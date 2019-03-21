@@ -1,0 +1,59 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:References
+WikiDoc:Page:Variables-Overview
+WikiDoc:TOCTitle:Description how to work with variables
+
+= Why variables? =
+
+You might ask why you need variables in a Remote Control Application. The answer is: If you want to track the status of your devices and/or want to modify your definition at runtime, you need variables.
+
+Examples: You have a TV device, which support only one button for power control. It switches the TV on, when it is off and it switches the TV on when it off: This is called power toggle. If you like to implement a button, which switches all your devices including the TV off, you shouldn't send the power command to your TV, as it will be switched on, when it is already off. For this, you need to track the power status off your TV. That's where you need variables. You assume, that your TV is off, when you start ORCA and set a variable for the TV power state to off. And if somebody pushes the power off button, you do nothing, if the power state if off. And if somebody pushes the power on button, you verify, if the power on state is off, and if yes, you send the power command to your TV and set the power state to on. Problem solved!
+= Variable types =
+There are four kinds of variables:
+
+== Language Variables ==
+Language variables are used to have text constants in your preferred language. All language variable have a number as variable name.
+== Public Variables ==
+Public variables are generic variable available everywhere within Orca. They can be used for actions, macros and interfaces.
+== Private Variables (Context Variables) ==
+Private variables are visible only within a specific context. They are used for interfaces, where several instances (configurations) of a interface needs their own variables, which should not be shared with other instances of the interface.
+== Definition Variables  ==
+Definition variables are used to alter elements/pages/actions on loadtime by text replacement. Definition vars must be set in the definition def_parameter section or when you import a definition. If you import a definition, the importing definition can alter the definition vars of the imported definition. If proper implemented, this allows definition to be imported multiple times with different setups.
+
+= Setting variables =
+You can set a variable by using the setvar action. For widgets like TEXTINPUT you can define a target variable as well, where the text input will stored into. Some interfaces will set some variables as well as part of their implementation. You do not need to define variable. It will be created as soon you set it to a value. All variables are string variables!
+Definition variables can only be set in the definiton.ini file
+
+= Accessing variables =
+There is a specific syntax to access a variable:
+* l$var(number) gets a language variable
+* $var(variablename) gets a public variable
+* $dvar gets a definition variable
+Private vars are only available for code inside interfaces, you cannot access them from your definition.
+Please note: Variable names are case sensitive! If a variable is not found, an empty string is returned.
+
+= Standard / System Variables =
+Orca initializes a set of system vars, which you can access from your definition:
+* SKINPATH: The path to your skin
+* RESOURCEPATH: The path to public Orca resources
+* DEFINITIONPATH: The path to the active definition
+* INTERFACEPATH: The path to the folder, where all interfaces are stored
+* INTERFACESETTINGSPATH: The path to the folder, where the settings of the interfaces are stored
+* SCRIPTSETTINGSPATH: The path to the folder, where the settings of the scripts are stored
+* DEFINITIONFILENAME: The name of the file of your active definition
+* APPLICATIONPATH: The path of the Orca application
+* ACTIONPATH: The path to your public action
+* GESTURESPATH: The path to your public gestures
+* SKINNAME: The name of the active skin
+* DEFINITIONNAME:  The name of the active definition
+* LANGUAGE: Your current language
+* CURRENTPAGE: The name of the current page
+* VERSION: The current ORCA version
+* LOGFILE: Full path and filename to the current logfile
+* INTERFACEERRORCODE_{interfacename}_{configname}: The errorcode of the last action of the interface: Usually 0=OK, 1= not OK (depending on Interface)
+
+You are able to modify the system variables, but it is strongly recommended not to do so!
+
+WikiDoc:End
+'''

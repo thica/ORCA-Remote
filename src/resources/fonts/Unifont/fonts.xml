@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontdef>
+    <repositorymanager>
+    <entry>
+      <name>Default Unicode Font</name>
+      <description language='English'>Default Unicode Font</description>
+      <description language='German'>Standard Unicode Schrift</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(RESOURCEPATH)/fonts/Unifont</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/fonts/unifont.zip</sourcefile>
+          <targetpath>resources/fonts</targetpath>
+        </source>
+      </sources>
+    </entry>
+  </repositorymanager>
+
+  <fonts>
+    <font>
+      <name>Unifont</name>
+      <file face="normal">$var(RESOURCEPATH)/fonts/Unifont/unifont-10.0.07.ttf</file>
+      <file face="bold">$var(RESOURCEPATH)/fonts/Unifont/unifont-10.0.07.ttf</file>
+      <file face="italic">$var(RESOURCEPATH)/fonts/Unifont/unifont-10.0.07.ttf</file>
+      <file face="bolditalic">$var(RESOURCEPATH)/fonts/Unifont/unifont-10.0.07.ttf</file>
+    </font>
+  </fonts>
+</fontdef>

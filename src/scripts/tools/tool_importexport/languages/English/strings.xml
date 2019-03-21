@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_1">Export Core Files</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_2">Export the Orca Core Files to a different location to edit them</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_3">Export</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_4">Orca Core Files</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_5">Import Core Files</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_6">Import the Orca Core Files from a different location after edit</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_7">Import</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_8">Please select export folder (Destination)</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_9">Please select import folder (Source)</string>
+
+</strings>
+
+

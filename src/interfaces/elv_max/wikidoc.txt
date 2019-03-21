@@ -1,0 +1,17 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-elv_max
+WikiDoc:TOCTitle:elv_max (ELV/EQ3)
+= elv_max =
+The elv_max interface sends commands via TCP to a MAX Cube from ELV of EQ3. The protocol is not public, the interfave uses the pymax library (https://github.com/ercpe/pymax)
+The elv_max interface supports auto detection of your cube device. This is the default setting (host=discover). You can also configure a specific serial number to target a specific MAX Cube, in case you have several of them.
+The codeset file uses the implemented functions only-
+The interface itself is uni-directional. No trigger are defined.
+
+The settings are self explained, please use "discover" as a host name (default setting), if you want the interface to discover your MAX cube. Please leave the timetoclose setting to -1, the cube can't hadle to many connect requests.
+If cube/valve/heater commands have been set, you need to reread the settings from the cube. For that you need to clear the cache first. Use the clearcache codeset command for that.
+
+
+WikiDoc:End
+'''

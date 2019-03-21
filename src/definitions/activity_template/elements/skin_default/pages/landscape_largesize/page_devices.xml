@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page name='Page_Devices_$dvar(definition_activity_template)'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Main Screen' type='BACKGROUND' picturenormal='background' />
+      <!--
+      <xi:include href="$var(DEFINITIONPATH)/block_topline.xml" parse="xml" />
+    </element>
+      -->
+    <element name='Anchor Device Buttons Left' type='ANCHOR' posx='%10' posy='%60' width='%38' height='%85'>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/block_devicebuttonsleft.xml" parse="xml" />
+    </element>
+    <element name='Anchor Device Buttons Right' type='ANCHOR' posx='%90' posy='%60' width='%38' height='%85'>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/block_devicebuttonsright.xml" parse="xml" />
+    </element>
+  </elements>
+</page>

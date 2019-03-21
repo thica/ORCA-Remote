@@ -1,0 +1,17 @@
+Thanks to
+
+The kivy project for providing the framework
+JLH Fonts for providing "Arrows" font for the public domain
+Google for providing the Noto Fonts under the SIL Open Font License (OFL)
+Google for providing the Material Icons fonts under the Apache License Version 2
+The "python-adb" project (https://github.com/google/python-adb) for providing the sources under the Apache License Version 2.0
+The Kodi project for providing the language template
+Bryan Tong Minh for providing the mwclient sources under the MIT License
+Keene for providing IR Anyware integration samples
+Global Cache for providing iTach integration samples
+The "maxcube" project (https://github.com/hackercowboy/python-maxcube-api) for providing the sources under the MIT License
+
+No thanks to
+Sony, for not providing integration samples
+
+

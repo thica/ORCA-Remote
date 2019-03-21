@@ -1,0 +1,135 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-URL
+WikiDoc:TOCTitle:url
+= URL =
+The URL interface provides an interface for web based communication. It is designed to control devices with a web interface. Tis is a inidirectional interface, so triggers are not supportet. The interface supports retrieving values from the device.
+= Settings =
+
+The following settings are supported by the interface
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|Host
+|Host-Name or IP-Address of your web device/server. Could be "discover" as well. (upnp discover)
+|-
+|Port
+|Port Address of your device. Default is 80
+|-
+|User
+|Username , if logon is requiered
+|-
+|Password
+|Password , if logon is requiered
+|-
+|FNCodeset
+|Filename of your codeset. Without path
+|-
+|parseresult
+|The way, responses should be parsed
+|-
+|tokenizestring
+|If the responses should be tokenized, this token should be used. Defaults to ":"
+|-
+|resultendstring
+|How to detect the end of a respond. Defaults to [LF]
+|-
+|DiscoverTimeOut
+|For Autodiscover: Timeout to discover a device in seconds. Defaults to 5
+|-
+|SaveDiscoveredIP
+|For Autodiscover: Flag if the discovered IP should be saved. Prevents to discover every app start.
+|-
+|OldDiscoveredIP
+|For Autodiscover: The last discoverd IP-Address. Delete, if you want the force a new discover
+|-
+|TimeToClose
+|Timeout in seconds, until the connection from the interface to the device will be close.
+* -1 The connection will not be closed
+* 0 The connection will be closed immediately
+* all other, Timeout in seconds
+|-
+|DisableInterFaceOnError
+|Disables the interface, if an error occurs. Prevents the interface to continue to send commands to a broken connection.
+|-
+|DisconnectInterFaceOnSleep
+|Disconnects the interface, when your remote control device goes to sleep
+|}</div>
+
+
+You need to define the codeset filename, which contains the command set for your device
+
+A  codeset file could look like that (shortened version):
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<action string="codeset" name='info'             type="soap" rc_key="79"  waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_1'            type="soap" rc_key="1"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_2'            type="soap" rc_key="2"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_3'            type="soap" rc_key="3"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_4'            type="soap" rc_key="4"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_5'            type="soap" rc_key="5"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_6'            type="soap" rc_key="6"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_7'            type="soap" rc_key="7"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_8'            type="soap" rc_key="8"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_9'            type="soap" rc_key="9"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='key_0'            type="soap" rc_key="0"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+<action string="codeset" name='pip_toggle'       type="soap" rc_key="10" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+<action string="codeset" name='mute_toggle'      type="soap" rc_key="13" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+</syntaxhighlight></div>
+
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|action
+|Defines, to which ORCA action the  command should be send
+|-
+|preaction
+|This defines an action from this codeset to be executed, before this action will be send to to your device. This gives you the option, to gather required information using json, before you can send this action
+|-
+|getvar
+|This defines, which information will be collected from the json respons., Only the last attribute will be used. If an attribute belongs to a list, only the first list entry is parsed.
+|-
+|ldestvar
+|This defines, which variable should be set by the information parsed by getvar. This variable is local to the interface and local to the configuration
+|-
+|gdestvar
+|This defines, which variable should be set by the information parsed by getvar. This variable is global to all ORCA functions
+|-
+|cmd
+|This is the command to transmit using json. Do not forget the trailing newline \n. You can chain up several commands separated by a newline tag.
+|-
+|requesttype
+|The Requesttpe: Can be "POST", "GET", "soap"
+|-
+|headers
+|The header information to send to the device, eg: '{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'
+|-
+|params
+|Parameters to send to the device, for POST requests. eg.: '{"key": "Digit0"}'
+|}
+
+Variable replacement: You can use variable placeholder to use variables in your json command string
+
+{| class="wikitable"
+! align="left" | var
+! align="left" | Description
+|-
+|var()
+|Uses a global variable name to be replaced
+|-
+|lvar()
+|Uses a language variable name to be replaced
+|-
+|cvar()
+|Uses a local variable to be replaced
+|}
+
+WikiDoc:End
+'''

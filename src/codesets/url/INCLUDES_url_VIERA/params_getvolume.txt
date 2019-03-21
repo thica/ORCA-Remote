@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+ <s:Body>
+  <u:GetVolume xmlns:u="urn:panasonic-com:service:p00NetworkControl:1">
+   <InstanceID>0</InstanceID>
+   <Channel>Master</Channel>
+   <DesiredVolume></DesiredVolume>
+  </u:GetVolume>
+ </s:Body>
+</s:Envelope>

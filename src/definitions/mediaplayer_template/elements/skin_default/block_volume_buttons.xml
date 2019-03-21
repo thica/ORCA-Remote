@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Button Volume Up'          type='BUTTON'    posx='left'   posy='top'    width='%30' iconfontsize='%h50' height='of:width:self' picturenormal='button round*' action='Send Volume Up'   actiondoubletap='Send Volume Up'   fontsize='%h30'  caption='icon:volume_up'     />
+  <element name='Button Volume Down'        type='BUTTON'    posx='left'   posy='bottom' width='%30' iconfontsize='%h50' height='of:width:self' picturenormal='button round*' action='Send Volume Down' actiondoubletap='Send Volume Down' fontsize='%h30'  caption='icon:volume_down'  />
+  <element name='Button Mute'               type='BUTTON'    posx='center' posy='middle' width='%25' iconfontsize='%h50' height='of:width:self' picturenormal='button round*' action='Send Mute Toggle'                                    fontsize='%h30'  caption='icon:volume_mute'                                     />
+  <element name='Main Volume Textvalue'     type='TEXTFIELD' posx='left'   posy='middle' width='%30' height='of:width:self' fontsize='%h30' caption='$var($dvar(definition_alias_mediaplayer_template)_mainvolume)' />
+</elements>

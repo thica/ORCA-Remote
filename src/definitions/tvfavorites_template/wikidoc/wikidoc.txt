@@ -1,0 +1,131 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:DefinitionsForUser
+WikiDoc:Page:Userdescription Definition tvfavorites_template
+WikiDoc:TOCTitle:tvfavorites_template
+
+This is a template definition not for single / direct use. It provides the settings and widgets to switch TV channels.
+
+WikiDoc:End
+'''
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Definitions
+WikiDoc:Page:Reference Definition tvfavorites_template
+WikiDoc:TOCTitle:tvfavorites_template
+
+This template definition provides the settings and elements to switch TV channels. Please notice, that the widget needs to be loaded into a square anchor.
+
+[[File:TVfavorites_main.png|link=]]
+
+This definition has the following capabilities
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Capability
+! align="left" | Description
+|-
+|Orientation
+|Landscape and portrait
+|-
+|Screen Size
+|
+* small / landscape
+* small / portrait
+* large / landscape
+* large / portrait
+|-
+|Interfaces
+|No Interfaces
+|}</div>
+
+= Definitionvars =
+This definition uses the following definitionvars:
+
+* "definition_alias_appfavorites_template": default value = "App Favorites"
+
+= Settings =
+This template defines the following settings:
+
+* $dvar(definition_alias_tvfavorites_template)_bouquet
+  The start bouquet to show when the page is shown
+* $dvar(definition_alias_tvfavorites_template)_bouquet_name[x]
+  The name of the bouquet, where x is a value from 1 to 4
+* $dvar(definition_alias_tvfavorites_template)_tvchannel[x][y]
+  The (TV) channel number of this channel.
+  x is the bouquet number (1 to 4)
+  y is the button number (1 to 29)
+* $dvar(definition_alias_tvfavorites_template)_tvlogo[1][1]
+  The (TV) channel logo of this channel.
+  x is the bouquet number (1 to 4)
+  y is the button number (1 to 29)
+
+There are some default channels and logos defined (fits for German channels, but for sure, can be adjusted and changed be the user)
+
+= How to import =
+
+You can import the definition by using the following syntax in your definition.xml
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+
+  <def_parameter>
+    <definitionvars>{"definition_alias_tvfavorites_template":"TV Favorites"}</definitionvars>
+  </def_parameter>
+
+  <definitionimports>
+      <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          alias           ="$dvar(definition_alias_tvfavorites_template)"
+          definitionvars  ='{"definition_alias_tvfavorites_template":"$dvar(definition_alias_tvfavorites_template)"}'>tvfavorites_template</definition>
+  </definitionimports>
+
+</syntaxhighlight></div>
+
+= Elements =
+The following elements are defined to use:
+
+* block_tv_channels: A block of tv buttons to switch tv channels
+
+Usual you can load the blocks using the the following code fragment as an example:
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<element name='Anchor TV Logos' type='ANCHOR' posx='%97' posy='of:totop:Anchor BottomGap' width='%35' height='of:width:self' >
+  <xi:include href="$var(DEFINITIONPATH[tvfavorites_template])/block_tv_channels.xml" parse="xml"  />
+</element>
+</syntaxhighlight></div>
+
+= Button Actions =
+The following button actions are defined for each tv channel button
+Normal tap: calls action $dvar(definition_alias_tvfavorites_template)_switchchannel
+Long tap: NoAction
+Double Tap: NoAction
+
+For the boutquet button the following button actions are defined:
+Normal tap: calls action $dvar(definition_alias_tvfavorites_template)_switchbouquet_byindex
+
+= Pages =
+The following pages are defined:
+
+* Page_Device_TV:  A dummy page, not for any use
+
+= Actions =
+
+The following actions are defined:
+
+* $dvar(definition_alias_tvfavorites_template)_switchbouquet_byindex : Switchs the bouquet by index number : you have to define the "$dvar(definition_alias_tvfavorites_template)_switchbouquet_byindex_parameter_DROPDOWNINDEX" variable to a bouquet number 1 to 4.
+* $dvar(definition_alias_tvfavorites_template)_switchbouquet : Switchs the bouquet by index number : you have to define the "BOUQUETNUM" as a function parameter or as a direct var $var($dvar(definition_alias_tvfavorites_template)_switchbouquet_parameter_BOUQUETNUM).
+* $dvar(definition_alias_tvfavorites_template)_switchchannel : Switchs the TV Channel : you have to define the "CHANNELNUM" as a function parameter or as a direct var $var($dvar(definition_alias_tvfavorites_template)_switchchannel_parameter_CHANNELNUM). The Bouqet number must be set in the var $var($dvar(definition_alias_tvfavorites_template)_bouquet)
+
+To get the channel loaded when your page is shown, you should call the switch bouquet function in the pagestart actions of your page
+
+eg:
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<action name="Load TV Pictures on first start" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var($dvar(definition_alias_tvfavorites_template)_bouquet)" />
+</syntaxhighlight></div>
+
+WikiDoc:End
+'''

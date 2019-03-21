@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <action name="Send Switch On Dimmer 1">
+        <!-- Called by the Dimmer 1 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer1"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="8" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="255" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="255" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 1"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 1 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE"/>
+    </action>
+
+    <action name="Send Switch Off Dimmer 1">
+        <!-- Called by the Dimmer 1 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer1"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="8" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="0" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="0" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 1"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 1 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+    <action name="Send Dim Dimmer 1">
+        <!-- Called by the Dimmer 1 Slider-->
+        <action name="Set Var Dimmer var"           string="setvar" varname="DIMVAR"             varvalue="Dimmer1"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"      varvalue="8" />
+        <action name="Set Var Dimmer Slider Widget" string="setvar" varname="DIMMERSLIDER"       varvalue="Slider Dimmer 1"/>
+        <action name="Set Var Dimmer Color Ball"    string="setvar" varname="DIMMERCOLORBALL"    varvalue="Picture BULB 1 ON"/>
+        <action name="Set Var Dimmer Value"         string="setvar" varname="DIMVALUE"           varvalue="$var(Dimmer1)"/>
+        <action name="Set Var RGB"                  string="setvar" varname="RGBCOLOR1"          varvalue="$var(Dimmer1)"/>
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+    <action name="Send Switch On Dimmer 2">
+        <!-- Called by the Dimmer 2 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer2"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="9" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="255" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="255" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 2"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 2 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+        <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
+    </action>
+
+    <action name="Send Switch Off Dimmer 2">
+        <!-- Called by the Dimmer 2 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer2"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="9" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="0" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="0" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 2"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 2 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+    <action name="Send Dim Dimmer 2">
+        <!-- Called by the Dimmer 2 Slider-->
+        <action name="Set Var Dimmer var"           string="setvar" varname="DIMVAR"             varvalue="Dimmer2"/>
+        <action name="Set Var HUE Device"           string="setvar" varname="HUELIGHTNUM"        varvalue="9" />
+        <action name="Set Var Dimmer Slider Widget" string="setvar" varname="DIMMERSLIDER"       varvalue="Slider Dimmer 2"/>
+        <action name="Set Var Dimmer Color Ball"    string="setvar" varname="DIMMERCOLORBALL"    varvalue="Picture BULB 2 ON"/>
+        <action name="Set Var Dimmer Value"         string="setvar" varname="DIMVALUE"           varvalue="$var(Dimmer2)"/>
+        <action name="Set Var RGB"                  string="setvar" varname="RGBCOLOR1"          varvalue="$var(Dimmer2)"/>
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+    <action name="Send Switch On Dimmer 3">
+        <!-- Called by the Dimmer 3 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer3"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="-2" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="255" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="255" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 3"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 3 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+        <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
+    </action>
+
+    <action name="Send Switch Off Dimmer 3">
+        <!-- Called by the Dimmer 3 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer3"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="-2" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="0" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="0" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 3"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 3 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+    <action name="Send Dim Dimmer 3">
+        <!-- Called by the Dimmer 3 Slider-->
+        <action name="Set Var Dimmer var"           string="setvar" varname="DIMVAR"             varvalue="Dimmer3"/>
+        <action name="Set Var HUE Device"           string="setvar" varname="HUELIGHTNUM"        varvalue="-2" />
+        <action name="Set Var Dimmer Slider Widget" string="setvar" varname="DIMMERSLIDER"       varvalue="Slider Dimmer 3"/>
+        <action name="Set Var Dimmer Color Ball"    string="setvar" varname="DIMMERCOLORBALL"    varvalue="Picture BULB 3 ON"/>
+        <action name="Set Var Dimmer Value"         string="setvar" varname="DIMVALUE"           varvalue="$var(Dimmer3)"/>
+        <action name="Set Var RGB"                  string="setvar" varname="RGBCOLOR1"          varvalue="$var(Dimmer3)"/>
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+    <action name="Send Switch On Dimmer 4">
+        <!-- Called by the Dimmer 3 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer4"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="-3" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="255" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="255" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 4"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 4 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+        <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
+    </action>
+
+    <action name="Send Switch Off Dimmer 4">
+        <!-- Called by the Dimmer 3 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer4"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="-3" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="0" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="0" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 4"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 4 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+    <action name="Send Dim Dimmer 4">
+        <!-- Called by the Dimmer 3 Slider-->
+        <action name="Set Var Dimmer var"           string="setvar" varname="DIMVAR"             varvalue="Dimmer4"/>
+        <action name="Set Var HUE Device"           string="setvar" varname="HUELIGHTNUM"        varvalue="-3" />
+        <action name="Set Var Dimmer Slider Widget" string="setvar" varname="DIMMERSLIDER"       varvalue="Slider Dimmer 4"/>
+        <action name="Set Var Dimmer Color Ball"    string="setvar" varname="DIMMERCOLORBALL"    varvalue="Picture BULB 4 ON"/>
+        <action name="Set Var Dimmer Value"         string="setvar" varname="DIMVALUE"           varvalue="$var(Dimmer4)"/>
+        <action name="Set Var RGB"                  string="setvar" varname="RGBCOLOR1"          varvalue="$var(Dimmer4)"/>
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+    <action name="Send Switch On Dimmer 5">
+        <!-- Called by the Dimmer 3 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer5"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="-4" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="255" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="255" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 5"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 5 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+        <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
+    </action>
+
+    <action name="Send Switch Off Dimmer 5">
+        <!-- Called by the Dimmer 3 On Button-->
+        <action name="Set Var Dimmer var"             string="setvar" varname="DIMVAR"              varvalue="Dimmer5"/>
+        <action name="Set Var HUE Device"             string="setvar" varname="HUELIGHTNUM"         varvalue="-4" />
+        <action name="Set Dim Value"                  string="setvar" varname="DIMVALUE"            varvalue="0" />
+        <action name="setvar"                         string="setvar" varname="hue_v"               varvalue="0" />
+        <action name="Set Var Dimmer Slider Widget"   string="setvar" varname="DIMMERSLIDER"        varvalue="Slider Dimmer 5"/>
+        <action name="Set Var Dimmer Color Ball"      string="setvar" varname="DIMMERCOLORBALL"     varvalue="Picture BULB 5 ON"/>
+        <!-- Core funktion to set light on full level-->
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+    <action name="Send Dim Dimmer 5">
+        <!-- Called by the Dimmer 3 Slider-->
+        <action name="Set Var Dimmer var"           string="setvar" varname="DIMVAR"             varvalue="Dimmer5"/>
+        <action name="Set Var HUE Device"           string="setvar" varname="HUELIGHTNUM"        varvalue="-4" />
+        <action name="Set Var Dimmer Slider Widget" string="setvar" varname="DIMMERSLIDER"       varvalue="Slider Dimmer 5"/>
+        <action name="Set Var Dimmer Color Ball"    string="setvar" varname="DIMMERCOLORBALL"    varvalue="Picture BULB 5 ON"/>
+        <action name="Set Var Dimmer Value"         string="setvar" varname="DIMVALUE"           varvalue="$var(Dimmer5)"/>
+        <action name="Set Var RGB"                  string="setvar" varname="RGBCOLOR1"          varvalue="$var(Dimmer5)"/>
+        <action name=""         string="call Fkt Send Dim Dimmer HUE" />
+    </action>
+
+
+    <action name="Fkt Send Dim Dimmer HUE">
+        <!-- Called by the Dimmer Hue Slider Funktion-->
+        <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(DIMMERCOLORBALL)" attributename="transparancy" attributevalue="$var(DIMVALUE)"/>
+        <action name="" string="if $var(DIMVALUE)&gt;10" />"
+        <!-- Core funktion switch on if bright enough-->
+        <action name="" string="call $dvar(definition_alias_philips_hue) Fkt Philips Hue Power On" />
+        <action name=""  string="call Fkt DezToHueDimSteps" />
+        <action name="Set Dimmer Value"  string="setvar" varname="hue_v"   varvalue="$var(DIMVALUE)"/>
+        <action name=""  string="call $dvar(definition_alias_philips_hue) Dim Lights Philips Hue by Widget"  />
+        <action name=""  string="goto label_end"/>
+        <action name="" string="endif" />
+        <action name="" string="call Fkt Switch Off Dimmer HUE" />
+        <action name="label_end" />
+    </action>
+
+  <action name="Fkt Switch Off Dimmer HUE">
+    <!-- Called by Swith of Dimmer Hue Button Function-->
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(DIMMERCOLORBALL)" attributename="transparancy" attributevalue="0"/>
+    <!-- Call the Core Funtktion-->
+    <action name="" string="call $dvar(definition_alias_philips_hue) Fkt Philips Hue Power Off" />
+    <action name="setvar" string="setvar"  varname="$var(DIMVAR)" varvalue="0" />
+    <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
+  </action>
+
+  <action name="Fkt DezToFS20DimSteps">
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="divide"   parameter1="6.25"/>
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="round"    parameter1="0"/>
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="decrease" parameter1="0.05"/>
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="multiply" parameter1="6.25"/>
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="round"    parameter1="0"/>
+  </action>
+
+  <action name="Fkt DezToHueDimSteps">
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="multiply" parameter1="2.55"/>
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="round"    parameter1="0"/>
+  </action>
+
+
+</includes>

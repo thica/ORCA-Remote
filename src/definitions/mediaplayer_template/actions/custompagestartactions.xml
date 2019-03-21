@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+    <action name="Set Default Powerstatus" string="setvar POWERSTATUS_$dvar(definition_alias_mediaplayer_template)=OFF" />
+    <action name="Set Default Volume" string="setvar $dvar(definition_alias_mediaplayer_template)_mainvolume=0" />
+    <action name="Load last Input" string="modifyvar" varname="inputstring"  operator="load" parameter1="" parameter2="$dvar(definition_alias_mediaplayer_template)"/>
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+    <action name="$dvar(definition_alias_mediaplayer_template) Definition Template Start Actions start here" />
+    <action name="Sets the Start Page" string="setvar DEFINITIONSTARTPAGE=Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+    <action name="If we want to show powerbuttons" string="if $var($dvar(definition_alias_mediaplayer_template)_SHOWPOWERBUTTONS)==0"/>
+      <action name="Disable Power On Button"  string="setwidgetattribute" widgetname="Button Power On@Page_Device_$dvar(definition_alias_mediaplayer_template)" attributename="enable" attributevalue="0" autoupdate="Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+      <action name="Disable Power Off Button" string="setwidgetattribute" widgetname="Button Power Off@Page_Device_$dvar(definition_alias_mediaplayer_template)" attributename="enable" attributevalue="0" autoupdate="Page_Device_$dvar(definition_alias_mediaplayer_template)"  />
+    <action name="" string="endif"/>
+    <action name="Add Navigation Bar" string="call Add NavigationBar $dvar(definition_alias_mediaplayer_template)"/>
+    <action name="load last input" string="modifyvar" varname="inputstring"  operator="load" parameter1="" parameter2="$dvar(definition_alias_mediaplayer_template)" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWSEARCHANDINPUT)!=0"/>
+    <action name="$dvar(definition_alias_mediaplayer_template) Definition Template Start Actions  ends here" />
+    <action name="Init Status" string="setvar Status_Second_Caption_Page_Device_$dvar(definition_alias_mediaplayer_template)=0" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)" >
+    <action name="Call seperate function for pagestart" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+  </pagestartaction>
+
+  <pagestopaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)" >
+    <action name="Call seperate stop actions" string="call PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+  </pagestopaction>
+
+</includes>

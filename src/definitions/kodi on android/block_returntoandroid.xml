@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements>
+    <element name='Button Return to Kodi' type='BUTTON' posx='left' posy='top' height='%50' picturenormal='button square*' action='Activity SwitchTo $dvar(definition_alias_firetv)' fontsize='%h70'  caption='icon:arrow_back' />
+</elements>

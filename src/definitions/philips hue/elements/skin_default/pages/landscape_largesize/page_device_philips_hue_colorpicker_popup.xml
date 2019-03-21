@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_$dvar(definition_alias_philips_hue) Colorpicker Popup'>
+  <page_parameter>
+    <interface>$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)</interface>
+    <configname>$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)</configname>
+    <popup>1</popup>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
+    <element name="Anchor Inner" type="ANCHOR" posx="center" posy="middle" width="%82" height="%75">
+        <element name="Frame" type="PICTURE"  picturenormal="background boxes" />
+        <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%5" height="of:width:self" picturenormal="button wide*" action="Show Page" actionpars='{"pagename":"$var(LASTPAGE)"}' fontsize='%h50' caption="icon:close_window" />
+        <element name="Anchor Frame" type="ANCHOR" posx="center" posy="middle" width="%95" height="%90">
+            <element name="ColorPicker HUE" type="COLORPICKER" posx="center" posy='middle' width="of:height:self:*2" height="%90" destvar="hue" action="$dvar(definition_alias_philips_hue) Set Lights Philips Hue by Widget" />
+        </element>
+    </element>
+  </elements>
+</page>

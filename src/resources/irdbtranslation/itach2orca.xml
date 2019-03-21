@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<commands>
+  <set name="all">
+    <action to="clock_toggle"              from="CLOCK"            />
+    <action to="down"                      from="CURSOR DOWN"      />
+    <action to="ok"                        from="CURSOR ENTER"     />
+    <action to="up"                        from="CURSOR UP"        />
+    <action to="left"                      from="CURSOR LEFT"        />
+    <action to="right"                     from="CURSOR RIGHT"        />
+    <action to="key_0"                     from="DIGIT 0"          />
+    <action to="key_1"                     from="DIGIT 1"          />
+    <action to="key_2"                     from="DIGIT 2"          />
+    <action to="key_3"                     from="DIGIT 3"          />
+    <action to="key_4"                     from="DIGIT 4"          />
+    <action to="key_5"                     from="DIGIT 5"          />
+    <action to="key_6"                     from="DIGIT 6"          />
+    <action to="key_7"                     from="DIGIT 7"          />
+    <action to="key_8"                     from="DIGIT 8"          />
+    <action to="key_9"                     from="DIGIT 9"          />
+    <action to="osd"                       from="DISPLAY"          />
+    <action to="fast_forward"             from="FORWARD"          />
+    <action to="source radio am"          from="INPUT AM"         />
+    <action to="source cd"                from="INPUT CD"         />
+    <action to="source dab"               from="INPUT DAB"        />
+    <action to="source radio fm"          from="INPUT FM"         />
+    <action to="source md"                from="INPUT MD"         />
+    <action to="next_source"              from="INPUT NEXT"       />
+    <action to="previous_source"          from="INPUT PREVIOUS"   />
+    <action to="source tape"              from="INPUT TAPE"       />
+    <action to="source"                   from="MODE"             />
+    <action to="mute_toggle"              from="MUTE TOGGLE"      />
+    <action to="skip_forward"             from="NEXT"             />
+    
+    <action to="skip_previous"            from="CHAPTER PREVIOUS"  />
+    <action to="skip_forward"             from="CHAPTER NEXT"      />
+        
+    <action to="button_green"             from="FUNCTION GREEN"      />
+    <action to="button_red"               from="FUNCTION RED"      />
+    <action to="button_blue"              from="FUNCTION BLUE"      />
+    <action to="button_yellow"            from="FUNCTION YELLOW"      />
+    <action to="info"                     from="INFO"      />
+    <action to="home"                     from="MENU HOME"      />
+    <action to="menu"                     from="MENU MAIN"      />
+    <action to="setup"                    from="MENU SETUP"      />
+    <action to="open"                     from="OPEN/CLOSE"      />
+    <action to="page_up"                  from="PAGE UP"      />
+    <action to="page_down"                from="PAGE DOWN"      />
+    <action to="pause"                    from="PAUSE"      />
+    <action to="play"                     from="PLAY"      />
+    <action to="stop"                     from="STOP"      />
+    <action to="subtitles_toggle"         from="SUBTITLE"      />
+    <action to="info"                     from="TITLE"      />
+    <action to="zoom"                     from="ZOOM"      />
+
+    <action to="3dtoggle"                 from="3D"      />
+    <action to="source tv/ant"            from="ANALOG TV"/>
+    <action to="source tv/sat"            from="DIGITAL TV"/>
+    <action to="source tv/ant"            from="INPUT ANTENNA"/>
+    <action to="sdcard"                   from="INPUT CARD"/>
+    <action to="source pc"                from="INPUT PC"/>
+    <action to="source usb"               from="INPUT USB"/>
+    <action to="source usb"               from="USB"/>
+    <action to="source usb"               from="INTERNET"/>
+    <action to="return"                   from="MENU RETURN"/>
+
+    <action to="source net"               from="INTERNET"/>
+    <action to="source net"               from="NET"/>
+    <action to="source radio"             from="RADIO"/>
+    <action to="source radio"             from="RADIO"/>
+    
+    <action to="option"                   from="OPTION"/>
+    <action to="pip_on"                   from="PIP"/>
+    <action to="pip_select"               from="PIP SELECT"/>
+    <action to="pip_toggle"               from="PIP TOGGLE"/>
+    <action to="suspend"                  from="POWER SAVING"/>
+    <action to="previous_tv_channel"      from="PREVIOUS CHANNEL"/>
+    <action to="record"                   from="RECORD"/>
+    <action to="stop record"              from="RECORD STOP"/>
+    <action to="return"                   from="RETURN"/>
+    <action to="avmode"                   from="VIEW MODE"/>
+
+    <action to="source tv/cbl"            from="CABLE"      />
+    <action to="avmode"                   from="AV MODE"      />
+    <action to="channel_down"             from="CHANNEL DOWN"      />
+    <action to="channel_up"               from="CHANNEL UP"      />
+    <action to="favorites"               from="FAVORIT"      />
+    <action to="favorite 0"              from="FAVORITE CHANNEL A"      />
+    <action to="favorite 1"              from="FAVORITE CHANNEL B"      />
+    <action to="favorite 2"              from="FAVORITE CHANNEL C"      />
+    <action to="favorite 3"              from="FAVORITE CHANNEL D"      />
+
+    <action to="freeze"                   from="FREEZE"  />
+    <action to="guide"                    from="GUIDE"  />
+
+    <action to="power_off"                from="POWER OFF"        />
+    <action to="power_on"                 from="POWER ON"         />
+    <action to="power_toggle"             from="POWER TOGGLE"     />
+    <action to="skip_back"                from="PREVIOUS"         />
+    <action to="repeat_toggle"            from="REPEAT"           />
+    <action to="fast_rewind"              from="REVERSE"          />
+    <action to="sleep"                    from="SLEEP"            />
+    <action to="timer"                    from="TIMER"            />
+    <action to="volume_up"                from="VOLUME UP"        />
+    <action to="volume_down"              from="VOLUME DOWN"      />
+
+    <!-- Identified but unmatched-->
+    <action to="TAPE PLAY" from="TAPE PLAY"        />
+    <action to="TAPE STOP" from="TAPE STOP"        />
+    <action to="TUNER DIRECT TUNE" from="TUNER DIRECT TUNE"/>
+    <action to="CD PAUSE" from="CD PAUSE"         />
+    <action to="CD PLAY" from="CD PLAY"          />
+    <action to="CD STOP" from="CD STOP"          />
+    <action to="CLEAR" from="CLEAR"            />
+
+  </set>
+  
+
+</commands>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_$dvar(definition_alias_mediaplayer_template)'>
+  <page_parameter>
+    <interface>$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)</interface>
+    <configname>$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)</configname>
+  </page_parameter>
+
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <element name='Background Main Screen' type='BACKGROUND' picturenormal='background' />
+    <element name='Anchor BottomGap' type='ANCHOR'  posy='bottom' height='%1' />
+
+    <element name='Anchor Info' type='ANCHOR' posx='%2' posy='of:totop:Anchor BottomGap' width='%65' height='of:width:self:*0.27'>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_amplifier_info.xml" parse="xml" />
+    </element>
+
+    <element name='Anchor Media section' type='ANCHOR' posx='%90' posy='of:totop:Anchor BottomGap' width='%21' height='%86'>
+      <element name='Frame Volumes' type='PICTURE' posy='middle' height='%55' picturenormal='background boxes' />
+      <element name='Button Mute' type='BUTTON' posx='center' posy='middle' width='%25' height='of:width:self' picturenormal='button round*' action='Send Mute Toggle' fontsize='%h30' iconfontsize='%h50' caption='icon:volume_mute' />
+
+      <element name='Anchor KNOB' type='ANCHOR'  posy='bottom'  height='of:width:self'>
+        <element name="Amp Back" type="PICTURE" picturenormal="knob back" />
+        <element name="Main Volume" type="KNOB" posx="%50" posy="%50"  width="%86"  height="of:width:self" picturenormal="knob" action="$dvar(definition_alias_mediaplayer_template) Set Main Volume By Widget" destvar="$dvar(definition_alias_mediaplayer_template)_mainvolume" mindatavalue="0" maxdatavalue="$var($dvar(definition_alias_mediaplayer_template)_MAXVOLUME)" leftboundaryangle="-135" rightboundaryangle="+135"  roundpos="0" discardmoves="1" />
+        <element name="Main Volume Textvalue" type="TEXTFIELD" posx="center" posy="middle"  width="%30" height="%30" caption="$var($dvar(definition_alias_mediaplayer_template)_mainvolume)" fontsize='%h70' vtextalign='middle' htextalign='center' />
+      </element>
+      <element name='Anchor Media Circle' type='ANCHOR' height='of:width:self'>
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_mediacircle.xml" parse="xml" />
+      </element>
+    </element>
+
+    <element name='Anchor Further Volumes'   type='ANCHOR' posx='%2' posy='%25' width='%23' height='%55'>
+      <element name='Anchor Central Volume'   type='ANCHOR' posx='left' posy='top' width='%40' >
+        <element name="Amp Volume Center Label"     type="TEXTFIELD" posx="center" posy="top"     height="%6" fontsize="%h100" caption='$lvar(onkyoAVR_10007)' vtextalign='middle' htextalign='center' />
+        <element name="Amp Volume Center"           type="SLIDER"    posx="center" posy="middle"  width="%70" height="%75" picturenormal="background boxes" picturebutton="button round normal" action="$dvar(definition_alias_mediaplayer_template) Set Center Volume By Widget"  mindatavalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_CenterLevel_Min)" maxdatavalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_CenterLevel_Max)" destvar="$dvar(definition_alias_mediaplayer_template)_centervolume"  roundpos="0" orientation="vertical" discardmoves="1" fontsize='%w50'  caption='icon:volume'/>
+        <element name='Amp Volume Center Textvalue' type='TEXTFIELD' posx='center' posy="bottom"  height='%6' fontsize="%h100" caption='$var($dvar(definition_alias_mediaplayer_template)_centervolume)' vtextalign='middle' htextalign='center' />
+      </element>
+      <element name='Anchor Subwoofer Volume'   type='ANCHOR' posx='right' posy='top' width='%40' >
+        <element name="Amp Volume Center Label"     type="TEXTFIELD" posx="center" posy="top"     height="%6" caption='$lvar(onkyoAVR_10008)'       fontsize='%h100'  vtextalign='middle' htextalign='center' />
+        <element name="Amp Volume Sub"              type="SLIDER"    posx="center" posy="middle"  width="%70" height="%75" picturenormal="background boxes" picturebutton="button round normal" action="$dvar(definition_alias_mediaplayer_template) Set Subwoofer Volume By Widget"  mindatavalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Min)" maxdatavalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Max)" destvar="$dvar(definition_alias_mediaplayer_template)_subwoofervolume"  roundpos="0" orientation="vertical" discardmoves="1" fontsize='%w50'  caption='icon:volume_up'/>
+        <element name='Amp Volume Sub Textvalue'    type='TEXTFIELD' posx='center' posy="bottom"  height='%6'  fontsize='%h100'  caption='$var($dvar(definition_alias_mediaplayer_template)_subwoofervolume)' />
+      </element>
+    </element>
+
+    <element name='Anchor Effect Device Buttons' type='ANCHOR' posx='of:toright:Anchor Info' posy='of:tobottom:Anchor Further Volumes' width='of:width:Anchor Info:*0.5' height='of:width:self:*0.4'>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_amplifier_dropdown.xml" parse="xml" />
+    </element>
+
+    <element name='Anchor PowerOnOff' type='ANCHOR' posx='%98' posy='of:totop:Anchor BottomGap' width='of:height:self:*0.5' height='%15'>
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_poweronoff.xml" parse="xml" />
+    </element>
+
+    <element name='Button Show Page Amplifier Onkyo AVR Net From Right' type='BUTTON' posx='right' posy='%33' width='%2' height='of:width:self:*3' picturenormal='button page right*' action="Show Page" actionpars='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_template)_Net"}'  caption="N"/>
+    <element name='Button Show Page Amplifier Onkyo AVR Radio From Right' type='BUTTON' posx='right' posy='%66' width='%2' height='of:width:self:*3' picturenormal='button page right*' action="Show Page" actionpars='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_template)_Radio"}'  effect="slide" direction="left" caption="R"/>
+
+    <element name='Picture Device'     type='PICTURE' posx='%49' posy='%18' width='%25' height='of:width:self:*0.5' picturenormal='$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Picture)' action="$dvar(definition_alias_mediaplayer_template) Update All Triggers" actiondoubletap="showpage Page_Device_$dvar(definition_alias_mediaplayer_template)_Popup"/>
+    <element name='Device Pretty Name' type='TEXTFIELD' posx='of:left:Picture Device' posy='of:bottom:Picture Device' width='of:width:Picture Device' height='of:width:self:*0.1' caption='$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model)'  fontsize='%h80'/>
+
+  </elements>
+</page>

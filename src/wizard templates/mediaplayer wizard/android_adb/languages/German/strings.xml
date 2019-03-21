@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="generic_android_10000">Du must die Entwickleroptionen im Android Gerät aktivieren. Für Android Geräte, welche verschlüsselte Verbindungen brauchen, lese bitte die entsprechenden Anweisungen im ORCA Wiki zum ADB interface</string>
+  <string id="generic_android_10100">Setup Wizard anzeigen</string>
+  <string id="generic_android_10101">Zeige den Konfigurations / setup Wizad beim start</string>
+  <string id="generic_android_10504">Konnte kein Android Gerät finden, bitte das Android Gerät an das Netzwerk anschliessen und/oder die IP Adresse manuell eingeben.</string>
+</strings>

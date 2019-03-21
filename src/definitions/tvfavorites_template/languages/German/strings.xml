@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="tvtemplate_10501">TV Kanäle</string>
+  <string id="tvtemplate_10502">Bitte Kanal auswählen</string>
+  <string id="tvtemplate_10503">Passendes Logo auswählen</string>
+  <string id="tvtemplate_10504">TV Kanal</string>
+  <string id="tvtemplate_10505">TV Logo</string>
+  <string id="tvtemplate_10506">Bouquet</string>
+  <string id="tvtemplate_10507">Start Bouquet</string>
+  <string id="tvtemplate_10508">Das Bouquet welches beim Start angezeigt werden soll (1-3)</string>
+  <string id="tvtemplate_10509">Bouquet Name</string>
+  <string id="tvtemplate_10510">Name des Bouquet's)</string>
+
+</strings>

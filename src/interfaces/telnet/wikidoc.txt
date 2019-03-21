@@ -1,0 +1,145 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-telnet
+WikiDoc:TOCTitle:Telnet
+= Telnet =
+The telnet interface is a simple interface. It opens a telnet connection to a given device and sends a set of commands to the interface. The telnet interface is bi-directional, so you can set triggers to catch responses..
+= Settings =
+
+The following settings are supported by the interface
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|Host
+|Host-Name or IP-Address of your telnet device/server. Could be "discover" as well. (upnp discover)
+|-
+|Port
+|Port Address of your telnet device. Default is 23
+|-
+|User
+|Username , if logon is requiered
+|-
+|Password
+|Password , if logon is requiered
+|-
+|Terminaltype
+|defaults to "linux"
+|-
+|FNCodeset
+|Filename of your codeset. Without path
+|-
+|parseresult
+|The way, responses should be parsed
+|-
+|tokenizestring
+|If the responses should be tokenized, this token should be used. Defaults to ":"
+|-
+|resultendstring
+|How to detect the end of a respond. Defaults to [LF]
+|-
+|DiscoverTimeOut
+|For Autodiscover: Timeout to discover a device in seconds. Defaults to 5
+|-
+|SaveDiscoveredIP
+|For Autodiscover: Flag if the discovered IP should be saved. Prevents to discover every app start.
+|-
+|OldDiscoveredIP
+|For Autodiscover: The last discoverd IP-Address. Delete, if you want the force a new discover
+|-
+|TimeToClose
+|Timeout in seconds, until the connection from the interface to the device will be close.
+* -1 The connection will not be closed
+* 0 The connection will be closed immediately
+* all other, Timeout in seconds
+|-
+|DisableInterFaceOnError
+|Disables the interface, if an error occurs. Prevents the interface to continue to send commands to a broken connection.
+|-
+|DisconnectInterFaceOnSleep
+|Disconnects the interface, when your remote control device goes to sleep
+|}</div>
+
+Some word to discover:
+The interface reduces matches / results from the discover results using the ...
+* discoverprettyname
+* discovermodels
+* discovermanufacturer
+... settings. Blanck option will not be used. You could eg use the pretty name just to match a specific device, or just the manufacturer name to match all devices in the network of this manufacturer.
+Discover uses the upnp discover protocoll
+
+You need to define the codeset filename, which contains the command set for your device
+
+A  codeset file could look like that (shortened version):
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<codeset>
+  <code action='getdeviceinfo'    type="string" waitforresponse='1' requesttype='GET'  cmd=''                   headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip"}' parseoption='xml' ldestvar='"MANUFACTURER","MODELNAME"' getvar='ORCAMULTI"{urn:schemas-upnp-org:device-1-0}device,{urn:schemas-upnp-org:device-1-0}manufacturer","{urn:schemas-upnp-org:device-1-0}device,{urn:schemas-upnp-org:device-1-0}modelName"' />
+  <code action="setparamsvars"     waitforresponse='0' type="action" string="setvar" par1="loeweparams" par2='&lt;?xml version="1.0" encoding="utf-8"?> &lt;v:Envelope xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:d="http://www.w3.org/2001/XMLSchema" xmlns:c="http://schemas.xmlsoap.org/soap/encoding/" xmlns:v="http://schemas.xmlsoap.org/soap/envelope/" xmlns:n0="urn:loewe.de:RemoteTV:Tablet"> &lt;v:Header /> &lt;v:Body> '  />
+  <code action="setloeweheaders"   waitforresponse='0' type="action" string="setvar" par1="loeweheader" par2='"Content-length":"$cvar(datalenght)","Content-type":"text/xml;charset=utf-8","Connection":"close", "Accept-Encoding":"gzip"' preaction='setparamsvars' />
+  <code action='logon'            type="soap" waitforresponse='1' requesttype='POST' cmd='/loewe_tablet_0001' headers='{$var(loeweheader),"SOAPAction": "RequestAccess"}' params='$var(loeweparams) &lt;n0:RequestAccess> &lt;fcid&gt;91827364&lt;/fcid&gt;  &lt;ClientId&gt;?&lt;/ClientId&gt; &lt;DeviceType>ORCA Remote Device&lt;/DeviceType> &lt;DeviceName>ORCA&lt;/DeviceName> &lt;DeviceUUID>$var(MAC_ADDRESS_COLON)&lt;/DeviceUUID> &lt;RequesterName>SoapUI&lt;/RequesterName>&lt;/n0:RequestAccess>&lt;/v:Body>&lt;/v:Envelope>' parseoption='xml' ldestvar='"FCID","CLIENTID"' getvar='ORCAMULTI"{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}RequestAccessResponse,{urn:loewe.de:RemoteTV:Tablet}fcid","{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}RequestAccessResponse,{urn:loewe.de:RemoteTV:Tablet}ClientId"' preaction='setloeweheaders' />
+
+  <code action='info'             type="soap" waitforresponse='0' requesttype='POST' cmd='/loewe_tablet_0001' headers='{$var(loeweheader),"SOAPAction": "InjectRCKey"}' params='$var(loeweparams)&lt;n0:InjectRCKey&gt; &lt;fcid&gt;$cvar(FCID)&lt;/fcid&gt; &lt;ClientId&gt;$cvar(CLIENTID)&lt;/ClientId&gt; &lt;n0:InputEventSequence i:type="n0:InputEventSequence"&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="press" value="79" />&gt;&lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="release" value="79" />&gt;&lt;/n0:InputEventSequence>&lt;/n0:InjectRCKey>&lt;/v:Body>&lt;/v:Envelope>' />
+  <code action="key_1"            type="soap" waitforresponse='0' requesttype='POST' cmd='/loewe_tablet_0001' headers='{$var(loeweheader),"SOAPAction": "InjectRCKey"}' params='$var(loeweparams)&lt;n0:InjectRCKey&gt; &lt;fcid&gt;$cvar(FCID)&lt;/fcid&gt; &lt;ClientId&gt;$cvar(CLIENTID)&lt;/ClientId&gt; &lt;n0:InputEventSequence i:type="n0:InputEventSequence"&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="press" value="1" />&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="release" value="1" />&gt; &lt;/n0:InputEventSequence>&lt;/n0:InjectRCKey>&lt;/v:Body>&lt;/v:Envelope>' />
+  <code action="key_2"            type="soap" waitforresponse='0' requesttype='POST' cmd='/loewe_tablet_0001' headers='{$var(loeweheader),"SOAPAction": "InjectRCKey"}' params='$var(loeweparams)&lt;n0:InjectRCKey&gt; &lt;fcid&gt;$cvar(FCID)&lt;/fcid&gt; &lt;ClientId&gt;$cvar(CLIENTID)&lt;/ClientId&gt; &lt;n0:InputEventSequence i:type="n0:InputEventSequence"&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="press" value="2" />&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="release" value="2" />&gt; &lt;/n0:InputEventSequence>&lt;/n0:InjectRCKey>&lt;/v:Body>&lt;/v:Envelope>' />
+  <code action="key_3"            type="soap" waitforresponse='0' requesttype='POST' cmd='/loewe_tablet_0001' headers='{$var(loeweheader),"SOAPAction": "InjectRCKey"}' params='$var(loeweparams)&lt;n0:InjectRCKey&gt; &lt;fcid&gt;$cvar(FCID)&lt;/fcid&gt; &lt;ClientId&gt;$cvar(CLIENTID)&lt;/ClientId&gt; &lt;n0:InputEventSequence i:type="n0:InputEventSequence"&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="press" value="3" />&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="release" value="3" />&gt; &lt;/n0:InputEventSequence>&lt;/n0:InjectRCKey>&lt;/v:Body>&lt;/v:Envelope>' />
+  </codeset>
+</syntaxhighlight></div>
+
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|action
+|Defines, to which ORCA action the  command should be send
+|-
+|preaction
+|This defines an action from this codeset to be executed, before this action will be send to to your device. This gives you the option, to gather required information using json, before you can send this action
+|-
+|getvar
+|This defines, which information will be collected from the json respons., Only the last attribute will be used. If an attribute belongs to a list, only the first list entry is parsed.
+|-
+|ldestvar
+|This defines, which variable should be set by the information parsed by getvar. This variable is local to the interface and local to the configuration
+|-
+|gdestvar
+|This defines, which variable should be set by the information parsed by getvar. This variable is global to all ORCA functions
+|-
+|cmd
+|This is the command to transmit using json. Do not forget the trailing newline \n. You can chain up several commands separated by a newline tag.
+|}
+
+Variable replacement: You can use variable placeholder to use variables in your json command string
+
+{| class="wikitable"
+! align="left" | var
+! align="left" | Description
+|-
+|var()
+|Uses a global variable name to be replaced
+|-
+|lvar()
+|Uses a language variable name to be replaced
+|-
+|cvar()
+|Uses a local variable to be replaced
+|}
+
+Example:
+The following line requests the current playerid from KODI/XBMC , and places the result as a local variable "playerid"
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<code action='getplayerid' cmd='{"jsonrpc":"2.0","method":"Player.GetActivePlayers"}' ldestvar='playerid' getvar='result,playerid'/></syntaxhighlight></div>
+
+
+The following line request to get the playerid first, and then uses the result in the command to control the play of KODI/XBMC
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<code action='stop' cmd='{"jsonrpc":"2.0","method":"Player.Stop", "params":{"playerid":$cvar(playerid)} }' preaction='getplayerid'/></syntaxhighlight></div>
+
+
+You can have as much actions as you like in your codeset file. You can use the same assignment file for several configurations.WikiDoc:End
+WikiDoc:End
+'''

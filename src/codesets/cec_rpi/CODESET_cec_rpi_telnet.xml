@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String
+     cmd = command to send, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>CEC control using Telnet</name>
+      <description language='English'>CEC Control using Telnet for the RPI</description>
+      <description language='German'>CEC Steuerung über Telnet für den RPI</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <skip>0</skip>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/cec_rpi/CODESET_cec_rpi_telnet.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_cec_rpi_telnet.zip</sourcefile>
+          <targetpath>codesets/cec_rpi</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>CEC Control (RPI)</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+
+  <action string="codeset" name="power_off"    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 36" | cec-client -s\r\n' />
+  <action string="codeset" name="power_on"     waitforresponse='0' cmd='echo "on $cvar(DESTTYPE)" |  cec-client -s\r\n' />
+  <action string="codeset" name="power_toggle" waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 40" | cec-client -s\r\n' />
+
+  <action string="codeset" name="power_toggle1" waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 6B" | cec-client -s\r\n' />
+  <action string="codeset" name="power_off1"   waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 6C" | cec-client -s\r\n' />
+  <action string="codeset" name="power_on1"    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 6f" | cec-client -s\r\n' />
+
+  <action string="codeset" name='suspend'      waitforresponse='0' cmd='echo "on $cvar(DESTTYPE)" |  cec-client -s\r\n' />
+
+  <action string="codeset" name='menu'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 8D 00" | cec-client -s\r\n' />
+  <action string="codeset" name='ok'           waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 00" | cec-client -s\r\n' />
+  <action string="codeset" name='up'           waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 01" | cec-client -s\r\n' />
+  <action string="codeset" name='down'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 02" | cec-client -s\r\n' />
+  <action string="codeset" name='left'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 03" | cec-client -s\r\n' />
+  <action string="codeset" name='right'        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 04" | cec-client -s\r\n' />
+  <!-- Root Menue-->
+  <action string="codeset" name='home'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 09" | cec-client -s\r\n' />
+  <action string="codeset" name='setup'        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 0A" | cec-client -s\r\n' />
+  <action string="codeset" name='favorites'   waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 0C" | cec-client -s\r\n' />
+  <action string="codeset" name='exit'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 0D" | cec-client -s\r\n' />
+  <action string="codeset" name='esc'          waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 0D" | cec-client -s\r\n' />
+
+  <action string="codeset" name="key_1"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 21" | cec-client -s\r\n' />
+  <action string="codeset" name="key_2"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 22" | cec-client -s\r\n' />
+  <action string="codeset" name="key_3"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 23" | cec-client -s\r\n' />
+  <action string="codeset" name="key_4"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 24" | cec-client -s\r\n' />
+  <action string="codeset" name="key_5"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 25" | cec-client -s\r\n' />
+  <action string="codeset" name="key_6"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 26" | cec-client -s\r\n' />
+  <action string="codeset" name="key_7"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 27" | cec-client -s\r\n' />
+  <action string="codeset" name="key_8"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 28" | cec-client -s\r\n' />
+  <action string="codeset" name="key_9"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 29" | cec-client -s\r\n' />
+  <action string="codeset" name="key_0"        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 20" | cec-client -s\r\n' />
+  <action string="codeset" name="key_."        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 2A" | cec-client -s\r\n' />
+  <!-- Enter -->
+  <action string="codeset" name='return'       waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 2B" | cec-client -s\r\n' />
+  <action string="codeset" name='favorite next' waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 2F" | cec-client -s\r\n' />
+  <action string="codeset" name='channel_up'   waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 30" | cec-client -s\r\n' />
+  <action string="codeset" name='channel_down' waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 31" | cec-client -s\r\n' />
+  <action string="codeset" name='previous_tv_channel' waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 32" | cec-client -s\r\n' />
+  <action string="codeset" name='audiochannel_select' waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 33" | cec-client -s\r\n' />
+  <action string="codeset" name='source'       waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 34" | cec-client -s\r\n' />
+  <action string="codeset" name='info'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 35" | cec-client -s\r\n' />
+  <action string="codeset" name='help'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 36" | cec-client -s\r\n' />
+
+  <action string="codeset" name='page_down'    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 37" | cec-client -s\r\n' />
+  <action string="codeset" name='page_up'      waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 38" | cec-client -s\r\n' />
+  <action string="codeset" name="increasevolvar" waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 41" | cec-client -s\r\n' />
+  <action string="codeset" name="decreasevolvar" waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 42" | cec-client -s\r\n' />
+  <action string="codeset" name='mute_toggle'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 43" | cec-client -s\r\n' />
+  <action string="codeset" name='play'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 44" | cec-client -s\r\n' />
+  <action string="codeset" name='stop'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 45" | cec-client -s\r\n' />
+  <action string="codeset" name='pause'        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 46" | cec-client -s\r\n' />
+  <action string="codeset" name='record'       waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 47" | cec-client -s\r\n' />
+  <action string="codeset" name='fast_rewind'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 48" | cec-client -s\r\n' />
+  <action string="codeset" name='fast_forward' waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 49" | cec-client -s\r\n' />
+  <action string="codeset" name='eject'        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 4A" | cec-client -s\r\n' />
+  <action string="codeset" name='skip_back'    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 4B" | cec-client -s\r\n' />
+  <action string="codeset" name='skip_forward' waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 4C" | cec-client -s\r\n' />
+  <action string="codeset" name='stop_record'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 4D" | cec-client -s\r\n' />
+  <action string="codeset" name='pause_record' waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 4E" | cec-client -s\r\n' />
+  <action string="codeset" name='angle'        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 50" | cec-client -s\r\n' />
+  <action string="codeset" name='angle'        waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 50" | cec-client -s\r\n' />
+  <!-- Sub picture -->
+  <action string="codeset" name='pip_on'       waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 51" | cec-client -s\r\n' />
+  <action string="codeset" name='video_on_demand' waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 52" | cec-client -s\r\n' />
+  <action string="codeset" name='epg'          waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 53" | cec-client -s\r\n' />
+  <action string="codeset" name='timer_programming' waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 54" | cec-client -s\r\n' />
+
+  <action string="codeset" name='play_function'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 60" | cec-client -s\r\n' />
+  <action string="codeset" name='pause_toggle_function'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 61" | cec-client -s\r\n' />
+  <action string="codeset" name='record_function'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 62" | cec-client -s\r\n' />
+  <action string="codeset" name='pause_record_function'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 63" | cec-client -s\r\n' />
+  <action string="codeset" name='stop_function'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 64" | cec-client -s\r\n' />
+  <action string="codeset" name='mute_function'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 65" | cec-client -s\r\n' />
+  <action string="codeset" name='restore_volume_function'  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 66" | cec-client -s\r\n' />
+  <action string="codeset" name='tuning_up'    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 67" | cec-client -s\r\n' />
+  <!--  Select Media Function -->
+  <action string="codeset" name='source tv/web'       waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 68" | cec-client -s\r\n' />
+  <action string="codeset" name='avmode'       waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 69" | cec-client -s\r\n' />
+
+  <action string="codeset" name='audio_input_function'       waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 69" | cec-client -s\r\n' />
+
+  <action string="codeset" name="button_red"   waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 72" | cec-client -s\r\n' />
+  <action string="codeset" name="button_green" waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 73" | cec-client -s\r\n' />
+  <action string="codeset" name="button_yellow" waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 74" | cec-client -s\r\n' />
+  <action string="codeset" name="button_blue"  waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 71" | cec-client -s\r\n' />
+  <action string="codeset" name="button_F5"    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 75" | cec-client -s\r\n' />
+  <action string="codeset" name="data"         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 76" | cec-client -s\r\n' />
+
+  <action string="codeset" name="setvolume"    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 9A $cvar(volumetoset)" | cec-client -s\r\n' />
+  <action string="codeset" name='getvolume'    waitforresponse='1' cmd='echo "tx $cvar(TARGET) 71" | cec-client -s\r\n' parseoption='xml' ldestvar='volume' gdestvar='mainvolume' getvar='volume'/>
+
+</includes>

@@ -1,0 +1,14 @@
+
+<page name='Page_InterfaceSettings'>
+  <page_parameter>
+      <preventpreinit>1</preventpreinit>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background' type='BACKGROUND' backgroundcolor='$var(black)' />
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitmessage_ll.xml" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitmessage_ls.xml" parse="xml" condition="$var(SCREEN)==SCREEN_LS"></xi:include>
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitmessage_pl.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitmessage_ps.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
+    <element name='Interfacesettings' type='SETTINGS' settingstype='interface' />
+  </elements>
+</page>

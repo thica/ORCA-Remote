@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String -->
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanagerq>
+    <entry>
+      <name>Bluetooth FIRETV</name>
+      <description language='English'>FireTV commandset for Bluetooth (WIP), not working</description>
+      <description language='German'>FireTV Kommandos für Bluetooth (WIP), not working</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <skip>1</skip>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/CODESET_bluetooth_FIRETV.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_bluetooth_FIRETV.zip</sourcefile>
+          <targetpath>codesets/bluetooth</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Android adb</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanagerq>
+
+  <!-- KEYCODE_DPAD_CENTER /  enter=66-->
+  <action string="codeset" name='ok' waitforresponse='0' cmd='Shell' params="input keyevent 23" />
+  <!-- KEYCODE_DPAD_XXXX -->
+  <action string="codeset" name='left' waitforresponse='0' cmd='Shell' params="input keyevent 21" />
+  <action string="codeset" name='right' waitforresponse='0' cmd='Shell'  params="input keyevent 22" />
+  <action string="codeset" name='up' waitforresponse='0' cmd='Shell'  params="input keyevent 19" />
+   <action string="codeset" name='down' waitforresponse='0' cmd='Shell'  params="input keyevent 20" />
+  <!-- KEYCODE_BACK -->
+  <action string="codeset" name='exit' waitforresponse='0' cmd='Shell'  params="input keyevent 4" />
+
+  <action string="codeset" name='home' waitforresponse='0' cmd='Shell'  params="input keyevent 3" />
+  <!-- starting with KITKAT 223 = SLEEP which is not a toggle -->
+  <action string="codeset" name='power_off'       cmd='Shell'  params="input keyevent 223" />
+  <!-- starting with KITKAT 224 = WAKEUP which is not a toggle -->
+  <action string="codeset" name='power_on'         cmd='Shell'  params="input keyevent 223" />
+
+  <action string="codeset" name='power_toggle'     cmd='Shell'  params="input keyevent 26" />
+
+  <action string="codeset" name='pause_toggle' waitforresponse='0' cmd='Shell'  params="input keyevent 85" />
+  <!-- could be 1 as well, Invoke the Android context menu (OptionsMenu).  -->
+  <action string="codeset" name='menu' waitforresponse='0' cmd='Shell'  params="input keyevent 82" />
+
+  <action string="codeset" name='startapp' waitforresponse='0' cmd='Shell'  params="am start -n $var(startapp)" />
+
+  <!--  NO ADB Codes
+  <action string="codeset" name="repeat_toggle" waitforresponse='0' cmd='Shell'  params="input keyevent 0" />
+  <action string="codeset" name="repeat_on" waitforresponse='0' cmd='Shell'  params="input keyevent 0" />
+  <action string="codeset" name="repeat_off" waitforresponse='0' cmd='Shell'  params="input keyevent 0" />
+  <action string="codeset" name="shuffle_toggle" waitforresponse='0' cmd='Shell'  params="input keyevent 0" />
+  <action string="codeset" name="shuffle_on" waitforresponse='0' cmd='Shell'  params="input keyevent 0" />
+  <action string="codeset" name="shuffle_off" waitforresponse='0' cmd='Shell'  params="input keyevent 0" />
+  -->
+
+    <!-- No function on FireTV -->
+  <action string="codeset" name='pause' waitforresponse='0' cmd='Shell'  params="input keyevent 121" />
+  <action string="codeset" name='play' waitforresponse='0' cmd='Shell'  params="input keyevent 126" />
+  <action string="codeset" name='stop' waitforresponse='0' cmd='Shell'  params="input keyevent 86" />
+  <action string="codeset" name='fast_forward' waitforresponse='0' cmd='Shell'  params="input keyevent 90" />
+  <action string="codeset" name='fast_rewind' waitforresponse='0' cmd='Shell'  params="input keyevent 89" />
+  <action string="codeset" name='skip_forward' waitforresponse='0' cmd='Shell'  params="input keyevent 87" />
+  <action string="codeset" name='skip_back' waitforresponse='0' cmd='Shell'  params="input keyevent 88" />
+
+  <action string="codeset" name="volume_up" waitforresponse='0' cmd='Shell'  params="input keyevent 24" />
+  <action string="codeset" name="volume_down" waitforresponse='0' cmd='Shell'  params="input keyevent 25" />
+  <action string="codeset" name='mute_toggle' waitforresponse='0' cmd='Shell'  params="input keyevent 164" />
+  <action string="codeset" name='mute_on' waitforresponse='0' cmd='Shell'  params="input keyevent 164" />
+  <action string="codeset" name='mute_off' waitforresponse='0' cmd='Shell'  params="input keyevent 164" />
+  <action string="codeset" name='mute_mic' waitforresponse='0' cmd='Shell'  params="input keyevent 91" />
+  <action string="codeset" name="call" waitforresponse='0' cmd='Shell'  params="input keyevent 5" />
+  <action string="codeset" name="endcall" waitforresponse='0' cmd='Shell'  params="input keyevent 6" />
+  <action string="codeset" name="3dtoggle" waitforresponse='0' cmd='Shell'  params="input keyevent 206" />
+  <action string="codeset" name="app_switch" waitforresponse='0' cmd='Shell'  params="input keyevent 187" />
+  <action string="codeset" name="assist" waitforresponse='0' cmd='Shell'  params="input keyevent 219" />
+  <action string="codeset" name="avr_input" waitforresponse='0' cmd='Shell'  params="input keyevent 182" />
+  <action string="codeset" name="avr_power" waitforresponse='0' cmd='Shell'  params="input keyevent 181" />
+
+  <action string="codeset" name='key_1' waitforresponse='0' cmd='Shell'  params="input keyevent 8" />
+  <action string="codeset" name='key_2' waitforresponse='0' cmd='Shell'  params="input keyevent 9" />
+  <action string="codeset" name='key_3' waitforresponse='0' cmd='Shell'  params="input keyevent 10" />
+  <action string="codeset" name='key_4' waitforresponse='0' cmd='Shell'  params="input keyevent 11" />
+  <action string="codeset" name='key_5' waitforresponse='0' cmd='Shell'  params="input keyevent 12" />
+  <action string="codeset" name='key_6' waitforresponse='0' cmd='Shell'  params="input keyevent 13" />
+  <action string="codeset" name='key_7' waitforresponse='0' cmd='Shell'  params="input keyevent 14" />
+  <action string="codeset" name='key_8' waitforresponse='0' cmd='Shell'  params="input keyevent 15" />
+  <action string="codeset" name='key_9' waitforresponse='0' cmd='Shell'  params="input keyevent 16" />
+  <action string="codeset" name='key_0' waitforresponse='0' cmd='Shell'  params="input keyevent 7" />
+  <action string="codeset" name='key_-' waitforresponse='0' cmd='Shell'  params="input keyevent 69" />
+  <action string="codeset" name='key_+' waitforresponse='0' cmd='Shell'  params="input keyevent 81" />
+
+  <action string="codeset" name='key_A' waitforresponse='0' cmd='Shell'  params="input keyevent 29" />
+  <action string="codeset" name='key_B' waitforresponse='0' cmd='Shell'  params="input keyevent 30" />
+  <action string="codeset" name='key_C' waitforresponse='0' cmd='Shell'  params="input keyevent 31" />
+  <action string="codeset" name='key_D' waitforresponse='0' cmd='Shell'  params="input keyevent 32" />
+  <action string="codeset" name='key_E' waitforresponse='0' cmd='Shell'  params="input keyevent 33" />
+  <action string="codeset" name='key_F' waitforresponse='0' cmd='Shell'  params="input keyevent 34" />
+  <action string="codeset" name='key_G' waitforresponse='0' cmd='Shell'  params="input keyevent 35" />
+  <action string="codeset" name='key_H' waitforresponse='0' cmd='Shell'  params="input keyevent 36" />
+  <action string="codeset" name='key_I' waitforresponse='0' cmd='Shell'  params="input keyevent 37" />
+  <action string="codeset" name='key_J' waitforresponse='0' cmd='Shell'  params="input keyevent 38" />
+  <action string="codeset" name='key_K' waitforresponse='0' cmd='Shell'  params="input keyevent 39" />
+  <action string="codeset" name='key_L' waitforresponse='0' cmd='Shell'  params="input keyevent 40" />
+  <action string="codeset" name='key_M' waitforresponse='0' cmd='Shell'  params="input keyevent 41" />
+  <action string="codeset" name='key_N' waitforresponse='0' cmd='Shell'  params="input keyevent 42" />
+  <action string="codeset" name='key_O' waitforresponse='0' cmd='Shell'  params="input keyevent 43" />
+  <action string="codeset" name='key_P' waitforresponse='0' cmd='Shell'  params="input keyevent 44" />
+  <action string="codeset" name='key_Q' waitforresponse='0' cmd='Shell'  params="input keyevent 45" />
+  <action string="codeset" name='key_R' waitforresponse='0' cmd='Shell'  params="input keyevent 46" />
+  <action string="codeset" name='key_S' waitforresponse='0' cmd='Shell'  params="input keyevent 47" />
+  <action string="codeset" name='key_T' waitforresponse='0' cmd='Shell'  params="input keyevent 48" />
+  <action string="codeset" name='key_U' waitforresponse='0' cmd='Shell'  params="input keyevent 49" />
+  <action string="codeset" name='key_V' waitforresponse='0' cmd='Shell'  params="input keyevent 50" />
+  <action string="codeset" name='key_W' waitforresponse='0' cmd='Shell'  params="input keyevent 51" />
+  <action string="codeset" name='key_X' waitforresponse='0' cmd='Shell'  params="input keyevent 52" />
+  <action string="codeset" name='key_Y' waitforresponse='0' cmd='Shell'  params="input keyevent 53" />
+  <action string="codeset" name='key_Z' waitforresponse='0' cmd='Shell'  params="input keyevent 54" />
+  <action string="codeset" name='key_*' waitforresponse='0' cmd='Shell'  params="input keyevent 17" />
+  <action string="codeset" name='key_#' waitforresponse='0' cmd='Shell'  params="input keyevent 18" />
+  <action string="codeset" name='key_@' waitforresponse='0' cmd='Shell'  params="input keyevent 77" />
+  <action string="codeset" name='key_\' waitforresponse='0' cmd='Shell'  params="input keyevent 73" />
+  <action string="codeset" name='key_;' waitforresponse='0' cmd='Shell'  params="input keyevent 74" />
+  <action string="codeset" name="key_'" waitforresponse='0' cmd='Shell'  params="input keyevent 75" />
+  <action string="codeset" name='key_/' waitforresponse='0' cmd='Shell'  params="input keyevent 76" />
+  <action string="codeset" name="key_`" waitforresponse='0' cmd='Shell'  params="input keyevent 68" />
+  <action string="codeset" name="key_ " waitforresponse='0' cmd='Shell'  params="input keyevent 62" />
+  <action string="codeset" name="key_," waitforresponse='0' cmd='Shell'  params="input keyevent 55" />
+  <action string="codeset" name="key_." waitforresponse='0' cmd='Shell'  params="input keyevent 56" />
+  <action string="codeset" name="key_=" waitforresponse='0' cmd='Shell'  params="input keyevent 70" />
+  <action string="codeset" name="key_[" waitforresponse='0' cmd='Shell'  params="input keyevent 71" />
+  <action string="codeset" name="key_(" waitforresponse='0' cmd='Shell'  params="input keyevent 162" />
+  <action string="codeset" name="key_)" waitforresponse='0' cmd='Shell'  params="input keyevent 163" />
+  <action string="codeset" name="key_*" waitforresponse='0' cmd='Shell'  params="input keyevent 155" />
+  <action string="codeset" name="key_backspace" waitforresponse='0' cmd='Shell'  params="input keyevent 67" />
+
+  <action string="codeset" name="key_F1" waitforresponse='0' cmd='Shell'  params="input keyevent 131" />
+  <action string="codeset" name="key_F2" waitforresponse='0' cmd='Shell'  params="input keyevent 132" />
+  <action string="codeset" name="key_F3" waitforresponse='0' cmd='Shell'  params="input keyevent 133" />
+  <action string="codeset" name="key_F4" waitforresponse='0' cmd='Shell'  params="input keyevent 134" />
+  <action string="codeset" name="key_F5" waitforresponse='0' cmd='Shell'  params="input keyevent 135" />
+  <action string="codeset" name="key_F6" waitforresponse='0' cmd='Shell'  params="input keyevent 136" />
+  <action string="codeset" name="key_F7" waitforresponse='0' cmd='Shell'  params="input keyevent 137" />
+  <action string="codeset" name="key_F8" waitforresponse='0' cmd='Shell'  params="input keyevent 138" />
+  <action string="codeset" name="key_F9" waitforresponse='0' cmd='Shell'  params="input keyevent 139" />
+  <action string="codeset" name="key_F10" waitforresponse='0' cmd='Shell'  params="input keyevent 140" />
+  <action string="codeset" name="key_F11" waitforresponse='0' cmd='Shell'  params="input keyevent 141" />
+  <action string="codeset" name="key_F12" waitforresponse='0' cmd='Shell'  params="input keyevent 142" />
+
+  <action string="codeset" name="guide"  waitforresponse='0' cmd='Shell'  params="input keyevent 172" />
+  <!-- KEYCODE_SETTINGS -->
+  <action string="codeset" name="setup"  waitforresponse='0' cmd='Shell'  params="input keyevent 176" />
+  <action string="codeset" name="insert" waitforresponse='0' cmd='Shell'  params="input keyevent 124" />
+  <action string="codeset" name="info"   waitforresponse='0' cmd='Shell'  params="input keyevent 165" />
+  <action string="codeset" name="eject"   waitforresponse='0' cmd='Shell'  params="input keyevent 129" />
+  <action string="codeset" name="close"   waitforresponse='0' cmd='Shell'  params="input keyevent 128" />
+  <action string="codeset" name="record"   waitforresponse='0' cmd='Shell'  params="input keyevent 130" />
+  <action string="codeset" name="showsearch"   waitforresponse='0' cmd='Shell'  params="input keyevent 84" />
+  <action string="codeset" name="source tv"   waitforresponse='0' cmd='Shell'  params="input keyevent 242" />
+
+
+  <action string="codeset" name="help" waitforresponse='0' cmd='Shell'  params="input keyevent 259" />
+  <action string="codeset" name="manner" waitforresponse='0' cmd='Shell'  params="input keyevent 205" />
+  <action string="codeset" name="brightness_up" waitforresponse='0' cmd='Shell'  params="input keyevent 220" />
+  <action string="codeset" name="brightness_down" waitforresponse='0' cmd='Shell'  params="input keyevent 221" />
+  <action string="codeset" name='clear'       waitforresponse='0' cmd='Shell'  params="input keyevent 28" />
+  <action string="codeset" name='esc'       waitforresponse='0' cmd='Shell'  params="input keyevent 111" />
+  <!-- DVR-->
+  <action string="codeset" name='recordings'   waitforresponse='0' cmd='Shell'  params="input keyevent 173" />
+
+  <action string="codeset" name="bookmark" waitforresponse='0' cmd='Shell'  params="input keyevent 174" />
+  <action string="codeset" name="calculator" waitforresponse='0' cmd='Shell'  params="input keyevent 210" />
+  <action string="codeset" name="calendar" waitforresponse='0' cmd='Shell'  params="input keyevent 208" />
+  <action string="codeset" name="contacts" waitforresponse='0' cmd='Shell'  params="input keyevent 207" />
+  <action string="codeset" name="notification" waitforresponse='0' cmd='Shell'  params="input keyevent 83" />
+  <!-- envelope-->
+  <action string="codeset" name="mail" waitforresponse='0' cmd='Shell'  params="input keyevent 65" />
+  <action string="codeset" name="explorer" waitforresponse='0' cmd='Shell'  params="input keyevent 64" />
+
+  <action string="codeset" name='camera'       waitforresponse='0' cmd='Shell'  params="input keyevent 27" />
+  <action string="codeset" name='music'       waitforresponse='0' cmd='Shell'  params="input keyevent 209" />
+  <action string="codeset" name='camera_focus'       waitforresponse='0' cmd='Shell'  params="input keyevent 80" />
+  <action string="codeset" name='channel_down' waitforresponse='0' cmd='Shell'  params="input keyevent 167" />
+  <action string="codeset" name='channel_up'   waitforresponse='0' cmd='Shell'  params="input keyevent 166" />
+  <action string="codeset" name="switch_language" waitforresponse='0' cmd='Shell'  params="input keyevent 224" />
+  <!-- KEYCODE_LAST_CHANNEL-->
+  <action string="codeset" name="previous_tv_channel" waitforresponse='0' cmd='Shell'  params="input keyevent 229" />
+  <!-- KEYCODE_MEDIA_AUDIO_TRACK -->
+  <action string="codeset" name="audiochannel_next" waitforresponse='0' cmd='Shell'  params="input keyevent 222" />
+
+
+  <action string="codeset" name='button_green'     waitforresponse='0' cmd='Shell'  params="input keyevent 184" />
+  <action string="codeset" name='button_red'       waitforresponse='0' cmd='Shell'  params="input keyevent 183" />
+  <action string="codeset" name='button_yellow'    waitforresponse='0' cmd='Shell'  params="input keyevent 185" />
+  <action string="codeset" name='button_blue'      waitforresponse='0' cmd='Shell'  params="input keyevent 186" />
+
+  <!--KEYCODE_MEDIA_TOP_MENU -->
+  <action string="codeset" name='dvdmenu'         waitforresponse='0' cmd='Shell'  params="input keyevent 226" />
+
+  <!-- KEYCODE_MOVE_HOME -->
+  <action string="codeset" name='page_first'      waitforresponse='0' cmd='Shell'  params="input keyevent 122" />
+  <!-- KEYCODE_MOVE_END -->
+  <action string="codeset" name='page_last'      waitforresponse='0' cmd='Shell'  params="input keyevent 123" />
+  <action string="codeset" name='page_down'      waitforresponse='0' cmd='Shell'  params="input keyevent 93" />
+  <action string="codeset" name='page_up'        waitforresponse='0' cmd='Shell'  params="input keyevent 92" />
+
+  <action string="codeset" name='reboot'         waitforresponse='0' cmd='Reboot' />
+  <action string="codeset" name='getversion'     waitforresponse='1' cmd='Shell'  params="grep ro.build.version.sdk= system/build.prop" parseoption='tokenize' parsetoken='=' ldestvar='adbversion' />
+  <action string="codeset" name='getpowerstatus' waitforresponse='1' cmd='Shell'  params="dumpsys input_method | grep mScreenOn" parseoption='tokenize' parsetoken='mScreenOn=' ldestvar='adbpowerstatus' gdestvar='adbpowerstatus' />
+  <action string="codeset" name='send_string'    waitforresponse='0' cmd='Shell'  params="input text '$cvar(SENDTEXT)'"/>
+
+</includes>

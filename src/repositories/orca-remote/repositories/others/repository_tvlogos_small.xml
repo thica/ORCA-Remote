@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <repositorymanager>
+    <entry>
+      <name>TV Logo Pack Small</name>
+      <description language='English'>Small pack of German TV logos</description>
+      <description language='German'>Kleines TV Logo Packet (deutsche Sender)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(RESOURCEPATH)/tvlogos/tvlogos_small</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/others/tvlogos_small.zip</sourcefile>
+          <targetpath>resources/tvlogos/tvlogos_small</targetpath>
+        </source>
+      </sources>
+    </entry>
+  </repositorymanager>
+</root>

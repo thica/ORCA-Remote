@@ -1,0 +1,115 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-iTach
+WikiDoc:TOCTitle:iTach
+= iTach =
+The Global Caché iTach product family allows you to send infrared commands to your devices, based on commands they receive via the network.
+The iTach interface sends commands via TCP to an iTach gateway, which then passes the infrared commands to your devices.
+
+= Settings =
+
+The following settings are supported by the interface
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|Host
+|Host-Name or IP-Address of your iTach device. Could be "discover" as well.
+|-
+|Port
+|Port Address of your iTach device. Default is 4998
+|-
+|Connector
+|The connector within your iTach device. The connector "3" is usual your IR Blaster
+|-
+|Module
+|The module within your iTach device. The module is usual "1"
+|-
+|FNCodeset
+|Filename of your codeset. Without path
+|-
+|DiscoverTimeOut
+|For Autodiscover: Timeout to discover a device in seconds. Defaults to 1ß
+|-
+|SaveDiscoveredIP
+|For Autodiscover: Flag if the discovered IP should be saved. Prevents to discover every app start.
+|-
+|OldDiscoveredIP
+|For Autodiscover: The last discoverd IP-Address. Delete, if you want the force a new discover
+|-
+|TimeToClose
+|Timeout in seconds, until the connection from the interface to the device will be close.
+* -1 The connection will not be closed
+* 0 The connection will be closed immediately
+* all other, Timeout in seconds
+|-
+|DisableInterFaceOnError
+|Disables the interface, if an error occurs. Prevents the interface to continue to send commands to a broken connection.
+|-
+|DisconnectInterFaceOnSleep
+|Disconnects the interface, when your remote control device goes to sleep
+|}</div>
+
+Discover uses the iTach discover protocol. Pleaser refer to the discover iTach documentation for details on discover.
+
+= The codeset file =
+
+You need to define the codeset filename, which contains the command set for your device (eg: which commands to send by given ORCA commands). The connector and module parameter refers to your connectors of your iTach device. The module is usual "1", the connector "3" is usual your IR Blaster. Important: the module and connector parameter are only supported, if your codeset file has been configured properly.
+The interface supports either codesets in the common CCF format (preferred) or codesets in the iTacj format (depriciated)
+
+Codeset for the interface in CCF format follows the naming convention:
+CODESET_infrared_ccf_DEVICENAME.xml
+Codeset for the interface in iTach format follows the naming convention:
+CODESET_itach_DEVICENAME.xml
+
+A simple codeset file in the iTach format could look like that:
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<codeset>
+  <code action="power_on" type="string" cmd="sendir,$cvar(MODULE):$cvar(CONNECTOR),1,38461,1,1,10,30,10,71,9,31,10,31,9,31,9,71,10,31,9,31,10,30,10,31,9,71,10,71,9,71,10,30,10,31,9,1692,9,31,10,70,10,31,9,31,10,31,9,31,9,71,10,71,9,71,10,70,10,31,9,31,10,31,9,71,10,70,10,1691,10,31,9,71,10,30,10,31,9,31,10,71,9,31,9,31,10,31,9,31,10,70,10,71,9,71,10,31,9,31,10,1691,9,31,10,71,9,31,10,30,10,31,9,31,10,71,9,71,9,71,10,71,9,31,10,30,10,31,9,71,10,71,9,3846" />
+  <code action="power_off" type="string" cmd="sendir,$cvar(MODULE):$cvar(CONNECTOR),1,38580,1,1,10,30,10,71,9,31,10,30,10,31,10,30,10,71,9,31,10,30,10,31,9,71,10,70,10,71,10,30,10,31,9,1696,10,31,10,70,10,31,9,31,10,30,10,71,10,30,10,71,9,71,10,70,10,31,10,30,10,30,10,71,10,70,10,3858" />
+  <code action="up" type="string" cmd="sendir,$cvar(MODULE):$cvar(CONNECTOR),1,38580,1,1,10,30,10,31,10,70,10,70,10,31,10,70,10,70,10,31,10,30,10,31,10,70,10,30,10,71,10,30,10,31,10,1695,10,31,10,30,10,71,10,70,10,30,10,31,10,30,10,70,10,71,10,70,10,31,10,70,10,30,10,71,10,70,10,1696,10,30,10,31,10,70,10,71,10,30,10,70,10,71,10,30,10,30,10,31,10,70,10,31,10,70,10,30,10,31,10,1696,10,30,10,30,10,71,10,70,10,31,10,30,10,30,10,71,10,70,10,70,10,31,10,70,10,31,10,70,10,70,10,3858" />
+ </codeset>
+</syntaxhighlight></div>
+
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|action
+|Defines, to which ORCA action the iTach command should be send
+|-
+|type
+|fixed: string, reserved for future extensions
+|-
+|cmd
+|This is the command to transmit to iTach.
+|}
+
+= Variable replacements =
+
+Variable replacement: You can use variable placeholder to use variables in your iTach command string
+
+{| class="wikitable"
+! align="left" | var
+! align="left" | Description
+|-
+|{CHANNELREPEAT:"command"}
+|Mainly used for channel selection, the parameter after the colon determs, which iTach command to send as single keystrokes.
+|}
+
+= Learning/Finding IR Commands =
+
+You should use the iTach tool iLearn to learn infrared commands from your original remote, or the iConvert tool, to convert pronto hexcodes. You should replace the module and connector parameter as shown in the example above.
+
+= The iTach DB =
+
+ORCA can download / convert IR codes from the iTAch IR Code DB. (Control Tower). This is a large IR Code daabase. (Find it under settings-tools)
+
+You have to register at http://irdb.globalcache.com/ (It's free!)
+WikiDoc:End
+'''

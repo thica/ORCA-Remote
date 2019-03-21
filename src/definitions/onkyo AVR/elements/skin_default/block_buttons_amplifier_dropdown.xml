@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Frame" type="PICTURE" posx="left" posy="top" picturenormal="background boxes" />
+  <element name="Anchor Effect Device Buttons inner" type="ANCHOR" posx="center" posy="middle" width="%90" height="%90">
+    <elements>
+      <element name ='DropDown_Services' type='DROPDOWN'  posy='top'              height='%33.3'            width='%100'           fontsize="%h50"  picturenormal='button wide*' caption="$lvar(onkyoAVR_10002):::$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_NetService_name[]"       actions='Change Service $dvar(definition_alias_mediaplayer_template)'  />
+      <element name ='DropDown_Sources'  type='DROPDOWN'  posy='of:bottom:last'   height="of:height:last"   width='of:width:last'  fontsize="%h50"  picturenormal='button wide*' caption="$lvar(onkyoAVR_10003):::$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Sources_name[]"          actions='Change Source $dvar(definition_alias_mediaplayer_template)'  />
+      <element name ='DropDown_Effects'  type='DROPDOWN'  posy='of:bottom:last'   height="of:height:last"   width='of:width:last'  fontsize="%h50"  picturenormal='button wide*' caption="$lvar(onkyoAVR_10004):::$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_ListeningMode_name[]"    actions='Change Mode $dvar(definition_alias_mediaplayer_template)'  />
+    </elements>
+  </element>
+</elements>
+
+
+

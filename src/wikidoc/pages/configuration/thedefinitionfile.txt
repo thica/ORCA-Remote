@@ -1,0 +1,293 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Configuration
+WikiDoc:Page:The definition files
+WikiDoc:TOCTitle:4=The Definition File
+
+= Overview =
+
+The definition file is the core component of your remote setup. A definition is a xml file, which usually includes several other xml files. If you want to create your own definition or want to adjust given definitions, you will need to change the definition file.
+
+A typical definition file has two sections: the
+<def_parameter> section and the <pages> section: Below an example of a definition xml file:
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <support>http://www.orca-remote.org/forum/</support>
+    <definitionvars>{"definition_devicename_panasonictvir":"PANASONICTVIR","definition_devicename_tvtemplate":"SHARED"}</definitionvars>
+  </def_parameter>
+  <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(DEFINITIONPATH)/page_*" parse="xml"></xi:include>
+    <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+  </pages>
+
+  <definitionimports>
+    <definition importlanguages="1" importpages="1" importsettings="1" importactions="1" alias="$dvar(definition_devicename_panasonictvir)_tvtemplate" definitionvars='{"definition_devicename_generictv":"PANASONICTVIR","definition_devicename_tvtemplate":"SHARED","definition_alias_tvtemplate":"Shared Channels"}'>generic TV</definition>
+  </definitionimports>
+
+  <interface_setup>
+    <interface name="Keene_Kira">
+      <configuration name ="DEVICE_$dvar(definition_devicename_panasonictvir)">
+        <setting name="Port" parameter="65432"/>
+        <setting name="Host" parameter="192.168.1.2"/>
+        <setting name="FNCodeset" parameter="CODESET_Keene_Kira_PANASONIC TV N2QAYB000181.xml"/>
+        <setting name="TimeToClose" parameter="10"/>
+        <setting name="DisableInterFaceOnError" parameter="0"/>
+        <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+      </configuration>
+    </interface>
+    <interface name="iTach">
+      <configuration name ="DEVICE_$dvar(definition_devicename_panasonictvir)">
+        <setting name="Port" parameter="4998"/>
+        <setting name="Host" parameter="192.168.1.2"/>
+        <setting name="FNCodeset" parameter="CODESET_iTach_PANASONIC TV N2QAYB000181.xml"/>
+        <setting name="Connector" parameter="3"/>
+        <setting name="Module" parameter="1"/>
+        <setting name="TimeToClose" parameter="10"/>
+        <setting name="DisableInterFaceOnError" parameter="0"/>
+        <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+      </configuration>
+    </interface>
+  </interface_setup>
+
+  <repositorymanager>
+    <entry>
+      <name>Panasonic TVs 16 to 10 wide</name>
+      <description language='English'>IR Remote Control for Panasonic TVs</description>
+      <description language='German'>IR Fernbedienung für Panasonic TVs</description>
+      <author>Carsten Thielepape</author>
+      <version>1.00</version>
+      <minorcaversion>1.1.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/panasonic TV IR</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/panasonic TV IR.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>definitions</type>
+          <name>Generic TV / DVB template</name>
+        </dependency>
+        <dependency>
+          <type>codesets</type>
+          <name>PANASONIC TV N2QAYB000181 iTach</name>
+        </dependency>
+        <dependency>
+          <type>codesets</type>
+          <name>PANASONIC TV N2QAYB000181 Keene Kira</name>
+        </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/panasonic TV IR/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/panasonic TV IR/interfacesettings*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+</orca>
+</syntaxhighlight></div>
+
+= Using xml includes  =
+
+You can use xml includes to structure your definition file and to reuse blocks. If you want to use includes , make sure, that the parent section have the following attribute:
+
+xmlns:xi="http://www.w3.org/2001/XInclude"
+
+To include an element, use the following syntax:
+
+<xi:include href="$var(DEFINITIONPATH)/page_activities.xml"         parse="xml"></xi:include>
+
+The $var(DEFINITIONPATH) will be replaced by the path of your definition. Please use always path placeholders instead of hard coded paths, to make your definition file portable to all platforms.
+
+You can make conditional includes by adding conditions to the includes. Pleser refer to the actions documentation how to use conditions.
+e.g.:
+<xi:include href="$var(DEFINITIONPATH)/block_topline.xml" parse="xml" conditionchecktype="==" conditionvar="$var(DEFINITIONNAME)" conditionvalue="kodi"/>
+
+= Section: def_parameter =
+
+This section describes some basic settings of your definition file
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|name
+|Sets the name and desciption of your definition
+|-
+|maxx
+|Sets the '''virtual'''  coordinates / screen size of your definition as x pixels. You can either use physical screen dimensions or virtual screen dimension. Using virtual screen dimensions would help to scale your layout to different device sizes.
+|-
+|maxy
+|Same as maxy, bu just for the vertical size.
+|-
+|defaultfont
+|The default font sets the font to use for buttons and labels, if not a specific font has been assigned. Please note: Here you have the font names given in your font definition file, and not system font names.
+Please set the default font only, if you do not want, that a font is set by a skin
+|-
+|fontsize_button
+|The defaut fontsize for buttons, if the individual button definition does not have a fontsize. Use virtual fontsize which is linked to the maxx numbers
+|-
+|fontsize_text
+|The defaut fontsize for text fields and input fields, if the individual widget definition does not have a fontsize. Use virtual fontsize which is linked to the maxx numbers
+|-
+|fontsize_file
+|The defaut fontsize for file viewer widgets, if the individual widget definition does not have a fontsize. Use virtual fontsize which is linked to the maxx numbers
+|-
+|orientations
+|The orientations supported by this definition. As default, ORCA uses the landscape mode. If ORCA has been started in portrait mode , but the definition just supports landscape, the the screen is rotated ( and vice versa). Can be portrait or landscape, or both, separated by ,
+Note: The definition is responsibe to handle orientations properly, ORCA just rotates the screen properly.
+|-
+|definitionvars
+|Definition vars are used like text replacements during loadtime (not runtime). The apply to definitions, elements and actions. You can define several definition vars,
+|}
+
+
+= Section: pages =
+
+This section starts the definition of all your pages. Please note: You need to define the complete pages structure, or: in other words: You are free to define the pages structure as you like them. Nothing is fixed! For every page you will have a separate <page> section. You can define each page as a separate include, or you can add all pages into a single file.  The standard pages needs to be included, but you are fine to replace them with your own versions.
+
+== Section: page ==
+
+Each page description has two sections. One section describes some common parameter for this section, the other section describes the elements to place on the page. A page description could like the example below.
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<page name='Page_Activities'>
+    <page_parameter>
+        <interface>$var(HTPC_INTERFACE_1)</interface>
+        <configname>$var(HTPC_CONFIGNAME_1)</configname>
+      </page_parameter>
+    <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+        <element name='Background Main Screen' type='BACKGROUND' picturenormal='$var(SKINPATH)/pics/background.jpg'>
+            <xi:include  href="$var(DEFINITIONPATH)/block_topline.xml" parse="xml"/>
+        </element>
+        <element name='Button Settings' type='BUTTON'  posx='13230'   posy='top'      width='3000' height='840'  picturenormal='$var(SKINPATH)/pics/button wide large*.png' action='Show Page' par1='settings' fontsize='300' textcolor='#000000ff' caption='$lvar(2002)'/>
+    </elements>
+</page></syntaxhighlight></div>
+
+=== Section: page_parameter ===
+
+This section describes the parameter for this page. It is mainly used to set the default interface and the default config for all commands on this page. This is not mandatory, but it helps to avoid defining these parameters for all commands on your page.
+
+{| class="wikitable"
+! align="left" | Parameter
+! align="left" | Description
+|-
+|interface
+|(Optional) Sets the default interface for actions. You can either use the direct interface name, or, even better, use a variable which points to the interface name. Please refer to section "Variables" to understand, how to use variables
+|-
+|configname
+|(Optional) Sets the default configuration for actions. You can either use the direct configuration name, or, even better, use a variable which points to the configuration name. Please refer to section "Variables" to understand, how to use variables
+|-
+|popup
+|(Optional) If you set this option to 1, the page will be shown as a popup. This means, that the "old" page will not disappear and enables you to use (semi) transparent backgrounds. Only one popup canbe shown at the same time
+|-
+|preventpreinit
+|Prevents that the page will be intialized before first use
+|}
+
+=== Section: Elements ===
+
+This section starts the list of all elements (widgets) for your page
+
+==== Section: Element ====
+
+For each element you need a have a separate element. Refer to the widgets reference, how to use widgets.
+
+= Section: definitionimports  =
+
+You can import other or parts of other definitions into your own definition. This is helpful, if you want to setup a multi device definiton and want to use available definitions without the need to copy its content. You can import mutiple definitions. Imports are done in reverse order, so that the first definition replaces all elements with the same name of the later definition.
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|importlanguages
+|(Optional) Defines, if you want to load the language files from a definition. (0/1) Default is 0.
+|-
+|importpages
+|(Optional) Defines, if you want to load the pages from a definition. (0/1) Default is 0.
+|-
+|importsettings
+|(Optional) Defines, if you want to load the settings from a definition. (0/1) Default is 0.
+|-
+|importactions
+|(Optional) Defines, if you want to load the actions from a definition. (0/1) Default is 0.
+|-
+|alias
+|(Optional) defines an alias name for the definition. Normally, definitions with the same name art just loaded once. If you define different alias for the same definition , a definition can be loaded mutiple time. EG: You have two FireTV and want to import the FireTV definition twice.
+|-
+|definitionvars
+|You can replace the definitionvars of the imported definition by those give here.
+|}
+
+= Section: settings  =
+
+You can define additional settings, which are required to customize your definition. The settings are bound to a variable will be set before definition start.
+
+The following example defines two settings for the XBMC definition.
+
+The first setting is a boolean setting, which sets the showxbmcpowerbuttons variable to 0 or 1
+The second setting is a options setting, which sets the xbmcpowerdownaction variable to one of the given string values.
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+  <settings>
+    <setting title="$lvar(10500)" desc="$lvar(10501)" var="showxbmcpowerbuttons" type="bool" default="1" />
+    <setting title="$lvar(10502)" desc="$lvar(10503)" var="xbmcpowerdownaction" type="scrolloptions" default="Exit" options='"Exit","Suspend","Hibernate","Reboot","Poweroff"'/>
+  </settings>
+</syntaxhighlight></div>
+
+The following attributes are available to define settings
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|title
+|Sets the title of the setting
+|-
+|desc
+|Adds a further description to the setting
+|-
+|var
+|The name of the variable, the setting will be bound to
+|-
+|type
+|The type of the setting, can be
+* string: A string setting
+* boolean: A boolean setting, evaluates to 0 or 1
+* scrolloptions: A list of options to choose from
+* numeric: A numeric setting
+* numericslider: A numeric input, input done by a slider
+|-
+|default
+|Default value of the setting, if the setting has not been set by the user
+|-
+|options
+|For scrolloptions only: The list of option values in the format:
+'"Option 1","Option2","Further Options"'
+|-
+|max
+|For numeric slider Only: The maximum slider value (default 100)
+|-
+|min
+|For numeric slider Only: The minimum slider value (default 0)
+|-
+|roundpos
+|The rounding pos of the numeric value: 0 rounds to integers (2), 1 rounds to eg 2.1
+|}
+
+= Section: interface_setup =
+
+You can define for interfaces their initial settings / configs, in case you want to define  some parameter for the first start of yur definition. Look into the example give above how to use it
+
+
+WikiDoc:End
+'''

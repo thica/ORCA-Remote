@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <repositorymanager>
+        <entry>
+            <name>ONKYO AVR IR simple</name>
+            <description language="English">ONKYO AVR: Only power on command using IR</description>
+            <description language="German">ONKYO AVR: Nur der Power on Befehl über IR</description>
+            <author>Carsten Thielepape</author>
+            <version>3.70</version>
+            <minorcaversion>3.7.0</minorcaversion>
+            <sources>
+                <source>
+                    <local>$var(APPLICATIONPATH)/codesets/infrared_ccf/CODESET_infrared_ccf_ONKYO_AVR_Simple.xml</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_infrared_ccf_ONKYO_AVR_Simple.zip</sourcefile>
+                    <targetpath>codesets/infrared_ccf</targetpath>
+                </source>
+            </sources>
+            <dependencies>
+                <dependency>
+                    <type>interfaces</type>
+                    <name>iTach IR Control</name>
+                </dependency>
+                <dependency>
+                    <type>interfaces</type>
+                    <name>Keene Kira IR Control</name>
+                </dependency>
+                <dependency>
+                    <type>interfaces</type>
+                    <name>IR Control on Android devices</name>
+                </dependency>
+            </dependencies>
+        </entry>
+    </repositorymanager>
+    <action string="codeset" name="power_toggle" cmd_ccf="0000 006C 0000 0024 0155 00AB 0016 0015 0016 003F 0016 0015 0016 0015 0016 003F 0016 0015 0016 003F 0016 003F 0016 0015 0016 0015 0016 003F 0016 003F 0016 0015 0016 003F 0016 003F 0016 0015 0016 003F 0016 003F 0016 0015 0016 003F 0016 0015 0016 0015 0016 003F 0016 003F 0016 0015 0016 0015 0016 003F 0016 0015 0016 003F 0016 003F 0016 0015 0016 0015 0016 05EB 0155 0056 0016 0EE2" repeatcount="1" type="string"/>
+    <action name="power_off" cmd="power_toggle" type="alias" waitforresponse="0"/>
+    <action name="power_on" cmd="power_toggle" type="alias" waitforresponse="0"/>
+</includes>

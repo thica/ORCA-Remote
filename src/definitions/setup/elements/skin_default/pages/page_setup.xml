@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Setup'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background ' type='BACKGROUND' picturenormal='background'>
+      <element name='Button Setup' type='BUTTON' posx='center' posy='middle' width='%60' height='%60' picturenormal="$var(DEFINITIONPATH)/pics/settings.png" picturepressed="$var(DEFINITIONPATH)/pics/settings_pressed.png" action='gotosettindownloadgspage' fontsize='%h10'  caption='$lvar(setup_10002)' vtextalign='bottom'/>
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==setup"/>
+    </element>
+
+  </elements>
+</page>

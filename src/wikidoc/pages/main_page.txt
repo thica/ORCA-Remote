@@ -1,0 +1,49 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Main
+WikiDoc:Page:Main_Page
+WikiDoc:TOCTitle:General Information
+Welcome to the ORCA wiki. ORCA (Open Remote Control Application) is designed to be the new future of software remotes application.
+
+ORCA can be used by different user groups:
+*Standard/normal Remote Users:
+For those, how just wants to use a readymade remote control definition, you can select and download those using ORCA, and maybe you need to adjust some parameter in the settings dialog. No further knowledge required.
+*Configurators:
+For those, who wants more, you can adjust / change a given remote control definition or even can create a new remote control definition. You should know how to use / edit xml files and how to copy files to your remote device.  You do not to have programming skills for that.
+* Developers:
+If you want to create new interfaces your new type of devices, you can create your own interfaces. Interfaces are loaded at runtime and must be coded in python. So you need to be a python developer to develop your own interfaces
+==Main sections==
+{| class="wikitable"
+! For users
+|-
+|
+: Guide to set up ORCA.
+WikiDoc:TOC:StartWithOrca:List:ordered
+|}
+{| class="wikitable"
+! For configurators
+|-
+|
+: Information how to configure ORCA to work as YOUR remote.
+WikiDoc:TOC:Configuration:List:ordered
+
+: References
+WikiDoc:TOC:References:List:sorted
+|}
+
+{| class="wikitable"
+! For developers
+|-
+|
+; Architecture
+: An overview of the key parts of ORCAs source code.
+WikiDoc:TOC:Architecture:List:ordered
+; The repository manager
+: An overview about the principles of the repository manager and how to use it
+WikiDoc:TOC:Repository Manager:List:ordered
+; Developing interfaces
+: An overview of the ways to create a new ORCA interfaces.
+WikiDoc:TOC:Develop Interfaces:List:ordered
+|}
+WikiDoc:End
+'''

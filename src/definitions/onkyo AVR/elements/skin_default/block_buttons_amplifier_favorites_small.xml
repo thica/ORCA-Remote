@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Frame" type="PICTURE" posx="left" posy="top"  picturenormal="background boxes" />
+  <element name="Anchor Input Device Buttons" type="ANCHOR" posx="center" posy="middle" width="%95" height="%95">
+    <elements>
+      <element name="Button Favorites PGUP"  type="BUTTON" posy="top"             height="of:height:Anchor Input Device Buttons:/12" picturenormal="button wide*" fontsize="%h50" action="Send Favorite PGUP" caption="$lvar(1020)" />
+      <element name="Button Favorites[0]"     type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 0"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[0])" />
+      <element name="Button Favorites[1]"     type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 1"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[1])" />
+      <element name="Button Favorites[2]"     type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 2"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[2])" />
+      <element name="Button Favorites[3]"     type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 3"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[3])" />
+      <element name="Button Favorites[4]"     type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 4"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[4])" />
+      <element name="Button Favorites[5]"     type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 5"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[5])" />
+      <element name="Button Favorites[6]"     type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 6"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[6])" />
+      <element name="Button Favorites[7]"     type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 7"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[7])" />
+      <element name="Button Favorites[8]"     type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 8"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[8])" />
+      <element name="Button Favorites[9]"    type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite 9"   caption="$var($dvar(definition_alias_mediaplayer_template)_listtext[9])" />
+      <element name="Button Favorites PGDN"  type="BUTTON" posy="of:bottom:last"  height="of:height:last"                            picturenormal="button wide*" fontsize="%h50" action="Send Favorite PGDN"   caption="$lvar(1021)" />
+    </elements>
+  </element>
+</elements>

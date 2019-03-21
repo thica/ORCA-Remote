@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Button Red'    type='BUTTON' posx='left'          posy='top' width='%25' picturenormal='button square*' action='Send Button Red'      fontsize='%h30' iconfontsize='%h80' caption='icon:square color:#ff0000ff' />
+  <element name='Button Green'  type='BUTTON' posx='of:right:last' posy='top' width='%25' picturenormal='button square*' action='Send Button Green'    fontsize='%h30' iconfontsize='%h80' caption='icon:square color:#00ff00ff' />
+  <element name='Button Yellow' type='BUTTON' posx='of:right:last' posy='top' width='%25' picturenormal='button square*' action='Send Button Yellow'   fontsize='%h30' iconfontsize='%h80' caption='icon:square color:#ffff00ff' />
+  <element name='Button Blue'   type='BUTTON' posx='of:right:last' posy='top' width='%25' picturenormal='button square*' action='Send Button Blue'     fontsize='%h30' iconfontsize='%h80' caption='icon:square color:#0000ffff' />
+</elements>

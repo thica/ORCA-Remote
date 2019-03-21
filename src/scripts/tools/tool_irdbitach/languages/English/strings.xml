@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_IRDBITACH_1">Global Cache Control Tower</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_2">Load IR codes from the Control Tower Online IR Database</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_3">Load</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_4">IR Databases</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_5">You need to provide your access credentials in the script settings</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_6">Brand</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_7">Type</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_8">Model</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_9">Write CCF/HEX Codeset</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_10">Write iTach Codeset</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_11">Optimize Channel Select</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_12">Downloading Brands</string>
+  </strings>
+

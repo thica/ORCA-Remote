@@ -1,0 +1,17 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:StartWithOrca
+WikiDoc:Page:Security Warning
+WikiDoc:TOCTitle:3=Security Warning
+You need to be aware, that ORCA is dynamical loading python code for interfaces and scripts that will be excecuted. This is a potential risk for backdoor trojans to get access to your system. To minimize risk, please follow some guidelines:
+
+* Never load the Orca packages from other locations then the official download links.
+* Never add new interfaces from untrusted authors.
+* Make sure, that nobody can add interfaces to your installation without your approval.
+
+This security warning affects all platforms.
+
+If you do not feel confident using the App with these threads, please do not use it. Do not blame me!
+
+WikiDoc:End
+'''

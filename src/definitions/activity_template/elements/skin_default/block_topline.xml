@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Anchor TopLine' type='ANCHOR' height='%7'  >
+  <element name='Picture TOP Line'          type='PICTURE'                                      picturenormal='background boxes'  />
+  <element name='Button Action Living Room' type='BUTTON'                          width='%10'  picturenormal='transparentpic' picturepressed="button wide pressed" action='Show Page' actionpars='{"pagename":"Page_Activities_$dvar(definition_activity_template)_1"}'  fontsize='%h40' caption='$lvar(thica_10010)' />
+  <element name='Button Action Lounge'      type='BUTTON'     posx='of:right:last' width='%10'  picturenormal='transparentpic' picturepressed="button wide pressed" action='Show Page' actionpars='{"pagename":"Page_Activities_$dvar(definition_activity_template)_2"}'  fontsize='%h40' caption='$lvar(thica_10009)' />
+  <element name='Button Devices'            type='BUTTON'     posx='of:right:last' width='%10'  picturenormal='transparentpic' picturepressed="button wide pressed" action='Show Page' actionpars='{"pagename":"Page_Devices_$dvar(definition_activity_template)"}'       fontsize='%h40' caption='$lvar(2001)' />
+  <element name='Clock'                     type='TEXTFIELD'  posx='of:right:last' width='%10'  fontsize='%h40' caption='$var(LOCALTIME)' clock='1' />
+    <element name='Picture Transmit'          type='PICTURE'    posx='of:right:last'  width='of:height:self'  picturenormal='transmit' enabled='0' />
+    <element name='Picture Wait'              type='PICTURE'    posx='of:left:last'   posy='top'  width='%4' picturenormal='wait' enabled='0' />
+    <element name='Anchor Topline Right Space' type='ANCHOR'    posx='right'         width='%30'  />
+  <element name='Date'                      type='TEXTFIELD'  posx='of:toleft:Anchor Topline Right Space' width='%15' fontsize='%h40'  caption='$var(LOCALDATE)' />
+  </element>
+</elements>

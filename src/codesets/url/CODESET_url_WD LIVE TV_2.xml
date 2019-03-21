@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String
+     cmd = command to send, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>WDTV Live control using Webserver/URL</name>
+      <description language='English'>WDTV Live Control using Webserver/URL (incomplete)</description>
+      <description language='German'>WDTV Live Control über Webserver/URL (nicht komplett)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <skip>1</skip>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_WD LIVE TV_2.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_WD LIVE TV_2.zip</sourcefile>
+          <targetpath>codesets/url</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>URL-Web</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+
+  <action string="codeset" name='ok' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"n"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='home' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"o"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='play' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"p"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='pause' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"p"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+
+  <action string="codeset" name='left' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"l\r\n"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='right' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"r"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='up' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"u"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='down' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"d"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='exit'  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"T"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='esc'  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"T"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+
+  <action string="codeset" name='reboot' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"w"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="power_on" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"w"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='suspend' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"w"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='eject' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"X"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='menu' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"G"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='info' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"G"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='search' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"E"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+
+  <action string="codeset" name='stop' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"t"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='fast_rewind' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"H"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='fast_forward'  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"I"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='skip_back'  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"["}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='skip_forward' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"]"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='pause_toggle' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"p"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='mute_toggle' waitforresponse='0' requesttype='post' type="encode" params='{"remote":"M"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="send_string" waitforresponse='0' requesttype='post' type="encode" params='{"keyboard":"$cvar(SENDTEXT)"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+
+  <action string="codeset" name="repeat_toggle" waitforresponse='0' cmd='l\r\n' headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="shuffle_toggle" waitforresponse='0' cmd='r\r\n' headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='subtitles_on'  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"&#92;"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='subtitles_off'  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"&#92;"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="subtitles_toggle"  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"&#92;"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="subtitles_next"  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"&#92;"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="audiochannel_next"   waitforresponse='0' requesttype='post' type="encode" params='{"remote":","}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='search' waitforresponse='0' cmd='^F\r\n' headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name='zoom' waitforresponse='0' cmd='Z\r\n' headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+
+  <action string="codeset" name="key_1" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"1"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="key_2" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"2"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="key_3" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"3"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+
+  <action string="codeset" name="key_4" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"4"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="key_5" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"5"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="key_6" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"6"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="key_7" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"7"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="key_8" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"8"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="key_9" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"9"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="key_0" waitforresponse='0' requesttype='post' type="encode" params='{"remote":"0"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="button_red"  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"x"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="button_green"  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"y"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="button_yellow"  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"z"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+  <action string="codeset" name="button_blue"  waitforresponse='0' requesttype='post' type="encode" params='{"remote":"A"}' cmd="/cgi-bin/toServerValue.cgi" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+
+  <action string="codeset" name='getvolume'  waitforresponse='0' requesttype='get' cmd="/cgi-bin/getServerValue.cgi?id=1" headers='{"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}'/>
+
+  <action name="ping" type="alias" cmd="getvolume" />
+
+</includes>

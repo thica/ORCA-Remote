@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String
+     cmd = url to use, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <repositorymanager>
+    <entry>
+      <name>Panasonic Viera URL</name>
+      <description language='English'>LAN Control for Panasonic Viera TVs</description>
+      <description language='German'>LAN Steuerung für Panasonic Viera TVs</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_VIERA.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_VIERA.zip</sourcefile>
+          <targetpath>codesets/url</targetpath>
+        </source>
+        <source>
+            <local>$var(APPLICATIONPATH)/codesets/url/INCLUDES_url_VIERA</local>
+            <sourcefile>$var(REPOSITORYWWWPATH)/codesets/INCLUDES_url_VIERA.zip</sourcefile>
+            <targetpath>codesets/url</targetpath>
+        </source>
+
+      </sources>
+      <dependencies>
+            <dependency>
+                <type>interfaces</type>
+                <name>URL-Web</name>
+            </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+    <action name='logon' >
+        <action string="if $cvar(firstcall)==1" varcontext="codeset"/>
+            <action string="modifyvar" varname="vieraparamsgetvol"           operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/params_getvolume.txt"     />
+            <action string="modifyvar" varname="vieraparamssetvol"           operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/params_setvolume.txt"     />
+            <action string="modifyvar" varname="vieraparamskeypre"           operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/params_keypre.txt"        />
+            <action string="modifyvar" varname="vieraparamskeypost"          operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/params_keypost.txt"       />
+            <action string="modifyvar" varname="vieraparamsstringpre"        operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/params_stringpre.txt"     />
+            <action string="modifyvar" varname="vieraparamsstringpost"       operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/params_stringpost.txt"    />
+            <action string="modifyvar" varname="vieraheadergetvol"           operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/headers_getvolume.txt"    />
+            <action string="modifyvar" varname="vieraheadersetvol"           operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/headers_setvolume.txt"    />
+            <action string="modifyvar" varname="vieraheaderkey"              operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/headers_key.txt"          />
+            <action string="modifyvar" varname="vieraheaderstring"           operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_VIERA/headers_string.txt"       />
+            <!-- Just to get a return code -->
+            <action string="setvar firstcall=0" varcontext="codeset"/>
+        <action string="endif"/>
+        <action string="setvar firstcall=0" varcontext="codeset"/>
+        <action name="set return code" string="setreturncode" code="0" />
+    </action>
+
+  <action name='setvolume'      string="codeset"      params='$var(vieraparamssetvol)'                                            type="soap" waitforresponse='1' requesttype='POST' cmd='/dmr/control_0' headers="$var(vieraheadersetvol)"  />
+  <action name='getvolume'      string="codeset"      params='$var(vieraparamsgetvol)'                                            type="soap" waitforresponse='1' requesttype='POST' cmd='/dmr/control_0' headers="$var(vieraheadergetvol)"  gdestvar='tvvolviera' getvar='{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:schemas-upnp-org:service:RenderingControl:1}GetVolumeResponse,CurrentVolume' parseoption='xml' />
+
+  <action name='info'           string="codeset"      params='$var(vieraparamskeypre)NRC_INFO-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='power_toggle'   string="codeset"      params='$var(vieraparamskeypre)NRC_POWER-ONOFF$var(vieraparamskeypost)'     type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='power_on'       type="alias"          cmd='power_toggle'  />
+  <action name='power_off'      type="alias"          cmd='power_toggle'  />
+
+  <action name='left'           string="codeset"      params='$var(vieraparamskeypre)NRC_LEFT-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='right'          string="codeset"      params='$var(vieraparamskeypre)NRC_RIGHT-ONOFF$var(vieraparamskeypost)'     type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='up'             string="codeset"      params='$var(vieraparamskeypre)NRC_UP-ONOFF$var(vieraparamskeypost)'        type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='down'           string="codeset"      params='$var(vieraparamskeypre)NRC_DOWN-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='volume_down'    string="codeset"      params='$var(vieraparamskeypre)NRC_VOLDOWN-ONOFF$var(vieraparamskeypost)'   type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='volume_up'      string="codeset"      params='$var(vieraparamskeypre)NRC_VOLUP-ONOFF$var(vieraparamskeypost)'     type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='channel_down'   string="codeset"      params='$var(vieraparamskeypre)NRC_CH_DOWN-ONOFF$var(vieraparamskeypost)'   type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='channel_up'     string="codeset"      params='$var(vieraparamskeypre)NRC_CH_UP-ONOFF$var(vieraparamskeypost)'     type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+
+  <action name='button_green'   string="codeset"      params='$var(vieraparamskeypre)NRC_GREEN-ONOFF$var(vieraparamskeypost)'     type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='button_red'     string="codeset"      params='$var(vieraparamskeypre)NRC_RED-ONOFF$var(vieraparamskeypost)'       type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='button_yellow'  string="codeset"      params='$var(vieraparamskeypre)NRC_YELLOW-ONOFF$var(vieraparamskeypost)'    type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='button_blue'    string="codeset"      params='$var(vieraparamskeypre)NRC_BLUE-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+
+  <action name='fast_rewind'    string="codeset"      params='$var(vieraparamskeypre)NRC_REW-ONOFF$var(vieraparamskeypost)'       type="soap" waitforresponse='1'     requesttype='POST' cmd='/nrc/control_0'     headers="$var(vieraheaderkey)"  />
+  <action name='play'           string="codeset"      params='$var(vieraparamskeypre)NRC_PLAY-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1'    requesttype='POST' cmd='/nrc/control_0'    headers="$var(vieraheaderkey)"  />
+  <action name='fast_forward'   string="codeset"      params='$var(vieraparamskeypre)NRC_F-ONOFF$var(vieraparamskeypost)'         type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0'       headers="$var(vieraheaderkey)"  />
+  <action name='skip_back    '  string="codeset"      params='$var(vieraparamskeypre)NRC_SKIP_PREV-ONOFF$var(vieraparamskeypost)' type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='pause'          string="codeset"      params='$var(vieraparamskeypre)NRC_PAUSE-ONOFF$var(vieraparamskeypost)'     type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0'   headers="$var(vieraheaderkey)"  />
+  <action name='skip_forward'   string="codeset"      params='$var(vieraparamskeypre)NRC_SKIP_NEXT-ONOFF$var(vieraparamskeypost)' type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='stop'           string="codeset"      params='$var(vieraparamskeypre)NRC_STOP-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='record'         string="codeset"      params='$var(vieraparamskeypre)NRC_REC-ONOFF$var(vieraparamskeypost)'       type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+
+  <action name='esc'            string="codeset"      params='$var(vieraparamskeypre)NRC_CANCEL-ONOFF$var(vieraparamskeypost)'    type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='return'         string="codeset"      params='$var(vieraparamskeypre)NRC_RETURN-ONOFF$var(vieraparamskeypost)'    type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='exit'           type="alias"          cmd='return'  />
+
+  <action name='ok'             string="codeset"      params='$var(vieraparamskeypre)NRC_ENTER-ONOFF$var(vieraparamskeypost)'     type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='menu'           string="codeset"      params='$var(vieraparamskeypre)NRC_MENU-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='epg'            string="codeset"      params='$var(vieraparamskeypre)NRC_EPG-ONOFF$var(vieraparamskeypost)'       type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='info'           string="codeset"      params='$var(vieraparamskeypre)NRC_INFO-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='freeze'         string="codeset"      params='$var(vieraparamskeypre)NRC_HOLD-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='previous_tv_channel' string="codeset" params='$var(vieraparamskeypre)NRC_R_TUNE-ONOFF$var(vieraparamskeypost)'    type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='3dtoggle'       string="codeset"      params='$var(vieraparamskeypre)NRC_3D-ONOFF$var(vieraparamskeypost)'        type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='3dselect'       type="alias"          cmd='3dtoggle'  />
+
+  <action name='aspect'         string="codeset"      params='$var(vieraparamskeypre)NRC_DISP_MODE-ONOFF$var(vieraparamskeypost)' type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='option'         string="codeset"      params='$var(vieraparamskeypre)NRC_SUBMENU-ONOFF$var(vieraparamskeypost)'   type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='mute_toggle'    string="codeset"      params='$var(vieraparamskeypre)NRC_MUTE-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='mute_on'        type="alias"          cmd='mute_toggle'  />
+  <action name='teletext_toggle' string="codeset"     params='$var(vieraparamskeypre)NRC_TEXT-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='teletext_on'    type="alias"          cmd='teletext_toggle'  />
+  <action name='teletext_off'   type="alias"          cmd='teletext_toggle'  />
+  <action name='subtitles_toggle' string="codeset"    params='$var(vieraparamskeypre)NRC_STTL-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='subtitles_on'   type="alias"         cmd='subtitles_toggle'  />
+  <action name='subtitles_off'  type="alias"         cmd='subtitles_toggle'  />
+  <action name='teletext_index' string="codeset"     params='$var(vieraparamskeypre)NRC_INDEX-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='source'         string="codeset"     params='$var(vieraparamskeypre)NRC_CHG_INPUT-ONOFF$var(vieraparamskeypost)'  type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+
+  <action name="channel_select">
+      <action string="codeset" type="string" cmd='{"REPEAT":{"REPEATCMD":"key_","REPEATVAR":"$cvar(CHANNELNUM)"}}' />
+      <action type="alias" cmd="ok" />
+  </action>
+
+  <action name='key_1'    string="codeset"          params='$var(vieraparamskeypre)NRC_D1-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='key_2'    string="codeset"          params='$var(vieraparamskeypre)NRC_D2-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='key_3'    string="codeset"          params='$var(vieraparamskeypre)NRC_D3-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='key_4'    string="codeset"          params='$var(vieraparamskeypre)NRC_D4-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='key_5'    string="codeset"          params='$var(vieraparamskeypre)NRC_D5-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='key_6'    string="codeset"          params='$var(vieraparamskeypre)NRC_D6-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='key_7'    string="codeset"          params='$var(vieraparamskeypre)NRC_D7-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='key_8'    string="codeset"          params='$var(vieraparamskeypre)NRC_D8-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='key_9'    string="codeset"          params='$var(vieraparamskeypre)NRC_D9-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='key_0'    string="codeset"          params='$var(vieraparamskeypre)NRC_D0-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <!-- Not Sure about this-->
+  <action name='key_-'    string="codeset"          params='$var(vieraparamskeypre)NRC_PROG-ONOFF$var(vieraparamskeypost)'        type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+
+  <action name='source hdmi 1'  string="codeset"    params='$var(vieraparamskeypre)NRC_HDMI1-ONOFF$var(vieraparamskeypost)'       type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='source hdmi 2'  string="codeset"    params='$var(vieraparamskeypre)NRC_HDMI2-ONOFF$var(vieraparamskeypost)'       type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='source hdmi 3'  string="codeset"    params='$var(vieraparamskeypre)NRC_HDMI3-ONOFF$var(vieraparamskeypost)'       type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='source hdmi 4'  string="codeset"    params='$var(vieraparamskeypre)NRC_HDMI4-ONOFF$var(vieraparamskeypost)'       type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='sdcard'         string="codeset"    params='$var(vieraparamskeypre)NRC_SD_CARD-ONOFF$var(vieraparamskeypost)'     type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='source tv/cbl'  type="alias"        cmd='source tv'  />
+  <action name='source tv/ant'  type="alias"        cmd='source tv'  />
+  <action name='source tv/sat'  type="alias"        cmd='source tv'  />
+  <action name='source tv/ip'   type="alias"        cmd='source tv'  />
+  <action name='source tv/web'  type="alias"        cmd='source tv'  />
+  <action name='source tv'      string="codeset"    params='$var(vieraparamskeypre)NRC_TV-ONOFF$var(vieraparamskeypost)'          type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='source component' string="codeset"  params='$var(vieraparamskeypre)NRC_VIDEO1-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='send_string'    string="codeset"    params='$var(vieraparamsstringpre)$cvar(SENDTEXT)$var(vieraparamsstringpost)' type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderstring)"  />
+  <action name='cec_link'       string="codeset"    params='$var(vieraparamskeypre)NRC_VIERA_LINK-ONOFF$var(vieraparamskeypost)'  type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <!--VIERA tools-->
+  <action name='home'           string="codeset"    params='$var(vieraparamskeypre)NRC_VTOOLS-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <!-- Not Sure about this-->
+  <action name='source net'     string="codeset"    params='$var(vieraparamskeypre)NRC_INTERNET-ONOFF$var(vieraparamskeypost)'    type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+
+  <!-- Non Standard Commands-->
+  <action name='noise_reduction' string="codeset"   params='$var(vieraparamskeypre)NRC_P_NR-ONOFF$var(vieraparamskeypost)'        type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+  <action name='stop_timer'     string="codeset"    params='$var(vieraparamskeypre)NRC_OFFTIMER-ONOFF$var(vieraparamskeypost)'    type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
+
+  <action name="ping"            type="alias"       cmd="getvolume" />
+
+</includes>
+
+
+
+
+
+

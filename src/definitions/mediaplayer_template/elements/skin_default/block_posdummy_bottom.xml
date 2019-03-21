@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+  <element name='Anchor Dummy2' type='ANCHOR' posy='of:totop:Anchor BottomGap' height='1' width='1'>
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_dummy.xml" parse="xml"/>
+  </element>
+</elements>

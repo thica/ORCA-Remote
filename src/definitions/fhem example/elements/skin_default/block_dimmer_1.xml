@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 1 OFF' type='PICTURE' posx='center' posy='top' height='of:width:self:*1.4' picturenormal='bulb off'/>
+  <element name='$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 1 ON'  type='PICTURE' posx='center' posy='top' height='of:width:self:*1.4' picturenormal='bulb on' enabled='0'/>
+  <element name='Anchor Dimmer 1 Gap1' type='ANCHOR' height='%2' posy='of:bottom:$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 1 ON' />
+  <element name='Anchor Dimmer 1 Inner' type='ANCHOR' width='%80' height='%75' posy='of:bottom:Anchor Dimmer 1 Gap1' posx='center'>
+    <element name='Button Power On 1' type='BUTTON'  posy='top'    height='of:width:self'     picturenormal='button square*' action='$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 1'  fontsize='%h60' textcolor='$var(green)' caption='icon:power_on' />
+    <element name="$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 1" type="SLIDER"  posy="middle" height='of:width:self:*5.5'  picturenormal="background boxes" picturebutton="button square normal" action="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 1"  mindatavalue="0" maxdatavalue="100" destvar="$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer1"  roundpos="0" orientation="vertical" discardmoves="1"/>
+    <element name='Button Power Off 1' type='BUTTON' posy='bottom' height='of:width:self'     picturenormal='button square*' action='$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Dimmer 1' fontsize='%h60' textcolor='$var(red)' caption='icon:power_off' />
+  </element>
+  <element name="$dvar(definition_alias_FHEMFS20LIGHTS)_Label Dimmer 1" type="TEXTFIELD" posx="center" posy="bottom" width="%145" height="%5"  caption='$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_LABEL)' htextalign='center' vtextalign='bottom' fontsize='%h60'/>
+</elements>

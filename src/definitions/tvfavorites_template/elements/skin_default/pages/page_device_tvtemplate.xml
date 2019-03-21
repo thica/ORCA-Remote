@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_TV'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Main Screen' type='BACKGROUND' picturenormal='background'>
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" />
+    </element>
+    <element name='Anchor TV Logos' type='ANCHOR' posx='center' posy='middle' width='of:height:self' height='%80'>
+      <xi:include href="$var(DEFINITIONPATH)/block_tv_channels.xml" parse="xml" />
+    </element>
+  </elements>
+</page>

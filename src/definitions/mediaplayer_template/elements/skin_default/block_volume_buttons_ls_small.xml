@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Button Volume Up'          type='BUTTON'    posx='center' posy='top'    height='of:width:self' picturenormal='button round*' action='Send Volume Up' actiondoubletap='Send Volume Up'     fontsize='%h30'  iconfontsize='%h50' caption='icon:volume_up'     />
+  <element name='Button Volume Down'        type='BUTTON'    posx='center' posy='bottom' height='of:width:self' picturenormal='button round*' action='Send Volume Down' actiondoubletap='Send Volume Down' fontsize='%h30'  iconfontsize='%h50' caption='icon:volume_down'  />
+</elements>

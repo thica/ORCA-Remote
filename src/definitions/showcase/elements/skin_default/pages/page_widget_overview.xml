@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Widget_Overview">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+
+    <element name='Anchor Left' posx="%5" type='ANCHOR' posy='%50' width='%15' height="%80" >
+      <element name='Frame top' type='ANCHOR' posy='top' height="of:width:self:*0.27" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  fontsize='%h50'  caption='$lvar(showcase_10002)' htextalign='center' vtextalign='middle' />
+        <element name="Label1" type="TEXTFIELD"      posy="of:bottom:last" height="%40" fontsize='%h90'  caption='$lvar(showcase_10002)' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Frame top' type='ANCHOR' posy='%16.7' height="of:width:self:*0.27" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  fontsize='%h50'  caption='$var(LOCALTIME)' htextalign='center' vtextalign='middle' clock='1' />
+        <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="%40" fontsize='%h90'  caption='$lvar(showcase_10003)' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Frame top' type='ANCHOR' posy='%33' height="of:width:self:*0.27" >
+        <element name="Button" type="BUTTON" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' picturenormal="button wide*"/>
+        <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="%40" fontsize='%h90'  caption='$lvar(showcase_10004)' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Frame top' type='ANCHOR' posy='%50' height="of:width:self:*0.27" >
+        <element name="Frame"      type="PICTURE"    picturenormal='background input' />
+        <element name='Inputfield' type='TEXTINPUT'  fontsize='%h50'  htextalign='left' destvar='inputstring' picturenormal='none' />
+        <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="%40" fontsize='%h90'  caption='$lvar(showcase_10005)' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Frame top' type='ANCHOR' posy='%66.7' height="of:width:self:*0.27" >
+        <element name="Dropdown" type="DROPDOWN" fontsize='%h50'  caption='$lvar(showcase_10016)'  captions='Option 1,Option 2,Option 3,Option 4' actions=',,,' htextalign='center' vtextalign='middle' picturenormal="button wide*" framecolor='$var(dimmed)' framewidth='500'/>
+        <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="%40" fontsize='%h90'  caption='$lvar(showcase_10016)' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Frame top' type='ANCHOR' posy='%83' height="of:width:self:*0.27" >
+        <element name="SliderHor" type="SLIDER" height="%80" picturenormal="background boxes" picturebutton="button round normal" orientation="horizontal"/>
+        <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="%40" fontsize='%h90'  caption='Slider' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Frame top' type='ANCHOR' posy='bottom' height="of:width:self:*0.40" >
+        <element name='Picture HTPC' type='PICTURE' picturenormal='device htpc' />
+        <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10006)' htextalign='center' vtextalign='middle' />
+      </element>
+    </element>
+
+    <element name='Anchor Left2' posx="%25" type='ANCHOR' posy='of:top:Anchor Left' width='%15' height="%22" >
+      <element name="GroupButton1" type="SWITCH" posy="top"      height="of:width:self:*0.27" fontsize='%h50'  caption='$lvar(showcase_10027)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" destvar="STATUSGROUP1" group="GROUP" />
+      <element name="GroupButton2" type="SWITCH" posy="middle"   height="of:width:self:*0.27" fontsize='%h50'  caption='$lvar(showcase_10028)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" destvar="STATUSGROUP2" group="GROUP" />
+      <element name="GroupButton3" type="SWITCH" posy="bottom"   height="of:width:self:*0.27" fontsize='%h50'  caption='$lvar(showcase_10029)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" destvar="STATUSGROUP3" group="GROUP" />
+      <element name="Label" type="TEXTFIELD"     posy="of:bottom:last" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10026)' htextalign='center' vtextalign='middle' />      
+    </element>
+
+
+    <element name='Anchor Left3' posx="%45" type='ANCHOR' posy='of:top:Anchor Left' width='%15' height="%22" >
+        <element name="Rectangle Changeable" type="RECTANGLE" posy="top" height="of:width:self:*0.27"  backgroundcolor='$var(RECTANGLECOLOR)' />
+        <element name="Label" type="TEXTFIELD"     posy="of:bottom:last" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10033)' htextalign='center' vtextalign='middle' />
+    </element>
+
+    <element name='Anchor Left4' posx="%62" type='ANCHOR' posy='of:top:Anchor Left' width='%10' height="%22" >
+        <element name="Circle Changeable" type="CIRCLE" posy="top" height="of:width:self"  backgroundcolor='$var(RECTANGLECOLOR)' />
+    </element>
+
+          
+    <element name='Frame colorpicker' type='ANCHOR' posx="of:left:Anchor Left2" posy='%90' width='%42' height="%55" >
+      <element name="Frame"      type="PICTURE"    picturenormal="background boxes" />
+      <element name="ColorPicker" type="COLORPICKER" action="Set rectangle1 color by Widget" destvar="RECTANGLECOLOR"/>
+      <element name="Label" type="TEXTFIELD"  posy="of:bottom:last" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10017)' htextalign='center' vtextalign='middle' />
+    </element>
+
+    <element name='Anchor right' posx="%95" type='ANCHOR' posy='of:top:Anchor Left' width='%30' height="%85" >
+      <element name='Frame top' type='ANCHOR' posy='top' height="%60" >
+        <element name="Definition File" type="FILEVIEWER"  filename="$var(DEFINITIONPATH)/definition.xml" htextalign="left" vtextalign="top" backgroundcolor='#FFFFFFFF' />
+        <element name="Label" type="TEXTFIELD"     posy="of:bottom:last" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10008)' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Anchor KNOB' type='ANCHOR' posx='center' posy='bottom' width='%50' height='of:width:self'>
+        <elements>
+          <element name="Knob Back" type="PICTURE" posx="%50" posy="%50" height="of:width:self" picturenormal="knob back" />
+          <element name="Knob Volume" type="KNOB" posx="%50" posy="%50" width="%82" height="of:width:self" picturenormal="knob"  mindatavalue="0" maxdatavalue="100" leftboundaryangle="0" rightboundaryangle="0" destvar="knobvol" roundpos="1" />
+        </elements>
+      </element>
+      <element name="Label" type="TEXTFIELD"     posy="of:bottom:Anchor KNOB" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10007)' htextalign='center' vtextalign='middle' />
+
+    </element>
+    
+
+  </elements>
+</page>

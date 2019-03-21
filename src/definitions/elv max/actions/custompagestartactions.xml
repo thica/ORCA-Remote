@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_room_name[0]=$lvar(elvmax_10100)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_device_name[0]=$lvar(elvmax_10100)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_temp_comfort=0" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_temp_eco=0" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_temp_target=0" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_temp_current=0" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_roomname=$lvar(elvmax_10120)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_devicename=$lvar(elvmax_10121)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_mode_current_text=$lvar(elvmax_10111)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_temperature_unit=&#176;C" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_max_temperature_knob=$var($dvar(definition_alias_elv_max)_max_temperature)" />
+    <action name="Multiply by 2"                      string="modifyvar" varname="$dvar(definition_alias_elv_max)_max_temperature_knob" operator="multiply" parameter1="2" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_min_temperature_knob=$var($dvar(definition_alias_elv_max)_min_temperature)" />
+    <action name="Multiply by 2"                      string="modifyvar" varname="$dvar(definition_alias_elv_max)_min_temperature_knob" operator="multiply" parameter1="2" />
+
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_set_temperature=40" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_elv_max)_text_set_temperature=$var($dvar(definition_alias_elv_max)_set_temperature)" />
+    <action name="Devide by 2"                        string="modifyvar" varname="$dvar(definition_alias_elv_max)_text_set_temperature" operator="divide" parameter1="2" />
+
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+    <action name="Add Navigation Bar" string="call Add NavigationBar $dvar(definition_alias_elv_max)" />
+    <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Device_$dvar(definition_alias_elv_max)" />
+
+  </pagestartaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_elv_max)">
+    <action name="" string="call PageStart Page_Device_$dvar(definition_alias_elv_max)" />
+  </pagestartaction>
+
+
+</includes>

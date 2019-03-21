@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface_setup>
+    <interface name="url">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="Port" parameter="9080"/>
+            <setting name="Host" parameter="mypc"/>
+            <setting name="Password" parameter="admin"/>
+            <setting name="User" parameter="admin"/>
+            <setting name="ParseResult" parameter="no"/>
+            <setting name="TokenizeString" parameter=":"/>
+            <setting name="ResultEndString" parameter="[LF]"/>
+            <setting name="FNCodeset" parameter="CODESET_url_DVBVIEWER.xml"/>
+        </configuration>
+    </interface>
+    <interface name="wake_on_lan">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="IP" parameter="192.168.1.255"/>
+            <setting name="MAC" parameter="aa:bb:cc:dd:ee:ff"/>
+        </configuration>
+    </interface>
+</interface_setup>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <action name="Add NavigationBar $dvar(definition_alias_elv_max)">
+    <action name="Add Topline" string="loadelement" filename="$var($dvar(definition_alias_elv_max)_NAVIGATIONBAR)" pagename="Page_Device_$dvar(definition_alias_elv_max)" condition="$var($dvar(definition_alias_elv_max)_NAVIGATIONBAR)!="/>
+   </action>
+
+  <action name="PageStart Page_Device_$dvar(definition_alias_elv_max)">
+
+     <action name="Reset Var"                              string="setvar $dvar(definition_alias_elv_max)_GROUP_AUTOMATIC=0" />
+     <action name="Reset Var"                              string="setvar $dvar(definition_alias_elv_max)_GROUP_MANUAL=0" />
+
+      <action name="Set Trigger on first page start" string="if $var(PAGESTARTCOUNT_$var(CURRENTPAGE))==1" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_elv_max)_temp_current"       linktype="widget" widgetname="Temperatures Value Current" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_elv_max)_temp_eco"           linktype="widget" widgetname="Temperatures Value Eco" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_elv_max)_temp_target"        linktype="widget" widgetname="Temperatures Value Target" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_elv_max)_temp_comfort"       linktype="widget" widgetname="Temperatures Value Comfort" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_elv_max)_roomname"           linktype="widget" widgetname="Value Room Name" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_elv_max)_mode_current_text"  linktype="widget" widgetname="Mode Value Current" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_elv_max)_text_set_temperature" linktype="widget" widgetname="Temp Knob Textvalue" />
+      <action string="endif" />
+
+      <action name="Discover with screen Output"         string="discover" interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)" gui="1"/>
+      <action name="Get all rooms"                       string="sendcommand" commandname="getrooms" retvar='"$dvar(definition_alias_elv_max)_room_name","$dvar(definition_alias_elv_max)_room_rfaddress","$dvar(definition_alias_elv_max)_room_type"' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+      <action name="Update the dropdown list of rooms"   string="updatewidget DropDown Rooms" ignoremissing="1" />
+      <action name="Update the dropdown list of devices" string="call OnWidgetChangeRoom_$dvar(definition_alias_elv_max)" DROPDOWNVALUE="$var($dvar(definition_alias_elv_max)_room_name[0])" roomindex="0" condition="$var($dvar(definition_alias_elv_max)_room_name[0])!=$lvar(elvmax_10100)"/>
+      <action name="Update the Knop / Text"              string="call Update_Knob_$dvar(definition_alias_elv_max)" />
+    </action>
+
+  <action name="OnWidgetChangeRoom_$dvar(definition_alias_elv_max)">
+      <action name="Save Room Name"             string="setvar $dvar(definition_alias_elv_max)_current_roomname=$var(OnWidgetChangeRoom_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"  />
+      <action name="Set Room Name"              string="setvar $dvar(definition_alias_elv_max)_roomname=$var(OnWidgetChangeRoom_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"  />
+      <action name="Set Room Name #2"           string="setvar $dvar(definition_alias_elv_max)_roomname2=$var(OnWidgetChangeRoom_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"  />
+      <action name="Update Textbox"             string="updatewidget Value Room Name" ignoremissing="1" />
+      <action name="Get all devices for  room"  string="sendcommand" commandname="getroomdevicesex" retvar='"$dvar(definition_alias_elv_max)_device_name","$dvar(definition_alias_elv_max)_rfaddress","$dvar(definition_alias_elv_max)_type"' commandparameter='{"room":"$var(OnWidgetChangeRoom_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"}' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+      <action name="Update the dropdown list of devices"    string="updatewidget DropDown Devices" ignoremissing="1" />
+      <action name="Update the device details"  string="call OnWidgetChangeDevice_$dvar(definition_alias_elv_max)" DROPDOWNVALUE="$var($dvar(definition_alias_elv_max)_device_name[0])" DROPDOWNINDEX="0" condition="$var($dvar(definition_alias_elv_max)_room_name[0])!=$lvar(elvmax_10100)"/>
+
+ </action>
+
+  <action name="OnWidgetChangeDevice_$dvar(definition_alias_elv_max)" >
+     <action name="Set device Name"                        string="setvar $dvar(definition_alias_elv_max)_roomname=$var($dvar(definition_alias_elv_max)_roomname2)&#10;$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"  condition="$var($dvar(definition_alias_elv_max)_roomname2)!=$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"/>
+     <action name="Set device Name"                        string="setvar $dvar(definition_alias_elv_max)_roomname=$var($dvar(definition_alias_elv_max)_roomname2)"  condition="$var($dvar(definition_alias_elv_max)_roomname2)==$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"/>
+     <action name="Get DropDown List Index"                string="setvar TMPINDEX=$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNINDEX)" />
+     <action name="Compile Var Name"                       string="setvar tmpvarname=$dvar(definition_alias_elv_max)_rfaddress[$var(TMPINDEX)]" />
+     <action name="Get the rf_address of the device"       string="modifyvar" operator="fromvar" varname="tmpvarname" />
+     <action name="save the rf_address"                    string="setvar current_rf_address=$var(tmpvarname)" />
+     <action string="call GetDeviceParameter_$dvar(definition_alias_elv_max)" rf_address="$var(current_rf_address)" />
+  </action>
+
+  <action name="GetDeviceParameter_$dvar(definition_alias_elv_max)" >
+     <action name="Get current temperature of device/room" string="sendcommand" commandname="getattribute" retvar='$dvar(definition_alias_elv_max)_temp_current' commandparameter='{"rf_address":"$var(GetDeviceParameter_$dvar(definition_alias_elv_max)_parameter_rf_address)","attributename":"actual_temperature"}' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+     <action name="Get eco temperature of device/room"     string="sendcommand" commandname="getattribute" retvar='$dvar(definition_alias_elv_max)_temp_eco'     commandparameter='{"rf_address":"$var(GetDeviceParameter_$dvar(definition_alias_elv_max)_parameter_rf_address)","attributename":"eco_temperature"}' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+     <action name="Get target temperature of device/room"  string="sendcommand" commandname="getattribute" retvar='$dvar(definition_alias_elv_max)_temp_target'  commandparameter='{"rf_address":"$var(GetDeviceParameter_$dvar(definition_alias_elv_max)_parameter_rf_address)","attributename":"target_temperature"}' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+     <action name="Get comfort temperature of device/room" string="sendcommand" commandname="getattribute" retvar='$dvar(definition_alias_elv_max)_temp_comfort' commandparameter='{"rf_address":"$var(GetDeviceParameter_$dvar(definition_alias_elv_max)_parameter_rf_address)","attributename":"comfort_temperature"}' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+     <action name="Get current mode of device/room"        string="sendcommand" commandname="getattribute" retvar='$dvar(definition_alias_elv_max)_mode_current' commandparameter='{"rf_address":"$var(GetDeviceParameter_$dvar(definition_alias_elv_max)_parameter_rf_address)","attributename":"current_mode"}' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+
+     <action name="If we are on manual mode" string="if $var($dvar(definition_alias_elv_max)_mode_current)==automatic"/>
+       <action name="Set Text Manual Mode on"              string="setvar $dvar(definition_alias_elv_max)_mode_current_text=$lvar(elvmax_10111)" />
+       <action name="Set Button Group Var"                 string="setvar $dvar(definition_alias_elv_max)_GROUP_AUTOMATIC=1" />
+       <action name="Update Button Group"                  string="updatewidget Mode Switch Automatic" ignoremissing="1"/>
+      <action string="endif" />
+
+     <action name="If we are on manual mode" string="if $var($dvar(definition_alias_elv_max)_mode_current)==manual"/>"
+       <action name="Set Text Manual Mode on"              string="setvar $dvar(definition_alias_elv_max)_mode_current_text=$lvar(elvmax_10112)" />
+       <action name="Set Button Group Var"                 string="setvar $dvar(definition_alias_elv_max)_GROUP_MANUAL=1" />
+       <action name="Update Button Group"                  string="updatewidget Mode Switch Manual" ignoremissing="1"/>
+      <action string="endif" />
+
+     <action name="If we are on vacation mode" string="if $var($dvar(definition_alias_elv_max)_mode_current)==vacation"/>"
+       <action name="Set Text Manual Mode on"              string="setvar $dvar(definition_alias_elv_max)_mode_current_text=$lvar(elvmax_10118)" />
+       <action name="Set Button Group Var"                 string="setvar $dvar(definition_alias_elv_max)_GROUP_VACATION=1" />
+       <action name="Update Button Group"                  string="updatewidget Mode Switch Vacation" ignoremissing="1"/>
+      <action string="endif" />
+
+     <action name="If we are on boost mode" string="if $var($dvar(definition_alias_elv_max)_mode_current)==boost"/>"
+       <action name="Set Text Manual Mode on"              string="setvar $dvar(definition_alias_elv_max)_mode_current_text=$lvar(elvmax_10117)" />
+     <action string="endif" />
+
+  </action>
+
+  <action name="SetTemperatureToManual_$dvar(definition_alias_elv_max)" >
+       <action name="Set Var"                 string="setvar TMP_TEMPERATURE=$var(SetTemperatureToManual_$dvar(definition_alias_elv_max)_parameter_TEMPERATUREVAR)" />
+       <action name="pull var"                string="modifyvar" operator="fromvar" varname="TMP_TEMPERATURE" />
+       <action name="Set Temperature Device"  string="sendcommand" commandname="device_set_mode_manual" commandparameter='{"rf_address":"$var(current_rf_address)","temperature":"$var(TMP_TEMPERATURE)"}'                   interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_elv_max)_roomname2)!=$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)" />
+       <action name="Set Temperature Room"    string="sendcommand" commandname="room_set_mode_manual"   commandparameter='{"room":"$var($dvar(definition_alias_elv_max)_roomname2)","temperature":"$var(TMP_TEMPERATURE)"}'  interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_elv_max)_roomname2)==$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)" />
+
+       <action string="call ClearCache_$dvar(definition_alias_elv_max)"  />
+       <action string="call GetDeviceParameter_$dvar(definition_alias_elv_max)" rf_address="$var(current_rf_address)" />
+  </action>
+
+  <action name="SetModeToManual_$dvar(definition_alias_elv_max)" >
+    <action name="Set Mode to Auto Device"   string="sendcommand" commandname="device_set_mode_manual" commandparameter='{"rf_address":"$var(current_rf_address)","temperature":"$dvar(definition_alias_elv_max)_temp_target"}'                         interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_elv_max)_roomname2)!=$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)" />
+    <action name="Set Mode to Auto Room"     string="sendcommand" commandname="room_set_mode_manual"   commandparameter='{"room":"$var($dvar(definition_alias_elv_max)_roomname2)","temperature":"$var($dvar(definition_alias_elv_max)_temp_target)"}'  interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_elv_max)_roomname2)==$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)" />
+
+    <action string="call ClearCache_$dvar(definition_alias_elv_max)"  />
+    <action string="call GetDeviceParameter_$dvar(definition_alias_elv_max)" rf_address="$var(current_rf_address)" />
+  </action>
+
+
+  <action name="SetModeToAuto_$dvar(definition_alias_elv_max)" >
+    <action name="Set Mode to Auto Device"   string="sendcommand" commandname="device_set_mode_auto" commandparameter='{"rf_address":"$var(current_rf_address)"}'                   interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  condition="$var($dvar(definition_alias_elv_max)_roomname2)!=$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"/>
+    <action name="Set Mode to Auto Room"     string="sendcommand" commandname="room_set_mode_auto"   commandparameter='{"room":"$var($dvar(definition_alias_elv_max)_roomname2)"}'  interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  condition="$var($dvar(definition_alias_elv_max)_roomname2)==$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"/>
+
+    <action string="call ClearCache_$dvar(definition_alias_elv_max)"  />
+    <action string="call GetDeviceParameter_$dvar(definition_alias_elv_max)" rf_address="$var(current_rf_address)" />
+  </action>
+
+  <action name="SetModeToBoost_$dvar(definition_alias_elv_max)" >
+    <action name="Set Mode to Boost Device"  string="sendcommand" commandname="device_set_mode_boost" commandparameter='{"rf_address":"$var(current_rf_address)"}'                   interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  condition="$var($dvar(definition_alias_elv_max)_roomname2)!=$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"/>
+    <action name="Set Mode to Boost Room"    string="sendcommand" commandname="room_set_mode_boost"   commandparameter='{"room":"$var($dvar(definition_alias_elv_max)_roomname2)"}'  interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  condition="$var($dvar(definition_alias_elv_max)_roomname2)==$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)"/>
+
+    <action string="call ClearCache_$dvar(definition_alias_elv_max)"  />
+    <action string="call GetDeviceParameter_$dvar(definition_alias_elv_max)" rf_address="$var(current_rf_address)" />
+  </action>
+
+  <action name="SetModeToVacation_$dvar(definition_alias_elv_max)" >
+    <action name="Set Mode to Vacation Device"  string="sendcommand" commandname="device_set_mode_vacation" commandparameter='{"rf_address":"$var(current_rf_address)"}'                  interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_elv_max)_roomname2)!=$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)" />
+    <action name="Set Mode to Vacation Room"    string="sendcommand" commandname="device_set_mode_vacation" commandparameter='{"room":"$var($dvar(definition_alias_elv_max)_roomname2)"}' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_elv_max)_roomname2)==$var(OnWidgetChangeDevice_$dvar(definition_alias_elv_max)_parameter_DROPDOWNVALUE)" />
+    <action string="call ClearCache_$dvar(definition_alias_elv_max)"  />
+    <action string="call GetDeviceParameter_$dvar(definition_alias_elv_max)" rf_address="$var(current_rf_address)" />
+  </action>
+
+
+  <action name="ClearCache_$dvar(definition_alias_elv_max)" >
+     <action name="show hourglass"   string="showpage Page_Wait" effect="no" />
+     <action name="Clear Cache"      string="sendcommand" commandname="clearcache" interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+     <action name="Get all rooms"    string="sendcommand" commandname="getrooms" retvar='"$dvar(definition_alias_elv_max)_room_name","$dvar(definition_alias_elv_max)_room_rfaddress","$dvar(definition_alias_elv_max)_room_type"' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+     <action name="Get all devices for room"  string="sendcommand" commandname="getroomdevicesex" retvar='"$dvar(definition_alias_elv_max)_device_name","$dvar(definition_alias_elv_max)_rfaddress","$dvar(definition_alias_elv_max)_type"' commandparameter='{"room":"$var($dvar(definition_alias_elv_max)_current_roomname)"}' interface="$var($dvar(definition_alias_elv_max)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_elv_max)_CONFIGNAME_MAIN)"  />
+     <action name="return to current page"   string="showpage $var(LASTPAGE)" effect="no" />
+  </action>
+
+  <action name="Set Temperature By Widget $dvar(definition_alias_elv_max)" >
+    <action name="Update the Knop / Text"    string="call Update_Knob_$dvar(definition_alias_elv_max)" />
+  </action>
+
+  <action name="Send_Temp_Up_$dvar(definition_alias_elv_max)" >
+    <action name="Increase Temp"    string="modifyvar" varname="$dvar(definition_alias_elv_max)_set_temperature" operator="increase" parameter1="1" parameter2="$var($dvar(definition_alias_elv_max)_max_temperature_knob)"/>
+    <action name="Update the Knop / Text"    string="call Update_Knob_$dvar(definition_alias_elv_max)" />
+  </action>
+
+  <action name="Send_Temp_Down_$dvar(definition_alias_elv_max)" >
+    <action name="Increase Temp"    string="modifyvar" varname="$dvar(definition_alias_elv_max)_set_temperature" operator="decrease" parameter1="1" parameter2="$var($dvar(definition_alias_elv_max)_min_temperature_knob)"/>
+    <action name="Update the Knop / Text"    string="call Update_Knob_$dvar(definition_alias_elv_max)" />
+  </action>
+
+  <action name="Send_Select_Temp_$dvar(definition_alias_elv_max)" >
+    <action name="Set Var"          string="setvar TMP_TEMPERATURE1=$var($dvar(definition_alias_elv_max)_set_temperature)" />
+    <action name="Divide by 2"      string="modifyvar" varname="TMP_TEMPERATURE1" operator="divide" parameter1="2" />
+    <action name="Set Temp"         string="call SetTemperatureToManual_$dvar(definition_alias_elv_max)" TEMPERATUREVAR="TMP_TEMPERATURE1"/>
+  </action>
+
+  <action name="Update_Knob_$dvar(definition_alias_elv_max)" >
+    <action name="Set Var"          string="setvar TMP_TEMPERATURE=$var($dvar(definition_alias_elv_max)_set_temperature)" />
+    <action name="Update Knob"      string="updatewidget Knob Temp" ignoremissing="1" />
+    <action name="Divide by 2"      string="modifyvar" varname="TMP_TEMPERATURE" operator="divide" parameter1="2" />
+    <action name="Set Var"          string="setvar $dvar(definition_alias_elv_max)_text_set_temperature=$var(TMP_TEMPERATURE)" />
+  </action>
+</includes>
+

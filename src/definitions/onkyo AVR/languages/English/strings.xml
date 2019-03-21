@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="onkyoAVR_10001">Pulling Configuration from Device</string>
+  <string id="onkyoAVR_10002">Services</string>
+  <string id="onkyoAVR_10003">Sources</string>
+  <string id="onkyoAVR_10004">Effects</string>
+  <string id="onkyoAVR_10007">Center</string>
+  <string id="onkyoAVR_10008">Subwoofer</string>
+  <string id="onkyoAVR_10009">Could not initialize receiver (not found). Some functions might not work properly</string>
+  <string id="onkyoAVR_10010">Artist</string>
+  <string id="onkyoAVR_10011">Album</string>
+  <string id="onkyoAVR_10012">Title</string>
+
+
+  <string id="onkyoAVR_10506">Max volume amplifier</string>
+  <string id="onkyoAVR_10507">Maximal volume for the amplifier</string>
+
+
+</strings>

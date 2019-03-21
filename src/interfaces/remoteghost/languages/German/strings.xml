@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="IFACE_RGHOST_1">Prefix</string>
+    <string id="IFACE_RGHOST_2">Prefix, welches Eventghost Events vorangestellt wird</string>
+</strings>

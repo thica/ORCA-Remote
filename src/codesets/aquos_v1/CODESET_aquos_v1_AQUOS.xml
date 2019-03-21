@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <repositorymanager>
+      <entry>
+        <name>Sharp Aquos US Models</name>
+        <description language='English'>LAN Control for Sharp Aquos TVs (US models) Experimental</description>
+        <description language='German'>LAN Steuerung für Sharp Aquos TVs (US Modelle) Experimental</description>
+        <author>Carsten Thielepape</author>
+        <version>3.70</version>
+        <minorcaversion>3.7.0</minorcaversion>
+        <skip>1</skip>
+        <sources>
+          <source>
+            <local>$var(APPLICATIONPATH)/codesets/aquos_v1/CODESET_aquos_v1_AQUOS.xml</local>
+            <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_v1_AQUOS.zip</sourcefile>
+            <targetpath>codesets/aquos_v1</targetpath>
+          </source>
+        </sources>
+        <dependencies>
+          <dependency>
+            <type>interfaces</type>
+            <name>Sharp Aquos (IP)</name>
+          </dependency>
+        </dependencies>
+      </entry>
+    </repositorymanager>
+
+  <action string="codeset" name="enablepower"              type="string"  cmd="RSPW2   "   />
+  <action name="enablepower with wait" >
+      <action  type="alias" cmd="enablepower" />
+      <action string="wait" time="1000" />
+  </action>
+
+  <action name="power_on" >
+      <action  type="alias" cmd="enablepower" />
+      <action string="codeset" name="power_on" type="string" cmd="POWR1   " />
+  </action>
+
+  <action name="power_off" >
+      <action  type="alias" cmd="enablepower" />
+      <action string="codeset" name="power_on" type="string" cmd="POWR0   " />
+  </action>
+
+  <action name="power_toggle" >
+      <action  type="alias" cmd="enablepower" />
+      <action string="codeset" name="power_on" type="string" cmd="RCKY12  " />
+  </action>
+
+  <action string="codeset" name="left"                     type="string"  cmd="RCKY43  " />
+  <action string="codeset" name="right"                    type="string"  cmd="RCKY44  " />
+  <action string="codeset" name="up"                       type="string"  cmd="RCKY41  " />
+  <action string="codeset" name="down"                     type="string"  cmd="RCKY42  " />
+
+  <action string="codeset" name="ok"                       type="string"  cmd="RCKY45  " />
+  <action string="codeset" name="menu"                     type="string"  cmd="RCKY38  " />
+  <action string="codeset" name="exit"                     type="string"  cmd="RCKY46  " />
+  <action string="codeset" name="channel_down"             type="string"  cmd="RCKY34  " />
+  <action string="codeset" name="channel_up"               type="string"  cmd="RCKY35  " />
+  <action string="codeset" name="volume_up"                type="string"  cmd="RCKY33  " />
+  <action string="codeset" name="volume_down"              type="string"  cmd="RCKY32  " />
+  <action string="codeset" name='setvolume'                type="string"  cmd="VOLM$cvar(volumetoset)  " />
+
+  <action string="codeset" name="volume_up_accelerated"    type="string"  cmd="RCKY33  " />
+  <action string="codeset" name="volume_down_accelerated"  type="string"  cmd="RCKY32  " />
+
+  <action string="codeset" name="key_1"                    type="string"  cmd="RCKY1   " />
+  <action string="codeset" name="key_2"                    type="string"  cmd="RCKY2   " />
+  <action string="codeset" name="key_3"                    type="string"  cmd="RCKY3   " />
+  <action string="codeset" name="key_4"                    type="string"  cmd="RCKY4   " />
+  <action string="codeset" name="key_5"                    type="string"  cmd="RCKY5   " />
+  <action string="codeset" name="key_6"                    type="string"  cmd="RCKY6   " />
+  <action string="codeset" name="key_7"                    type="string"  cmd="RCKY7   " />
+  <action string="codeset" name="key_8"                    type="string"  cmd="RCKY8   " />
+  <action string="codeset" name="key_9"                    type="string"  cmd="RCKY9   " />
+  <action string="codeset" name="key_0"                    type="string"  cmd="RCKY0   " />
+
+  <action string="codeset" name="button_red"               type="string"  cmd="RCKY50  " />
+  <action string="codeset" name="button_green"             type="string"  cmd="RCKY51  " />
+  <action string="codeset" name="button_yellow"            type="string" cmd="RCKY53  " />
+  <action string="codeset" name="button_blue"              type="string"  cmd="RCKY52  " />
+  <action string="codeset" name="mute_toggle"              type="string"  cmd="MUTE0   " />
+  <action string="codeset" name='mute_on'                  type="string"  cmd="MUTE1   " />
+  <action string="codeset" name='mute_off'                 type="string"  cmd="MUTE2   " />
+
+
+  <action string="codeset" name="stop"                     type="string"  cmd="RCKY20  " />
+  <action string="codeset" name="skip_back"                type="string"  cmd="RCKY19  " />
+  <action string="codeset" name="skip_forward"             type="string"  cmd="RCKY21  " />
+  <action string="codeset" name="play"                     type="string"  cmd="RCKY18  " />
+  <action string="codeset" name="fast_rewind"              type="string"  cmd="RCKY15  " />
+  <action string="codeset" name="fast_forward"             type="string"  cmd="RCKY17  " />
+  <action string="codeset" name="pause"                    type="string"  cmd="RCKY18  " />
+  <action string="codeset" name="record"                   type="string"  cmd="RCKY22  " />
+  <action string="codeset" name="info"                     type="string"  cmd="RCKY13  " />
+  <action string="codeset" name="epg"                      type="string"  cmd="RCKY13  " />
+  <action string="codeset" name="sleep"                    type="string"  cmd="RCKY54  " />
+
+  <!-- Source Toggle -->
+  <action string="codeset" name="source"                   type="string" cmd="ITGDx   " />
+  <action string="codeset" name="source tv"                type="string" cmd="ITVD0   " />
+  <action string="codeset" name="source hdmi 1"            type="string" cmd="IAVD1   " />
+  <action string="codeset" name="source hdmi 2"            type="string" cmd="IAVD2   " />
+  <action string="codeset" name="source hdmi 3"            type="string" cmd="IAVD3   " />
+  <action string="codeset" name="source hdmi 4"            type="string" cmd="IAVD4   " />
+  <!-- Component -->
+  <action string="codeset" name="source aux 1"             type="string" cmd="IAVD5   " />
+  <!-- Video 1 -->
+  <action string="codeset" name="source aux 2"             type="string" cmd="IAVD6   " />
+  <!-- Video 2 -->
+  <action string="codeset" name="source aux 3"             type="string" cmd="IAVD7   " />
+  <action string="codeset" name="source pc"                type="string" cmd="IAVD8   " />
+
+  <!-- Smart Central -->
+  <action string="codeset" name="source net"               type="string" cmd="RCKY39  " />
+
+  <!-- Surround -->
+  <!-- Toggle -->
+  <action string="codeset" name="effect 1"                 type="string" cmd="ACSU1   " />
+  <!-- Normal -->
+  <action string="codeset" name="effect 2"                 type="string" cmd="ACSU2   " />
+  <!-- Off -->
+  <action string="codeset" name="effect 3"                 type="string" cmd="ACSU3   " />
+  <!--3d HALL -->
+  <action string="codeset" name="effect 4"                 type="string" cmd="ACSU4   " />
+  <!--3d Movie -->
+  <action string="codeset" name="effect 5"                 type="string" cmd="ACSU5   " />
+  <!--3d Standard -->
+  <action string="codeset" name="effect 6"                 type="string" cmd="ACSU6   " />
+  <!--3d Stadium -->
+  <action string="codeset" name="effect 7"                 type="string" cmd="ACSU7   " />
+
+  <!-- View Mode-->
+  <action string="codeset" name="aspect"                   type="string" cmd="RCKY29  " />
+
+  <action string="codeset" name="aspect_toggle_av"         type="string" cmd="WIDE0   " />
+  <action string="codeset" name="aspect_sidebar_av"        type="string" cmd="WIDE1   " />
+  <action string="codeset" name="aspect_s.stretch_av"      type="string" cmd="WIDE2   " />
+  <action string="codeset" name="aspect_zoom_av"           type="string" cmd="WIDE3   " />
+  <action string="codeset" name="aspect_stretch_av"        type="string" cmd="WIDE4   " />
+  <action string="codeset" name="aspect_normal_pc"         type="string" cmd="WIDE5   " />
+  <action string="codeset" name="aspect_zoom_pc"           type="string" cmd="WIDE6   " />
+  <action string="codeset" name="aspect_stretch_pc"        type="string" cmd="WIDE7   " />
+  <action string="codeset" name="aspect_dotbydot_pc"       type="string" cmd="WIDE8   " />
+  <action string="codeset" name="aspect_full_screen_av"    type="string" cmd="WIDE9   " />
+  <action string="codeset" name="aspect_auto"              type="string" cmd="WIDE10  " />
+  <action string="codeset" name="aspect_origina"           type="string" cmd="WIDE11  " />
+
+
+  <!-- AV Mode-->
+  <action string="codeset" name="av_effect"                type="string" cmd="RCKY28  " />
+
+  <!-- AV Mode-->
+  <action string="codeset" name="av_effect_toggle"         type="string" cmd="AVMD0   " />
+  <action string="codeset" name="av_effect_standard"       type="string" cmd="AVMD1   " />
+  <action string="codeset" name="av_effect_movie"          type="string" cmd="AVMD2   " />
+  <action string="codeset" name="av_effect_game"           type="string" cmd="AVMD3   " />
+  <action string="codeset" name="av_effect_user"           type="string" cmd="AVMD4   " />
+  <action string="codeset" name="av_effect_dynamic_fixed"  type="string" cmd="AVMD5   " />
+  <action string="codeset" name="av_effect_dynamic"        type="string" cmd="AVMD6   " />
+  <action string="codeset" name="av_effect_pc"             type="string" cmd="AVMD7   " />
+  <action string="codeset" name="av_effect_xv_color"       type="string" cmd="AVMD8   " />
+  <action string="codeset" name="av_effect_standard_3d"    type="string" cmd="AVMD14  " />
+  <action string="codeset" name="av_effect_movie_3d"       type="string" cmd="AVMD15  " />
+  <action string="codeset" name="av_effect_game_3d"        type="string" cmd="AVMD16  " />
+  <action string="codeset" name="av_effect_auto"           type="string" cmd="AVMD100 " />
+
+
+  <!-- 3d Mode-->
+  <action string="codeset" name="3dtoggle"       type="string" cmd="RCKY58  " />
+  <action string="codeset" name="3d_off"         type="string" cmd="TDCH0   " />
+  <action string="codeset" name="3d_2dto3d"      type="string" cmd="TDCH1   " />
+  <action string="codeset" name="3d_sbs"         type="string" cmd="TDCH2   " />
+  <action string="codeset" name="3d_tab"         type="string" cmd="TDCH3   " />
+  <action string="codeset" name="3d_3dto2d_sbs"  type="string" cmd="TDCH4   " />
+  <action string="codeset" name="3d_3dto2d_tab"  type="string" cmd="TDCH5   " />
+  <action string="codeset" name="3d_3dauto"      type="string" cmd="TDCH6   " />
+  <action string="codeset" name="3d_2dauto"      type="string" cmd="TDCH7   " />
+
+  <!-- Flashback -->
+  <action string="codeset" name="previous_tv_channel" type="string" cmd="RCKY30  " />
+  <action string="codeset" name="aspect"       type="string" cmd="WIDE0   " />
+    <action string="codeset" name="channel_select" type="string" cmd='{"REPEAT":{"REPEATCMD":"key_","REPEATVAR":"$cvar(CHANNELNUM)"}}' />
+
+  <action string="codeset" name="teletext_toggle" type="string" cmd="TEXT1   " />
+
+
+
+
+  <!-- experimental -->
+
+  <action string="codeset" name='getvolume' type="string"  cmd="VOLM?  " ldestvar='volume' gdestvar='volume'  />
+
+
+</includes>
+

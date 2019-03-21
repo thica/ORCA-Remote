@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="IFACE_OVIDEO_1">Video Widget</string>
+    <string id="IFACE_OVIDEO_2">Name des Video Widget welches das Video anzeigt</string>
+    <string id="IFACE_OVIDEO_3">Dateiname/Stream</string>
+    <string id="IFACE_OVIDEO_4">Dateiname oder Stream welcher abgespielt werden soll</string>
+</strings>

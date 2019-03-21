@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Widget_Alignment">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+   <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+     <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+   </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+    <element name='Anchor Alignments' type='ANCHOR' posx='%15' posy='%15' width='%30' height='%30' >
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_align.xml" parse="xml" />
+    </element>
+    <element name='Anchor Alignments' type='ANCHOR' posx='%85' posy='%15' width='%30' height='%30' >
+      <element name="Frame" type="PICTURE" posx="left" posy="top" picturenormal="background boxes" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_align.xml" parse="xml" />
+    </element>
+
+   </elements>
+</page>

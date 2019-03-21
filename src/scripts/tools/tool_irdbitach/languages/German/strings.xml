@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_IRDBITACH_1">Global Cache Control Tower</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_2">Lade IR Codes von der Control Tower Online IR Datenbank</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_3">Herunterladen</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_4">IR Datenbanken</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_5">Du must deine Zugangngsdaten in den Script Einstellungen eintragen</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_6">Hersteller</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_7">Typ</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_8">Modell</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_9">Schreibe CCF/HEX Codeset</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_10">Schreibe iTach Codeset</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_11">Optimiere Kanal Auswahl</string>
+     <string id="SCRIPT_TOOLS_IRDBITACH_12">Lade Hersteller</string>
+  </strings>

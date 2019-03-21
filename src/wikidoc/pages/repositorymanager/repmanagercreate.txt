@@ -1,0 +1,10 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Repository Manager
+WikiDoc:Page:Repository Manager Create a Repository
+WikiDoc:TOCTitle:2=Create a Repository
+To create your own repository to share files with the community, you need to have webspace, where ORCA download files by an URL link. The simplest way would be to use the space within a web presentation (homepage).
+Or course you need to be able to upload your files to this space. It is good practice to use a separate folder within your webspace to store your repository files
+TBC…
+WikiDoc:End
+'''

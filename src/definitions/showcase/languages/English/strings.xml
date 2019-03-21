@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="showcase_10000">Welcome to the ORCA Showcase!&#10;This definition files gives you a little tutorial, how to use widgets, actions and variables for your own definition.</string>
+  <string id="showcase_10001">Please use your finger or mouse left/right/up/down to flip pages. For changing the transformation effect, press the buttons.</string>
+  <string id="showcase_10002">Textwidget</string>
+  <string id="showcase_10003">Clock</string>
+  <string id="showcase_10004">Button</string>
+  <string id="showcase_10005">Text Input</string>
+  <string id="showcase_10006">Picture</string>
+  <string id="showcase_10007">Turning Knob</string>
+  <string id="showcase_10008">Fileviewer</string>
+  <string id="showcase_10009">Slider</string>
+
+  <string id="showcase_10010">Standard Color Button</string>
+  <string id="showcase_10011">Standard Picture Button</string>
+  <string id="showcase_10012">Bi-State Picture Button</string>
+  <string id="showcase_10013">Tri-State Picture Button</string>
+  <string id="showcase_10014">You need to have a look into the xml files, to understand how to use anchors and includes.</string>
+
+  <string id="showcase_10016">Dropdown</string>
+  <string id="showcase_10017">ColorPicker</string>
+  <string id="showcase_10018">ColorPicker in a popup window</string>
+  
+  <string id="showcase_10020">Slide</string>
+  <string id="showcase_10021">Fade</string>
+  <string id="showcase_10022">Swap</string>
+  <string id="showcase_10023">Wipe</string>
+  <string id="showcase_10024">Rise In</string>
+  <string id="showcase_10025">Fall Out</string>
+  <string id="showcase_10026">Grouped Buttons</string>
+  <string id="showcase_10027">Button 1</string>
+  <string id="showcase_10028">Button 2</string>
+  <string id="showcase_10029">Button 3</string>
+  <string id="showcase_10030">Long &amp; Double</string>
+  <string id="showcase_10031">Up &amp; Down</string>
+  <string id="showcase_10032">Repeat &amp; Double</string>
+  <string id="showcase_10033">Colored Shapes</string>
+    
+
+  <string id="showcase_10100">Widgets Overview</string>
+  <string id="showcase_10101">Widgets Alignment</string>
+  <string id="showcase_10102">Anchors and includes</string>
+  <string id="showcase_10103">Textfields and TextInput</string>
+  <string id="showcase_10104">Buttons</string>
+  <string id="showcase_10105">Knobs and Sliders</string>
+  <string id="showcase_10106">Pictures</string>
+  <string id="showcase_10107">Gestures and Effects</string>
+  <string id="showcase_10108">Popup</string>
+  <string id="showcase_10109">Video</string>
+  <string id="showcase_10110">Sound</string>
+  <string id="showcase_10200">Color</string>
+  <string id="showcase_10201">An example how to set colors by colorpicker</string>
+  <string id="showcase_10202">Back</string>
+  
+  
+</strings>

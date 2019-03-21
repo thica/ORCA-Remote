@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Button Channel Up'   type='BUTTON'    posx='right' posy='top'    width='%30' height='of:width:self'                    picturenormal='button round*' action='Send Channel Up'   fontsize='%h30' iconfontsize='%h60' caption='icon:osd_next' />
+  <element name='Button Channel Down' type='BUTTON'    posx='right' posy='bottom' width='%30' height='of:width:self'                    picturenormal='button round*' action='Send Channel Down' fontsize='%h30' iconfontsize='%h60' caption='icon:osd_prev' />
+  <element name='Text Channel'        type='TEXTFIELD' posx='right' posy='middle' width='%30' height='of:width:self'                                                                             fontsize='%h20' iconfontsize='%h60' caption='$lvar(1059)' />
+</elements>

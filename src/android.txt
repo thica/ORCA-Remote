@@ -1,0 +1,3 @@
+title=ORCA
+author=Carsten Thielepape
+orientation=landscape

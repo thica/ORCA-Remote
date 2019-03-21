@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <repositorymanager>
+    <entry>
+      <name>Sharp Aquos EU TV Models</name>
+      <description language='English'>Sharp Aquos TV models for european market (Loewe based) (for mediaplayer template)</description>
+      <description language='German'>Sharp Aquos TV Modelle für den europäischen Markt (Loewe basiert) (Für Mediaplayer Template)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/sharp_aquos_EU</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/wizard templates/sharp_aquos_EU.zip</sourcefile>
+          <targetpath>wizard templates/mediaplayer wizard</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>codesets</type>
+          <name>Sharp Aquos URL</name>
+        </dependency>
+        <dependency>
+          <type>codesets</type>
+          <name>Aquos IR simple</name>
+        </dependency>
+          <dependency>
+              <type>definitions</type>
+              <name>Mediaplayer Wizard</name>
+          </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+</orca>

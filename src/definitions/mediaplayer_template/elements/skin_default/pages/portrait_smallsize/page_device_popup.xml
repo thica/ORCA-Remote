@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page name='Page_Device_$dvar(definition_alias_mediaplayer_template)_Popup'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+    <interface>$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)</interface>
+    <configname>$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)</configname>
+    <popup>1</popup>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
+    <element name="Anchor Inner" type="ANCHOR" posx="center" posy="middle" width="%90" height="%90">
+        <xi:include href="$var(DEFINITIONPATH)/block_popup_inner_portrait.xml" parse="xml" />
+    </element>
+  </elements>
+</page>

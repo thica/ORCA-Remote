@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont>Sans</defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <support>http://www.orca-remote.org/forum/</support>
+    <installationhint>$lvar(setup_10000)</installationhint>
+    <orientations>landscape</orientations>
+  </def_parameter>
+  <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/page_*" parse="xml"></xi:include>
+    <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+  </pages>
+  <repositorymanager>
+    <entry>
+      <name>Setup</name>
+      <description language='English'>First definition to show, if no default definition has been chosen</description>
+      <description language='German'>Erste Definition bei Programmstart, falls keine andere Definition gewählt wurde</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/setup</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/setup.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>others</type>
+          <name>ORCA Core Files</name>
+        </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/setup/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/setup/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+</orca>

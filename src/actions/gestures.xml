@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- It is NOT wise to change this document, change the custom include files 
+     instead!! -->
+<ORCA>
+  <gestures xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(ACTIONPATH)/standardgestures.xml" parse="xml" condition="'$var(ORCASTANDARDGESTURESINCLUDED)'!='1'"/>
+    <xi:include href="$var(DEFINITIONPATH)/actions/customgestures.xml" parse="xml" />
+  </gestures>
+</ORCA>

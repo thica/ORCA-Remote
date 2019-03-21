@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_$dvar(definition_alias_mediaplayer_template)'>
+    <page_parameter>
+        <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+        <interface>$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)</interface>
+        <configname>$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)</configname>
+    </page_parameter>
+    <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+        <element name='Background Main Screen' type='BACKGROUND' picturenormal='background' />
+        <element name='Anchor BottomGap' type='ANCHOR' posx='left' posy='bottom' width='%100'  height='%1' />
+        <element name='Anchor TopGap' type='ANCHOR' posx='left' posy='%6' width='%100'  height='%1' />
+
+        <element name='Anchor Media section' type='ANCHOR' posx='%5' posy='of:top:Anchor TopGap' width='%50' height='%60'>
+            <element name='Frame Volumes' type='PICTURE' posx='center' posy='bottom' width='%97' height='%82' picturenormal='background boxes' />
+            <element name='Anchor Media Circle' type='ANCHOR' posx='center' posy='top' height='of:width:self'>
+                <xi:include href="$var(STANDARDELEMENTSPATH)/block_mediacircle.xml" parse="xml" />
+            </element>
+            <element name='Anchor Gap Media Circle' type='ANCHOR' posx='center' posy='of:bottom:Anchor Media Circle' height='%2'/>
+            <element name='Anchor Volume Slider' type='ANCHOR' posx='center' posy='of:bottom:Anchor Gap Media Circle' width='%90' height='%50'>
+                <xi:include href="$var(DEFINITIONPATHSKINELEMENTS[mediaplayer_template])/block_volume_slider.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Slider" />
+            </element>
+            <element name='Anchor Volume Buttons' type='ANCHOR' posx='center' posy='of:bottom:Anchor Gap Media Circle' width='%90' height='%50'>
+                <xi:include href="$var(DEFINITIONPATHSKINELEMENTS[mediaplayer_template])/block_volume_buttons.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Buttons" />
+            </element>
+            <element name='Anchor Channels' type='ANCHOR' posy='of:bottom:Anchor Gap Media Circle' posx='center' width='%90' height='%50'>
+              <xi:include href="$var(DEFINITIONPATH)/block_buttons_channels.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWCHANNELUPDOWN)==1"/>
+            </element>
+        </element>
+
+        <element name='Anchor Menu Buttons' type='ANCHOR' posx='%95' posy='of:totop:Anchor BottomGap' width='%42'  height='of:width:self:*0.25'>
+          <xi:include href="$var(DEFINITIONPATH)/block_buttons_menu_tv.xml" parse="xml" />
+        </element>
+
+        <element name='Anchor Right Buttons' type='ANCHOR' posx='%95' posy='of:totop:Anchor Menu Buttons' width='of:width:Anchor Menu Buttons'  height='of:width:self:*2.8' >
+          <xi:include href="$var(DEFINITIONPATH)/block_buttons_left_p.xml" parse="xml" />
+        </element>
+
+    <element name='Anchor TV Logos' type='ANCHOR' posx='%05' posy='of:totop:Anchor BottomGap' width='%50' height='of:width:self' >
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS[tvfavorites_template])/block_tv_channels.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE)==TVICONS" />
+    </element>
+
+    <element name='Anchor App Buttons' type='ANCHOR' posx='%05' posy='of:totop:Anchor BottomGap' width='%50' height='of:width:self' >
+        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS[appfavorites_template])/block_buttons_appstart.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE)==APPBUTTONS" />
+    </element>
+
+    <element name='Anchor Cmd Buttons' type='ANCHOR' posx='%05' posy='of:totop:Anchor BottomGap' width='%50' height='of:width:self' >
+        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS[cmdfavorites_template])/block_buttons_cmdstart.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE)==CMDBUTTONS" />
+    </element>
+
+
+        <element name='Anchor NumberPad' type='ANCHOR' posx='%95' width='of:width:Anchor Menu Buttons' height='of:width:self:*1.33' posy='of:top:Anchor Media section'>
+        <xi:include href="$var(DEFINITIONPATH)/block_numberpad.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD)==1"/>
+    </element>
+
+        <element name='Anchor PowerOnOff' type='ANCHOR' posx='of:toright:Anchor Menu Buttons' posx2='of:toright:Anchor Menu Buttons' posy='%46' width='of:height:self:*0.5' height='of:height:Anchor Menu Buttons:*2'>
+            <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_poweronoff.xml" parse="xml" />
+        </element>
+
+        <element name='Hide_Show_SecondCaption' type='SWITCH' posx='of:left:Anchor Menu Buttons' posy='of:top:Anchor PowerOnOff'   width='of:width:Anchor PowerOnOff' height='of:width:self' picturenormal='button square*' action='Switch Second Caption Page_Device_$dvar(definition_alias_mediaplayer_template)' destvar="Status_Second_Caption_Page_Device_$dvar(definition_alias_mediaplayer_template)" fontsize='%h30' iconfontsize='%h70' caption='icon:translate' />
+
+
+    </elements>
+</page>

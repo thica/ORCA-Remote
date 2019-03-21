@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <elements>
+    <xi:include href="$var(ORCA_INCLUDEFILE)" parse="xml" />
+  </elements>
+</includes>

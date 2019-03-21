@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings , 10000 to 10099 resevred for elvmax interface-->
+
+    <string id="elvmax_10100">Error</string>
+    <string id="elvmax_10101">Rooms</string>
+    <string id="elvmax_10102">Devices</string>
+    <string id="elvmax_10103">Temperatures</string>
+    <string id="elvmax_10104">Comfort</string>
+    <string id="elvmax_10105">Eco</string>
+    <string id="elvmax_10106">Target</string>
+    <string id="elvmax_10107">Current</string>
+
+
+    <string id="elvmax_10110">Set</string>
+    <string id="elvmax_10111">Automatic</string>
+    <string id="elvmax_10112">Manual</string>
+    <string id="elvmax_10113">Current Mode</string>
+    <string id="elvmax_10115">Automatic</string>
+    <string id="elvmax_10116">Manual</string>
+    <string id="elvmax_10117">Boost</string>
+    <string id="elvmax_10118">Vacation</string>
+    <string id="elvmax_10120">Room</string>
+    <string id="elvmax_10121">Device</string>
+
+    <string id="elvmax_10200">Other</string>
+    <string id="elvmax_10202">Max Temperature</string>
+    <string id="elvmax_10203">Maximal temperature to select</string>
+    <string id="elvmax_10204">Min Temperature</string>
+    <string id="elvmax_10205">Minimal temperature to select</string>
+    <string id="elvmax_10240">Navigation Bar</string>
+    <string id="elvmax_10241">Select the type of the navigation bar</string>
+    <string id="elvmax_10242">Device Picture</string>
+    <string id="elvmax_10243">Picture / Logo to show</string>
+
+</strings>

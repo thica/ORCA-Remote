@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <repositorymanager>
+    <entry>
+      <name>Octagon Sat Receivers by IR</name>
+      <description language='English'>IR Control for Octagon Receiver (for mediaplayer template)</description>
+      <description language='German'>IR Fernbedienung für Octagon Receiver (Für Mediaplayer Template)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/octagon 1018</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/wizard templates/octagon 1018.zip</sourcefile>
+          <targetpath>wizard templates/mediaplayer wizard</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>definitions</type>
+          <name>Mediaplayer Wizard</name>
+        </dependency>
+        <dependency>
+          <type>codesets</type>
+          <name>Octagon 1018HD IR</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+</orca>

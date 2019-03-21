@@ -1,0 +1,93 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Architecture
+WikiDoc:Page:The Code Structure
+WikiDoc:TOCTitle:1=The Code Structure
+
+The following folders are used:
+
+= The root installation folder =
+
+The installation folder contains the main.py source, which just initiates the main ORCA file: App.py. It further more contains a indicator file, which should only be present in the development environment: "protected". If this file is present, then the download of repository files is blocked.
+
+= Folders with repository files =
+
+The folders contains files, which are part of the genuine ORCA repository
+
+== actions ==
+The "actions" folder contains the action files for the startup ORCA and other standard actions
+== codesets ==
+The "codesets" folder contains all pre made codesets
+== definitions ==
+This folder contains all pre made definitions. It also contains the shared definitions elements and pages
+== interfaces ==
+This folder contains all pre made interfaces.
+== languages ==
+This folder contains language files. Each language is stored in a separate folder with name of the language.
+== scripts ==
+This folder contains all pre made scripts.
+== skins ==
+This folder contains all pre made skins.
+== sounds ==
+This folder contains all pre made sounds.
+== wizard templates ==
+This is the generic wizard templates folder, It contains sub folder for each template type.
+== resources ==
+This folder contains fürther core resources of ORCA
+=== fonts ===
+This folder contains the fonts of ORCA
+=== irdbtranslation ===
+This folder contains the translation file for ITACH tower commands to ORCA actions
+=== pics ===
+This folder contains some core pictures (not skin pictures) used by ORCA
+=== tvlogos ===
+This folder contains a pre selection of TV channel logos (Subset German TV)
+=== tvlogos_large ===
+This folder contains a large set TV channel logos
+=== repositories ===
+This folder contains some repository structure files for ORCA core files.
+= Internal folder and helper folder=
+== tmp ==
+This folder will be created by ORCA and contains cookies, repositories downloads and other temporary files
+== logs ==
+This folder will be created by ORCA and contains the ORCA log files
+== wikidoc ==
+This folder contains the wiki content files for the autocreation of thORCA wikipedia
+
+= ORCA Source files =
+The ORCA folder is the main folder for all source files. The root ORCA folder contain the main source files. Don't be confused: The installation folder contains the main.py source, which just initiates the main ORCA file: App.py
+== actions ==
+The actions folder contains the code for the individual actions.
+== scripttemplates ==
+The scripttemplates folder contains the the base classes for scripts. One example is the template for discover scripts.
+== services ==
+This is reserved for future extensions
+== setttingtypes ==
+Here you can find all customized and new setting types for the ORCA settings dialogs.
+== ui ==
+A collection of standard dialogs, which are not part of a definition
+== utils ==
+A folder which contains a collection of helper files.
+== widgets ==
+In this folder you can find all kind of GUI elements / widgets.
+= Environment Variables =
+The following environment variable are used for the development environment
+== Repository manager ==
+For the repository manager, to create the and upload the repository, the following variables are used
+* set ORCAFTPSERVER=ftp.orca-remote.org  : The (FTP) URl of the repository server
+* set ORCAFTPSERVERPATH=/repositories/ORCA_$var(REPVERSION) : The remote FTP Server path
+* set ORCAFTPUSER=FTPUSERNAME : The username to logon to the FTP server
+* set ORCAFTPPW=FTPPASSWORD : The password to logon to the FTP server
+* set ORCAWWWSERVERPATH=http://www.orca-remote.org/repositories/ORCA_$var(REPVERSION)/repositories : www path for the repository manager
+* SET ORCAREPSOURCEPATH=$var(APPLICATIONPATH) : The (local) root path, where to find the repository
+== The iTach control tower ==
+* set IRDBUSER=ITACHUSER : The control tower user
+* set IRDBPASSWORD=ITACHPW : The control tower password
+== Wiki creation ==
+* set ORCAWIKIUSER=WIKIUSER : The wikipedia user
+* set ORCAWIKIPW=WIKIPASSWORD : The wikipedia password
+== other ==
+* set ORCASHOWBORDERS=1 : If set, all widgets and anchors are framed with a border.
+
+WikiDoc:End
+'''

@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>ENIGMA2 Control by Open WebInterface</name>
+      <description language='English'>ENIGMA2 Remote Control using the open webinterface</description>
+      <description language='German'>ENIGMA2 Fernbedienung über das Open Web-Interface</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <skip>0</skip>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_ENIGMA2.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_ENIGMA2.zip</sourcefile>
+          <targetpath>codesets/url</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>URL-Web</name>
+        </dependency>
+        <dependency>
+          <type>scripts</type>
+          <name>Enigma Helper Script</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <!-- Translates Orca Actions to Interface Commands action = Orca Action    -->
+  <action name='logon'>
+    <action name="We log only once" string="if $cvar(firstcall)==1" varcontext="codeset"/>
+      <action string="setvar firstcall=0" varcontext="codeset"/>
+      <action string="call getallservices" />
+    <action string="endif"/>
+    <action name="if we got all services" string="if $var(RESULT)!=" />
+     <action string="setvar firstcall=0" varcontext="codeset"/>
+    <action name="endif" string="endif" />
+
+    <action name="set return code" string="setreturncode" code="0" />
+  </action>
+
+
+  <action name="getallservices" >
+     <action string="setvar RESULT=" />
+     <action string="codeset"  name="getallservices_sub"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/getallservices'            headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  getvar='dummy' parseoption='store' gdestvar='RESULT' />
+     <action name='Parse Result into Vars' string="runscript" scriptname="helper_enigma" commandparameter='{"cmd_type":"parse_services","resultvar":"RESULT","retvar":"enigmachannel"}' condition="$var(RESULT)!="/>
+  </action>
+
+
+  <action string="codeset" name='logon_unused'            type="encode" waitforresponse='1' requesttype='GET' cmd='/' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="power_toggle"     type="alias" cmd='key_power'/>
+  <action string="codeset" name="power_on"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/powerstate?newstate=4'      headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+    <!-- Deep Standby-->
+  <action string="codeset" name="power_off"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/powerstate?newstate=0'     headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+    <!-- Standby-->
+  <action string="codeset" name="hibernate"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/powerstate?newstate=5'      headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="reboot"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/powerstate?newstate=3'      headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action name="shutdown"         type="alias" cmd='power_off'/>
+
+  <action string="codeset" name="mute_toggle"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol?set=mute'              headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action name="mute_on"          type="alias" cmd='mute_toggle'/>
+  <action name="mute_off"         type="alias" cmd='mute_toggle'/>
+
+  <action string="codeset" name="volume_up"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol?set=up'                headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="volume_down"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol?set=down'              headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name='getvolume'        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol'                       headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  getvar='e2current' parseoption='xml' gdestvar='enigma2vol' />
+  <action string="codeset" name='setvolume'        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol?set=set$cvar(volumetoset)'    headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  />
+
+  <action name="channel_down"     type="alias" cmd='key_channelup'/>
+  <action name="channel_up"       type="alias" cmd='key_channeldown'/>
+
+  <action name="pause"            type="alias" cmd="key_playpause" />
+  <action name="play"             type="alias" cmd="key_play" />
+  <action name="stop"             type="alias" cmd="key_stop" />
+  <action name="fast_rewind"      type="alias" cmd="key_rewind" />
+  <action name="fast_forward"     type="alias" cmd="key_fastforward" />
+  <action name="skip_back"        type="alias" cmd="key_back" />
+  <action name="skip_forward"     type="alias" cmd="key_forward" />
+  <action name="record"           type="alias" cmd="key_record" />
+  <action name="pause_toggle"     type="alias" cmd="key_playpause" />
+
+  <action name="recordings"        type="alias" cmd="key_pvr" />
+  <action name="pvr"               type="alias" cmd="key_pvr" />
+  <action name="audiochannel_select"  type="alias" cmd="key_audio" />
+  <action name="timer"               type="alias" cmd="key_timer" />
+
+  <action name="previous_tv_channel" type="alias" cmd="key_previous" />
+  <action name="esc" type="alias" cmd="key_previous" />
+
+  <action name="key_&#60;"  type="alias" cmd="key_previous"        />
+  <action name="key_&#62;"  type="alias" cmd="key_next"       />
+
+  <!-- OSD-OK -->
+  <action name="ok"               type="alias" cmd='key_ok'/>
+  <!-- OSD-Left -->
+  <action name="left"             type="alias" cmd='key_left'/>
+  <!-- OSD-Right -->
+  <action name="right"            type="alias" cmd='key_right'/>
+  <!-- OSD-Up -->
+  <action name="up"               type="alias" cmd='key_up'/>
+  <!-- OSD-Down -->
+  <action name="down"             type="alias" cmd='key_down'/>
+  <!-- OSD-Close-->
+  <action name="exit"             type="alias" cmd='key_exit'/>
+  <action name="esc"              type="alias" cmd='key_esc'/>
+  <action name="cancel"           type="alias" cmd='key_cancel'/>
+  <action name="option"           type="alias" cmd='key_option'/>
+  <action name="info"             type="alias" cmd='key_info'/>
+  <action name="epg"              type="alias" cmd='key_epg' />
+  <action name="angle"            type="alias" cmd='key_angle' />
+  <action name="aspect"           type="alias" cmd='key_aspect' />
+  <action name="zoom"             type="alias" cmd='key_zoom' />
+  <action name="favorites"        type="alias" cmd='key_favorites' />
+
+
+  <action name="button_red"       type="alias" cmd='key_red' />
+  <action name="button_green"     type="alias" cmd='key_green' />
+  <action name="button_yellow"    type="alias" cmd='key_yellow' />
+  <action name="button_blue"      type="alias" cmd='key_blue' />
+
+  <!-- OSD-Previous OSD Page- -->
+  <action name="page_up"          type="alias" cmd='key_pgup'/>
+  <!-- OSD-Next OSD page -->
+  <action name="page_down"        type="alias" cmd='key_pgdown'/>
+  <action name="page_first"       type="alias" cmd='key_home'/>
+  <action name="page_last"        type="alias" cmd='key_end'/>
+
+  <action name="menu"             type="alias" cmd='key_menu'/>
+  <action name="help"             type="alias" cmd='key_help'/>
+  <action name="setup"            type="alias" cmd='key_setup'/>
+  <action name="eject"            type="alias" cmd='key_ejectcd'/>
+  <action name="closecd"          type="alias" cmd='key_closecd'/>
+
+  <action name="source net"       type="alias" cmd='key_www'/>
+  <action name="source pc"        type="alias" cmd='key_computer'/>
+
+  <action name="clock_toggle"     type="alias" cmd='key_time'/>
+  <action name="clock_on"         type="alias" cmd='clock_toggle' />
+  <action name="clock_off"        type="alias" cmd='clock_toggle' />
+
+  <action name="subtitles_toggle" type="alias" cmd='key_subtitle'/>
+  <action name="subtitles_on"     type="alias" cmd='subtitles_toggle' />
+  <action name="subtitles_off"    type="alias" cmd='subtitles_toggle' />
+  <action name="subtitles_menue"  type="alias" cmd='subtitles_toggle' />
+  <action name="subtitles_next"   type="alias" cmd='subtitles_toggle' />
+  <action name="subtitles_prev"   type="alias" cmd='subtitles_toggle' />
+
+  <action name="shuffle_toggle"   type="alias" cmd='key_shuffle'/>
+  <action name="shuffle_on"       type="alias" cmd='shuffle_toggle' />
+  <action name="shuffle_off"      type="alias" cmd='shuffle_toggle' />
+
+  <action name="repeat_toggle"   type="alias" cmd='key_AB'/>
+  <action name="repeat_on"       type="alias" cmd='repeat_toggle' />
+  <action name="repeat_off"      type="alias" cmd='repeat_toggle' />
+
+  <action name="teletext"         type="alias" cmd="key_text" />
+  <action name="teletext_toggle"  type="alias" cmd="teletext" />
+  <action name="teletext_on"      type="alias" cmd="teletext" />
+  <action name="teletext_off"     type="alias" cmd="teletext" />
+
+  <action name="source tuner"     type="alias" cmd="key_tuner" />
+  <action name="source dvd"       type="alias" cmd="key_dvd" />
+  <action name="source tv/sat"    type="alias" cmd="key_sat" />
+  <action name="source tv"        type="alias" cmd="key_tv" />
+  <action name="source vcr"       type="alias" cmd="key_vcr" />
+  <action name="source radio"     type="alias" cmd="key_radio" />
+  <action name="source aux 1"     type="alias" cmd="key_aux" />
+  <action name="source tape"      type="alias" cmd="key_tape" />
+  <action name="source usb"       type="alias" cmd="key_mp3" />
+
+  <action name="pip_on"           type="alias" cmd="key_pip" />
+
+  <action name="pip_off" >
+    <action string="call context" />
+    <action name="pip_off"          type="alias" cmd="key_blue"  />
+  </action>
+
+  <action name="pip_swap" >
+      <action string="call context" />
+      <action name="pip_swap"         type="alias" cmd="key_yellow" />
+  </action>
+
+  <action name="pip_select" >
+      <action string="call context" />
+      <action name="pip_select"       type="alias" cmd="key_red" />
+  </action>
+
+  <action name="help"             type="alias" cmd="key_help" />
+  <action name="user"             type="alias" cmd="key_help" />
+  <action name="context"          type="alias" cmd="key_hdmi_in" />
+  <action name="source hdmi 1"    type="alias" cmd="key_hdmi_in" />
+
+  <action name="ping"             type="alias" cmd="getvolume" />
+
+
+  <!--
+  https://github.com/openatv/enigma2/blob/master/data/keymap.xml
+  -->
+
+
+
+  <action string="codeset" name="key_sleep"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=142' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_wakeup"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=143' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />#
+  <action string="codeset" name="key_power"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=116' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_power2"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=356' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_suspend"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=205' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_channelup"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=403' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_channeldown"  type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=402' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_volumeup"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=114' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_volumedown"   type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=114' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_a"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=30'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_b"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=48'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_c"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=46'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_d"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=32'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_e"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=18'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=33'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_g"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=34'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_h"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=35'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_i"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=23'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_j"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=36'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_k"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=37'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_l"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=38'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_m"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=50'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_n"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=49'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_o"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=24'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_p"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=25'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_q"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=16'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_r"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=19'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_s"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=31'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_t"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=20'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_u"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=22'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_v"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=47'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_w"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=17'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_x"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=45'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_y"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=21'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_z"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=44'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_0"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=11'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_1"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=2'   headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_2"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=3'   headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_3"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=4'   headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_4"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=5'   headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_5"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=6'   headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_6"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=7'   headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_7"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=8'   headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_8"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=9'   headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_9"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=10'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action name="channel_selectbykey">
+      <action string="codeset" type="string" cmd='{"REPEAT":{"REPEATCMD":"key_","REPEATVAR":"$cvar(CHANNELNUM)"}}' />
+      <action type="alias" cmd="key_ok" />
+  </action>
+
+  <action name="channel_select">
+      <action name='Check if we allready initialized the whole codeset' string="if $cvar(firstcall)==1" varcontext="codeset"/>
+          <action name='we havent so lets initialize' string="call logon" />
+      <action name='endf' string="endif" />
+
+      <action name='Get Channel reference' string="runscript" scriptname="helper_enigma" commandparameter='{"cmd_type":"get_channelreference","channelnum":"$cvar(CHANNELNUM)","retvar":"tmp_channelreference"}'/>
+      <action name='Switch Channel by reference' string="codeset" type="string" cmd='/web/zap?sRef=$cvar(tmp_channelreference)'  waitforresponse='1' />
+  </action>
+
+
+  <action string="codeset" name="key_esc"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=1'   headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_-"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=12'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_tab"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=15'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_="            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=13'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_backspace"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=14'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_leftbrace"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=26'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_rightbrace"   type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=27'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_leftctrl"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=29'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_enter"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=28'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_;"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=39'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- APOSTROPHE -->
+  <action string="codeset" name="key_'"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=40'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- GRAVE -->
+  <action string="codeset" name="key_`"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=41'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_ "            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=57'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_space"        type="alias" cmd='key_ '/>
+  <action string="codeset" name="key_,"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=51'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_."            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=52'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_/"            type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=53'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_rightshift,"  type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=54'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_leftalt "     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=56'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_rightalt"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=100' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_capslock"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=58'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_numlock"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=69'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_scrolllock"   type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=70'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_leftshift"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=42'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_backslash"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=43'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_sysrq"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=99'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_linefeed"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=101' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_insert"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=110' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_delete"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=111' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_macro"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=112' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_move"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=175' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_edit"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=176' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_goto"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=354' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_clear"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=355' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_text"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=388' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_digits"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=413' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_teen"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=414' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_twen"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=415' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_del_eol"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=448' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_del_eos"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=449' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_ins_line"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=450' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_del_line"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=451' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_ascii"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=510' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_max"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=511' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_btn_0"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=256' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_btn_1"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=257' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+
+  <action string="codeset" name="key_leftmeta"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=125' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_rightmeta"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=126' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_compose"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=127' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_again"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=129' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_props"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=130' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_undo"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=131' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_front"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=132' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_copy"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=133' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_open"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=134' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_paste"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=135' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_find"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=136' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_cut"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=137' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_help"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=138' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_menu"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=139' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_setup"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=141' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_calc"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=140' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_file"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=144' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_sendfile"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=145' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_deletefile"   type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=146' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_xfer"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=147' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_prog1"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=148' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_prog2"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=149' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_prog3"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=202' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_prog4"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=203' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_www"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=150' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_msdos"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=151' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_coffee"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=152' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_direction"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=153' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_cyclewindows" type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=154' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_mail"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=155' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_bookmarks"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=156' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_computer"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=157' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_bassboost"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=209' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_print"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=210' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_hp"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=211' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_camera"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=212' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_sound"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=213' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_question"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=214' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_email"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=215' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_chat"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=216' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_search"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=217' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_connect"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=218' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_finance"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=219' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_sport"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=220' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_shop"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=221' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_alterase"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=222' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_keyboard"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=374' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_screen"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=375' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_pc"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=376' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_tv"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=377' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_tv2"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=378' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_vcr"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=379' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_vcr2"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=380' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_sat"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=381' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_sat2"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=382' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_cd"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=383' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_tape"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=384' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_radio"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=385' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_tuner"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=386' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_player"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=387' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_dvd"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=389' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_aux"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=390' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_mp3"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=391' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_audio"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=392' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_video"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=393' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_directory"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=394' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_list"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=395' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_memo"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=396' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_calendar"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=397' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_brightnessdown" type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=224' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_brightnessup" type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=225' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_media"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=226' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_unknown"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=240' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_phone"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=169' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_iso"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=170' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_config"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=171' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_homepage"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=172' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_refresh"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=173' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_scrollup"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=177' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_scrolldown"   type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=178' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_intl1"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=181' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_intl2"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=182' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_intl3"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=183' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_intl4"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=184' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_intl5"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=185' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_intl6"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=186' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_intl7"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=187' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_intl8"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=188' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_intl9"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=189' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_lang1"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=190' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_lang2"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=191' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_lang3"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=192' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_lang4"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=193' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_lang5"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=194' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_lang6"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=195' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_lang7"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=196' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_lang8"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=197' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_lang9"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=198' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_closecd"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=160' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_ejectcd"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=161' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_ejectclosecd" type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=162' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_stopcd"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=166' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_home"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=102' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_end"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=107' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_up"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=103' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_down"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=108' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_left"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=105' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_right"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=106' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_pgup"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=104' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_pgdown"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=109' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_f1"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=59'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f2"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=60'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f3"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=61'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f4"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=62'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f5"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=63'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f6"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=64'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f7"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=64'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f8"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=65'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f9"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=66'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f10"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=67'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f11"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=87'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f12"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=88'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f13"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=85'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f14"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=89'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f15"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=90'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f16"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=91'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f17"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=92'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f18"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=93'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f19"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=94'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f20"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=95'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f21"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=120' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f22"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=121' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f23"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=122' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_f24"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=123' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_kp*"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=55'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp0"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=82'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp1"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=79'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp2"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=80'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp3"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=81'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp4"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=75'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp5"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=76'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp6"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=77'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp7"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=71'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp8"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=72'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp9"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=73'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp-"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=74'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp+"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=75'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp."          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=83'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp,"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=124' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kpenter"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=96'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp="          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=117' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp+-"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=118' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp("          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=179' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_kp)"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=180' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_102rd"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=86'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_103rd"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=84'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_pause"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=119' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_play"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=207' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_stop"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=128' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_fastforward"  type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=208' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_rewind"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=168' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_record"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=167' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_back"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=158' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_forward"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=159' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_playpause"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=164' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_first"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=404' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_last"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=405' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_AB"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=406' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_next"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=407' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_restart"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=408' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_slow"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=409' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_shuffle"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=410' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_break"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=411' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_previous"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=412' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_exit"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=174' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_close"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=206' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_cancel"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=223' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_ok"           type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=352' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_select"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=353' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_option"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=357' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_info"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=358' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_time"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=359' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_epg"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=365' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_subtitle"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=370' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_angle"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=371' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_aspect"       type="alias" cmd="key_angle" />
+
+    <action string="codeset" name="key_zoom"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=372' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_favorites"    type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=364' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_vendor"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=360' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_archive"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=361' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_program"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=362' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_timer"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=362' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+
+    <action string="codeset" name="key_channel"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=363' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_pvr"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=366' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_mhp"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=367' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_language"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=368' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_title"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=369' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_mode"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=373' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_pip"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=375' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_hdmi_in"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=438' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+
+  <action string="codeset" name="key_nextsong"     type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=163' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_previoussong" type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=165' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_playcd"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=200' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_pausecd"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=201' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_red"          type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=398' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_green"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=399' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_yellow"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=400' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_blue"         type="encode" waitforresponse='1' requesttype='GET' cmd='/web/remotecontrol?command=401' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+
+
+    <!--
+
+
+  KEYIDS = {
+"KEY_RESERVED": 0,
+*"KEY_ESC": 1,
+*"KEY_1": 2,
+*"KEY_2": 3,
+*"KEY_3": 4,
+*"KEY_4": 5,
+*"KEY_5": 6,
+*"KEY_6": 7,
+*"KEY_7": 8,
+*"KEY_8": 9,
+*"KEY_9": 10,
+*"KEY_0": 11,
+*"KEY_MINUS": 12,
+*"KEY_EQUAL": 13,
+*"KEY_BACKSPACE": 14,
+*"KEY_TAB": 15,
+*"KEY_Q": 16,
+*"KEY_W": 17,
+*"KEY_E": 18,
+*"KEY_R": 19,
+*"KEY_T": 20,
+*"KEY_Y": 21,
+*"KEY_U": 22,
+*"KEY_I": 23,
+*"KEY_O": 24,
+*"KEY_P": 25,
+*"KEY_LEFTBRACE": 26,
+*"KEY_RIGHTBRACE": 27,
+*"KEY_ENTER": 28,
+*"KEY_LEFTCTRL": 29,
+*"KEY_A": 30,
+*"KEY_S": 31,
+*"KEY_D": 32,
+*"KEY_F": 33,
+*"KEY_G": 34,
+*"KEY_H": 35,
+*"KEY_J": 36,
+*"KEY_K": 37,
+*"KEY_L": 38,
+*"KEY_SEMICOLON": 39,
+*"KEY_APOSTROPHE": 40,
+*"KEY_GRAVE": 41,
+*"KEY_LEFTSHIFT": 42,
+*"KEY_BACKSLASH": 43,
+*"KEY_Z": 44,
+*"KEY_X": 45,
+*"KEY_C": 46,
+*"KEY_V": 47,
+*"KEY_B": 48,
+*"KEY_N": 49,
+*"KEY_M": 50,
+*"KEY_COMMA": 51,
+*"KEY_DOT": 52,
+*"KEY_SLASH": 53,
+*"KEY_RIGHTSHIFT": 54,
+*"KEY_KPASTERISK": 55,
+*"KEY_LEFTALT": 56,
+*"KEY_SPACE": 57,
+*"KEY_CAPSLOCK": 58,
+*"KEY_F1": 59,
+*"KEY_F2": 60,
+*"KEY_F3": 61,
+*"KEY_F4": 62,
+*"KEY_F5": 63,
+*"KEY_F6": 64,
+*"KEY_F7": 65,
+*"KEY_F8": 66,
+*"KEY_F9": 67,
+*"KEY_F10": 68,
+*"KEY_NUMLOCK": 69,
+*"KEY_SCROLLLOCK": 70,
+*"KEY_KP7": 71,
+*"KEY_KP8": 72,
+*"KEY_KP9": 73,
+*"KEY_KPMINUS": 74,
+*"KEY_KP4": 75,
+*"KEY_KP5": 76,
+*"KEY_KP6": 77,
+*"KEY_KPPLUS": 78,
+*"KEY_KP1": 79,
+*"KEY_KP2": 80,
+*"KEY_KP3": 81,
+*"KEY_KP0": 82,
+*"KEY_KPDOT": 83,
+*"KEY_103RD": 84,
+*"KEY_F13": 85,
+*"KEY_102ND": 86,
+*"KEY_F11": 87,
+*"KEY_F12": 88,
+*"KEY_F14": 89,
+*"KEY_F15": 90,
+*"KEY_F16": 91,
+*"KEY_F17": 92,
+*"KEY_F18": 93,
+*"KEY_F19": 94,
+*"KEY_F20": 95,
+*"KEY_KPENTER": 96,
+*"KEY_RIGHTCTRL": 97,
+*"KEY_KPSLASH": 98,
+*"KEY_SYSRQ": 99,
+*"KEY_RIGHTALT": 100,
+*"KEY_LINEFEED": 101,
+*"KEY_HOME": 102,
+*"KEY_UP": 103,
+*"KEY_PAGEUP": 104,
+*"KEY_LEFT": 105,
+*"KEY_RIGHT": 106,
+*"KEY_END": 107,
+*"KEY_DOWN": 108,
+*"KEY_PAGEDOWN": 109,
+
+*"KEY_INSERT": 110,
+*"KEY_DELETE": 111,
+*"KEY_MACRO": 112,
+*"KEY_MUTE": 113,
+*"KEY_VOLUMEDOWN": 114,
+*"KEY_VOLUMEUP": 115,
+*"KEY_POWER": 116,
+*"KEY_KPEQUAL": 117,
+*"KEY_KPPLUSMINUS": 118,
+*"KEY_PAUSE": 119,
+
+*"KEY_F21": 120,
+*"KEY_F22": 121,
+*"KEY_F23": 122,
+*"KEY_F24": 123,
+*"KEY_KPCOMMA": 124,
+
+*"KEY_LEFTMETA": 125,
+*"KEY_RIGHTMETA": 126,
+*"KEY_COMPOSE": 127,
+*"KEY_STOP": 128,
+*"KEY_AGAIN": 129,
+*"KEY_PROPS": 130,
+*"KEY_UNDO": 131,
+*"KEY_FRONT": 132,
+*"KEY_COPY": 133,
+*"KEY_OPEN": 134,
+*"KEY_PASTE": 135,
+*"KEY_FIND": 136,
+*"KEY_CUT": 137,
+
+*"KEY_HELP": 138,
+*"KEY_MENU": 139,
+*"KEY_CALC": 140,
+*"KEY_SETUP": 141,
+*"KEY_SLEEP": 142,
+*"KEY_WAKEUP": 143,
+*"KEY_FILE": 144,
+*"KEY_SENDFILE": 145,
+*"KEY_DELETEFILE": 146,
+*"KEY_XFER": 147,
+*"KEY_PROG1": 148,
+*"KEY_PROG2": 149,
+*"KEY_WWW": 150,
+*"KEY_MSDOS": 151,
+*"KEY_COFFEE": 152,
+*"KEY_DIRECTION": 153,
+*"KEY_CYCLEWINDOWS": 154,
+*"KEY_MAIL": 155,
+*"KEY_BOOKMARKS": 156,
+*"KEY_COMPUTER": 157,
+
+*"KEY_BACK": 158,
+*"KEY_FORWARD": 159,
+
+*"KEY_CLOSECD": 160,
+*"KEY_EJECTCD": 161,
+*"KEY_EJECTCLOSECD": 162,
+*"KEY_NEXTSONG": 163,
+*"KEY_PLAYPAUSE": 164,
+*"KEY_PREVIOUSSONG": 165,
+*"KEY_STOPCD": 166,
+*"KEY_RECORD": 167,
+*"KEY_REWIND": 168,
+*"KEY_PHONE": 169,
+*"KEY_ISO": 170,
+*"KEY_CONFIG": 171,
+*"KEY_HOMEPAGE": 172,
+*"KEY_REFRESH": 173,
+*"KEY_EXIT": 174,
+*"KEY_MOVE": 175,
+*"KEY_EDIT": 176,
+*"KEY_SCROLLUP": 177,
+*"KEY_SCROLLDOWN": 178,
+*"KEY_KPLEFTPAREN": 179,
+*"KEY_KPRIGHTPAREN": 180,
+*"KEY_INTL1": 181,
+*"KEY_INTL2": 182,
+*"KEY_INTL3": 183,
+*"KEY_INTL4": 184,
+*"KEY_INTL5": 185,
+*"KEY_INTL6": 186,
+*"KEY_INTL7": 187,
+*"KEY_INTL8": 188,
+*"KEY_INTL9": 189,
+*"KEY_LANG1": 190,
+*"KEY_LANG2": 191,
+*"KEY_LANG3": 192,
+*"KEY_LANG4": 193,
+*"KEY_LANG5": 194,
+*"KEY_LANG6": 195,
+*"KEY_LANG7": 196,
+*"KEY_LANG8": 197,
+*"KEY_LANG9": 198,
+
+*"KEY_PLAYCD": 200,
+*"KEY_PAUSECD": 201,
+*"KEY_PROG3": 202,
+*"KEY_PROG4": 203,
+*"KEY_SUSPEND": 205,
+*"KEY_CLOSE": 206,
+
+*"KEY_PLAY": 207,
+*"KEY_FASTFORWARD": 208,
+
+*"KEY_BASSBOOST": 209,
+*"KEY_PRINT": 210,
+*"KEY_HP": 211,
+*"KEY_CAMERA": 212,
+*"KEY_SOUND": 213,
+*"KEY_QUESTION": 214,
+*"KEY_EMAIL": 215,
+*"KEY_CHAT": 216,
+*"KEY_SEARCH": 217,
+*"KEY_CONNECT": 218,
+*"KEY_FINANCE": 219,
+*"KEY_SPORT": 220,
+*"KEY_SHOP": 221,
+*"KEY_ALTERASE": 222,
+
+*"KEY_CANCEL": 223,
+*"KEY_BRIGHTNESSDOWN": 224,
+*"KEY_BRIGHTNESSUP": 225,
+*"KEY_MEDIA": 226,
+*"KEY_UNKNOWN": 240,
+*"KEY_OK": 352,
+*"KEY_SELECT": 353,
+*"KEY_GOTO": 354,
+*"KEY_CLEAR": 355,
+*"KEY_POWER2": 356,
+*"KEY_OPTION": 357,
+*"KEY_INFO": 358,
+
+*"KEY_TIME": 359,
+*"KEY_VENDOR": 360,
+*"KEY_ARCHIVE": 361,
+*"KEY_PROGRAM": 362,
+*"KEY_CHANNEL": 363,
+*"KEY_FAVORITES": 364,
+*"KEY_EPG": 365,
+*"KEY_PVR": 366,
+*"KEY_MHP": 367,
+*"KEY_LANGUAGE": 368,
+*"KEY_TITLE": 369,
+*"KEY_SUBTITLE": 370,
+*"KEY_ANGLE": 371,
+*"KEY_ZOOM": 372,
+*"KEY_MODE": 373,
+
+*"KEY_KEYBOARD": 374,
+*"KEY_SCREEN": 375,
+*"KEY_PC": 376,
+*"KEY_TV": 377,
+*"KEY_TV2": 378,
+*"KEY_VCR": 379,
+*"KEY_VCR2": 380,
+*"KEY_SAT": 381,
+*"KEY_SAT2": 382,
+*"KEY_CD": 383,
+*"KEY_TAPE": 384,
+*"KEY_RADIO": 385,
+*"KEY_TUNER": 386,
+*"KEY_PLAYER": 387,
+*"KEY_TEXT": 388,
+*"KEY_DVD": 389,
+*"KEY_AUX": 390,
+*"KEY_MP3": 391,
+*"KEY_AUDIO": 392,
+*"KEY_VIDEO": 393,
+*"KEY_DIRECTORY": 394,
+*"KEY_LIST": 395,
+*"KEY_MEMO": 396,
+*"KEY_CALENDAR": 397,
+
+*"KEY_RED": 398,
+*"KEY_GREEN": 399,
+*"KEY_YELLOW": 400,
+*"KEY_BLUE": 401,
+
+*"KEY_CHANNELUP": 402,
+*"KEY_CHANNELDOWN": 403,
+
+*"KEY_FIRST": 404,
+*"KEY_LAST": 405,
+*"KEY_AB": 406,
+*"KEY_NEXT": 407,
+*"KEY_RESTART": 408,
+*"KEY_SLOW": 409,
+*"KEY_SHUFFLE": 410,
+*"KEY_BREAK": 411,
+*"KEY_PREVIOUS": 412,
+*"KEY_DIGITS": 413,
+*"KEY_TEEN": 414,
+*"KEY_TWEN": 415,
+*"KEY_DEL_EOL": 448,
+*"KEY_DEL_EOS": 449,
+*"KEY_INS_LINE": 450,
+*"KEY_DEL_LINE": 451,
+*"KEY_ASCII": 510,
+*"KEY_MAX": 511,
+*"BTN_0": 256,
+*"BTN_1": 257,
+}
+
+    -->
+
+</includes>
+
+

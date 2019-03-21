@@ -1,0 +1,20 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:StartWithOrca
+WikiDoc:Page:Installing ORCA
+WikiDoc:TOCTitle:5=Installing
+
+= Windows =
+
+The package for Windows can be unzipped to folder where ever you like (you need to have write access here. There is no installer, just unzipping is enough. You should be able to start "ORCA.exe" to start a default configuration. Please do not expect any remote commands to work, before you customized something or download a readymade definition.
+
+= Android =
+
+The .apk package: This package contains everything to install ORCA on your Android device. Copy the package on your device and refer to your device documentation how to install packages. The installation should not change any of your own definitions, (but will change the standard definitions), but please make a backup of your definition before updating ORCA Remote.
+
+= Apple / IOS =
+
+There is no package available by now.
+
+WikiDoc:End
+'''

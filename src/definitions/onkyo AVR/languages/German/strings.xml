@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="onkyoAVR_10001">Hole Gerätedaten</string>
+  <string id="onkyoAVR_10002">Dienste</string>
+  <string id="onkyoAVR_10003">Eingänge</string>
+  <string id="onkyoAVR_10004">Effekte</string>
+  <string id="onkyoAVR_10009">Kann den Receiver nicht initialisieren (nicht gefunden). Manche Funktionen sind ggf. eingeschränkt</string>
+
+  <string id="onkyoAVR_10506">Max Lautstärke des Verstärker</string>
+  <string id="onkyoAVR_10507">Maximale Lautstärke des Verstärkers</string>
+</strings>

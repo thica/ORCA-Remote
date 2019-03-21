@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="definitionstart">
+    <action name="set hint to add" string="setvar" varname="TEMPLATETHINT" varvalue="$lvar(enigma2_10000)" />
+    <action name="Add Template Installationshint" string="call FKT_AddTemplateInstallationsHint $dvar(definition_alias_mediaplayer_wizard)" />
+    <action name="handle setting changes" string="call Set SetupTrigger $dvar(definition_alias_mediaplayer_template)" />
+
+    <action name="on first start" string="if $var(STARTCOUNT)==1"/>"
+      <action name="Update Splash"     string="showsplashtext"  maintext="Enigma" subtext='$lvar(enigma2_10006)'/>
+      <action name="Load Settings from Enigma by sending something (Enigma)" string="sendcommand" commandname="getvolume" retvar="dummy" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
+      <action name='Assign the channels from enigma' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_template)","force":"0"}' />
+    <action name="endif first start" string="endif" />
+
+  </pagestartaction>
+</includes>

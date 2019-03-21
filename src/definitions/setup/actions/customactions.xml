@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+  <action name="gotosettindownloadgspage" >
+    <action name="show hourglass"   string="showpage Page_Wait" effect="no" />
+    <action name="gotosettingspage" string="showpage Page_Settings_Download" effect="risein" />
+  </action>
+
+</includes>
+

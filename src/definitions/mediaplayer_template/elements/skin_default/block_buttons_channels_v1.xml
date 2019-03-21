@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+    <element name='Button Channel Up' type='BUTTON' posx='%5' posy='of:bottom:Anchor Gap Media Circle' width='%20' height='of:width:self' picturenormal='button round*' action='Send Channel Up'      fontsize='%h50'  iconfontsize='%h70' caption='icon:osd_next' />
+    <element name='Button Channel Down' type='BUTTON' posx='%95' posy='of:bottom:Anchor Gap Media Circle' width='%20' height='of:width:self' picturenormal='button round*' action='Send Channel Down' fontsize='%h50'  iconfontsize='%h70' caption='icon:osd_prev' />
+    <element name='Text PgUpDown' type='TEXTFIELD' posx='center' posy='of:bottom:Anchor Gap Media Circle' width='%30' height='of:width:self' fontsize='%h20'  caption='$lvar(1059)' />
+</elements>

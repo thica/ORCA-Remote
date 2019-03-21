@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+    <element name='Button All Off Group1' type='BUTTON' posx='%99' posy='of:height:Anchor TopLine:*0.25' height="of:height:Anchor TopLine:*1.5" width='of:height:self'  picturenormal='button round framed*' action='FKT SwitchAllOffActivityGroup'  actionpars='{"ACTIVITYGROUP":"1"}' fontsize='%h50' textcolor='$var(red)' caption='icon:power_off' />
+</elements>

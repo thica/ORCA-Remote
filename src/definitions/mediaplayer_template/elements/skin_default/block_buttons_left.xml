@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Anchor Play Buttons' type='ANCHOR' posy='bottom'  height='of:width:self:*0.5' >
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecord.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE)==SMALL" />
+    </element>
+    <element name='Anchor Play Buttons' type='ANCHOR' posy='bottom'  height='of:width:self:*0.5' >
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecordshuffle.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE)==EXTENDED 1" />
+    </element>
+    <element name='Anchor Play Buttons' type='ANCHOR' posy='bottom'  width='%125' height='of:width:self:*0.4' >
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecordshuffle.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE)==EXTENDED 2" />
+    </element>
+
+
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_posdummy_media.xml"  parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE)!=None"/>
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_posdummy_bottom.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE)==None"/>
+
+    <element name='Anchor PlayButtonsGap' type='ANCHOR' posy='of:totop:last'  height='of:width:self:*0.02' />
+
+    <element name='Anchor TV Buttons' type='ANCHOR' posy='of:totop:Anchor PlayButtonsGap' height='of:width:self' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" >
+        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_buttonbars.xml" parse="xml" />
+    </element>
+    <element name='Anchor NumberGap' type='ANCHOR' posy='of:totop:Anchor TV Buttons' height='of:width:self:*0.05' />
+    <element name='Anchor NumberPad' type='ANCHOR' posx='center' width='%90' height='of:width:self:*1.33' posy='of:totop:Anchor NumberGap'>
+        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_numberpad.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD)==1"/>
+    </element>
+
+</elements>

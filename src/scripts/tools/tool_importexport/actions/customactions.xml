@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ORCA>
+ <actions>
+  <action name="Fkt Import_Export">
+    <action name="show hourglass" string="showpage Page_Wait" effect="no" />
+    <action name="Export" string="sendnotification" notification="STARTSCRIPTIMPORTEXPORT-DOEXPORT" condition="$var(ORCA_IE_DIRECTION)==EXPORT" />
+    <action name="Import" string="sendnotification" notification="STARTSCRIPTIMPORTEXPORT-DOIMPORT" condition="$var(ORCA_IE_DIRECTION)==IMPORT" />
+    <command1 name="Return to last page" string="call gotolastpage" />
+    <action name="Close Export Window" string="showpage Page_Settings" />
+  </action>
+ </actions>
+</ORCA>

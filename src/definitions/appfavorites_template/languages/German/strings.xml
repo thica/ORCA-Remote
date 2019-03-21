@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+    <string id="apptemplate_10500">Programm Name</string>
+    <string id="apptemplate_10501">Quickstart Programm Name</string>
+    <string id="apptemplate_10502">Programm Start Befehl</string>
+    <string id="apptemplate_10503">Kommandozeile um das Programm zu starten</string>
+    <string id="apptemplate_10504">Programm Favoriten</string>
+</strings>

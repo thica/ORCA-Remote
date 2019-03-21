@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_CMDS'>
+  <page_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Main Screen' type='BACKGROUND' picturenormal='background'>
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" />
+    </element>
+    <element name='Anchor Cmd Buttoms' type='ANCHOR' posx='%95' posy='%50' width='%34' height='%60'>
+          <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_cmdstart.xml" parse="xml" />
+    </element>
+      <element name='Anchor Appstart Buttons' type='ANCHOR' posx='%5' posy='%80' width='%34' height='%80'>
+          <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_cmdstart_vertical.xml" parse="xml" />
+      </element>
+     <element name="Button PopupVertical" type="BUTTON" posx="%12" posy="%10" width="%12" height="of:width:self:*0.25" picturenormal="button wide*" action="Show Page" actionpars='{"pagename":"Page_$dvar(definition_alias_cmdfavorites_template)_CMDS_Popup_Vertical"}'  caption="Show Popup" />
+     <element name="Button Popup" type="BUTTON" posx="%88" posy="%10" width="%12" height="of:width:self:*0.25" picturenormal="button wide*" action="Show Page" actionpars='{"pagename":"Page_$dvar(definition_alias_cmdfavorites_template)_CMDS_Popup"}'  caption="Show Popup" />
+  </elements>
+</page>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+    <string id="elvmax_10100">Fehler</string>
+    <string id="elvmax_10101">Räume</string>
+    <string id="elvmax_10102">Geräte</string>
+    <string id="elvmax_10103">Temperaturen</string>
+
+    <string id="elvmax_10104">Komfort</string>
+    <string id="elvmax_10105">Eco</string>
+    <string id="elvmax_10106">Soll</string>
+    <string id="elvmax_10107">Aktuell</string>
+
+
+    <string id="elvmax_10110">Set</string>
+    <string id="elvmax_10111">Automatik</string>
+    <string id="elvmax_10112">Manuell</string>
+    <string id="elvmax_10113">Aktueller Modus</string>
+
+    <string id="elvmax_10115">Automatisch</string>
+    <string id="elvmax_10116">Manuell</string>
+    <string id="elvmax_10117">Boost</string>
+    <string id="elvmax_10118">Urlaub</string>
+    <string id="elvmax_10120">Raum</string>
+    <string id="elvmax_10121">Gerät</string>
+
+    <string id="elvmax_10200">Sonstiges</string>
+    <string id="elvmax_10202">Max Temperatur</string>
+    <string id="elvmax_10203">Maximale Temperature die einstellbar ist</string>
+    <string id="elvmax_10204">Min Temperatur</string>
+    <string id="elvmax_10205">Minimale Temperature die einstellbar ist</string>
+    <string id="elvmax_10240">Navigations Leiste</string>
+    <string id="elvmax_10241">Wähle den Typ der Navigations Leiste</string>
+    <string id="elvmax_10242">Gerätebild</string>
+    <string id="elvmax_10243">Anzuzeigendes Gerätebild</string>
+
+
+</strings>

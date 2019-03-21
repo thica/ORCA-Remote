@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <repositorymanager>
+    <entry>
+      <name>ORCA Core Files</name>
+      <description language='English'>ORCA Core Files necessary for proper operation (fonts, pics, actions,..)</description>
+      <description language='German'>Untentbehrliche ORCA Dateien (Schriften, Bilder, Aktionen)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(RESOURCEPATH)/irdbtranslation</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/others/irdbtranslation.zip</sourcefile>
+          <targetpath>resources</targetpath>
+        </source>
+        <source>
+          <local>$var(RESOURCEPATH)/pics</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/others/pics.zip</sourcefile>
+          <targetpath>resources</targetpath>
+        </source>
+        <source>
+          <local>$var(APPLICATIONPATH)/actions</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/others/actions.zip</sourcefile>
+          <targetpath></targetpath>
+        </source>
+        <source>
+          <local>$var(SHAREDDOCUMENTSPATH)</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/others/standardpages.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+        <source>
+          <local>$var(SHAREDDOCUMENTSPATH)</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/others/standardelements.zip</sourcefile>
+          <targetpath>definitions/shared_documents</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>skins</type>
+          <name>ORCA Hires Silver</name>
+        </dependency>
+        <dependency>
+          <type>fonts</type>
+          <name>Default Fonts</name>
+        </dependency>
+        <dependency>
+          <type>sounds</type>
+          <name>ORCA Default</name>
+        </dependency>
+        <dependency>
+          <type>languages</type>
+          <name>English</name>
+        </dependency>
+        <dependency>
+          <type>languages</type>
+          <name>German</name>
+        </dependency>
+        <dependency>
+          <type>scripts</type>
+          <name>Keyhandler Symbols</name>
+        </dependency>
+
+      </dependencies>
+    </entry>
+  </repositorymanager>
+</root>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="SCRIPT_DISC_ELVMAX_1">Serien Nummer</string>
+    <string id="SCRIPT_DISC_ELVMAX_2">Zu suchende Seriennummer</string>
+    <string id="SCRIPT_DISC_ELVMAX_3">Firmware Version</string>
+    <string id="SCRIPT_DISC_ELVMAX_4">RF Adresse</string>
+</strings>

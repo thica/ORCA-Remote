@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="definitionstart">
+      <action name="Set Start Page (Dummy)" string="setvar DEFINITIONSTARTPAGE=Page_Device_APPS" condition="$var(DEFINITIONNAME)==appfavorites_template"/>
+  </pagestartaction>
+
+  <pagestartaction name="appstart">
+    <action name="Set Interface Name (Dummy)" string="setvar tmpinterfacename="/>
+  </pagestartaction>
+
+</includes>

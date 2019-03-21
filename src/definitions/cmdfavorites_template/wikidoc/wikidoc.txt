@@ -1,0 +1,113 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:DefinitionsForUser
+WikiDoc:Page:Userdescription Definition cmdfavorites_template
+WikiDoc:TOCTitle:cmdfavorites_template
+
+This is a template definition not for single / direct use. It provides the settings and widgets to send commands on your remote device (if supported).
+
+WikiDoc:End
+'''
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Definitions
+WikiDoc:Page:Reference Definition cmdfavorites_template
+WikiDoc:TOCTitle:cmdfavorites_template
+
+This template definition provides the settings and elements to send commands. Please notice, that the left and right blocks and the screenshot below are defined to use them in your definition (landscape and portrait mode). There are popups defined as well.
+
+[[File:cmdfavorites_main.png|link=]]
+
+This definition has the following capabilities
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Capability
+! align="left" | Description
+|-
+|Orientation
+|Landscape and portrait
+|-
+|Screen Size
+|
+* small / landscape
+* small / portrait
+* large / landscape
+* large / portrait
+|-
+|Interfaces
+|No Interfaces
+|}</div>
+
+= Definitionvars =
+This definition uses the following definitionvars:
+
+* "definition_alias_cmdfavorites_template": default value = "Command Favorites"
+
+= Settings =
+This template defines the following settings:
+
+* $dvar(definition_alias_cmdfavorites_template)_cmdname[x]"
+* $dvar(definition_alias_cmdfavorites_template)_cmdaction[x]"
+* $dvar(definition_alias_cmdfavorites_template)_cmdparameter[x]"
+
+
+... where x defines a number from 14 (so in fact you have 14 different command settings.
+
+There are no default commands defined (default action is NoAction
+
+= How to import =
+
+You can import the definition by using the following syntax in your definition.xml
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+
+  <def_parameter>
+    <definitionvars>{"definition_alias_cmdfavorites_template":"Command Favorites"}</definitionvars>
+  </def_parameter>
+
+  <definitionimports>
+      <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          alias           ="$dvar(definition_alias_cmdfavorites_template)"
+          definitionvars  ='{"definition_alias_cmdfavorites_template":"$dvar(definition_alias_cmdfavorites_template)"}'>cmdfavorites_template</definition>
+  </definitionimports>
+
+</syntaxhighlight></div>
+
+= Elements =
+The following elements are defined to use:
+
+* block_buttons_cmdstart: A block of buttons to send commands
+* block_buttons_cmdstart_vertical: A block of buttons to send commands (vertical version)
+
+Usual you can load the blocks using the the following code fragment as an example:
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<element name='Anchor Cmd Buttons' type='ANCHOR' posx='%97' posy='of:totop:Anchor BottomGap' width='%35' height='of:width:self' >
+  <xi:include href="$var(DEFINITIONPATH[cmdfavorites_template])/block_buttons_cmdstart.xml" parse="xml" />
+</element>
+</syntaxhighlight></div>
+
+= Button Actions =
+The following button actions are defined for each command button
+Normal tap: Sends the commands
+Long tap: No Action
+Double Tap: No Action
+
+= Pages =
+The following pages are defined:
+
+* Page_Device_CMDS:  A dummy page, not for any use
+* Page_$dvar(definition_alias_cmdfavorites_template)_CMDS_Popup: A popup page to show the block of buttons
+* age_$dvar(definition_alias_cmdfavorites_template)_CMDS_Popup_Vertical: A popup page to show the block of buttons (vertical version)
+
+= Actions =
+
+No actions defined
+
+WikiDoc:End
+'''

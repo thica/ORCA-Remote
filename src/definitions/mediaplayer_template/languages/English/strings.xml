@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="mediaplayertemplate_10001">Menue button label</string>
+  <string id="mediaplayertemplate_10002">Label for the menue button</string>
+  <string id="mediaplayertemplate_10003">Menue button action</string>
+  <string id="mediaplayertemplate_10004">Action for the menue button</string>
+  <string id="mediaplayertemplate_10005">Action</string>
+  <string id="mediaplayertemplate_10009">TV Button Bar</string>
+  <string id="mediaplayertemplate_10010">Show button bar</string>
+  <string id="mediaplayertemplate_10011">Show the button bar</string>
+  <string id="mediaplayertemplate_10012">Button Bar button label</string>
+  <string id="mediaplayertemplate_10013">Label for the button bar button</string>
+  <string id="mediaplayertemplate_10014">Button Bar buttom action</string>
+  <string id="mediaplayertemplate_10015">Action for the button bar button</string>
+  <string id="mediaplayertemplate_10016">Menue button second label</string>
+  <string id="mediaplayertemplate_10017">Label for the menue button (alternative Text)</string>
+  <string id="mediaplayertemplate_10018">Button Bar button second label</string>
+  <string id="mediaplayertemplate_10019">Label for the button bar button (alternative Text)</string>
+
+  <string id="mediaplayertemplate_10020">Power Control</string>
+  <string id="mediaplayertemplate_10021">Power On Command</string>
+  <string id="mediaplayertemplate_10022">Command to send to power on the device</string>
+  <string id="mediaplayertemplate_10023">Power Off Command</string>
+  <string id="mediaplayertemplate_10024">Command to send to power off the device</string>
+
+
+  <string id="mediaplayertemplate_10047">Volume Control</string>
+  <string id="mediaplayertemplate_10048">Select how to control the device volume</string>
+  <string id="mediaplayertemplate_10049">Other settings</string>
+  <string id="mediaplayertemplate_10050">Max volume</string>
+  <string id="mediaplayertemplate_10051">Maximal volume if you use the slider</string>
+  <string id="mediaplayertemplate_10052">Power On Check Command</string>
+  <string id="mediaplayertemplate_10053">Command to verify if the device in powered on</string>
+  <string id="mediaplayertemplate_10054">Device Picture</string>
+  <string id="mediaplayertemplate_10055">Picture / Logo to show</string>
+  <string id="mediaplayertemplate_10056">Show numberpad</string>
+  <string id="mediaplayertemplate_10057">Show the numberpad (1234567890)</string>
+  <string id="mediaplayertemplate_10058">Show media bar</string>
+  <string id="mediaplayertemplate_10059">Show the media bar (play/pause/stop)</string>
+  <string id="mediaplayertemplate_10060">Show Channel favorites</string>
+  <string id="mediaplayertemplate_10061">Show the TV Channel favorites block</string>
+  <string id="mediaplayertemplate_10062">Audio Control</string>
+  <string id="mediaplayertemplate_10063">Menue Items</string>
+  <string id="mediaplayertemplate_10064">Layout</string>
+  <string id="mediaplayertemplate_10065">Volume Notification</string>
+  <string id="mediaplayertemplate_10066">The device notifies ORCA by itself, if the volume has been changed</string>
+  <string id="mediaplayertemplate_10067">Device Input after power on</string>
+  <string id="mediaplayertemplate_10068">Switch to this input channel after power on</string>
+
+  <string id="mediaplayertemplate_10070">Numberpad</string>
+  <string id="mediaplayertemplate_10072">Numberpad Button Label</string>
+  <string id="mediaplayertemplate_10073">Label for Numberpad Button</string>
+  <string id="mediaplayertemplate_10074">Numberpad Button Action</string>
+  <string id="mediaplayertemplate_10075">Action for Numberpad Button</string>
+
+  <string id="mediaplayertemplate_10080">Show Powerbuttons</string>
+  <string id="mediaplayertemplate_10081">Show Device Powerbuttons</string>
+
+  <string id="mediaplayertemplate_10083">Show Search and Input</string>
+  <string id="mediaplayertemplate_10084">Show the Search and Input elements</string>
+  <string id="mediaplayertemplate_10085">Show TV Channel Up/Down</string>
+  <string id="mediaplayertemplate_10086">Show the TV Channel up and down buttons</string>
+  <string id="mediaplayertemplate_10087">Navigation Bar</string>
+  <string id="mediaplayertemplate_10088">Select the type of the navigation bar</string>
+
+  <string id="mediaplayertemplate_10090">Pretty Device Name</string>
+  <string id="mediaplayertemplate_10091">User readable device name for messages</string>
+  <string id="mediaplayertemplate_10092">External Volume Variable</string>
+  <string id="mediaplayertemplate_10093">If set, the volume widgts will be set by an external variable change</string>
+
+
+
+</strings>

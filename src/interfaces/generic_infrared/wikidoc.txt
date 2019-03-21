@@ -1,0 +1,9 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-generic_infrared
+WikiDoc:TOCTitle:generic infrared
+= generic infrared =
+This a foundation class for all infrared based classes. It's not for direct use.
+WikiDoc:End
+'''

@@ -1,0 +1,152 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:References
+WikiDoc:Page:Languages-Overview
+WikiDoc:TOCTitle:Description how to use languages
+= Language files =
+
+Orca supports string constants in several languages. Primary language is english. A set a predefined constants is delivered with Orca. Regional settings will be will be supported in future as well.
+The structure for language files is "stolen" from KODI, it is helpful to use their language files.
+The main language files are stored under [orca_root]\languages\[language name]. Here you can find two files:
+
+* strings.xml: defines all the language string constants
+* langinfo.xml: Regional settings like time format for this language
+
+You should not edit these files, as they will be replaced on each update. If a string constant is not available in the selected language, the english string constant is taken instead.
+
+= strings.xml =
+
+A strings.xml file will like like this:
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+ <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<strings>
+	<string id="0">Loading Definition</string>
+	<string id="1">Loading Page(s)</string>
+	<string id="2">Reserved</string>
+	<string id="3">Reserved</string>
+	<string id="4">Reserved</string>
+	<string id="5">Reserved</string>
+	<string id="6">Reserved</string>
+	<string id="7">Reserved</string>
+	<string id="8">Reserved</string>
+	<string id="9">Reserved</string>
+
+	<!--Standard Strings from KODI -->
+	<string id="11">Monday</string>
+	<string id="12">Tuesday</string>
+	<string id="13">Wednesday</string>
+	<string id="14">Thursday</string>
+	<string id="15">Friday</string>
+	<string id="16">Saturday</string>
+	<string id="17">Sunday</string>
+	<string id="21">January</string>
+	<string id="22">February</string>
+	<string id="23">March</string>
+	<string id="24">April</string>
+	<string id="25">May</string>
+	<string id="26">June</string>
+	<string id="27">July</string>
+	<string id="28">August</string>
+	<string id="29">September</string>
+	<string id="30">October</string>
+	<string id="31">November</string>
+	<string id="32">December</string>
+	<string id="41">Mon</string>
+	<string id="42">Tue</string>
+	<string id="43">Wed</string>
+	<string id="44">Thu</string>
+	<string id="45">Fri</string>
+	<string id="46">Sat</string>
+	<string id="47">Sun</string>
+	<string id="51">Jan</string>
+	<string id="52">Feb</string>
+	<string id="53">Mar</string>
+	<string id="54">Apr</string>
+	<string id="55">May</string>
+	<string id="56">Jun</string>
+	<string id="57">Jul</string>
+	<string id="58">Aug</string>
+	<string id="59">Sep</string>
+	<string id="60">Oct</string>
+	<string id="61">Nov</string>
+	<string id="62">Dec</string>
+	<string id="71">N</string>
+	<string id="72">NNE</string>
+	<string id="73">NE</string>
+	<string id="74">ENE</string>
+	<string id="75">E</string>
+	<string id="76">ESE</string>
+	<string id="77">SE</string>
+	<string id="78">SSE</string>
+	<string id="79">S</string>
+	<string id="80">SSW</string>
+	<string id="81">SW</string>
+	<string id="82">WSW</string>
+	<string id="83">W</string>
+	<string id="84">WNW</string>
+	<string id="85">NW</string>
+	<string id="86">NNW</string>
+	<string id="87">VAR</string>
+
+    <!--String for Settings Dialog -->
+    <string id="501">Initialisation</string>
+    <string id="502">Language</string>
+    .......
+</syntaxhighlight></div>
+
+
+String Ids:
+
+* 0 -10: Reserved for system start: You have to remove the original KODI constants.
+* 11 -100: Original KODI constants: Please don''t change them, they might be used in future
+* 500 - 9999: Standard application constants
+
+You can add or replace string constants as part of your definition file, if you place a further strings.xml file in the folder [orca_root]\definitions\[definition name]\languages\[language name]
+
+= langinfo.xml =
+
+The langinfo.xml file defines some regional settings. Reserved for future extensions
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<language locale="en">
+	<charsets>
+		<gui>CP1252</gui>
+		<subtitle>CP1252</subtitle>
+	</charsets>
+	<regions>
+		<region name="USA (12h)" locale="US">
+			<dateshort>MM/DD/YYYY</dateshort>
+			<datelong>DDDD, MMMM D, YYYY</datelong>
+			<time symbolAM="AM" symbolPM="PM">h:mm:ss xx</time>
+			<tempunit>F</tempunit>
+			<speedunit>mph</speedunit>
+		</region>
+
+		<region name="USA (24h)" locale="US">
+			<dateshort>MM/DD/YYYY</dateshort>
+			<datelong>DDDD, MMMM D, YYYY</datelong>
+			<time symbolAM="" symbolPM="">H:mm:ss</time>
+			<tempunit>F</tempunit>
+			<speedunit>mph</speedunit>
+		</region>
+
+		<region name="UK (12h)" locale="GB">
+			<dateshort>DD/MM/YYYY</dateshort>
+			<datelong>DDDD, D MMMM YYYY</datelong>
+			<time symbolAM="AM" symbolPM="PM">h:mm:ss xx</time>
+			<tempunit>C</tempunit>
+			<speedunit>mph</speedunit>
+			<timezone>GMT</timezone>
+		</region>
+
+        ......
+
+	</regions>
+
+</language>
+</syntaxhighlight></div>
+
+WikiDoc:End
+'''

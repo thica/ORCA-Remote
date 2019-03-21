@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="IFACE_WOL_1">IP - Subnet</string>
+  <string id="IFACE_WOL_2">IP Subnet to use (eg:192.168.1.255)</string>
+  <string id="IFACE_WOL_3">MAC</string>
+  <string id="IFACE_WOL_4">MAC-Address for magic packet</string>
+</strings>

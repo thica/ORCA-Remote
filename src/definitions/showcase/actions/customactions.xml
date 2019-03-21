@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+  <action name="Show Page Gestures From Left">
+    <action name="ShowPageGestures" string="showpage Page_Gestures" effect="$var(EFFECT)" direction="right"/>
+  </action>
+  <action name="Show Page Gestures From Right">
+    <action name="ShowPageGestures" string="showpage Page_Gestures" effect="$var(EFFECT)" direction="left"/>
+  </action>
+  <action name="Show Page Gestures From Top">
+    <action name="ShowPageGestures" string="showpage Page_Gestures" effect="$var(EFFECT)" direction="up"/>
+  </action>
+  <action name="Show Page Gestures From Bottom">
+    <action name="ShowPageGestures" string="showpage Page_Gestures" effect="$var(EFFECT)" direction="down"/>
+  </action>
+
+  <action name="Show Page Gestures2 From Left">
+    <action name="ShowPageGestures" string="showpage Page_Gestures2" effect="$var(EFFECT)" direction="right"/>
+  </action>
+  <action name="Show Page Gestures2 From Right">
+    <action name="ShowPageGestures" string="showpage Page_Gestures2" effect="$var(EFFECT)" direction="left"/>
+  </action>
+  <action name="Show Page Gestures2 From Top">
+    <action name="ShowPageGestures" string="showpage Page_Gestures2" effect="$var(EFFECT)" direction="up"/>
+  </action>
+  <action name="Show Page Gestures2 From Bottom">
+    <action name="ShowPageGestures" string="showpage Page_Gestures2" effect="$var(EFFECT)" direction="down"/>
+  </action>
+
+  <action name="ToggleButtonBiState">
+    <action name="" string="setwidgetattribute" widgetname="ButtonBiState" attributename="caption" attributevalue="On"  condition="$var(STATUSBUTTONBISTATE)==1"/>
+    <action name="" string="setwidgetattribute" widgetname="ButtonBiState" attributename="caption" attributevalue="Off" condition="$var(STATUSBUTTONBISTATE)==0"/>
+  </action>
+
+  <action name="ToggleButtonTriState">
+    <action name="Check if TriState is OFF"  string="goto ToggleButtonTriState_OFF to On" condition="$var(STATUSBUTTONTRISTATE)==OFF"/>
+    <action name="Check if TriState is On"   string="goto ToggleButtonTriState_ON to Auto"  condition="$var(STATUSBUTTONTRISTATE)==ON"/>
+    <action name="Check if TriState is Auto" string="goto ToggleButtonTriState_AUTO to Off" condition="$var(STATUSBUTTONTRISTATE)==AUTO"/>
+    <action name="ToggleButtonTriState_OFF to On" string="setvar STATUSBUTTONTRISTATE=ON" />
+    <action name="Goto Set Caption" string="goto ToggleButtonTriState_SETCAPTION" />
+    <action name="ToggleButtonTriState_ON to Auto" string="setvar STATUSBUTTONTRISTATE=AUTO" />
+    <action name="Goto Set Caption" string="goto ToggleButtonTriState_SETCAPTION" />
+    <action name="ToggleButtonTriState_AUTO to Off" string="setvar STATUSBUTTONTRISTATE=OFF" />
+    <action name="Goto Set Caption" string="goto ToggleButtonTriState_SETCAPTION" />
+    <action name="ToggleButtonTriState_SETCAPTION" string="setwidgetattribute" widgetname="ButtonTriState" attributename="caption" attributevalue="$var(STATUSBUTTONTRISTATE)" />
+  </action>
+
+
+  <action name="Update Slider Hor Values">
+    <action name="Update Widget Slider Text" string="updatewidget Slider Hor Textvalue" />
+    <action name="Set Var RGB" string="setvar RGBCOLOR=$var(SLIDERHOR)"/>
+    <action name="Multiply Var RGB" string="modifyvar" varname="RGBCOLOR" operator="multiply" parameter1="2.55"/>
+    <action name="Format VAr RGB" string="modifyvar" varname="RGBCOLOR" operator="format" parameter1="(int){0:0>2x}0000ff"/>
+    <action name="Set Widget Color" string="setwidgetattribute" widgetname="Colorcicle" attributename="color" attributevalue="$var(RGBCOLOR)" autoupdate="1"/>
+  </action>
+  <action name="Update Slider Ver Values">
+    <action name="" string="updatewidget Slider Ver Textvalue" />
+    <action name="Set Var RGB" string="setvar RGBCOLOR2=$var(SLIDERVER)"/>
+    <action name="Normalize to 0" string="modifyvar" varname="RGBCOLOR2"  operator="increase" parameter1="100"/>
+    <action name="Multiply Var RGB" string="modifyvar" varname="RGBCOLOR2" operator="multiply" parameter1="1.275"/>
+    <action name="Format VAr RGB" string="modifyvar" varname="RGBCOLOR2" operator="format" parameter1="(int)FFFF00{0:0>2x}"/>
+    <action name="Set Widget Color" string="setwidgetattribute" widgetname="Colorrectangle" attributename="color" attributevalue="$var(RGBCOLOR2)" autoupdate="1"/>
+  </action>
+
+  <action name="Update Circle 4 Angle">
+      <action name="Set End Angle" string="setwidgetattribute" widgetname="Circle 4" attributename="endangle" attributevalue="$var(CIRCLE4ENDANGLE)" autoupdate="1"/>
+  </action>
+
+  <action name="Set Effect Slide">
+    <action name="SET Effect" string="setvar EFFECT=slide"/>
+  </action>
+  <action name="Set Effect Swap">
+    <action name="SET Effect" string="setvar EFFECT=swap"/>
+  </action>
+  <action name="Set Effect Wipe">
+    <action name="SET Effect" string="setvar EFFECT=wipe"/>
+  </action>
+  <action name="Set Effect Fade">
+    <action name="SET Effect" string="setvar EFFECT=fade"/>
+  </action>
+  <action name="Set Effect RiseIn">
+    <action name="SET Effect" string="setvar EFFECT=risein"/>
+  </action>
+  <action name="Set Effect FallOut">
+    <action name="SET Effect" string="setvar EFFECT=fallout"/>
+  </action>
+
+  <action name="trigger_on_positionvideo2changed">
+    <action name="" string="updatewidget POS VIDEO2" />
+  </action>
+  <action name="trigger_on_durationvideo2changed">
+    <action name="" string="updatewidget LEN VIDEO2" />
+  </action>
+  <action name="trigger_on_positionvideo1changed">
+    <action name="" string="updatewidget POS VIDEO1" />
+  </action>
+  <action name="trigger_on_durationvideo1changed">
+    <action name="" string="updatewidget LEN VIDEO1" />
+  </action>
+
+  <action name="ShowMessage_Singletap">
+      <action name="Show Message single tap" string="showquestion" title="Message" message="Single Press detected!" actionyes="dummy"/>
+  </action>
+  <action name="ShowMessage_Doubletap">
+      <action name="Show Message Double tap" string="showquestion" title="Message" message="Double Press detected!" actionyes="dummy"/>
+  </action>
+  <action name="ShowMessage_Longtap">
+      <action name="Show Message Long tap" string="showquestion" title="Message" message="Long Press detected!" actionyes="dummy"/>
+  </action>
+  <action name="Increase_Number_Repeat">
+     <action name="Increase_Number_Repeat" string="modifyvar" varname="incvalue" operator="increase" parameter1="1"/>
+     <action name="Update" string="updatewidget Label_IncValue"/>
+  </action>
+
+  <action name="TextDown">
+      <action name="" string="setvar UPDOWN=Down" />
+      <action name="Update" string="updatewidget Label_UpDown"/>
+  </action>
+
+  <action name="TextUp">
+      <action name="" string="setvar UPDOWN=Up" />
+      <action name="Update" string="updatewidget Label_UpDown"/>
+  </action>
+
+  <action name="ShowMessage_Option1">
+      <action name="Show Message Option1" string="showquestion" title="Message" message="Option 1 Press detected!" actionyes="dummy"/>
+  </action>
+
+  <action name="ShowMessage_Option2">
+      <action name="Show Message Option2" string="showquestion" title="Message" message="Option 2 Press detected!" actionyes="dummy"/>
+  </action>
+
+  <action name="ShowMessage_Option3">
+      <action name="Show Message Option3" string="showquestion" title="Message" message="Option 3 Press detected!" actionyes="dummy"/>
+  </action>
+
+  <action name="ShowMessage_Option4">
+      <action name="Show Message Option4" string="showquestion" title="Message" message="Option 4 Press detected!" actionyes="dummy"/>
+  </action>
+
+ <action name="Set rectangle1 color by Widget">
+   <action name="Update Widget Rectangle" string="updatewidget Rectangle Changeable" />
+   <action name="Update Widget Circle"    string="setwidgetattribute" widgetname="Circle Changeable" attributename="color" attributevalue="$var(RECTANGLECOLOR)" autoupdate="1"/>
+</action>
+
+    <action name="FKT_IncreaseFontSize">
+        <action string="getwidgetattribute" widgetname="Definition File3" attributename="fontsize" retvar="FONTSIZE" />
+        <action string="modifyvar" varname="FONTSIZE" operator="increase" parameter1="1"/>
+        <action string="setwidgetattribute" widgetname="Definition File3" attributename="fontsize" attributevalue="$var(FONTSIZE)" />
+    </action>
+    <action name="FKT_DecreaseFontSize">
+        <action string="getwidgetattribute" widgetname="Definition File3" attributename="fontsize" retvar="FONTSIZE" />
+        <action string="modifyvar" varname="FONTSIZE" operator="decrease" parameter1="1"/>
+        <action string="setwidgetattribute" widgetname="Definition File3" attributename="fontsize" attributevalue="$var(FONTSIZE)" />
+    </action>
+
+
+</includes>
+

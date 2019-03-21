@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<orca>
+  <def_parameter>
+
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont>Sans</defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <orientations>landscape</orientations>
+    <installationhint>$lvar(showcase_10000)</installationhint>
+    <support>http://www.orca-remote.org/forum/</support>
+  </def_parameter>
+  <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/page_*" parse="xml"></xi:include>
+    <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+  </pages>
+
+    <interface_setup>
+        <interface name="orca_video">
+            <configuration name ="STREAM_Bunny">
+                <setting name="widgetname" parameter="VIDEO 1"/>
+                <setting name="streamyt" parameter="rtsp://r5---sn-4g57kued.c.youtube.com/CiILENy73wIaGQm-z8Iok64r_hMYDSANFEgGUgZ2aWRlb3MM/0/0/0/video.3gp"/>
+                <setting name="stream" parameter="rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"/>
+                <setting name="stream1" parameter="https://pdlvimeocdn-a.akamaihd.net/83267/098/358148511.mp4?token2=1441642950_f6b3697799c889e5ba9ff72d516ffee9&amp;aksessionid=4baeebc43e7f5b60"/>
+                <setting name="FNCodeset" parameter="CODESET_orca_video_default.xml"/>
+                <setting name="DisableInterFaceOnError" parameter="0"/>
+                <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+            </configuration>
+            <configuration name ="STREAM_RED">
+                <setting name="widgetname" parameter="VIDEO 2"/>
+                <setting name="stream" parameter="http://samples.mplayerhq.hu/V-codecs/h264/interlaced_crop.mp4"/>
+                <setting name="FNCodeset" parameter="CODESET_orca_video_default.xml"/>
+                <setting name="DisableInterFaceOnError" parameter="0"/>
+                <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+            </configuration>
+        </interface>
+    </interface_setup>
+
+  <settings>
+    <setting title="$lvar(showcase_10200)" desc="$lvar(showcase_10201)" var="colorpickercolor" type="colorpicker" default="$var(red)" />
+  </settings>
+
+  <repositorymanager>
+    <entry>
+      <name>ORCA Showcase 16 to 10 wide</name>
+      <description language='English'>Showcase definition to provide an overview of available screen elements</description>
+      <description language='German'>Showcase definition, um einen Überblick über die verfügbaren Bildschirmelemente zu geben</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/showcase</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/showcase.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>codesets</type>
+          <name>ORCA Video Control</name>
+        </dependency>
+        <dependency>
+          <type>fonts</type>
+          <name>Default Unicode Font</name>
+        </dependency>
+
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/showcase/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/showcase/atlas*</file>
+      </skipfiles>
+
+    </entry>
+  </repositorymanager>
+</orca>

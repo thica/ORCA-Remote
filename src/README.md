@@ -1,0 +1,57 @@
+ORCA-Remote
+===========
+
+ORCA (Open Remote Control Application) is designed to be the new future of software remotes application.
+
+Project Page:
+https://www.orca-remote.org/
+
+Wiki: 
+https://www.orca-remote.org/mediawiki
+
+What is ORCA
+ORCA stands for Open Remote Control Application.
+
+ORCA is designed as an Open Source Framework to provide Remote Control Capabilities
+
+* OS Support: Android, IOS, Windows, Linux
+* Hardware Support: Tablets, Phones, PC‘s
+* Communication Support: (W)LAN, IR, (extendable by interface plugins, eg Bluetooth, Home Automatisation)
+* Bi-Directional Support: ORCA can transmit and receive commands (if interface is bi-directional)
+* Control Target: Multimedia, Home Automatisation
+* Open Source, Non Profit application
+
+Features
+* Skinnable: Look and feel can be adjusted to user needs
+* Adjustable Layout: The layout is not hardcode and be adjusted as requiered
+* Multi Language Support: All screen messages are stored in external language files and can be selected
+* Unicode and 3rd party fonts support to support APAC region
+* Macro Support: Actions can be performed based on rule sets (far beyond Logitech Harmony capabilities)
+* Multi target support within one screen. Similar to Logitech Harmony , Activities are supported to control several targets from one screen
+* Gesture Support: Gestures are supported to control your targets
+* Loadable Interfaces: Target Interfaces like WOL, Telnet, Eventghost, IR will be loaded at runtime are scripted. 3rd party developer can contribute interfaces without adjusting the ORCA application
+
+Target Market
+
+There is a increasing demand for Remote Control Capabilites for tablets and large screen phones.
+
+Current market solutions are limited:
+
+* Requiere a web server
+* Supports only limited interfaces
+* Closed source and vendor specific
+* Limited layout and design capabilities
+* No support for macros / linked actions
+
+Orca is designed to overcome these limitations
+
+But: Unlimited options increases complexibity. Ready made remote definitions are available, but to change / create remotes ORCA will target experienced IT users and integrators. Designers and wizards are planned for a second phase
+Design
+* ORCA is based an Kivy, a portable framework for Android, Windows, Apple and Linux
+* Screen design is based on XML description files for screen elements
+* Application logic are based on XML ruleset files
+* Skins can be selected by gui
+* Communication interfaces are script pased (python) and will be loaded and executed at runtime
+* Communication interfaces can control multiple devices
+* Device setup will be handled by communication interface
+Multiple communication interfaces and multiple devices can be used at the same time

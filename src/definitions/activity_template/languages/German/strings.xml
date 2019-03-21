@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+
+ <string id="activitytemplate_10000">Aktivitäten Gruppe</string>
+ <string id="activitytemplate_10001">Gruppen Name</string>
+ <string id="activitytemplate_10002">Name/Titel für Aktivitäten Gruppe</string>
+ <string id="activitytemplate_10003">Start Seite Gruppe</string>
+ <string id="activitytemplate_10004">Start Seite der Aktivitäten Gruppe</string>
+ <string id="activitytemplate_10005">Gruppen Schaltfläche</string>
+ <string id="activitytemplate_10006">Name der Gruppen Schaltfläche (erste) der Aktivitäten Gruppe</string>
+ <string id="activitytemplate_10007">Gruppe</string>
+ <string id="activitytemplate_10008">Aktivität</string>
+ <string id="activitytemplate_10009">Aktivitäten Name</string>
+ <string id="activitytemplate_10010">Der Name der Aktivität</string>
+ <string id="activitytemplate_10011">Seiten Name</string>
+ <string id="activitytemplate_10012">Die Start Seite der Aktivität</string>
+ <string id="activitytemplate_10013">Power Status</string>
+ <string id="activitytemplate_10014">Der initionale Power Status der Aktivität</string>
+ <string id="activitytemplate_10015">Definition</string>
+ <string id="activitytemplate_10016">Der Name der Definition Var</string>
+ <string id="activitytemplate_10017">Einschalt Option</string>
+ <string id="activitytemplate_10018">Wie die Geräte eingeschaltet werden sollen (serial oder parallel)</string>
+ <string id="activitytemplate_10019">Aktion vor dem Einschalten</string>
+ <string id="activitytemplate_10020">Aktion welche ausgeführt wird, bevor das Gerät eingeschaltet wird</string>
+ <string id="activitytemplate_10021">Aktion nach dem Einschalten</string>
+ <string id="activitytemplate_10022">Aktion welche ausgeführt wird, nachdem das Gerät eingeschaltet wurde</string>
+ <string id="activitytemplate_10023">Aktivitäten</string>
+ <string id="activitytemplate_10024">Aktion vorm Ausschalten</string>
+ <string id="activitytemplate_10025">Aktion welche ausgeführt wird, bevor das Gerät ausgeschaltet wird</string>
+ <string id="activitytemplate_10026">Aktion vor dem Ausschalten</string>
+ <string id="activitytemplate_10027">Aktion welche ausgeführt wird, nachdem das Gerät ausgeschaltet wurde</string>
+ <string id="activitytemplate_10028">Aktivitäten Gruppe Bild</string>
+ <string id="activitytemplate_10029">Start Seiten Bild für die Aktivitäten Gruppe</string>
+
+ <string id="activitytemplate_10030">Aktivitäten Gerät</string>
+ <string id="activitytemplate_10031">Geräte Name</string>
+ <string id="activitytemplate_10032">Geräte Name wie in den dvar/import Befehlen angegeben</string>
+ <string id="activitytemplate_10033">Eingabe Kanal Aktion</string>
+ <string id="activitytemplate_10034">Aktion zum Auswählen des Eingabe Kanals (Kanal / Port)</string>
+ <string id="activitytemplate_10035">Initial Lautstärke</string>
+ <string id="activitytemplate_10036">Einschalt Lautstärke für das Gerät (-1 = Keine Änderung)</string>
+ <string id="activitytemplate_10037">Ausschalt Lautstärke</string>
+ <string id="activitytemplate_10038">Ausschalt Lautstärke für das Gerät (-1 = Keine Änderung)</string>
+ <string id="activitytemplate_10039">Wartezeit vor dem Einschalten</string>
+ <string id="activitytemplate_10040">Wartezeit in Sekunden, bevor das Gerät eingeschaltet wird</string>
+ <string id="activitytemplate_10041">Wartezeit nach dem Einschalten</string>
+ <string id="activitytemplate_10042">Wartezeit in Sekunden, nachdem das Gerät eingeschaltet wurde</string>
+ <string id="activitytemplate_10050">Geräte Bild</string>
+ <string id="activitytemplate_10051">Bild, welches das Gerät darstellt</string>
+ <string id="activitytemplate_10052">Geräte Name</string>
+ <string id="activitytemplate_10053">Geräte Name für die Schaltfläche</string>
+ <string id="activitytemplate_10054">Geräte Seite</string>
+ <string id="activitytemplate_10055">Start Seite für das Gerät</string>
+
+
+</strings>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_GITWIKIDOC_1">WikiDoc (GIT)</string>
+     <string id="SCRIPT_TOOLS_GITWIKIDOC_2">Creates ORCA Wiki Documentation for GIT</string>
+     <string id="SCRIPT_TOOLS_GITWIKIDOC_3">Create WikiDoc (GIT)</string>
+     <string id="SCRIPT_TOOLS_GITWIKIDOC_4">WikiDoc</string>
+     <string id="SCRIPT_TOOLS_GITWIKIDOC_5">GIT Path</string>
+     <string id="SCRIPT_TOOLS_GITWIKIDOC_6">Path on GIT to image files</string>
+     <string id="SCRIPT_TOOLS_GITWIKIDOC_7">Local Path</string>
+     <string id="SCRIPT_TOOLS_GITWIKIDOC_8">Local Path for Wikimedia files</string>
+  </strings>
+

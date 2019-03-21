@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <repositorymanager>
+    <entry>
+      <name>DVB Viewer 16 to 10 wide</name>
+      <description language='English'>Simple DVB Viewer remote using the Web Interface  (for mediaplayer template)</description>
+      <description language='German'>Einfache DVB Viewer Fernbedienung über das Webinterface (Für Mediaplayer Template)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/dvbviewer</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/dvbviewer.zip</sourcefile>
+          <targetpath>wizard templates/mediaplayer wizard</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>definitions</type>
+          <name>Mediaplayer Wizard</name>
+        </dependency>
+        <dependency>
+          <type>codesets</type>
+          <name>DVBViewer Control by DVBViewer Webserver/URL</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+</orca>

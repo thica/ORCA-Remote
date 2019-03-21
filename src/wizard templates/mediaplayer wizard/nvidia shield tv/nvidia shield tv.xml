@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<orca>
+    <repositorymanager>
+        <entry>
+            <name>NVidia Shield TV (adb)</name>
+            <description language='English'>NVidia Shield Remote Control (using adb/TCP) (requieres adbkey)</description>
+            <description language='German'>NVidia Shield Fernbedienung (verwendet adb/TCP) (Benötigt adbkey)</description>
+            <author>Carsten Thielepape</author>
+            <version>3.70</version>
+            <minorcaversion>3.7.0</minorcaversion>
+            <skip>0</skip>
+            <sources>
+                <source>
+                    <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/nvidia shield tv</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/wizard templates/nvidia shield tv.zip</sourcefile>
+                    <targetpath>wizard templates/mediaplayer wizard</targetpath>
+                </source>
+            </sources>
+            <dependencies>
+                <dependency>
+                    <type>codesets</type>
+                    <name>Android adb Fire TV</name>
+                </dependency>
+                <dependency>
+                    <type>wizard templates</type>
+                    <name>Generic Android Device (adb)</name>
+                </dependency>
+            </dependencies>
+        </entry>
+    </repositorymanager>
+</orca>

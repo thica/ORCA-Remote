@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements>
+  <element name='Shadow' type='RECTANGLE' posx='%52' posy='%52'  width="%60" height="of:width:self:*0.25" backgroundcolor='$var(shadow)' />
+  <element name='Anchor Message' type='ANCHOR' posx="%50" posy="%50" width="%60" height="of:width:self:*0.25" >
+    <element name='Background'       type='PICTURE'   posx='left'       posy='top'  picturenormal='background boxes' />
+    <element name="Picture Wait"     type="PICTURE"   posx="right"      posy="middle"     width="of:height:self"    height="%80"        picturenormal="wait" />
+    <element name="Message Wait"     type="TEXTFIELD" posx="%5"         posy="of:top:last" width="%75"       height="of:height:last" htextalign="left"  caption="$lvar(5014)" fontsize='%h35'  />
+  </element>
+ </elements>

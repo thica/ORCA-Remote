@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<elements>
+  <element name='Anchor TV Add. Buttons Bar2' type='ANCHOR' posx='left' posy='of:totop:last'  height='%25'>
+    <element name='ButtonBar2_Button1' type='BUTTON' posx='left'          posy='top' width='%25' picturenormal='button square*' action='$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][1])'   fontsize='%h30' iconfontsize='%h70' caption='$var($dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][1])' secondcaption='$var($dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][1])'/>
+    <element name='ButtonBar2_Button2' type='BUTTON' posx='of:right:last' posy='top' width='%25' picturenormal='button square*' action='$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][2])'   fontsize='%h30' iconfontsize='%h70' caption='$var($dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][2])' secondcaption='$var($dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][2])'/>
+    <element name='ButtonBar2_Button3' type='BUTTON' posx='of:right:last' posy='top' width='%25' picturenormal='button square*' action='$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][3])'   fontsize='%h30' iconfontsize='%h70' caption='$var($dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][3])' secondcaption='$var($dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][3])'/>
+    <element name='ButtonBar2_Button4' type='BUTTON' posx='of:right:last' posy='top' width='%25' picturenormal='button square*' action='$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][4])'   fontsize='%h30' iconfontsize='%h70' caption='$var($dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][4])' secondcaption='$var($dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][4])'/>
+  </element>
+</elements>

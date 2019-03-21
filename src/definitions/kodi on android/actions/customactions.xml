@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <action name="Activity Start $dvar(definition_alias_mediaplayer_kodi)">
+    <action name="Restart Kodi" string="call Stop Start APP By Name $dvar(definition_alias_appfavorites_android)" appname="Kodi" APPINTERFACE="$var($dvar(definition_alias_mediaplayer_android)_INTERFACE_MAIN)" APPCONFIGNAME="$var($dvar(definition_alias_mediaplayer_android)_CONFIGNAME_MAIN)"/>
+    <action name="ShowDevice $dvar(definition_alias_mediaplayer_kodi)" string="showpage Page_Device_$dvar(definition_alias_mediaplayer_kodi)" />
+  </action>
+
+  <action name="Send Power On $dvar(definition_alias_mediaplayer_kodi)">
+      <action name="Restart Kodi" string="call Stop Start APP By Name $dvar(definition_alias_appfavorites_android)" appname="Kodi" APPINTERFACE="$var($dvar(definition_alias_mediaplayer_android)_INTERFACE_MAIN)" APPCONFIGNAME="$var($dvar(definition_alias_mediaplayer_android)_CONFIGNAME_MAIN)"/>
+      <action name="" string="setvar POWERSTATUS_$dvar(definition_alias_mediaplayer_kodi)=ON" />
+  </action>
+
+  <action name="Send Power On $dvar(definition_alias_mediaplayer_kodi) Force">
+      <action name="Restart Kodi" string="call Stop Start APP By Name $dvar(definition_alias_appfavorites_android)" appname="Kodi" APPINTERFACE="$var($dvar(definition_alias_mediaplayer_android)_INTERFACE_MAIN)" APPCONFIGNAME="$var($dvar(definition_alias_mediaplayer_android)_CONFIGNAME_MAIN)"/>
+      <action name="" string="setvar POWERSTATUS_$dvar(definition_alias_mediaplayer_kodi)=ON" />
+  </action>
+
+  <action name="Activity SwitchTo $dvar(definition_alias_mediaplayer_android)">
+      <action name="ShowDevice $dvar(definition_alias_mediaplayer_kodi)" string="showpage Page_Device_$dvar(definition_alias_mediaplayer_android)" />
+      <action name="Show Home Screen" string="Send Home" interface="$var($dvar(definition_alias_mediaplayer_android)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_android)_CONFIGNAME_MAIN)"/>
+  </action>
+
+  <action name="Add NavigationBar $dvar(definition_alias_mediaplayer_kodi)">
+    <action name="adjust kodi device page Topline Button Back" string="loadelement" filename="$var(DEFINITIONPATH)/block_toplineadd_kodi_ll.xml" pagename="Page_Device_$dvar(definition_alias_mediaplayer_kodi)" definitionvarcontext="$dvar(definition_alias_kodi_on_android)" condition="$var(SCREEN)==SCREEN_LL"/>
+    <action name="adjust kodi device page Topline Button Back" string="loadelement" filename="$var(DEFINITIONPATH)/block_toplineadd_kodi_lS.xml" pagename="Page_Device_$dvar(definition_alias_mediaplayer_kodi)" definitionvarcontext="$dvar(definition_alias_kodi_on_android)" condition="$var(SCREEN)==SCREEN_LS"/>
+    <action name="adjust kodi device page Topline Button Back" string="loadelement" filename="$var(DEFINITIONPATH)/block_toplineadd_kodi_lS.xml" pagename="Page_Device_$dvar(definition_alias_mediaplayer_kodi)" definitionvarcontext="$dvar(definition_alias_kodi_on_android)" condition="$var(SCREEN)==SCREEN_PS"/>
+    <action name="adjust kodi device page Topline Button Back" string="loadelement" filename="$var(DEFINITIONPATH)/block_toplineadd_kodi_lS.xml" pagename="Page_Device_$dvar(definition_alias_mediaplayer_kodi)" definitionvarcontext="$dvar(definition_alias_kodi_on_android)" condition="$var(SCREEN)==SCREEN_PL"/>
+  </action>
+</includes>
+

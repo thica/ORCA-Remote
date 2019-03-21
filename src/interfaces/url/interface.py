@@ -1,0 +1,349 @@
+# -*- coding: utf-8 -*-
+# url
+
+"""
+    ORCA Open Remote Control Application
+    Copyright (C) 2013-2019  Carsten Thielepape
+    Please contact me by : http://www.orca-remote.org/
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+import urllib
+import base64
+from time import sleep
+
+from kivy.clock             import Clock
+from kivy.network.urlrequest import UrlRequest
+
+from ORCA.interfaces.BaseInterface import cBaseInterFace
+from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
+from ORCA.vars.Replace      import ReplaceVars
+from ORCA.vars.Access import SetVar
+from ORCA.utils.TypeConvert import UnEscapeUnicode
+from ORCA.utils.TypeConvert  import ToUnicode
+from ORCA.utils.TypeConvert  import ToDic
+from ORCA.utils.TypeConvert  import ToBytes
+
+from ORCA.Compat            import *
+
+
+'''
+<root>
+  <repositorymanager>
+    <entry>
+      <name>URL-Web</name>
+      <description language='English'>Interface to send web based commands</description>
+      <description language='German'>Interface um webbasierte Kommandos zu senden</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/interfaces/url</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/interfaces/url.zip</sourcefile>
+          <targetpath>interfaces</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>scripts</type>
+          <name>UPNP Discover</name>
+        </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>url/interface.pyc</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+</root>
+'''
+
+class cInterface(cBaseInterFace):
+
+    class cInterFaceSettings(cBaseInterFaceSettings):
+
+        def __init__(self,oInterFace):
+            cBaseInterFaceSettings.__init__(self,oInterFace)
+            self.bIgnoreTimeOut                                    = False
+            self.aInterFaceIniSettings.uHost                       = u"discover"
+            self.aInterFaceIniSettings.uPort                       = u"80"
+            self.aInterFaceIniSettings.uFNCodeset                  = u"Select"
+            self.aInterFaceIniSettings.fTimeOut                    = 2.0
+            self.aInterFaceIniSettings.iTimeToClose                = -1
+            self.aInterFaceIniSettings.uDiscoverScriptName         = u"discover_upnp"
+            self.aInterFaceIniSettings.uParseResultOption          = u'no'
+            self.aInterFaceIniSettings.fDISCOVER_UPNP_timeout      = 2.0
+            self.aInterFaceIniSettings.uDISCOVER_UPNP_models       = u"[]"
+            self.aInterFaceIniSettings.uDISCOVER_UPNP_servicetypes = "urn:dial-multiscreen-org:service:dial:1,urn:schemas-upnp-org:service:AVTransport:1"
+            self.aInterFaceIniSettings.uDISCOVER_UPNP_manufacturer = ""
+            self.aInterFaceIniSettings.uDISCOVER_UPNP_prettyname   = ""
+
+        def ReadAction(self,oAction):
+            cBaseInterFaceSettings.ReadAction(self,oAction)
+            oAction.uParams      = oAction.dActionPars.get(u'params',u'')
+            oAction.uRequestType = oAction.dActionPars.get(u'requesttype',u'POST')
+            oAction.uHeaders     = oAction.dActionPars.get(u'headers',u'{}')
+            oAction.uProtocol    = oAction.dActionPars.get(u'protocol',u'http://')
+
+
+        def OnError(self,request,error):
+            if self.bIgnoreTimeOut:
+                if str(error)=="timed out":
+                    return
+            if self.bIsConnected:
+                self.ShowError(u'Error Receiving Response (Error)',error)
+            self.oInterFace.bStopWait      = True
+        def OnFailure(self,request,result):
+            self.ShowError(u'Error Receiving Response (Failure)')
+            self.oInterFace.bStopWait      = True
+        def OnReceive(self,oRequest,oResult):
+            self.ShowDebug(u'Received Response:'+ToUnicode(oResult))
+            self.oInterFace.bStopWait      = True
+        def Disconnect(self):
+
+            if not self.bIsConnected:
+                return cBaseInterFaceSettings.Disconnect(self)
+
+            try:
+                tRet = self.ExecuteStandardAction('logoff')
+                return cBaseInterFaceSettings.Disconnect(self)
+
+            except Exception as e:
+                self.ShowError(u'Cannot diconnect:'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                return cBaseInterFaceSettings.Disconnect(self)
+
+        def Connect(self):
+
+            if self.bInConnect:
+                return True
+
+            bRet=True
+            if not cBaseInterFaceSettings.Connect(self):
+                return False
+            try:
+                self.bInConnect   = True
+                self.bIsConnected = True
+                tRet= self.ExecuteStandardAction('logon')
+                self.bInConnect = False
+                if type(tRet)==tuple:
+                    iStatusCode, uRes = tRet[0],tRet[1]
+                elif type(tRet)==int:
+                    iStatusCode=tRet
+                else:
+                    iStatusCode=0
+
+                # self.bIsConnected = (iStatusCode == 200)
+                self.bIsConnected = (iStatusCode == 0)
+                if not self.bIsConnected:
+                    self.ShowDebug(u'Auth. failed:'+self.oInterFace.uResponse )
+                    self.ShowError(u'Cannot connect:' + self.aInterFaceIniSettings.uHost + ':' + self.aInterFaceIniSettings.uPort)
+
+                return self.bIsConnected
+
+            except Exception as e:
+                self.ShowError(u'Cannot connect:'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.bOnError=True
+                return False
+
+    def __init__(self):
+        cBaseInterFace.__init__(self)
+        self.aSettings      = {}
+        self.oSetting       = None
+        self.uResponse      = u''
+        self.oReq           = None
+        self.bStopWait      = False
+        self.iWaitMs        = 2000
+
+    def Init(self, uInterFaceName, oFnInterFace=None):
+        cBaseInterFace.Init(self, uInterFaceName, oFnInterFace)
+
+        self.oInterFaceConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['Port']['active']                        = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['User']['active']                        = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['Password']['active']                    = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['ParseResult']['active']                 = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['TokenizeString']['active']              = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
+        self.oInterFaceConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+
+    def DeInit(self, **kwargs):
+        cBaseInterFace.DeInit(self,**kwargs)
+        for aSetting in self.aSettings:
+            self.aSettings[aSetting].DeInit()
+
+    def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
+        cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+
+        iTryCount = 0
+        iRet      = 1
+
+        oSetting.uRetVar=uRetVar
+
+        if uRetVar!="":
+            oAction.uGlobalDestVar=uRetVar
+
+        while iTryCount<2:
+            iTryCount+=1
+            oSetting.Connect()
+            if oSetting.bIsConnected:
+                try:
+                    iStatusCode, uRes = self.SendCommand_Helper(oAction,oSetting,self.uInterFaceName)
+                    if iStatusCode == 200:
+                        iRet=0
+                        self.ShowDebug(u'Sending Command succeeded: : %d' % (iStatusCode),oSetting.uConfigName)
+                        break
+                    elif iStatusCode == 0:
+                        iRet=200
+                        self.ShowWarning(u'Sending Command: Response should be 200, maybe error, maybe success: %d [%s]' % (iStatusCode,uRes),oSetting.uConfigName)
+                        break
+                    else:
+                        iRet=1
+                        oSetting.bIsConnected=False
+                        self.ShowError(u'Sending Command failed: %d [%s]' % (iStatusCode,ToUnicode(uRes)),oSetting.uConfigName)
+                except Exception as e:
+                    self.ShowError(u'can\'t Send Message',oSetting.uConfigName,e)
+                    iRet=1
+            else:
+                if iTryCount==2:
+                    self.ShowWarning(u'Nothing done,not connected! ->[%s]' % (oAction.uActionName),oSetting.uConfigName)
+                oSetting.bIsConnected=False
+        if not bNoLogOut:
+            if oSetting.aInterFaceIniSettings.iTimeToClose==0:
+                oSetting.Disconnect()
+            elif oSetting.aInterFaceIniSettings.iTimeToClose!=-1:
+                Clock.unschedule(oSetting.FktDisconnect)
+                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aInterFaceIniSettings.iTimeToClose)
+
+        self.iLastRet=iRet
+        return iRet
+
+    def NewWait(self,delay):
+
+        #Replacement of the buggy UrlRquest wait function
+
+        while self.oReq.resp_status is None:
+            self.oReq._dispatch_result(delay)
+            sleep(delay)
+            if self.bStopWait:
+                self.bStopWait=False
+                break
+
+    def SendCommand_Helper(self,oAction,oSetting,uInterFaceName):
+
+        iRet = None
+        self.uResponse      = u''
+
+        uUrlFull= oAction.uProtocol+oSetting.aInterFaceIniSettings.uHost+":"+oSetting.aInterFaceIniSettings.uPort+oAction.uCmd
+        uUrlFull= ReplaceVars(uUrlFull,uInterFaceName+u'/'+oSetting.uConfigName)
+        uUrlFull= ReplaceVars(uUrlFull)
+
+        # oSetting.SetContextVar('Host',oSetting.aInterFaceIniSettings.uHost)
+        # oSetting.SetContextVar('Port',oSetting.aInterFaceIniSettings.uPort)
+        sAuth = u''
+
+        #self.register_app('http://'+oAction.uHost,oSetting)
+        #self.register_app(uUrlFull,oSetting)
+
+        try:
+            uData = oAction.uParams
+            uData = ReplaceVars(uData,uInterFaceName+u'/'+oSetting.uConfigName)
+            uData = ReplaceVars(uData)
+
+            # we do nothing special on soap actions
+            if oAction.uType=='soap':
+                pass
+
+            # we do nothing special on plain string actions
+            if oAction.uType=='string':
+                pass
+
+            if oAction.uType=='none':
+                return -1
+
+            if oAction.uType=='encode':
+                if PY2:
+                    uData = urllib.urlencode(uData)
+                else:
+                    uData = urllib.parse.urlencode(uData)
+
+            uData = ReplaceVars(uData,uInterFaceName+u'/'+oSetting.uConfigName)
+            uData = ReplaceVars(uData)
+
+            SetVar(uVarName = 'datalenght', oVarValue = ToUnicode(len(uData)), uContext =  uInterFaceName+u'/'+oSetting.uConfigName)
+
+            if oAction.uActionName=='logon' or True:
+                # base64 encode the username and password
+                uTmp = ReplaceVars('%s:%s' % ('$cvar(CONTEXT_USER)','$cvar(CONTEXT_PASSWORD)'),uInterFaceName+u'/'+oSetting.uConfigName)
+                if PY2:
+                    sAuth = base64.encodestring(uTmp).replace('\n', '')
+                else:
+                    bTmp  = ToBytes(uTmp)
+                    #bTmp  = base64.encodestring(bTmp)
+                    bTmp = base64.encodebytes(bTmp)
+                    uTmp  = bTmp.decode( 'utf-8')
+                    sAuth = uTmp.replace('\n', '')
+                    #sAuth = base64.encodestring(bTmp).replace('\n', '')
+            #construct and send the header
+            uHeader = oAction.uHeaders
+            uHeader = ReplaceVars(uHeader,uInterFaceName+u'/'+oSetting.uConfigName)
+            uHeader = ReplaceVars(uHeader)
+            uHeader = ReplaceVars(uHeader,uInterFaceName+u'/'+oSetting.uConfigName)
+
+            aHeader = ToDic(uHeader)
+            for uKey in aHeader:
+                if isinstance(aHeader[uKey],string_types):
+                    aHeader[uKey]=UnEscapeUnicode(aHeader[uKey])
+
+            if not sAuth == u'':
+                aHeader['Authorization'] = "Basic %s" % sAuth
+
+            self.ShowInfo(u'Sending Command [%s]: %s %s to %s' % (oAction.uActionName,uData,UnEscapeUnicode(uHeader),uUrlFull),oSetting.uConfigName)
+
+            if not oAction.bWaitForResponse:
+                oSetting.bIgnoreTimeOut=True
+                fTimeOut=0.02
+            else:
+                oSetting.bIgnoreTimeOut=False
+                fTimeOut=oSetting.aInterFaceIniSettings.fTimeOut
+
+            self.bStopWait = False
+            self.oReq = UrlRequest(uUrlFull,method=oAction.uRequestType,req_body=uData, req_headers=aHeader,timeout=fTimeOut,on_error=oSetting.OnError,on_success=oSetting.OnReceive,debug=False)
+            if oAction.bWaitForResponse:
+                self.NewWait(0.05)
+                if self.oReq.resp_status is not None:
+                    uCmd,uRetVal=self.ParseResult(oAction,self.oReq.result,oSetting)
+                    iRet=self.oReq.resp_status
+                    self.uResponse = self.oReq.result
+                else:
+                    if self.oReq._error is not None:
+                        self.uResponse = self.oReq._error.strerror
+                        iRet=self.oReq._error.errno
+                if iRet is None:
+                    iRet=200
+                if self.uResponse is None:
+                    self.uResponse ="unknown"
+                return iRet,self.uResponse
+            else:
+                return 200,''
+
+        except Exception as e:
+            self.ShowError(u'can\'t Send Message #2' ,oSetting.uConfigName,e)
+
+        return -1,''
+

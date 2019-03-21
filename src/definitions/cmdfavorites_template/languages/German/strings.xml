@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+    <string id="cmdtemplate_10500">Befehls Name</string>
+    <string id="cmdtemplate_10501">Beschriftung für Befehls Schaltfläche</string>
+    <string id="cmdtemplate_10502">Befehl</string>
+    <string id="cmdtemplate_10503">Befehls Text</string>
+    <string id="cmdtemplate_10504">Befehls Favoriten</string>
+    <string id="cmdtemplate_10505">Befehls Parameter</string>
+    <string id="cmdtemplate_10506">Parameter für den Befehl</string>
+
+</strings>

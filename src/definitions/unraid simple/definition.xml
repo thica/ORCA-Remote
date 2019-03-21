@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <name>Unraid Simple</name>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <author>Carsten Thielepape</author>
+    <version>3.70</version>
+    <orientations>portrait,landscape</orientations>
+    <support>http://www.orca-remote.org/forum/</support>
+    <definitionvars>{"definition_alias_unraid":"UNRAID"}</definitionvars>
+  </def_parameter>
+
+  <startskip condition="$dvar(definition_alias_unraid_IMPORTPAGES)=0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/page_*" parse="xml" ></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_smallsize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LS"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_smallsize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+    </pages>
+  <stopskip/>
+
+  <settings>
+    <setting title="$lvar(700) (telnet)" desc="$lvar(701)" var="$dvar(definition_alias_unraid)_INTERFACE_MAIN" type="scrolloptions" default="telnet" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(702)" desc="$lvar(703)" var="$dvar(definition_alias_unraid)_CONFIGNAME_MAIN" type="string" default="DEVICE_$dvar(definition_alias_unraid)" />
+    <setting title="$lvar(705) (wake on lan)" desc="$lvar(705)" var="$dvar(definition_alias_unraid)_INTERFACE_POWERON" type="scrolloptions" default="wake_on_lan" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(706)" desc="$lvar(707)" var="$dvar(definition_alias_unraid)_CONFIGNAME_POWERON" type="string" default="DEVICE_$dvar(definition_alias_unraid)" />
+    <setting title="$lvar(unraidsimple_10087)" desc="$lvar(unraidsimple_10088)"  var="$dvar(definition_alias_unraid)_NAVIGATIONBAR"   type="string"   default="$var(STANDARDELEMENTSPATH)/block_topline.xml" />
+
+  </settings>
+
+  <interface_setup>
+    <interface name="telnet">
+      <configuration name ="DEVICE_$dvar(definition_alias_unraid)">
+        <setting name="Port" parameter="23"/>
+        <setting name="Host" parameter="tower"/>
+        <setting name="Password" parameter=""/>
+        <setting name="User" parameter="root"/>
+        <setting name="ParseResult" parameter="no"/>
+        <setting name="TokenizeString" parameter=":"/>
+        <setting name="ResultEndString" parameter="[LF]"/>
+        <setting name="TimeToClose" parameter="120"/>
+        <setting name="TerminalType" parameter="linux"/>
+        <setting name="FNCodeset" parameter="CODESET_telnet_UNRAID.xml"/>
+        <setting name="DisableInterFaceOnError" parameter="0"/>
+        <setting name="DisconnectInterFaceOnSleep" parameter="0"/>
+      </configuration>
+     </interface>
+    <interface name="wake_on_lan">
+      <configuration name ="DEVICE_$dvar(definition_alias_unraid)">
+        <setting name="MAC" parameter="aa:bb:cc:dd:ee:ff"/>
+        <setting name="IP" parameter="192.168.1.255"/>
+      </configuration>
+    </interface>
+
+  </interface_setup>
+
+
+
+  <repositorymanager>
+    <entry>
+      <name>Unraid Simple</name>
+      <description language='English'>Simple UNRAID remote to power on / off</description>
+      <description language='German'>Einfache Unraid Fernbedienung, zum ein/ausschalten</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/unraid simple</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/unraid simple.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>codesets</type>
+          <name>Unraid Power off / Telnet</name>
+        </dependency>
+        <dependency>
+          <type>interfaces</type>
+          <name>Wake-On-LAN</name>
+        </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/unraid simple/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/unraid simple/interfacesettings*</file>
+        <file>$var(APPLICATIONPATH)/definitions/unraid simple/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+
+</orca>

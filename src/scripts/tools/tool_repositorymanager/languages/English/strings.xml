@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_REPMANAGER_1">Repository Manager</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_2">Start Repository Manager</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_3">Start Manager</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_4">Repository Manager</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_5">FTP Path</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_6">Remote FTP Path</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_7">FTP SSL</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_8">Use SSL for FTP Connection</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_9">Source Path</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_10">Source path for repository manager where to find the repositry files to upload</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_11">WWW Path</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_12">WWW Path which matches the FTP Path</string>
+  </strings>
+

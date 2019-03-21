@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN"              default="android_adb" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN"             default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON"           default="android_adb" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON"          default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME"            default="android_adb" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME"           default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"               default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND"         default="Send Ping" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"               default="device android" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"                  default="Android" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD"               default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE"               default="SMALL" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE"              default="APPBUTTONS" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1]"            default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2]"            default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[3]"            default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[4]"            default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWCHANNELUPDOWN"           default="0" />
+
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"               default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_MAXVOLUME"                   default="100" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE"           default="Buttons" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[1]"           default="icon:home" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[1]"     default="$lvar(1110)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[1]"            default="Send Home" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[2]"           default="icon:source_music" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[2]"     default="$lvar(3129)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[2]"            default="Send Source Music" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[3]"           default="icon:menu" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[3]"     default="$lvar(1024)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[3]"            default="Send Menu" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[4]"           default="icon:info" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[4]"     default="$lvar(1022)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[4]"            default="Send Info" />
+</settings>
+

@@ -1,0 +1,27 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-wake_on_lan
+WikiDoc:TOCTitle:Wake On Lan
+= Wake On Lan =
+The Wake On LAn Interface send a magic packet in the local subnet
+= Settings =
+
+The following settings are supported by the interface
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|MAC
+|the Mac address of the device. Format = aa:bb:cc:dd:ee:ff
+|-
+|Host
+|The subnet, (not the IP Address) of your device, usually this is the IP adress of your device with .255 at the end.
+|}</div>
+
+The simplest way to determine the mac address is to ping your device and the type arp -a and notice the mac address. Please use the shown format , means hex adress, small letters, and a colon. You also need to provide the subnet, (not the IP Address) of your device, usually this is the IP adress of your device with .255 at the end.
+|}
+
+WikiDoc:End
+'''

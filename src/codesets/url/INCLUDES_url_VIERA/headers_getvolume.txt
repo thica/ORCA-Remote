@@ -1,0 +1,1 @@
+{"Content-length":$cvar(datalenght),"Content-type":"text/xml","Accept":"text/xml","SOAPACTION": "&quot;urn:schemas-upnp-org:service:RenderingControl:1#GetVolume&quot;"}

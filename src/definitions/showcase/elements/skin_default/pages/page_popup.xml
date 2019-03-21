@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Popup">
+  <page_parameter>
+    <popup>1</popup>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
+    <element name="Frame" type="PICTURE" posx="center" posy="middle" width="%90" height="%90" picturenormal="background boxes" />
+    <element name="Anchor Effects Buttons" type="ANCHOR" posx="center" posy="middle" width="%90" height="%90">
+      <elements>
+        <element name="Textblock" type="TEXTFIELD" posx="center" posy="%2" width="%45" height="%8" fontsize='%h60'  caption='$lvar(showcase_10018)' htextalign='center' vtextalign='middle' />
+        <element name="ColorPicker" type="COLORPICKER" posx="center" posy="%60" width="%95" height="%80" />
+        <element name="Button Back" type="BUTTON" posx="right" posy="bottom" width="%20" height="of:width:self:*0.26" picturenormal="button wide*" action="Show Page" actionpars='{"pagename":"Page_Main"}' caption="$lvar(showcase_10202)" />
+      </elements>
+    </element>
+  </elements>
+</page>

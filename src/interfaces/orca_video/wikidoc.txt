@@ -1,0 +1,52 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-orcavideo
+WikiDoc:TOCTitle:Orca Video
+= Orca Video =
+The Orca Video interface provides a control interface to play videos and streams. As the interface itself does not have any capabilities to render videos (this will be done by the framework), it defines, which content will be displayed at which (video) widget.
+
+= Settings =
+
+The following settings are supported by the interface
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|stream
+|The stream to play (full url)
+|-
+|widgetname
+|The (video) widget which should show the video
+|-
+|FNCodeset
+|Filename of your codeset. Should be CODESET_orca_video_default.xml
+|-
+|DisableInterFaceOnError
+|Disables the interface, if an error occurs. Prevents the interface to continue to send commands to a broken connection.
+|-
+|DisconnectInterFaceOnSleep
+|Disconnects the interface, when your remote control device goes to sleep
+|}</div>
+
+= The codeset file =
+
+The codeset filename is fixed and supports the following commands:
+
+- getvolume: return vars = local=volume global=orca_video_volume
+- volume_up
+- volume_down
+- stop
+- play
+- pause
+- repeat_toggle
+- repeat_on
+- repeat_off
+- mute_toggle
+- mute_on
+- mute_off
+
+
+WikiDoc:End
+'''

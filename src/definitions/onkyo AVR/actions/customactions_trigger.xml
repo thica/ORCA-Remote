@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <action name="FKT Set Trigger $dvar(definition_alias_mediaplayer_template)">
+    <action name="Add Trigger Main Volume"      string="addtrigger" triggername ="MVL"  actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_volume_main"        retvar="$dvar(definition_alias_mediaplayer_template)_mainvolume"        interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Center Volume"    string="addtrigger" triggername ="CTL"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_centervolume"      interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Subwoofer Volume" string="addtrigger" triggername ="SWL"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_subwoofervolume"   interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Audio Changed"    string="addtrigger" triggername ="IFA"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"         interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Video Changed"    string="addtrigger" triggername ="IFV"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_videoinfo"         interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Artist Name"      string="addtrigger" triggername ="NAT"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_artistname"        interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Album Name"       string="addtrigger" triggername ="NAL"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_albumname"         interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Title Name"       string="addtrigger" triggername ="NTI"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_titlename"         interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Net List"         string="addtrigger" triggername ="NLS"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_listtext"          interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+
+    <action name="Add Trigger Stream Pos"       string="addtrigger" triggername ="NTM"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_streampos"         interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Picture"          string="addtrigger" triggername ="NJA"  actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_picturechange"      retvar="$dvar(definition_alias_mediaplayer_template)_mediapicture"      interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Info"             string="addtrigger" triggername ="NRI"  actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_infochange"         retvar="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS"    interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Add Trigger Audio Effect"     string="addtrigger" triggername ="LMD"  actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_effecttype"         retvar="$dvar(definition_alias_mediaplayer_template)_effecttype"        interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+
+    <action name="Update Audio Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_audioinfo_audio_input_codec"        linktype="widget" widgetname="AudioInfo Textvalue Input Codec" />
+    <action name="Update Audio Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_audioinfo_audio_input_frequency"    linktype="widget" widgetname="AudioInfo Textvalue Input Frequency" />
+    <action name="Update Audio Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_audioinfo_audio_input_channels"     linktype="widget" widgetname="AudioInfo Textvalue Input Channels" />
+    <action name="Update Audio Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_audioinfo_audio_output_effect"      linktype="widget" widgetname="AudioInfo Textvalue Output Effect" />
+    <action name="Update Audio Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_audioinfo_audio_output_channels"    linktype="widget" widgetname="AudioInfo Textvalue Output Channels" />
+    <action name="Update Audio Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_audioinfo_audio_input_selection"    linktype="widget" widgetname="AudioInfo Textvalue Input Selection" />
+    <action name="Update Audio Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_videoinfo_video_input_selection"    linktype="widget" widgetname="VideoInfo Textvalue Input Selection" />
+    <action name="Update Video Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_videoinfo_video_input_resolution"   linktype="widget" widgetname="VideoInfo Textvalue Input Resolution" />
+    <action name="Update Video Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_videoinfo_video_input_color"        linktype="widget" widgetname="VideoInfo Textvalue Input Color" />
+    <action name="Update Video Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_videoinfo_video_input_bits"         linktype="widget" widgetname="VideoInfo Textvalue Input Bits" />
+    <action name="Update Video Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_selection"   linktype="widget" widgetname="VideoInfo Textvalue Output Selection" />
+    <action name="Update Video Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_resolution"  linktype="widget" widgetname="VideoInfo Textvalue Output Resolution" />
+    <action name="Update Video Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_color"       linktype="widget" widgetname="VideoInfo Textvalue Output Color" />
+    <action name="Update Video Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_bits"        linktype="widget" widgetname="VideoInfo Textvalue Output Bits" />
+    <action name="Update Video Info (linked)"   string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_effect"      linktype="widget" widgetname="VideoInfo Textvalue Output Effect" />
+
+    <action name="Update Artist Name (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_artistname"                         linktype="widget" widgetname="Artist" />
+    <action name="Update Album  Name (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_albumname"                          linktype="widget" widgetname="Album"  />
+    <action name="Update Title  Name (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_titlename"                          linktype="widget" widgetname="Title"  />
+    <action name="Update StreamPos   (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_streampos"                          linktype="widget" widgetname="Streampos Textvalue"  />
+
+    <action name="Update CtrVlm Slider(linked)" string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_centervolume"                       linktype="widget" widgetname="Amp Volume Center"  />
+    <action name="Update CtrVlm Text (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_centervolume"                       linktype="widget" widgetname="Amp Volume Center Textvalue"  />
+    <action name="Update SwlVlm Slider(linked)" string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_subwoofervolume"                    linktype="widget" widgetname="Amp Volume Sub"  />
+    <action name="Update SwlVlm Text (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_subwoofervolume"                    linktype="widget" widgetname="Amp Volume Sub Textvalue"  />
+
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[0]"                        linktype="widget" widgetname="Button Favorites[0]"  />
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[1]"                        linktype="widget" widgetname="Button Favorites[1]"  />
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[2]"                        linktype="widget" widgetname="Button Favorites[2]"  />
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[3]"                        linktype="widget" widgetname="Button Favorites[3]"  />
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[4]"                        linktype="widget" widgetname="Button Favorites[4]"  />
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[5]"                        linktype="widget" widgetname="Button Favorites[5]"  />
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[6]"                        linktype="widget" widgetname="Button Favorites[6]"  />
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[7]"                        linktype="widget" widgetname="Button Favorites[7]"  />
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[8]"                        linktype="widget" widgetname="Button Favorites[8]"  />
+    <action name="Update Netlist Btn (linked)"  string="addvarlink"  varname="$dvar(definition_alias_mediaplayer_template)_listtext[9]"                        linktype="widget" widgetname="Button Favorites[9]"  />
+  </action>
+
+  <action name="FKT Delete Trigger $dvar(definition_alias_mediaplayer_template)">
+    <action name="Delete Trigger " string="addtrigger" triggername ="MVL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="CTL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="SWL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="LMD"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="IFA"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="IFV"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="NAT"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="NAL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="NTI"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="NTM"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="NJA"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="NLS"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="addtrigger" triggername ="NRI"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+  </action>
+
+  <action name="Set Trigger $dvar(definition_alias_mediaplayer_template)_mainvolume">
+    <action name="Add Trigger Main Volume"      string="addtrigger" triggername ="MVL"  actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_volume_main"        retvar="$dvar(definition_alias_mediaplayer_template)_mainvolume"        interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+  </action>
+
+  <action name="Delete Trigger $dvar(definition_alias_mediaplayer_template)_mainvolume">
+    <action name="Delete Trigger " string="addtrigger" triggername ="MVL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+  </action>
+
+  <action name="trigger_on_$dvar(definition_alias_mediaplayer_template)_volume_main">
+    <action name="Trigger: $dvar(definition_alias_mediaplayer_template)_volume_main"  string="updatewidget Main Volume" ignoremissing="1"/>
+    <action name="Trigger: $dvar(definition_alias_mediaplayer_template)_volume_main"  string="updatewidget Main Volume Textvalue" ignoremissing="1"/>
+  </action>
+
+  <action name="trigger_on_$dvar(definition_alias_mediaplayer_template)_picturechange">
+    <action name="Trigger: $dvar(definition_alias_mediaplayer_template)_picturechange"  string="updatewidget Picture StreamPic" ignoremissing="1"/>
+  </action>
+
+
+  <action name="$dvar(definition_alias_mediaplayer_template) Update All Triggers">
+    <action name="Send Get Main Volume"   string="Send Get Volume"                                        retvar="$dvar(definition_alias_mediaplayer_template)_mainvolume"      interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var($dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL)==1"/>
+    <action name="Send Get Volume Sub"    string="Send Get Volume Sub"                                    retvar="$dvar(definition_alias_mediaplayer_template)_subwoofervolume" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var($dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL)==1"/>
+    <action name="Send Get Volume Center" string="Send Get Volume Center"                                 retvar="$dvar(definition_alias_mediaplayer_template)_centervolume"    interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var($dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL)==1"/>
+    <action name="Init Receiver Commands" string="sendcommand" commandname="init"                         retvar="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
+    <action name="Send Get Audio"         string="sendcommand" commandname="main.audio-infomation.query"  retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
+    <action name="Send Get Video"         string="sendcommand" commandname="main.video-infomation.query"  retvar="$dvar(definition_alias_mediaplayer_template)_videoinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
+  </action>
+
+  <action name="trigger_on_$dvar(definition_alias_mediaplayer_template)_effecttype" >
+    <action name="Update everything" string="call $dvar(definition_alias_mediaplayer_template) Update All Triggers"/>
+  </action>
+
+  <action name="trigger_on_$dvar(definition_alias_mediaplayer_template)_infochange" >
+    <action name="Set Min Value" string="setwidgetattribute" widgetname="Amp Volume Center" attributename="min" attributevalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_CenterLevel_Min)" ignoremissing="1" />
+    <action name="Set Max Value" string="setwidgetattribute" widgetname="Amp Volume Center" attributename="max" attributevalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_CenterLevel_Max)" ignoremissing="1" />
+    <action name="Set Min Value" string="setwidgetattribute" widgetname="Amp Volume Sub" attributename="min" attributevalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_CenterLevel_Min)"  ignoremissing="1"/>
+    <action name="Set Max Value" string="setwidgetattribute" widgetname="Amp Volume Sub" attributename="max" attributevalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_CenterLevel_Max)"  ignoremissing="1"/>
+
+    <action name="Set List" string="updatewidget DropDown_Services"  ignoremissing="1"/>
+    <action name="Set List" string="updatewidget DropDown_Sources"   ignoremissing="1" />
+    <action name="Set List" string="updatewidget DropDown_Effects"   ignoremissing="1" />
+
+    <action name="Update text und picture" string="call $dvar(definition_alias_mediaplayer_template)_updateimage" />
+  </action>
+
+
+</includes>

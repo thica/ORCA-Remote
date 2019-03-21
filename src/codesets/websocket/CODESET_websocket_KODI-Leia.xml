@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String  -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <repositorymanager>
+    <entry>
+      <name>KODI JSON (WEBSOCKET)</name>
+      <description language='English'>KODI command set using JSON (Leia)</description>
+      <description language='German'>KODI Befehlssatz über JSON (Leia) </description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <skip>0</skip>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/websocket/CODESET_websocket_KODI-Leia.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_websocket_KODI-Leia.zip</sourcefile>
+          <targetpath>codesets/websocket</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Websocket</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action name='logon' >
+      <action string="if $cvar(firstcall)==1" varcontext="codeset"/>
+          <action string="setvar firstcall=0" varcontext="codeset"/>
+          <action name="check if var exists"  string="modifyvar" varname="KODI_ID" operator="exists"  parameter1="TMPVAREXISTS" />
+          <action string="setvar TMPKODI_ID=$var(KODI_ID)"     condition="$var(TMPVAREXISTS)==1"/>
+          <action string="setvar TMPKODI_ID=5"                 condition="$var(TMPVAREXISTS)==0"/>
+          <action string="setvar KODI_ID=$var(TMPKODI_ID)"     varcontext="codeset" />
+
+      <action string="endif"/>
+  </action >
+
+
+  <action string="codeset" name='ok' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.Select","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='left' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.Left","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='right' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.Right","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='up' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.Up","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='down' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.Down","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='exit' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.Back","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='info' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.Info","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='osd' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.ShowOSD","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='send_string' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "$cvar(SENDTEXT)" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='esc' waitforresponse='0' cmd='{ "jsonrpc": "2.0", "method":"Input.ExecuteAction", "params": { "action": "close" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='page_down' waitforresponse='0' cmd='{ "jsonrpc": "2.0", "method":"Input.ExecuteAction", "params": { "action": "pagedown" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='page_up' waitforresponse='0' cmd='{ "jsonrpc": "2.0", "method":"Input.ExecuteAction", "params": { "action": "pageup" },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='menu' waitforresponse='0' cmd='{"jsonrpc": "2.0","method":"Input.ContextMenu","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='home' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.Home","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='shutdown' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"System.Shutdown","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='suspend' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"System.Suspend","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='hibernate' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"System.Hibernate","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='reboot' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"System.Reboot","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='eject' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"System.EjectOpticalDrive","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='mark_watched' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Input.ExecuteAction", "params": { "action": "togglewatched" },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='setvolume' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Application.SetVolume", "params": {"volume": $cvar(volumetoset)},"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='getvolume' waitforresponse='1' cmd='{"jsonrpc": "2.0", "method": "Application.GetProperties",  "params":{"properties":["volume"]},"id":"$cvar(KODI_ID)"}' ldestvar='volume' gdestvar='mainvolume' getvar='result,volume' />
+
+  <action name="volume_up" >
+      <action string="call"         actionname="getvolume" />
+      <action string="modifyvar"    name="increasevolvar" varname="mainvolume" operator="increase" parameter1="3"  parameter2="100" />
+      <action string="codeset"      name="volume_up" waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Application.SetVolume", "params": {"volume": $var(mainvolume)},"id":"$cvar(KODI_ID)"}'/>
+  </action>
+  <action name="volume_down" >
+      <action string="call"         actionname="getvolume" />
+      <action string="modifyvar"    name="decreasevolvar" varname="mainvolume" operator="decrease" parameter1="3"  parameter2="0" />
+      <action string="codeset"      name="volume_down" waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Application.SetVolume", "params": {"volume": $var(mainvolume)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="volume_up_accelerated" >
+      <action type="alias"          cmd="getvolume" />
+      <action string="modifyvar"    name="increasevolvar_accelerated"  varname="mainvolume" operator="increase" parameter1="10" parameter2="100" />
+      <action string="codeset"      name="" waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Application.SetVolume", "params": {"volume": $var(mainvolume)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="volume_down_accelerated" >
+      <action type="alias"          cmd="getvolume" />
+      <action string="modifyvar"    name="decreasevolvar_accelerated"  varname="mainvolume" operator="decrease" parameter1="10" parameter2="0" />
+      <action string="codeset"      name="volume_down_accelerated" waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Application.SetVolume", "params": {"volume": $var(mainvolume)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+
+  <action name="stop" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='stop' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.Stop", "params":{"playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="skip_back" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='skip_back' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.GoTo", "params":{"to" : "previous", "playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="skip_forward" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='skip_forward' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.GoTo",     "params":{"to" : "next", "playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="play" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='play' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.PlayPause",  "params":{"playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="fast_rewind" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='fast_rewind' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.SetSpeed" ,  "params":{"playerid":$cvar(playerid), "speed":"decrement"},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="fast_forward" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='fast_forward' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.SetSpeed" ,  "params":{"playerid":$cvar(playerid), "speed":"increment"},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="pause" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='pause' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.PlayPause",  "params":{"playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="repeat_toggle" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name="repeat_toggle" waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.SetRepeat",  "params":{"repeat" : "cycle", "playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="repeat_on" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name="repeat_on" waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.SetRepeat",  "params":{"repeat" : "on", "playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="repeat_off" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name="repeat_off" waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.SetRepeat",  "params":{"repeat" : "off", "playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="shuffle_toggle" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name="shuffle_toggle" waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.SetShuffle",  "params":{"shuffle" : "toggle", "playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}'  />
+  </action>
+  <action name="shuffle_off" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name="shuffle_off" waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Player.Setshuffle",  "params":{"shuffle" : "false", "playerid":$cvar(playerid)},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="subtitles_on" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='subtitles_on' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Player.SetSubtitle", "params": {"playerid": $cvar(playerid), "subtitle" : "on"},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="subtitles_off" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='subtitles_off' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Player.SetSubtitle", "params": {"playerid": $cvar(playerid), "subtitle" : "off"},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="subtitles_toggle" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name="subtitles_toggle" waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Player.SetSubtitle", "params": {"playerid": $cvar(playerid), "subtitle" : "next"},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="subtitles_next" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name="subtitles_next" waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Player.SetSubtitle", "params": {"playerid": $cvar(playerid), "subtitle" : "next"},"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="channel_select" >
+      <action type="alias"          cmd="getplayerid" />
+      <action string="codeset"      name='channel_select' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":" Player.Open",  "params":{"playerid":$cvar(playerid)},"channelid":$cvar(CHANNELNUM),"id":"$cvar(KODI_ID)"}'  />
+  </action>
+
+  <action string="codeset" name='mute_toggle' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Application.SetMute","params":{"mute":"toggle"},"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='mute_on' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Application.SetMute","params":{"mute":true},"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='mute_off' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Application.SetMute","params":{"mute":false},"id":"$cvar(KODI_ID)"}' />
+
+  <action string="codeset" name="audiochannel_next" waitforresponse='0' cmd='{ "jsonrpc": "2.0", "method":"Input.ExecuteAction", "params": { "action": "audionextlanguage" },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='closeapp' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Application.Quit","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='power_off' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Application.Quit","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='getplayerid' waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"Player.GetActivePlayers","id":"$cvar(KODI_ID)"}' ldestvar='playerid' getvar='result,dummy,playerid' />
+  <action string="codeset" name='ping' waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"JSONRPC.Ping","id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='getmutestatus' waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"Application.GetProperties","params": { "properties": [ "muted" ] },"id":"$cvar(KODI_ID)"}' ldestvar='mutestatus' getvar='result,muted' />
+  <action string="codeset" name='getmoviegenreid' waitforresponse='1' cmd='{"jsonrpc": "2.0", "method": "VideoLibrary.GetGenres", "params": {"type": "movie"},"id":"$cvar(KODI_ID)"}' ldestvar='moviegenreid' getvar='result,genres,[label=$cvar(genre),genreid]' />
+  <action string="codeset" name='getmusicgenreid' waitforresponse='1' cmd='{"jsonrpc": "2.0", "method": "AudioLibrary.GetGenres", "params": {"type": "title"},"id":"$cvar(KODI_ID)"}' ldestvar='musicgenreid' getvar='result,genres,[label=$cvar(genre),genreid]' />
+  <action string="codeset" name='getavailableresolutions' waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"Settings.GetSettings", "params":{"filter":{"section":"system","category":"videoscreen"}},"id":1}' ldestvar='kodiresolutions' getvar='result,genres,[label=$cvar(genre),genreid]' />
+  <action string="codeset" name='introspect' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"JSONRPC.Introspect","id":"$cvar(KODI_ID)"}' />
+
+
+  <action name="showmoviesforgenre" >
+      <action type="alias"          cmd="getmoviegenreid" />
+      <action string="codeset"      name='showmoviesforgenre' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window":"video", "parameters":["videodb://movies/MovieGenres/$cvar(moviegenreid)"]},"id":"$cvar(KODI_ID)"}' />
+      <action string="codeset"      name='showmoviesforgenre' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window":"video", "parameters":["videodb://1/1/$cvar(moviegenreid)"]},"id":"$cvar(KODI_ID)"}' />
+      <action string="codeset"      name='showmoviesforgenre' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window":"video", "parameters":["videodb:/movies/MovieGenres/$cvar(moviegenreid)"]},"id":"$cvar(KODI_ID)"}' />
+      <action string="codeset"      name='showmoviesforgenre' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window":"video", "parameters":["videodb:/1/1/$cvar(moviegenreid)"]},"id":"$cvar(KODI_ID)"}' />
+      <action string="codeset"      name='showmoviesforgenre' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "video","parameters":["videodb://1/1/$cvar(moviegenreid)"]  },"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="showaddon" >
+      <action type="alias"          cmd="getaddonid" />
+      <action string="codeset"      name='showaddon' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Addons.ExecuteAddon", "params": {"addonid": "$cvar(addonid)" },"id":"$cvar(KODI_ID)"}' />
+  </action>
+  <action name="search" >
+      <action type="alias"          cmd="showsearch" />
+      <action string="wait"         time="1500" />
+      <action string="codeset"      name='dosearch' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "$cvar(SEARCHTEXT)" },"id":"$cvar(KODI_ID)"}' />
+  </action>
+
+  <action string="codeset" name='getaddonid' waitforresponse='1' cmd=' {"jsonrpc": "2.0", "method": "Addons.GetAddons", "params": {"enabled" : true, "properties": ["name"]},"id":"$cvar(KODI_ID)"}' ldestvar='addonid' getvar='result,addons,[name=$cvar(addonname),addonid]' />
+  <action string="codeset" name='menu2' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Addons.ExecuteAddon", "params": {"addonid": "script.commands" },"id":"$cvar(KODI_ID)"}'  />
+  <action string="codeset" name='showsearch' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "Addons.ExecuteAddon", "params": {"addonid": "script.globalsearch" },"id":"$cvar(KODI_ID)"}'  />
+
+  <action string="codeset" name='showmovies'                    waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["Movies"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmoviegenres'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MovieGenres"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmovietitles'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MovieTitles"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmovieyears'                waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MovieYears"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmovieactors'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MovieActors"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmoviedirectors'            waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MovieDirectors"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmoviestudios'              waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MovieStudios"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmoviesets'                 waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MovieSets"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmoviecountries'            waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MovieCountries/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmovietags'                 waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MovieTags/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmovierecentlyadded'        waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["RecentlyAddedMovies"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmovieplaylists'            waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["PlayLists"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showvideoaddons'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["addons://sources/video/"]  },"id":"$cvar(KODI_ID)"}' />
+
+  <action string="codeset" name='showtvshows'                   waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["TvShows"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showtvshowgenres'              waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["TvShowGenres"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showtvshowtitles'              waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["TvShowTitles"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showtvshowyears'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["TvShowYears"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showtvshowactors'              waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["TvShowActors"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showtvshowstudios'             waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["TvShowStudios"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showtvshowrecentlyadded'       waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["RecentlyAddedEpisodes"]  },"id":"$cvar(KODI_ID)"}' />
+
+  <action string="codeset" name='showmusicvideos'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MusicVideos"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicvideogenres'          waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MusicVideoGenres"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicvideotitles'          waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MusicVideoTitles"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicvideoyears'           waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MusicVideoYears"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicvideoalbums'          waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MusicVideoAlbums"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicvideoartists'         waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MusicVideoArtists"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicvideodirectors'       waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["VideoDirectors"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicvideostudios'         waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["MusicVideoStudios"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicvideorecentlyadded'   waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "videos", "parameters":["RecentlyAddedMusicVideos"]  },"id":"$cvar(KODI_ID)"}' />
+
+  <action string="codeset" name='showmusic'                     waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["Root"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicgenres'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://genres/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicartists'              waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://artists"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicalbums'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://albums"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicsongs'                waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://songs/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusictop100'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://top100/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusictop100songs'          waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://top100/songs/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusictop100albums'         waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://top100/albums/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicrecentlyaddedalbums'  waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://recentlyaddedalbums/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicrecentlyplayedalbums' waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://recentlyplayedalbums/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusiccompilations'         waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://compilations/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicyears'                waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://years/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicsingles'              waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["musicdb://singles/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicplaylists'            waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["special://musicplaylists/"]  },"id":"$cvar(KODI_ID)"}' />
+  <action string="codeset" name='showmusicaddons'               waitforresponse='0' cmd='{"jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": {"window": "music", "parameters":["addons://sources/audio/"]  },"id":"$cvar(KODI_ID)"}' />
+
+  <action string="codeset" name='key_1' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "1" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_2' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "2" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_3' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "3" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_4' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "4" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_5' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "5" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_6' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "6" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_7' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "7" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_8' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "8" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_9' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "9" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_0' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "0" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_-' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "-" },"id":"$cvar(KODI_ID)"}'/>
+  <action string="codeset" name='key_+' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "+" },"id":"$cvar(KODI_ID)"}'/>
+
+  <action string="codeset" name='getmoviedetails'              waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"VideoLibrary.GetMovieDetails", "params": { "movieid":$var(kodi_movieid), "properties": ["originaltitle"]},"id":"$cvar(KODI_ID)"}' gdestvar='"kodi_title","kodi_originaltitle"' getvar='ORCAMULTI"result,moviedetails,label","result,moviedetails,originaltitle"' />
+
+
+
+  <!-- Trigger here
+       We need those line to tell the parser, what value to parse on a trigger response
+  -->
+
+  <action string="codeset" name='defaultresponse'         waitforresponse='0'                                   ldestvar='default'          gdestvar='default' getvar='method' />
+  <action string="codeset" name='On_Volume_Changed'       waitforresponse='0' cmd='Application.OnVolumeChanged' ldestvar='volume'           gdestvar='mainvolume' getvar='params,data,volume' />
+  <action string="codeset" name='Playlist_On_Clear'       waitforresponse='0' cmd='Playlist.OnClear' />
+  <action string="codeset" name='Playlist_On_Add'         waitforresponse='0' cmd='Playlist.OnAdd'              ldestvar='title'            gdestvar='kodititle' getvar='params,data,item,title' />
+  <action string="codeset" name='Player_On_Play'          waitforresponse='0' cmd='Player.OnPlay'               ldestvar='"id","type"'      gdestvar='"kodi_id","kodi_type"' getvar='ORCAMULTI"params,data,item,id","params,data,item,type"' />
+  <action string="codeset" name='Player_On_SpeedChanged'  waitforresponse='0' cmd='Player.OnSpeedChanged'       ldestvar='speed'            gdestvar='kodispeed' getvar='params,data,player,speed' />
+  <action string="codeset" name='Player_On_Stop'          waitforresponse='0' cmd='Player.OnStop'               ldestvar='"id","type"'      gdestvar='"kodi_id","kodi_type"' getvar='ORCAMULTI"params,data,item,id","params,data,item,type"' />
+  <action string="codeset" name='Player_On_Pause'         waitforresponse='0' cmd='Player.OnPause'              ldestvar='"id","type"'      gdestvar='"kodi_id","kodi_type"' getvar='ORCAMULTI"params,data,item,id","params,data,item,type"' />
+
+  <!-- skin.togglesetting -->
+
+</includes>

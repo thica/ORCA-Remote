@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline_ll.xml" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+  <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline_pl.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+  <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline_ls.xml" parse="xml" condition="$var(SCREEN)==SCREEN_LS"></xi:include>
+  <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline_ps.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
+</elements>

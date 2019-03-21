@@ -1,0 +1,10 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:StartWithOrca
+WikiDoc:Page:listofdefinitions
+WikiDoc:TOCTitle:8=Pre defined definitions
+
+WikiDoc:TOC:DefinitionsForUser:List:sorted
+
+WikiDoc:End
+'''

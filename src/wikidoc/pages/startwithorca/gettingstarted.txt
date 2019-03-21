@@ -1,0 +1,47 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:StartWithOrca
+WikiDoc:Page:Getting Started
+WikiDoc:TOCTitle:2=Getting Started
+Are you ready for ORCA?
+
+=Ready?=
+
+Think about, how you want to use ORCA. If you want to use the given remote control definitions, you will not need to have deeper IT knowledge. For some interfaces: you should know, what an IP address or host name is.
+
+If you want to customize or create a remote control definition please be aware of the following topics:
+
+As long as ORCA does not have a GUI designed and a configurator, you should be able to:
+
+* read, understand and edit XML files
+* possible understand image formats, and know how to detect image sizes
+* Know, how to transfer files from your PC to your mobile device
+* Have a advanced understanding of how communication between devices works, eg: if you are scared / struggle to record&convert IR commands from A to B, ORCA might not be the optimal solution for you.
+* be patient enough, to design and optimize to device design based on XML descriptions
+
+If you do not match these requirements, some other solutions may be better for you. A this stage , ORCA is not as simple as the Logitech Harmony Wizards (credits to them)
+
+=Hardware requirements=
+
+You should match the following hardware requirements to use ORCA
+
+*A device you like to use as a remote :Android Tablet, Android phone, Windows Notebook, Linux Notebook, (Apple to be confirmed)
+** Think about, if a phone with a 3 inch display is the right solution for you.
+*Devices that can be controlled by your hardware: If you want control your TV by IR with a tablet computer, you will need an IPtoIR converter
+*Optional: A PC for adjusting and testing your definition / layout
+
+=How to start=
+* Install ORCA on your target device
+* Optional: Install ORCA on a PC
+* On first start, ORCA will download required further files, so you need to be onlne with your device.
+* Select on of the definitions shown in the setup page. It will be downloaded and started.
+* You might need to adjust some parameters (IP Adresses / Host Names) of the used interfaces of your definition.
+
+=If you want to customize=
+* NEVER: Change Orca Files or original/3rd party definition files. THEY MAY BE REPLACED ON UPDATES!
+* Read the Wiki, how to change the definition files
+* YOU DO NOT NEED ANY DEVELOPMENT TOOLS TO CONFIGURE ORCA!
+* A simple text editor to edit XML files is enough!
+
+WikiDoc:End
+'''

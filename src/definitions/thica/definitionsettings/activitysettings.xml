@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+
+    <setting title="$lvar(activitytemplate_10070)"  desc="$lvar(activitytemplate_10071)" var="$dvar(definition_activity_template)_IMPORTNAVIGATIONBAR"                               type="bool"                default="1" />
+
+
+    <setting title="$lvar(activitytemplate_10000) 1"  type="section" />
+    <!-- Syntax: 1 Level: ActivityGroup, 2cnd Level Activity, 3 Level for Devices the device index-->
+    <setting title="$lvar(activitytemplate_10001) 1"  desc="$lvar(activitytemplate_10002) 1" var="ACTIVITYGROUPNAME[1]"                         type="scrolloptions"       default="$lvar(thica_10010)"  options='"$LANGUAGELIST"' rem="Living Room"/>
+    <setting title="$lvar(activitytemplate_10003) 1"  desc="$lvar(activitytemplate_10004) 1" var="ACTIVITYGROUPHOMEPAGE[1]"                     type="string"              default="Page_Activities_$dvar(definition_activity_template)_1" />
+    <setting title="$lvar(activitytemplate_10028) 1"  desc="$lvar(activitytemplate_10029) 1" var="ACTIVITYGROUPLOGO[1]"                         type="string"              default="logo" />
+
+    <!-- First Element only, by purpose-->
+    <setting title="$lvar(activitytemplate_10005) 1"  desc="$lvar(activitytemplate_10006) 1" var="ACTIVITYGROUPBUTTONGROUPNAME[1]"              type="string"              default="Button Activity_1_1" />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 1"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[1][1]"                          type="scrolloptions"       default="$lvar(4000)"  options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[1][1]"                     type="string"              default="Page_Device_$dvar(definition_activityalias_mediaplayer_tv1)" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[1][1]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[1][1]"                    type="string"              default="$dvar(definition_activityalias_tv1)" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[1][1]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[1][1]"              type="actions"             default="Set Trigger $dvar(definition_alias_mediaplayer_onkyoavr)_mainvolume"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[1][1]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[1][1]"             type="actions"             default="Delete Trigger $dvar(definition_alias_mediaplayer_onkyoavr)_mainvolume"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[1][1]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 1 $lvar(activitytemplate_10030) 1"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][1][1]"                      type="string"              default="$dvar(definition_alias_mediaplayer_panasonic_4k)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][1][1]"          type="actions"             default="Send Source HDMI 1"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][1][1]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][1][1]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][1][1]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][1][1]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 1 $lvar(activitytemplate_10030) 2"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][1][2]"                      type="string"              default="$dvar(definition_alias_mediaplayer_onkyoavr)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][1][2]"          type="actions"             default="Send Source TV/Cbl"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][1][2]"           type="string"              default="30" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][1][2]"         type="string"              default="30" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][1][2]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][1][2]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 1 $lvar(activitytemplate_10030) 3"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][1][3]"                      type="string"              default="$dvar(definition_alias_mediaplayer_enigma2)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][1][3]"          type="actions"             default="NoAction"  allowtextinput='1'  />>
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][1][3]"           type="string"              default="100" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][1][3]"         type="string"              default="100" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][1][3]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][1][3]"  type="string"              default="0" />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 2"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[1][2]"                          type="scrolloptions"       default="$lvar(4001)" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[1][2]"                     type="string"              default="Page_Device_$dvar(definition_activityalias_mediaplayer_kodi1)" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[1][2]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[1][2]"                    type="string"              default="$dvar(definition_activityalias_kodi1)" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[1][2]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[1][2]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[1][2]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[1][2]"             type="actions"             default="NoAction"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[1][2]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 2 $lvar(activitytemplate_10030) 1"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][2][1]"                      type="string"              default="$dvar(definition_alias_mediaplayer_panasonic_4k)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][2][1]"          type="actions"             default="Send Source HDMI 1"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][2][1]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][2][1]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][2][1]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][2][1]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 2 $lvar(activitytemplate_10030) 2"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][2][2]"                      type="string"              default="$dvar(definition_alias_mediaplayer_onkyoavr)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][2][2]"          type="actions"             default="Send Source PC" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][2][2]"           type="string"              default="30" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][2][2]"         type="string"              default="30" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][2][2]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][2][2]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 2 $lvar(activitytemplate_10030) 3"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][2][3]"                      type="string"              default="$dvar(definition_alias_mediaplayer_shield)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][2][3]"          type="actions"             default="Send Restart KODI1" allowtextinput='1'  />>
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][2][3]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][2][3]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][2][3]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][2][3]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 2 $lvar(activitytemplate_10030) 4"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][2][4]"                      type="string"              default="$dvar(definition_alias_unraid)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][2][4]"          type="actions"             default="NoAction" allowtextinput='1'  />>
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][2][4]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][2][4]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][2][4]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][2][4]"  type="string"              default="0" />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 3"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[1][3]"                          type="scrolloptions"       default="Prime Instant Video" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[1][3]"                     type="string"              default="Page_Device_$dvar(definition_activityalias_mediaplayer_apiv1)" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[1][3]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[1][3]"                    type="string"              default="$dvar(definition_activityalias_apiv1)" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[1][3]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[1][3]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[1][3]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[1][3]"             type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[1][3]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 3 $lvar(activitytemplate_10030) 1"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][3][1]"                      type="string"              default="$dvar(definition_alias_mediaplayer_panasonic_4k)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][3][1]"          type="actions"             default="Send Source HDMI 1" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][3][1]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][3][1]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][3][1]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][3][1]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 3 $lvar(activitytemplate_10030) 2"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][3][2]"                      type="string"              default="$dvar(definition_alias_mediaplayer_onkyoavr)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][3][2]"          type="actions"             default="Send Source PC" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][3][2]"           type="string"              default="30" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][3][2]"         type="string"              default="30" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][3][2]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][3][2]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 3 $lvar(activitytemplate_10030) 3"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][3][3]"                      type="string"              default="$dvar(definition_alias_mediaplayer_shield)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][3][3]"          type="actions"             default="Send Restart APIV" allowtextinput='1'  />>
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][3][3]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][3][3]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][3][3]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][3][3]"  type="string"              default="0" />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 4"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[1][4]"                          type="scrolloptions"       default="WII" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[1][4]"                     type="string"              default="Page_Device_$dvar(definition_activityalias_mediaplayer_games1)" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[1][4]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[1][4]"                    type="string"              default="$dvar(definition_activityalias_games1)" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[1][4]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[1][4]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[1][4]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[1][4]"             type="actions"             default="NoAction"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[1][4]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 4 $lvar(activitytemplate_10030) 1"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][4][1]"                      type="string"              default="$dvar(definition_alias_mediaplayer_panasonic_4k)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][4][1]"          type="actions"             default="Send Source HDMI 1" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][4][1]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][4][1]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][4][1]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][4][1]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 4 $lvar(activitytemplate_10030) 2"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[1][4][2]"                      type="string"              default="$dvar(definition_activityalias_mediaplayer_games1)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[1][4][2]"          type="actions"             default="Send Source Console" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[1][4][2]"           type="string"              default="30" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[1][4][2]"         type="string"              default="30" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[1][4][2]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[1][4][2]"  type="string"              default="0" />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 5"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[1][5]"                          type="scrolloptions"       default="" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[1][5]"                     type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[1][5]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[1][5]"                    type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[1][5]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[1][5]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[1][5]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[1][5]"             type="actions"             default="NoAction"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[1][5]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 6"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[1][6]"                          type="scrolloptions"       default="" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[1][6]"                     type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[1][6]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[1][6]"                    type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[1][6]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[1][6]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[1][6]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[1][6]"             type="actions"             default="NoAction"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[1][6]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 7"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[1][7]"                          type="scrolloptions"       default="" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[1][7]"                     type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[1][7]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[1][7]"                    type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[1][7]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[1][7]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[1][7]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[1][7]"             type="actions"             default="NoAction"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[1][7]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 1 $lvar(activitytemplate_10008) 8"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[1][8]"                          type="scrolloptions"       default="" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[1][8]"                     type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[1][8]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[1][8]"                    type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[1][8]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[1][8]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[1][8]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[1][8]"             type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[1][8]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+
+    <setting title="$lvar(activitytemplate_10000) 2"  type="section" />
+    <setting title="$lvar(activitytemplate_10001) 2"  desc="$lvar(activitytemplate_10002) 2" var="ACTIVITYGROUPNAME[2]"                         type="scrolloptions"       default="$lvar(thica_10009)"   options='"$LANGUAGELIST"' rem="Launge"/>
+    <setting title="$lvar(activitytemplate_10003) 2"  desc="$lvar(activitytemplate_10004) 2" var="ACTIVITYGROUPHOMEPAGE[2]"                     type="string"              default="Page_Activities_$dvar(definition_activity_template)_2" />
+    <setting title="$lvar(activitytemplate_10028) 1"  desc="$lvar(activitytemplate_10029) 2" var="ACTIVITYGROUPLOGO[2]"                         type="string"              default="$var(DEFINITIONPATH)/pics/lounge.png" />
+
+    <!-- First Element only, by purpose-->
+    <setting title="$lvar(activitytemplate_10005) 2"  desc="$lvar(activitytemplate_10006) 2" var="ACTIVITYGROUPBUTTONGROUPNAME[2]"              type="string"              default="Button Activity_2_1" />
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 1"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[2][1]"                          type="scrolloptions"       default="$lvar(4000)"  options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[2][1]"                     type="string"              default="Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[2][1]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[2][1]"                    type="string"              default="$dvar(definition_alias_panasonictvnet)" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[2][1]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[2][1]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[2][1]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[2][1]"             type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[2][1]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 1 $lvar(activitytemplate_10030) 1"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[2][1][1]"                      type="string"              default="$dvar(definition_alias_mediaplayer_panasonictvnet)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[2][1][1]"          type="actions"             default="Send Source TV"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[2][1][1]"           type="string"              default="10" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[2][1][1]"         type="string"              default="10" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[2][1][1]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[2][1][1]"  type="string"              default="0" />
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 2"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[2][2]"                          type="scrolloptions"       default="$lvar(4001)"  options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[2][2]"                     type="string"              default="Page_Device_$dvar(definition_activityalias_mediaplayer_kodi2)" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[2][2]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[2][2]"                    type="string"              default="$dvar(definition_activityalias_kodi2)" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[2][2]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[2][2]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[2][2]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[2][2]"             type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[2][2]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 2 $lvar(activitytemplate_10030) 1"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[2][2][1]"                      type="string"              default="$dvar(definition_alias_mediaplayer_panasonictvnet)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[2][2][1]"          type="actions"             default="Send Source HDMI 1" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[2][2][1]"           type="string"              default="10" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[2][2][1]"         type="string"              default="10" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[2][2][1]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[2][2][1]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 2 $lvar(activitytemplate_10030) 2"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[2][2][2]"                      type="string"              default="$dvar(definition_alias_mediaplayer_firetv2)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[2][2][2]"          type="actions"             default="Send Restart KODI2" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[2][2][2]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[2][2][2]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[2][2][2]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[2][2][2]"  type="string"              default="0" />
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 3"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[2][3]"                          type="scrolloptions"       default="Fire TV" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[2][3]"                     type="string"              default="Page_Device_$dvar(definition_activityalias_mediaplayer_ftv2)" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[2][3]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[2][3]"                    type="string"              default="$dvar(definition_activityalias_ftv2)" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[2][3]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[2][3]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[2][3]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[2][3]"             type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[2][3]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 3 $lvar(activitytemplate_10030) 1"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[2][3][1]"                      type="string"              default="$dvar(definition_alias_mediaplayer_panasonictvnet)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[2][3][1]"          type="actions"             default="Send Source HDMI 1" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[2][3][1]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[2][3][1]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[2][3][1]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[2][3][1]"  type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 3 $lvar(activitytemplate_10030) 2"  type="title" />
+    <setting title="$lvar(activitytemplate_10031)"    desc="$lvar(activitytemplate_10032)"   var="ACTIVITYDEVICE[2][3][2]"                      type="string"              default="$dvar(definition_alias_mediaplayer_firetv2)" />
+    <setting title="$lvar(activitytemplate_10033)"    desc="$lvar(activitytemplate_10034)"   var="ACTIVITYDEVICE_INPUTACTION[2][3][2]"          type="actions"             default="Send Home" allowtextinput='1'  />>
+    <setting title="$lvar(activitytemplate_10035)"    desc="$lvar(activitytemplate_10036)"   var="ACTIVITYDEVICE_INITVOLUME[2][3][2]"           type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10037)"    desc="$lvar(activitytemplate_10038)"   var="ACTIVITYDEVICE_DEINITVOLUME[2][3][2]"         type="string"              default="-1" />
+    <setting title="$lvar(activitytemplate_10039)"    desc="$lvar(activitytemplate_10040)"   var="ACTIVITYDEVICE_PREPOWERONWAITTIME[2][3][2]"   type="string"              default="0" />
+    <setting title="$lvar(activitytemplate_10041)"    desc="$lvar(activitytemplate_10042)"   var="ACTIVITYDEVICE_POSTPOWERONWAITTIME[2][3][2]"  type="string"              default="0" />
+
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 4"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[2][4]"                          type="scrolloptions"       default="" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[2][4]"                     type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[2][4]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[2][4]"                    type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[2][4]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[2][4]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[2][4]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[2][4]"             type="actions"             default="NoAction"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[2][4]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 5"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[2][5]"                          type="scrolloptions"       default="" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[2][5]"                     type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[2][5]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[2][5]"                    type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[2][5]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[2][5]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[2][5]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[2][5]"             type="actions"             default="NoAction"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[2][5]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 6"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[2][6]"                          type="scrolloptions"       default="" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[2][6]"                     type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[2][6]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[2][6]"                    type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[2][6]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[2][6]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[2][6]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[2][6]"             type="actions"             default="NoAction"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[2][6]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 7"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[2][7]"                          type="scrolloptions"       default="" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[2][7]"                     type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[2][7]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[2][7]"                    type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[2][7]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[2][7]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[2][7]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[2][7]"             type="actions"             default="NoAction"  allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[2][7]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+    <setting title="$lvar(activitytemplate_10007) 2 $lvar(activitytemplate_10008) 8"  type="title" />
+    <setting title="$lvar(activitytemplate_10009)"    desc="$lvar(activitytemplate_10010)"   var="ACTIVITY_NAME[2][8]"                          type="scrolloptions"       default="" options='"$LANGUAGELIST"'/>
+    <setting title="$lvar(activitytemplate_10011)"    desc="$lvar(activitytemplate_10012)"   var="ACTIVITY_STARTPAGE[2][8]"                     type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10013)"    desc="$lvar(activitytemplate_10014)"   var="ACTIVITY_POWERSTATUS[2][8]"                   type="scrolloptions"       default='OFF' options='"ON","OFF"' allowtextinput='0' />
+    <setting title="$lvar(activitytemplate_10015)"    desc="$lvar(activitytemplate_10016)"   var="ACTIVITY_DEFINITION[2][8]"                    type="string"              default="" />
+    <setting title="$lvar(activitytemplate_10017)"    desc="$lvar(activitytemplate_10018)"   var="ACTIVITY_POWERONOPTION[2][8]"                 type="string"              default="parallel" options='"parallel","seriell"' allowtextinput='0'/>
+    <setting title="$lvar(activitytemplate_10019)"    desc="$lvar(activitytemplate_10020)"   var="ACTIVITY_PREPOWERONACTION[2][8]"              type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10021)"    desc="$lvar(activitytemplate_10022)"   var="ACTIVITY_POSTPOWERONACTION[2][8]"             type="actions"             default="NoAction" allowtextinput='1' /> />
+    <setting title="$lvar(activitytemplate_10024)"    desc="$lvar(activitytemplate_10025)"   var="ACTIVITY_PREPOWEROFFACTION[2][8]"             type="actions"             default="NoAction" allowtextinput='1'  />
+    <setting title="$lvar(activitytemplate_10026)"    desc="$lvar(activitytemplate_10027)"   var="ACTIVITY_POSTPOWEROFFACTION[2][8]"            type="actions"             default="NoAction" allowtextinput='1' /> />
+
+
+
+
+</settings>
+

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String cmd = command to send, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>ENIGMA2 Telnet Commands</name>
+      <description language='English'>Telnet Commands for Enigma2</description>
+      <description language='German'>Telnet Befehle für Enigma 2</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/telnet/CODESET_telnet_ENIGMA2.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_telnet_ENIGMA2.zip</sourcefile>
+          <targetpath>codesets/telnet</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Telnet</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action string="codeset" name="startapp"      waitforresponse='1' cmd="python -c &quot;from struct import pack; import socket; import os; import time; pp=chr(33)+'III'; os.system('/etc/init.d/kodi restart'); time.sleep(10); oSocket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM); oSocket.connect('/tmp/.sock.kodi'); oSocket.sendall(pack(pp, 987654321, 1000,0)); oSocket.close()&quot; \n" getvar='root' />
+  <action string="codeset" name="closeapp"      waitforresponse='1' cmd="/etc/init.d/$var(startapp) stop \n" />
+
+</includes>

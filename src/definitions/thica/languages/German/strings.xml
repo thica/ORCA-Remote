@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="thica_10001">KODI neutarten</string>
+  <string id="thica_10002">Reboot Mediacenter</string>
+  <string id="thica_10003">NAS Laufwerke mappen</string>
+  <string id="thica_10004">Sofa</string>
+  <string id="thica_10005">Truhe</string>
+  <string id="thica_10006">Alle</string>
+
+  <string id="thica_10009">Lounge</string>
+  <string id="thica_10010">Wohnzimmer</string>
+  <string id="thica_10011">TV</string>
+  <string id="thica_10012">Decke</string>
+  <string id="thica_10013">Lumi</string>
+  <string id="thica_10014">TV Raum</string>
+  <string id="thica_10015">Heizung</string>
+
+    <string id="thica_10100">Soll der HTPC wirklich neu gestartet werden?</string>
+
+
+</strings>

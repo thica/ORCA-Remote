@@ -1,0 +1,103 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-cec_rpi
+WikiDoc:TOCTitle:cec_rpi
+= cec_rpi =
+CEC Control using the Raspberry PI. This interface sends command to the Raspberry PI CEC interface. Main purpose is to poweron or poweroff devices, but it supports the whole set of CEC commands. The interface s based on the TELNET interface, so all parameters from the telnet interface apply. In addition, the following parameters can be configured
+
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|Source Device Type
+|The device type of the sender. Some CEC devices expect CEC commands only from selected device types. CEC has defined the following device types:
+* 0:TV
+* 1:Recording 1
+* 2:Recording 2
+* 3:Tuner 1
+* 4:Playback 1
+* 5:Audio system
+* 6:Tuner 2
+* 7:Tuner 3
+* 8:Playback 2
+* 9:Playback 3
+* A:Tuner 4
+* B:Playback 3
+* C:Reserved (C)
+* D:Reserved (D)
+* E:Reserved (E)
+* F:Unregistered'
+|-
+|Source Device ID
+|The source device ID. Some devices only excepts CEC commands from specific IDs. This is vendor specific. Default is 00000
+|-
+|Destination Device Type
+|The device type of the target. Some CEC devices expect CEC commands only if the target is selected properly. The device types are the same as shown in Source Device Type
+|}</div>
+
+
+You need to define the codeset filename, which contains the command set for your device 
+
+A  codeset file could look like that (shortened version):
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<codeset>
+  <action string="codeset" name="power_off"    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 36" | cec-client -s\r\n' />
+  <action string="codeset" name="power_on"     waitforresponse='0' cmd='echo "on $cvar(DESTTYPE)" |  cec-client -s\r\n' />
+  <action string="codeset" name="power_toggle" waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 40" | cec-client -s\r\n' />
+
+  <action string="codeset" name="power_toggle1" waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 6B" | cec-client -s\r\n' />
+  <action string="codeset" name="power_off1"   waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 6C" | cec-client -s\r\n' />
+  <action string="codeset" name="power_on1"    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 6f" | cec-client -s\r\n' />
+
+  <action string="codeset" name='suspend'      waitforresponse='0' cmd='echo "on $cvar(DESTTYPE)" |  cec-client -s\r\n' />
+
+  <action string="codeset" name='menu'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 8D 00" | cec-client -s\r\n' />
+  <action string="codeset" name='ok'           waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 00" | cec-client -s\r\n' />
+  <action string="codeset" name='up'           waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 01" | cec-client -s\r\n' />
+  <action string="codeset" name='down'         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 02" | cec-client -s\r\n' />
+</codeset>
+</syntaxhighlight></div>
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|action
+|Defines, to which ORCA action the  command should be send
+|-
+|getvar
+|This defines, which information will be collected from the json respons., Only the last attribute will be used. If an attribute belongs to a list, only the first list entry is parsed.
+|-
+|ldestvar
+|This defines, which variable should be set by the information parsed by getvar. This variable is local to the interface and local to the configuration
+|-
+|gdestvar
+|This defines, which variable should be set by the information parsed by getvar. This variable is global to all ORCA functions
+|-
+|cmd
+|This is the command to transmit using adb. 
+|}
+
+Variable replacement: You can use variable placeholder to use variables in your adb command string
+
+{| class="wikitable"
+! align="left" | var
+! align="left" | Description
+|-
+|var()
+|Uses a global variable name to be replaced
+|-
+|lvar()
+|Uses a language variable name to be replaced
+|-
+|cvar()
+|Uses a local variable to be replaced
+|}
+
+You can have as much actions as you like in your codeset file. You can use the same codeset file for several configurations. You should have a "ping" command in your codeset
+WikiDoc:End
+'''

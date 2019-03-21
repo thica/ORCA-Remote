@@ -1,0 +1,103 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Configuration
+WikiDoc:Page:How it works
+WikiDoc:TOCTitle:1=How it works and design
+
+You should understand some principles about the way ORCA works, before you start creating your remote control definition.
+
+= ORCA Components =
+
+== The ORCA Appplication ==
+
+That's simple: The Application that you control and which shows everything on the screen
+
+== Interfaces ==
+Interfaces are components which interact with the devices you like to control. Interfaces are loaded and runtime and they can send commands. Some of them can read messages / information as well and can pass them to ORCA
+
+Typicall interfaces are
+
+* Wake on Lan
+* Telnet
+* Lan to Infrared
+
+You can find the interfaces under [orca_root]\interfaces
+=== Config files ===
+Interfaces can support several targets. The configuration of the targets for a specific interface is stored in a "config.ini" file.
+
+See below the example of a config.ini file for the telnet interface
+
+ <nowiki>[DEVICE_UNRAID]
+host = tower
+fncodeset = ASSIGN_DEVICE_UNRAID.xml
+user = root
+password =</nowiki>
+
+The config.ini can look different for different interfaces. Refer to the documentation for each interface, which parameters are uses in a config.ini file.
+
+You can find the config.ini file under [orca_root]\definitions\[your definition name]\interfacesettings\[interface_name]
+=== Codesets ===
+
+Codesets are used by interfaces. A codeset file translates ORCA commands and actions to interface commands. EG: the ORCA 'stop' command will be translated to the specific Infra Red command which fits to your TV. Codesets are specific to an interface. An interface can use several codesets, and a codeset  can be used several times by the same interface. Codeset files should be xml files (but it is up to the interface developer, which format to use). Refer to the documentation for each interface, how the codeset file is stuctured. See below an (shortend) example for codeset file to control XBMC using json:
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<codeset>
+    <code action='*'                  cmd=''/>
+    <code action='ok'                 cmd='{"jsonrpc":"2.0","method":"Input.Select"}'/>
+    <code action='left'               cmd='{"jsonrpc":"2.0","method":"Input.Left"}'/>
+    <code action='right'              cmd='{"jsonrpc":"2.0","method":"Input.Right"}'/>
+    <code action='up'                 cmd='{"jsonrpc":"2.0","method":"Input.Up"}'/>
+    <code action='down'               cmd='{"jsonrpc":"2.0","method":"Input.Down"}'/>
+    <code action='exit'               cmd='{"jsonrpc":"2.0","method":"Input.Back"}'/>
+    <code action='stop'               cmd='{"jsonrpc":"2.0","method":"Player.Stop",       "params":{"playerid":$cvar(playerid)} }' preaction='getplayerid'/>
+    <code action='skip_back'          cmd='{"jsonrpc":"2.0","method":"Player.GoPrevious", "params":{"playerid":$cvar(playerid)} }' preaction='getplayerid'/>
+    <code action='skip_forward'       cmd='{"jsonrpc":"2.0","method":"Player.GoNext",     "params":{"playerid":$cvar(playerid)} }' preaction='getplayerid'/>
+    <code action='play'               cmd='{"jsonrpc":"2.0","method":"Player.PlayPause",  "params":{"playerid":$cvar(playerid)} }' preaction='getplayerid'/>
+    <code action='closeapp'           cmd='{"jsonrpc":"2.0","method":"Application.Quit"}'/>
+    <code action='getplayerid'        cmd='{"jsonrpc":"2.0","method":"Player.GetActivePlayers"}' ldestvar='playerid' getvar='result,playerid'/>
+    <code action='getmutestatus'      cmd='{"jsonrpc":"2.0","method":"Application.GetProperties","params": { "properties": [ "muted" ] },  "id":1}' ldestvar='mutestatus' getvar='result,muted'/>
+</codeset></syntaxhighlight></div>
+
+Not every interface needs codesets. As an example: The "Wake on Lan" interface supports only one command, so the interface does not need a codeset file.
+
+You can find the codeset files at  [orca_root]\codesets or at [orca_root]\definitions\[your definition name]\interfacesettings\[interface_name]
+
+At [orca_root]\codesets you find the standard codesets, while in your definition folder you should place your own customized codesets.
+
+There are codesets, that needs to be created or customized by you. As an example, you may have to create a codeset file for Infrared commands, which fits to your current infrared remote control. Codesets like the XBMC json file needs no customisation. Refer to the documentation of the interface for further details.
+
+== Actions / Commands / Functions / Macros ==
+
+A key component of ORCA is the command structure.
+
+It is easier to explain this functionality as an example.
+
+You mave a button on your screen, which shows the logo of your favourite TV Channel "MTV". If you press this button, the TV should switch to channel "21" , which is your channel on your TV for "MTV". The TV is controlled by Infrared
+
+So how it works:
+
+* If the button is pressed, you send an action called 'Send Channel Select', with a parameter of 21.
+* 'Send Channel Select' is a standard action, this action sends a command called "channel_select" to the configured interface.
+* The interface looks in the codeset file, which infrared command will be used for changing a channel and sends two commands (Number "2" and Number "1") * over LAN to the LAN two Infrared converter.
+* The Lan to Infrared converter send two infrared commands to your TV
+* Your TV changes the channel
+
+Actions can be just a single command, or can be a set of commands. You can assign conditions, can set variables or can call actions like functions.
+
+You can find the the action definition files under [orca_root]\definitions\[your definition name]\actions and [orca_root]\actions
+== Skins ==
+Currently, a skin is not more than a set a graphics with defined names for backgrounds, buttons and other screen elements. Standard sounds and text attributes are part of the skin as well.
+You can find the the skins under [orca_root]\skins.
+
+The skin is defined in a file named skin.xml which represents the links to the physical picture and sound files.
+
+== Definitions ==
+Definitions are the core component of ORCA. A definiton describes your screen layout, everything you see on your screen, the actions, which should be performed, if you press a button and your interface settings.
+A definition is the only part of ORCA, which you should customize as a standard user. Never change the standard definition, allways make a copy of an existing definition to make your changes.
+* On Windows, definitons are stored in [orca_root]\definitions\
+* On Android, definitions are stored in /sdcard0/OrcaRemote
+Youcan change the path to the definition file using the settings dialog.
+
+WikiDoc:End
+'''

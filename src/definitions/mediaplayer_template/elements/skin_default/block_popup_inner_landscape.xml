@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Frame" type="PICTURE"  picturenormal="background boxes" />
+    <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%5" height="of:width:self" picturenormal="button wide*" action="Show Page" actionpars='{"pagename":"$var(LASTPAGE)"}' fontsize='%h50' caption="icon:close_window" />
+    <element name="Anchor Frame" type="ANCHOR" posx="center" posy="middle" width="%95" height="%90">
+
+        <element name='Picture Transmit'  type='PICTURE'    posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%4' height='of:width:self' picturenormal='transmit' enabled='0' />
+        <element name='Picture Wait'      type='PICTURE'    posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%4' height='of:width:self' picturenormal='wait' enabled='0' />
+        <element name='Label Device'      type='TEXTFIELD'  posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%25' height='of:width:self:*0.2' caption='$var($dvar(definition_alias_mediaplayer_template)_PRETTYNAME)' fontsize='%h60'/>
+
+        <element name='Anchor TV Buttons' type='ANCHOR' posy='bottom' width='%25' height='of:width:self'>
+            <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_buttonbars.xml" parse="xml" />
+        </element>
+
+        <element name='Anchor Media Circle' type='ANCHOR' posx='center' posy='middle' width='of:height:self' >
+            <xi:include href="$var(STANDARDELEMENTSPATH)/block_mediacircle.xml" parse="xml" />
+        </element>
+        <element name='Anchor Menu Buttons' type='ANCHOR' posx='right' posy='bottom' width='of:width:Anchor TV Buttons' height='of:width:self:*0.25'>
+            <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_menu_tv.xml" parse="xml" />
+        </element>
+        <element name='Anchor PowerOnOff' type='ANCHOR' posx='right' posy='middle' width='of:width:Anchor Menu Buttons:*0.25' height='of:width:self:*2'>
+            <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_poweronoff.xml" parse="xml" />
+        </element>
+
+        <element name='Hide_Show_SecondCaption' type='SWITCH' posx='of:left:Anchor Menu Buttons' posy='of:top:Anchor PowerOnOff'   width='of:width:Anchor PowerOnOff' height='of:width:self' picturenormal='button square*' action='Switch Second Caption Page_Device_$dvar(definition_alias_mediaplayer_template)' destvar="Status_Second_Caption_Page_Device_$dvar(definition_alias_mediaplayer_template)" fontsize='%h30' iconfontsize='%h70' caption='icon:translate' />
+
+    </element>
+
+</elements>

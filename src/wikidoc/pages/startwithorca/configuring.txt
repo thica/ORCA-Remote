@@ -1,0 +1,16 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:StartWithOrca
+WikiDoc:Page:Configuring ORCA
+WikiDoc:TOCTitle:7=Configuring ORCA
+= Android =
+
+On Android there is no need to configure anything to start/run the ORCA application.
+
+= Windows =
+
+On Windows, Orca start with a standard resolution in windowed mode. You can change the resolution and the windowed/fullscreen mode by adjusting the config.ini file
+Please refer to [[Manual:The config.ini file|The config.ini file]] for a detailed description of the config.ini
+
+WikiDoc:End
+'''

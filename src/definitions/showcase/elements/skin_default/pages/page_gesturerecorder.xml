@@ -1,0 +1,8 @@
+
+<page name='GestureRecorder'>
+  <page_parameter>
+  </page_parameter>
+  <elements>
+    <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='#000000ff' />
+  </elements>
+</page>

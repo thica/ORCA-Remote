@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <!-- Translates Orca Actions to Interface Commands action = Orca Action
+        String ('*' = default command) type = 'event' or 'key': tells, if Remoteghost
+        should send an EventGhost event or a Keystroke cmd = command to send, either
+        the event name, or the keystroke (look interface.py for keystrokes) -->
+
+  <repositorymanager>
+    <entry>
+      <name>Simple customized HTPC Control by Eventghost</name>
+      <description language='English'>HTPC Control using Eventghost / Plugin-Events</description>
+      <description language='German'>HTPC Kontrolle über Eventghost / Plugin-Events</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <skip>0</skip>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/remoteghost/CODESET_remoteghost_HTPC.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_remoteghost_HTPC.zip</sourcefile>
+          <targetpath>codesets/remoteghost</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Remoteghost Control for EventGhost</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+
+  <action string="codeset" name="closeapp" type="event" cmd="CLOSEAPP" />
+  <action string="codeset" name="mount_nas_drives" type="event" cmd="MOUNTNAS" />
+  <action string="codeset" name="left_mouse_click" type="mouse" cmd="{Mouse_Left_Click}" />
+  <action string="codeset" name="right_mouse_click" type="mouse" cmd="{Mouse_Right_Click}" />
+  <action string="codeset" name="restart" type="event" cmd="RESTARTKODI" />
+  <action string="codeset" name="restart KODI" type="event" cmd="RESTARTKODI" />
+  <action string="codeset" name="restart DVBVIEWER" type="event" cmd="RESTARTDVBVIEWER" />
+  <action string="codeset" name="reboot" type="event" cmd="REBOOT" />
+  <action string="codeset" name="esc" type="key" cmd="{Esc}" />
+  <action string="codeset" name="power_off" type="event" cmd="POWEROFF" />
+</includes>

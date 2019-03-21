@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(WIZARDTEMPLATESPATH)/mediaplayer wizard/android_adb/actions/custompagestartactions.xml" parse="xml" ></xi:include>
+    <pagestartaction name="definitionstart">
+        <action name="set hint to add" string="setvar" varname="TEMPLATETHINT" varvalue="$lvar(nvidiashield_10000)" />
+        <action name="Add Template Installationshint" string="call FKT_AddTemplateInstallationsHint $dvar(definition_alias_mediaplayer_wizard)" />
+    </pagestartaction>
+
+</includes>
+

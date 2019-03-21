@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_ShowFileDemo">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+
+    <element name='Anchor Left' posx="%5" type='ANCHOR' posy='%95' width='%30' height="%85" >
+      <element name='Frame top' type='ANCHOR' posy='top' height="%100" >
+        <element name="Definition File1" type="FILEVIEWER"  filename="$var(DEFINITIONPATH)/definition.xml" htextalign="left" vtextalign="top" backgroundcolor='#FFFFFFFF' />
+      </element>
+    </element>
+
+      <element name='Anchor Left 1' posx="%95" type='ANCHOR' posy='%95' width='%60' height="%85" >
+          <element name='Frame top' type='ANCHOR' posy='top' height="%45" >
+              <element name="Definition File2" type="FILEVIEWER"  filename="$var(DEFINITIONPATH)/block_buttons_main_menu.xml" htextalign="left" vtextalign="top" backgroundcolor='#FFFFFFFF' fontsize='%w4' />
+          </element>
+          <element name='Frame bottom' type='ANCHOR' posy='bottom' height="%45" width="%92">
+              <element name="Definition File3" type="FILEVIEWER"  filename="$var(DEFINITIONPATH)/definition.xml" htextalign="left" vtextalign="top" backgroundcolor='#FFFFFFFF' fontsize='%w4' />
+          </element>
+          <element name="Button Larger"  posx="of:right:Definition File3" posy="of:top:Definition File3" width="%8" height="of:width:self" type="BUTTON"  caption ="+" action="FKT_IncreaseFontSize" fontsize='%h90'/>
+          <element name="Button Smaller" posx="of:right:Definition File3" posy="bottom"                  width="%8" height="of:width:self" type="BUTTON"  caption ="-" action="FKT_DecreaseFontSize" fontsize='%h90'/>
+      </element>
+
+
+  </elements>
+</page>

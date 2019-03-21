@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!-- It is NOT wise to change this document, change the custom include files instead!! -->
+<ORCA>
+  <!--Actions to be started, when a page is displayed. If 'page name' is 'appstart',
+        the actions will be executed before the first page is displayed -->
+
+  <pagestartactions xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(ACTIONPATH)/standardpagestartactions.xml" parse="xml" condition="$var(ORCASTANDARDPAGESTARTACTIONSINCLUDED)!=1"/>
+    <xi:include href="$var(DEFINITIONPATH)/actions/custompagestartactions.xml" parse="xml" />
+  </pagestartactions>
+
+  <!-- Actions which can be assigned to buttons or used by th framework -->
+  <actions xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(ACTIONPATH)/standardactions.xml" parse="xml" condition="$var(ORCASTANDARDACTIONSINCLUDED)!=1"/>
+    <xi:include href="$var(DEFINITIONPATH)/actions/customactions.xml" parse="xml" />
+  </actions>
+</ORCA>

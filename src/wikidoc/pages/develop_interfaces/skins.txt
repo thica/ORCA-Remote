@@ -1,0 +1,196 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Develop Interfaces
+WikiDoc:Page:Develop Skins
+WikiDoc:TOCTitle:1=Skins
+= Overview =
+
+A skin definines some main attributes of the visual and accustical represenation of your remote:
+
+* Sounds
+* Pictures off buttons, backgrounds, sliders, devices
+* Font attributes
+
+A skin will not change position, size, and logic of a widgets.
+
+= Sections =
+The following sections are available:
+
+== Section: sounds ==
+
+The sounds section will define the system sounds to use:
+
+The following attributes are used to define a sound
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|name
+|The name of the sound, can be one of the following names:
+* startup
+* shutdown
+* error
+* message
+* question
+* notification
+* ring
+* success
+|-
+|file
+|The filename of the sound to play
+|}
+
+== Section: pics ==
+
+The pics section will define the pics to use for backgrounds, buttons, etc...:
+
+The following attributes are used to define a pic:
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|name
+|The name of the pics, can be one of the following names:
+* background
+* logo
+* background boxes
+* mediacircle
+* transmit
+* nopic
+* button page left normal
+* button page left pressed
+* button page right normal
+* button page right pressed
+* button wide normal
+* button wide pressed
+* button wide framed normal
+* button wide framed pressed
+* button square normal
+* button square pressed
+* button square framed normal
+* button square framed pressed
+* button round normal
+* button round pressed
+* button round framed normal
+* button round framed pressed
+* knob back
+* knob
+* knob without marker
+* knob marker only
+* device amplifier
+* device htpc
+* device TV receiver
+* device tv
+* device light
+* device NAS
+* device power strip
+* device game console
+* device inetradio
+* device xbmc
+* device dvbviewer
+* bulb off
+* bulb on
+|-
+|att
+|The filename of the pic to use
+|}
+
+== Section: attributes ==
+
+The attribuets section will define further skin attributes, mainly used for font definition:
+
+The following attributes are used to define attributes
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|name
+|The name of the attribute, can be one of the following names:
+* fontcolor button
+* fontcolor text
+* fontcolor file
+* defaultfont
+|-
+|file
+|The attribute to assign to the name
+|}
+
+= Example =
+
+Below you see an example for a skin definition
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<skin>
+  <sounds>
+    <sound name="startup" file="$var(SKINPATH)/sounds/startup.wav" />
+    <sound name="shutdown" file="$var(SKINPATH)/sounds/shutdown.wav" />
+    <sound name="error" file="$var(SKINPATH)/sounds/error.wav" />
+    <sound name="message" file="$var(SKINPATH)/sounds/message.wav" />
+    <sound name="question" file="$var(SKINPATH)/sounds/question.wav" />
+    <sound name="notification" file="$var(SKINPATH)/sounds/notification.wav" />
+    <sound name="ring" file="$var(SKINPATH)/sounds/ring.wav" />
+    <sound name="success" file="$var(SKINPATH)/sounds/success.wav" />
+  </sounds>
+  <pics>
+    <pic name="background" file="$var(SKINPATH)/pics/background.jpg" />
+    <pic name="logo" file="$var(SKINPATH)/pics/Orca scaled.png" />
+    <pic name="background boxes" file="$var(SKINPATH)/pics/background boxes.png" />
+    <pic name="mediacircle" file="$var(SKINPATH)/pics/button mediacircle.png" />
+    <pic name="transmit" file="$var(SKINPATH)/pics/picture transmit.png" />
+    <pic name="nopic" file="$var(SKINPATH)/pics/nopic.jpg" />
+
+    <pic name="button page left normal" file="$var(SKINPATH)/pics/button page left normal.png" />
+    <pic name="button page left pressed" file="$var(SKINPATH)/pics/button page left pressed.png" />
+    <pic name="button page right normal" file="$var(SKINPATH)/pics/button page right normal.png" />
+    <pic name="button page right pressed" file="$var(SKINPATH)/pics/button page right pressed.png" />
+
+    <pic name="button wide normal" file="$var(SKINPATH)/pics/button wide normal.png" />
+    <pic name="button wide pressed" file="$var(SKINPATH)/pics/button wide pressed.png" />
+    <pic name="button wide framed normal" file="$var(SKINPATH)/pics/button wide framed normal.png" />
+    <pic name="button wide framed pressed" file="$var(SKINPATH)/pics/button wide framed pressed.png" />
+
+    <pic name="button square normal" file="$var(SKINPATH)/pics/button square normal.png" />
+    <pic name="button square pressed" file="$var(SKINPATH)/pics/button square pressed.png" />
+    <pic name="button square framed normal" file="$var(SKINPATH)/pics/button square framed normal.png" />
+    <pic name="button square framed pressed" file="$var(SKINPATH)/pics/button square framed pressed.png" />
+
+    <pic name="button round normal" file="$var(SKINPATH)/pics/button round normal.png" />
+    <pic name="button round pressed" file="$var(SKINPATH)/pics/button round pressed.png" />
+    <pic name="button round framed normal" file="$var(SKINPATH)/pics/button round framed normal.png" />
+    <pic name="button round framed pressed" file="$var(SKINPATH)/pics/button round framed pressed.png" />
+
+    <pic name="knob back" file="$var(SKINPATH)/pics/knob back.png" />
+    <pic name="knob" file="$var(SKINPATH)/pics/knob.png" />
+    <pic name="knob without marker" file="$var(SKINPATH)/pics/knob wheel only.png" />
+    <pic name="knob marker only" file="$var(SKINPATH)/pics/knob marker only.png" />
+
+    <pic name="device amplifier" file="$var(SKINPATH)/pics/devices/device amplifier.png" />
+    <pic name="device htpc" file="$var(SKINPATH)/pics/devices/device htpc.png" />
+    <pic name="device TV receiver" file="$var(SKINPATH)/pics/devices/device TV receiver.png" />
+    <pic name="device tv" file="$var(SKINPATH)/pics/devices/device tv.png" />
+    <pic name="device light" file="$var(SKINPATH)/pics/devices/device light.png" />
+    <pic name="device NAS" file="$var(SKINPATH)/pics/devices/device NAS.png" />
+    <pic name="device power strip" file="$var(SKINPATH)/pics/devices/device power strip.png" />
+    <pic name="device game console" file="$var(SKINPATH)/pics/devices/device game console.png" />
+    <pic name="device inetradio" file="$var(SKINPATH)/pics/devices/device inetradio.png" />
+
+    <pic name="device xbmc" file="$var(SKINPATH)/pics/devices/device xbmc.png" />
+    <pic name="device dvbviewer" file="$var(SKINPATH)/pics/devices/device dvbviewer.png" />
+    <pic name="bulb off" file="$var(SKINPATH)/pics/devices/bulb off.png" />
+    <pic name="bulb on" file="$var(SKINPATH)/pics/devices/bulb on.png" />
+  </pics>
+  <attributes>
+    <attribute name="fontcolor button" att="#000000ff" />
+    <attribute name="fontcolor text" att="#000000ff" />
+    <attribute name="fontcolor file" att="#ff0000ff" />
+    <attribute name="defaultfont" att="Font1"/>
+  </attributes>
+</skin>
+</syntaxhighlight></div>
+WikiDoc:End
+'''

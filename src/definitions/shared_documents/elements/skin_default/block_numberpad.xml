@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Button Number 1'         type='BUTTON' posx='left'           posy='top'            width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 1' fontsize='%h40'  caption='1' />
+  <element name='Button Number 2'         type='BUTTON' posx='of:right:last'  posy='top'            width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 2' fontsize='%h40'  caption='2' />
+  <element name='Button Number 3'         type='BUTTON' posx='of:right:last'  posy='top'            width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 3' fontsize='%h40'  caption='3' />
+  <element name='Button Number 4'         type='BUTTON' posx='left'           posy='of:bottom:last' width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 4' fontsize='%h40'  caption='4' />
+  <element name='Button Number 5'         type='BUTTON' posx='of:right:last'  posy='of:top:last'    width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 5' fontsize='%h40'  caption='5' />
+  <element name='Button Number 6'         type='BUTTON' posx='of:right:last'  posy='of:top:last'    width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 6' fontsize='%h40'  caption='6' />
+  <element name='Button Number 7'         type='BUTTON' posx='left'           posy='of:bottom:last' width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 7' fontsize='%h40'  caption='7' />
+  <element name='Button Number 8'         type='BUTTON' posx='of:right:last'  posy='of:top:last'    width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 8' fontsize='%h40'  caption='8' />
+  <element name='Button Number 9'         type='BUTTON' posx='of:right:last'  posy='of:top:last'    width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 9' fontsize='%h40'  caption='9' />
+  <element name='Button Number minus'     type='BUTTON' posx='left'           posy='of:bottom:last' width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key -' fontsize='%h40'  caption='-' />
+  <element name='Button Number 0'         type='BUTTON' posx='of:right:last'  posy='of:top:last'    width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key 0' fontsize='%h40'  caption='0' />
+  <element name='Button Number plus'      type='BUTTON' posx='of:right:last'  posy='of:top:last'    width='%33.3' height='of:width:self' picturenormal='button round*' action='Send Key +' fontsize='%h40'  caption='+' />
+</elements>

@@ -1,0 +1,236 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:DefinitionsForUser
+WikiDoc:Page:Userdescription Definition mediaplayer_template
+WikiDoc:TOCTitle:mediaplayer_template
+
+The mediaplayer_template is on of the most flexible definitions of ORCA. It is designed to fit for most devices which plays media, like TVs , DVB receiver, DVD/BR player, software player, streaming devices...
+There it is high customizable through the definition settings. Not all setting combinations will work, so therefore you might need to play around with the settings.
+Furthermore the template is used by the mediaplayer_wizards, which pushes tested settings into the mediaplayer_template and might add some functions as well.
+
+Key features:
+* Works for all screen sizes and orientations
+* Customizable interfaces for power control, volume control and main control
+* Customizable screen layout for use TV-Channels buttos OR Application start OR Device Commands
+* Customizable button commands and captions
+* Customizable gestures
+* Customizable volume control
+* Waiting for the device to completely booted / be online before passing further commands to the device (like fetching audio volume)
+
+
+[[File:mediaplayer_template_main_large_landscape.png|link=]]
+
+The main page in large screen and landscape mode
+
+[[File:mediaplayer_template_main_small_landscape.png|link=]]
+
+The main page in small screen and landscape mode
+
+[[File:mediaplayer_template_main_small_landscape_more.png|link=]]
+
+The "More"... popup for main page in small screen and landscape mode
+
+[[File:mediaplayer_template_main_large_portrait.png|link=]]
+
+The main page in large screen and portrait mode
+
+[[File:mediaplayer_template_main_small_portrait.png|link=]]
+
+The main page in small screen and portrait mode
+
+[[File:mediaplayer_template_main_small_portrait_more.png|link=]]
+
+The "More"... popup for main page in small screen and portrait mode
+
+
+WikiDoc:End
+'''
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Definitions
+WikiDoc:Page:Reference Definition mediaplayer_template
+WikiDoc:TOCTitle:mediaplayer_template
+
+The mediaplayer_template is on of the most flexible definitions of ORCA. It is designed to fit for most devices which plays media, like TVs , DVB receiver, DVD/BR player, software player, streaming devices...
+There it is high customizable through the definition settings. Not all setting combinations will work, so therefore you might need to play around with the settings.
+Furthermore the template is used by the mediaplayer_wizards, which pushes tested settings into the mediaplayer_template and might add some functions as well.
+
+[[File:mediaplayer_template_main_large_landscape.png|link=]]
+The main page in large screen and landscape mode. For more details please have a look in the user decription for the defintion
+
+This definition has the following capabilities
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Capability
+! align="left" | Description
+|-
+|Orientation
+|Landscape and portrait
+|-
+|Screen Size
+|
+* small / landscape
+* small / portrait
+* large / landscape
+* large / portrait
+|-
+|Interfaces
+|No Interfaces
+|}</div>
+
+= Definitionvars =
+This definition uses the following definitionvars:
+
+* "definition_alias_mediaplayer_template": default value = "Mediaplayer"
+* "definition_alias_appfavorites_template": default value = "App Favorites"
+* "definition_alias_cmdfavorites_template": default value = "Command Favorites"
+* "definition_alias_tvfavorites_template": default value = "TV Channels"
+
+= Settings =
+This template defines the following settings:
+
+== Interfaces ==
+$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN : The main interface to control the device
+$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN : The main configuration name to control the device
+$dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON : The interface to power on the device
+$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON : The configuration name to control the device
+$dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME : The interface to control the volume
+$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME : The configuration name to control the volume
+$dvar(definition_alias_mediaplayer_template)_DISCOVERACTION : Action to be send to the device to start the discover routine of the interface
+
+== Power Control ==
+
+$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE : Flag, if the definition should wait for the device to responsive on commands 0/1
+$dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND : Action to be used to detect, if the device booted / powered on
+$dvar(definition_alias_mediaplayer_template)_POWERONCOMMAND : Action to used to power on the device
+$dvar(definition_alias_mediaplayer_template)_POWEROFFCOMMAND : Action to used to power off the device
+$dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD : Action to be used to switch TV channels
+
+== Audio Control ==
+
+$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL : Flag, if the definition should pull the current audio volume from the device
+$dvar(definition_alias_mediaplayer_template)_MAXVOLUME : The maximum value for the volume control
+$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE : Type of volume control: Slider,Buttons,None
+$dvar(definition_alias_mediaplayer_template)_VOLUMENOTIFICATION : Flag, if the device send volume change notification
+$dvar(definition_alias_mediaplayer_template)_EXTERNALVOLUMEVAR : Variable name to monitor, if not the standard is effected
+
+== Layout ==
+
+$dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE : The type of the media control bar (play/pause/stop): SMALL,EXTENDED 1,EXTENDED 2,None
+$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE : The type of the "favourites" block : TVICONS,APPBUTTONS,CMDBUTTONS
+$dvar(definition_alias_mediaplayer_template)_SHOWPOWERBUTTONS : Flag, if the Poweron/off buttons should be displayed (0/1)
+$dvar(definition_alias_mediaplayer_template)_SHOWSEARCHANDINPUT : Flag, if the seach und input buttons should be displayed (0/1)
+$dvar(definition_alias_mediaplayer_template)_SHOWCHANNELUPDOWN : Flag, if the channel up/down buttons should be displayed (0/1)
+$dvar(definition_alias_mediaplayer_template)_NAVIGATIONBAR : xml block name of the navigation bar
+
+== Menu items ==
+
+The configuration for the menu items, x is the menue button number with a value from one to 4
+
+$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[x] : Button text
+$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[x] : Button second text
+$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[x] : Button action/command
+
+== Button bar items ==
+
+There are for button bars with 4 buttons each. y is the number of the button bar (1 to 4) and x is the number of the button in the button bar (1 to 4)
+
+$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[y] : Flag , if the button bar should be displayed (0/1)
+$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[y][x] : Button text
+$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[y][x] : Button second text
+$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[y][x] : Button action/command
+
+== Number pad ==
+
+You can configure one number pad with 12 buttons
+
+$dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD : Flag , if the number pad should be displayed (0/1)
+$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[x] : Button text
+$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[x]"  : Button action/command
+
+== Other Settings ==
+
+$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE : The name of the picture/device log 480px x 240px with tansparent background is best
+$dvar(definition_alias_mediaplayer_template)_PRETTYNAME : The name of the device
+
+== Gestures ==
+
+You can configure up to 14 gestures.
+
+$dvar(definition_alias_mediaplayer_template)_USEGESTURES" : Flag, if gestures should be applied (0/1)
+$dvar(definition_alias_mediaplayer_template)_INVERTGESTURES" : Flag, if left/right/up/down should be inverted
+$dvar(definition_alias_mediaplayer_template)_GESTURENAME[x]" : Predefined gesture name
+$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[x]" : Gesture action
+
+= How to import =
+
+You can import the definition by using the following syntax in your definition.xml
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+
+  <def_parameter>
+    <definitionvars>{"definition_alias_mediaplayer_template":"Mediaplayer",
+                     "definition_alias_appfavorites_template":"App Favorites",
+                     "definition_alias_cmdfavorites_template":"Command Favorites",
+                     "definition_alias_tvfavorites_template":"TV Channels"}</definitionvars>
+  </def_parameter>
+
+  <definitionimports>
+    <definition
+        importlanguages ="1"
+        importpages     ="1"
+        importsettings  ="1"
+        importactions   ="1"
+        alias           ="$dvar(definition_alias_mediaplayer_template)"
+        definitionvars  ='{"definition_alias_mediaplayer_template":     "$dvar(definition_alias_mediaplayer_template)",
+                           "definition_alias_appfavorites_template":    "$dvar(definition_alias_appfavorites_template)",
+                           "definition_alias_cmdfavorites_template":    "$dvar(definition_alias_cmdfavorites_template)",
+                           "definition_alias_tvfavorites_template":     "$dvar(definition_alias_tvfavorites_template)"}'>mediaplayer_template</definition>
+  </definitionimports>
+
+</syntaxhighlight></div>
+
+= Elements =
+The following elements are defined to use:
+
+Usual there no specific elements of the defintion to use (Use the whole defintion)
+
+
+= Pages =
+
+The following pages are defined:
+
+* Page_Device_$dvar(definition_alias_mediaplayer_template)
+* Page_Device_$dvar(definition_alias_mediaplayer_template)_Popup
+* Page_Device_$dvar(definition_alias_mediaplayer_template)_Button_Popup
+
+= Actions =
+
+The following actions are defined:
+
+* FKT WaitForReady_$dvar(definition_alias_mediaplayer_template)
+* Check if $dvar(definition_alias_mediaplayer_template) on
+* FKT GetVolume_$dvar(definition_alias_mediaplayer_template)
+* FKT SwitchOn $dvar(definition_alias_mediaplayer_template)
+* FKT SwitchOff $dvar(definition_alias_mediaplayer_template)
+* FKT SwitchOn $dvar(definition_alias_mediaplayer_template) Force
+* FKT SwitchOff $dvar(definition_alias_mediaplayer_template) Force
+* FKT Reboot $dvar(definition_alias_mediaplayer_template)
+* Send Volume Up $dvar(definition_alias_mediaplayer_template)
+* Send $dvar(definition_alias_mediaplayer_template) Search
+* Send Volume Down $dvar(definition_alias_mediaplayer_template)
+* Set Volume $dvar(definition_alias_mediaplayer_template) by Widget
+* FKT Send Switch Channel $dvar(definition_alias_mediaplayer_template)
+* Set Trigger $dvar(definition_alias_mediaplayer_template)
+* Delete Trigger $dvar(definition_alias_mediaplayer_template)
+* Update Volume Widgets by external volume var $dvar(definition_alias_mediaplayer_template)
+* Set Gestures $dvar(definition_alias_mediaplayer_template)
+* Switch Second Caption Page_Device_$dvar(definition_alias_mediaplayer_template)
+* Add NavigationBar $dvar(definition_alias_mediaplayer_template)
+* ShowPage $dvar(definition_alias_mediaplayer_template)_Popup
+* Set SetupTrigger
+* Set SetupTrigger $dvar(definition_alias_mediaplayer_template)
+
+WikiDoc:End
+'''

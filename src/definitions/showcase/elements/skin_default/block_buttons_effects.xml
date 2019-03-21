@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Frame" type="PICTURE" posx="left" posy="top" picturenormal="background boxes" />
+  <element name="Anchor Effects Buttons" type="ANCHOR" posx="center" posy="middle" width="%80" height="%90">
+    <elements>
+      <element name="Button Slide" type="BUTTON" posx="%50" posy="top"  height="%16.7" picturenormal="button wide*" action="Set Effect Slide"  caption="$lvar(showcase_10020)" />
+      <element name="Button Fade" type="BUTTON" posx="%50" posy="%20" height="%16.7" picturenormal="button wide*" action="Set Effect Fade"  caption="$lvar(showcase_10021)" />
+      <element name="Button Swap" type="BUTTON" posx="%50" posy="%40"  height="%16.7" picturenormal="button wide*" action="Set Effect Swap"  caption="$lvar(showcase_10022)" />
+      <element name="Button Wipe" type="BUTTON" posx="%50" posy="%60" height="%16.7" picturenormal="button wide*" action="Set Effect Wipe"  caption="$lvar(showcase_10023)" />
+      <element name="Button RiseIn" type="BUTTON" posx="%50" posy="%80"  height="%16.7" picturenormal="button wide*" action="Set Effect RiseIn"  caption="$lvar(showcase_10024)" />
+      <element name="Button FallOut" type="BUTTON" posx="%50" posy="bottom"  height="%16.7" picturenormal="button wide*" action="Set Effect FallOut"  caption="$lvar(showcase_10025)" />
+    </elements>
+  </element>
+</elements>
+

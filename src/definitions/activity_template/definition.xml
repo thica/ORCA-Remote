@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont>Sans</defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <support>http://www.orca-remote.org/forum/</support>
+    <installationhint></installationhint>
+    <orientations>landscape,portrait</orientations>
+    <definitionvars>{"definition_activity_template":"Activity Template"}
+    </definitionvars>
+  </def_parameter>
+  <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LS"></xi:include>
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
+    <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+  </pages>
+
+    <settings>
+        <setting title="$lvar(2001)"  type="section" />
+        <setting title="$lvar(activitytemplate_10050) 1"   desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[1]"    type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 1"   desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[1]"       type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 1"   desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[1]"  type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 2"   desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[2]"    type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 2"   desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[2]"       type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 2"   desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[2]"  type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 3"   desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[3]"    type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 3"   desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[3]"       type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 3"   desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[3]"  type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 4"   desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[4]"    type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 4"   desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[4]"       type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 4"   desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[4]"  type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 5"   desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[5]"    type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 5"   desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[5]"       type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 5"   desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[5]"  type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 6"   desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[6]"    type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 6"   desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[6]"       type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 6"   desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[6]"  type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 7"   desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[7]"    type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 7"   desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[7]"       type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 7"   desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[7]"  type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 8"   desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[8]"    type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 8"   desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[8]"       type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 8"   desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[8]"  type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 9"   desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[9]"    type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 9"   desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[9]"       type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 9"   desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[9]"  type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 10"  desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[10]"   type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 10"  desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[10]"      type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 10"  desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[10]" type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 11"  desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[11]"   type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 11"  desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[11]"      type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 11"  desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[11]" type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 12"  desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[12]"   type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 12"  desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[12]"      type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 12"  desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[12]" type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 13"  desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[13]"   type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 13"  desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[13]"      type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 13"  desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[13]" type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(activitytemplate_10050) 14"  desc="$lvar(activitytemplate_10051)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[14]"   type="picture"             default="transparentpic" />
+        <setting title="$lvar(activitytemplate_10052) 14"  desc="$lvar(activitytemplate_10053)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[14]"      type='scrolloptions'       default="" options='"$LANGUAGELIST"' allowtextinput='1' />
+        <setting title="$lvar(activitytemplate_10054) 14"  desc="$lvar(activitytemplate_10055)" var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[14]" type='scrolloptions'       default='Page_None'    options='"$PAGELIST"' allowtextinput='0'  />
+        <setting title="$lvar(2000)"  type="section" />
+
+    </settings>
+
+
+  <repositorymanager>
+    <entry>
+      <name>Activity Template</name>
+      <description language='English'>Template to add common activity commands</description>
+      <description language='German'>Template um Activitäten zu unterstützen</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/activity_template</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/activity_template.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>others</type>
+          <name>ORCA Core Files</name>
+        </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/activity_template/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/activity_template/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+</orca>

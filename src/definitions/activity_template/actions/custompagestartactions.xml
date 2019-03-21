@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <pagestartaction name="appstart">
+        <action name="Update Splash" string="showsplashtext" subtext="$lvar(455) $lvar(activitytemplate_10023)" />
+        <action name="Let's Initialize some helper vars" string="call FKT InitActivityVars" />
+        <action name="Update Splash" string="showsplashtext" />
+    </pagestartaction>
+    <pagestartaction name="definitionstart">
+        <action name="Add Navigation Bar" string="call Add NavigationBar $dvar(definition_activity_template)"/>
+        <action name="Set Start PAge" string="setvar DEFINITIONSTARTPAGE=Page_Devices_$dvar(definition_activity_template)" />
+    </pagestartaction>
+    <pagestartaction name="Page_Devices_$dvar(definition_activity_template)">
+      <action name="Disable Buttons on first page start" string="if $var(PAGESTARTCOUNT_$var(CURRENTPAGE))==1" />
+        <action name="Loop through all Devices" string="forin" varname="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[]"  dstvarname="TMPDEVICENAME" level="1" actionname="FKT DisableUnusedDeviceButtons" />
+      <action name="end if" string="endif" />
+      <action name="Set Default Keyhandler" string="if $var(PAGESTARTCOUNT_$var(CURRENTPAGE))==1" />
+        <action name="Loop through all Devices" string="forin" varname="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[]"  dstvarname="TMPDEVICEPAGE" level="1" actionname="FKT SetActivityDevicesKeyhandler" />
+      <action name="end if" string="endif" />
+    </pagestartaction>
+
+</includes>

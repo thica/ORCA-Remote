@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<orca>
+    <repositorymanager>
+        <entry>
+            <name>KODI Media Center (JSON)</name>
+            <description language='English'>LAN KODI Remote Control (using JSON/Websocket) (for mediaplayer template)</description>
+            <description language='German'>LAN KODI Fernbedienung (verwendet JSON/Websocket) (Für Mediaplayer Template)</description>
+            <author>Carsten Thielepape</author>
+            <version>3.70</version>
+            <minorcaversion>3.7.0</minorcaversion>
+            <sources>
+                <source>
+                    <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/kodi</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/wizard templates/kodi.zip</sourcefile>
+                    <targetpath>wizard templates/mediaplayer wizard</targetpath>
+                </source>
+            </sources>
+            <dependencies>
+                <dependency>
+                    <type>definitions</type>
+                    <name>Mediaplayer Wizard</name>
+                </dependency>
+                <dependency>
+                    <type>codesets</type>
+                    <name>KODI JSON (WEBSOCKET)</name>
+                </dependency>
+                <dependency>
+                    <type>codesets</type>
+                    <name>CEC control using Telnet</name>
+                </dependency>
+                <dependency>
+                    <type>interfaces</type>
+                    <name>Wake-On-LAN</name>
+                </dependency>
+            </dependencies>
+        </entry>
+    </repositorymanager>
+</orca>

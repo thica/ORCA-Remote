@@ -1,0 +1,52 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-eiscp
+WikiDoc:TOCTitle:eiscp (ONKYO)
+= eiscp =
+The eiscp interface sends commands via TCP to a ONKYO device (receivers, amps,..). The EISCP protocol is a proprietary protocol from ONKYO, the command set is huge. The full command set is implemented (not tested) using the ONKYO codeset file.
+The eiscp interface supports auto detection of your ONKYO device. This is the default setting (host=discover). You can also configure a specific IP address to target a specific ONKYO device, in case you have several of them.
+Notes on Power On
+The interface can power on you ONKYO device as well. For the power on command to work while the device is in standby, make sure you turn on the obtusely named Setup -> Hardware -> Network -> Network Control option. Without it, you can only connect to your receiver while it is already turned on.
+The Onkyo codeset file is complete, so there should be no need for changes.
+The interface itself is bi-directional. This means, that (after connected), the interface receives and passes various messages submitet by the device itself. To use them, you should set some triggers or varlinks.
+The eiscp interface supports triggers. The main command (3 char string) is used as the trigger.
+
+Some common trigger and varlink examples:
+Note: the varlink names will be computed by the varnames given by "IFA" and "IFV" for the audio and video information.
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+   <action name="Add Trigger Subwoofer Volume"  string="addtrigger"  triggername ="SWL" actionname="trigger_on_subwoofervolume"  retvar="subwoofervolume"    interface="eiscp" configname="ONKYO"/>
+   <action name="Add Trigger Center Volume"     string="addtrigger"  triggername ="CTL" actionname="trigger_on_centervolume"     retvar="centervolume"       interface="eiscp" configname="ONKYO"/>
+   <action name="Add Trigger Main Volume"       string="addtrigger"  triggername ="MVL" actionname="trigger_on_volume_main"      retvar="mainvolume"         interface="eiscp" configname="ONKYO"/>
+   <action name="Add Trigger Audio Effect"      string="addtrigger"  triggername ="LMD" actionname="trigger_on_effecttype"       retvar="effecttype"         interface="eiscp" configname="ONKYO"/>
+   <action name=""                              string="addtrigger"  triggername ="NAL" actionname="trigger_on_albumnamechanged" retvar="albumname"          interface="eiscp" configname="ONKYO"/>
+   <action name=""                              string="addtrigger"  triggername ="NTI" actionname="trigger_on_titlenamechanged" retvar="titlename"          interface="eiscp" configname="ONKYO"/>
+   <action name=""                              string="addtrigger"  triggername ="NTM" actionname="trigger_on_streamposchanged" retvar="streampos"          interface="eiscp" configname="ONKYO"/>
+   <action name=""                              string="addtrigger"  triggername ="NJA" actionname="trigger_on_picturechange"       retvar=""                interface="eiscp" configname="ONKYO"/>
+   <action name=""                              string="addtrigger"  triggername ="NLS" actionname="trigger_on_netlistchange"       retvar=""                interface="eiscp" configname="ONKYO"/>
+   <action name=""                              string="addtrigger"  triggername ="NAT" actionname="trigger_on_artistnamechanged"   retvar="artistname"      interface="eiscp" configname="ONKYO"/>
+   <action name=""                              string="addtrigger"  triggername ="IFA" actionname="trigger_on_mainaudioinfomation" retvar="audioinfo"       interface="eiscp" configname="ONKYO"/>
+   <action name=""                              string="addtrigger"  triggername ="IFV" actionname="trigger_on_mainvideoinfomation" retvar="videoinfo"       interface="eiscp" configname="ONKYO"/>
+
+   <action name=""                              string="addvarlink"  varname="audioinfo_audio_input_codec"        linktype="widget" widgetname="AudioInfo Textvalue Input Codec" />
+   <action name=""                              string="addvarlink"  varname="audioinfo_audio_input_frequency"    linktype="widget" widgetname="AudioInfo Textvalue Input Frequency" />
+   <action name=""                              string="addvarlink"  varname="audioinfo_audio_input_channels"     linktype="widget" widgetname="AudioInfo Textvalue Input Channels" />
+   <action name=""                              string="addvarlink"  varname="audioinfo_audio_output_effect"      linktype="widget" widgetname="AudioInfo Textvalue Output Effect" />
+   <action name=""                              string="addvarlink"  varname="audioinfo_audio_output_channels"    linktype="widget" widgetname="AudioInfo Textvalue Output Channels" />
+   <action name=""                              string="addvarlink"  varname="audioinfo_audio_input_selection"    linktype="widget" widgetname="AudioInfo Textvalue Input Selection" />
+   <action name=""                              string="addvarlink"  varname="videoinfo_video_input_selection"    linktype="widget" widgetname="VideoInfo Textvalue Input Selection" />
+   <action name=""                              string="addvarlink"  varname="videoinfo_video_input_resolution"   linktype="widget" widgetname="VideoInfo Textvalue Input Resolution" />
+   <action name=""                              string="addvarlink"  varname="videoinfo_video_input_color"        linktype="widget" widgetname="VideoInfo Textvalue Input Color" />
+   <action name=""                              string="addvarlink"  varname="videoinfo_video_input_bits"         linktype="widget" widgetname="VideoInfo Textvalue Input Bits" />
+   <action name=""                              string="addvarlink"  varname="videoinfo_video_output_selection"   linktype="widget" widgetname="VideoInfo Textvalue Output Selection" />
+   <action name=""                              string="addvarlink"  varname="videoinfo_video_output_resolution"  linktype="widget" widgetname="VideoInfo Textvalue Output Resolution" />
+   <action name=""                              string="addvarlink"  varname="videoinfo_video_output_color"       linktype="widget" widgetname="VideoInfo Textvalue Output Color" />
+   <action name=""                              string="addvarlink"  varname="videoinfo_video_output_bits"        linktype="widget" widgetname="VideoInfo Textvalue Output Bits" />
+   <action name=""                              string="addvarlink"  varname="videoinfo_video_output_effect"      linktype="widget" widgetname="VideoInfo Textvalue Output Effect" />
+</syntaxhighlight></div>
+
+The settings are self explained, please use "discover" as a host name (default setting), if you want the interface to discover your ONKYO device.
+
+WikiDoc:End
+'''

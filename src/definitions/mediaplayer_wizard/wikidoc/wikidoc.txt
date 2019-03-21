@@ -1,0 +1,83 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:DefinitionsForUser
+WikiDoc:Page:Userdescription Definition mediaplayer_wizard
+WikiDoc:TOCTitle:mediaplayer_wizard
+= Mediaplayer Wizard =
+The mediaplayer wizard definition is a helper definition to push mediaplayer wizard templates into the mediaplayer_template definition. This is a convinient way to use predefined settings without the need to create a new definition.
+On first start, you get a selection screen for the wizard templates. Later you can change the wizard templates in the definition settings. You should download the wizard templates befor you start this definition.
+
+[[File:mediaplayer_wizard_main.png|link=]]
+
+This definition has the following capabilities
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Capability
+! align="left" | Description
+|-
+|Orientation
+|Landscape and portrait
+|-
+|Screen Size
+|
+* small / landscape
+* small / portrait
+* large / landscape
+* large / portrait
+|-
+|Interfaces
+|No Interfaces
+|}</div>
+
+= Settings =
+
+This definition has the following settings:
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|Template to use
+|The wizard template to push into the mediaplayer_template
+|}</div>
+WikiDoc:End
+'''
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Definitions
+WikiDoc:Page:Reference Definition mediaplayer_wizard
+WikiDoc:TOCTitle:mediaplayer_wizard
+
+The mediaplayer wizard definition is a helper definition to push mediaplayer wizard templates into the mediaplayer_template definition.
+
+= definitionvars =
+
+This definition uses the following definitionvars:
+
+* "definition_alias_mediaplayer_wizard" : default value = "Mediaplayer Wizard"
+* "definition_alias_mediaplayer_template" : default value = "Mediaplayer"
+* "definition_alias_appfavorites_template" : default value = "App Favorites"
+* "definition_alias_cmdfavorites_template" : default value = "Cmd Favorites"
+* "definition_alias_tvfavorites_template" : default value = "TV Channels"
+* "definition_templatename_mediaplayer_wizard" : default value = "$cookie(Mediaplayer Wizard_mediaplayer_template)"
+* "definition_templatepath_mediaplayer_wizard": default value = "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard"
+
+= Settings =
+
+$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template
+
+= elements =
+The following elements are defined for use:
+
+No common blocks
+
+= pages =
+The following pages are defined:
+
+= actions =
+The following actions are defined:
+
+WikiDoc:End
+'''

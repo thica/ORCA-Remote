@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(SCRIPTPATHSKINELEMENTS[tool_itach2keene])/pages/page_*" parse="xml" ></xi:include>
+  </pages>
+</orca>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface_setup>
+    <interface name="url">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="Port" parameter="905"/>
+            <setting name="Host" parameter="discover"/>
+            <setting name="Password" parameter=""/>
+            <setting name="User" parameter="root"/>
+            <setting name="TimeToClose" parameter="30"/>
+            <setting name="FNCodeset" parameter="CODESET_url_AQUOS.xml"/>
+            <setting name="DisableInterFaceOnError" parameter="0"/>
+            <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+            <setting name="Authorization" parameter="http_basic"/>
+            <setting name="DiscoverScriptName" parameter="discover_upnp"/>
+            <setting name="DISCOVER_UPNP_manufacturer" parameter="Sharp"/>
+        </configuration>
+    </interface>
+    <!--
+    <interface name="iTach">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="Port" parameter="4998"/>
+            <setting name="Host" parameter="192.168.1.2"/>
+            <setting name="Connector" parameter="3"/>
+            <setting name="Module" parameter="1"/>
+            <setting name="TimeToClose" parameter="10"/>
+            <setting name="FNCodeset" parameter="CODESET_infrared_ccf_AQUOSV1SIMPLE.xml"/>
+            <setting name="DisableInterFaceOnError" parameter="0"/>
+            <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+        </configuration>
+    </interface>
+    <interface name="Keene_Kira">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="Port" parameter="65432"/>
+            <setting name="Host" parameter="192.168.1.2"/>
+            <setting name="FNCodeset" parameter="CODESET_infrared_ccf_AQUOSV1SIMPLE.xml"/>
+            <setting name="TimeToClose" parameter="10"/>
+            <setting name="DisableInterFaceOnError" parameter="0"/>
+            <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+        </configuration>
+    </interface>
+    <interface name="ir_on_android">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="FNCodeset" parameter="CODESET_infrared_ccf_AQUOSV1SIMPLE.xml"/>
+        </configuration>
+    </interface>
+    -->
+</interface_setup>

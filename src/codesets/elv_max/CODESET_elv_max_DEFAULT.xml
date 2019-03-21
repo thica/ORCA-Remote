@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String -->
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>ELV Max</name>
+      <description language='English'>Default commandset for ELV MAX</description>
+      <description language='German'>Standard Kommandos für ELV MAX</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/elv_max/CODESET_elv_max_DEFAULT.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_elv_max_DEFAULT.zip</sourcefile>
+          <targetpath>codesets/elv_max</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>ELV MAX</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action string="codeset" name='clearcache'                  cmd='{"method": "clearcache",              "params": {}}'  />
+  <action string="codeset" name='getrooms'                    cmd='{"method": "getrooms",                "params": {}}'                       gdestvar='"elvmax_name","elvmax_rfaddress","elvmax_type"'  getvar='ORCAMULTI"name","rf_address","typestring"' />
+  <action string="codeset" name='getroomdevices'              cmd='{"method": "getroomdevices",          "params": {"room": "$cvar(room)"}}'  gdestvar='"elvmax_name","elvmax_rfaddress","elvmax_type"'  getvar='ORCAMULTI"name","rf_address","typestring"' />
+  <action string="codeset" name='getroomdevicesex'            cmd='{"method": "getroomdevicesex",        "params": {"room": "$cvar(room)"}}'  gdestvar='"elvmax_name","elvmax_rfaddress","elvmax_type"'  getvar='ORCAMULTI"name","rf_address","typestring"' />
+  <action string="codeset" name='getattribute'                cmd='{"method": "getattribute",            "params": {"rf_address": "$cvar(rf_address)","attributename":"$cvar(attributename)"}}' ldestvar='elvmax_attribute' gdestvar='"elvmax_attribute"'  getvar='result' />
+  <action string="codeset" name='getattributelist'            cmd='{"method": "getattributelist",        "params": {"rf_address": "$cvar(rf_address)","attributename":"$cvar(attributename)"}}' ldestvar='elvmax_attribute' gdestvar='"elvmax_attribute"'  getvar='resultlist' />
+  <action string="codeset" name='getattributelistex'          cmd='{"method": "getattributelist",        "params": {"rf_address": "$cvar(rf_address)","attributename":"$cvar(attributename)"}}' ldestvar='elvmax_attribute' gdestvar='"elvmax_attribute"'  getvar='resultlist' />
+  <action string="codeset" name='room_set_mode_auto'          cmd='{"method": "room_set_mode_auto",      "params": {"room": "$cvar(room)"}}'                                                              gdestvar='elvmax_result' getvar='result'  />
+  <action string="codeset" name='room_set_mode_manual'        cmd='{"method": "room_set_mode_manual",    "params": {"room": "$cvar(room)","temperature": "$cvar(temperature)"}}'                          gdestvar='elvmax_result' getvar='result'  />
+  <action string="codeset" name='room_set_mode_boost'         cmd='{"method": "room_set_mode_boost",     "params": {"room": "$cvar(room)"}}'                                                              gdestvar='elvmax_result' getvar='result'  />
+  <action string="codeset" name='room_set_mode_vacation'      cmd='{"method": "room_set_mode_vacation",  "params": {"room": "$cvar(room)"}}'                                                              gdestvar='elvmax_result' getvar='result'  />
+  <action string="codeset" name='device_set_mode_auto'        cmd='{"method": "device_set_mode_auto",    "params": {"rf_address": "$cvar(rf_address)"}}'                                                  gdestvar='elvmax_result' getvar='result'  />
+  <action string="codeset" name='device_set_mode_manual'      cmd='{"method": "device_set_mode_manual",  "params": {"rf_address": "$cvar(rf_address)","temperature": "$cvar(temperature)"}}'              gdestvar='elvmax_result' getvar='result'  />
+  <action string="codeset" name='device_set_mode_boost'       cmd='{"method": "device_set_mode_boost",   "params": {"rf_address": "$cvar(rf_address)"}}'                                                  gdestvar='elvmax_result' getvar='result'  />
+  <action string="codeset" name='device_set_mode_vacation'    cmd='{"method": "device_set_mode_vacation","params": {"rf_address": "$cvar(rf_address)"}}'                                                  gdestvar='elvmax_result' getvar='result'  />
+  <action name="ping" type="alias" cmd="getrooms" />
+</includes>
+

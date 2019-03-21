@@ -1,0 +1,10 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:StartWithOrca
+WikiDoc:Page:First Start
+WikiDoc:TOCTitle:6=First Start
+Starting from version 1.1, the ORCA installation package will not include definitions, fonts, skins, etc. On the first start of ORCA, ORCA will download these required files from the central online repository.  If this is successful, if very basic definition called „setup“  is launched. The main purpose of this definition is, to launch the configuration pages. Here the language can be changed and the desired definition could be selected and downloaded.
+You should select our definition at the start page. It will be downloaded and started immediatly. After start, you can adjust the language of ORCA and other settings as well. Maybe you need to configure the interfaces (eg Host names/ IP Adresses) used in your definition
+ORCA is linked by default to it’s own central repository, you could add other repository sources as well.
+WikiDoc:End
+'''

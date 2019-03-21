@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_1">Record Gestures</string>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_2">Record Gestures and store them into gestures.log</string>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_3">Record Gestures</string>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_4">Gestures</string>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_5">Your gestures will stored in the file 'gestures.log' in your ORCA directory</string>
+  </strings>
+

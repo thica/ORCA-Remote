@@ -1,0 +1,53 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:References
+WikiDoc:Page:Interfaces-General Information
+WikiDoc:TOCTitle:Description of ORCA standard interfaces
+= General information about interfaces =
+
+Interfaces are the communication gateway for ORCA to the real world. Using interfaces, you can send commands to your devices. As ORCA is designed to get used by mobile devices like tablets and phones, the communication for most of the interfaces is based on network  (LAN) commands. If your device, which you like to control, does not have ability to get controlled by LAN, you might a gateway hardware to convert LAN commands.
+
+Standard LAN interfaces are
+WikiDoc:TOC:Interfaces:List:sorted
+
+Interfaces, where you need further hardware are
+* Keene Kira: LAN to Infrared converter to control IR devices
+* iTach: LAN to Infrared converter to control IR devices
+
+Further interfaces, which might come in the future
+* Bluetooth
+
+Interfaces have (as a standard) two to three components:
+
+* The interface python code, which come from the developer of the interface
+* A config.ini file, which defines, which devices to control and how to communicate with them
+* A codeset file (optional), which defines, which commands to send to your devices
+
+Interfaces will be loaded as part of the used definition. You can download manually as well using the Online resources section of the settings.
+The config.ini file is part of your definition and is located in your definition folder. A default ini file will be created by the interface, when it gets used by your definition file. The config.ini file can be configured using the ORCA settings dialog.
+The codesets files can either be common or local to your definition. The requiered codeset files will be loaded as part of your definition. Local / customized codeset files needs to be placed in the directory, where the interface file of the defition is located. Some codeset files are ready to use (eg XBMC/Onkyo), others needs to get customize by you (eg Remoteghost). NEVER change the codeset files delivered with ORCA, they will be replaced at the next update.
+ORCA includes an interface the ITach IRDB to get access to a huge database of IR codes which can be imported and used by ORCA.
+
+* All codesets support the type='alias' attribute, where you can link to other codeset commands within the same codeset file.
+* All codesets support the preaction='xyz' attribute, where you can refer to another action to be executed before this action is executed (to chain actions)
+* All codesets support the type='wait' attribute, where you add a pause between chained actions
+* All codesets support the type="action" attribute, to run Orca actions, like variable manipulations
+
+Some interfaces are bi-directional, they are able to receive data from the device as well (eg. json-tcp/eiscp). Some interfaces also support triggers (eg. eiscp), which means, ORCA gets informed, when something on the device happens and you can do something on your definition (e.g. change the name of your currently played song)
+
+Some word to discover: Some interfaces support autodiscover. The discover settings are documents with the discover scripts. Below an example for the uPNP discover:
+The uPNP discover reduces matches / results from the discover results using the ...
+* discoverprettyname
+* discovermodels
+* discovermanufacturer
+... settings. Blank options will not be used. You could eg use the pretty name just to match a specific device, or just the manufacturer name to match all devices in the network of this manufacturer.
+Discover uses the upnp discover protocoll
+
+
+As an example:
+The iTach interface is an interface, which controls the iTach Infrared gateway to send IR commands to your devices
+You can configure multiple configurations to control eg a TV and an Amplifier. Each configuration uses a different codeset, which contains the commands and IR codes which are specific for your TV or Amplifier
+
+
+WikiDoc:End
+'''

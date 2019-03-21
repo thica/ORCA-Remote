@@ -1,0 +1,21 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:References
+WikiDoc:Page:Scripts-General Information
+WikiDoc:TOCTitle:Description of ORCA standard scripts
+= General information about scripts =
+
+Scripts can add additional functions to ORCA. In a simple view, you call a script by an action, and the script (optional) returns the result. Some scripts are used by ORCA itself, eg. some interfaces uses some discover scripts.
+
+Standard scripts are
+WikiDoc:TOC:Scripts:List:sorted
+
+Scripts have (as a standard) two components:
+
+* The scripts python code, which come from the developer of the scripts
+* A config.ini file, which contains the main parameter for the scripts
+
+To use a script, you need to add an action to your customcommands. Please use the [[Actions-RunScript|runscript]] documentation to understand, how to use scripts.
+
+WikiDoc:End
+'''

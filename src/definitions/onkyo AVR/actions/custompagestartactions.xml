@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_centervolume=0" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_subwoofervolume=0" />
+
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_audioinfo_audio_input_selection=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_audioinfo_audio_input_codec=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_audioinfo_audio_input_frequency=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_audioinfo_audio_input_channels=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_audioinfo_audio_output_effect=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_audioinfo_audio_output_channels=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo_video_input_selection=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo_video_input_resolution=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo_video_input_color=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo_video_input_bits=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_selection=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_resolution=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_color=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_bits=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo_video_output_effect=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_videoinfo=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_effecttype=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_artistname=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_albumname=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_titlename=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_streampos= -- | --" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_artistname=$lvar(onkyoAVR_10010)" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_albumname=$lvar(onkyoAVR_10011)" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_titlename=$lvar(onkyoAVR_10012)" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_streampos=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_songname=Song" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_mediapicture=nopic" />
+
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_CenterLevel_Min=-12"/>
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_CenterLevel_Max=12"/>
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Min=-15"/>
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Max=12"/>
+
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[0]=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[1]=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[2]=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[3]=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[4]=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[5]=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[6]=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[7]=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[8]=" />
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[9]=" />
+
+    <action name="Load Default Input String" string="modifyvar" varname="inputstring"  operator="load" parameter1="" parameter2="$dvar(definition_alias_onkyoavr)"/>
+    <action name="Set Default Model" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model=Onkyo" />
+    <action name="Set Default Device Picture" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Picture=device amplifier" />
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+    <action name="OnkyoAVR Definitions start here" />
+    <action name="Remove the Favourites settings from the imported setting"     string="removedefinitionsetting" definitionname="$dvar(definition_alias_mediaplayer_template)" settingname="$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE"/>
+    <action name="Remove the Layout settings from the imported setting"         string="removedefinitionsetting" definitionname="$dvar(definition_alias_mediaplayer_template)" settingname="$lvar(mediaplayertemplate_10064)"/>
+    <action name="Remove the tv channels settings from the imported setting"    string="removedefinitionsetting" definitionname="$dvar(definition_alias_tvfavorites_template)"/>
+    <action name="Init all Triggers" string="call FKT Set Trigger $dvar(definition_alias_mediaplayer_template)" />
+    <action name="OnkyoAVR Definitions ends here" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)">
+    <action name="Calling Onkyo Pagestart actions as a separate function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template) Onkyo" />
+  </pagestartaction>
+
+  <pagestopaction name="[Disabled] Page_Device_$dvar(definition_alias_mediaplayer_template)">
+    <action name="Call Pagestop Actions" string="call PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+  </pagestopaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Net">
+    <action name="Remove Captions of Record Button" string="setwidgetattribute" widgetname="Button Record" attributename="caption" attributevalue=""/>
+    <action name="Calling Onkyo Pagestart actions as a seperate function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+    <action name="Send Get Picture"  string="sendcommand" commandname="main.net-usb-jacket-art.query"  retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
+  </pagestartaction>
+
+  <pagestopaction name="[Disabled] Page_Device_$dvar(definition_alias_mediaplayer_template)_Net">
+    <action name="Remove the Trigger" string="call Delete Trigger $dvar(definition_alias_mediaplayer_template)" />
+  </pagestopaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Radio">
+    <action name="Calling Onkyo Pagestart actions as a seperate function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+    <action name="Send Get Picture"  string="sendcommand" commandname="main.net-usb-jacket-art.query"  retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
+
+  </pagestartaction>
+
+  <pagestopaction name="[Disabled] Page_Device_$dvar(definition_alias_mediaplayer_template)_Radio">
+    <action name="Delete Trigger" string="call Delete Trigger $dvar(definition_alias_mediaplayer_template)" />
+  </pagestopaction>
+
+   <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Popup">
+    <action name="Update all triggers" string="call $dvar(definition_alias_mediaplayer_template) Update All Triggers" />
+  </pagestartaction>
+
+</includes>

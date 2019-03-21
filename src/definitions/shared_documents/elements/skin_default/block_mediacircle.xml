@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Picture Media Circle'      type='PICTURE'    posx='left'   posy='top'  picturenormal='mediacircle' />
+  <element name='Button MediaCircle Up'     type='BUTTON'     posx='center' posy='%2.2'   width='%48'   height='%25' action='Send Up'     backgroundcolor='$var(nocolor)' fontsize='%h30'  iconfontsize='%h70' vtextalign='middle' caption='icon:osd_up' />
+  <element name='Button MediaCircle Down'   type='BUTTON'     posx='center' posy='bottom' width='%48'   height='%25' action='Send Down'   backgroundcolor='$var(nocolor)' fontsize='%h30'  iconfontsize='%h70' vtextalign='top' caption='icon:osd_down' />
+  <element name='Button MediaCircle Left'   type='BUTTON'     posx='%4'     posy='middle' width='%24.5' height='%37' action='Send Left'   backgroundcolor='$var(nocolor)' fontsize='%h30'  iconfontsize='%h50' htextalign='left' caption='icon:osd_left' />
+  <element name='Button MediaCircle Right'  type='BUTTON'     posx='%96'    posy='middle' width='%24.5' height='%37' action='Send Right'  backgroundcolor='$var(nocolor)' fontsize='%h30'  iconfontsize='%h50' htextalign='right' caption='icon:osd_right' />
+  <element name='TEXT MediaCircle OK'       type='TEXTFIELD'  posx='center' posy='%36'    width='%44'   height='%25' action='Send OK'                                     fontsize='%h60'  vtextalign='middle' caption='$lvar(1017)' textcolor='$var(fontcolor button)'/>
+  <element name='Button MediaCircle OK'     type='BUTTON'     posx='center' posy='%40'    width='%44'   height='%25' action='Send OK'     backgroundcolor='$var(nocolor)' caption='' />
+  <element name='Button MediaCircle Exit'   type='BUTTON'     posx='center' posy='%68'    width='%44'   height='%20' action='Send Exit'   backgroundcolor='$var(nocolor)' fontsize='%h40'  vtextalign='middle' caption='$lvar(1054)' />
+</elements>

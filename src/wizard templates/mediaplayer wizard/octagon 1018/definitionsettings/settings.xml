@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN"             default="iTach" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN"            default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON"          default="iTach" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON"         default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME"           default="iTach" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME"          default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"              default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND"        default="Send Ping" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"              default="device TV receiver"/>
+    <default var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"                 default="Octagon SAT Receiver" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD"              default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE"              default="SMALL" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE"             default="TVICONS" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"              default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_MAXVOLUME"                  default="100" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE"          default="Buttons" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[1]"          default="$lvar(1022)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[1]"           default="Send Info" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[2]"          default="$lvar(1027)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[2]"           default="Send Escape" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[3]"          default="$lvar(1024)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[3]"           default="Send Menu" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[4]"          default="$lvar(1056)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[4]"           default="Send EPG" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[4]"           default="1" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1]"           default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][1]"   default="$lvar(1061)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][1]"    default="Send Recordings" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][2]"   default="$lvar(1084)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][2]"    default="Send Resolution" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][3]"   default="$lvar(1057)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][3]"    default="Send Teletext Toggle" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][4]"   default="$lvar(3107)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][4]"    default="Send Source Radio" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2]"           default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][1]"   default="$lvar(1038)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][1]"    default="Send Previous TV Channel" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][2]"   default="$lvar(1077)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][2]"    default="Send Subtitles Toggle" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][3]"   default="$lvar(1078)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][3]"    default="Send Aspect" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][4]"   default="$lvar(1096)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][4]"    default="Send AVMode" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[3]"           default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][1]"   default="$lvar(1040)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][1]"    default="Send PIP Toggle" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][2]"   default="$lvar(1043)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][2]"    default="Send PIP Swap" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][3]"   default="$lvar(1044)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][3]"    default="Send PIP Select" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][4]"   default="$lvar(1083)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][4]"    default="Send Sleep" />
+</settings>
+

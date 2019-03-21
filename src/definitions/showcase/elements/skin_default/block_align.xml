@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Frame"     type="PICTURE"    posx="left"   posy="top"    width="%25" height="of:width:self:*0.5" picturenormal="background boxes" />
+  <element name="Textblock" type="TEXTFIELD"  posx="left"   posy="top"    width="%25" height="of:width:self:*0.5" caption='Top Left' htextalign='center' vtextalign='middle' />
+  <element name="Frame"     type="PICTURE"    posx="left"   posy="middle" width="%25" height="of:width:self:*0.5" picturenormal="background boxes" />
+  <element name="Textblock" type="TEXTFIELD"  posx="left"   posy="middle" width="%25" height="of:width:self:*0.5" caption='Center Left' htextalign='center' vtextalign='middle' />
+  <element name="Frame"     type="PICTURE"    posx="left"   posy="bottom" width="%25" height="of:width:self:*0.5" picturenormal="background boxes" />
+  <element name="Textblock" type="TEXTFIELD"  posx="left"   posy="bottom" width="%25" height="of:width:self:*0.5" caption='Bottom Left' htextalign='center' vtextalign='middle' />
+
+  <element name="Frame"     type="PICTURE"    posx="center" posy="top"    width="%25" height="of:width:self:*0.5" picturenormal="background boxes" />
+  <element name="Textblock" type="TEXTFIELD"  posx="center" posy="top"    width="%25" height="of:width:self:*0.5" caption='Top Center' htextalign='center' vtextalign='middle' />
+  <element name="Frame"     type="PICTURE"    posx="center" posy="middle" width="%25" height="of:width:self:*0.5" picturenormal="background boxes" />
+  <element name="Textblock" type="TEXTFIELD"  posx="center" posy="middle" width="%25" height="of:width:self:*0.5" caption='Center Center' htextalign='center' vtextalign='middle' />
+  <element name="Frame"     type="PICTURE"    posx="center" posy="bottom" width="%25" height="of:width:self:*0.5" picturenormal="background boxes" />
+  <element name="Textblock" type="TEXTFIELD"  posx="center" posy="bottom" width="%25" height="of:width:self:*0.5" caption='Bottom Center' htextalign='center' vtextalign='middle' />
+
+  <element name="Frame"     type="PICTURE"    posx="right"  posy="top"    width="%25" height="of:width:self:*0.5" picturenormal="background boxes" />
+  <element name="Textblock" type="TEXTFIELD"  posx="right"  posy="top"    width="%25" height="of:width:self:*0.5" caption='Top Right' htextalign='center' vtextalign='middle' />
+  <element name="Frame"     type="PICTURE"    posx="right"  posy="middle" width="%25" height="of:width:self:*0.5" picturenormal="background boxes" />
+  <element name="Textblock" type="TEXTFIELD"  posx="right"  posy="middle" width="%25" height="of:width:self:*0.5" caption='Center Right' htextalign='center' vtextalign='middle' />
+  <element name="Frame"     type="PICTURE"    posx="right"  posy="bottom" width="%25" height="of:width:self:*0.5" picturenormal="background boxes" />
+  <element name="Textblock" type="TEXTFIELD"  posx="right"  posy="bottom" width="%25" height="of:width:self:*0.5" caption='Bottom Right' htextalign='center' vtextalign='middle' />
+
+
+</elements>

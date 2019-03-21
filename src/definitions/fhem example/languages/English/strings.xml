@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="fhem_example_10004">Dimmer</string>
+  <string id="fhem_example_10005">Switch</string>
+  <string id="fhem_example_10006">All Dimmer</string>
+  <string id="fhem_example_10007">All Switches</string>
+
+  
+  <string id="fhem_example_10100">Label Dimmer</string>
+  <string id="fhem_example_10101">Screen Label for Dimmer</string>
+  <string id="fhem_example_10102">FHEM Name Dimmer</string>
+  <string id="fhem_example_10103">FHEM Device name for the dimmer</string>
+
+  <string id="fhem_example_10105">Label Switch</string>
+  <string id="fhem_example_10106">Screen Label for Switch</string>
+  <string id="fhem_example_10107">FHEM Name Switch</string>
+  <string id="fhem_example_10108">FHEM Device name for the Switch</string>
+
+  <string id="fhem_example_10110">Label All Dimmer</string>
+  <string id="fhem_example_10111">Screen Label for all Dimmer</string>
+  <string id="fhem_example_10112">Label All Switches</string>
+  <string id="fhem_example_10113">Screen Label for all Switches</string>
+
+</strings>

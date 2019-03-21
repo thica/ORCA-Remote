@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="definitionstart">
+    <action name="Set Start Page Name" string="setvar DEFINITIONSTARTPAGE=Page_Setup" />
+  </pagestartaction>
+  <pagestartaction name="Page_Settings_Download">
+    <action name="Load repository direcdtory"                       string="loadrepositorycontent" />
+  </pagestartaction>
+</includes>

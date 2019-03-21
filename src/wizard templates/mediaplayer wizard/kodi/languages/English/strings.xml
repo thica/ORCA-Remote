@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="kodi_10000">To discover your Kodi installation, you need enable uPnP in Kodi. Or you can enter the IP-Address of your Kodi-device. Further more you need to enable Services->Remote Control: Allow programs on other systems to control Kodi. Then you need to restart ORCA</string>
+
+  <string id="kodi_10001">Menue button label</string>
+  <string id="kodi_10002">Label for the menue button</string>
+  <string id="kodi_10003">Menue button action</string>
+  <string id="kodi_10004">Action for the menue button</string>
+  <string id="kodi_10005">Favorites Items</string>
+  <string id="kodi_10006">Kodi Windows</string>
+
+  <string id="kodi_10100">Page</string>
+
+  <string id="kodi_10500">KODI Powerbuttons</string>
+  <string id="kodi_10501">Show KODI Powerbuttons</string>
+  <string id="kodi_10508">Favorite #1</string>
+  <string id="kodi_10509">Direct Filter for movie genre favorites #1</string>
+  <string id="kodi_10510">Favorite #2</string>
+  <string id="kodi_10511">Direct Filter for movie genre favorites #2</string>
+  <string id="kodi_10512">Favorite #3</string>
+  <string id="kodi_10513">Direct Filter for movie genre favorites #3</string>
+  <string id="kodi_10520">Movie Genre Favorites</string>
+  <string id="kodi_10521">Movies</string>
+  <string id="kodi_10522">Videos</string>
+  <string id="kodi_10523">TV-Shows</string>
+  <string id="kodi_10524">Music-Videos</string>
+  <string id="kodi_10525">Music</string>
+  <string id="kodi_10526">Weather</string>
+  <string id="kodi_10527">Mark Watched</string>
+
+</strings>

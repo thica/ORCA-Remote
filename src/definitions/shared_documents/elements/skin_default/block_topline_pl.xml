@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Topline'             type='ANCHOR'     posx='left'       posy='top'  height='%5'>
+    <element name='Picture TOP Line'  type='PICTURE'    posx='left'       posy='top'  picturenormal='background boxes'  />
+    <element name='Clock'             type='TEXTFIELD'  posx='left'       posy='top' width='%40'  fontsize='%h40'  caption='$var(LOCALTIME)' clock='1' />
+    <element name="Button QuitApp"    type="BUTTON"     posx="right"      posy="top" width="of:height:self"  picturenormal='transparentpic' picturepressed="button wide pressed" fontsize='%h60' textcolor='$var(red)' caption='icon:close_window' action="askonexit" />
+    <element name="Button Settings"   type="BUTTON"     posx="of:toleft:last" posy="top" width="of:height:self"  picturenormal='transparentpic' picturepressed="button wide pressed" fontsize='%h60' caption='icon:settings'  action="gotosettingspage" />
+    <element name='Picture Transmit'  type='PICTURE'    posx='center' posy='top' width='of:height:self' picturenormal='transmit' enabled='0' />
+    <element name='Picture Wait'      type='PICTURE'    posx='center' posy='top' width='of:height:self' picturenormal='wait'     enabled='0' />
+
+  </element>
+</elements>

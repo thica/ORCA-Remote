@@ -1,0 +1,153 @@
+# -*- coding: utf-8 -*-
+#
+
+"""
+    ORCA Open Remote Control Application
+    Copyright (C) 2013-2019  Carsten Thielepape
+    Please contact me by : http://www.orca-remote.org/
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+from shutil import ignore_patterns
+
+
+from ORCA.scripts.Scripts                   import cScriptSettingPlugin
+from ORCA.scripttemplates.Template_Tools    import cToolsTemplate
+from ORCA.utils.FileName                    import cFileName
+from ORCA.utils.Path                        import cPath
+from ORCA.vars.Access                       import GetVar
+from ORCA.vars.Access                       import SetVar
+
+import ORCA.Globals as Globals
+
+'''
+<root>
+  <repositorymanager>
+    <entry>
+      <name>Tool Import Export</name>
+      <description language='English'>Tool to Im/Export Orca files</description>
+      <description language='German'>Tool um die Orca Files zu Im/Exportieren</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <skip>0</skip>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/scripts/tools/tool_importexport</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/scripts/tool_importexport.zip</sourcefile>
+          <targetpath>scripts/tools</targetpath>
+        </source>
+      </sources>
+      <skipfiles>
+        <file>scripts/tools/tool_importexport/script.pyc</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+</root>
+'''
+
+
+
+class cScript(cToolsTemplate):
+    """
+    WikiDoc:Doc
+    WikiDoc:Context:Scripts
+    WikiDoc:Page:Scripts-tools_importexport
+    WikiDoc:TOCTitle:Script Tools Import Export
+    = Tool to import or export the orca files =
+
+    This tool imports or exports the orca files
+    <div style="overflow:auto; ">
+    {| class="wikitable"
+    ! align="left" | Attribute
+    ! align="left" | Description
+    |}</div>
+
+    WikiDoc:End
+    """
+
+    def __init__(self):
+        cToolsTemplate.__init__(self)
+        self.uSubType        = u'IRDB'
+        self.uSortOrder      = u'auto'
+        self.uSettingSection = u'tools'
+        self.uSettingTitle   = u"Import Export"
+
+    def RunScript(self, *args, **kwargs):
+        cToolsTemplate.RunScript(self,*args, **kwargs)
+        if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
+            self.ShowPageExport(self, *args, **kwargs)
+
+    def ShowPageExport(self, *args, **kwargs):
+        SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="EXPORT")
+        oEvents = Globals.oEvents
+        aActions=oEvents.CreateSimpleActionList([{'name':'show page','string':'showpage','pagename':'Page_Export'},
+                                                 {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_8)', 'autoupdate':'1'}])
+        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+
+    def ShowPageImport(self, *args, **kwargs):
+        SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="IMPORT")
+        oEvents = Globals.oEvents
+        aActions=oEvents.CreateSimpleActionList([{'name':'show page','string':'showpage','pagename':'Page_Export'},
+                                                 {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_9)', 'autoupdate':'1'}])
+        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+
+    def Register(self, *args, **kwargs):
+        cToolsTemplate.Register(self,*args, **kwargs)
+        Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED", fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools Import Export")
+        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-IMPORT",   fNotifyFunction=self.ShowPageImport, uDescription="Script Tools Import / Export")
+        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-EXPORT",   fNotifyFunction=self.ShowPageExport, uDescription="Script Tools Import / Export")
+        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-DOIMPORT", fNotifyFunction=self.ImportOrcaFiles, uDescription="Script Tools Import / Export")
+        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-DOEXPORT", fNotifyFunction=self.ExportOrcaFiles, uDescription="Script Tools Import / Export")
+
+        oScriptSettingPlugin = cScriptSettingPlugin()
+        oScriptSettingPlugin.uScriptName   = self.uScriptName
+        oScriptSettingPlugin.uSettingName  = "ORCA"
+        oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
+        oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_4)"
+        oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_1)","desc": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_IMPORTEXPORT_3)","id":"button_notification_STARTSCRIPTIMPORTEXPORT-EXPORT"}]}',
+                                              u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_5)","desc": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_5)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_IMPORTEXPORT_7)","id":"button_notification_STARTSCRIPTIMPORTEXPORT-IMPORT"}]}']
+        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uScriptName,oScriptSettingPlugin=oScriptSettingPlugin)
+
+        self.LoadActions()
+
+    def LoadScriptPages(self,*args,**kwargs):
+        oDefinition = kwargs.get("definition")
+
+        if oDefinition.uName == Globals.uDefinitionName:
+            if self.oFnXML.Exists():
+                oDefinition.LoadFurtherXmlFile(self.oFnXML)
+
+    def ExportOrcaFiles(self,*args,**kwargs):
+        """
+        Export all Orca Files a given location
+        """
+        oPath = cPath(GetVar(uVarName="filebrowserfile")) + "/OrcaExport"
+        oPath.Delete()
+        if not Globals.oPathRoot.string in oPath.string:
+            fIgnore = ignore_patterns('*.ini', 'ORCA', '*.py*')
+            Globals.oPathRoot.Copy(oPath, fIgnore)
+
+    def ImportOrcaFiles(self,*args,**kwargs):
+        """
+        Import all ORCA files from a given location
+        """
+        oPath = cPath(GetVar(uVarName="filebrowserfile"))
+        oFnCheckFile = cFileName(oPath + 'actions') + 'actions.xml'
+        if oFnCheckFile.Exists():
+            if not Globals.bProtected:
+                oPath.Copy(Globals.oPathRoot)
+
+

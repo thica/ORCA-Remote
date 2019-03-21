@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ORCA>
+ <actions>
+    <action name="Create Repository">
+      <action name="Zip Files" string="call CreateZipFilesForRepository"/>
+      <action name="Upload Files" string="call UploadRepository" condition="$var(TMPBREAKLOOP)==0"/>
+    </action>
+
+    <action name="UploadRepository">
+      <action name="Create Array" string="sendnotification" notification='CREATEREPOSITORYVARARRAY' actionpars='{"baselocaldir":"$var(REPMAN_BASELOCALDIR)"}' />
+      <action name="SET" string="setvar LASTERRORCODE=0" />
+      <action name="SET" string="setvar RESULTERRORCODE=0" />
+      <action name="SET" string="setvar TMPPOS=0" />
+      <action name="Show the Progressbar"  string="showprogressbar" title="$lvar(5015)" message="Connecting to $var(REPMAN_FTPSERVER)" max="$var(REPMAN_CNTFILES)" />
+      <action name="Login To FTP Server"   string="executeftpcommand" command="connect" host="$var(REPMAN_FTPSERVER)" user="$var(REPMAN_FTPUSER)" password="$var(REPMAN_FTPPASSWORD)" ssl="$var(REPMAN_FTPSSL)"/>
+      <action name="SET" string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
+      <action name="if not failed"   string="if $var(LASTERRORCODE)==0" />
+        <action name="SET" string="setvar TMPBREAKLOOP=0" />
+        <action name="loop through all files" string="forin"  varname="REPMAN_LOCALFILENAMES[]" dstvarname="REPMAN_LOCALFILENAME" level="1" actionname="UploadRepository_Sub" breakvar="TMPBREAKLOOP" />
+        <action name="SET" string="setvar RESULTERRORCODE=$var(LASTERRORCODE)" />
+        <action name="Logout from FTP Server"   string="executeftpcommand" command="disconnect"  />
+      <action name="endif not failed" string="endif" />
+      <action name="Close the Progressbar" string="showprogressbar"  />
+      <action name="show message" string="showquestion" title="$lvar(595)" message="Repository updated!" actionyes="dummy" condition="'$var(TMPBREAKLOOP)'=='0'"/>
+      <action name="show message" string="showquestion" title="$lvar(595)" message="Failed to create repository" actionyes="dummy" condition="'$var(TMPBREAKLOOP)'!='0'"/>
+    </action>
+
+    <action name="UploadRepository_Sub">
+        <action name="increase scrollbar pointer"  string="modifyvar"             varname="TMPPOS" operator="increase"  parameter1="1" />
+        <action name="Update the Progressbar"      string="showprogressbar"       message="$var(REPMAN_LOCALFILENAME_value)" current="$var(TMPPOS)" />
+        <action name="Upload File to FTP Server"   string="executeftpcommand"     command="uploadfile" localfile="$var(REPMAN_LOCALFILENAME_value)" localbasefolder="$var(REPMAN_LOCALBASENAME)" remotebasefolder="$var(REPMAN_FTPPATH)"/>
+        <action name="Break loop on Error"         string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
+    </action>
+
+
+
+ </actions>
+</ORCA>

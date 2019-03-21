@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Button Return to Android' type='BUTTON'    width='of:width:Button Settings' height='of:height:Button Settings' posy='of:top:Button Settings' posx='of:toleft:Button Settings' picturenormal='transparentpic' picturepressed="button wide pressed" action='Show Page'  actionpars='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_android)"}'  fontsize='%h60' caption='icon:arrow_left' />
+</elements>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="kodi_10000">Um deine Kodi Installation automatisch zu erkennen, must Du den uPnP Server in Kodi aktivieren. Alternativ kannst Du die IP-Adresse des Kodi Gerätes eingeben. Zudem musst Du in Kodi unter Dienste->Fernbedienung die Steuerung über externe Programme zulasssen.</string>
+    
+  <string id="kodi_10001">Menu Taste Text</string>
+  <string id="kodi_10002">Text der Menu Taste</string>
+  <string id="kodi_10003">Menu Taste Befehl</string>
+  <string id="kodi_10004">Befehl der Menu Taste</string>
+  <string id="kodi_10005">Favoriten Tasten</string>
+  <string id="kodi_10006">Kodi Fenster</string>
+  <string id="kodi_10100">Seite</string>
+
+    <string id="kodi_10500">KODI Powerbuttons</string>
+  <string id="kodi_10501">Zeige KODI Powerbuttons</string>
+  <string id="kodi_10508">Favorit #1</string>
+  <string id="kodi_10509">Direkter Filter für Filmgenres Favorit #1</string>
+  <string id="kodi_10510">Favorit #2</string>
+  <string id="kodi_10511">Direkter Filter für Filmgenres Favorit #2</string>
+  <string id="kodi_10512">Favorit #3</string>
+  <string id="kodi_10513">Direkter Filter für Filmgenres Favorit  #3</string>
+  <string id="kodi_10520">Filmgenre Favoriten</string>
+  <string id="kodi_10521">Filme</string>
+  <string id="kodi_10522">Videos</string>
+  <string id="kodi_10523">TV-Serien</string>
+  <string id="kodi_10524">Musik-Videos</string>
+  <string id="kodi_10525">Musik</string>
+  <string id="kodi_10526">Wetter</string>
+  <string id="kodi_10527">Gesehen Markieren</string>
+
+</strings>

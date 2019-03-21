@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings xmlns:xi="http://www.w3.org/2001/XInclude">
+    <string id="mediaplayerwizard_10000">If you haven't you need to load some wizard templates from the repository</string>
+    <string id="mediaplayerwizard_10001">Will you really change to this template?</string>
+    <xi:include href="$dvar(definition_templatepath_mediaplayer_wizard)/$dvar(definition_templatename_mediaplayer_wizard)/languages/English/strings.xml" parse="xml" ></xi:include>
+</strings>

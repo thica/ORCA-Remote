@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="definitionstart">
+    <action name="Remove the tv channels settings from the imported setting" string="removedefinitionsetting" definitionname="$dvar(definition_alias_tvfavorites_template)"/>
+    <action name="set hint to add" string="setvar" varname="TEMPLATETHINT" varvalue="$lvar(generic_android_10000)" />
+    <action name="Add Template Installationshint" string="call FKT_AddTemplateInstallationsHint $dvar(definition_alias_mediaplayer_wizard)" />
+  </pagestartaction>
+</includes>

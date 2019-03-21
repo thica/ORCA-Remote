@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<orca>
+    <repositorymanager>
+        <entry>
+            <name>Generic Android Device (adb)</name>
+            <description language='English'>Android Remote Control (using adb/TCP) (for mediaplayer template)</description>
+            <description language='German'>Android Fernbedienung (verwendet adb/TCP) (for mediaplayer template)</description>
+            <author>Carsten Thielepape</author>
+            <version>3.70</version>
+            <minorcaversion>3.7.0</minorcaversion>
+            <skip>0</skip>
+            <sources>
+                <source>
+                    <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/android_adb</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/wizard templates/android_adb.zip</sourcefile>
+                    <targetpath>wizard templates/mediaplayer wizard</targetpath>
+                </source>
+            </sources>
+            <dependencies>
+                <dependency>
+                    <type>codesets</type>
+                    <name>Android adb Default</name>
+                </dependency>
+                <dependency>
+                    <type>definitions</type>
+                    <name>Mediaplayer Wizard</name>
+                </dependency>
+            </dependencies>
+        </entry>
+    </repositorymanager>
+</orca>

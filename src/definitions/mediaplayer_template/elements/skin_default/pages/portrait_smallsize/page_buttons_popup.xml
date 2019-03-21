@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page name='Page_Device_$dvar(definition_alias_mediaplayer_template)_Button_Popup'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+    <interface>$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)</interface>
+    <configname>$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)</configname>
+    <popup>1</popup>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
+    <element name="Anchor Inner" type="ANCHOR" posx="center" posy="middle" width="%95" height="%95">
+      <element name="Frame" type="PICTURE"  picturenormal="background boxes" />
+      <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%10" height="of:width:self" picturenormal="button wide*" action="gotolastpage" fontsize='%h50' caption="icon:close_window" />
+      <element name="Button Exit" type="BUTTON" posx="left"  posy="top" width="%10" height="of:width:self" picturenormal="button wide*" action='Send Exit' fontsize='%h40'  vtextalign='middle' caption='$lvar(1054)' />
+      <element name="Anchor Frame" type="ANCHOR" posx="center" posy="middle" width="%95" height="%95">
+        <element name='Picture Transmit'  type='PICTURE'    posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%4' height='of:width:self' picturenormal='transmit' enabled='0' />
+        <element name='Picture Wait'      type='PICTURE'    posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%4' height='of:width:self' picturenormal='wait' enabled='0' />
+          <element name='Anchor TV Buttons' type='ANCHOR' posy='top'  posx='center' width='of:height:self' height='%47'>
+          <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_buttonbars.xml" parse="xml" />
+        </element>
+        <element name='Anchor TV Buttons' type='ANCHOR' posy='bottom'  posx='center' width='of:height:self' height='%47'>
+            <xi:include href="$var(DEFINITIONPATHSKINELEMENTS[tvfavorites_template])/block_tv_channels.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE)==TVICONS" />
+        </element>
+        <element name='Anchor App Buttons' type='ANCHOR' posy='bottom'  posx='center' width='of:height:self' height='%47'>
+            <xi:include href="$var(DEFINITIONPATHSKINELEMENTS[appfavorites_template])/block_buttons_appstart.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE)==APPBUTTONS" />
+        </element>
+        <element name='Anchor Cmd Buttons' type='ANCHOR' posy='bottom'  posx='center' width='of:height:self' height='%47'>
+            <xi:include href="$var(DEFINITIONPATHSKINELEMENTS[cmdfavorites_template])/block_buttons_cmdstart.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE)==CMDBUTTONS" />
+        </element>
+
+      </element>
+    </element>
+  </elements>
+</page>

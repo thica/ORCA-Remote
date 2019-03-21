@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <setting title="Enigma2" type='section' />
+
+    <setting title="$lvar(enigma2_10001)" desc="$lvar(enigma2_10002)" var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_ROOT"     type="scrolloptions" default="telnet" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(enigma2_10003)" desc="$lvar(enigma2_10004)" var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_ROOT"    type="string" default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <setting title="$lvar(enigma2_10011)" desc="$lvar(enigma2_10012)" var="$dvar(definition_alias_mediaplayer_template)_reloadbouquet"      type="buttons"  buttons='[{"title":"$lvar(enigma2_10013)","id":"button_reloadbouquet"}]'/>
+    <setting title="Functions ($dvar(definition_alias_mediaplayer_template)"   type='title' />
+    <setting title="F#1"  desc="Function $lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM1_TEXT"  type='scrolloptions'  default='F1'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="F#1"  desc="Function $lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM1_CMD"   type='actions'        default='Send Key F1'                           allowtextinput='1'  />
+    <setting title="F#2"  desc="Function $lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM2_TEXT"  type='scrolloptions'  default='F2'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="F#2"  desc="Function $lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM2_CMD"   type='actions'        default='Send Key F2'                           allowtextinput='1'  />
+    <setting title="F#3"  desc="Function $lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM3_TEXT"  type='scrolloptions'  default='F3'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="F#3"  desc="Function $lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM3_CMD"   type='actions'        default='Send Key F3'                           allowtextinput='1'  />
+    <setting title="F#4"  desc="Function $lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM4_TEXT"  type='scrolloptions'  default='F4'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="F#4"  desc="Function $lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM4_CMD"   type='actions'        default='Send Key F4'                           allowtextinput='1'  />
+    <setting title="F#5"  desc="Function $lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM5_TEXT"  type='scrolloptions'  default='F5'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="F#5"  desc="Function $lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM5_CMD"   type='actions'        default='Send Key F5'                           allowtextinput='1'  />
+    <setting title="F#6"  desc="Function $lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM6_TEXT"  type='scrolloptions'  default='F6'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="F#6"  desc="Function $lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM6_CMD"   type='actions'        default='Send Key F6'                           allowtextinput='1'  />
+    <setting title="F#7"  desc="Function $lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM7_TEXT"  type='scrolloptions'  default='F7'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="F#7"  desc="Function $lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM7_CMD"   type='actions'        default='Send Key F7'                           allowtextinput='1'  />
+    <setting title="F#8"  desc="Function $lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM8_TEXT"  type='scrolloptions'  default='F8'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="F#8"  desc="Function $lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM8_CMD"   type='actions'        default='Send Key F8'                           allowtextinput='1'  />
+    <setting title="F#9"  desc="Function $lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM9_TEXT"  type='scrolloptions'  default='F9'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="F#9"  desc="Function $lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_FUNCTIONMENUEITEM9_CMD"   type='actions'        default='Send Key F9'                           allowtextinput='1'  />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN"                default="url" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN"               default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON"             default="url" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON"            default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME"              default="url" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME"             default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCOMMAND"                default="Send Power On" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"                 default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND"           default="Send Ping" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"                 default="device TV receiver" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"                    default="Sat Receiver (E2)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD"                 default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE"                 default="SMALL" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE"                default="TVICONS" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"                 default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_MAXVOLUME"                     default="100" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE"             default="Slider" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[1]"             default="icon:info" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[1]"              default="Send Info" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[1]"       default="$lvar(1022)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[2]"             default="icon:escape" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[2]"              default="Send Escape" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[2]"       default="$lvar(1027)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[3]"             default="icon:menu" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[3]"              default="Send Menu" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[3]"       default="$lvar(1024)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[4]"             default="icon:epg" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[4]"              default="Send EPG" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[4]"       default="$lvar(1056)" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1]"                default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][1]"        default="icon:pip:::$lvar(1041):::$lvar(1042):::$lvar(1044):::$lvar(1043)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[1][1]"  default="$lvar(1040):::$lvar(1041):::$lvar(1042):::$lvar(1044):::$lvar(1043)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][1]"         default="Send PIP On:::Send PIP Off:::Send PIP Select:::Send PIP Swap" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][2]"        default="icon:audiochannel" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[1][2]"  default="$lvar(1071)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][2]"         default="Send Audiochannel Select" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][3]"         default="icon:teletext" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[1][3]"   default="$lvar(1057)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][3]"          default="Send Teletext Toggle" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][4]"         default="icon:source:::icon:source_tv:::icon:source_radio:::icon:source_hdmi:::icon:source_pvr:::$lvar(3016)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[1][4]"   default="$lvar(1082):::$lvar(3106):::$lvar(3107):::$lvar(3110):::$lvar(3128):::$lvar(3016)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][4]"          default="Send Source TV:::Send Source Radio:::Send Source HDMI 1:::Send PVR:::Send Start Kodi $dvar(definition_alias_mediaplayer_template)" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2]"                 default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][1]"         default="icon:prev_channel" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][1]"   default="$lvar(1038)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][1]"          default="Send Previous TV Channel" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][2]"         default="icon:subtitles" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][2]"   default="$lvar(1077)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][2]"          default="Send Subtitles Toggle" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][3]"         default="icon:aspect" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][3]"   default="$lvar(1078)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][3]"          default="Send Aspect" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][4]"         default="icon:timer" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][4]"   default="$lvar(1115)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][4]"          default="Send Timer" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[3]"                 default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][1]"         default="icon:context" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[3][1]"   default="$lvar(1112)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][1]"          default="Send Context" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][2]"         default="icon:user" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[3][2]"   default="$lvar(1111)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][2]"          default="Send User" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][3]"         default="icon:functions:::F1:::F2:::F3:::F4:::F5:::F6:::F7:::F8:::F9:::" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[3][3]"   default="$lvar(enigma2_10005):::F1:::F2:::F3:::F4:::F5:::F6:::F7:::F8:::F9:::" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][3]"          default="Send Key F1:::Send Key F1:::Send Key F2:::Send Key F3:::Send Key F4:::Send Key F5:::Send Key F6:::Send Key F7:::Send Key F8:::Send Key F9" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][4]"         default="icon:help" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[3][4]"   default="$lvar(1116)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][4]"          default="Send Help" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[4]"                 default="1" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"                 default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"                 default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[10]"      default="&#60;" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[10]"       default="Send Key &#60;" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[11]"      default="&#62;" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[11]"       default="Send Key &#62;" />
+
+
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][1]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][2]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][3]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][4]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][5]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][6]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][7]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][8]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][9]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][10]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][11]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][12]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][13]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][14]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][15]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][16]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][17]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][18]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][19]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][20]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][21]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][22]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][23]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][24]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][25]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][26]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][27]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][28]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][29]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][1]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][2]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][3]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][4]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][5]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][6]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][7]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][8]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][9]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][10]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][11]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][12]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][13]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][14]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][15]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][16]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][17]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][18]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][19]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][20]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][21]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][22]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][23]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][24]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][25]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][26]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][27]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][28]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][29]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][1]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][2]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][3]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][4]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][5]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][6]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][7]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][8]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][9]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][10]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][11]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][12]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][13]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][14]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][15]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][16]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][17]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][18]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][19]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][20]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][21]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][22]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][23]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][24]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][25]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][26]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][27]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][28]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][29]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][1]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][2]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][3]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][4]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][5]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][6]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][7]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][8]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][9]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][10]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][11]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][12]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][13]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][14]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][15]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][16]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][17]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][18]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][19]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][20]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][21]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][22]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][23]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][24]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][25]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][26]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][27]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][28]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][29]"      default="discover" />
+
+
+
+</settings>
+

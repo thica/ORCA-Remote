@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="kodionandroid_10000">You need to tell ORCA the network address to your Android device to work with this definition. You have to enable the developer mode on your Android device. Please go to settings, then choose the android-adb interface and adjust the DEVICE setting. Then you need to restart ORCA.</string>
+</strings>

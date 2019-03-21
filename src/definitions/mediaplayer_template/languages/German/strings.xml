@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+    <!--Custom Strings -->
+    <string id="mediaplayertemplate_10001">Menu Taste Text</string>
+    <string id="mediaplayertemplate_10002">Text der Menu Taste</string>
+    <string id="mediaplayertemplate_10003">Menu Taste Befehl</string>
+    <string id="mediaplayertemplate_10004">Befehl der Menu Taste</string>
+    <string id="mediaplayertemplate_10005">Befehl</string>
+    <string id="mediaplayertemplate_10009">Tasten Leiste</string>
+    <string id="mediaplayertemplate_10010">Zeige Tasten Leiste</string>
+    <string id="mediaplayertemplate_10011">Zeige die Leiste für Tastenbefehle</string>
+    <string id="mediaplayertemplate_10012">Leisten Tasten Text</string>
+    <string id="mediaplayertemplate_10013">Text der Taste auf der Leiste</string>
+    <string id="mediaplayertemplate_10014">Leisten Tasten Befehl</string>
+    <string id="mediaplayertemplate_10015">Befehl der Leisten Taste</string>
+    <string id="mediaplayertemplate_10016">Menu Taste zweiter Text</string>
+    <string id="mediaplayertemplate_10017">Text der Menu Taste (alternativer Text)</string>
+    <string id="mediaplayertemplate_10018">Leisten Tasten zweiter Text</string>
+    <string id="mediaplayertemplate_10019">Text der Taste auf der Leiste (alternativer Text)</string>
+
+    <string id="mediaplayertemplate_10020">Ein/Ausschalt Kontrolle</string>
+    <string id="mediaplayertemplate_10021">Einschaltbefehl</string>
+    <string id="mediaplayertemplate_10022">Befehl um das Gerät einzuschalten</string>
+    <string id="mediaplayertemplate_10023">Ausschaltbefehl</string>
+    <string id="mediaplayertemplate_10024">Befehl um das Gerät auszuschalten</string>
+
+    <string id="mediaplayertemplate_10047">Lautstärke Kontrolle</string>
+    <string id="mediaplayertemplate_10048">Wähle, wie die Lautstärke geregelt werden soll</string>
+    <string id="mediaplayertemplate_10049">Andere Einstellungen</string>
+    <string id="mediaplayertemplate_10050">Maximale Lautstärke</string>
+    <string id="mediaplayertemplate_10051">Maximale Lautstärke, wenn der Schieberegler/Slider verwendet ird</string>
+    <string id="mediaplayertemplate_10052">Einschalts-Kontroll Befehl</string>
+    <string id="mediaplayertemplate_10053">Befehl um festzustellen, ob das Gerät eingeschaltet ist</string>
+    <string id="mediaplayertemplate_10054">Gerätebild</string>
+    <string id="mediaplayertemplate_10055">Anzuzeigendes Gerätebild</string>
+    <string id="mediaplayertemplate_10056">Zeige Nummernfeld</string>
+    <string id="mediaplayertemplate_10057">Zeige das Nummernfeld (1234567890)</string>
+    <string id="mediaplayertemplate_10058">Zeige Media Leiste</string>
+    <string id="mediaplayertemplate_10059">Zeige die Media Leiste (play/pause/stop)</string>
+    <string id="mediaplayertemplate_10060">Kanalfavoriten anzeigen</string>
+    <string id="mediaplayertemplate_10061">Zeige den Block mit den Kanal-Favoriten</string>
+    <string id="mediaplayertemplate_10062">Lautstärke Kontrolle</string>
+    <string id="mediaplayertemplate_10063">Leisten Tasten</string>
+    <string id="mediaplayertemplate_10064">Layout</string>
+    <string id="mediaplayertemplate_10065">Lautstärke Meldung</string>
+    <string id="mediaplayertemplate_10066">Das Gerät meldet automatisch an ORCA, wenn die Lautstärke geändert wird</string>
+    <string id="mediaplayertemplate_10067">Geräte Eingangskanal</string>
+    <string id="mediaplayertemplate_10068">Wechsel zu diesem Einganskanal nach Gerätestart</string>
+
+    <string id="mediaplayertemplate_10070">Nummernfeld</string>
+    <string id="mediaplayertemplate_10072">Nummernfeld Tasten Text</string>
+    <string id="mediaplayertemplate_10073">Text der Nummerfeld Taste</string>
+    <string id="mediaplayertemplate_10074">Nummernfeld Tasten Befehl</string>
+    <string id="mediaplayertemplate_10075">Befehl der Nummernfeld Taste</string>
+
+    <string id="mediaplayertemplate_10080">Zeige Ein/Schalt Tasten</string>
+    <string id="mediaplayertemplate_10081">Zeige die Geräte Ein/Schalt Tasten</string>
+    <string id="mediaplayertemplate_10083">Zeige Suche und Eingabe Felder</string>
+    <string id="mediaplayertemplate_10084">Zeige die Elemente zum Suchen und zur Text-Eingabe</string>
+    <string id="mediaplayertemplate_10085">Zeige TV Kanäle Auf/Ab</string>
+    <string id="mediaplayertemplate_10086">Zeige die TV Kanäle Auf/Ab Tasten</string>
+    <string id="mediaplayertemplate_10087">Navigations Leiste</string>
+    <string id="mediaplayertemplate_10088">Wähle den Typ der Navigations Leiste</string>
+
+    <string id="mediaplayertemplate_10090">Gerätename</string>
+    <string id="mediaplayertemplate_10091">Schöner Gerätename für Meldungen</string>
+    <string id="mediaplayertemplate_10092">Externe Lautstärke Variable</string>
+    <string id="mediaplayertemplate_10093">Falls angegeben, werde die Lautstärke Elemente durch diese Variable gesetzt</string>
+
+
+</strings>

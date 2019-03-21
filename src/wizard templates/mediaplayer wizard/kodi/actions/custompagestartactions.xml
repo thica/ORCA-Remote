@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+    <action name="Initialize Value" string="setvar" varname="$dvar(definition_alias_mediaplayer_template)_SUBTITLESTATE"  varvalue="1" />
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+    <action name="Update Splash" string="showsplashtext" subtext="$lvar(454) $dvar(definition_alias_mediaplayer_template)" />
+    <action name="Set Start Page" string="setvar" varname="DEFINITIONSTARTPAGE" varvalue="Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+
+    <!-- we remove the TV settings, we might reenable this if the Kodi codeset supports TV -->
+    <action name="Remove the tv channels settings from the imported setting"    string="removedefinitionsetting" definitionname="$dvar(definition_alias_tvfavorites_template)"/>
+    <action name="Remove the Buttonbar1 settings from the imported setting"     string="removedefinitionsetting" definitionname="$dvar(definition_alias_mediaplayer_template)" settingname="$lvar(mediaplayertemplate_10009) 1"/>
+    <action name="Remove the Buttonbar2 settings from the imported setting"     string="removedefinitionsetting" definitionname="$dvar(definition_alias_mediaplayer_template)" settingname="$lvar(mediaplayertemplate_10009) 2"/>
+    <action name="Remove the Buttonbar3 settings from the imported setting"     string="removedefinitionsetting" definitionname="$dvar(definition_alias_mediaplayer_template)" settingname="$lvar(mediaplayertemplate_10009) 3"/>
+    <action name="Remove the Buttonbar4 settings from the imported setting"     string="removedefinitionsetting" definitionname="$dvar(definition_alias_mediaplayer_template)" settingname="$lvar(mediaplayertemplate_10009) 4"/>
+
+    <action name="Remove the Numberpad settings from the imported setting"      string="removedefinitionsetting" definitionname="$dvar(definition_alias_mediaplayer_template)" settingname="$lvar(mediaplayertemplate_10070)"/>
+    <action name="Update Splash" string="showsplashtext" />
+    <action name="Set $dvar(definition_alias_mediaplayer_template) Search Action"    string="setwidgetattribute" widgetname="SearchInputfield@Page_Device_$dvar(definition_alias_mediaplayer_template)" attributename="action" attributevalue="Send $dvar(definition_alias_mediaplayer_template) Search"  />
+
+    <action name ="Replace Channel Up   to Pg Up Action"    string="setwidgetattribute" widgetname="Button Channel Up@Page_Device_$dvar(definition_alias_mediaplayer_template)"   attributename="action" attributevalue="Send Page Up"/>
+    <action name ="Replace Channel Down to Pg Down Action"  string="setwidgetattribute" widgetname="Button Channel Down@Page_Device_$dvar(definition_alias_mediaplayer_template)" attributename="action" attributevalue="Send Page Down"/>
+    <action name ="Set Channel Up   to Pg Up Action long"   string="setwidgetattribute" widgetname="Button Channel Up@Page_Device_$dvar(definition_alias_mediaplayer_template)"   attributename="action" attributevalue="Send Page First" touchtype="long"/>
+    <action name ="Set Channel Down to Pg Down Action long" string="setwidgetattribute" widgetname="Button Channel Down@Page_Device_$dvar(definition_alias_mediaplayer_template)" attributename="action" attributevalue="Send Page Last" touchtype="long"/>
+    <action name ="Set New Channel Text"                   string="setwidgetattribute" widgetname="Text Channel@Page_Device_$dvar(definition_alias_mediaplayer_template)" attributename="caption" attributevalue="$lvar(kodi_10100)"/>
+
+    <action name="set hint to add" string="setvar" varname="TEMPLATETHINT" varvalue="$lvar(kodi_10000)" />
+    <action name="Add Template Installationshint" string="call FKT_AddTemplateInstallationsHint $dvar(definition_alias_mediaplayer_wizard)" />
+
+    <action1 name="test" string="sendcommand" commandname="getavailableresolutions"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
+
+
+  </pagestartaction>
+
+ <!--
+  <pagestartaction1 name="Page_Device_$dvar(definition_alias_mediaplayer_template)">
+    <action name="" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+  </pagestartaction1>
+
+  <pagestopaction1 name="Page_Device_$dvar(definition_alias_mediaplayer_template)">
+    <action name="" string="call PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+  </pagestopaction1>
+  -->
+</includes>

@@ -1,0 +1,222 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:StartWithOrca
+WikiDoc:Page:The setup dialog
+WikiDoc:TOCTitle:8=The setup dialog
+
+Configuration of ORCA settings will be done by the settings dialog. As default there should be a button in your Definiton to call the settings dialog.
+
+* On Android, you should have a device button to call the settings
+* On a PC environment, you can press F1  to call the settings
+
+There are several sections within the settings
+
+* Section ORCA
+* Section Definition (optional)
+* Section Info
+* Section Tools
+* Section Resources
+* Section Kivy
+
+= Section ORCA =
+
+This section contains all settings for the ORCA Application
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+| Section "Initialisation"
+|-
+|Language
+|Choose the ORCA GUI language. English is the default language. You can install further (available) languages using the Resources sections
+|-
+|Regional Settings
+|This refers to the selected language. Choose your region to ensure proper display of date &  time
+|-
+|Select Definition
+|The definition (remote control) you would like to use. You can install further (available) definitions using the Resources sections
+|-
+|Manage Definition
+|Here you can copy/rename/delete a definition
+|-
+|Path to ORCA files
+|Here you can change the path to the downloaded ORCA files. Note: ORCA uses always the orca.ini at the original download location.
+|-
+|Skin
+|Here you can change the used skin. You can install further (available) skins using the Resources sections
+|-
+|Interfaces
+|Here yo can change the settings of the used interfaces. Only the used interfaces by your definiton will be shown here. All interface settings belongs to your current definition.
+|-
+|Early page load
+|All pages used by your definition must be loaded and initialised. As this takes some time, you can choose, if this should happen at application start, or scheduled later after start.
+|-
+|Page load delay
+|If you choose a scheduled page load, this parameters defines the interval in seconds for loaded the next page
+|-
+|Ignore Atlas
+|By default, ORCA creates an "ATLAS" file, which you can see like an image cache for the skin images. If you do not want ORCA to create ATLAS files, set this to "Off".
+*Note: ATLAS Files are not available on Apple devices.
+*Note: You need to delete the ATLAS files, if you changed the skin images
+|-
+|Cache Definition
+|Orca is able to cache your definition xml files for faster loading.
+*Note: You need to delete the definition cache files, if you changed xml files of your definition
+|-
+|Adjust screen ratio
+|Every definition is made for a specific screen ratio. If your device is not matching these screen ratio, there are several options how to handle this
+* Center: The layout will be shown centered on the screen. Ratios will be kept, and you see a border either top/bottom or left/right
+* Top/Left: The layout will be shown aligned to the top left corner of the screen. Ratios will be kept, and you see a border either bottom or right
+* Stretch: The layout will be scaled to fit to the screen. Ratios will be adjusted. Round Picture elements might get elliptic.
+* Resize: On Windows devices only (Windows/MacOS). The window will be resized to match definitions ratio.
+|-
+| Section "Behaviour"
+|-
+|Touch
+|ORCA can either perform action when an element has been touched (touch down), or when the finger has been releasd (touch up). If you select the touch down option, you always get a single touch and a double touch notification on double touches.
+|-
+|Touch
+|Android Only: If you device can vibrate, you can activate vibration on touches
+|-
+|Repeat touch ini delay
+|Orca support repeating touches (eg. you keep your finger pressed on a button (touch down only). This is the delay in seconds, after a long touch is recognized as a repeating touch
+|-
+|Repeat touch continuous delay
+|This is delay for repeating commands on long touch. Note: ORCA is queue based, so all touch events are placed into a queue. If execution of a command takes longer than the continuous delay, you might see actions excetuted even after you stopped the long touch.
+|-
+| Section "Resume"
+|-
+|Check for network connectivity
+|Orca recognizes, when your device is going on sleep/standby. Some devices (depends on configuration), supends their WLAN connection on sleep/standby. To prevent, that you send commands over wlan before the WLAN connection is reconnected, you can ask ORCA to check for it and you get a waiting message until the WLAN has been connected again.
+|-
+|IP adress to check
+|To verify WLAN connection, ORCA sends a ping to a specific adress. You can set this IP adrress here. Recommendation: The gateway adress is a good start.
+|-
+| Section "Presentation"
+|-
+|Clock with seconds
+|You can set, if the time is displayed with or without seconds
+|-
+| Section "Sound Volumes"
+|You can set the volume for the different ORCA sounds
+|-
+| Section "Repositories"
+|You can set the online address for up to 5 different repositories. The directories of all repositories are used to download further online resources. The ORCA repository is used as a preset.
+|}
+
+= Section Definition (Optional) =
+
+This section contains all settings for your definition. If your definition does not have any settings, this section is missing.
+
+= Section Info =
+
+This section shows some useful information regarding ORCA and the definition. You can show the logfile as well.
+
+= Section Tools =
+
+This sections give you access to some tools. You can clear the ATLAS or definitions cache, or you can record your own gestures.
+
+= Section Kivy =
+
+This section contains all settings for the KIVY Framework, which is used by ORCA.
+
+
+
+= The config.ini file =
+
+The config.ini files should look similar to the following content:
+
+ <nowiki>
+[kivy]
+keyboard_repeat_delay = 300
+keyboard_repeat_rate = 30
+log_dir = logs
+log_enable = 1
+log_level = debug
+log_name = kivy_%y-%m-%d_%_.txt
+window_icon =
+keyboard_mode =
+keyboard_layout = qwerty
+config_version = 6
+
+[graphics]
+display = -1
+fullscreen = 1
+height = 1200
+left = 0
+maxfps = 60
+multisamples = 2
+position = auto
+rotation = 0
+show_cursor = 1
+top = 0
+width = 1920
+resizable = 1
+
+[input]
+mouse = mouse
+wm_touch = wm_touch
+wm_pen = wm_pen
+
+[postproc]
+double_tap_distance = 20
+double_tap_time = 250
+ignore = []
+jitter_distance = 0
+jitter_ignore_devices = mouse,mactouch,
+retain_distance = 50
+retain_time = 0
+
+[widgets]
+scroll_timeout = 250
+scroll_distance = 20
+scroll_friction = 1.
+
+[modules]
+
+[ORCA]
+rootpath =
+language = German
+locales = Deutschland
+definition = default
+skin = ORCA_silver_hires
+initpagesatstartup = 0
+disableinterfaceonerror = 0
+touch = Down
+delayedpageinitinterval = 2
+startrepeatdelay = 0.8
+contrepeatdelay = 0.05
+checkfornetwork = 0
+checknetworkaddress = http://173.194.70.100</nowiki>
+
+Normally, there is no need to adjust the ini file manually, as you can set all the values using the settings dialog
+
+You can adjust/create the following values to your needs:
+
+= The parameters =
+
+Windows only:
+
+The fullscreen parameter sets the windows behaviour of ORCA:
+
+{| class="wikitable"
+! align="left" | Config Var
+! width=40% align="center" | Value
+! width=40% align="left"| Description
+|-
+|fullscreen
+|align="center"  | 0
+|Sets ORCA to windowed mode (windows only)
+|-
+|fullscreen
+|align="center"  | 1
+|Sets ORCA to fullscreen mode (windows only)
+|-
+|width and height
+|align="center"  | Resolution in pixels
+|Sets the resolution for Orca (windows only) windowed and fullscreen mode
+|}
+
+WikiDoc:End
+'''

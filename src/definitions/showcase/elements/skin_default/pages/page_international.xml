@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_International">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+
+    <element name='Frame Left' type='ANCHOR' posx='%5' posy='%40' width='%45' height='%75' >
+      <element name='Frame top' type='ANCHOR' posy='top' height="of:width:self:*0.45" >
+        <element name="Textblock" type="TEXTFIELD"  posy="top"              height="of:width:self:*0.1" fontsize='%h50'                  caption='Chinese:' htextalign='left' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='你好世界' htextalign='right' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Japanese:' htextalign='left' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='こんにちは世界' htextalign='right' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Korean:' htextalign='left' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='안녕 세상' htextalign='right' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Hindi:' htextalign='left' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='हैलो दुनिया' htextalign='right' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Greek:' htextalign='left' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='Γεια σου κόσμο' htextalign='right' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Arab:' htextalign='left' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='مرحبا بالعالم' htextalign='right' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Russian:' htextalign='left' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='Привет мир' htextalign='right' vtextalign='top' />
+        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='And much more' htextalign='left' vtextalign='top' />
+      </element>
+    </element>
+
+    <element name="Textblock" type="TEXTFIELD" posx="%10" posy="%95" height="%12" width="%90"  fontsize='%h35'  caption='ORCA is supporting those languages, this does not mean, that the translations are available!' htextalign='left' vtextalign='top' />
+
+  </elements>
+</page>

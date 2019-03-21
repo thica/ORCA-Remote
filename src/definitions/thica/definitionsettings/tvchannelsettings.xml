@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <!--  TV Channels settings-->
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[1]"  default="1"  rem="ARD"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[1]"     default="$var(RESOURCEPATH)/tvlogos/das erste.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[2]"  default="2"  rem="ZDF"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[2]"     default="$var(RESOURCEPATH)/tvlogos/zdf.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[3]"  default="3"  rem="WDR"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[3]"     default="$var(RESOURCEPATH)/tvlogos/wdr duesseldorf.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[4]"  default="4"  rem="RTL"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[4]"     default="$var(RESOURCEPATH)/tvlogos/rtl hessen.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[5]"  default="5"  rem="SAT1"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[5]"     default="$var(RESOURCEPATH)/tvlogos/sat 1.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[6]"  default="6"  rem="RTL2"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[6]"     default="$var(RESOURCEPATH)/tvlogos/rtl2.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[7]"  default="7"  rem="Pro 7"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[7]"     default="$var(RESOURCEPATH)/tvlogos/pro 7.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[8]"  default="8"  rem="Kabel 1"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[8]"     default="$var(RESOURCEPATH)/tvlogos/kabel eins.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[9]"  default="9"  rem="Vox"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[9]"     default="$var(RESOURCEPATH)/tvlogos/vox.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[10]" default="10" rem="Arte"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[10]"    default="$var(RESOURCEPATH)/tvlogos/arte.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[11]" default="11" rem="3SAT"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[11]"    default="$var(RESOURCEPATH)/tvlogos/3sat.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[12]" default="12" rem="SIXX"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[12]"    default="$var(RESOURCEPATH)/tvlogos/sixx.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[13]" default="13" rem="ZDF Info"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[13]"    default="$var(RESOURCEPATH)/tvlogos/zdfinfo.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[14]" default="14" rem="Das Vierte / Disney"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[14]"    default="$var(RESOURCEPATH)/tvlogos/disney channel.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[15]" default="15" rem="Super RTL"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[15]"    default="$var(RESOURCEPATH)/tvlogos/super rtl.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[16]" default="16" rem="EinsPlus"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[16]"    default="$var(RESOURCEPATH)/tvlogos/einsplus.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[17]" default="17" rem="DMAX"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[17]"    default="$var(RESOURCEPATH)/tvlogos/dmax.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[18]" default="18" rem="Euronrew"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[18]"    default="$var(RESOURCEPATH)/tvlogos/euronews german.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[19]" default="19" rem="Tagesschau 24"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[19]"    default="$var(RESOURCEPATH)/tvlogos/tagesschau24.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[20]" default="20" rem="Servus TV"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[20]"    default="$var(RESOURCEPATH)/tvlogos/servus tv.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[21]" default="23" rem="Kika"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[21]"    default="$var(RESOURCEPATH)/tvlogos/kika.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[22]" default="22" rem="Deluxe"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[22]"    default="$var(RESOURCEPATH)/tvlogos/deluxe television.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[23]" default="28" rem="MTV"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[23]"    default="$var(RESOURCEPATH)/tvlogos/mtv music television.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[24]" default="29" rem="VIVA"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[24]"    default="$var(RESOURCEPATH)/tvlogos/viva tv.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[25]" default="32" rem="RTL Nitro"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[25]"    default="$var(RESOURCEPATH)/tvlogos/rtl nitro.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[26]" default="31" rem="Pearl"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[26]"    default="$var(RESOURCEPATH)/tvlogos/pearl.tv.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[27]" default="37" rem="EinsFestival"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[27]"    default="$var(RESOURCEPATH)/tvlogos/einsfestival.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[28]" default="47" rem="ZDF Neo"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[28]"    default="$var(RESOURCEPATH)/tvlogos/zdf_neo.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[29]" default="48" rem="ZDF Kultur"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[29]"    default="$var(RESOURCEPATH)/tvlogos/zdf.kultur.png" />
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[30]" default="68" rem="N24"/>
+    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[30]"    default="$var(RESOURCEPATH)/tvlogos/n24.png" />
+
+</settings>
+

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_dimmer.xml" parse="xml" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[$dvar(philips_hue_dimmer_num)])==Dimmer" />
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_switch.xml" parse="xml" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[$dvar(philips_hue_dimmer_num)])==Switch" />
+
+</elements>

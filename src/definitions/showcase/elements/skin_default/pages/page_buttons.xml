@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Buttons">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+
+    <element name='Frame' type='ANCHOR' posx='center' posy='%90' width='%90' height='%80' >
+      <element name='Anchor Left' type='ANCHOR' width='%20' >
+        <element name="Button"          type="BUTTON"    posy="top"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle'  backgroundcolor='#00ff00ff'/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40' caption='$lvar(showcase_10010)' htextalign='center' vtextalign='top' />
+        <element name="Button"          type="BUTTON"    posy="%20"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' picturenormal="button wide*"/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2 " fontsize='%h40'  caption='$lvar(showcase_10011)' htextalign='center' vtextalign='top' />
+        <element name="ButtonBiState"   type="SWITCH"    posy="%40"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" destvar="STATUSBUTTONBISTATE" action="ToggleButtonBiState"/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10012)' htextalign='center' vtextalign='top' />
+        <element name="ButtonTriState"  type="BUTTON"    posy="%60"             height="of:width:self:*0.25" fontsize='%h50'  caption='$var(STATUSBUTTONTRISTATE)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" action="ToggleButtonTriState"/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10013)' htextalign='center' vtextalign='top' />
+        <element name="Dropdown"        type="DROPDOWN"  posy="of:bottom:last"  height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10016)'  captions='Option 1,Option 2,Option 3,Option 4' actions='ShowMessage_Option1,ShowMessage_Option2,ShowMessage_Option3,ShowMessage_Option4' htextalign='center' vtextalign='middle' picturenormal="button wide*" framecolor='$var(dimmed)' framewidth='500'/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10016)' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Anchor Left2' posx='%33' type='ANCHOR' width='%20' >
+        <element name="Button"          type="BUTTON"    posy="top"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' backgroundcolor='#ff00ffff'/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10010)' htextalign='center' vtextalign='top' />
+        <element name="Button"          type="BUTTON"    posy="%20"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' picturenormal="button wide framed*"/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10011)' htextalign='center' vtextalign='top' />
+        <element name="GroupButton1"    type="SWITCH"    posy="%40"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10027)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" destvar="STATUSGROUP1" group="GROUP" />
+        <element name="GroupButton2"    type="SWITCH"    posy="%50"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10028)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" destvar="STATUSGROUP2" group="GROUP" />
+        <element name="GroupButton3"    type="SWITCH"    posy="%60"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10029)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" destvar="STATUSGROUP3" group="GROUP" />
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10026)' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Anchor right2' posx='%66' type='ANCHOR' width='%20' >
+        <element name="Button"          type="BUTTON"    posy="top"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' backgroundcolor='#ffff00ff'/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.20" fontsize='%h40'  caption='$lvar(showcase_10010)' htextalign='center' vtextalign='top' />
+        <element name="Button"          type="BUTTON"    posy="%20" width="%60" posx="center" height="of:width:self"       fontsize='%h25'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' picturenormal="button round*"/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.20" fontsize='%h40'  caption='$lvar(showcase_10011)' htextalign='center' vtextalign='top' />
+        <element name="Button_Long"     type="BUTTON"    posy="of:bottom:last"  height="of:width:self:*0.25" fontsize='%h40'  caption='$lvar(showcase_10030)'  htextalign='center' vtextalign='middle' picturenormal="button wide framed*" action="ShowMessage_Singletap" actiondoubletap="ShowMessage_Doubletap" actionlongtap="ShowMessage_Longtap"/>
+        <element name="Button_UpDown"   type="BUTTON"    posy="of:bottom:last"  height="of:width:self:*0.25" fontsize='%h40'  caption='$lvar(showcase_10031)'  htextalign='center' vtextalign='middle' picturenormal="button wide framed*" actiondownonly="TextDown" actionuponly="TextUp" actionlongtap="NoAction"/>
+        <element name="Label_UpDown"    type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$var(UPDOWN)' htextalign='center' vtextalign='middle' />
+      </element>
+
+      <element name='Anchor right' posx='right' type='ANCHOR' width='%20' >
+        <element name="Button"          type="BUTTON"    posy="top"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' backgroundcolor='#ff0000ff'/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10010)' htextalign='center' vtextalign='top' />
+        <element name="Button"          type="BUTTON"    posy="%20" width="%60" posx="center" height="of:width:self"       fontsize='%h15'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' picturenormal="button round framed*"/>
+        <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10011)' htextalign='center' vtextalign='top' />
+        <element name="Button_Repeat"   type="BUTTON"    posy="of:bottom:last"  height="of:width:self:*0.25" fontsize='%h40'  caption='$lvar(showcase_10032)'  htextalign='center' vtextalign='middle' picturenormal="button wide framed*" action="Increase_Number_Repeat" actiondoubletap="ShowMessage_Doubletap" />
+        <element name="Label_IncValue"  type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$var(incvalue)' htextalign='center' vtextalign='middle' />
+      </element>
+
+    </element>
+
+  </elements>
+</page>

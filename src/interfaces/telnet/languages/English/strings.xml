@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="IFACE_TELNET_1">Result End String</string>
+  <string id="IFACE_TELNET_2">String, which identifies the end to result string</string>
+  <string id="IFACE_TELNET_3">Terminal type</string>
+  <string id="IFACE_TELNET_4">if required: type of the terminal session set set (eg: xterm)</string>
+
+</strings>

@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--$Revision$ -->
+<strings>
+
+  <repositorymanager>
+    <entry>
+      <name>German</name>
+      <description language='English'>German language strings</description>
+      <description language='German'>Deutsche Zeichenketten</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/languages/German</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/languages/German.zip</sourcefile>
+          <targetpath>languages</targetpath>
+        </source>
+      </sources>
+    </entry>
+  </repositorymanager>
+
+  <string id="0">Reserved</string>
+  <string id="1">Reserved</string>
+  <string id="2">Reserved</string>
+  <string id="3">Reserved</string>
+  <string id="4">Reserved</string>
+  <string id="5">Reserved</string>
+  <string id="6">Reserved</string>
+  <string id="7">Reserved</string>
+  <string id="8">Reserved</string>
+  <string id="9">Reserved</string>
+  <string id="11">Montag</string>
+  <string id="12">Dienstag</string>
+  <string id="13">Mittwoch</string>
+  <string id="14">Donnerstag</string>
+  <string id="15">Freitag</string>
+  <string id="16">Samstag</string>
+  <string id="17">Sonntag</string>
+  <string id="21">Januar</string>
+  <string id="22">Februar</string>
+  <string id="23">März</string>
+  <string id="24">April</string>
+  <string id="25">Mai</string>
+  <string id="26">Juni</string>
+  <string id="27">Juli</string>
+  <string id="28">August</string>
+  <string id="29">September</string>
+  <string id="30">Oktober</string>
+  <string id="31">November</string>
+  <string id="32">Dezember</string>
+  <string id="41">Mo</string>
+  <string id="42">Di</string>
+  <string id="43">Mi</string>
+  <string id="44">Do</string>
+  <string id="45">Fr</string>
+  <string id="46">Sa</string>
+  <string id="47">So</string>
+  <string id="51">Jan</string>
+  <string id="52">Feb</string>
+  <string id="53">Mär</string>
+  <string id="54">Apr</string>
+  <string id="55">Mai</string>
+  <string id="56">Jun</string>
+  <string id="57">Jul</string>
+  <string id="58">Aug</string>
+  <string id="59">Sep</string>
+  <string id="60">Okt</string>
+  <string id="61">Nov</string>
+  <string id="62">Dez</string>
+  <string id="71">N</string>
+  <string id="72">NNO</string>
+  <string id="73">NO</string>
+  <string id="74">ONO</string>
+  <string id="75">O</string>
+  <string id="76">OSO</string>
+  <string id="77">SO</string>
+  <string id="78">SSO</string>
+  <string id="79">S</string>
+  <string id="80">SSW</string>
+  <string id="81">SW</string>
+  <string id="82">WSW</string>
+  <string id="83">W</string>
+  <string id="84">WNW</string>
+  <string id="85">NW</string>
+  <string id="86">NNW</string>
+  <string id="87">VAR</string>
+
+  <string id="400">Lade Definition</string>
+  <string id="401">Lade Seiten</string>
+  <string id="403">Lade Aktionen</string>
+  <string id="404">Lade Gesten</string>
+  <string id="405">Starte Anwendungs Start Aktionen</string>
+  <string id="406">Starte Definitions Start Aktionen</string>
+  <string id="409">Registriere Schnittstellen</string>
+  <string id="410">Erzeuge Seiten</string>
+  <string id="411">Warte auf Rotation</string>
+  <string id="412">Parse Definition Dateien</string>
+  <string id="413">Lade Definition Sprache</string>
+  <string id="414">Lade Definition Einstellungen</string>
+  <string id="415">Kann keine ORCA Dateien unter %s finden und kann diese auch nicht herunterladen\nBitte den Standort für ORCA Dateien ändern oder online gehen</string>
+  <string id="416">Lade zentrales Archiv...</string>
+  <string id="417">Registriere Schriften</string>
+  <string id="418">Initialisiere Schnittstellen Einstellungen</string>
+  <string id="419">Keine ORCA Dateien gefunden</string>
+  <string id="420">Neue ORCA Installation gefunden!</string>
+  <string id="421">ORCA muss zentrale Komponenten herunterladen (Skins, Schriften, Sprachen, etc). Das können bis zu 20 MB an Dateien sein. Möchtest Du fortsetzen?</string>
+  <string id="422">Neue ORCA version gefunden</string>
+  <string id="423">Registriere Keyhandler Skripte</string>
+  <string id="424">Registriere Systems Skripte</string>
+  <string id="425">Registriere Tools Skripte</string>
+
+  <string id="450">Versuche Gerät zu finden</string>
+  <string id="451">Konnte kein Gerät finden</string>
+  <string id="453">Initialisiere Definition Parameter</string>
+  <string id="454">Anpassung der Definition</string>
+  <string id="455">Konfiguriere Aktivitäten</string>
+  <string id="456">Speichere Einstellungen</string>
+
+    <!--String for Settings Dialog -->
+  <string id="501">Initialisierung</string>
+  <string id="502">Sprache</string>
+  <string id="503">Sprache wählen</string>
+  <string id="504">Regionale Einstellungen</string>
+  <string id="505">Wähle Datum/Zeit Format</string>
+  <string id="506">Wähle Definition</string>
+  <string id="507">Wähle die Definition (Das Layout)</string>
+  <string id="508">Skin</string>
+  <string id="509">Wähle das Skin</string>
+  <string id="510">Frühes Laden der Seiten</string>
+  <string id="511">Initialisiere alle Seiten beim Programmstart (Langsameres starten, schnelleres Programm)</string>
+  <string id="512">Verzug beim laden</string>
+  <string id="513">Verzug in Sekunden, bevor weitere Seiten geladen werden</string>
+  <string id="514">Atlas ignorieren</string>
+  <string id="515">Atlas Dateien nicht nutzen oder erzeugen</string>
+  <string id="516">Konfigurieren</string>
+  <string id="517">Starten</string>
+  <string id="518">Bildschirm Seitenverhältniss anpassen</string>
+  <string id="519">Bildschirmdarstellung anpassen, falls das Definition Seitenverhältniss nicht zum Bildschirm passt</string>
+  <string id="520">Verhalten</string>
+  <string id="521">Druck/Klick</string>
+  <string id="522">Aktion beim Drücken (down), oder beim Loslassen (up) ausführen</string>
+  <string id="523">Definition managen</string>
+  <string id="524">Lade weitere Definitions online, kopiere, lösche oder umbenenne eine Definition</string>
+  <string id="525">Wiederholungs Startzeit</string>
+  <string id="526">Zeit in Sekunden, bis wann ein Druck wiederholt gesendet wird</string>
+  <string id="527">Wiederholungs Pause</string>
+  <string id="528">Pause in Sekunden, bis die nächste Wiederholung gesendet wird</string>
+  <string id="529">Interfaces bei Fehler deaktivieren</string>
+  <string id="530">Interfaces / Schnittstellen beim Auftreten eines Fehlers deaktivieren</string>
+  <string id="531">Pfad zu Orca Dateien</string>
+  <string id="532">Setzt den Pfad für die Orca Dateien (Definitionen, etc)</string>
+  <string id="533">Netzwerkverbindungen bei Pause trennen</string>
+  <string id="534">Alle Interfaces/Scripte bei Pause vom Netzwerk trennen</string>
+  <string id="535">Bildschirmgröße</string>
+  <string id="536">Bildschirmgröße bestimmen (0=automatisch)</string>
+  <string id="537">Langer Tastendruck</string>
+  <string id="538">Zeit in Sekunden, bis wann ein Druck als langer Druck erkannt wird</string>
+  <string id="539">Allgemein</string>
+
+  <string id="540">Aufwachen</string>
+  <string id="541">Prüfen auf Netzwerkverbindung</string>
+  <string id="542">Warten, bis eine Netzwerkverbindung vorhanden ist</string>
+  <string id="543">IP zum prüfen</string>
+  <string id="544">IP Adresse zum prüfen, ob eine Verbindung vorhanden ist (ping)</string>
+  <string id="545">Netzwerkverbindungs Status Ermittlung</string>
+  <string id="546">Methode zum Ermitteln des Netzwerk-Verbindungsstatus</string>
+  <string id="547">Powerstati</string>
+  <string id="548">Zeige die Stati von Geräten und Aktivitäten</string>
+  <string id="549">Zeige Powerstati</string>
+  <string id="550">Darstellung</string>
+  <string id="551">Uhrzeit mit Sekunden</string>
+  <string id="552">Uhrzeit mit oder ohne Sekunden anzeigen</string>
+  <string id="553">Langes Datumsformat</string>
+  <string id="554">Datum in Langform oder in Kurzfom anzeigen</string>
+  <string id="555">Langes Wochentagsformat</string>
+  <string id="556">Wochentage in Langform oder in Kurzfom anzeigen</string>
+  <string id="557">Langes Monatsnamenformat</string>
+  <string id="558">Monatsnamen in Langform oder in Kurzfom anzeigen</string>
+  <string id="560">Einstellungen</string>
+  <string id="561">Interfaces / Schnittstellen</string>
+  <string id="562">Interfaces / Schnittstellen konfigurieren</string>
+  <string id="563">Auswählen</string>
+  <string id="565">Ändere Konfiguration</string>
+  <string id="566">Konfiguration hinzufügen, löschen oder umbenennen</string>
+  <string id="567">Vibrieren</string>
+  <string id="568">Bei Berührung vibrieren</string>
+  <string id="569">Neu</string>
+  <string id="570">Löschen</string>
+  <string id="571">Umben.</string>
+  <string id="572">Werkzeuge</string>
+  <string id="573">Temporäre Dateien</string>
+  <string id="574">ATLAS Löschen</string>
+  <string id="575">Lösche compilierte Atlas (Grafik) Dateien</string>
+  <string id="576">ATLAS Löschen</string>
+  <string id="577">Skripte</string>
+  <string id="578">Skripte konfigurieren/ starten</string>
+
+  <string id="590">Sound Läutstärke (0-100) (0=disable)</string>
+  <string id="591">Start</string>
+  <string id="592">Start Sound Lautstärke</string>
+  <string id="593">Beenden</string>
+  <string id="594">Beenden Sound Lautstärke</string>
+  <string id="595">Fehler</string>
+  <string id="596">Fehler Sound Lautstärke</string>
+  <string id="597">Meldung</string>
+  <string id="598">Meldung Sound Lautstärke</string>
+  <string id="599">Frage</string>
+  <string id="600">Frage Sound Lautstärke</string>
+  <string id="601">Notiz</string>
+  <string id="602">Notiz Sound Lautstärke</string>
+  <string id="603">Klingel</string>
+  <string id="604">Klingel Sound Lautstärke</string>
+  <string id="605">Erfolg</string>
+  <string id="606">Erfolg Sound Lautstärke</string>
+  <string id="607">Klick</string>
+  <string id="608">Klick Sound Lautstärke</string>
+  <string id="611">Zeige credits</string>
+  <string id="633">Sonstiges</string>
+  <string id="634">Töne</string>
+  <string id="635">Wähle Töne</string>
+  <string id="652">Definitions Informationen</string>
+  <string id="653">Log</string>
+  <string id="654">Zeige ORCA Logdatei</string>
+  <string id="655">Zeige Logdatei</string>
+  <string id="656">Schließen</string>
+  <string id="657">Installations Hinweise</string>
+  <string id="658">Zeige Installations-Hinweise für diese Definition</string>
+  <string id="659">Zeige Hinweise</string>
+  <string id="660">Lizenz</string>
+  <string id="661">Zeige ORCA Licenz</string>
+  <string id="662">Zeige Lizenz</string>
+  <string id="666">Ihr Codeset</string>
+
+  <string id="670">Repositories</string>
+  <string id="671">Online Quelle</string>
+  <string id="672">Netzwerk Adresse for online Quellen</string>
+  <string id="673">Version</string>
+  <string id="674">Alle Repository Einträge wurden heruntergeladen</string>
+
+  <string id="675">Umbenennen</string>
+  <string id="676">Kopieren</string>
+  <string id="677">Löschen</string>
+  <string id="678">Online herunterladen</string>
+  <string id="679">Installierte Online Quellen</string>
+
+  <string id="680">Online Quellen</string>
+  <string id="681">Lade online Dateien</string>
+  <string id="682">Lade Definitionen, Interfaces, Codesets.. von Online Quellen</string>
+  <string id="683">Definitionen</string>
+  <string id="684">Codesets</string>
+  <string id="685">Skins</string>
+  <string id="686">Interfaces</string>
+  <string id="687">Sprachen</string>
+  <string id="688">Weiteres</string>
+  <string id="689">Töne</string>
+  <string id="691">Schriften</string>
+
+  <string id="694">Zu verwendende Online Quellen</string>
+  <string id="695">Online Quelle</string>
+  <string id="696">Lade Beschreibungen</string>
+  <string id="697">Lade die Beschreibungen von allen gewählten Quellen</string>
+  <string id="698">Konnte keine Beschreibungen laden</string>
+  <string id="699">Quellen</string>
+
+  <string id="700">Haupt Interface</string>
+  <string id="701">Haupt Interface für das Gerät</string>
+  <string id="702">Haupt Konfiguration</string>
+  <string id="703">Haupt Konfiguration für das Gerät</string>
+  <string id="704">Einschalt Interface</string>
+  <string id="705">Einschalt Interface für das Gerät</string>
+  <string id="706">Einschalt Konfiguration</string>
+  <string id="707">Einschalt Konfiguration für das Gerät</string>
+  <string id="708">Warten bis Gerät an</string>
+  <string id="709">Warten, bis das Gerät vollständig hochgefahren ist</string>
+  <string id="710">Lautstärke holen</string>
+  <string id="711">Lautstärke vom Gerät holen</string>
+  <string id="716">Einstellungen ändern</string>
+  <string id="717">Einstellungen der Haupt-Definition</string>
+  <string id="718">Einstellungen der importierten Definitionen</string>
+
+  <string id="720">Zeige Discover Resultate</string>
+  <string id="721">Zeige detaillierte Ergebnisse von Discovery Funktionen</string>
+  <string id="722">Ermittle</string>
+  <string id="723">Lautstärke Interface</string>
+  <string id="724">Zu benutzendes Interface um die Lautstärke zu regeln</string>
+  <string id="725">Lautstärke Konfiguration</string>
+  <string id="726">Konfigurationsname um die Lautstärke zu regeln</string>
+  <string id="727">Discover Befehl</string>
+  <string id="728">Befehl, um autodiscover zu starten</string>
+  <string id="729">Ermittle forciert</string>
+  <string id="731">Gesten</string>
+  <string id="732">Benutze Gesten</string>
+  <string id="733">Gesten umkehren</string>
+  <string id="734">Kehre die Hoch/Runter/Links/Rechts Gesten um (müssen an Stelle 1-4 stehen)</string>
+  <string id="735">Gesten Name</string>
+  <string id="736">Name der Geste</string>
+  <string id="737">Gesten Befehl</string>
+  <string id="738">Befehl für die Geste</string>
+  <string id="739">Gesten in dieser Definition aktivieren</string>
+  <string id="742">Wähle aus sendcommand Befehlsliste</string>
+  <string id="743">Wähle aus vollständiger Befehlsliste</string>
+  <string id="744">Wähle Codeset Befehl</string>
+
+  <string id="750">Typ</string>
+  <string id="751">Version</string>
+  <string id="752">Aktualisieren</string>
+  <string id="753">Alle Aktualisieren</string>
+  <string id="754">Discover Script</string>
+  <string id="755">Zu nutzendes Discover Script für Discover</string>
+
+  <string id="760">Discover für Definition neu starten</string>
+  <string id="761">Ermittele die in dieser Definition verwendeten Geräte</string>
+
+
+    <!--Button Strings -->
+  <string id="1001">Einschalten</string>
+  <string id="1002">Ausschaltem</string>
+  <string id="1003">Ein/Ausschalten</string>
+  <string id="1026">Zurück</string>
+  <string id="1038">Letzter Kanal</string>
+  <string id="1050">Untertitel An/Aus)</string>
+  <string id="1051">Untertitel An</string>
+  <string id="1052">Untertitel Aus</string>
+  <string id="1053">Untertitel wahl</string>
+  <string id="1059">Kanal</string>
+  <string id="1060">Aufnahmen</string>
+  <string id="1061">TV Aufn.</string>
+  <string id="1064">Vorh. Kapitel</string>
+  <string id="1065">Nächstes Kapitel</string>
+  <string id="1066">Linke Maus</string>
+  <string id="1067">Rechte Maus</string>
+  <string id="1072">Texteingabe</string>
+  <string id="1077">Unter Titel</string>
+  <string id="1079">Aspekt</string>
+  <string id="1082">Quelle</string>
+  <string id="1086">Seite</string>
+  <string id="1088">Suche</string>
+  <string id="1092">Mehr...</string>
+  <string id="1093">Zurück</string>
+  <string id="1095">Uhr</string>
+  <string id="1111">Benutzer</string>
+  <string id="1112">Kontext</string>
+  <string id="1116">Hilfe</string>
+  <string id="1018">Links</string>
+  <string id="1019">Rechts</string>
+  <string id="1020">Auf</string>
+  <string id="1021">Ab</string>
+
+  <string id="1119">Funktionen</string>
+
+
+  <string id="2000">Aktivitäten</string>
+  <string id="2001">Geräte</string>
+  <string id="2002">Einstellungen</string>
+  <string id="2003">Beenden</string>
+  <string id="3001">TV</string>
+  <string id="3006">Verstärker</string>
+  <string id="3009">Steckerleiste</string>
+  <string id="3018">Licht</string>
+  <string id="3129">Musik</string>
+
+
+  <string id="4000">Fernsehen</string>
+  <string id="4001">Filme sehen</string>
+  <string id="4002">Musik hören</string>
+  <string id="4003">Spielen</string>
+
+  <string id="5000">Weiter</string>
+  <string id="5001">Ja</string>
+  <string id="5002">Nein</string>
+  <string id="5003">Frage</string>
+  <string id="5004">ORCA beenden?</string>
+  <string id="5005">ORCA beenden!</string>
+  <string id="5006">Info</string>
+  <string id="5007">Orca Remote Control Application Version: $var(VERSION)</string>
+  <string id="5008">OK</string>
+  <string id="5009">Abbruch</string>
+  <string id="5010">Meldung</string>
+  <string id="5011">Für diese Änderung musss ORCA neu gestartet werden!</string>
+  <string id="5012">Warte auf Netzwerk Verbindung</string>
+  <string id="5013">Soll die Definition wirklich gelöscht werden? Dieses kann nicht rückgängig gemacht werden!</string>
+  <string id="5014">Bitte warten!</string>
+  <string id="5015">Lade Datei</string>
+  <string id="5016">Herunterladen</string>
+  <string id="5017">Fehler</string>
+  <string id="5018">Bibliotheken</string>
+  <string id="5019">Favoriten</string>
+  <string id="5020">Computer</string>
+  <string id="5021">Plätze</string>
+  <string id="5022">Liste</string>
+  <string id="5023">Symbole</string>
+  <string id="5024">Warte auf</string>
+  <string id="5025">Speichern</string>
+  <string id="5026">Soll diese Definition aktiviert werden?</string>
+  <string id="5027">Wähle Datei</string>
+  <string id="5028">Gefundene Geräte</string>
+  <string id="5030">Hersteller</string>
+  <string id="5031">Modell</string>
+  <string id="5040">Warnung</string>
+  <string id="5041">Komprimiere Datei</string>
+
+  <!--Generic Interfaces Config Strings for multi interface use-->
+  <string id="6000">Zuordnung/Codeset</string>
+  <string id="6001">Zu benutzende Zuordnung</string>
+  <string id="6002">Port Nummer</string>
+  <string id="6003">Der TCP/IP port</string>
+  <string id="6004">Host</string>
+  <string id="6005">Host Name oder IP Adresse</string>
+  <string id="6006">Benutzer</string>
+  <string id="6007">Benutzername zur Anmeldung</string>
+  <string id="6008">Kennwort</string>
+  <string id="6009">Benötigtes Kennwort</string>
+  <string id="6010">Zeit bis zum Verbindungsende</string>
+  <string id="6011">Zeit in Sekunden, bis die Verbindung geschlossen wird (0=sofort,-1=nie)</string>
+  <string id="6012">Host Name oder IP Adresse(discover für auto Ermittlung)</string>
+  <string id="6013">Herstellername für Discover</string>
+  <string id="6014">Für Autodiscover: Herstellername, nachdem gesucht weren soll (oder leer lassen)</string>
+  <string id="6015">Modell Namen für Discover</string>
+  <string id="6016">Für Autodiscover: Model Namen, nachdem gesucht weren soll (durch , getrennt)(oder leer lassen)</string>
+  <string id="6017">Discover Pretty Name</string>
+  <string id="6018">Für Autodiscover: Lesbarer Name, nachdem gesucht weren soll (oder leer lassen)</string>
+  <string id="6019">Timeout</string>
+  <string id="6020">Timeout für Netzwerk Befehle</string>
+  <string id="6021">Ermittelte IP</string>
+  <string id="6022">Für Autodiscover: die letzte ermittelte IP</string>
+  <string id="6023">Autodiscover Service Typen</string>
+  <string id="6024">Zu ermittelnde Service Typen (Durch Komma getrennt)</string>
+  <string id="6025">Discover Timeout</string>
+  <string id="6026">Timeoout für Autodiscover in Sekunden</string>
+  <string id="6027">Resultat auswerten</string>
+  <string id="6028">Wie soll das Resultat eines Befehls ausgewertet werden</string>
+  <string id="6029">Token Trennzeichen</string>
+  <string id="6030">Wenn das Resultat in Tokens zerlegt werden soll, sollen diese Trennzeichen benutzt werden</string>
+  <string id="6031">Erkannte IP Adresse sichern</string>
+  <string id="6032">Erkannte IP Adresse sichern und wiederverwenden</string>
+  <string id="6033">Discover / Autoerkennung konfigurieren</string>
+  <string id="6034">Einstelllungen Discover / Autoerkennung Scripte konfigurieren</string>
+  <string id="6035">Discover / Autoerkennung Script Name</string>
+  <string id="6036">Name des Discover / Autoerkennung Script welches verwendet werden soll</string>
+  <string id="6037">IPv6</string>
+  <string id="6038">IPv6 verwenden</string>
+
+</strings>

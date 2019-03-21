@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>Jointspace/Philips (URL)</name>
+      <description language='English'>Jointspace/Philips control by Webserver/URL</description>
+      <description language='German'>Jointspace/Philips Konrolle über Webserver/URL</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_JOINTSPACE.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_JOINTSPACE.zip</sourcefile>
+          <targetpath>codesets/url</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>URL-Web</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <!-- Translates Orca Actions to Interface Commands action = Orca Action    -->
+
+  <action string="codeset" name='setvolume'      type="string" waitforresponse='0' requesttype='POST' cmd='/1/audio/volume' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"current": $cvar(volumetoset)}' />
+  <action string="codeset" name='getvolume'      type="string" waitforresponse='1' requesttype='GET'  cmd='/1/audio/volume' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  ldestvar='volume' gdestvar='tvvolume' getvar='current' parseoption='dict' />
+  <action string="codeset" name='mute_on'        type="string" waitforresponse='0' requesttype='POST' cmd='/1/audio/volume' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"muted": true}' />
+  <action string="codeset" name='mute_off'       type="string" waitforresponse='0' requesttype='POST' cmd='/1/audio/volume' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"muted": false}' />
+  <action string="codeset" name="mute_toggle"    type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Mute"}' />
+  <action string="codeset" name='suspend'        type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Standby"}' />
+  <action name="shutdown"       type="alias" cmd='suspend'/>
+  <action name="power_off"      type="alias" cmd='suspend'/>
+  <action string="codeset" name="key_0"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit0"}' />
+  <action string="codeset" name="key_1"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit1"}' />
+  <action string="codeset" name="key_2"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit2"}' />
+  <action string="codeset" name="key_3"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit3"}' />
+  <action string="codeset" name="key_4"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit4"}' />
+  <action string="codeset" name="key_5"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit5"}' />
+  <action string="codeset" name="key_6"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit6"}' />
+  <action string="codeset" name="key_7"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit7"}' />
+  <action string="codeset" name="key_8"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit8"}' />
+  <action string="codeset" name="key_9"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Digit9"}' />
+  <action string="codeset" name="key_."          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Dot"}' />
+  <action string="codeset" name="button_red"     type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "RedColour"}' />
+  <action string="codeset" name="button_green"   type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "GreenColour"}' />
+  <action string="codeset" name="button_yellow"  type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "YellowColour"}' />
+  <action string="codeset" name="button_blue"    type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "BlueColour"}' />
+  <action string="codeset" name="volume_up"      type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "VolumeUp"}' />
+  <action string="codeset" name="volume_down"    type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "VolumeDown"}' />
+  <action string="codeset" name="left"           type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "CursorLeft"}' />
+  <action string="codeset" name="right"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "CursorRight"}' />
+  <action string="codeset" name="up"             type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "CursorUp"}' />
+  <action string="codeset" name="down"           type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "CursorDown"}' />
+  <action string="codeset" name="ok"             type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Confirm"}' />
+
+  <action string="codeset" name="channel_select" type="string" cmd='{"REPEAT":{"REPEATCMD":"key_","REPEATVAR":"$cvar(CHANNELNUM)"}}' />
+
+  <action string="codeset" name="pause"          type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Pause"}' />
+  <action string="codeset" name="play"           type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "PlayPause"}' />
+  <action string="codeset" name="pause_toggle"   type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "PlayPause"}' />
+  <action string="codeset" name="stop"           type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Stop"}' />
+  <action string="codeset" name="fast_forward"   type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "FastForward"}' />
+  <action string="codeset" name="fast_rewind"    type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Rewind"}' />
+  <action string="codeset" name="record"         type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Record"}' />
+
+  <action string="codeset" name="skip_back"      type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Previous"}' />
+  <action string="codeset" name="skip_forward"   type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Next"}' />
+  <action string="codeset" name="channel_down"   type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "ChannelStepDown"}' />
+  <action string="codeset" name="channel_up"     type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "ChannelStepUp"}' />
+
+  <action string="codeset" name="exit"           type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Back"}' />
+  <action string="codeset" name="esc"            type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Back"}' />
+
+  <!-- OSD-Teletext -->
+  <action string="codeset" name="teletext"         type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Teletext"}' />
+  <action name="teletext_toggle"  type="alias" cmd="teletext" />
+  <action name="teletext_on"      type="alias" cmd="teletext" />
+  <action name="teletext_off"     type="alias" cmd="teletext" />
+
+  <action string="codeset" name="subtitles_menue"  type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Subtitle"}' />
+  <action name="subtitles_toggle" type="alias" cmd='subtitles_menue'/>
+  <action name="subtitles_on"     type="alias" cmd='subtitles_menue'/>
+  <action name="subtitles_off"    type="alias" cmd='subtitles_menue'/>
+  <action name="subtitles_next"   type="alias" cmd='subtitles_menue'/>
+  <action name="subtitles_prev"   type="alias" cmd='subtitles_menue'/>
+
+  <action string="codeset" name="epg"              type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Guide"}' />
+  <action string="codeset" name="guide"            type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Guide"}' />
+
+  <action string="codeset" name="info"             type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Info"}' />
+  <action string="codeset" name="aspect"           type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Adjust"}' />
+  <action string="codeset" name="home"             type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Home"}' />
+  <action string="codeset" name="option"           type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Options"}' />
+  <action string="codeset" name="source"           type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Source"}' />
+  <action string="codeset" name="search"           type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Find"}' />
+
+  <!--   Viewmode -->
+  <action string="codeset" name="test"             type="string" waitforresponse='1' requesttype='GET'  cmd='/1/sources'   headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  ldestvar='volume' gdestvar='tvvolume' getvar='current' parseoption='dict' />
+  <action string="codeset" name='test'            type="string" waitforresponse='1' requesttype='GET'  cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  ldestvar='currentsource' getvar='id' parseoption='dict' />
+  <action string="codeset" name="test"        type="string" waitforresponse='1' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "WatchTV"}' />
+
+  <action string="codeset" name='getsource'        type="string" waitforresponse='1' requesttype='GET'  cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  ldestvar='currentsource' getvar='id' parseoption='dict' />
+  <action string="codeset" name="getsources"       type="string" waitforresponse='1' requesttype='GET'  cmd='/1/sources'   headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  ldestvar='sources' gdestvar='tvsources'  parseoption='store' />
+  <action string="codeset" name="source tv"        type="string" waitforresponse='1' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "WatchTV"}' />
+  <action string="codeset" name="source net"        type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "Online"}' />
+  <action string="codeset" name="ambilight_toggle"  type="string" waitforresponse='0' requesttype='POST' cmd='/1/input/key' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"key": "AmbilightOnOff"}' />
+
+  <action string="codeset" name="source tv/sat"     type="string" waitforresponse='0' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "satellite"}' />
+  <action string="codeset" name="source tv/cbl"     type="string" waitforresponse='0' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "tv"}' />
+  <action string="codeset" name="source hdmi 1"     type="string" waitforresponse='1' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "hdmi1"}' />
+  <action string="codeset" name="source hdmi 2"     type="string" waitforresponse='0' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "hdmi2"}' />
+  <action string="codeset" name="source hdmi 3"     type="string" waitforresponse='0' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "hdmi3"}' />
+  <action string="codeset" name="source hdmi 4"     type="string" waitforresponse='0' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "hdmiside"}' />
+  <action string="codeset" name="source component"  type="string" waitforresponse='0' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "ypbpr"}' />
+  <action string="codeset" name="source aux 1"      type="string" waitforresponse='0' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "vga"}' />
+  <action string="codeset" name="source aux 2"      type="string" waitforresponse='0' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "ext1"}' />
+  <action string="codeset" name="source aux 3"      type="string" waitforresponse='0' requesttype='POST' cmd='/1/sources/current' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip, deflate"}'  params='{"id": "ext2"}' />
+
+  <action name="ping" type="alias" cmd="getvolume" />
+
+</includes>
+
+

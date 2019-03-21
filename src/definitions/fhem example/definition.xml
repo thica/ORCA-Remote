@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <name>FHEM Example</name>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <author>Carsten Thielepape</author>
+    <version>3.70</version>
+    <orientations>landscape</orientations>
+    <support>http://www.orca-remote.org/forum/</support>
+    <definitionvars>{"definition_alias_FHEMFS20LIGHTS":"FHEMFS20LIGHTS"}</definitionvars>
+  </def_parameter>
+
+ <startskip condition="$dvar(definition_alias_FHEMFS20LIGHTS_IMPORTPAGES)==0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/page_*" parse="xml" ></xi:include>
+      <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+    </pages>
+  <stopskip/>
+
+  <interface_setup>
+    <interface name="telnet">
+      <configuration name ="DEVICE_$dvar(definition_alias_FHEMFS20LIGHTS)">
+        <setting name="Port" parameter="7072"/>
+        <setting name="Host" parameter="192.168.1.197"/>
+        <setting name="Password" parameter=""/>
+        <setting name="User" parameter=""/>
+        <setting name="ParseResult" parameter="no"/>
+        <setting name="TokenizeString" parameter=":"/>
+        <setting name="ResultEndString" parameter="[LF]"/>
+        <setting name="TimeToClose" parameter="-1"/>
+        <setting name="TerminalType" parameter=""/>
+        <setting name="FNCodeset" parameter="CODESET_telnet_fhem_fs20.xml"/>
+        <setting name="DisableInterFaceOnError" parameter="0"/>
+        <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+      </configuration>
+    </interface>
+  </interface_setup>
+
+  <settings>
+    <setting title="$lvar(700) (Telnet)" desc="$lvar(701)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1" type="scrolloptions" default="telnet" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(702)" desc="$lvar(703)"          var="$dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1" type="string" default="DEVICE_$dvar(definition_alias_FHEMFS20LIGHTS)" />
+    <setting title="$lvar(fhem_example_10004)"       type="title" />
+    <setting title="$lvar(fhem_example_10100) 1"     desc="$lvar(fhem_example_10101)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_LABEL"        type="string" default="$lvar(fhem_example_10004) 1" />
+    <setting title="$lvar(fhem_example_10102) 1"     desc="$lvar(fhem_example_10103)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_NAME_FHEM"    type="string" default="Dimmer1" />
+    <setting title="$lvar(fhem_example_10100) 2"     desc="$lvar(fhem_example_10101)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER2_LABEL"        type="string" default="$lvar(fhem_example_10004) 2" />
+    <setting title="$lvar(fhem_example_10102) 2"     desc="$lvar(fhem_example_10103)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER2_NAME_FHEM"    type="string" default="Dimmer2" />
+    <setting title="$lvar(fhem_example_10100) 3"     desc="$lvar(fhem_example_10101)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER3_LABEL"        type="string" default="$lvar(fhem_example_10004) 3" />
+    <setting title="$lvar(fhem_example_10102) 3"     desc="$lvar(fhem_example_10103)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER3_NAME_FHEM"    type="string" default="" />
+    <setting title="$lvar(fhem_example_10100) 4"     desc="$lvar(fhem_example_10101)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER4_LABEL"        type="string" default="$lvar(fhem_example_10004) 4" />
+    <setting title="$lvar(fhem_example_10102) 4"     desc="$lvar(fhem_example_10103)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER4_NAME_FHEM"    type="string" default="" />
+    <setting title="$lvar(fhem_example_10110)"       desc="$lvar(fhem_example_10111)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMERALL_LABEL"      type="string" default="$lvar(fhem_example_10006)" />
+    <setting title="$lvar(fhem_example_10005)"       type="title" />
+    <setting title="$lvar(fhem_example_10105) 1"     desc="$lvar(fhem_example_10106)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH1_LABEL"        type="string" default="$lvar(fhem_example_10005) 1" />
+    <setting title="$lvar(fhem_example_10107) 1"     desc="$lvar(fhem_example_10108)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH1_NAME_FHEM"    type="string" default="Switch1" />
+    <setting title="$lvar(fhem_example_10105) 2"     desc="$lvar(fhem_example_10106)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH2_LABEL"        type="string" default="$lvar(fhem_example_10005) 2" />
+    <setting title="$lvar(fhem_example_10107) 2"     desc="$lvar(fhem_example_10108)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH2_NAME_FHEM"    type="string" default="Switch2" />
+    <setting title="$lvar(fhem_example_10105) 3"     desc="$lvar(fhem_example_10106)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH3_LABEL"        type="string" default="$lvar(fhem_example_10005) 3" />
+    <setting title="$lvar(fhem_example_10107) 3"     desc="$lvar(fhem_example_10108)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH3_NAME_FHEM"    type="string" default="Switch3" />
+    <setting title="$lvar(fhem_example_10105) 4"     desc="$lvar(fhem_example_10106)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH4_LABEL"        type="string" default="$lvar(fhem_example_10005) 4" />
+    <setting title="$lvar(fhem_example_10107) 4"     desc="$lvar(fhem_example_10108)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH4_NAME_FHEM"    type="string" default="" />
+    <setting title="$lvar(fhem_example_10112)"       desc="$lvar(fhem_example_10113)" var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCHALL_LABEL"      type="string" default="$lvar(fhem_example_10007)" />
+
+  </settings>
+
+
+
+  <repositorymanager>
+    <entry>
+      <name>FHEM Example</name>
+      <description language='English'>Simple FHEM example FS20 light</description>
+      <description language='German'>Einfaches FHEM Beispiel Licht über FS20</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/fhem example</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/fhem example.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>codesets</type>
+          <name>FHEM / FS20 Command Set</name>
+        </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/fhem example/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/fhem example/interfacesettings*</file>
+        <file>$var(APPLICATIONPATH)/definitions/fhem example/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+
+</orca>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+
+ <string id="activitytemplate_10000">Activity Group</string>
+ <string id="activitytemplate_10001">Group name</string>
+ <string id="activitytemplate_10002">Name/Title for activity group</string>
+ <string id="activitytemplate_10003">Home page group</string>
+ <string id="activitytemplate_10004">Home page for activity group</string>
+ <string id="activitytemplate_10005">Group button group</string>
+ <string id="activitytemplate_10006">Group button name (first one) for activity group</string>
+ <string id="activitytemplate_10007">Group</string>
+ <string id="activitytemplate_10008">Activity</string>
+ <string id="activitytemplate_10009">Activity name</string>
+ <string id="activitytemplate_10010">The name for activity</string>
+ <string id="activitytemplate_10011">Pagename</string>
+ <string id="activitytemplate_10012">The start page name for the activity </string>
+ <string id="activitytemplate_10013">Powerstatus</string>
+ <string id="activitytemplate_10014">The initional power status for the activity</string>
+ <string id="activitytemplate_10015">Definition</string>
+ <string id="activitytemplate_10016">The name of the definitition var</string>
+ <string id="activitytemplate_10017">Power On Option</string>
+ <string id="activitytemplate_10018">How to power on activity devices (serial or parallel)</string>
+ <string id="activitytemplate_10019">Pre Power On Action</string>
+ <string id="activitytemplate_10020">Action to be performed, before the devicef will be switched on</string>
+ <string id="activitytemplate_10021">Post Power On Action</string>
+ <string id="activitytemplate_10022">Action to be performed, after the device has been switched on</string>
+ <string id="activitytemplate_10023">Activities</string>
+ <string id="activitytemplate_10024">Pre Power Off Action</string>
+ <string id="activitytemplate_10025">Action to be performed, before the device will be switched off</string>
+ <string id="activitytemplate_10026">Post Power Off Action</string>
+ <string id="activitytemplate_10027">Action to be performed, after the device has been switched off</string>
+ <string id="activitytemplate_10028">Activity Group Picture</string>
+ <string id="activitytemplate_10029">Home Page Picture for the activity group</string>
+
+ <string id="activitytemplate_10030">Activity Device</string>
+ <string id="activitytemplate_10031">Device Name</string>
+ <string id="activitytemplate_10032">Device name as defined in the dvar/import statement</string>
+ <string id="activitytemplate_10033">Input Action</string>
+ <string id="activitytemplate_10034">Input Action (Channel / Port) to use for this activity</string>
+ <string id="activitytemplate_10035">Init Volume</string>
+ <string id="activitytemplate_10036">Power On Volume for Device (-1 = No Change)</string>
+ <string id="activitytemplate_10037">De-Init Volume for Device</string>
+ <string id="activitytemplate_10038">Power Off Volume for Device (-1 = No Change)</string>
+ <string id="activitytemplate_10039">Pre Power On wait time</string>
+ <string id="activitytemplate_10040">Wait Time in seconds before the power on command will be send</string>
+ <string id="activitytemplate_10041">Post Power On wait time</string>
+ <string id="activitytemplate_10042">Wait Time in seconds after the power on command has been send</string>
+ <string id="activitytemplate_10050">Device Picture</string>
+ <string id="activitytemplate_10051">Picture  that represents the device</string>
+ <string id="activitytemplate_10052">Device Name</string>
+ <string id="activitytemplate_10053">Button caption for the device</string>
+ <string id="activitytemplate_10054">Device Page</string>
+ <string id="activitytemplate_10055">Start Page for the device</string>
+ <string id="activitytemplate_10070">Import Navigation Bar</string>
+ <string id="activitytemplate_10071">Import the navigation bar for the device pages</string>
+
+Import Navigation Bar
+
+</strings>

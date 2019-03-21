@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+
+    <action name="Send Start Kodi $dvar(definition_alias_mediaplayer_template)">
+       <action name="" string="setvar" varname="startapp" varvalue="kodi" />
+       <action name="" string="sendcommand" commandname="startapp" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_ROOT)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_ROOT)" />
+   </action>
+
+    <action name="FKT SwitchOn $dvar(definition_alias_mediaplayer_template)">
+        <!-- Original wakeup will be called first by default, so we just add the second stuff-->
+        <!-- disabled as it slows down power on if we use WOL -->
+        <action1 name="Call Web PowerOn (even if fails)" string="sendcommand" commandname="power_on"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var(POWERSTATUS_$dvar(definition_alias_mediaplayer_template))==OFF"   />
+    </action>
+
+    <action name="FKT SwitchOn $dvar(definition_alias_mediaplayer_template) Force">
+        <!-- Original wakeup will be called first by default, so we just add the second stuff-->
+        <!-- disabled as it slows down power on if we use WOL -->
+        <action1 name="Call Web PowerOn (even if fails)" string="sendcommand" commandname="power_on"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)"  configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    </action>
+
+    <action name="FKT WaitForReady_$dvar(definition_alias_mediaplayer_template)">
+      <action name="if we need to detect channels" string="if $var($dvar(definition_alias_tvfavorites_template)_tvlogo[1][1])==discover" />
+          <action name="show hourglass" string="showpage Page_Wait" effect="no" />
+          <action name="Load Bouquet" string="call $dvar(definition_alias_mediaplayer_template)_updatebouquet" condition="$var(DEVICEISONLINE)!=FALSE"/>
+          <action name="Return to last page" string="call gotolastpage" />
+      <action name="endif (we want to wait)" string="endif" />"
+    </action>
+
+    <action name="$dvar(definition_alias_mediaplayer_template)_updatebouquet" >
+          <action name="show hourglass" string="showpage Page_Wait" effect="no" />
+          <action name='Assign the channels from enigma' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_template)","force":"0"}' />
+          <action name="Return to last page" string="call gotolastpage" />
+          <action name="Load TV Pictures" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var($dvar(definition_alias_tvfavorites_template)_bouquet)" />
+          <action name="Check if widget exists on current page" string="getwidgetattribute" widgetname="DropDown_Bouquets" attributename="exists" retvar="TMPWIDGETEXISTS" />
+          <action name="update the bouquet drop down" string="updatewidget DropDown_Bouquets" condition="$var(TMPWIDGETEXISTS)=1" />
+    </action>
+
+
+      <action name="$dvar(definition_alias_mediaplayer_template)_updatebouquet_force" >
+          <action name="show hourglass" string="showpage Page_Wait" effect="no" />
+          <action name='Assign the channels from enigma' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_template)","force":"1"}' />
+          <action name="Return to last page" string="call gotolastpage" />
+          <action name="Load TV Pictures" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var($dvar(definition_alias_tvfavorites_template)_bouquet)" />
+          <action name="Check if widget exists on current page" string="getwidgetattribute" widgetname="DropDown_Bouquets" attributename="exists" retvar="TMPWIDGETEXISTS" />
+          <action name="update the bouquet drop down" string="updatewidget DropDown_Bouquets" condition="$var(TMPWIDGETEXISTS)=1" />
+    </action>
+
+
+      <action name="Set SetupTrigger $dvar(definition_alias_mediaplayer_template)">
+      <!-- The a trigger to reload the bouquet if the reload button is pressed in the definition setings -->
+       <action name="If we pressed the button in the definition settings" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_reloadbouquet" linktype="call" actionname="$dvar(definition_alias_mediaplayer_template)_updatebouquet_force" />
+    </action>
+
+</includes>

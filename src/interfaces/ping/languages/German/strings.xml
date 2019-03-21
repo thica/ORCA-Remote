@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="IFACE_PING_1">Hostname oder IP Adresse zum anpingen</string>
+</strings>

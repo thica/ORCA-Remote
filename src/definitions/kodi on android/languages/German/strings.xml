@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="kodionandroid_10000">Sie müssen die IP Adressse ihres Android Gerätes angeben, um mit dieser Definition arbeiten zu können. Zudem müssen Sie die Entwickleroptionen im Android Gerät aktivieren. Bitte in den Einstellungen das android-adb interface auswählen und die DEVICE Einstellungen anpassen. Danach bitte ORCA neu starten.</string>
+</strings>

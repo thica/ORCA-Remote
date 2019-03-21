@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_$dvar(definition_alias_philips_hue)_Universal'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+    <interface>$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)</interface>
+    <configname>$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)</configname>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background' type='BACKGROUND' picturenormal='background'>
+      <xi:include href="$var(DEFINITIONPATH)/block_topline.xml" parse="xml" />
+    </element>
+
+    <element name='Anchor BottomGap' type='ANCHOR'  posy='bottom' height='%1' />
+      <element name='Anchor Single Dimmers' type='ANCHOR' posx='center' posy='of:totop:Anchor BottomGap' width='%90' height='%90'>
+        <element name='Anchor Dimmer 1' type='ANCHOR' posx='left'  width='%8' >
+            <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_inner.xml" parse="xml" includedefinitionvars='{"philips_hue_dimmer_num":"1"}' />
+        </element>
+          <element name='Anchor Dimmer 2' type='ANCHOR' posx='%14.3'  width='%8' >
+              <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_inner.xml" parse="xml" includedefinitionvars='{"philips_hue_dimmer_num":"2"}' />
+          </element>
+          <element name='Anchor Dimmer 3' type='ANCHOR' posx='%28.6'  width='%8' >
+              <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_inner.xml" parse="xml" includedefinitionvars='{"philips_hue_dimmer_num":"3"}' />
+          </element>
+          <element name='Anchor Dimmer 4' type='ANCHOR' posx='%42.9'  width='%8' >
+              <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_inner.xml" parse="xml" includedefinitionvars='{"philips_hue_dimmer_num":"4"}' />
+          </element>
+          <element name='Anchor Dimmer 5' type='ANCHOR' posx='%57.1'  width='%8' >
+              <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_inner.xml" parse="xml" includedefinitionvars='{"philips_hue_dimmer_num":"5"}' />
+          </element>
+          <element name='Anchor Dimmer 6' type='ANCHOR' posx='%71.4'  width='%8' >
+              <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_inner.xml" parse="xml" includedefinitionvars='{"philips_hue_dimmer_num":"6"}' />
+          </element>
+          <element name='Anchor Dimmer 7' type='ANCHOR' posx='%85.7'  width='%8' >
+              <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_inner.xml" parse="xml" includedefinitionvars='{"philips_hue_dimmer_num":"7"}' />
+          </element>
+          <element name='Anchor Dimmer 8' type='ANCHOR' posx='right'  width='%8' >
+              <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_inner.xml" parse="xml" includedefinitionvars='{"philips_hue_dimmer_num":"8"}' />
+          </element>
+
+      </element>
+
+      <element name='Button Show Page Hue' type='BUTTON' posx='left' posy='middle' width='%2' height='of:width:self:*3' picturenormal='button page left*' action='Show Page' actionpars='{"pagename":"Page_Device_$dvar(definition_alias_philips_hue)"}' />
+
+  </elements>
+</page>

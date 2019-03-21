@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Button Volume Up'    type='BUTTON' posx='right'  posy='top'    width='1140' height='1140' picturenormal='button round*' action='Send Volume Up'   fontsize='%h30'  iconfontsize='%h50' caption='icon:volume_up' />
+  <element name='Button Volume Down'  type='BUTTON' posx='left'   posy='top'    width='1140' height='1140' picturenormal='button round*' action='Send Volume Down' fontsize='%h30'  iconfontsize='%h50' caption='icon:volume_down' />
+  <element name='Button Mute'         type='BUTTON' posx='center' posy='middle' width='840'  height='840'  picturenormal='button round*' action='Send Mute Toggle' fontsize='%h30'  iconfontsize='%h50' caption='icon:volume_mute' />
+</elements>

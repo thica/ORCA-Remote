@@ -1,0 +1,11 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Configuration
+WikiDoc:Page:First Steps
+WikiDoc:TOCTitle:3=First Steps
+
+If you use one of the exitisting definitions and you are happy with it, you can skip this chapter. If you want to create a new definition or want to change a existing definition, read the next sections carefully.
+You should first try to get some remote functions to work. Do not start with adjusting the layout before you are sure, that you can control your devices in principle. It is likely, that your definition will define minimal one device you like to control. EG: it might be a good idea to start with your TV. Start with some basic commands like switching on / off on your TV. If an assignment is available , make a copy of an existing one, rename it to your device and change the power on / power off commands. For infrared gateways, you might need to learn the according infrared commands using the vendor tools. Refer to your interface documentation for further details. Continue integrating some basic functions of all of your devices until you are sure that you can control everything in principle. If you succeeded with this, start adjusting your definition file.
+
+WikiDoc:End
+'''

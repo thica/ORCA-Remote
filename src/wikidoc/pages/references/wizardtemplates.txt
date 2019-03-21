@@ -1,0 +1,10 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:References
+WikiDoc:Page:WizardTemplates-General Information
+WikiDoc:TOCTitle:Description of Templates
+= General information about templates =
+
+Templates are a generic method to apply settings and elements to various parts of ORCA. Currently only one type of templates are implemented: Templates for the definition with name mediaplayer wizard. In a nutshell, this definition pulls a set of settings into post this into the mediaplayr template definition. This enables you to run one definition (the  template definition) with different settings (the template).
+WikiDoc:End
+'''

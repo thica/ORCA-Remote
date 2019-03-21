@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface_setup>
+    <interface name="android_adb">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="Port" parameter="5555"/>
+            <setting name="Host" parameter="discover"/>
+            <setting name="FNCodeset" parameter="CODESET_android_adb_DEFAULT.xml"/>
+            <setting name="DISCOVER_UPNP_manufacturer" parameter="NVIDIA"/>
+            <setting name="DISCOVER_UPNP_models" parameter="'[SHIELD Android TV]'"/>
+            <setting name="DISCOVER_UPNP_prettyname" parameter=""/>
+        </configuration>
+    </interface>
+</interface_setup>

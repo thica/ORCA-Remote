@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Frame" type="PICTURE"  picturenormal="background boxes" />
+    <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%5" height="of:width:self" picturenormal="button wide*" action="Show Page" actionpars='{"pagename":"$var(LASTPAGE)"}' fontsize='%h50' caption="icon:close_window" />
+    <element name="Anchor Frame" type="ANCHOR" posx="center" posy="middle" width="%95" height="%90">
+
+        <element name='Picture Transmit'  type='PICTURE'    posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%4' height='of:width:self' picturenormal='transmit' enabled='0' />
+        <element name='Picture Wait'      type='PICTURE'    posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%4' height='of:width:self' picturenormal='wait' enabled='0' />
+        <element name='Label Device'      type='TEXTFIELD'  posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%50' height='%12' caption='$var($dvar(definition_alias_mediaplayer_template)_PRETTYNAME)' fontsize='%h60'/>
+
+        <element name='Anchor Info' type='ANCHOR' posy='bottom' height='%70'>
+           <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_amplifier_info.xml" parse="xml" />
+        </element>
+
+      <element name ='DropDown_Services' type='DROPDOWN'  posx='right' posy='top' width='%50' height='%14'                                   fontsize="%h50"  picturenormal='button wide*' caption="$lvar(onkyoAVR_10002):::$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_NetService_name[]"       actions='Change Service $dvar(definition_alias_mediaplayer_template)'  />
+      <element name ='DropDown_Sources'  type='DROPDOWN'  posx='right' posy='of:bottom:last'   height="of:height:last"   width='of:width:last'  fontsize="%h50"  picturenormal='button wide*' caption="$lvar(onkyoAVR_10003):::$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Sources_name[]"          actions='Change Source $dvar(definition_alias_mediaplayer_template)'  />
+      <element name ='DropDown_Effects'  type='DROPDOWN'  posx='left'  posy='of:top:last'   height="of:height:last"   width='of:width:last'  fontsize="%h50"  picturenormal='button wide*' caption="$lvar(onkyoAVR_10004):::$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_ListeningMode_name[]"    actions='Change Mode $dvar(definition_alias_mediaplayer_template)'  />
+
+    </element>
+
+</elements>

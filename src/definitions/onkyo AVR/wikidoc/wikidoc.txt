@@ -1,0 +1,153 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:DefinitionsForUser
+WikiDoc:Page:Userdescription Definition onkyo AVR
+WikiDoc:TOCTitle:onkyo AVR
+
+This definition controls ONKYO AVR receiver using the ONKYO EISCP network protocol. It autodetects your receiver on the network and pulls most information from it to initialize the definition. Will work for network enabled receiver only.
+
+Key features are:
+
+* Pulls the volume from main, center and subwoofer channels
+* Reacts on volume changes if volumes are adjusted with other remote controls or by hand
+* Pulls receiver capabilities for
+** Network commands
+** Sources
+** Effects
+* Shows the receiver picture (for some models)
+* Separate page for network services (like Amazon Music)
+* Separate page for radio playback
+* Shows artist, song, title and position information during playback (network and Radio)
+* Shows cover art during playback (network and Radio)
+* Shows media information for audio and video and updates it , if the signal has changed
+
+IMPORTANT/Remarks: You need to enable network standby of your Onkyo receiver to get power on and discover working!
+
+[[File:ORCA_MAIN.png|link=]]
+The main receiver page. 
+Usual the screen will be switched to the network services if you select the service from the services dropdown. You can reach the network services directly, if you press the N Button on the right edge of the page.
+Usual the screen will be switched to the radio services if you select the service from the services dropdown. You can reach the radio services directly, if you press the R Button on the right edge of the page.
+
+[[File:ORCA_NET.png|link=]]
+The page for network/online services.
+With the button on the left edge, you can return to the main receiver page. Usual you should see the screen menu options on the right button list. For timing issues, the list migth be empty, if you selct the service. In this caseyou have to press OK once to get into the service menu. I am working on this issue.
+
+[[File:ORCA_RADIO.png|link=]]
+The page for radio playback.
+With the button on the left edge, you can return to the main receiver page.
+
+[[File:ORCA_MAIN_SERVICES.png|link=]]
+The main page, dropdown for network services. The available network service will be pulled from the receiver
+
+[[File:ORCA_MAIN_INPUTS.png|link=]]
+The main page, dropdown for inputs/source control. The available sources will be pulled from the receiver
+
+[[File:ORCA_MAIN_EFFECTS.png|link=]]
+The main page, dropdown for audio effects. The available audio effects will be pulled from the receiver. Note: The names for the audio effects may differ from the display, as the receiver just returns a number, and the correct name to the number might be different on different models.
+
+If the dropdowns are empty, the defintion struggled to get valid receiver information from the device. Try to press at the receiver symbol to pull them again. Some ONKYO receiver have a weak network stack so the network communication gets broken for a while. Nothing I can fix.
+
+
+= Settings =
+This definition defines the following settings:
+
+The settings from the mediaplayer_template. The appfavorites, cmdfavorites, tvfavorites settings are not used. Usual you do not need to adjust any settings for this definition. If you are using multiple ONKY interfaces or the discover of the receiver does not work, you might need to configure the IP port in the interface settings
+
+
+WikiDoc:End
+'''
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Definitions
+WikiDoc:Page:Reference Definition onkyo AVR
+WikiDoc:TOCTitle:onkyo AVR
+
+This definition controls ONKYO AVR receiver using the ONKYO EISCP network protocol. It uses the mediaplayer_template definition but is not integrated into the mediaplayer_wizard framework.
+
+[[File:ORCA_MAIN.png|link=]]
+
+This definition has the following capabilities
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Capability
+! align="left" | Description
+|-
+|Orientation
+|Landscape only
+|-
+|Screen Size
+|
+* large / landscape
+|-
+|Interfaces
+|eiscp only
+|}</div>
+
+= Definitionvars =
+This definition uses the following definitionvars:
+
+* "definition_alias_onkyoavr": default value = "Onkyo AVR Receiver",
+* "definition_alias_appfavorites_template": default value = "App Favorites",
+* "definition_alias_cmdfavorites_template": default value = "Cmd Favorites",
+* "definition_alias_tvfavorites_template": default value = "TV Channels",
+* "definition_alias_mediaplayer_template": default value = "ONKYO AVR Mediaplayer"
+
+= Settings =
+This definition defines the following settings:
+
+The settings from the mediaplayer_template. The appfavorites, cmdfavorites, tvfavorites settings are not used.
+
+= How to import =
+
+You can import the definition by using the following syntax in your definition.xml
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+
+  <def_parameter>
+    <definitionvars>{ "definition_alias_onkyoavr":                                  "Onkyo AVR Receiver",
+                      "definition_alias_mediaplayer_onkyoavr":                      "AVR Receiver Living Room -Onkyo- Mediaplayer",
+                      "definition_alias_cmdfavorites_unused":                       "Unused Shared Commands",
+                      "definition_alias_appfavorites_unused":                       "Unused Shared Apps",
+                      "definition_alias_tvfavorites_unused":                        "Unused TV Channels"}</definitionvars>
+  </def_parameter>
+
+  <definitionimports>
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_alias_onkyoavr)"
+          definitionvars  ='{"definition_alias_onkyoavr":                           "$dvar(definition_alias_onkyoavr)",
+                             "definition_alias_mediaplayer_template":               "$dvar(definition_alias_mediaplayer_onkyoavr)",
+                             "definition_alias_appfavorites_template":              "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":              "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":               "$dvar(definition_alias_tvfavorites_unused)"}'>onkyo AVR</definition>
+  </definitionimports>
+
+</syntaxhighlight></div>
+
+= Elements =
+The following elements are defined to use:
+
+No elements for direct import
+
+= Button Actions =
+
+* Change Service $dvar(definition_alias_mediaplayer_template): Reacts to the services dropdown. Switches the pages as well
+* Change Preset $dvar(definition_alias_mediaplayer_template): Reacts to the radio station favorites buttons
+* Change Source $dvar(definition_alias_mediaplayer_template): Reacts to the sources dropdown. Switches the pages as well
+* Change Mode $dvar(definition_alias_mediaplayer_template): Reacts to the audio effects dropdown
+
+= Pages =
+The following pages are defined:
+
+* Page_Device_$dvar(definition_alias_mediaplayer_template): The receiver main page
+* Page_Device_$dvar(definition_alias_mediaplayer_template)_Net: The receiver network services control
+* Page_Device_$dvar(definition_alias_mediaplayer_template)_Radio: The receiver radio control
+* Page_Device_$dvar(definition_alias_mediaplayer_template)_Popup: A popup for receiver audio control
+
+
+WikiDoc:End
+'''

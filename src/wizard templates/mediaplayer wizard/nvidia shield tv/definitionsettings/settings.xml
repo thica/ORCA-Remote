@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(WIZARDTEMPLATESPATH)/mediaplayer wizard/android_adb/definitionsettings/settings.xml" parse="xml" ></xi:include>
+    <settings>
+        <default var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"               default="1" />
+        <default var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"               default="device nvidia shield" />
+        <default var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"                  default="NVIDIA Shield TV" />
+        <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE"           default="Buttons" />
+        <default var="$dvar(definition_alias_mediaplayer_template)_SHOWSEARCHANDINPUT"          default="1" />
+        <default var="$dvar(definition_alias_mediaplayer_template)_SHOWCHANNELUPDOWN"           default="0" />
+        <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"               default="1" />
+
+        <default var="$dvar(definition_alias_appfavorites_template)_appname[6]"   default="Amazon Prime" />
+        <default var="$dvar(definition_alias_appfavorites_template)_execname[6]"  default="com.amazon.amazonvideo.livingroom/com.amazon.ignition.IgnitionActivity" />
+
+    </settings>
+</settings>
+

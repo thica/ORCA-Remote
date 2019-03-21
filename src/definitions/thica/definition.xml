@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+    <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <orientations>landscape</orientations>
+    <support>http://www.orca-remote.org/forum/</support>
+    <definitionvars>{ "definition_alias_thica":                                     "Thicas personal definition",
+                      "definition_alias_panasonic_4K":                              "TV Living Room -Panasonic 4K- Wizard",
+                      "definition_alias_mediaplayer_panasonic_4k":                  "TV Living Room -Panasonic 4K- Mediaplayer",
+                      "definition_alias_enigma2":                                   "SAT Receiver Living Room -Mutant Wizard",
+                      "definition_alias_mediaplayer_enigma2":                       "SAT Receiver Living Room -Mutant- Mediaplayer",
+                      "definition_alias_onkyoavr":                                  "Onkyo AVR Receiver",
+                      "definition_alias_mediaplayer_onkyoavr":                      "AVR Receiver Living Room -Onkyo- Mediaplayer",
+                      "definition_alias_kodi1":                                     "Kodi 1 Living Room Shield",
+                      "definition_alias_mediaplayer_kodi1":                         "Kodi 1 Living Room Mediaplayer Template Shield",
+                      "definition_alias_cmdfavorites_kodi1":                        "Kodi 1 Commands -Activity Movies Living Room Shield-",
+                      "definition_alias_kodi2":                                     "Kodi 2 Launge Wizard",
+                      "definition_alias_mediaplayer_kodi2":                         "Kodi 2 Launge Mediaplayer",
+                      "definition_alias_cmdfavorites_kodi2":                        "Kodi 2 Commands -Activity Movies Launge-",
+                      "definition_alias_panasonictvnet":                            "TV Launge -Panasonic-",
+                      "definition_alias_mediaplayer_panasonictvnet":                "TV Launge -Panasonic- Mediaplayer Template",
+                      "definition_alias_firetv2":                                   "FireTV 2 Launge Wizard",
+                      "definition_alias_mediaplayer_firetv2":                       "FireTV 2 Launge Mediaplayer",
+                      "definition_alias_shield":                                    "NVidia Shield Living Room Wizard",
+                      "definition_alias_mediaplayer_shield":                        "NVidia Shield Living Room Mediaplayer",
+                      "definition_alias_appfavorites_android":                      "Android Apps",
+                      "definition_alias_philips_hue":                               "Philips HUE",
+                      "definition_alias_unraid":                                    "UNRAID",
+                      "definition_alias_elv_max":                                   "ELV_MAX",
+                      "definition_activity_template":                               "Activities",
+                      "definition_alias_tvfavorites_shared":                        "Shared TV Channels",
+                      "definition_alias_cmdfavorites_unused":                       "Unused Shared Commands",
+                      "definition_alias_appfavorites_unused":                       "Unused Shared Apps",
+                      "definition_alias_tvfavorites_unused":                        "Unused TV Channels",
+                      "definition_activityalias_tv1":                               "Activity TV Living Room Wizard",
+                      "definition_activityalias_mediaplayer_tv1":                   "Activity TV Living Room Mediaplayer",
+                      "definition_activityalias_kodi1":                             "Activity Movies Living Room Kodi1 Wizard",
+                      "definition_activityalias_mediaplayer_kodi1":                 "Activity Movies Living Room Kodi1 Mediaplayer",
+                      "definition_activityalias_games1":                            "Actvity Games Living Room",
+                      "definition_activityalias_mediaplayer_games1":                "Actvity Games Living Room Mediaplayer",
+                      "definition_activityalias_ftv2":                              "Actvity FireTV Launge Wizard",
+                      "definition_activityalias_mediaplayer_ftv2":                  "Actvity FireTV Launge Mediaplayer",
+                      "definition_activityalias_kodi2":                             "Activity Movies Launge Kodi2 Wizard",
+                      "definition_activityalias_mediaplayer_kodi2":                 "Activity Movies Launge Kodi2 Mediaplayer",
+                      "definition_activityalias_apiv1":                             "Activity Amazon Prime Living Room Shield Wizard",
+                      "definition_activityalias_mediaplayer_apiv1":                 "Activity Amazon Prime Living Room Shield Mediaplayer"}</definitionvars>
+  </def_parameter>
+
+
+
+  <startskip condition="$dvar(definition_alias_thica_IMPORTPAGES)=0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="$var(DEFINITIONPATH)/page_*" > parse="xml"></xi:include>
+      <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+    </pages>
+  <stopskip/>
+
+  <definitionimports>
+
+      <!-- We pass the "definition_activity_template" def var to all single device includes, as they reload the topline block , which has a reference to it-->
+
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_alias_panasonic_4K)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                    "$dvar(definition_alias_panasonic_4K)",
+                             "definition_alias_mediaplayer_template":                  "$dvar(definition_alias_mediaplayer_panasonic_4k)",
+                             "definition_alias_appfavorites_template":                 "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":                 "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":                  "$dvar(definition_alias_tvfavorites_shared)",
+                             "definition_templatename_mediaplayer_wizard":             "panasonic TV Net",
+                             "definition_templatepath_mediaplayer_wizard":             "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                           "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_alias_panasonictvnet)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                    "$dvar(definition_alias_panasonictvnet)",
+                             "definition_alias_mediaplayer_template":                  "$dvar(definition_alias_mediaplayer_panasonictvnet)",
+                             "definition_alias_appfavorites_template":                 "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":                 "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":                  "$dvar(definition_alias_tvfavorites_shared)",
+                             "definition_templatename_mediaplayer_wizard":             "panasonic TV Net",
+                             "definition_templatepath_mediaplayer_wizard":             "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                           "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_alias_onkyoavr)"
+          definitionvars  ='{"definition_alias_onkyoavr":                           "$dvar(definition_alias_onkyoavr)",
+                             "definition_alias_mediaplayer_template":               "$dvar(definition_alias_mediaplayer_onkyoavr)",
+                             "definition_alias_appfavorites_template":              "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":              "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":               "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_activity_template":                        "$dvar(definition_activity_template)"}'>onkyo AVR</definition>
+
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_alias_enigma2)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                   "$dvar(definition_alias_enigma2)",
+                             "definition_alias_mediaplayer_template":                 "$dvar(definition_alias_mediaplayer_enigma2)",
+                             "definition_alias_appfavorites_template":                "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":                "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":                 "$dvar(definition_alias_tvfavorites_shared)",
+                             "definition_templatename_mediaplayer_wizard":            "enigma2",
+                             "definition_templatepath_mediaplayer_wizard":            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_alias_kodi1)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                   "$dvar(definition_alias_kodi1)",
+                             "definition_alias_mediaplayer_template":                 "$dvar(definition_alias_mediaplayer_kodi1)",
+                             "definition_alias_appfavorites_template":                "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":                "$dvar(definition_alias_cmdfavorites_kodi1)",
+                             "definition_alias_tvfavorites_template":                 "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_templatename_mediaplayer_wizard":            "kodi",
+                             "definition_templatepath_mediaplayer_wizard":            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_alias_kodi2)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                   "$dvar(definition_alias_kodi2)",
+                             "definition_alias_mediaplayer_template":                 "$dvar(definition_alias_mediaplayer_kodi2)",
+                             "definition_alias_appfavorites_template":                "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":                "$dvar(definition_alias_cmdfavorites_kodi2)",
+                             "definition_alias_tvfavorites_template":                 "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_templatename_mediaplayer_wizard":            "kodi",
+                             "definition_templatepath_mediaplayer_wizard":            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_alias_firetv2)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                   "$dvar(definition_alias_firetv2)",
+                             "definition_alias_mediaplayer_template":                 "$dvar(definition_alias_mediaplayer_firetv2)",
+                             "definition_alias_appfavorites_template":                "$dvar(definition_alias_appfavorites_android)",
+                             "definition_alias_cmdfavorites_template":                "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":                 "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_templatename_mediaplayer_wizard":            "firetv_adb",
+                             "definition_templatepath_mediaplayer_wizard":            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_alias_shield)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                   "$dvar(definition_alias_shield)",
+                             "definition_alias_mediaplayer_template":                 "$dvar(definition_alias_mediaplayer_shield)",
+                             "definition_alias_appfavorites_template":                "$dvar(definition_alias_appfavorites_android)",
+                             "definition_alias_cmdfavorites_template":                "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":                 "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_templatename_mediaplayer_wizard":            "nvidia shield tv",
+                             "definition_templatepath_mediaplayer_wizard":            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          definitionvars  ='{"definition_activity_template":                         "$dvar(definition_activity_template)",
+                             "definition_alias_unraid":                              "$dvar(definition_alias_unraid)"}'>unraid simple</definition>
+
+      <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          definitionvars  ='{"definition_activity_template":                       "$dvar(definition_activity_template)",
+                             "definition_alias_philips_hue":                       "$dvar(definition_alias_philips_hue)"}'>philips hue</definition>
+
+      <!-- We use the- Enigma definition for the activity TV1 (From Template) -->
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_activityalias_tv1)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                   "$dvar(definition_activityalias_tv1)",
+                             "definition_alias_mediaplayer_template":                 "$dvar(definition_activityalias_mediaplayer_tv1)",
+                             "definition_alias_appfavorites_template" :               "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":                "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":                 "$dvar(definition_alias_tvfavorites_shared)",
+                             "definition_templatename_mediaplayer_wizard":            "enigma2",
+                             "definition_templatepath_mediaplayer_wizard":            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+
+      <!-- We use the-KODI definition for the activity Mediacenter1_1 (KODI)-->
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_activityalias_kodi1)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                   "$dvar(definition_activityalias_kodi1)",
+                             "definition_alias_mediaplayer_template":                 "$dvar(definition_activityalias_mediaplayer_kodi1)",
+                             "definition_alias_appfavorites_template":                "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":                "$dvar(definition_alias_cmdfavorites_kodi1)",
+                             "definition_alias_tvfavorites_template":                 "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_templatename_mediaplayer_wizard":            "kodi",
+                             "definition_templatepath_mediaplayer_wizard":            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+
+    <!-- We use the-Generic Android definition for the activity Amazon Prime Instant Video-->
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_activityalias_apiv1)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                  "$dvar(definition_activityalias_apiv1)",
+                             "definition_alias_mediaplayer_template":                "$dvar(definition_activityalias_mediaplayer_apiv1)",
+                             "definition_alias_appfavorites_template":               "$dvar(definition_alias_appfavorites_android)",
+                             "definition_alias_cmdfavorites_template":               "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":                "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_templatename_mediaplayer_wizard":           "nvidia shield tv",
+                             "definition_templatepath_mediaplayer_wizard":           "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                         "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <!-- We use the-FIRETV definition for the activity firetv2-->
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_activityalias_ftv2)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                  "$dvar(definition_activityalias_ftv2)",
+                             "definition_alias_mediaplayer_template":                "$dvar(definition_activityalias_mediaplayer_ftv2)",
+                             "definition_alias_appfavorites_template":               "$dvar(definition_alias_appfavorites_android)",
+                             "definition_alias_cmdfavorites_template":               "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":                "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_templatename_mediaplayer_wizard":           "firetv_adb",
+                             "definition_templatepath_mediaplayer_wizard":           "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                         "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+     <!-- We use the Onkyo AVr definition for the games1 Living room (Wii doesn't support remote control by lan-->
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_activityalias_games1)"
+          definitionvars  ='{"definition_alias_onkyoavr":                           "$dvar(definition_activityalias_games1)",
+                             "definition_alias_mediaplayer_template":               "$dvar(definition_activityalias_mediaplayer_games1)",
+                             "definition_alias_appfavorites_template":              "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":              "$dvar(definition_alias_cmdfavorites_unused)",
+                             "definition_alias_tvfavorites_template":               "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_activity_template":                        "$dvar(definition_activity_template)"}'>onkyo AVR</definition>
+
+      <!-- We use the-KODI definition for the activity Mediacenter2 (KODI)-->
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          alias           = "$dvar(definition_activityalias_kodi2)"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                   "$dvar(definition_activityalias_kodi2)",
+                             "definition_alias_mediaplayer_template":                 "$dvar(definition_activityalias_mediaplayer_kodi2)",
+                             "definition_alias_appfavorites_template" :               "$dvar(definition_alias_appfavorites_unused)",
+                             "definition_alias_cmdfavorites_template":                "$dvar(definition_alias_cmdfavorites_kodi2)",
+                             "definition_alias_tvfavorites_template":                 "$dvar(definition_alias_tvfavorites_unused)",
+                             "definition_templatename_mediaplayer_wizard":            "kodi",
+                             "definition_templatepath_mediaplayer_wizard":            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          alias           ="$dvar(definition_alias_elv_max)"
+          definitionvars  ='{"definition_activity_template":                          "$dvar(definition_activity_template)",
+                             "definition_alias_elv_max":                              "$dvar(definition_alias_elv_max)"}'>elv max</definition>
+
+
+        <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          definitionvars  ='{"definition_activity_template":"$dvar(definition_activity_template)"}'>activity_template</definition>
+
+  </definitionimports>
+
+
+    <!-- The interface setup is for my own convinience, as I do not want configure it manually after an app re-installaion-->
+    <interface_setup>
+
+        <interface name="websocket">
+            <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_kodi1)">
+                <setting name="Port" parameter="9095"/>
+                <setting name="Host" parameter="linked:android_adb:DEVICE_$dvar(definition_alias_mediaplayer_shield):Host"/>
+                <setting name="Password" parameter="admin"/>
+                <setting name="User" parameter="admin"/>
+                <setting name="TimeToClose" parameter="-1"/>
+                <setting name="FNCodeset" parameter="CODESET_websocket_KODI-Leia.xml"/>
+                <setting name="DisableInterFaceOnError" parameter="0"/>
+                <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+            </configuration>
+            <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_kodi2)">
+                <setting name="Port" parameter="9090"/>
+                <setting name="Host" parameter="linked:android_adb:DEVICE_$dvar(definition_alias_mediaplayer_firetv2):Host"/>
+                <setting name="Password" parameter="admin"/>
+                <setting name="User" parameter="admin"/>
+                <setting name="TimeToClose" parameter="-1"/>
+                <setting name="FNCodeset" parameter="CODESET_websocket_KODI-Leia.xml"/>
+                <setting name="DisableInterFaceOnError" parameter="0"/>
+                <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+            </configuration>
+            <configuration name ="DEVICE_$dvar(definition_activityalias_mediaplayer_kodi1)">
+                <setting name="Port" parameter="9095"/>
+                <setting name="Host" parameter="linked:android_adb:DEVICE_$dvar(definition_alias_mediaplayer_shield):Host"/>
+                <setting name="Password" parameter="admin"/>
+                <setting name="User" parameter="admin"/>
+                <setting name="TimeToClose" parameter="-1"/>
+                <setting name="FNCodeset" parameter="CODESET_websocket_KODI-Leia.xml"/>
+                <setting name="DisableInterFaceOnError" parameter="0"/>
+                <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+            </configuration>
+            <configuration name ="DEVICE_$dvar(definition_activityalias_mediaplayer_kodi2)">
+                <setting name="Port" parameter="9090"/>
+                <setting name="Host" parameter="linked:android_adb:DEVICE_$dvar(definition_alias_mediaplayer_firetv2):Host"/>
+                <setting name="Password" parameter="admin"/>
+                <setting name="User" parameter="admin"/>
+                <setting name="TimeToClose" parameter="-1"/>
+                <setting name="FNCodeset" parameter="CODESET_websocket_KODI-Leia.xml"/>
+                <setting name="DisableInterFaceOnError" parameter="0"/>
+                <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+            </configuration>
+        </interface>
+        <interface name="Keene_Kira">
+            <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_panasonic_4k)">
+                <setting name="Host" parameter="192.168.1.31"/>
+            </configuration>
+            <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_onkyoavr)">
+                <setting name="Host" parameter="192.168.1.31"/>
+            </configuration>
+        </interface>
+        <interface name="iTach">
+            <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_panasonic_4k)">
+                <setting name="Host" parameter="192.168.1.206"/>
+                <setting name="FNCodeset" parameter="CODESET_infrared_ccf_PANASONIC TV N2QAYB0000181.xml"/>
+            </configuration>
+            <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_onkyoavr)">
+                <setting name="Host" parameter="192.168.1.206"/>
+                <setting name="FNCodeset" parameter="CODESET_infrared_ccf_ONKYO_AVR_Simple.xml"/>
+            </configuration>
+        </interface>
+        <interface name="url">
+          <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_enigma2)">
+              <setting name="Host" parameter="192.168.1.154"/>
+          </configuration>
+          <!-- We allreday paired the bridge -->
+          <configuration name ="DEVICE_$dvar(definition_alias_philips_hue)">
+              <setting name="User"     parameter="ORCAPHILIPSUSER"/>
+              <setting name="Password" parameter="jdgT5h5l5Nv4FFdTJLWegeSsDKIVYp22hl9tJEtd"/>
+          </configuration>
+          <!-- We skip the discover for the Panasonic TV, as discover will not work on turned off devices-->
+          <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_panasonic_4k)">
+              <setting name="Host" parameter="192.168.1.199"/>
+          </configuration>
+          <!-- We skip the discover for the Panasonic, as discover will not work on turned off devices-->
+          <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_panasonictvnet)">
+              <setting name="Host" parameter="192.168.1.184"/>
+          </configuration>
+          <configuration name ="DEVICE_$dvar(definition_activityalias_mediaplayer_tv1)">
+              <setting name="Host" parameter="192.168.1.154"/>
+          </configuration>
+      </interface>
+      <interface name="wake_on_lan">
+          <configuration name ="DEVICE_$dvar(definition_alias_unraid)">
+              <setting name="MAC" parameter="00:25:22:e0:34:21"/>
+          </configuration>
+          <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_enigma2)">
+              <setting name="MAC" parameter="44:70:0B:04:7E:34"/>
+          </configuration>
+          <configuration name ="DEVICE_$dvar(definition_activityalias_mediaplayer_tv1)">
+              <setting name="MAC" parameter="44:70:0B:04:7E:34"/>
+          </configuration>
+          <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_panasonic_4k)">
+              <setting name="MAC" parameter="A8:13:74:A6:36:7B"/>
+          </configuration>
+
+      </interface>
+      <interface name="android_adb">
+          <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_firetv2)">
+            <setting name="DISCOVER_UPNP_prettyname" parameter="Petra's 2nd Fire TV"/>
+          </configuration>
+          <configuration name ="DEVICE_$dvar(definition_activityalias_mediaplayer_ftv2)">
+              <setting name="Host" parameter="linked:android_adb:DEVICE_$dvar(definition_alias_mediaplayer_firetv2):Host"/>
+          </configuration>
+          <!-- We turn on the Panasonic TV by CEC from the firetv-->
+          <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_panasonictvnet)">
+              <setting name="Host" parameter="linked:android_adb:$dvar(definition_alias_mediaplayer_firetv2):Host"/>
+          </configuration>
+        </interface>
+
+  </interface_setup>
+
+  <settings xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(DEFINITIONPATH)/definitionsettings/activitysettings.xml"         parse="xml" ></xi:include>
+    <xi:include href="$var(DEFINITIONPATH)/definitionsettings/activitydevicesettings.xml"  parse="xml" ></xi:include>
+    <xi:include href="$var(DEFINITIONPATH)/definitionsettings/tvchannelsettings.xml"        parse="xml" ></xi:include>
+
+    <setting title="Start Page"     desc="which page to start with"   var="thica_startpage" type="scrolloptions" default="Living Room" options='"Living Room","Lounge"'/>
+    <setting title="Enigma Bouquet" desc="Default Bouquet for ENIGMA" var="thica_bouquet"   type="numeric"       default="2"/>
+
+    <!-- Assign Interfaces -->
+    <default var="$dvar(definition_alias_mediaplayer_panasonic_4k)_INTERFACE_POWERON"                      default="wake_on_lan" />
+    <default var="$dvar(definition_alias_mediaplayer_panasonictvnet)_INTERFACE_POWERON"                    default="android_adb" />
+    <default var="$dvar(definition_alias_mediaplayer_enigma2)_INTERFACE_POWERON"                           default="url" />
+    <default var="$dvar(definition_alias_unraid)_INTERFACE_MAIN"                                           default="telnet" />
+    <default var="$dvar(definition_alias_unraid)_INTERFACE_POWERON"                                        default="wake_on_lan" />
+    <default var="$dvar(definition_alias_unraid)_INTERFACE_VOLUME"                                         default="wake_on_lan" />
+    <default var="$dvar(definition_alias_mediaplayer_firetv2)_INTERFACE_VOLUME"                            default="url" />
+    <default var="$dvar(definition_activityalias_mediaplayer_tv1)_INTERFACE_VOLUME"                        default="eiscp" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi1)_INTERFACE_VOLUME"                      default="eiscp" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi2)_INTERFACE_VOLUME"                      default="url" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_INTERFACE_VOLUME"                      default="eiscp" />
+    <default var="$dvar(definition_activityalias_mediaplayer_ftv2)_INTERFACE_VOLUME"                       default="url" />
+
+    <default var="$dvar(definition_activityalias_mediaplayer_games1)_INTERFACE_POWERON"                    default="" />
+    <default var="$dvar(definition_activityalias_mediaplayer_games1)_INTERFACE_VOLUME"                     default="" />
+
+    <!-- Enigma standby instead of deep standby -->
+    <default var="$dvar(definition_alias_mediaplayer_enigma2)_POWEROFFCOMMAND"                             default='Send Hibernate'  />
+
+    <!-- set the parameters for the activity and devices pages if different from defaults-->
+    <default var="$dvar(definition_activityalias_mediaplayer_tv1)_SHOWPOWERBUTTONS"                        default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_tv1)_VOLUMENOTIFICATION"                      default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_tv1)_MAXVOLUME"                               default="70" />
+    <default var="$dvar(definition_activityalias_mediaplayer_tv1)_WAITFORDEVICE"                           default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_tv1)_DEVICEPICTURE"                           default="activity tv" />
+    <default var="$dvar(definition_activityalias_mediaplayer_tv1)_PRETTYNAME"                              default="$lvar(4000)" />
+    <default var="$dvar(definition_activityalias_mediaplayer_tv1)_EXTERNALVOLUMEVAR"                       default="$dvar(definition_alias_mediaplayer_onkyoavr)_mainvolume" />
+
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi1)_VOLUMENOTIFICATION"                    default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi1)_SHOWPOWERBUTTONS"                      default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi1)_MAXVOLUME"                             default="70" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi1)_WAITFORDEVICE"                         default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi1)_DEVICEPICTURE"                         default="activity movie" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi1)_PRETTYNAME"                            default="$lvar(4001)" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi1)_EXTERNALVOLUMEVAR"                     default="$dvar(definition_alias_mediaplayer_onkyoavr)_mainvolume" />
+
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_VOLUMENOTIFICATION"                    default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_SHOWPOWERBUTTONS"                      default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_MAXVOLUME"                             default="70" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_VOLUMECONTROLTYPE"                     default="Slider" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_WAITFORDEVICE"                         default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_TEXT_MENUEITEM[2]"                     default="TV CMD" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_CMD_MENUEITEM[2]"                      default="Show Page TV Popup Panasonic 4K" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_DEVICEPICTURE"                         default="activity video streaming" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_PRETTYNAME"                            default="Amazon Video" />
+    <default var="$dvar(definition_activityalias_mediaplayer_apiv1)_EXTERNALVOLUMEVAR"                     default="$dvar(definition_alias_mediaplayer_onkyoavr)_mainvolume" />
+
+    <default var="$dvar(definition_activityalias_mediaplayer_games1)_SHOWPOWERBUTTONS"                     default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_games1)_MAXVOLUME"                            default="70" />
+    <default var="$dvar(definition_activityalias_mediaplayer_games1)_EXTERNALVOLUMEVAR"                    default="$dvar(definition_alias_mediaplayer_onkyoavr)_mainvolume" />
+
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi2)_VOLUMENOTIFICATION"                    default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi2)_SHOWPOWERBUTTONS"                      default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi2)_WAITFORDEVICE"                         default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi2)_DEVICEPICTURE"                         default="activity movie" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi2)_PRETTYNAME"                            default="$lvar(4001)" />
+    <default var="$dvar(definition_activityalias_mediaplayer_kodi2)_EXTERNALVOLUMEVAR"                     default="$dvar(definition_alias_mediaplayer_panasonictvnet)_mainvolume" />
+
+    <default var="$dvar(definition_activityalias_mediaplayer_ftv2)_SHOWPOWERBUTTONS"                       default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_ftv2)_VOLUMECONTROLTYPE"                      default="Slider" />
+    <default var="$dvar(definition_activityalias_mediaplayer_ftv2)_WAITFORDEVICE"                          default="0" />
+    <default var="$dvar(definition_activityalias_mediaplayer_ftv2)_TEXT_MENUEITEM[2]"                      default="TV CMD" />
+    <default var="$dvar(definition_activityalias_mediaplayer_ftv2)_CMD_MENUEITEM[2]"                       default="Show Page TV Popup Panasonic" />
+    <default var="$dvar(definition_activityalias_mediaplayer_ftv2)_EXTERNALVOLUMEVAR"                     default="$dvar(definition_alias_mediaplayer_panasonictvnet)_mainvolume" />
+
+      <!-- max volume for the Panasonic -->
+    <default var="$dvar(definition_alias_panasonictvnet)_mediaplayer_MAXVOLUME"                            default="40" />
+
+    <!--  Further button settings on the activity kodi pages -->
+
+      <!-- Adjust the Favorite 1 for Movie Genre -->
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdname[9]"                     default='$lvar(kodi_10520):::Pilates:::Fantasy:::Horror' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdname[11]"                    default='$lvar(thica_10001)' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdaction[11]"                  default='Send Restart KODI1'   />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdparameter[11]"               default="" />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdname[12]"                    default='$lvar(thica_10002)' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdaction[12]"                  default='Send Reboot'  />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdparameter[12]"               default="" />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdname[13]"                    default='TV Commands' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdaction[13]"                  default='Show Page'  />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdparameter[13]"               default='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_panasonic_4k)_Popup"}' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdname[14]"                    default='Receiver Commands' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdaction[14]"                  default='Show Page'  />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdparameter[14]"               default='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_onkyoavr)_Popup"}' />
+
+
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdname[9]"                       default='$lvar(kodi_10520):::Pilates:::Fantasy:::Horror' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdname[11]"                      default='$lvar(thica_10001)' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdaction[11]"                    default='Send Restart KODI2'   />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdparameter[11]"                 default="" />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdname[12]"                      default='$lvar(thica_10002)' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdaction[12]"                    default='Send Reboot'  />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdparameter[12]"                 default="" />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdname[13]"                      default='TV Commands' />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdaction[13]"                    default='Show Page'  />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdparameter[13]"                 default='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)_Popup"}' />
+
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[1]"  default="Dimmer" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[1]"  default="Decke" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[2]"  default="Dimmer" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[2]"  default="Fernseher" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[3]"  default="Switch"/>
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[3]"  default="Nachtbeleuchtung" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[4]"  default="Dimmer" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[4]"  default="Couch" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[5]"  default="Switch"/>
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[5]"  default="Truhe" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[6]"  default="Switch"/>
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[6]"  default="Seiten" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[7]"  default="Switch"/>
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[7]"  default="Treppe" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[8]"  default="Switch" />
+    <default var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[8]"  default="F Zimmer" />
+
+    <default var="$dvar(definition_alias_tvfavorites_shared)_bouquet"   default="2" />
+
+  </settings>
+
+  <repositorymanager>
+    <entry>
+      <name>Thicas Private 16 to 10 wide</name>
+      <description language='English'>Personal definition from the developer, good to see, how ORCA is fully utilized</description>
+      <description language='German'>Persönliche Definition des Enwicklers, hilfreich um zu sehen, wie ORCA genutzt wird</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/thica</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/thica.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>wizard templates</type>
+          <name>KODI Media Center (JSON)</name>
+        </dependency>
+        <dependency>
+          <type>wizard templates</type>
+          <name>Fire TV (adb)</name>
+        </dependency>
+        <dependency>
+          <type>wizard templates</type>
+          <name>NVidia Shield TV (adb)</name>
+        </dependency>
+        <dependency>
+          <type>wizard templates</type>
+          <name>Generic Android Device (adb)</name>
+        </dependency>
+        <dependency>
+          <type>definitions</type>
+          <name>Philips Hue (url)</name>
+        </dependency>
+          <dependency>
+              <type>wizard templates</type>
+              <name>Panasonic TV Models Lan</name>
+          </dependency>
+          <dependency>
+              <type>wizard templates</type>
+              <name>Enigma2 Control</name>
+          </dependency>
+          <dependency>
+          <type>definitions</type>
+          <name>Onkyo AVR 16 to 10 wide</name>
+        </dependency>
+        <dependency>
+          <type>definitions</type>
+          <name>Unraid Simple</name>
+        </dependency>
+        <dependency>
+          <type>definitions</type>
+          <name>Activity Template</name>
+        </dependency>
+        <dependency>
+          <type>definitions</type>
+          <name>ELV MAX</name>
+        </dependency>
+        <dependency>
+          <type>interfaces</type>
+          <name>Keene Kira IR Control</name>
+        </dependency>
+        <dependency>
+          <type>interfaces</type>
+          <name>iTach IR Control</name>
+        </dependency>
+        <dependency>
+          <type>codesets</type>
+          <name>Unraid Power off / Telnet</name>
+        </dependency>
+        <dependency>
+          <type>interfaces</type>
+          <name>Wake-On-LAN</name>
+        </dependency>
+        <dependency>
+          <type>interfaces</type>
+          <name>Ping</name>
+        </dependency>
+        <dependency>
+          <type>others</type>
+          <name>TV Logo Pack large</name>
+        </dependency>
+
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/thica/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/thica/interfacesettings*</file>
+        <file>$var(APPLICATIONPATH)/definitions/thica/atlas*</file>
+      </skipfiles>
+
+    </entry>
+  </repositorymanager>
+
+</orca>

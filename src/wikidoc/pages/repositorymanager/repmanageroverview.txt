@@ -1,0 +1,18 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Repository Manager
+WikiDoc:Page:Repository Manager Overview
+WikiDoc:TOCTitle:1=Overview
+The repository manager is a convenient interface for user, to add further resources to ORCA without the need to copy them manually to the device
+The core features are:
+* Full access to online repositories
+* Multiple (up to 5) online repositories can be used
+* Full repository directory control including multilingual descriptions
+* Versioning of repository packages
+* Verification of ORCA versions against package requirements
+* Multiple sources within one repository package
+* Dependency management to other repository packages including automatic installation
+* Auto update of packages on ORCA release change
+* Excluding files from a package
+WikiDoc:End
+'''

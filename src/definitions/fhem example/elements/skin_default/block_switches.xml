@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+  <element name='Anchor Switch 1' type='ANCHOR' posx='left'  width='%15' >
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_switch_1.xml" parse="xml" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH1_NAME_FHEM)'!=''" />
+  </element>
+
+  <element name='Anchor Switch 2' type='ANCHOR' posx='%25'  width='%15' >
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_switch_2.xml" parse="xml" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH2_NAME_FHEM)'!=''" />
+  </element>
+  <element name='Anchor Switch 3' type='ANCHOR' posx='%50'  width='%15' >
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_switch_3.xml" parse="xml" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH3_NAME_FHEM)'!=''" />
+  </element>
+  <element name='Anchor Switch 4' type='ANCHOR' posx='%75'  width='%15' >
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_switch_4.xml" parse="xml" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH4_NAME_FHEM)'!=''" />
+  </element>
+  <element name='Anchor Switch all' type='ANCHOR' posx='right'  width='%15' >
+    <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_switch_all.xml" parse="xml"  condition="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMSWITCHES)&gt;1" />
+  </element>
+
+</elements>

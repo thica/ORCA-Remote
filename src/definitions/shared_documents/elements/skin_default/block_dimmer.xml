@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements>
+  <element name='Dimmer Element' type='RECTANGLE'  backgroundcolor='$var(dimmed)'/>
+</elements>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <action replaceoption="replaceexisting" name="Show Main Definition Page" >
+        <action name="if we are the wizard" string="if $var(DEFINITIONNAME)==mediaplayer_wizard" />
+            <action name="if we want to show the wizard" string="if $var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)==" />
+                <action name="Show Setup Wizard" string="showpage Page_SetupWizard_$dvar(definition_alias_mediaplayer_wizard)"/>
+                <action name="nothing more to do" string="goto $dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)_End_ShowMainPage" />
+            <action name="endif" string="endif"/>
+            <action name="Finally: show first page" string="showpage $var(DEFINITIONSTARTPAGE)" condition="$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)!="/>
+        <action name="endif" string="endif"/>
+        <action name="Finally: show first page" string="showpage $var(DEFINITIONSTARTPAGE)" />
+        <action name="$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)_End_ShowMainPage" />
+    </action>
+
+
+    <action name="FKT Select Template $dvar(definition_alias_mediaplayer_wizard)" >
+        <!-- Called by the drop down button on the wizard page -->
+        <action name="Set Name, rest will be triggered by var link" string="setvar $dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template=$var(FKT Select Template $dvar(definition_alias_mediaplayer_wizard)_parameter_DROPDOWNVALUE)"/>
+    </action>
+
+    <action name="FKT_OnTemplateName Changed $dvar(definition_alias_mediaplayer_wizard)">
+        <action name="ask if you really want to use it" string="showquestion" title="$lvar(5003)" message="$lvar(mediaplayerwizard_10001)" actionyes="FKT_Change Template $dvar(definition_alias_mediaplayer_wizard)" actionno="FKT_Do Not Change Template $dvar(definition_alias_mediaplayer_wizard)"/>
+    </action>
+
+    <action name="FKT_Change Template $dvar(definition_alias_mediaplayer_wizard)">
+        <action name="Delete Trigger"                               string="addvarlink" varname="$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template" actionname="FKT_OnTemplateName Changed $dvar(definition_alias_mediaplayer_wizard)" linktype="call" delete="1" />
+        <action name="save it to cookie"                            string="modifyvar"  varname="$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template" operator="save" />
+        <action name="save current selection"                       string="setvar $dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_newvalue=$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)" />
+        <action name="restore original selection"                   string="setvar $dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template=$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_orgvalue)" condition="$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_orgvalue)!="/>
+        <action name="save it to definition.ini"                    string="getsaveorcasetting" configtype="mediaplayer_wizard" varname="$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template" varvalue="$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)" />
+        <action name="copy active definition file"                  string="modifyfile" operator="copyfile"      filename="definition.ini"    dstfilename="definition.$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template).ini" condition="'$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_orgvalue)'!=''"/>
+        <action name="copy active interface settings"               string="modifyfile" operator="copyfolder"    path="interfacesettings" dstpath="interfacesettings.$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)" condition="'$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_orgvalue)'!=''"/>
+        <action name="delete active interface settings"             string="modifyfile" operator="deletefolder"  path="interfacesettings"/>
+        <action name="check if we have a saved definition file"     string="modifyfile" operator="existfile"     filename="definition.$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_newvalue).ini" dstvarname="DEFINITIONEXIST"/>
+        <action name="copy old definition file if there"            string="modifyfile" operator="copyfile"      filename="definition.$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_newvalue).ini" dstfilename="definition.ini" condition="$var(DEFINITIONEXIST)==TRUE"/>
+        <action name="check if we have saved interface settings"    string="modifyfile" operator="existfolder"   path="interfacesettings.$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)" dstvarname="INTERFACESETTINGSEXIST"/>
+        <action name="copy old interface settings , if there"       string="modifyfile" operator="copyfolder"    path="interfacesettings.$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)" dstpath="interfacesettings" condition="$var(INTERFACESETTINGSEXIST)==TRUE"/>
+        <action name="delete current definition file if not there"  string="modifyfile" operator="deletefile"    filename="definition.ini" condition="$var(DEFINITIONEXIST)==FALSE"/>
+        <action1 name="delete current active definition folder"      string="modifyfile" operator="deletefolder"  path="active_template"/>
+        <action1 name="copy template to active definition folder"    string="modifyfile" operator="copyfolder"    abspath="$var(WIZARDTEMPLATESPATH)/mediaplayer wizard/$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_newvalue)" dstpath="$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_newvalue)"/>
+        <action1 name="Rename it to active"                          string="modifyfile" operator="renamefolder"  path="$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_newvalue)" dstfilename="active_template"/>
+        <action name="Restart"                                      string="restartafterrepositoryupdate"/>
+    </action>
+
+    <action name="FKT_Do Not Change Template $dvar(definition_alias_mediaplayer_wizard)">
+        <action name="Delete Trigger" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template" actionname="FKT_OnTemplateName Changed $dvar(definition_alias_mediaplayer_wizard)" linktype="call" delete="1" />
+        <action name="restore var in definition.ini" string="getsaveorcasetting" configtype="mediaplayer_wizard" varname="$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template" varvalue="$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_orgvalue" />
+        <action name="Restart Trigger" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template"          linktype="call" actionname="FKT_OnTemplateName Changed $dvar(definition_alias_mediaplayer_wizard)" />
+    </action>
+
+    <xi:include href="$dvar(definition_templatepath_mediaplayer_wizard)/$dvar(definition_templatename_mediaplayer_wizard)/actions/customactions.xml" parse="xml" ></xi:include>
+
+    <action name="FKT_AddTemplateInstallationsHint $dvar(definition_alias_mediaplayer_wizard)">
+        <action name="check, if allready in hint" string="modifyvar" varname="$var(INSTALLATIONHINT)"  operator="find" parameter1="$var(TEMPLATETHINT)" parameter2="findresult"/>
+        <action name="if not in hint" string="if $var(findresult)==-1"/>
+
+          <action name="Add Installation Hint" string="modifyvar" varname="INSTALLATIONHINT" parameter1="[b][color=#FFFF00]$dvar(definition_templatename_mediaplayer_wizard)[/color][/b]&#10;&#10;$var(TEMPLATETHINT)&#10;&#10;" operator="concatenate"/>
+
+
+        <action name="" string="endif" />
+    </action>
+
+</includes>
+

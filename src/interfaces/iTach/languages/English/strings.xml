@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="IFACE_ITACH_1">Connnector</string>
+  <string id="IFACE_ITACH_2">iTach Connector</string>
+  <string id="IFACE_ITACH_3">Module</string>
+  <string id="IFACE_ITACH_4">iTach Module (usual 1)</string>
+ </strings>

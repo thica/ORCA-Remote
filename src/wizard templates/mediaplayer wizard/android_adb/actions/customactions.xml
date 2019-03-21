@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <action replaceoption="replaceexisting"  name="Check if $dvar(definition_alias_mediaplayer_template) on">
+        <action name="" string="setvar" varname="DEVICEISONLINE" varvalue="FALSE" />
+        <action name="" string="setvar" varname="adbpowerstatus  mScreenOn" varvalue="false" />
+        <action name="" string="setvar" varname="adbpowerstatusmInteractive" varvalue="false" />
+        <action name="Send Check Command"  string="$var($dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND)" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+        <action name="Check if checkcommannd succeeded" string="if $var(adbpowerstatusmInteractive)==true" />"
+          <action name="setsuccessvar" string="setvar" varname="DEVICEISONLINE" varvalue="TRUE" />
+        <action name="endif" string="endif" />
+    </action>    
+    
+  <action name="Get $dvar(definition_alias_mediaplayer_template) Power Status">
+      <action name="" string="Send Get Power Status"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)" retvar="powerstatus"/>
+      <action name="" string="setvar" varname="POWERSTATUS_$dvar(definition_alias_mediaplayer_template)" varvalue="ON"  condition="$var(powerstatus)==true"/>
+      <action name="" string="setvar" varname="POWERSTATUS_$dvar(definition_alias_mediaplayer_template)" varvalue="OFF" condition="$var(powerstatus)!=true"/>
+  </action>
+
+</includes>
+

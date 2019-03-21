@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+    <string id="philipshue_10001">Startpage</string>
+    <string id="philipshue_10002">Startpage for the definition</string>
+    <string id="philipshue_10003">Other settings</string>
+    <string id="philipshue_10004">Details</string>
+    <string id="philipshue_10005">Control Type</string>
+    <string id="philipshue_10006">Dimmable or just on/off device</string>
+    <string id="philipshue_10007">Name</string>
+    <string id="philipshue_10008">Name of the lamp</string>
+    <string id="philipshue_10009">Lamp</string>
+    <string id="philipshue_10010">Device number</string>
+    <string id="philipshue_10011">The Hue device Number (negative for groups)</string>
+    <string id="philipshue_10012">Not Selected</string>
+    <string id="philipshue_10087">Navigation Bar</string>
+    <string id="philipshue_10088">Select the type of the navigation bar</string>
+
+
+
+
+
+</strings>

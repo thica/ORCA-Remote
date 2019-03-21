@@ -1,0 +1,13 @@
+
+<page name='Page_GestureRecorder'>
+  <page_parameter>
+    <popup>0</popup>
+    <preventpreinit>1</preventpreinit>
+  </page_parameter>
+  <elements>
+    <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
+    <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%4" height="of:width:self" picturenormal="button wide*" action="gotosettingspage" fontsize='%40' caption="icon:close_window" />
+    <element name='GestureRecorder'   type='GESTURERECORDER' posx="center" posy="middle" width="%90" height="%90"  backgroundcolor='#454545ff' />
+    <element name="Storemessage"      type="TEXTFIELD" posx="center" posy="top" width="%90" height="of:height:Button Back"  fontsize='%h50' textcolor='$var(white)' caption='$lvar(SCRIPT_TOOLS_GESTURERECORDER_5)' htextalign='center' vtextalign='top' />
+  </elements>
+</page>

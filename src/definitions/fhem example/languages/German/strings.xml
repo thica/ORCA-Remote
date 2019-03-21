@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="fhem_example_10004">Dimmer</string>
+  <string id="fhem_example_10005">Schalter</string>
+  <string id="fhem_example_10006">Alle Dimmer</string>
+  <string id="fhem_example_10007">Alle Schalter</string>  
+  
+  <string id="fhem_example_10100">Text Dimmer</string>
+  <string id="fhem_example_10101">Bildschirm Text für Dimmer</string>
+  <string id="fhem_example_10102">FHEM Name Dimmer</string>
+  <string id="fhem_example_10103">FHEM Geräte Name für den Dimmer</string>
+  
+
+  <string id="fhem_example_10105">Text Schalter</string>
+  <string id="fhem_example_10106">Bildschirm Text für Schalter</string>
+  <string id="fhem_example_10107">FHEM Name Schalter</string>
+  <string id="fhem_example_10108">FHEM Geräte Name für den Schalter</string>
+
+  <string id="fhem_example_10110">Text alle Dimmer</string>
+  <string id="fhem_example_10111">Bildschirm Text für alle Dimmer</string>
+  <string id="fhem_example_10112">Text alle Schalter</string>
+  <string id="fhem_example_10113">Bildschirm Text für alle Schalter</string>
+</strings>

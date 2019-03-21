@@ -1,0 +1,70 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:DefinitionsForUser
+WikiDoc:Page:Userdescription Definition showcase
+WikiDoc:TOCTitle:showcase
+= Showcase =
+The Showcase definition is an example definition which shows most of the ORCA capabilities. It does not have any remote control functions. This is more for developers to figure out the capabilties of ORCA and how to use them.
+
+[[File:showcase_main.png|link=]]
+[[File:showcase_overview.png|link=]]
+[[File:showcase_slider.png|link=]]
+
+This definition has the following capabilities
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Capability
+! align="left" | Description
+|-
+|Orientation
+|Landscape Only
+|-
+|Screen Size
+|No optimisation for different screen sizes, best on large screens
+|-
+|Interfaces
+|[[Interfaces-orcavideo|orca_video]] zu show an example video
+|}</div>
+
+= Settings =
+
+This definition has the following settings:
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|colorpickercolor
+|The initial color for the [[Widgets-COLORPICKER:colorpicker]] widget
+|}</div>
+WikiDoc:End
+'''
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Definitions
+WikiDoc:Page:Reference Definition showcase
+WikiDoc:TOCTitle:showcase
+
+This definition is not designed to use or import it into other definitions. But it might worth to look into the xml files to get an impression how to use the different widgets.
+
+= definitionvars =
+This definition uses the following definitionvars:
+
+No defininition vars
+
+
+= elements =
+The following elements are defined for use:
+
+No common blocks
+
+= pages =
+The following pages are defined:
+
+= actions =
+The following actions are defined:
+
+WikiDoc:End
+'''

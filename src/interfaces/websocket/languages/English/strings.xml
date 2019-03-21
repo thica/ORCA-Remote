@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <string id="IFACE_WEBSOCKET_1">Service</string>
+  <string id="IFACE_WEBSOCKET_2">Full Service Address, you can use $cvar(HOST) and $cvar(PORT)</string>
+
+</strings>

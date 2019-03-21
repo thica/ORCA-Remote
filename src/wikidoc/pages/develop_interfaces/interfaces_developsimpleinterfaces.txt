@@ -1,0 +1,8 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Develop Interfaces
+WikiDoc:Page:Develop Simple Interfaces
+WikiDoc:TOCTitle:2=Develop Simple Interfaces
+Todo: Create Description
+WikiDoc:End
+'''

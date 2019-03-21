@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <support>http://www.orca-remote.org/forum/</support>
+    <installationhint>$lvar(kodionandroid_10000)</installationhint>
+    <orientations>landscape,portrait</orientations>
+    <definitionvars>{ "definition_alias_kodi_on_android":                           "Kodi on Android",
+                      "definition_alias_mediaplayer_kodi":                          "Kodi Mediaplayer",
+                      "definition_alias_mediawizard_kodi":                          "Kodi Wizard",
+                      "definition_alias_cmdfavorites_kodi":                         "Kodi Commands",
+                      "definition_alias_appfavorites_kodi":                         "Kodi Apps",
+                      "definition_alias_mediaplayer_android":                       "Android Mediaplayer",
+                      "definition_alias_mediawizard_android":                       "Android Wizard",
+                      "definition_alias_cmdfavorites_android":                      "Android Commands",
+                      "definition_alias_appfavorites_android":                      "Android Apps",
+                      "definition_activity_template":                               "Activity Player",
+                      "definition_alias_tvfavorites_shared":                        "Shared TV Channels"}</definitionvars>
+  </def_parameter>
+
+  <startskip condition="$dvar(definition_alias_kodi_on_android_IMPORTPAGES)==0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+    </pages>
+  <stopskip/>
+  <definitionimports>
+
+      <definition
+          importlanguages = "1"
+          importpages     = "1"
+          importsettings  = "1"
+          importactions   = "1"
+          definitionvars  ='{"definition_alias_mediaplayer_wizard":                                   "$dvar(definition_alias_mediawizard_android)",
+                             "definition_alias_mediaplayer_template":                                 "$dvar(definition_alias_mediaplayer_android)",
+                             "definition_alias_appfavorites_template":                                "$dvar(definition_alias_appfavorites_android)",
+                             "definition_alias_cmdfavorites_template":                                "$dvar(definition_alias_cmdfavorites_android)",
+                             "definition_alias_tvfavorites_template":                                 "$dvar(definition_alias_tvfavorites_shared)",
+                             "definition_templatename_mediaplayer_wizard":                            "android_adb",
+                             "definition_templatepath_mediaplayer_wizard":                            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                             "definition_activity_template":                                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+      <definition
+        importlanguages = "1"
+        importpages     = "1"
+        importsettings  = "1"
+        importactions   = "1"
+        definitionvars  ='{"definition_alias_mediaplayer_wizard":                                   "$dvar(definition_alias_mediawizard_kodi)",
+                           "definition_alias_mediaplayer_template":                                 "$dvar(definition_alias_mediaplayer_kodi)",
+                           "definition_alias_appfavorites_template":                                "$dvar(definition_alias_appfavorites_kodi)",
+                           "definition_alias_cmdfavorites_template":                                "$dvar(definition_alias_cmdfavorites_kodi)",
+                           "definition_alias_tvfavorites_template":                                 "$dvar(definition_alias_tvfavorites_shared)",
+                           "definition_templatename_mediaplayer_wizard":                            "kodi",
+                           "definition_templatepath_mediaplayer_wizard":                            "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
+                           "definition_activity_template":                                          "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
+
+    </definitionimports>
+
+  <interface_setup>
+    <interface name="websocket">
+      <configuration name="DEVICE_$dvar(definition_alias_mediaplayer_kodi)">
+        <setting name="Port" parameter="9090"/>
+        <setting name="Host" parameter="linked:android_adb:DEVICE_$dvar(definition_alias_mediaplayer_android):Host"/>
+        <setting name="Password" parameter="admin"/>
+        <setting name="User" parameter="admin"/>
+        <setting name="TimeToClose" parameter="-1"/>
+        <setting name="FNCodeset" parameter="CODESET_websocket_KODI-Leia.xml"/>
+        <setting name="DisableInterFaceOnError" parameter="0"/>
+        <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+      </configuration>
+    </interface>
+  </interface_setup>
+
+  <repositorymanager>
+    <entry>
+      <name>Kodi on Fire TV (adb)</name>
+      <description language='English'>Controls Kodi on Fire TV (using adb/TCP)</description>
+      <description language='German'>Kodi Fernbedienung auf Fire TV(verwendet adb/TCP)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/kodi on android</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/kodi on android.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>definitions</type>
+          <name>KODI Media Center (JSON)</name>
+        </dependency>
+        <dependency>
+          <type>definitions</type>
+          <name>Fire TV (adb)</name>
+        </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/kodi on android/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/kodi on android/interfacesettings*</file>
+        <file>$var(APPLICATIONPATH)/definitions/kodi on android/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+</orca>

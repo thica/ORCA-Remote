@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_$dvar(definition_alias_appfavorites_template)_APPS_Popup_Vertical'>
+  <page_parameter>
+    <popup>1</popup>
+  </page_parameter>
+
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
+    <element name="Anchor Inner" type="ANCHOR" posx="center" posy="middle" width="%90" height="%90">
+      <element name="Frame" type="PICTURE"  picturenormal="background boxes" />
+      <element name='Anchor Appstart Buttons' type='ANCHOR' posx='center' posy='middle' width='%93' height='%90'>
+        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_appstart_vertical.xml" parse="xml" />
+      </element>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%12" height="of:width:self" picturenormal="button wide*" action="Show Page" actionpars='{"pagename":"$var(LASTPAGE)"}' fontsize='%h40' caption="icon:close_window" />
+  </elements>
+</page>

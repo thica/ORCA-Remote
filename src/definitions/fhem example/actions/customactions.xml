@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer all">
+
+    <action name="" string="if '$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_NAME_FHEM)'!=''"/>
+    <action name="Set Value Dimmer" string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer1=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmerall)"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 1" />
+    <action name="Update Widget Dimmer" string="updatewidget $dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 1" />
+    <action name="" string="endif"/>
+
+    <action name="" string="if '$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER2_NAME_FHEM)'!=''"/>
+    <action name="Set Value Dimmer" string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer2=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmerall)"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 2" />
+    <action name="Update Widget Dimmer" string="updatewidget $dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 2" />
+    <action name="" string="endif"/>
+
+    <action name="" string="if '$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER3_NAME_FHEM)'!=''"/>
+    <action name="Set Value Dimmer" string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer3=$var(Dimmerall)"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 3" />
+    <action name="Update Widget Dimmer" string="updatewidget $dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 3" />
+    <action name="" string="endif"/>
+
+    <action name="" string="if '$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER4_NAME_FHEM)'!=''"/>
+    <action name="Set Value Dimmer" string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer4=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmerall)"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 4" />
+    <action name="Update Widget Dimmer" string="updatewidget $dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 4" />
+    <action name="" string="endif"/>
+
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB all ON" attributename="transparancy" attributevalue="$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmerall)"/>
+
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 1">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer1"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 1"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 1 ON"/>
+    <action name="Set Var Dimmer Value"         string="setvar DIMVALUE=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer1)"/>
+    <action name="Set Var RGB"                  string="setvar RGBCOLOR1=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer1)"/>
+    <action name=""                             string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Send Dim Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 2">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer2"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER2_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 2"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 2 ON"/>
+    <action name="Set Var Dimmer Value"         string="setvar DIMVALUE=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer2)"/>
+    <action name="Set Var RGB"                  string="setvar RGBCOLOR1=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer2)"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Send Dim Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 3">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer3"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER3_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 3"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 3 ON"/>
+    <action name="Set Var Dimmer Value"         string="setvar DIMVALUE=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer3)"/>
+    <action name="Set Var RGB"                  string="setvar RGBCOLOR1=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer3)"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Send Dim Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 4">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer4"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER4_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 4"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 4 ON"/>
+    <action name="Set Var Dimmer Value"         string="setvar DIMVALUE=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer4)"/>
+    <action name="Set Var RGB"                  string="setvar RGBCOLOR1=$var($dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer4)"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Send Dim Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Send Dim Dimmer">
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(DIMMERCOLORBALL)" attributename="transparancy" attributevalue="$var(DIMVALUE)"/>
+    <action name="Switch Off on low Dim Values" string="goto label_switchoff" condition="$var(DIMVALUE)&lt;=3"  />
+    <action name="Make FS Values" string="call Fkt DezToFS20DimSteps" />
+    <action name="Dim it" string="sendcommand" commandname="dim" commandparameter='{"dimmer":"$var(DIMMER)","dimvalue":"$var(DIMVALUE)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="Done" string="goto label_end"/>
+    <action name="label_switchoff" />
+    <action name="Switch it off" string="sendcommand" commandname="power_off" commandparameter='{"dimmer":"$var(DIMMER)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="label_end" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer all">
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_NAME_FHEM)'!=''" />
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 2" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER2_NAME_FHEM)'!=''"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 3" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER3_NAME_FHEM)'!=''"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 4" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER4_NAME_FHEM)'!=''"/>
+    <action name="" string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_Dimmerall=100" />
+    <action name="Update Widget Dimmer" string="updatewidget $dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer all" />
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB all ON" attributename="transparancy" attributevalue="100"/>
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 1">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer1"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 1"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 1 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 2">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer2"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER2_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 2"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 2 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 3">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer3"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER3_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 3"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 3 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 4">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer4"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER4_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 4"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 4 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Dimmer">
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(DIMMERCOLORBALL)" attributename="transparancy" attributevalue="100"/>
+    <action name="" string="sendcommand" commandname="ramp_on_time" commandparameter='{"dimmer":"$var(DIMMER)","time":"3"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand" commandname="power_on" commandparameter='{"dimmer":"$var(DIMMER)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand" commandname="dim" commandparameter='{"dimmer":"$var(DIMMER)","dimvalue":"100"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="setvar $var(DIMVAR)=100" />
+    <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
+  </action>
+
+  <action name="Send Switch Off Dimmer all">
+    <action name="" string="call Send Switch Off Dimmer 1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_NAME_FHEM)'!=''"/>
+    <action name="" string="call Send Switch Off Dimmer 2" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER2_NAME_FHEM)'!=''"/>
+    <action name="" string="call Send Switch Off Dimmer 3" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER3_NAME_FHEM)'!=''"/>
+    <action name="" string="call Send Switch Off Dimmer 4" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER4_NAME_FHEM)'!=''"/>
+    <action name="" string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_Dimmerall=0" />
+    <action name="Update Widget Dimmer" string="updatewidget $dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer all" />
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB all ON" attributename="transparancy" attributevalue="0"/>
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Dimmer 1">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer1"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 1"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 1 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Dimmer 2">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer2"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER2_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 2"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 2 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Dimmer 3">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer3"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER3_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 3"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 3 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Dimmer 4">
+    <action name="Set Var Dimmer var"           string="setvar DIMVAR=$dvar(definition_alias_FHEMFS20LIGHTS)_Dimmer4"/>
+    <action name="Set Var Dimmer Device"        string="setvar DIMMER=$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER4_NAME_FHEM)"/>
+    <action name="Set Var Dimmer Slider Widget" string="setvar DIMMERSLIDER=$dvar(definition_alias_FHEMFS20LIGHTS)_Slider Dimmer 4"/>
+    <action name="Set Var Dimmer Color Ball"    string="setvar DIMMERCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 4 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Dimmer" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Dimmer">
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(DIMMERCOLORBALL)" attributename="transparancy" attributevalue="0"/>
+    <action name="" string="sendcommand" commandname="ramp_off_time" commandparameter='{"dimmer":"$var(DIMMER)","time":"3"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand" commandname="power_off" commandparameter='{"dimmer":"$var(DIMMER)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="setvar $var(DIMVAR)=0" />
+    <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
+  </action>
+
+  <action name="Fkt DezToFS20DimSteps">
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="divide"   parameter1="6.25"/>
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="round"    parameter1="0"/>
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="decrease" parameter1="0.05"/>
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="multiply" parameter1="6.25"/>
+    <action name="" string="modifyvar" varname="DIMVALUE" operator="round"    parameter1="0"/>
+  </action>
+
+
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch all">
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH1_NAME_FHEM)'!=''" />
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 2" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH2_NAME_FHEM)'!=''"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 3" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH3_NAME_FHEM)'!=''"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 4" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH4_NAME_FHEM)'!=''"/>
+    <action name="" string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_Switchall=100" />
+    <action name="Update Widget Switch" string="updatewidget $dvar(definition_alias_FHEMFS20LIGHTS)_Slider Switch all" />
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB all ON" attributename="transparancy" attributevalue="100"/>
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 1">
+    <action name="Set Var Switch Device"        string="setvar SWITCH=$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH1_NAME_FHEM)"/>
+    <action name="Set Var Switch Color Ball"    string="setvar SWITCHCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 1 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Switch" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 2">
+    <action name="Set Var Switch Device"        string="setvar SWITCH=$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH2_NAME_FHEM)"/>
+    <action name="Set Var Switch Color Ball"    string="setvar SWITCHCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 2 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Switch" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 3">
+    <action name="Set Var Switch Device"        string="setvar SWITCH=$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH3_NAME_FHEM)"/>
+    <action name="Set Var Switch Color Ball"    string="setvar SWITCHCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 3 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Switch" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 4">
+    <action name="Set Var Switch Device"        string="setvar SWITCH=$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH4_NAME_FHEM)"/>
+    <action name="Set Var Switch Color Ball"    string="setvar SWITCHCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 4 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Switch" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Switch">
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(SWITCHCOLORBALL)" attributename="transparancy" attributevalue="100"/>
+    <action name="" string="sendcommand" commandname="power_on" commandparameter='{"dimmer":"$var(SWITCH)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch all">
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH1_NAME_FHEM)'!=''"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 2" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH2_NAME_FHEM)'!=''"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 3" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH3_NAME_FHEM)'!=''"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 4" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH4_NAME_FHEM)'!=''"/>
+    <action name="" string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_Switchall=0" />
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB all ON" attributename="transparancy" attributevalue="0"/>
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 1">
+    <action name="Set Var Switch Device"        string="setvar SWITCH=$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH1_NAME_FHEM)"/>
+    <action name="Set Var Switch Color Ball"    string="setvar SWITCHCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 1 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Switch" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 2">
+    <action name="Set Var Switch Device"        string="setvar SWITCH=$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH2_NAME_FHEM)"/>
+    <action name="Set Var Switch Color Ball"    string="setvar SWITCHCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 2 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Switch" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 3">
+    <action name="Set Var Switch Device"        string="setvar SWITCH=$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH3_NAME_FHEM)"/>
+    <action name="Set Var Switch Color Ball"    string="setvar SWITCHCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 3 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Switch" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 4">
+    <action name="Set Var Switch Device"        string="setvar SWITCH=$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH4_NAME_FHEM)"/>
+    <action name="Set Var Switch Color Ball"    string="setvar SWITCHCOLORBALL=$dvar(definition_alias_FHEMFS20LIGHTS)_Picture BULB 4 ON"/>
+    <action name="" string="call $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Switch" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Switch">
+    <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(SWITCHCOLORBALL)" attributename="transparancy" attributevalue="0"/>
+    <action name="" string="sendcommand" commandname="power_off" commandparameter="{'dimmer':$var(SWITCH)}" interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+  </action>
+
+  <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt INITFS20DIMMERVARS">
+    <action name="INITCNTDIMMERS"        string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMDIMMERS=0" />
+    <action name="INCREASECNTDIMMERS"    string="modifyvar" varname="$dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMDIMMERS"       operator="increase" parameter1="1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER1_NAME_FHEM)'!=''"/>
+    <action name="INCREASECNTDIMMERS"    string="modifyvar" varname="$dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMDIMMERS"       operator="increase" parameter1="1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER2_NAME_FHEM)'!=''"/>
+    <action name="INCREASECNTDIMMERS"    string="modifyvar" varname="$dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMDIMMERS"       operator="increase" parameter1="1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER3_NAME_FHEM)'!=''"/>
+    <action name="INCREASECNTDIMMERS"    string="modifyvar" varname="$dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMDIMMERS"       operator="increase" parameter1="1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_DIMMER4_NAME_FHEM)'!=''"/>
+
+    <action name="INITCNTSWITCHES"        string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMSWITCHES=0" />
+    <action name="INCREASECNTSWITCHES"    string="modifyvar" varname="$dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMSWITCHES"       operator="increase" parameter1="1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH1_NAME_FHEM)'!=''"/>
+    <action name="INCREASECNTSWITCHES"    string="modifyvar" varname="$dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMSWITCHES"       operator="increase" parameter1="1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH2_NAME_FHEM)'!=''"/>
+    <action name="INCREASECNTSWITCHES"    string="modifyvar" varname="$dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMSWITCHES"       operator="increase" parameter1="1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH3_NAME_FHEM)'!=''"/>
+    <action name="INCREASECNTSWITCHES"    string="modifyvar" varname="$dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMSWITCHES"       operator="increase" parameter1="1" condition="'$var($dvar(definition_alias_FHEMFS20LIGHTS)_SWITCH4_NAME_FHEM)'!=''"/>
+
+    <action name="INITPOSDIMERS"         string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_POSDIMMERS=%5" />
+    <action name="INITPOSSWITCHES"       string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_POSSWITCHES=%95" />
+
+    <action name="INITPOSDIMERS"         string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_POSDIMMERS=center"  condition="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMSWITCHES)==0"/>
+    <action name="INITPOSSWITCHES"       string="setvar $dvar(definition_alias_FHEMFS20LIGHTS)_POSSWITCHES=center" condition="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMDIMMERS)==0"/>
+  </action>
+
+</includes>

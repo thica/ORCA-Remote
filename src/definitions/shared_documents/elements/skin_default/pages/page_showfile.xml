@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_ShowFile'>
+  <page_parameter>
+   <popup>1</popup>
+  </page_parameter>
+  <elements>
+    <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
+    <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%4" height="of:width:self" picturenormal="button wide*" action="gotosettingspage" fontsize='%40' caption="icon:close_window" />
+    <element name="File" type="FILEVIEWER" posx="center" posy="middle" width="%90" height="%90"  filename="$var(SHOWFILE)" htextalign="left" vtextalign="middle" backgroundcolor='#454545ff' textcolor='$var(white)' fontsize='d16'/>
+  </elements>
+</page>

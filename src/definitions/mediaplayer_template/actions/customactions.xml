@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <!-- Local comamnds -->
+  <action name="SwitchAllOff">
+    <action name="" string="call FKT SwitchAllOff" />
+  </action>
+
+  <action name="FKT SwitchAllOff">
+    <action name="" string="call FKT SwitchOff $dvar(definition_alias_mediaplayer_template)" />
+  </action>
+
+  <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)">
+    <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_template) starts here" />
+    <action name="Adjust Page on first page start" string="if $var(PAGESTARTCOUNT_$var(CURRENTPAGE))==1" />
+      <action name="Load TV Pictures on first start" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var($dvar(definition_alias_tvfavorites_template)_bouquet)" />
+      <action name="Check if widget exists on current page" string="getwidgetattribute" widgetname="Main Volume Textvalue" attributename="exists" retvar="TMPWIDGETEXISTS" />
+      <action name="Disable Volumetext if we dont use it" string="setwidgetattribute" widgetname="Main Volume Textvalue" attributename="enable" attributevalue="0"    condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Buttons" ignoremissing="1"/>
+      <action name="Disable Volumetext if we dont use it" string="setwidgetattribute" widgetname="Main Volume Textvalue" attributename="enable" attributevalue="0"    condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==None" ignoremissing="1"/>
+      <action name="Set $dvar(definition_alias_mediaplayer_template) Power On Action (MPT)"  string="setwidgetattribute" widgetname="Button Power On"  attributename="action" attributevalue="FKT SwitchOn $dvar(definition_alias_mediaplayer_template) Force" ignoremissing="1"/>
+      <action name="Set $dvar(definition_alias_mediaplayer_template) Power Off Action (MPT)" string="setwidgetattribute" widgetname="Button Power Off" attributename="action" attributevalue="FKT SwitchOff $dvar(definition_alias_mediaplayer_template) Force" ignoremissing="1"/>
+      <action name="Set Gestures for Template" string="call Set Gestures $dvar(definition_alias_mediaplayer_template)" />
+    <action name="endif" string="endif" />
+    <action name="Dont do anything on first app start/ interfaces might not be configured" string="if $var(STARTCOUNT)>1"/>
+      <action name="Set Triggers"         string="call Set Trigger $dvar(definition_alias_mediaplayer_template)" />
+      <action name="Set Return Page"      string="setvar PAGEWAITRETURN=Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+      <action name="Wait to be ready"     string="call FKT WaitForReady_$dvar(definition_alias_mediaplayer_template)" />
+      <action name="Get the Volume"       string="call FKT GetVolume_$dvar(definition_alias_mediaplayer_template)" condition="$var(DEVICEISONLINE)!=FALSE"/>
+      <action name="Select Input Channel" string="call FKT Send Switch Channel $dvar(definition_alias_mediaplayer_template)" condition="$var(DEVICEISONLINE)!=FALSE"/>
+    <action name="endif (Dont do anything on first app start)" string="endif"/>
+    <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_template) ends here" />
+  </action>
+
+  <action name="PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)">
+    <action name="" string="call Delete Trigger $dvar(definition_alias_mediaplayer_template)" />
+  </action>
+
+  <action name="FKT WaitForReady_$dvar(definition_alias_mediaplayer_template)">
+    <action name="if we want to wait" string="if $var($dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE)==1" />
+      <action name="Enable Tiny Wait picture" string="enablewaitpicture" />
+      <action name="Check if already online" string="call Check if $dvar(definition_alias_mediaplayer_template) on"  />"
+      <action name="Disable Tiny Wait picture" string="disablewaitpicture" />
+      <action name="if not online" string="if $var(DEVICEISONLINE)==FALSE" />"
+        <action name="Set Command to Poweron Device"  string="setvar DEVICEPOWERONCMD=FKT SwitchOn $dvar(definition_alias_mediaplayer_template) Force" />
+        <action name="Set Command to Check If on"     string="setvar DEVICECHECKIFONCMD=Check if $dvar(definition_alias_mediaplayer_template) on" />
+        <action name="Set Pause between poll"         string="setvar DEVICEWAITTIME=500" />
+        <action name="Set String for Wait Popup"      string="setvar WAITFORMESSAGE=$lvar(5024) $var($dvar(definition_alias_mediaplayer_template)_PRETTYNAME)" />
+        <action name="Wait until Online" string="call Fkt WaitForDeviceReady" condition="$var(DEVICEISONLINE)==FALSE" />"
+      <action name="endif (not online)" string="endif" />"
+    <action name="endif (we want to wait)" string="endif" />"
+  </action>
+
+  <action name="Check if $dvar(definition_alias_mediaplayer_template) on">
+    <action name="" string="setvar DEVICEISONLINE=FALSE" />
+    <action name="Send Check Command"  string="$var($dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND)" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="setsuccessvar" string="setvar DEVICEISONLINE=TRUE" condition="$var(LASTERRORCODE)==0" />
+  </action>
+
+  <action name="FKT GetVolume_$dvar(definition_alias_mediaplayer_template)">
+    <action name="if we want to to get the volume" string="if $var($dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL)==1"/>
+      <action name="Save The Current Volume variable Name" string="setvar tmpvolumevarname=$var(CURRENTVOLUMEMAIN)" />
+      <action name="Set the new Volume variable Name"      string="setvar CURRENTVOLUMEMAIN=$dvar(definition_alias_mediaplayer_template)_mainvolume" />
+      <action name="Get Volume from $dvar(definition_alias_mediaplayer_template)" string="Send Get Volume" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)"/>
+      <action name="Update Volume slider" string="updatewidget Main Volume@$var(CURRENTPAGE)" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Slider"/>
+      <action name="Update Volume text (FKT GetVolume_$dvar(definition_alias_mediaplayer_template))" string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
+      <action name="restore the old volume variable Name" string="setvar CURRENTVOLUMEMAIN=$var(tmpvolumevarname)" />
+    <action name="endif" string="endif" />
+  </action>
+
+  <action name="FKT SwitchOn $dvar(definition_alias_mediaplayer_template)">
+    <action name="Send Power On" string="$var($dvar(definition_alias_mediaplayer_template)_POWERONCOMMAND)" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON)" condition="$var(POWERSTATUS_$dvar(definition_alias_mediaplayer_template))==OFF"   />
+    <action name="Set PowerStatus $dvar(definition_alias_mediaplayer_template) ON" string="setvar POWERSTATUS_$dvar(definition_alias_mediaplayer_template)=ON" />
+  </action>
+
+  <action name="FKT SwitchOff $dvar(definition_alias_mediaplayer_template)">
+    <action name="Send Power Off" string="$var($dvar(definition_alias_mediaplayer_template)_POWEROFFCOMMAND)"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var(POWERSTATUS_$dvar(definition_alias_mediaplayer_template))==ON"   />
+    <action name="Set PowerStatus $dvar(definition_alias_mediaplayer_template) OFF" string="setvar POWERSTATUS_$dvar(definition_alias_mediaplayer_template)=OFF" />
+  </action>
+
+  <action name="FKT SwitchOn $dvar(definition_alias_mediaplayer_template) Force">
+    <action name="Send Power On" string="$var($dvar(definition_alias_mediaplayer_template)_POWERONCOMMAND)"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON)" />
+    <action name="Set PowerStatus $dvar(definition_alias_mediaplayer_template) ON" string="setvar POWERSTATUS_$dvar(definition_alias_mediaplayer_template)=ON" />
+  </action>
+
+  <action name="FKT SwitchOff $dvar(definition_alias_mediaplayer_template) Force">
+    <action name="Send Power Off" string="$var($dvar(definition_alias_mediaplayer_template)_POWEROFFCOMMAND)"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
+    <action name="Set PowerStatus $dvar(definition_alias_mediaplayer_template) OFF" string="setvar POWERSTATUS_$dvar(definition_alias_mediaplayer_template)=OFF" />
+  </action>
+
+  <action name="FKT Reboot $dvar(definition_alias_mediaplayer_template)">
+    <action name="Send Reboot" string="Send Reboot" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON)"   />
+    <action name="Set PowerStatus $dvar(definition_alias_mediaplayer_template) ON" string="setvar POWERSTATUS_$dvar(definition_alias_mediaplayer_template)=ON" />
+  </action>
+
+  <action name="Send Volume Up $dvar(definition_alias_mediaplayer_template)">
+    <action name="Send Volume Up" string="Send Volume Up" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)"  />
+    <action name="Get Volume" string="call FKT GetVolume_$dvar(definition_alias_mediaplayer_template)" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMENOTIFICATION)!=1"/>
+  </action>
+
+  <action name="Send $dvar(definition_alias_mediaplayer_template) Search">
+    <action name="Show the Search Window" string="Send Show Search" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
+    <action name="safe cookie" string="modifyvar" varname="inputstring" operator="save" parameter1="$dvar(definition_alias_mediaplayer_template)" />
+    <action name="wait"                string="wait 1500"  />
+    <action name="And send the string" string="sendcommand" commandname="send_string" commandparameter='{"SENDTEXT":"$var(inputstring)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
+  </action>
+
+  <action name="Send Volume Down $dvar(definition_alias_mediaplayer_template)">
+    <action name="Send Volume Down" string="Send Volume Down" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)"  />
+    <action name="Get Volume" string="call FKT GetVolume_$dvar(definition_alias_mediaplayer_template)" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMENOTIFICATION)!=1"/>
+  </action>
+
+  <action name="Set Volume $dvar(definition_alias_mediaplayer_template) by Widget">
+    <action name="Set the volume var" string="setvar volumetoset=$var($dvar(definition_alias_mediaplayer_template)_mainvolume)" />
+    <action name="Set the volume" string="Send Set Volume" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)"  />
+    <action name="Update Volume text (Set Volume $dvar(definition_alias_mediaplayer_template) by Widget)" string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
+    <action name="Get Volume" string="call FKT GetVolume_$dvar(definition_alias_mediaplayer_template)" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMENOTIFICATION)!=1"/>
+  </action>
+
+  <action name="FKT Send Switch Channel $dvar(definition_alias_mediaplayer_template)">
+    <action name="Switch Channel" string="sendcommand" commandname="$var($dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD)" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD)!=NoAction"   /> />
+  </action>
+
+  <action name="Set Trigger $dvar(definition_alias_mediaplayer_template)">
+    <action name="set var link to external volume var" string="addvarlink" varname="$var($dvar(definition_alias_mediaplayer_template)_EXTERNALVOLUMEVAR)" linktype="call" actionname="Update Volume Widgets by external volume var $dvar(definition_alias_mediaplayer_template)" condition='"$var($dvar(definition_alias_mediaplayer_template)_EXTERNALVOLUMEVAR)"!=""'/>
+  </action>
+
+
+  <action name="Delete Trigger $dvar(definition_alias_mediaplayer_template)">
+    <action name="set var link to external volume var" string="addvarlink" delete="1" varname="$dvar(definition_alias_mediaplayer_template)_EXTERNALVOLUMEVAR" linktype="call" actionname="Update Volume Widgets by external volume var $dvar(definition_alias_mediaplayer_template)" condition='"$var($dvar(definition_alias_mediaplayer_template)_EXTERNALVOLUMEVAR)"!=""'/>
+  </action>
+
+  <action name="Update Volume Widgets by external volume var $dvar(definition_alias_mediaplayer_template)">
+    <action name="copy external volume var to tmp var"  string="setvar tmp=$var($dvar(definition_alias_mediaplayer_template)_EXTERNALVOLUMEVAR)" />
+    <action name="And Pull the Value" string="modifyvar" varname="tmp" operator="fromvar"  />
+    <action name="copy external volume var to volume var"  string="setvar $dvar(definition_alias_mediaplayer_template)_mainvolume=$var(tmp)" />
+    <action name="Update the Volume Widget" string="updatewidget Main Volume@Page_Device_$dvar(definition_alias_mediaplayer_template)" ignoremissing="1"/>
+    <action name="Update the Volume Text"   string="updatewidget Main Volume Textvalue@Page_Device_$dvar(definition_alias_mediaplayer_template)" ignoremissing="1"/>
+  </action>
+
+  <action name="Set Gestures $dvar(definition_alias_mediaplayer_template)">
+    <action name="if we want to use gestures" string="if $var($dvar(definition_alias_mediaplayer_template)_USEGESTURES)==1"/>
+        <action name="if we want to invert gestures (left/right/up/down)" string="if $var($dvar(definition_alias_mediaplayer_template)_INVERTGESTURES)==1"/>
+          <action name="" string="setvar tmpvar=$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[1])" />
+          <action name="" string="setvar $dvar(definition_alias_mediaplayer_template)_GESTUREACTION[1]=$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[2])" />
+          <action name="" string="setvar $dvar(definition_alias_mediaplayer_template)_GESTUREACTION[2]=$var(tmpvar)" />
+          <action name="" string="setvar tmpvar=$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[3])" />
+          <action name="" string="setvar $dvar(definition_alias_mediaplayer_template)_GESTUREACTION[3]=$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[4])" />
+          <action name="" string="setvar $dvar(definition_alias_mediaplayer_template)_GESTUREACTION[4]=$var(tmpvar)" />
+        <action name="endif" string="endif"/>
+
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[1])"    actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[1])"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[1])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[2])"    actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[2])"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[2])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[3])"    actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[3])"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[3])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[4])"    actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[4])"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[4])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[5])"    actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[5])"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[5])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[6])"    actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[6])"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[6])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[7])"    actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[7])"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[7])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[8])"    actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[8])"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[8])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[9])"    actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[9])"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[9])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[10])"   actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[10])" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[10])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[11])"   actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[11])" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[11])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[12])"   actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[12])" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[12])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[13])"   actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[13])" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[13])!=NoAction"/>
+        <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[14])"   actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[14])" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[14])!=NoAction"/>
+    <action name="endif" string="endif"/>
+
+  </action>
+
+  <action name="Switch Second Caption Page_Device_$dvar(definition_alias_mediaplayer_template)">
+    <action name="Show Second Caption" string="call ShowSecondCaption" condition="$var(Status_Second_Caption_Page_Device_$dvar(definition_alias_mediaplayer_template))==1" />
+    <action name="Show First  Caption" string="call HideSecondCaption" condition="$var(Status_Second_Caption_Page_Device_$dvar(definition_alias_mediaplayer_template))==0" />
+  </action>
+
+    <action name="Add NavigationBar $dvar(definition_alias_mediaplayer_template)">
+     <action name="Add Topline Template for $dvar(definition_alias_mediaplayer_template)" string="loadelement" filename="$var($dvar(definition_alias_mediaplayer_template)_NAVIGATIONBAR)" pagename="Page_Device_$dvar(definition_alias_mediaplayer_template)" condition="$var($dvar(definition_alias_mediaplayer_template)_NAVIGATIONBAR)!="/>
+    </action>
+
+    <action name="ShowPage $dvar(definition_alias_mediaplayer_template)_Popup">
+        <action name="ShowPopup" string="showpage Page_Device_$dvar(definition_alias_mediaplayer_template)_Popup" />
+    </action>
+
+    <action name="Set SetupTrigger" >
+        <action name="" string="call Set SetupTrigger $dvar(definition_alias_mediaplayer_template)" />
+    </action>
+
+    <action name="Set SetupTrigger $dvar(definition_alias_mediaplayer_template)">
+        <!-- adjust menue buttons if changed in settings -->
+       <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[1]" linktype="widget" widgetname="TVMenueButton 1@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+       <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[2]" linktype="widget" widgetname="TVMenueButton 2@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+       <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[3]" linktype="widget" widgetname="TVMenueButton 3@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+       <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[4]" linktype="widget" widgetname="TVMenueButton 4@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+       <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[1]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"TVMenueButton 1@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[1])"}' />
+       <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[2]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"TVMenueButton 2@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[2])"}' />
+       <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[3]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"TVMenueButton 3@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[3])"}' />
+       <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[4]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"TVMenueButton 4@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[4])"}' />
+
+       <action name="if we show the buttonbar1" string="if $var($dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1])==1" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][1]" linktype="widget" widgetname="ButtonBar1_Button1@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][2]" linktype="widget" widgetname="ButtonBar1_Button2@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][3]" linktype="widget" widgetname="ButtonBar1_Button3@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][4]" linktype="widget" widgetname="ButtonBar1_Button4@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][1]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar1_Button1@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][1])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][2]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar1_Button2@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][2])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][3]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar1_Button3@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][3])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][4]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar1_Button4@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][4])"}' />
+       <action name="" string="endif"  />
+
+       <action name="if we show the buttonbar2" string="if $var($dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2])==1" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][1]" linktype="widget" widgetname="ButtonBar2_Button1@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][2]" linktype="widget" widgetname="ButtonBar2_Button2@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][3]" linktype="widget" widgetname="ButtonBar2_Button3@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][4]" linktype="widget" widgetname="ButtonBar2_Button4@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][1]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar2_Button1@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][1])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][2]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar2_Button2@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][2])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][3]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar2_Button3@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][3])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][4]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar2_Button4@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][4])"}' />
+      <action name="" string="endif"  />
+
+       <action name="if we show the buttonbar3" string="if $var($dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[3])==1" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][1]" linktype="widget" widgetname="ButtonBar3_Button1@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][2]" linktype="widget" widgetname="ButtonBar3_Button2@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][3]" linktype="widget" widgetname="ButtonBar3_Button3@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][4]" linktype="widget" widgetname="ButtonBar3_Button4@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][1]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar3_Button1@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][1])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][2]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar3_Button2@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][2])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][3]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar3_Button3@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][3])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][4]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar3_Button4@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][4])"}' />
+       <action name="" string="endif"  />
+
+       <action name="if we show the rgb bar" string="if $var($dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[4])==1" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[4][1]" linktype="widget" widgetname="ButtonBar4_Button1@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[4][2]" linktype="widget" widgetname="ButtonBar4_Button2@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[4][3]" linktype="widget" widgetname="ButtonBar4_Button3@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[4][4]" linktype="widget" widgetname="ButtonBar4_Button4@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][1]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar4_Button1@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][1])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][2]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar4_Button2@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][2])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][3]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar4_Button3@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][3])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][4]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"ButtonBar4_Button4@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][4])"}' />
+       <action name="" string="endif"  />
+
+        <action name="if we show the numberpad" string="if $var($dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD)==1" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[0]" linktype="widget" widgetname="Button Number 0@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[1]" linktype="widget" widgetname="Button Number 1@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[2]" linktype="widget" widgetname="Button Number 2@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[3]" linktype="widget" widgetname="Button Number 3@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[4]" linktype="widget" widgetname="Button Number 4@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[5]" linktype="widget" widgetname="Button Number 5@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[6]" linktype="widget" widgetname="Button Number 6@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[7]" linktype="widget" widgetname="Button Number 7@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[8]" linktype="widget" widgetname="Button Number 8@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[9]" linktype="widget" widgetname="Button Number 9@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[10]" linktype="widget" widgetname="Button Number 10@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[11]" linktype="widget" widgetname="Button Number 11@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[0]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 0@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[0])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[1]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 1@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[1])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[2]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 2@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[2])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[3]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 3@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[3])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[4]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 4@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[4])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[5]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 5@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[5])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[6]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 6@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[6])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[7]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 7@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[7])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[8]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 8@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[8])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[9]"  linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 9@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[9])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[10]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 10@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[10])"}' />
+         <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[11]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 11@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[11])"}' />
+       <action name="" string="endif"  />
+    </action>
+</includes>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String -->
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <repositorymanager>
+    <entry>
+      <name>ORCA Video Control</name>
+      <description language='English'>Command Set for the video interface</description>
+      <description language='German'>Befehlssatz für das Video Interface</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/orca_video/CODESET_orca_video_default.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_orca_video_default.zip</sourcefile>
+          <targetpath>codesets/orca_video</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>ORCA Video Control</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action string="codeset" name='getvolume' cmd='getvolume' ldestvar='volume' gdestvar='orca_video_volume' />
+  <action string="codeset" name="volume_up" cmd='volume_up' />
+  <action string="codeset" name="volume_down" cmd='volume_down'/>
+
+  <action string="codeset" name='stop' cmd='stop' />
+  <action string="codeset" name='play' cmd='play' />
+  <action string="codeset" name='pause' cmd='pause' />
+
+  <action string="codeset" name="repeat_toggle" cmd='repeat_toggle' />
+  <action string="codeset" name="repeat_on" cmd='repeat_on'/>
+  <action string="codeset" name="repeat_off" cmd='repeat_off' />
+  <action string="codeset" name='mute_toggle' cmd='mute_toggle' />
+  <action string="codeset" name='mute_on' cmd='mute_on' />
+  <action string="codeset" name='mute_off' cmd='mute_off' />
+
+</includes>

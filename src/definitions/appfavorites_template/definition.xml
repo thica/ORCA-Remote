@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h50</fontsize_button>
+    <fontsize_text>%h50</fontsize_text>
+    <author>Carsten Thielepape</author>
+    <version>3.70</version>
+    <support>http://www.orca-remote.org/forum/</support>
+    <definitionvars>{"definition_alias_appfavorites_template":"App Favorites"}</definitionvars>
+  </def_parameter>
+
+  <startskip condition="$dvar(definition_alias_appfavorites_template_IMPORTPAGES)=0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/page_*" parse="xml"></xi:include>
+      <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+    </pages>
+  <stopskip/>
+
+    <!--
+    adb shell pm list packages -f
+    adb shell pm dump PACKAGE_NAME | grep -A 1 MAIN
+
+    -->
+
+  <settings>
+    <setting title="$lvar(apptemplate_10500) #1"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[1]"   type="string" default="Kodi" />
+    <setting title="$lvar(apptemplate_10502) #1"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[1]"  type="string" default="org.xbmc.kodi/.Splash" />
+    <setting title="$lvar(apptemplate_10500) #2"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[2]"   type="string" default="Netflix" />
+    <setting title="$lvar(apptemplate_10502) #2"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[2]"  type="string" default="com.netflix.ninja/.MainActivity" />
+    <setting title="$lvar(apptemplate_10500) #3"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[3]"   type="string" default="Hulu Plus" />
+    <setting title="$lvar(apptemplate_10502) #3"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[3]"  type="string" default="com.hulu.plusx.activity.Root" />
+    <setting title="$lvar(apptemplate_10500) #4"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[4]"   type="string" default="YouTube TV" />
+    <setting title="$lvar(apptemplate_10502) #4"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[4]"  type="string" default="com.google.android.youtube.tv/com.google.android.apps.youtube.tv.activity.TvGuideActivity" />
+    <setting title="$lvar(apptemplate_10500) #5"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[5]"   type="string" default="Pandora" />
+    <setting title="$lvar(apptemplate_10502) #5"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[5]"  type="string" default="com.pandora.android/.Main" />
+    <setting title="$lvar(apptemplate_10500) #6"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[6]"   type="string" default="Amazon Prime" />
+    <settingold title="$lvar(apptemplate_10502) #6"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[6]"  type="string" default="com.amazon.aiv.eu/com.amazon.blasthtml5android.MainActivity" />
+    <setting title="$lvar(apptemplate_10502) #6"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[6]"  type="string" default="com.amazon.amazonvideo.livingroom.nvidia/com.amazon.ignition.IgnitionActivity" />
+    <setting title="$lvar(apptemplate_10500) #7"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[7]"   type="string" default="Google Music" />
+    <setting title="$lvar(apptemplate_10502) #7"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[7]"  type="string" default="com.google.android.music/.tutorial.ExternalTutorialLaunchActivity" />
+    <setting title="$lvar(apptemplate_10500) #8"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[8]"   type="string" default="" />
+    <setting title="$lvar(apptemplate_10502) #8"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[8]"  type="string" default="" />
+    <setting title="$lvar(apptemplate_10500) #9"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[9]"   type="string" default="" />
+    <setting title="$lvar(apptemplate_10502) #9"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[9]"  type="string" default="" />
+    <setting title="$lvar(apptemplate_10500) #10" desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[10]"  type="string" default="" />
+    <setting title="$lvar(apptemplate_10502) #10" desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[10]" type="string" default="" />
+    <setting title="$lvar(apptemplate_10500) #11" desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[11]"  type="string" default="" />
+    <setting title="$lvar(apptemplate_10502) #11" desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[11]" type="string" default="" />
+    <setting title="$lvar(apptemplate_10500) #12" desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[12]"  type="string" default="" />
+    <setting title="$lvar(apptemplate_10502) #12" desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[12]" type="string" default="" />
+    <setting title="$lvar(apptemplate_10500) #13" desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[13]"  type="string" default="" />
+    <setting title="$lvar(apptemplate_10502) #13" desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[13]" type="string" default="" />
+    <setting title="$lvar(apptemplate_10500) #14" desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[14]"  type="string" default="" />
+    <setting title="$lvar(apptemplate_10502) #14" desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[14]" type="string" default="" />
+  </settings>
+
+  <repositorymanager>
+    <entry>
+      <name>Standard Applications Template</name>
+      <description language='English'>Standard Template to start applications, not for direct use</description>
+      <description language='German'>Standard Template um Programme zu starten, nicht direkt verwenden</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/appfavorites_template</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/appfavorites_template.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/appfavorites_template/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/appfavorites_template/atlas*</file>
+
+      </skipfiles>
+
+    </entry>
+  </repositorymanager>
+
+</orca>

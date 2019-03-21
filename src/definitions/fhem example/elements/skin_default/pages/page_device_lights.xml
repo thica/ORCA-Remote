@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_$dvar(definition_alias_FHEMFS20LIGHTS)_'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+    <interface>$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)</interface>
+    <configname>$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)</configname>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background LIGHTS' type='BACKGROUND' picturenormal='background'>
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline_ll.xml" parse="xml" condition="$var(DEFINITIONNAME)==fhem example" />
+    </element>
+
+    <element name='Anchor BottomGap' type='ANCHOR'  posy='bottom' height='%1' />
+    <element name='Anchor Single Dimmers' type='ANCHOR' posx='$var($dvar(definition_alias_FHEMFS20LIGHTS)_POSDIMMERS)' posy='of:totop:Anchor BottomGap' width='%40' height='%90'>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_dimmers.xml" parse="xml" condition="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMDIMMERS)&gt;0" />
+    </element>
+    <element name='Anchor Single Switches' type='ANCHOR' posx='$var($dvar(definition_alias_FHEMFS20LIGHTS)_POSSWITCHES)' posy='of:totop:Anchor BottomGap' width='%40' height='%90'>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_switches.xml" parse="xml" condition="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CNTFHEMSWITCHES)&gt;0" />
+    </element>
+  </elements>
+</page>

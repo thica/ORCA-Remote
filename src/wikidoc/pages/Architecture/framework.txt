@@ -1,0 +1,19 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Architecture
+WikiDoc:Page:The Framework
+WikiDoc:TOCTitle:1=The Framework
+Orca is witten in [http://www.python.org/ Python]. Python is an interpreter language, so the sources will not be compiled.  You do not need a compiler and you do not need a developmnet environment. Using PyCharm as an IDE is helpful, but not mandantory. A simple text editir will do the job as well.
+
+Orca is based on the [http://kivy.org/#home Kivy] framework. Kivy is a portable framework for developing mobile applications using python. Currently kivy is supporting the following Operating Systems:
+
+* Windows
+* Android
+* Unix
+* MacOSx
+* IOS
+
+Due to the lack of availability of any Apple devices. MacOSx and IOS is untested.
+
+WikiDoc:End
+'''

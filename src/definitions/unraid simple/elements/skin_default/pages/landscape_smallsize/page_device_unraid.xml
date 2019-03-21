@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_$dvar(definition_alias_unraid)'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+    <interface>$var($dvar(definition_alias_unraid)_INTERFACE_POWERON)</interface>
+    <configname>$var($dvar(definition_alias_unraid)_CONFIGNAME_POWERON)</configname>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background NAS' type='BACKGROUND' picturenormal='background' />
+    <element name='Anchor Media Circle' type='ANCHOR' posx='center' posy='%60' width='of:height:self' height='%70'>
+      <elements>
+        <element name='Picture Media Circle' type='PICTURE' picturenormal='mediacircle' />
+        <element name='Button MediaCircle Power On' type='BUTTON' posx='center' posy='%40' width='%44' height='%25' action='FKT SwitchOn $dvar(definition_alias_unraid)' backgroundcolor='$var(nocolor)'   fontsize='%h90' textcolor='$var(green)' vtextalign='bottom' caption='icon:power_on' />
+        <element name='Button MediaCircle Power Off' type='BUTTON' posx='center' posy='%68' width='%44' height='%20' action='FKT SwitchOff $dvar(definition_alias_unraid)' backgroundcolor='$var(nocolor)' fontsize='%h60' textcolor='$var(red)' vtextalign='middle' caption='icon:power_off' interface='$var($dvar(definition_alias_unraid)_INTERFACE_MAIN)' configname='$var($dvar(definition_alias_unraid)_CONFIGNAME_MAIN)' />
+      </elements>
+    </element>
+  </elements>
+</page>

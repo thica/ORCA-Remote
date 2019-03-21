@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+  <element name='Background Searchfield' type='PICTURE' posx='left' posy='top' picturenormal='background input'  />
+  <element name='Text'              type='TEXTFIELD' posx='center' posy='top' width='%95' height='%50' fontsize='%h30' iconfontsize='%h100'  caption='icon:search' vtextalign='top' htextalign='left' />
+  <element name='SearchInputfield'  type='TEXTINPUT' posx='center' posy='%97' width='%95' height='%70' fontsize='%h80' vtextalign='bottom' htextalign='left' destvar='inputstring' action='Send Search' picturenormal='none' actionpars='{"commandparameter":{"SEARCHTEXT":"$var(inputstring)"}}' />
+</elements>

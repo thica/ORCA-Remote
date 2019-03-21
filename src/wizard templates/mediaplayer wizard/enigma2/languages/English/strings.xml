@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+  <string id="enigma2_10000">You need to apply the IP - Address of your Receiver in Settings->Interfaces->url->ENIGMA2. If your Receiver supports Wake On Lan the you need to apply the MAC Address of your receiver in Settings->Interfaces->wake_on_lan->ENIGMA2</string>
+  <string id="enigma2_10001">Root Access Interface</string>
+  <string id="enigma2_10002">Root Access Interface to use</string>
+  <string id="enigma2_10003">Root Access Config</string>
+  <string id="enigma2_10004">Root Access Config to use</string>
+  <string id="enigma2_10005">Functions</string>
+  <string id="enigma2_10006">Pulling data from device</string>
+  <string id="enigma2_10011">Reload Bouquet</string>
+  <string id="enigma2_10012">Reload the bouquets from Enigma</string>
+  <string id="enigma2_10013">Start</string>
+
+</strings>

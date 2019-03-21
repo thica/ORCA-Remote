@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ORCA>
+    <appstartactions xmlns:xi="http://www.w3.org/2001/XInclude">
+        <appstartaction name="earlyappstart">
+            <!-- Loading Stuff-->
+
+            <!-- Given Order
+                 First the global fonts
+                 second the skin, to have a chance to replace the global fonts
+                 Third The definition to have a chance to replace the global fonts/skin font
+                 Last The Language to have a chance to replace all fonts to required language fonts
+                 Which means, that parts of the initialisation strings must be hardcoded in english
+             -->
+
+            <action name="If we are not protected (development)"    string="if $var(PROTECTED)!=1" />
+              <action name="askifupdate"                            string="showquestion" title="Found new ORCA version" message="ORCA needs do download central components (skins,fonts,languages, etc). This can take up to 25 MB of files. Would you like to to continue?" actionyes="Fkt_UpdateRepository" actionno="StopApp"  condition="$var(LASTVERSION)!=$var(VERSION)"/>
+            <action name="endif"                                    string="endif"                />
+
+
+            <action name="Update Splash"                            string="showsplashtext"             maintext="Loading global fonts" percentage="+2"/>
+            <action name="load core fonts"                          string="loaddefinitionfonts"        definitionname="ORCA"/>
+            <action name="Update Splash"                            string="showsplashtext"             maintext="Loading Skin"   percentage="+2"/>
+            <action name="Load Skin Description"                    string="loadskin" />
+            <action name="Load Sounds Description"                  string="loadsounds" />
+            <action name="Play startup sound"                       string="playsound"                  soundname="startup"/>
+            <action name="WaitForNetwork"                           string="waitforconnectivity" />
+
+            <action name="Update Splash"                            string="showsplashtext"             maintext="Loading Definition Parameter" />
+            <action name="Get used definitions"                     string="getuseddefinitions"       percentage="+15"/>
+
+            <action name="Set WaitFlag"                             string="setvar WAITFORROTATION=0" />
+            <action name="Rotate/Resize if necessary"               string="checktorotate" />
+            <action name="if we need to wait"                       string="if $var(WAITFORROTATION)==1"/>
+                <action name="Set wait count"                       string="setvar WAITCOUNT=0" />
+                <!-- wait until rotation finished-->
+                <action name="Waitrotationloop"                     string="modifyvar"                varname="WAITCOUNT" operator="increase"  parameter1="1" />
+                <action name="if we haven't waited enough"          string="if $var(WAITCOUNT)&lt;60"/>
+                    <action name="loop"                             string="goto Waitrotationloop" condition="$var(WAITFORROTATION)==1"/>
+                <action name="endif"                                string="endif" />
+            <action name="endif (need to wait)"                     string="endif" />
+
+            <action name="Load DefinitionParameter"                 string="loaddefinitionparameter"   />
+            <action name="Load fonts for each definition"           string="loaddefinitionfonts"      percentage="2"/>
+
+            <action name="Update Splash"                            string="showsplashtext"  maintext="Loading Languages" percentage="+2"/>
+            <action name="load core languages"                      string="loadlanguages" />
+
+            <action name="Update Splash"                            string="showsplashtext"             maintext="$lvar(423)" percentage="+1"/>
+            <action name="Register KeyHandler Scripts"              string="registerscriptgroup"        groupname="KEYHANDLER"/>
+            <action name="Update Splash"                            string="showsplashtext"             maintext="$lvar(424)" percentage="+1"/>
+            <action name="Register System Scripts"                  string="registerscriptgroup"        groupname="SYSTEM"/>
+            <action name="Update Splash"                            string="showsplashtext"             maintext="$lvar(425)" percentage="+1"/>
+            <action name="Register System Tools"                    string="registerscriptgroup"        groupname="TOOLS"/>
+
+            <action name="Update Splash"                            string="showsplashtext"           maintext="$lvar(411)"        percentage="+5"/>
+            <!-- Setting ScreenSize trigger-->
+            <action name="SETSCREENSIZE"                            string="setvar SCREEN=SCREEN_" />
+            <action name="Add Prefix"                               string="modifyvar" varname="SCREEN"  operator="concatenate" parameter1="P" condition="$var(DEVICEORIENTATION)=portrait"/>
+            <action name="Add Prefix"                               string="modifyvar" varname="SCREEN"  operator="concatenate" parameter1="L" condition="$var(DEVICEORIENTATION)!=portrait"/>
+            <action name="Add Prefix"                               string="modifyvar" varname="SCREEN"  operator="concatenate" parameter1="S" condition="$var(SCREENSIZE)&lt;5.1" />
+            <action name="Add Prefix"                               string="modifyvar" varname="SCREEN"  operator="concatenate" parameter1="L" condition="$var(SCREENSIZE)&gt;=5.1" />
+
+            <action name="Load language from each definition"       string="loaddefinitionlanguages" />
+            <action name="Load actions  from each definition"       string="loaddefinitionactions"    percentage="11"/>
+            <action name="Load settings from each definition"       string="loaddefinitionsettings"   percentage="10"/>
+            <action name="Load gestures from each definition"       string="loaddefinitiongestures"   percentage="2"/>
+            <action name="Update Splash"                            string="showsplashtext"           maintext="$lvar(405)"   />
+
+            <action name="Load Status"                              string="modifyvar" varname="STARTCOUNT" operator="load"      parameter1="0" parameter2="$var(DEFINITIONNAME)"/>
+            <action name="INCREASE"                                 string="modifyvar" varname="STARTCOUNT" operator="increase"  parameter1="1" />
+            <action name="Save Status"                              string="modifyvar" varname="STARTCOUNT" operator="save"      parameter1="$var(DEFINITIONNAME)"/>
+
+            <action name="Call user defined appstart actions"       string="call APPSTARTACTIONS"/>
+            <action name="Load xml-details from used definitions"   string="parsedefinitionxml"       percentage="30"/>
+            <action name="Register interfaces"                      string="registerinterfaces"       percentage="5"/>
+            <action name="Initialize interface setttings"           string="initinterfacesettings"    percentage="5"/>
+            <action name="Load and register fonts"                  string="registerfonts"            percentage="2"/>
+            <action name="Set blend effect for the first page"      string="setpageeffect"            effect="fade"/>
+            <action name="Update Splash"                            string="showsplashtext"           maintext="$lvar(406)"   percentage="99"/>
+            <action name="Call user defined definitionstart actions" string="call DEFINITIONSTARTACTIONS"/>
+            <action name="Create the pages (if requested)"          string="createpages"/>
+            <action name="Show Installation Hint"                   string="call Fkt ShowInstallationHint"/>
+            <action name="Finally: show first page"                 string="call Show Main Definition Page"/>
+        </appstartaction>
+    </appstartactions>
+    <actions>
+        <action name="StopApp" string="stopapp" />
+        <action name="Fkt_UpdateRepository">
+            <action name="Load repository"                          string="loadrepositorycontent" />
+            <action name="Check for Repository update"              string="repositoryupdate"      />
+            <action name="Restart"                                  string="restartafterrepositoryupdate" />
+        </action>
+    </actions>
+</ORCA>

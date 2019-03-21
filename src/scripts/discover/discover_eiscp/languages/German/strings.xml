@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_DISC_EISCP_1">Model</string>
+     <string id="SCRIPT_DISC_EISCP_2">Liste der Modelle die erkannt werden sollen ([comma separiert])</string>
+
+</strings>

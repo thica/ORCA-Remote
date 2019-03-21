@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String
+     cmd = url to use, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <repositorymanager>
+    <entry>
+      <name>Sharp Aquos URL</name>
+      <description language='English'>LAN Control for Sharp Aquos TVs (european models)</description>
+      <description language='German'>LAN Steuerung für Sharp Aquos TVs (europäische Modelle)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_AQUOS.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_AQUOS.zip</sourcefile>
+          <targetpath>codesets/url</targetpath>
+        </source>
+        <source>
+            <local>$var(APPLICATIONPATH)/codesets/url/INCLUDES_url_AQUOS</local>
+            <sourcefile>$var(REPOSITORYWWWPATH)/codesets/INCLUDES_url_AQUOS.zip</sourcefile>
+            <targetpath>codesets/url</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+            <dependency>
+                <type>interfaces</type>
+                <name>URL-Web</name>
+            </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action string="codeset" name='getdeviceinfo'    type="string" waitforresponse='1' requesttype='GET'  cmd='' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip"}' parseoption='xml' ldestvar='"MANUFACTURER","MODELNAME"' getvar='ORCAMULTI"{urn:schemas-upnp-org:device-1-0}device,{urn:schemas-upnp-org:device-1-0}manufacturer","{urn:schemas-upnp-org:device-1-0}device,{urn:schemas-upnp-org:device-1-0}modelName"' />
+
+  <action name='logon' >
+      <action string="if $cvar(firstcall)==1" varcontext="codeset"/>
+          <action string="modifyvar" varname="loeweheader_injectkey"            operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/headers_injectkey.txt"           />
+          <action string="modifyvar" varname="loeweheader_requestaccess"        operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/headers_requestaccess.txt"       />
+          <action string="modifyvar" varname="loeweheader_getvolume"            operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/headers_getvolume.txt"           />
+          <action string="modifyvar" varname="loeweheader_setvolume"            operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/headers_setvolume.txt"           />
+          <action string="modifyvar" varname="loeweheader_getchannellist"       operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/headers_getchannellist.txt"      />
+          <action string="modifyvar" varname="loeweparams_requestaccess"        operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/params_requestaccess.txt"        />
+          <action string="modifyvar" varname="loeweparams_getchannellist"       operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/params_getchannellist.txt"       />
+          <action string="modifyvar" varname="loeweparams_getvolume"            operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/params_getvolume.txt"            />
+          <action string="modifyvar" varname="loeweparams_setvolume"            operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/params_setvolume.txt"            />
+          <action string="modifyvar" varname="loeweparams_injectkey_l2700"      operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/params_injectkey_l2700.txt"      />
+          <action string="modifyvar" varname="loeweparams_injectkey_l2700-hdr"  operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/params_injectkey_l2700-hdr.txt"  />
+          <action string="modifyvar" varname="loeweparams_injectkey_sharp-le65" operator="loadfile" parameter1="$var(CODESETPATH)/url/INCLUDES_url_AQUOS/params_injectkey_sharp-le65.txt" />
+          <action string="setvar loewe_URL=/loewe_tablet_0001"/>
+          <action string="setvar firstcall=0" varcontext="codeset"/>
+      <action string="endif"/>
+      <action string="codeset" name='logon'            type="soap" waitforresponse='1' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_requestaccess)' params='$var(loeweparams_requestaccess)' parseoption='xml' ldestvar='"FCID","CLIENTID"' gdestvar='"dummy","dummy"' getvar='ORCAMULTI"{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}RequestAccessResponse,{urn:loewe.de:RemoteTV:Tablet}fcid","{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}RequestAccessResponse,{urn:loewe.de:RemoteTV:Tablet}ClientId"'  />
+  </action >
+
+  <action string="codeset" name='info'             type="soap" rc_key="79"  waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_1'            type="soap" rc_key="1"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_2'            type="soap" rc_key="2"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_3'            type="soap" rc_key="3"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_4'            type="soap" rc_key="4"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_5'            type="soap" rc_key="5"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_6'            type="soap" rc_key="6"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_7'            type="soap" rc_key="7"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_8'            type="soap" rc_key="8"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_9'            type="soap" rc_key="9"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='key_0'            type="soap" rc_key="0"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+  <action string="codeset" name='pip_toggle'       type="soap" rc_key="10" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='mute_toggle'      type="soap" rc_key="13" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action name='mute_on'   type="alias" cmd='mute_toggle'  />
+  <action string="codeset" name='menu'             type="soap" rc_key="49" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+  <action string="codeset" name='power_toggle'       type="soap" rc_key="12" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action name="power_off" type="alias"             cmd='power_toggle'/>
+  <action name="power_on"  type="alias"             cmd='power_toggle'/>
+  <action string="codeset" name='left'               type="soap" rc_key="17" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='right'              type="soap" rc_key="16" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='up'                 type="soap" rc_key="32" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='down'               type="soap" rc_key="33" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='volume_down'        type="soap" rc_key="20" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='volume_up'          type="soap" rc_key="21" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='channel_down'       type="soap" rc_key="23" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='channel_up'         type="soap" rc_key="24" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='button_green'       type="soap" rc_key="26" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='button_red'         type="soap" rc_key="27" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='button_yellow'      type="soap" rc_key="43" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='button_blue'        type="soap" rc_key="40" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='epg'                type="soap" rc_key="15" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='ok'                 type="soap" rc_key="38" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='end'                type="soap" rc_key="63" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='exit'               type="soap" rc_key="65" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action name='esc' type="alias"  cmd='end'/>
+  <action string="codeset" name='favorites'          type="soap" rc_key="90" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='source radio'       type="soap" rc_key="53" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='teletext_toggle'    type="soap" rc_key="60" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <!--  aquos net+ -->
+  <action string="codeset" name='source net'         type="soap" rc_key="64" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='aspect'             type="soap" rc_key="35" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='source hdmi 1'      type="soap" rc_key="119" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='source hdmi 2'      type="soap" rc_key="121" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='source hdmi 3'      type="soap" rc_key="122" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='source hdmi 4'      type="soap" rc_key="123" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='source pc'          type="soap" rc_key="118" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='source component'   type="soap" rc_key="120" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+  <!-- Scart -->
+  <action string="codeset" name='source aux 1'       type="soap" rc_key="114" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+  <!-- aux linked to AV , not valid for Sharp aquos-->
+  <action string="codeset" name='source aux 2'       type="soap" rc_key="115" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='source aux 3'       type="soap" rc_key="116" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <!-- VCR  linked to Video -->
+  <action string="codeset" name='source vcr'         type="soap" rc_key="117" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+   <!-- VIDEO  linked to DVD,  , not valid for Sharp aquos -->
+  <action string="codeset" name='source dvd'         type="soap" rc_key="124" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+   <!-- CD  linked to SPDIF,  , not valid for Sharp aquos -->
+   <action string="codeset" name='source cd'         type="soap" rc_key="125" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+   <!--
+   below should work for Loewe
+   <action string="codeset" name='power_off'        type="soap" rc_key="12" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+   <action string="codeset" name='power_on'         type="soap" rc_key="22" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  -->
+
+  <action string="codeset" name='getchannellist'          type="soap" waitforresponse='1' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_getchannellist)' params='$var(loeweparams_getchannellist)'/>
+
+  <!-- some volume helpers: Setting Volume in TV accepts a range form 0 to 50000 but we prefer a value range from 0 to 100-->
+  <action name="getvolume" >
+      <action name='getvolume_real'         string="codeset"   type="soap"   waitforresponse='1' requesttype='POST' cmd='$var(loewe_URL)' parseoption='xml' gdestvar='$var(GLOBALDESTVAR)' getvar='{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}GetVolumeResponse,{urn:loewe.de:RemoteTV:Tablet}Value' headers='$var(loeweheader_getvolume)' params='$var(loeweparams_getvolume)'/>
+      <action name='save error code'        string="setvar LASTERRORCODETMP=$var(LASTERRORCODE)"/>
+      <action name='adjustresult'           string="modifyvar" varname="$var(GLOBALDESTVAR)" operator="divide" parameter1="10000"/>
+      <action name='restore error code'     string="setvar LASTERRORCODE=$var(LASTERRORCODETMP)"/>
+  </action>
+
+  <action name="setvolume" >
+      <action string="setvar tvvol_valuetmp=$var(volumetoset)" />
+      <action string="modifyvar" varname="tvvol_valuetmp" operator="multiply" parameter1="10000" />
+      <action string="codeset"   name='setvolume_real'   type="soap"   waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_setvolume)' params='$var(loeweparams_setvolume)' />
+  </action>
+
+  <action string="codeset" name="ping" type="alias" cmd="getvolume" />
+
+  <!-- end Loewe standard commands-->
+
+  <!-- Start Loewe extended commands-->
+
+  <action string="codeset" name='play'             type="soap" rc_key="53" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700-hdr)'/>
+  <action string="codeset" name='pause'            type="soap" rc_key="41" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700-hdr)'/>
+  <action string="codeset" name='stop'             type="soap" rc_key="54" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700-hdr)'/>
+  <action string="codeset" name='record'           type="soap" rc_key="55" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700-hdr)'/>
+  <action string="codeset" name='fast_rewind'      type="soap" rc_key="50" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700-hdr)'/>
+  <action string="codeset" name='fast_forward'     type="soap" rc_key="52" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700-hdr)'/>
+  <!-- end Loewe extended commands-->
+
+  <!-- Start Sharp extended commands-->
+  <action string="codeset" name='3dselect'         type="soap" rc_key="0" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <!-- ATV -->
+  <action string="codeset" name='source tv/ant'    type="soap" rc_key="1" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <!-- Exit Aquos+ Net-->
+  <action string="codeset" name='return'           type="soap" rc_key="2" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='skip_forward'     type="soap" rc_key="15" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='skip_back'        type="soap" rc_key="14" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='source'           type="soap" rc_key="12" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='previous_tv_channel' type="soap" rc_key="3" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='eco mode'         type="soap" rc_key="4" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='freeze'           type="soap" rc_key="5" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='source tv/sat'    type="soap" rc_key="6" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='subtitles_toggle' type="soap" rc_key="7" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='revealhiddentext' type="soap" rc_key="8" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='clock_toggle'     type="soap" rc_key="9" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='avmode'           type="soap" rc_key="10" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <action string="codeset" name='audiochannel_select' type="soap" rc_key="11" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_sharp-le65)'/>
+  <!-- End Sharp extended commands-->
+
+  <action string="codeset" name="channel_select" type="string" cmd='{"REPEAT":{"REPEATCMD":"key_","REPEATVAR":"$cvar(CHANNELNUM)"}}' />
+
+  <action name='hbbtv'  type="alias" cmd='button_red' />
+
+  <!-- Helper functions as sequenced key strokes-->
+
+  <!-- call 3D menue -->
+  <action name="3dmenueleft">
+      <action name="open 3d Menue"  type="alias" cmd="3dselect"  />
+      <action name="mv right"       type="alias" cmd="right" />
+      <action name="mv left 1"      type="alias" cmd="left"  />
+      <action name="mv left 2"      type="alias" cmd="left"  />
+      <action name="mv left 3"      type="alias" cmd="left"  />
+      <action name="mv left 4"      type="alias" cmd="left"  />
+      <action name="mv left 5"      type="alias" cmd="left"  />
+      <action name="mv left 6"      type="alias" cmd="left"  />
+      <action name="mv left 7"      type="alias" cmd="left"  />
+      <action string="wait"         time="1000" />
+  </action>
+
+  <action name="3doff">
+      <action string="call"   actionname="3dmenueleft"/>
+      <action type="alias"    cmd="right"    />
+      <action string="wait"   time="1000"    />
+      <action type="alias"    cmd="end"      />
+      <action type="alias"    cmd="end"      />
+  </action>
+
+  <action name="3dauto">
+    <action string="call"     actionname="3dmenueleft"/>
+    <action type="alias"      cmd="right" />
+    <action string="wait"     time="1000" />
+    <action type="alias"      cmd="right" />
+    <action string="wait"     time="1000" />
+    <action type="alias"      cmd="end"   />
+    <action type="alias"      cmd="end"   />
+  </action>
+
+  <action name="3dsbs">
+      <action string="call"     actionname="3dmenueleft"/>
+      <action type="alias"      cmd="right"             />
+      <action string="wait"     time="1000"             />
+      <action type="alias"      cmd="right"             />
+      <action string="wait"     time="1000"             />
+      <action type="alias"      cmd="right"             />
+      <action string="wait"     time="1000"             />
+      <action type="alias"      cmd="end"               />
+      <action type="alias"      cmd="end"               />
+  </action>
+
+  <action name="3dou">
+      <action string="call"   actionname="3dmenueleft"/>
+      <action type="alias"    cmd="right"             />
+      <action string="wait"   time="1000"             />
+      <action type="alias"    cmd="right"             />
+      <action string="wait"   time="1000"             />
+      <action type="alias"    cmd="right"             />
+      <action string="wait"   time="1000"             />
+      <action type="alias"    cmd="right"             />
+      <action string="wait"   time="1000"             />
+      <action type="alias"    cmd="end"               />
+      <action type="alias"    cmd="end"               />
+  </action>
+
+  <!-- sources -->
+  <action name="source menueleft">
+    <action type="alias" cmd="source"  />
+    <action type="alias" cmd="right"  />
+    <action type="alias" cmd="left"   />
+    <action type="alias" cmd="left"   />
+    <action type="alias" cmd="left"   />
+    <action type="alias" cmd="left"   />
+    <action type="alias" cmd="left"   />
+    <action type="alias" cmd="left"   />
+    <action type="alias" cmd="left"   />
+    <action string="wait"   time="1000"             />
+  </action>
+
+  <action string="codeset" name="1source hdmi 1"         type="alias" cmd="ok"     preaction="source menueleft" />
+
+  <action string="codeset" name="source hdmi 2 1"       type="alias" cmd="right"  preaction="source menueleft"/>
+  <action string="codeset" name="1source hdmi 2"         type="alias" cmd="ok"     preaction="source hdmi 2 1" />
+
+  <action string="codeset" name="source hdmi 3 1"       type="alias" cmd="right"  preaction="source menueleft"/>
+  <action string="codeset" name="source hdmi 3 0"       type="alias" cmd="right"  preaction="source hdmi 3 1" />
+  <action string="codeset" name="1source hdmi 3"         type="alias" cmd="ok"     preaction="source hdmi 3 0" />
+
+  <action string="codeset" name="source hdmi 4 2"       type="alias" cmd="right"  preaction="source menueleft"/>
+  <action string="codeset" name="source hdmi 4 1"       type="alias" cmd="right"  preaction="source hdmi 4 2" />
+  <action string="codeset" name="source hdmi 4 0"       type="alias" cmd="right"  preaction="source hdmi 4 1" />
+  <action string="codeset" name="1source hdmi 4"         type="alias" cmd="ok"    preaction="source hdmi 4 0" />
+
+  <!-- Non Sharp  commands-->
+  <action string="codeset" name='zoom'             type="soap" rc_key="90" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='teletext_toggle'  type="soap" rc_key="60" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+  <action string="codeset" name='pip_toggle'       type="soap" rc_key="88" waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
+
+</includes>
+
+
+

@@ -1,0 +1,19 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Develop Interfaces
+WikiDoc:Page:Interfaces Structure
+WikiDoc:TOCTitle:1=Interfaces Structure
+Interface modules have to follow the following structure:
+
+* Written in Python
+* Main file name is "interface.py"
+* File(s) location is [ORCA-Root]\interfaces\[interface name]\..
+* Class name is cInterface, based on cBaseInterFace
+* No further classes outside of cInterface class. Any required further classes should be defined inside of cInterface to avoid conflicts with other interfaces
+
+Interfaces are loaded at runtime, and only, if they are used by the definition. Interfaces have full access to all ORCA functions, nevertheless, they should neither block the code, nor should direct interact with the screen. Interfaces should , if possible, not have hardcoded commands into their code. Defining codes in xml files is a good idea, but not mandantory. Interfaces should support to be used simultaniously for different targets. Interfaces get notified, if the device will be paused and resumed, and can handle their connection state accordingly.
+
+TCP/IP, UDP and Telnet are available for interfaces. Bluetooth is not available by now but is announce by the KIVY framework for the future.
+
+WikiDoc:End
+'''

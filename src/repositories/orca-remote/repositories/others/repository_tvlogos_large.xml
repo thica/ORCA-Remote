@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <repositorymanager>
+    <entry>
+      <name>TV Logo Pack large</name>
+      <description language='English'>Big pack of TV logos (80 MB!)</description>
+      <description language='German'>Grosses TV Logo Packet  (80 MB!)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(RESOURCEPATH)/tvlogos/tvlogos_large</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/others/tvlogos_large.zip</sourcefile>
+          <targetpath>resources/tvlogos/tvlogos_large</targetpath>
+        </source>
+      </sources>
+    </entry>
+  </repositorymanager>
+</root>

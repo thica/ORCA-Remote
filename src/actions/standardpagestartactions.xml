@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+  <pagestartaction name="appstart">
+      <!-- Standard Pre Initialize empty discover interface-->
+      <action name="Set DISCOVERINTERFACE"                  string="setvar DiscoverSingle_parameter_DISCOVERINTERFACE=" />
+      <action name="Set DISCOVERINTERFACE"                  string="setvar DISCOVERINTERFACE=" />
+      <action name="Set DISCOVERCONFIG"                     string="setvar DISCOVERCONFIG=" />
+      <action name="Set DISCOVERACTION"                     string="setvar DISCOVERACTION=" />
+      <action name="Set WAITFORMESSAGE"                     string="setvar WAITFORMESSAGE=Waiting" />
+      <!-- This sets the var names, not the volume default values -->
+      <action name="Set Default Volume Return Value"        string="setvar CURRENTVOLUMEMAIN=mainvolume" />
+      <action name="Set Default Volume Return Value"        string="setvar CURRENTVOLUMESUB=subvolume" />
+      <action name="Set Default Volume Return Value"        string="setvar CURRENTVOLUMECENTER=centervolume" />
+      <action name="Set Default Volume Return Value"        string="setvar CURRENTVOLUMEFRONT=frontvolume" />
+      <action name="Set Default Volume Return Value"        string="setvar CURRENTVOLUMEBACK=backvolume" />
+      <action name="Set Default Volume Return Value"        string="setvar CURRENTVOLUMESURROUND=surroundvolume" />
+
+      <action name="Initialize Value"                       string="setvar GLOBALDESTVAR=" />
+      <action name="Initialize Value"                       string="setvar powerstatus=OFF" />
+      <action name="Initialize Value"                       string="setvar DEVICEISONLINE=FALSE" />
+      <action name="Initialize Value"                       string="setvar ONPAUSE=FALSE" />
+
+      <!-- Standard Pre Initialize empty ACTIVITY interface-->
+      <action name="Initialize Value"                       string="setvar DEVICEMAININTERFACE=" />
+      <action name="Initialize Value"                       string="setvar DEVICEMAINCONFIGNAME=" />
+      <action name="Initialize Value"                       string="setvar DEVICEVOLUMEINTERFACE=" />
+      <action name="Initialize Value"                       string="setvar DEVICEVOLUMECONFIGNAME=" />
+  </pagestartaction>
+
+
+  <pagestartaction name="definitionstart">
+    <action name="Standard Definitions start here" />
+    <!-- Standard Images for wait and transmit -->
+    <action name="Set default Transmitter Picture" string="settransmitterpicture" picturename="Picture Transmit" />
+    <action name="Set default Wait Picture" string="setwaitpicture" picturename="Picture Wait" />
+
+    <!-- Timer for the clock -->
+    <action name="update page clocks" string="definetimer" timername="UpdatePageTimer" interval="1" switch="on" actionname="Update Page Clocks"/>
+
+    <!-- If ESC on First page , asked to finish app -->
+    <action name="ESC Key Handler QuitApp" string="registernotification" filterpagename="FIRSTPAGE" notification="on_key_ESC" notifyaction="askonexit"/>
+    <!-- Standard behaviour: Goto Last page , when esc is pressed for popup pages-->
+    <action name="ESC Key Handler Popups"  string="registernotification" filterpagename="POPUP" notification="on_key_ESC" notifyaction="gotolastpage"/>
+    <!-- Standard behaviour: Goto First page , when esc is pressed for non popup pages-->
+    <action name="ESC Key Handler Default" string="registernotification" filterpagename="NOPOPUP" notification="on_key_ESC"  notifyaction="gotofirstpage"/>
+
+    <!-- Standard behaviour for all pages: Show settings dialog, when dialog button is pressed -->
+    <action name="Settings Key Handler Default" string="registernotification" filterpagename="ALL" notification="on_key_282"  notifyaction="gotosettingspage"/>
+    <action name="Settings Key Handler Default" string="registernotification" filterpagename="ALL" notification="on_key_319"  notifyaction="gotosettingspage"/>
+
+    <!-- we disable esc key for the settings dialog as popups from the framework might be open. So just the close button works -->
+    <action name="ESC Key Handler Settings" string="registernotification" filterpagename="Page_Settings" notification="on_key_ESC"  notifyaction=""/>
+    <!-- If we press the close button on the settings page, goto to the first page -->
+    <action name="Button Close settings Key Handler Settings" string="registernotification" filterpagename="Page_Settings" notification="closesetting_orca"  notifyaction="gotofirstpagefromsettings"/>
+
+    <!-- If we press ESC on the interface-settings page, goto to the settings page -->
+    <action name="ESC Key Handler Interface Settings" string="registernotification" filterpagename="Page_InterfaceSettings" notification="on_key_ESC"  notifyaction="gotosettingspage"/>
+    <!-- If we press the close button on the interface-settings page, goto to the settings page -->
+    <action name="Button Close interface settings Key Handler Settings" string="registernotification" filterpagename="Page_InterfaceSettings" notification="closesetting_interface"  notifyaction="gotosettingspage"/>
+
+    <!-- If we press ESC on the interface-settings discoverpage, goto to the settings page -->
+    <action name="ESC Key Handler Interface Discover Settings" string="registernotification" filterpagename="Page_InterfaceSettingsDiscover" notification="on_key_ESC"  notifyaction="gotointerfacesettingspage"/>
+    <!-- If we press the close button on the interface-settings page, goto to the settings page -->
+    <action name="Button Close interface settings Key Handler Settings" string="registernotification" filterpagename="Page_InterfaceSettingsDiscover" notification="closesetting_interface_discover"  notifyaction="gotointerfacesettingspage"/>
+
+    <!-- If we press ESC on the script-settings page, goto to the settings page -->
+    <action name="ESC Key Handler Script Settings" string="registernotification" filterpagename="Page_ScriptSettings" notification="on_key_ESC"  notifyaction="gotosettingspage"/>
+    <!-- If we press the close button on the scipt-settings page, goto to the settings page -->
+    <action name="Button Close Script settings Key Handler Settings" string="registernotification" filterpagename="Page_ScriptSettings" notification="closesetting_script"  notifyaction="gotosettingspage"/>
+
+    <!-- If we press ESC on the definition-settings page, goto to the settings page -->
+    <action name="ESC Key Handler Script Settings" string="registernotification" filterpagename="Page_DefinitionSettings" notification="on_key_ESC"  notifyaction="gotosettingspage"/>
+    <!-- If we press the close button on the definition-settings page, goto to the settings page -->
+    <action name="Button Close definition settings Key Handler Settings" string="registernotification" filterpagename="Page_DefinitionSettings" notification="closesetting_definition"  notifyaction="gotosettingspage"/>
+    <!-- If we press ESC on the Powerstatus-settings page, goto to the settings page -->
+    <action name="ESC Key Handler Powerstatus Settings" string="registernotification" filterpagename="Page_PowerStati" notification="on_key_ESC"  notifyaction="gotosettingspage"/>
+    <!-- If we press the close button on the powerstatus-settings page, goto to the settings page -->
+    <action name="Button Close Powerstatus settings Key Handler Settings" string="registernotification" filterpagename="Page_PowerStati" notification="closesetting_powerstati"  notifyaction="gotosettingspage"/>
+      <!-- If we press ESC on the download-settings page, goto to the settings page -->
+    <action name="ESC Key Handler download Settings" string="registernotification" filterpagename="Page_Settings_Download" notification="on_key_ESC"  notifyaction=""/>
+    <!-- If we press the close button on the download-settings page, goto to the settings page -->
+    <action name="Button Close download settings Key Handler Settings" string="registernotification" filterpagename="Page_Settings_Download" notification="=closesetting_download"  notifyaction="gotosettingspage"/>
+    <!-- If we press ESC on the logfile page, goto to the settings page -->
+    <action name="ESC Key Handler Logfile" string="registernotification" filterpagename="Page_ShowFile" notification="on_key_ESC"  notifyaction="gotosettingspage"/>
+    <!-- If we press ESC on the wait page, goto to the last page -->
+    <action name="ESC Key Handler Wait" string="registernotification" filterpagename="Page_Wait" notification="on_key_ESC"  notifyaction="KeyHandler_PageWait_ESC"/>
+    <!-- If we press the close button on the logfile-settings page, goto to the settings page -->
+    <action name="Button Close Logfileviewer Key Handler Settings" string="registernotification" filterpagename="Page_ShowFile" notification="closesetting_orca"  notifyaction="gotosettingspage"/>
+
+    <action name="ESC Key Handler Wait" string="registernotification" filterpagename="Page_Wait_For_Device"            notification="on_key_ESC" notifyaction="Fkt WaitForDeviceAbort"/>
+    <action name="ESC Key Handler Wait" string="registernotification" filterpagename="Page_Wait_For_Device_NoPowerOn"  notification="on_key_ESC" notifyaction="Fkt WaitForDeviceAbort"/>
+
+    <action name="Change Lamguage handler" string="registernotification" notification="on_language_change"  notifyaction="Change App Language"/>
+
+
+    <!-- Standard file to show is the logfile-->
+    <action name="Set Logfile" string="setvar SHOWFILE=$var(LOGFILE)" />
+    <!-- Set default message for wait on device popup-->
+    <action name="Set String for Wait Popop" string="setvar WAITFORMESSAGE=$lvar(5024)" />
+    <!--  On Pause Actions -->
+    <action name="Register On Pause" string="registernotification" filterpagename="CURRENT" notification="on_pause" notifyaction="on_pause"/>
+    <!--  On Resume Actions -->
+    <action name="Register On Resume" string="registernotification" filterpagename="CURRENT" notification="on_resume" notifyaction="on_resume"/>
+    <!--  Wait For Connectivity -->
+    <action1 name="Wait For Connectivity" string="waitforconnectivity" />
+
+      <!-- Standard Pre Initialize empty discover interface-->
+      <action name="Set DISCOVERINTERFACE" string="setvar DISCOVERINTERFACE=" />
+      <action name="Set DISCOVERCONFIG"    string="setvar DISCOVERCONFIG=" />
+      <action name="Set DISCOVERACTION"    string="setvar DISCOVERACTION=" />
+      <action name="Standard Definitions end here" />
+
+  </pagestartaction>
+  <pagestartaction name="Page_InterfaceSettings">
+    <action name="Reload Interface Settings" string="updatewidget Interfacesettings" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_InterfaceSettingsDiscover">
+    <action name="Reload Interface Discover Settings" string="updatewidget Interfacesettingsdiscover" />
+  </pagestartaction>
+
+
+  <pagestartaction name="Page_ScriptSettings">
+    <action name="Reload Script Settings" string="updatewidget Scriptsettings" />
+  </pagestartaction>
+
+
+  <pagestartaction name="Page_DefinitionSettings">
+      <action name="Reload Definition Settings" string="updatewidget definitionsettings" />
+  </pagestartaction>
+
+   <pagestartaction name="Page_PowerStati">
+        <action name="Reload Definition Settings" string="updatewidget PowerStatusSettings" />
+    </pagestartaction>
+
+    <pagestartaction name="Page_ShowFile">
+    <action name="update Log File" string="updatewidget File" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Wait_For_Device">
+    <action name="update wait message" string="updatewidget Message Wait@Page_Wait_For_Device" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Wait_For_Device_NoPowerOn">
+    <action name="update wait message" string="updatewidget Message Wait@Page_Wait_For_Device_NoPowerOn" />
+  </pagestartaction>
+
+
+    <pagestartaction name="Page_Settings" >
+        <action name="Set Trigger after a second" string="definetimer" timername="Set SetupTrigger" interval="1" switch="on" actionname="Set SetupTrigger" condition="$var(PAGESTARTCOUNT_Page_Settings)==1"/>
+    </pagestartaction>
+
+</includes>
+

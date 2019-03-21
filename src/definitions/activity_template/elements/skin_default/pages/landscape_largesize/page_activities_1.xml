@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Activities_$dvar(definition_activity_template)_1">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_topline.xml" parse="xml" condition="$var($dvar(definition_activity_template)_IMPORTNAVIGATIONBAR)==1"/>
+    </element>
+    <element name="Button QuitApp"  type="BUTTON" posx="right" width="%15" height="of:height:Anchor TopLine" picturenormal='transparentpic' picturepressed="button wide pressed" action="askonexit" fontsize='%h40'  caption="$lvar(2003)" />
+    <element name="Button Settings" type="BUTTON" posx="of:toleft:Button QuitApp" width="%15" height="of:height:Anchor TopLine"  picturenormal='transparentpic' picturepressed="button wide pressed" action="gotosettingspage" fontsize='%h40' caption="$lvar(2002)" />
+    <element name='Button All Off' type='BUTTON' posx='center' posy='of:height:Anchor TopLine:*0.25' height="of:height:Anchor TopLine:*1.5" width='of:height:self'  picturenormal='button round framed*' action='FKT SwitchAllOffActivityGroup'  actionpars='{"ACTIVITYGROUP":"1"}' fontsize='%h50' textcolor='$var(red)' caption='icon:power_off' />
+    <element name="Picture Group" type="PICTURE" posx="left" posy="bottom" width="%40" height="of:width:self:*0.6" picturenormal="$var(ACTIVITYGROUPLOGO[1])" />
+    <element name='Anchor Buttons Right' type='ANCHOR' posx='%95' posy='middle' height='%65' width='%25' >
+      <element name="Button Activity_1_1"       type="SWITCH" posy="top"    height="of:width:self:*0.3" picturenormal="button wide framed*" action="FKT SwitchOn Activity"    rem=""        actionpars='{"ACTIVITYGROUP":"1","ACTIVITYNUMBER":"1"}' caption="$var(ACTIVITY_NAME[1][1])"   group="ACTIVITYGROUP_1" destvar="ACTIVITY_1_1" autohide="1"/>
+      <element name="Button Activity_1_2"       type="SWITCH" posy="%33"    height="of:width:self:*0.3" picturenormal="button wide framed*" action="FKT SwitchOn Activity"    rem=""        actionpars='{"ACTIVITYGROUP":"1","ACTIVITYNUMBER":"2"}' caption="$var(ACTIVITY_NAME[1][2])"   group="ACTIVITYGROUP_1" destvar="ACTIVITY_1_2" autohide="1"/>
+      <element name="Button Activity_1_3"       type="SWITCH" posy="%66"    height="of:width:self:*0.3" picturenormal="button wide framed*" action="FKT SwitchOn Activity"    rem=""        actionpars='{"ACTIVITYGROUP":"1","ACTIVITYNUMBER":"3"}' caption="$var(ACTIVITY_NAME[1][3])"   group="ACTIVITYGROUP_1" destvar="ACTIVITY_1_3" autohide="1"/>
+      <element name="Button Activity_1_4"       type="SWITCH" posy="bottom" height="of:width:self:*0.3" picturenormal="button wide framed*" action="FKT SwitchOn Activity"    rem=""        actionpars='{"ACTIVITYGROUP":"1","ACTIVITYNUMBER":"4"}' caption="$var(ACTIVITY_NAME[1][4])"   group="ACTIVITYGROUP_1" destvar="ACTIVITY_1_4" autohide="1"/>
+    </element>
+    <element name='Anchor Buttons Left' type='ANCHOR' posx='%57' posy='middle' height='%65' width='%25' >
+      <element name="Button Activity_1_5"       type="SWITCH" posy="top"    height="of:width:self:*0.3" picturenormal="button wide framed*" action="FKT SwitchOn Activity"    rem=""        actionpars='{"ACTIVITYGROUP":"1","ACTIVITYNUMBER":"5"}' caption="$var(ACTIVITY_NAME[1][5])"   group="ACTIVITYGROUP_1" destvar="ACTIVITY_1_5" autohide="1"/>
+      <element name="Button Activity_1_6"       type="SWITCH" posy="%33"    height="of:width:self:*0.3" picturenormal="button wide framed*" action="FKT SwitchOn Activity"    rem=""        actionpars='{"ACTIVITYGROUP":"1","ACTIVITYNUMBER":"6"}' caption="$var(ACTIVITY_NAME[1][6])"   group="ACTIVITYGROUP_1" destvar="ACTIVITY_1_6" autohide="1"/>
+      <element name="Button Activity_1_7"       type="SWITCH" posy="%66"    height="of:width:self:*0.3" picturenormal="button wide framed*" action="FKT SwitchOn Activity"    rem=""        actionpars='{"ACTIVITYGROUP":"1","ACTIVITYNUMBER":"7"}' caption="$var(ACTIVITY_NAME[1][7])"   group="ACTIVITYGROUP_1" destvar="ACTIVITY_1_7" autohide="1"/>
+      <element name="Button Activity_1_8"       type="SWITCH" posy="bottom" height="of:width:self:*0.3" picturenormal="button wide framed*" action="FKT SwitchOn Activity"    rem=""        actionpars='{"ACTIVITYGROUP":"1","ACTIVITYNUMBER":"8"}' caption="$var(ACTIVITY_NAME[1][8])"   group="ACTIVITYGROUP_1" destvar="ACTIVITY_1_8" autohide="1"/>
+    </element>
+
+  </elements>
+</page>

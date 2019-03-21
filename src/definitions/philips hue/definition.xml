@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <support>http://www.orca-remote.org/forum/</support>
+    <installationhint></installationhint>
+    <orientations>landscape,portrait</orientations>
+    <definitionvars>{"definition_alias_philips_hue":"PHILIPS_HUE"}</definitionvars>
+  </def_parameter>
+
+  <startskip condition="$dvar(definition_alias_philips_hue_IMPORTPAGES)=0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/page_*" parse="xml"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+      <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+    </pages>
+  <stopskip/>
+
+  <interface_setup>
+      <interface name="url">
+        <configuration name ="DEVICE_$dvar(definition_alias_philips_hue)">
+          <setting name="Port" parameter="80"/>
+          <setting name="Host" parameter="discover"/>
+          <setting name="TimeToClose" parameter="2"/>
+          <setting name="FNCodeset" parameter="CODESET_url_PHILIPS HUE.xml"/>
+          <setting name="DiscoverScriptName" parameter="discover_upnp"/>
+          <setting name="DISCOVER_UPNP_manufacturer" parameter="Royal Philips Electronics"/>
+          <setting name="DISCOVER_UPNP_models" parameter='["Philips hue bridge*"]'/>
+          <setting name="SaveDiscoveredIP" parameter="1"/>
+          <setting name="OldDiscoveredIP" parameter=""/>
+          <setting name="User" parameter="ORCAPHILIPSUSER" />
+          <setting name="ParseResult" parameter="json" />
+          <setting name="TimeOut" parameter="2" />
+        </configuration>
+      </interface>
+  </interface_setup>
+
+  <settings>
+    <!-- Interfaces -->
+    <setting title="$lvar(561)" type='section' />
+    <setting title="$lvar(700)"  desc="$lvar(701)" var="$dvar(definition_alias_philips_hue)_INTERFACE_MAIN"     type="scrolloptions"    default="url" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(702)"  desc="$lvar(703)" var="$dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN"    type="string"           default="DEVICE_$dvar(definition_alias_philips_hue)" />
+    <setting title="$lvar(705)"  desc="$lvar(705)" var="$dvar(definition_alias_philips_hue)_INTERFACE_POWERON"  type="scrolloptions"    default="url" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(706)"  desc="$lvar(707)" var="$dvar(definition_alias_philips_hue)_CONFIGNAME_POWERON" type="string"           default="DEVICE_$dvar(definition_alias_philips_hue)" />
+    <setting title="$lvar(philipshue_10004)" type='section' />
+    <setting title="$lvar(philipshue_10009) #1" type='title' />
+    <setting title="$lvar(philipshue_10007)" desc="$lvar(philipshue_10008)" var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[1]"  type="scrolloptions" default="" options='"$dvar(definition_alias_philips_hue)_status_name[]"'/>
+    <setting title="$lvar(philipshue_10005)" desc="$lvar(philipshue_10006)" var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[1]"  type="scrolloptions" default="Dimmer" options='"Dimmer","Switch","None"'/>
+    <setting title="$lvar(philipshue_10009) #2" type='title' />
+    <setting title="$lvar(philipshue_10007)" desc="$lvar(philipshue_10008)" var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[2]"  type="scrolloptions" default="" options='"$dvar(definition_alias_philips_hue)_status_name[]"'/>
+    <setting title="$lvar(philipshue_10005)" desc="$lvar(philipshue_10006)" var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[2]"  type="scrolloptions" default="Dimmer" options='"Dimmer","Switch","None"'/>
+    <setting title="$lvar(philipshue_10009) #3" type='title' />
+    <setting title="$lvar(philipshue_10007)" desc="$lvar(philipshue_10008)" var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[3]"  type="scrolloptions" default="" options='"$dvar(definition_alias_philips_hue)_status_name[]"'/>
+    <setting title="$lvar(philipshue_10005)" desc="$lvar(philipshue_10006)" var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[3]"  type="scrolloptions" default="Dimmer" options='"Dimmer","Switch","None"'/>
+    <setting title="$lvar(philipshue_10009) #4" type='title' />
+    <setting title="$lvar(philipshue_10007)" desc="$lvar(philipshue_10008)" var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[4]"  type="scrolloptions" default="" options='"$dvar(definition_alias_philips_hue)_status_name[]"'/>
+    <setting title="$lvar(philipshue_10005)" desc="$lvar(philipshue_10006)" var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[4]"  type="scrolloptions" default="Dimmer" options='"Dimmer","Switch","None"'/>
+    <setting title="$lvar(philipshue_10009) #5" type='title' />
+    <setting title="$lvar(philipshue_10007)" desc="$lvar(philipshue_10008)" var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[5]"  type="scrolloptions" default="" options='"$dvar(definition_alias_philips_hue)_status_name[]"'/>
+    <setting title="$lvar(philipshue_10005)" desc="$lvar(philipshue_10006)" var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[5]"  type="scrolloptions" default="Switch" options='"Dimmer","Switch","None"'/>
+    <setting title="$lvar(philipshue_10009) #6" type='title' />
+    <setting title="$lvar(philipshue_10007)" desc="$lvar(philipshue_10008)" var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[6]"  type="scrolloptions" default="" options='"$dvar(definition_alias_philips_hue)_status_name[]"'/>
+    <setting title="$lvar(philipshue_10005)" desc="$lvar(philipshue_10006)" var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[6]"  type="scrolloptions" default="Switch" options='"Dimmer","Switch","None"'/>
+    <setting title="$lvar(philipshue_10009) #7" type='title' />
+    <setting title="$lvar(philipshue_10007)" desc="$lvar(philipshue_10008)" var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[7]"  type="scrolloptions" default="" options='"$dvar(definition_alias_philips_hue)_status_name[]"'/>
+    <setting title="$lvar(philipshue_10005)" desc="$lvar(philipshue_10006)" var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[7]"  type="scrolloptions" default="Switch" options='"Dimmer","Switch","None"'/>
+    <setting title="$lvar(philipshue_10009) #8" type='title' />
+    <setting title="$lvar(philipshue_10007)" desc="$lvar(philipshue_10008)" var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[8]"  type="scrolloptions" default="" options='"$dvar(definition_alias_philips_hue)_status_name[]"'/>
+    <setting title="$lvar(philipshue_10005)" desc="$lvar(philipshue_10006)" var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[8]"  type="scrolloptions" default="Switch" options='"Dimmer","Switch","None"'/>
+
+     <!-- Other Settings -->
+    <setting title="$lvar(philipshue_10003)" type='section' />
+    <setting title="$lvar(philipshue_10001)" desc="$lvar(philipshue_10002)"  var="$dvar(definition_alias_philips_hue)_STARTPAGE"       type='scrolloptions' default='Detailed' options='"Universal","Detailed"' />
+    <setting title="$lvar(philipshue_10087)" desc="$lvar(philipshue_10088)"  var="$dvar(definition_alias_philips_hue)_NAVIGATIONBAR"   type="string"   default="$var(STANDARDELEMENTSPATH)/block_topline.xml" />
+
+  </settings>
+  <repositorymanager>
+    <entry>
+      <name>Philips Hue (url)</name>
+      <description language='English'>Philips Hue Light Control via LAN conrol</description>
+      <description language='German'>Philips Hue Lich Fernbedienung über LAN</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/philips hue</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/philips hue.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>codesets</type>
+          <name>Philips HUE</name>
+        </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/philips hue/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/philips hue/interfacesettings*</file>
+        <file>$var(APPLICATIONPATH)/definitions/philips hue/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+</orca>

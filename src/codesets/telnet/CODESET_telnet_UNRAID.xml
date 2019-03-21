@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String
+	cmd = command to send, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>Unraid Power off / Telnet</name>
+      <description language='English'>Power off command for Unraid NAS Server using Telnet</description>
+      <description language='German'>Power off Befehl für Unraid NAS Server über Telnet</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/telnet/CODESET_telnet_UNRAID.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_telnet_UNRAID.zip</sourcefile>
+          <targetpath>codesets/telnet</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Telnet</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action string="codeset" name='power_off' waitforresponse='0' cmd='powerdown\n' />
+  <action name='power_off_byscreen' >
+      <action string="codeset" name='power_off_byscreen_pre' waitforresponse='1' cmd='screen -S "ORCAPOWERDOWNPRE" bash -c "shutdown -t 180 now" \n' />
+      <action string="codeset" name='power_off_byscreen'     waitforresponse='1' cmd='screen -S "ORCAPOWERDOWN" bash -c "powerdown" \n' />
+  </action>
+</includes>

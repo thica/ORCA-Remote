@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(WIZARDTEMPLATESPATH)/mediaplayer wizard/android_adb/definitionsettings/settings.xml" parse="xml" ></xi:include>
+    <settings>
+        <settings>
+            <default var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"               default="1" />
+            <default var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"               default="device firetv" />
+            <default var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"                  default="Fire TV" />
+            <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE"           default="None" />
+            <default var="$dvar(definition_alias_mediaplayer_template)_SHOWSEARCHANDINPUT"          default="1" />
+            <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"               default="0" />
+        </settings>
+    </settings>
+</settings>
+

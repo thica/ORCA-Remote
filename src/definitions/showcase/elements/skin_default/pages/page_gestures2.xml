@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Gestures2">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+    <element name="Textblock Info" type="TEXTFIELD" posx="%90" posy="%30" width="%47" height="%21" fontsize='%h20'   caption='$lvar(showcase_10001)' htextalign='right' />
+    <element name='Anchor Buttons' type='ANCHOR' posx='%5' posy='middle'  width='%17' height='%74'>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_effects.xml" parse="xml" />
+    </element>
+  </elements>
+</page>

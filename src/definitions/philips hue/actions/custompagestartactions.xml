@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+    <!-- Number of single light to dim-->
+    <action name="Initialize Var"  string="setvar HUELIGHTNUM=" />
+    <action name="Initialize Var"  string="setvar HUELIGHTNAME=$lvar(philipshue_10012)" />
+    <action name="Initialize Var"  string="setvar HUELIGHTCATEGORY=Light" />
+
+    <!-- Number of group light to dim-->
+    <action name="Initialize Value" string="setvar hue_t=20" />
+
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+    <action name="Add Navigation Bar" string="call Add NavigationBar $dvar(definition_alias_philips_hue)" />
+    <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Device_$dvar(definition_alias_philips_hue)"   condition="$var($dvar(definition_alias_philips_hue)_STARTPAGE)!=Universal" />
+    <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Device_$dvar(definition_alias_philips_hue)_Universal"   condition="$var($dvar(definition_alias_philips_hue)_STARTPAGE)==Universal" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_philips_hue)">
+    <action name="" string="call PageStart Page_Device_$dvar(definition_alias_philips_hue)" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_philips_hue)_Universal">
+      <action name="" string="call PageStart Page_Device_$dvar(definition_alias_philips_hue)" />
+
+      <action name="" string="addvarlink" widgetname="Slider Dimmer 1@Page_Device_$dvar(definition_alias_philips_hue)_Universal" linktype="widget" varname="Dimmer1" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[1])==Dimmer" />
+      <action name="" string="addvarlink" widgetname="Slider Dimmer 2@Page_Device_$dvar(definition_alias_philips_hue)_Universal" linktype="widget" varname="Dimmer2" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[2])==Dimmer" />
+      <action name="" string="addvarlink" widgetname="Slider Dimmer 3@Page_Device_$dvar(definition_alias_philips_hue)_Universal" linktype="widget" varname="Dimmer3" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[3])==Dimmer" />
+      <action name="" string="addvarlink" widgetname="Slider Dimmer 4@Page_Device_$dvar(definition_alias_philips_hue)_Universal" linktype="widget" varname="Dimmer4" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[4])==Dimmer" />
+      <action name="" string="addvarlink" widgetname="Slider Dimmer 5@Page_Device_$dvar(definition_alias_philips_hue)_Universal" linktype="widget" varname="Dimmer5" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[5])==Dimmer" />
+      <action name="" string="addvarlink" widgetname="Slider Dimmer 6@Page_Device_$dvar(definition_alias_philips_hue)_Universal" linktype="widget" varname="Dimmer6" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[6])==Dimmer" />
+      <action name="" string="addvarlink" widgetname="Slider Dimmer 7@Page_Device_$dvar(definition_alias_philips_hue)_Universal" linktype="widget" varname="Dimmer7" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[7])==Dimmer" />
+      <action name="" string="addvarlink" widgetname="Slider Dimmer 8@Page_Device_$dvar(definition_alias_philips_hue)_Universal" linktype="widget" varname="Dimmer8" condition="$var($dvar(definition_alias_philips_hue)_CONTROL_TYPE[8])==Dimmer" />
+      <action name="get current light" string="call $dvar(definition_alias_philips_hue) FKT_OnHueLightnumVChanged"  />
+      <action name="Get IDs for setting light names"    string="call $dvar(definition_alias_philips_hue) Get lights IDs for Settings Names"/>
+
+      <action name="Update all" string="updatewidget *"/>
+  </pagestartaction>
+
+</includes>

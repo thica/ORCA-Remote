@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <orientations>landscape</orientations>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <support>http://www.orca-remote.org/forum/</support>
+    <definitionvars>{"definition_alias_onkyoavr":"Onkyo AVR Receiver",
+                     "definition_alias_appfavorites_template":"App Favorites",
+                     "definition_alias_cmdfavorites_template":"Cmd Favorites",
+                     "definition_alias_tvfavorites_template":"TV Channels",
+                     "definition_alias_mediaplayer_template":"ONKYO AVR Mediaplayer"}</definitionvars>
+
+   </def_parameter>
+
+  <startskip condition="$dvar(definition_alias_onkyoavr_IMPORTPAGES)=0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/page_*" parse="xml"></xi:include>
+        <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+    </pages>
+  <stopskip/>
+
+  <definitionimports>
+      <definition
+          importlanguages ="1"
+          importpages     ="0"
+          importsettings  ="1"
+          importactions   ="1"
+          alias           ="$dvar(definition_alias_mediaplayer_template)"
+          definitionvars  ='{"definition_alias_mediaplayer_template":   "$dvar(definition_alias_mediaplayer_template)",
+                             "definition_alias_appfavorites_template":  "$dvar(definition_alias_appfavorites_template)",
+                             "definition_alias_cmdfavorites_template":  "$dvar(definition_alias_cmdfavorites_template)",
+                             "definition_alias_tvfavorites_template":   "$dvar(definition_alias_tvfavorites_template)"}'>mediaplayer_template</definition>
+  </definitionimports>
+
+  <interface_setup>
+    <interface1 name="eiscp">
+      <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+        <setting name="Port" parameter="60128"/>
+        <setting name="Host" parameter="discover"/>
+        <setting name="TimeToClose" parameter="-1"/>
+        <setting name="FNCodeset" parameter="CODESET_eiscp_ONKYO_AVR.xml"/>
+        <setting name="unittype" parameter="1"/>
+        <setting name="DisableInterFaceOnError" parameter="0"/>
+        <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+        <setting name="SaveDiscoveredIP" parameter="1"/>
+        <setting name="OldDiscoveredIP" parameter=""/>
+      </configuration>
+    </interface1>
+    <interface name="iTach">
+      <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+        <setting name="Port" parameter="4998"/>
+        <setting name="Host" parameter="192.168.1.2"/>
+        <setting name="FNCodeset" parameter="CODESET_infrared_ccf_ONKYO_AVR_Simple.xml"/>
+        <setting name="Connector" parameter="3"/>
+        <setting name="Module" parameter="1"/>
+        <setting name="TimeToClose" parameter="10"/>
+        <setting name="DisableInterFaceOnError" parameter="0"/>
+        <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
+      </configuration>
+    </interface>
+  </interface_setup>
+
+  <settings>
+      <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN"             default="eiscp" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN"            default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON"          default="eiscp" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON"         default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME"           default="eiscp" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME"          default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"              default="1" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND"        default="Send Ping" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD"              default="0" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE"              default="None" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE"             default="None" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"              default="1" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_MAXVOLUME"                  default="70" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE"          default="Knob" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMENOTIFICATION"         default="0" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCOMMAND"             default="Send Power On" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"              default="device TV receiver" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"                 default="Onkyo AVR"  />
+
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[4]"           default="0" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1]"           default="0" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2]"           default="0" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[3]"           default="0" />
+
+  </settings>
+  <repositorymanager>
+    <entry>
+      <name>Onkyo AVR 16 to 10 wide</name>
+      <description language='English'>LAN Remote Control for ONKYO Receiver</description>
+      <description language='German'>LAN Fernbedienung für ONKYO Receiver</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/onkyo AVR</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/onkyo AVR.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>codesets</type>
+          <name>Onkyo EISCP</name>
+        </dependency>
+        <dependency>
+          <type>codesets</type>
+          <name>ONKYO AVR IR simple</name>
+        </dependency>
+        <dependency>
+          <type>definitions</type>
+          <name>Generic Mediaplayer / TV template</name>
+        </dependency>
+
+
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/onkyo AVR/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/onkyo AVR/interfacesettings*</file>
+        <file>$var(APPLICATIONPATH)/definitions/onkyo AVR/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+
+</orca>

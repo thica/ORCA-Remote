@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Video">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+
+    <element name="Anchor video 1" type="ANCHOR" posx="%5" posy="%90" width="%40" height="%83"  >
+      <element name="VIDEO 1" type="VIDEO" height="of:width:self:*0.75"  />
+      <element name='Anchor POS1'        type='ANCHOR' posx='center' posy='of:bottom:last' width='%50'         height='of:width:self:*0.2'>
+        <element name="POS VIDEO1" type="TEXTFIELD" posx="left"   width="%50" fontsize='%h50' caption='$var(video1_position)'  />
+        <element name="LEN VIDEO1" type="TEXTFIELD" posx="right"  width="%50" fontsize='%h50'  caption='$var(video1_len)' />
+      </element>
+      <element name='Anchor Play Buttons 1' type='ANCHOR' posx='center' posy='bottom' width='%50' height='of:width:self:*0.5' interface='$var(VIDEO_INTERFACE_1)' configname='$var(VIDEO_CONFIGNAME_1)'>
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecord.xml" parse="xml" />
+      </element>
+    </element>
+
+    <element name="Anchor video 2" type="ANCHOR" posx="%95" posy="%90" width="%40" height="%83"  >
+      <element name="VIDEO 2" type="VIDEO" height="of:width:self:*0.75"  />
+      <element name='Anchor POS2'        type='ANCHOR' posx='center' posy='of:bottom:last' width='%50'         height='of:width:self:*0.2'>
+        <element name="POS VIDEO2" type="TEXTFIELD" posx="left"   width="%50" fontsize='%h50' caption='$var(video2_position)'  />
+        <element name="LEN VIDEO2" type="TEXTFIELD" posx="right"  width="%50" fontsize='%h50' caption='$var(video2_len)'/>
+      </element>
+      <element name='Anchor Play Buttons 2' type='ANCHOR' posx='center' posy='bottom' width='%50' height='of:width:self:*0.5' interface='$var(VIDEO_INTERFACE_2)' configname='$var(VIDEO_CONFIGNAME_2)'>
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecord.xml" parse="xml" />
+      </element>
+    </element>
+
+  </elements>
+</page>

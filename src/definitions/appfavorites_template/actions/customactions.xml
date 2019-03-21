@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <action name="Start APP By Name $dvar(definition_alias_appfavorites_template)">
+      <action name="Set the App Name for start"           string="setvar tmp_appname=$var(Start APP By Name $dvar(definition_alias_appfavorites_template)_parameter_appname)" />
+      <action name="Set default index"                    string="setvar tmp_appindex=-1" />
+      <action name="Loop through all App Buttons"         string="forin" varname="$dvar(definition_alias_appfavorites_template)_appname[]"  dstvarname="TMP_APPNAME" level="1" actionname="FKT Find App Index $dvar(definition_alias_appfavorites_template)" />
+      <action name="if we have found something"           string="if $ar(tmp_appindex)!=-1" />
+          <action name="Create App Exec Name part 1"      string="setvar startapp=$dvar(definition_alias_appfavorites_template)_execname[$var(tmp_appindex)]" />
+          <action name="Create App Exec Name part 2"      string="modifyvar" varname="startapp" operator="fromvar"  />
+          <action name="Create Interface Name part 1"     string="setvar tmpinterfacename=$var(Start APP By Name $dvar(definition_alias_appfavorites_template)_parameter_APPINTERFACE)" />
+          <action name="Create Interface Name part 2"     string="modifyvar" varname="tmpinterfacename" operator="fromvar"  />
+          <action name="Create Config Name part 1"        string="setvar tmpconfigname=$var(Start APP By Name $dvar(definition_alias_appfavorites_template)_parameter_APPCONFIGNAME)" />
+          <action name="Create Config Name part 2"        string="modifyvar" varname="tmpconfigname" operator="fromvar"  />
+          <action name="Start App with given Interface"   string="Send Start Application" interface="$var(tmpinterfacename)" configname="$var(tmpconfigname)" condition="'$var(tmpinterfacename)'!=''"/>
+          <action name="Start App with default interface" string="Send Start Application" condition="'$var(tmpinterfacename)'==''"/>
+      <action name="endif"                                string="endif"  />
+    </action>
+
+  <action name="Stop APP By Name $dvar(definition_alias_appfavorites_template)">
+      <action name="Set the App Name for stop"            string="setvar tmp_appname=$var(Stop APP By Name $dvar(definition_alias_appfavorites_template)_parameter_appname)" />
+      <action name="Set default index"                    string="setvar tmp_appindex=-1" />
+      <action name="Loop through all App Buttons"         string="forin" varname="$dvar(definition_alias_appfavorites_template)_appname[]"  dstvarname="TMP_APPNAME" level="1" actionname="FKT Find App Index $dvar(definition_alias_appfavorites_template)" />
+      <action name="if we have found something"           string="if $var(tmp_appindex)!=-1" />
+          <action name="Create App Exec Name part 1"      string="setvar startapp=$dvar(definition_alias_appfavorites_template)_execname[$var(tmp_appindex)]" />
+          <action name="Create App Exec Name part 2"      string="modifyvar" varname="startapp" operator="fromvar"  />
+          <action name="Create Interface Name part 1"     string="setvar tmpinterfacename=$var(Stop APP By Name $dvar(definition_alias_appfavorites_template)_parameter_APPINTERFACE)" />
+          <action name="Create Interface Name part 2"     string="modifyvar" varname="tmpinterfacename" operator="fromvar"  />
+          <action name="Create Config Name part 1"        string="setvar tmpconfigname=$var(Stop APP By Name $dvar(definition_alias_appfavorites_template)_parameter_APPCONFIGNAME)" />
+          <action name="Create Config Name part 2"        string="modifyvar" varname="tmpconfigname" operator="fromvar"  />
+          <action name="Stop App with given Interface"    string="Send Close Application" interface="$var(tmpinterfacename)" configname="$var(tmpconfigname)" condition="'$var(tmpinterfacename)'!=''"/>
+          <action name="Stop App with default interface"  string="Send Close Application" condition="'$var(tmpinterfacename)'==''"/>
+      <action name="endif"                                string="endif"  />
+    </action>
+
+  <action name="Stop Start APP By Name $dvar(definition_alias_appfavorites_template)">
+      <action name="Set the App Name"                     string="setvar tmp_appname=$var(Stop Start APP By Name $dvar(definition_alias_appfavorites_template)_parameter_appname)" />
+      <action name="Set default index"                    string="setvar tmp_appindex=-1" />
+      <action name="Loop through all App Buttons"         string="forin" varname="$dvar(definition_alias_appfavorites_template)_appname[]"  dstvarname="TMP_APPNAME" level="1" actionname="FKT Find App Index $dvar(definition_alias_appfavorites_template)" />
+      <action name="if we have found something"           string="if $var(tmp_appindex)!=-1" />
+          <action name="Create App Exec Name part 1"      string="setvar startapp=$dvar(definition_alias_appfavorites_template)_execname[$var(tmp_appindex)]" />
+          <action name="Create App Exec Name part 2"      string="modifyvar" varname="startapp" operator="fromvar"  />
+          <action name="Create Interface Name part 1"     string="setvar tmpinterfacename=$var(Stop Start APP By Name $dvar(definition_alias_appfavorites_template)_parameter_APPINTERFACE)" />
+          <action name="Create Interface Name part 2"     string="modifyvar" varname="tmpinterfacename" operator="fromvar"  />
+          <action name="Create Config Name part 1"        string="setvar tmpconfigname=$var(Stop Start APP By Name $dvar(definition_alias_appfavorites_template)_parameter_APPCONFIGNAME)" />
+          <action name="Create Config Name part 2"        string="modifyvar" varname="tmpconfigname" operator="fromvar"  />
+          <action name="Stop App with given Interface"    string="Send Close Application" interface="$var(tmpinterfacename)" configname="$var(tmpconfigname)" condition="'$var(tmpinterfacename)'!=''"/>
+          <action name="Stop App with default interface"  string="Send Close Application" condition="'$var(tmpinterfacename)'==''"/>
+          <action name="wait for app to stop"             string="wait 2000"  />
+          <action name="Start App with given Interface"   string="Send Start Application" interface="$var(tmpinterfacename)" configname="$var(tmpconfigname)" condition="'$var(tmpinterfacename)'!=''"/>
+          <action name="Start App with default interface" string="Send Start Application" condition="'$var(tmpinterfacename)'==''"/>
+      <action name="endif"                                string="endif"  />
+    </action>
+
+    <action name="FKT Find App Index $dvar(definition_alias_appfavorites_template)">
+        <action name="if app name is requested app name"  string="setvar tmp_appindex=$var(TMP_APPNAME_index)" condition="$var(TMP_APPNAME_value)==$var(tmp_appname)"/>
+    </action>
+
+    <action name="Start APP By Index $dvar(definition_alias_appfavorites_template)">
+        <action name="Set default index"                  string="setvar tmp_appindex=$var(Start APP By Index $dvar(definition_alias_appfavorites_template)_parameter_INDEX)" />
+        <action name="Create App Exec Name part 1"        string="setvar startapp=$dvar(definition_alias_appfavorites_template)_execname[$var(tmp_appindex)]" />
+        <action name="Create App Exec Name part 2"        string="modifyvar" varname="startapp" operator="fromvar"  />
+        <action name="Create Interface Name part 1"       string="setvar tmpinterfacename=$var(Start APP By Index $dvar(definition_alias_appfavorites_template)_parameter_APPINTERFACE)" />
+        <action name="Create Interface Name part 2"       string="modifyvar" varname="tmpinterfacename" operator="fromvar"  />
+        <action name="Create Config Name part 1"          string="setvar tmpconfigname=$var(Start APP By Index $dvar(definition_alias_appfavorites_template)_parameter_APPCONFIGNAME)" />
+        <action name="Create Config Name part 2"          string="modifyvar" varname="tmpconfigname" operator="fromvar"  />
+        <action name="Start App with given Interface"     string="Send Start Application" interface="$var(tmpinterfacename)" configname="$var(tmpconfigname)" condition="'$var(tmpinterfacename)'!=''"/>
+        <action name="Start App with default interface"   string="Send Start Application" condition="'$var(tmpinterfacename)'==''"/>
+    </action>
+    <action name="Stop APP By Index $dvar(definition_alias_appfavorites_template)">
+        <action name="Set default index"                  string="setvar tmp_appindex=$var(Start APP By Index $dvar(definition_alias_appfavorites_template)_parameter_INDEX)" />
+        <action name="Create App Exec Name part 1"        string="setvar startapp=$dvar(definition_alias_appfavorites_template)_execname[$var(tmp_appindex)]" />
+        <action name="Create App Exec Name part 2"        string="modifyvar" varname="startapp" operator="fromvar"  />
+        <action name="Create Interface Name part 1"       string="setvar tmpinterfacename=$var(Stop APP By Index $dvar(definition_alias_appfavorites_template)_parameter_APPINTERFACE)" />
+        <action name="Create Interface Name part 2"       string="modifyvar" varname="tmpinterfacename" operator="fromvar"  />
+        <action name="Create Config Name part 1"          string="setvar tmpconfigname=$var(Stop APP By Index $dvar(definition_alias_appfavorites_template)_parameter_APPCONFIGNAME)" />
+        <action name="Create Config Name part 2"          string="modifyvar" varname="tmpconfigname" operator="fromvar"  />
+        <action name="Stop App with given Interface"      string="Send Close Application" interface="$var(tmpinterfacename)" configname="$var(tmpconfigname)" condition="'$var(tmpinterfacename)'!=''"/>
+        <action name="Stop App with default interface"    string="Send Close Application" condition="'$var(tmpinterfacename)'==''"/>
+    </action>
+    <action name="Stop Start APP By Index $dvar(definition_alias_appfavorites_template)">
+        <action name="Set default index"                  string="setvar tmp_appindex=$var(Start APP By Index $dvar(definition_alias_appfavorites_template)_parameter_INDEX)" />
+        <action name="Create App Exec Name part 1"        string="setvar startapp=$dvar(definition_alias_appfavorites_template)_execname[$var(tmp_appindex)]" />
+        <action name="Create App Exec Name part 2"        string="modifyvar" varname="startapp" operator="fromvar"  />
+        <action name="Create Interface Name part 1"       string="setvar tmpinterfacename=$var(Stop Start APP By Index $dvar(definition_alias_appfavorites_template)_parameter_APPINTERFACE)" />
+        <action name="Create Interface Name part 2"       string="modifyvar" varname="tmpinterfacename" operator="fromvar"  />
+        <action name="Create Config Name part 1"          string="setvar tmpconfigname=$var(Stop Start APP By Index $dvar(definition_alias_appfavorites_template)_parameter_APPCONFIGNAME)" />
+        <action name="Create Config Name part 2"          string="modifyvar" varname="tmpconfigname" operator="fromvar"  />
+        <action name="Stop App with given Interface"      string="Send Close Application" interface="$var(tmpinterfacename)" configname="$var(tmpconfigname)" condition="'$var(tmpinterfacename)'!=''"/>
+        <action name="Stop App with default interface"    string="Send Close Application" condition="'$var(tmpinterfacename)'==''"/>
+        <action name="wait for app to stop"               string="wait 2000"  />
+        <action name="Start App with given Interface"     string="Send Start Application" interface="$var(tmpinterfacename)" configname="$var(tmpconfigname)" condition="'$var(tmpinterfacename)'!=''"/>
+        <action name="Start App with default interface"   string="Send Start Application" condition="'$var(tmpinterfacename)'==''"/>
+    </action>
+
+
+</includes>
+

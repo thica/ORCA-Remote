@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="SCRIPT_DISC_UPNP_1">Service Typ</string>
+    <string id="SCRIPT_DISC_UPNP_2">Port zurück melden</string>
+    <string id="SCRIPT_DISC_UPNP_3">Ermittelten Port zuzück melden</string>
+
+</strings>

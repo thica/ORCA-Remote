@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <settings>
+      <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN"              default="iTach" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN"             default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON"           default="iTach" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON"          default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME"            default="iTach" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME"           default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"               default="0" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND"         default="Send Ping" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"               default="device tv" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"                  default="Panasonic TV" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD"               default="1" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE"               default="SMALL" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE"              default="TVICONS" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"               default="0" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_MAXVOLUME"                   default="100" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE"           default="Buttons" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[1]"           default="icon:info" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[1]"            default="Send Info" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[2]"           default="icon:escape" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[2]"            default="Send Escape" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[3]"           default="icon:menu" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[3]"            default="Send Menu" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[4]"           default="icon:arrow_back" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[4]"            default="Send Return" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[4]"                 default="1" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTON_RED"              default="Send Button Red" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTON_GREEN"            default="Send Button Green" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTON_YELLOW"           default="Send Button Yellow" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTON_BLUE"             default="Send Button Blue" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1]"            default="1" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][1]"    default="icon:info" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][1]"     default="Send Info" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][2]"    default="icon:subtitles" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][2]"     default="Send Subtitles Toggle" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][3]"    default="icon:aspect" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][3]"     default="Send Aspect" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][4]"    default="$lvar(1076)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][4]"     default="Send Freeze" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2]"            default="1" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][1]"    default="$lvar(1080)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][1]"     default="Send Option" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][2]"    default="icon:source_sdcard" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][2]"     default="Send SDCard" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][3]"    default="icon:source_tv" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][3]"     default="Send Source TV" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][4]"    default="icon:source" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][4]"     default="Send Source" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[3]"            default="1" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][1]"    default="icon:teletext" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][1]"     default="Send Teletext Toggle" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][2]"    default="icon:source_favorites" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][2]"     default="Send Teletext Favorites" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][3]"    default="$lvar(1074)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][3]"     default="Send Teletext Index" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][4]"    default="$lvar(1075)" />
+      <default var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][4]"     default="Send Teletext Hold" />
+  </settings>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+    <action name="Check if we have a first app start" string="if $var(STARTCOUNT)==1" />
+      <!-- If we use the IP from the Android for Kodi -->
+      <action name="save var" string="saveinterfacesetting" interfacename="$var($dvar(definition_alias_mediaplayer_kodi)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_kodi)_CONFIGNAME_MAIN)" varname="host" varvalue="linked:android_adb:DEVICE_$dvar(definition_alias_mediaplayer_android):Host"/>
+    <action name="endif" string="endif"/>
+  </pagestartaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_android)">
+    <action name="Set Kodi start app action" string="setwidgetattribute" widgetname="Button App[1]" attributename="action" attributevalue="Activity Start $dvar(definition_alias_mediaplayer_kodi)" />
+  </pagestartaction>
+  <pagestartaction name="Page_$dvar(definition_alias_appfavorites_kodi)_APPS_Popup_Vertical">
+    <action name="Set Kodi start app action" string="setwidgetattribute" widgetname="Button App[1]" attributename="action" attributevalue="Activity Start $dvar(definition_alias_mediaplayer_kodi)" />
+  </pagestartaction>
+  <pagestartaction name="Page_$dvar(definition_alias_appfavorites_kodi)_APPS_Popup">
+    <action name="Set Kodi start app action" string="setwidgetattribute" widgetname="Button App[1]" attributename="action" attributevalue="Activity Start $dvar(definition_alias_mediaplayer_kodi)" />
+  </pagestartaction>
+    
+</includes>

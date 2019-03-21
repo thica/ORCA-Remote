@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+      <action name="" string="getsaveorcasetting" configtype="ORCA" varname="locales" varvalue="Deutschland" condition="$var(STARTCOUNT)==1" />
+      <action name="" string="redirect" from="$var(STANDARDELEMENTSPATH)/block_topline.xml" to="$var(DEFINITIONPATHSKINELEMENTS[activity_template])/block_topline.xml" />
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+      <action name="Thica Definitions start here" />
+      <!-- We change the settings of the definition at first appstart-->
+      <!-- All adjustments to Interface settings needs to be in definition start, not in appstart-->
+      <action name="Discover all" string="discover"  condition="$var(STARTCOUNT)==1"/>
+
+      <!-- we want to get all channels from enigma , independent from the definition load order-->
+
+      <action name="on first start" string="if $var(STARTCOUNT)==1"/>"
+
+        <action name="Update Splash"     string="showsplashtext"  maintext="Enigma" subtext='$lvar(enigma2_10006)'/>
+        <action name="Load Settings from Enigma by sending something (thica)" string="sendcommand" commandname="getvolume" retvar="dummy" interface="$var($dvar(definition_alias_mediaplayer_enigma2)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_enigma2)_CONFIGNAME_MAIN)"  />
+        <action name='Assign the channels from enigma (forced)' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_enigma2)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_enigma2)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_shared)","force":"1"}' />
+      <action name="endif first start" string="endif" />
+
+
+
+      <action name="Show First Page"   string="setvar DEFINITIONSTARTPAGE=Page_Activities_$dvar(definition_activity_template)_1"   condition="$var(thica_startpage)!=Lounge" />
+      <action name="Or Second Page"    string="setvar DEFINITIONSTARTPAGE=Page_Activities_$dvar(definition_activity_template)_2"   condition="$var(thica_startpage)==Lounge" />
+      <action name="Thica Definitions Ends here" />
+  </pagestartaction>
+
+</includes>

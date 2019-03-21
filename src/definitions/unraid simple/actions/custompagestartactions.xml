@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+    <action name="" string="setvar POWERSTATUS_$dvar(definition_alias_unraid)=OFF" />
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+    <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Device_$dvar(definition_alias_unraid)" />
+    <action name="Add Navigation Bar" string="call Add NavigationBar $dvar(definition_alias_unraid)" />
+  </pagestartaction>
+
+</includes>

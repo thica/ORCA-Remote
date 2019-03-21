@@ -1,0 +1,88 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:References
+WikiDoc:Page:Widgets-Overview
+WikiDoc:TOCTitle:Description of ORCA Widgets (screen elements)
+Widgets are elements you can place on the screen. There are widgets to show information (Text, Pictures, etc), Widgets to start actions (Buttons, Backgrounds), and Widgets to structure your definition (Anchors).
+
+Widgets are defined by a xml line as part of your page definition. You can control position, size, captions and other attributes of your widget by adjusting the xml attributes of your widget in the xml section.
+
+The following widgets are available
+
+WikiDoc:TOC:Widgets:List:sorted
+
+The following elements are not fully functional on every platform:
+
+* Video
+
+Some widgets have attributes, which are unique to them, some other attributes are common to all widgets. Below you find a list and a explanation of all common attributes.
+
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|posx
+|The horizontal position of the widget. Default is 0 (left). You can either use virtual pixel, a percentage value to the screen or position attributs. For percentange values, the value has to start with a percentage sign, followed by a value between 0 and 100 (eg %65). %0 would mean left aligned, %100 would mean right alignend and %50 would mean center. You could use the position attributs "left", "right" and "center" as well. Positioning is either based on the virtual screen coordinates, or based on the relevant anchor.
+|-
+|posy
+|The vertical position of the widget. Default is 0 (top). You can either use virtual pixel, a percentage value to the screen or position attributs. For percentange values, the value has to start with a percentage sign, followed by a value between 0 and 100 (eg %65). %0 would mean top aligned, %100 would mean bottom alignend and %50 would mean middle aligned. You could use the position attributs "top", "bottom" and "middle" as well. Positioning is either based on the virtual screen coordinates, or based on the relevant anchor.  T
+|-
+|width
+|The width of the widget in virtual pixel. If  no width is given, the width of the last ancor is used. You can use a % of the width of the last ancor as well (eg. '%30')
+|-
+|height
+|The height of the widget in virtual pixel. If  no height is given, the height of the last ancor is used. You can use a % of the height of the last ancor as well (eg. '%30').
+|-
+|Relative size and positions
+|There are special options to set the size and position based on other wigets or based on itself. The widget attribute (posx,posy,width,height) has to start with "of:". Than you need to specify, what attribut you would like to refer to too. This can be one of the following words:
+* top: You get the posy attribut from the referred widget
+* left: You get the posx attribut from the referred widget
+* bottom: You get the bottom attribut (posy+height) from the referred widget
+* right: You get the right attribut (posx+width) from the referred widget
+* width:  You get the width attribut from the referred widget
+* height: You get the height attribut from the referred widget
+* totop: Helpful to attach a widget on top on another: posy of the referred widget plus the own widget height
+* toleft:  Helpful to attach a widget to left on another: posy of the referred widget plus the own widget height
+The third element (after a colon) points to the referred widget. Can be either
+* widget name: refers to the widget with the given name
+* self: refers to the widget itself
+* last: refers to the last used widget
+The forth element (after a colon) is optional. You can multiply the pulled value with the vlue given here.
+
+Examples:
+width='of:height:self:*0.5'
+This creates a widget width half of its own height
+
+posy='of:totop:Anchor AName'
+Puts the widget on top of the Anchor with name "Anchor AName"
+|-
+|enabled
+|Specify, if a widget is enabled- By default all widgets are enabled. If a widget is disabled. it is not visible on the screen. There a actions to enable or disable widget at runtime. Please use "0" to disable a widget and "1" to enable a widget.
+|-
+|backgroundcolor
+|The background color of the widget in hexedecimal RGBA format. It has to start with a pound sign (eg: #ff00ffff). Please use only low capital chars.
+|-
+|anchor
+|You can specify an anchor to use for the xpos and ypos attributes. If you embedd the widget within a anchor, the anchor will be assigned automtic, otherwis you can specify the name of the nchor manually here.
+|-
+|action
+|If a widget supports action (currently only buttons and textinput do so), you can specify the name of the action here.
+|-
+|par1,par2,par3,par4
+|These are the parameters you can pass to the actions. Please read the actions reference, which parameters are valid for each action.
+|-
+|interface
+|Sets the interface for this action. You can either use the direct interface name, or, even better, use a variable which points to the interface name. Please refer to section "Variables" to understand, how to use variables. You should just set the interface, if it is different from the page default interface or from the anchor interface.
+|-
+|configname
+|Sets the configuration for this action. You can either use the direct configuraton name, or, even better, use a variable which points to the configuration name. Please refer to section "Variables" to understand, how to use variables. You should just set the configuration name, if it is different from the page default configuration or from the anchor configuration.
+|}
+
+An example line for a widget could look like the example below.
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<element name='Button Power On' type='BUTTON' posx='3800' posy='9500' width='840' height='840' picturenormal='$var(SKINPATH)/pics/button square medium*.png' action='Send Power On' fontid='Font4' fontsize='650' textcolor='#00ff00ff' caption='q' interface='$var(HTPC_INTERFACE_2)' configname='$var(HTPC_CONFIGNAME_2)'/></syntaxhighlight></div>
+
+WikiDoc:End
+'''

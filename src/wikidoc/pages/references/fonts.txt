@@ -1,0 +1,13 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:References
+WikiDoc:Page:Fonts-Overview
+WikiDoc:TOCTitle:Description how to work with fonts
+
+ORCA does not work with system fonts. There is a set of royality free unicode fonts availale as part of the application installation. You can add individual fonts as part of your definition files as well.
+
+
+WikiDoc:End
+
+'''
+

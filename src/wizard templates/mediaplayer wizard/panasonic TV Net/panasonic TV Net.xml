@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<orca>
+  <repositorymanager>
+    <entry>
+      <name>Panasonic TV Models Lan</name>
+      <description language='English'>Panasonic Viera TV models LAN Control (for mediaplayer template)</description>
+      <description language='German'>Panasonic Viera TV Modell LAN Kontrolle (Für Mediaplayer Template)</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/panasonic TV Net</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/wizard templates/panasonic TV Net.zip</sourcefile>
+          <targetpath>wizard templates/mediaplayer wizard</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>codesets</type>
+          <name>Panasonic Viera URL</name>
+        </dependency>
+        <dependency>
+          <type>definitions</type>
+          <name>Mediaplayer Wizard</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+</orca>

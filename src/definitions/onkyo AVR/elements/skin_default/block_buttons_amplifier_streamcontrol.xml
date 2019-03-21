@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Frame" type="PICTURE"  picturenormal="background boxes" />
+
+  <element name="Anchor Stream control inner" type="ANCHOR" posx="center" posy="middle" width="%90" height="%90" >
+    <elements>
+      <element name='Button Next Ch'                                                  type='BUTTON'     posx='%20'           posy="middle"  width="of:height:self"  height="of:height:DropDown_Services"   picturenormal='button square*' action='Send Channel Up' fontsize='%h60'  caption='icon:media_skip_back' />
+      <element name='Button Prev Ch'                                                  type='BUTTON'     posx="of:right:last"  posy="of:top:last"     width="of:height:self"  height="of:height:last"   picturenormal='button square*' action='Send Channel Down'   fontsize='%h60'  caption='icon:media_skip_next' />
+      <element name='Button Tune Up'                                                  type='BUTTON'     posx="of:right:last"  posy="of:top:last"     width="of:height:self"  height="of:height:last"   picturenormal='button square*' action='Send Tuning Up'      fontsize='%h60'  caption='icon:media_fast_rewind' />
+      <element name='Button Tune Down'                                                type='BUTTON'     posx="of:right:last"  posy="of:top:last"     width="of:height:self"  height="of:height:last"   picturenormal='button square*' action='Send Tuning Down'    fontsize='%h60'  caption='icon:media_fast_forward' />
+      <element name='Button Tune Stop'                                                type='BUTTON'     posx="of:right:last"  posy="of:top:last"     width="of:height:self"  height="of:height:last"   picturenormal='button square*' action='Send Tuning Stop'    fontsize='%h60'  caption='icon:media_stop' />
+    </elements>
+  </element>
+
+</elements>
+

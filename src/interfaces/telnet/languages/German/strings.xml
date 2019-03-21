@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="IFACE_TELNET_1">Resultat Ende Erkennung</string>
+    <string id="IFACE_TELNET_2">Zeichenkette, welche das Ende des Resultats identifiziert</string>
+    <string id="IFACE_TELNET_3">Terminal Typ</string>
+    <string id="IFACE_TELNET_4">Falls notwendig: Terminal Typ festlegen (z.B.: xterm)</string>
+</strings>

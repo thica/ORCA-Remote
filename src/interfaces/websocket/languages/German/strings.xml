@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <string id="IFACE_WEBSOCKET_2">Vollständige Service Adresse, $cvar(HOST) und $cvar(PORT) kann verwendet werden </string>
+  <!--Custom Strings -->
+</strings>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Frame" type="PICTURE" picturenormal="background boxes" />
+  <element name="Anchor Main Menu Buttons" type="ANCHOR" posx="center" posy="middle" width="%90" height="%90">
+    <elements>
+      <element name="Button Widgets Overview"           type="BUTTON" posx="left"   posy="top"              width="%50" height="%14.29"         picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Widget_Overview"}'  caption="$lvar(showcase_10100)" />
+      <element name="Button Widgets Alignment"          type="BUTTON" posx="right"  posy="top"              width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Widget_Alignment"}' caption="$lvar(showcase_10101)" />
+      <element name="Button Anchors And Includes"       type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Anchors"}'          caption="$lvar(showcase_10102)" />
+      <element name="Button Textfields and Text input"  type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_TextFields"}'       caption="$lvar(showcase_10103)" />
+      <element name="Button Buttons"                    type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Buttons"}'          caption="$lvar(showcase_10104)" />
+      <element name="Button Knobs"                      type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Knobs"}'            caption="$lvar(showcase_10105)" />
+      <element name="Button Pictures"                   type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Pictures"}'         caption="$lvar(showcase_10106)" />
+      <element name="Button Gestures"                   type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Gestures"}'         caption="$lvar(showcase_10107)" />
+      <element name="Button Sound"                      type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Sound"}'            caption="$lvar(showcase_10110)" />
+      <element name="Button Video"                      type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Video"}'            caption="$lvar(showcase_10109)" />
+      <element name="Button Popup"                      type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Popup"}'            caption="$lvar(showcase_10108)" />
+      <element name="Button ShowFile"                   type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_ShowFileDemo"}'     caption="File Viewer" />
+      <element name="Button Icons"                      type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Icons"}'            caption="Icons" />
+      <element name="Button International"              type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_International"}'     caption="International" />
+
+    </elements>
+  </element>
+</elements>
+

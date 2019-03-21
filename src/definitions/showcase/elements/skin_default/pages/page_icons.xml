@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Icons">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+
+    <element name='Frame' type='ANCHOR' posx='center' posy='%40' width='%90' height='%70' >
+        <element name='Button' type='BUTTON' posx='left'          posy='top'            width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='12345' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_play' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_pause' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_stop' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_record color:$var(red)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_skip_back' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_skip_next' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_fast_rewind' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_fast_forward' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_shuffle_toggle' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_repeat_toggle' />
+        <element name=''       type='ANCHOR' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:volume' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:volume_up' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:volume_down' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:volume_mute' />
+        <element name=''       type='ANCHOR' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:power_on color:$var(green)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:power_off color:$var(red)'/>
+
+
+        <element name='Button' type='BUTTON' posx='left'          posy='of:bottom:last' width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='12345' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1004)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1006)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1007)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1012)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1009)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1008)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1011)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1010)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1028)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1031)' />
+        <element name=''       type='ANCHOR' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='Volume' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1034)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1035)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1014)' />
+        <element name=''       type='ANCHOR' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1001)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1002)' />
+
+        <element name=''       type='ANCHOR' posx='left'          posy='of:bottom:last' width='%1' height='of:width:self'  />
+        <element name='Button' type='BUTTON' posx='left'          posy='of:bottom:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='12345' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd_up' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd_down' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd_left' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd_right' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd_next' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd_prev' />
+        <element name=''       type='ANCHOR' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:arrow_up' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:arrow_down' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:arrow_left' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:arrow_right' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:arrow_back' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:close_window' />
+
+
+        <element name='Button' type='BUTTON' posx='left'          posy='of:bottom:last' width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='12345' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1020)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1021)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1018)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1019)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1065)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1064)' />
+        <element name=''       type='ANCHOR' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1020)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1021)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1018)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1019)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1093)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(656)' />
+
+        <element name=''       type='ANCHOR' posx='left'          posy='of:bottom:last' width='%1' height='of:width:self'  />
+        <element name='Button' type='BUTTON' posx='left'          posy='of:bottom:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:square' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:search' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:input' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:settings' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:help' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:info' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:menu' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:escape' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:aspect' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:brightness' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:audiochannel' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:clock' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:timer' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:subtitles' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:audioeffect' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:epg' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:home' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:pip' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:teletext' />
+
+
+        <element name='Button' type='BUTTON' posx='left'          posy='of:bottom:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='Square' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1088)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1072)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(2002)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1116)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(5006)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1024)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1027)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1078)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1117)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1071)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1095)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1115)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1077)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1118)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1056)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1110)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1040)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1057)' />
+
+        <element name=''       type='ANCHOR' posx='left'          posy='of:bottom:last' width='%1' height='of:width:self'  />
+        <element name='Button' type='BUTTON' posx='left'          posy='of:bottom:last' width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:prev_channel' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:context' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:user' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:functions' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:escape' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:translate' />
+
+        <element name='Button' type='BUTTON' posx='left'          posy='of:bottom:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1082)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1038)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1112)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1111)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1119)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1087)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1027)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='Translate' />
+
+
+        <element name=''       type='ANCHOR' posx='left'          posy='of:bottom:last' width='%1' height='of:width:self'  />
+        <element name='Button' type='BUTTON' posx='left'          posy='of:bottom:last' width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_radio' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_pvr' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_sdcard' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_usb' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_dock' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_pc' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_svideo' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_component' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_hdmi' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_games' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_bluetooth' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_cloud' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_favorites' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_nas' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_antenna' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:source_music' />
+
+        <element name='Button' type='BUTTON' posx='left'          posy='of:bottom:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3013)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3128)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1081)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3122)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3100)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3120)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3130)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3131)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3110)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3109)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3132)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3133)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1073)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3008)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3124)' />
+        <element name='Button' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(3129)' />
+
+    </element>
+
+
+  </elements>
+</page>

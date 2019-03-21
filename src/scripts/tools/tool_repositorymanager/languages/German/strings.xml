@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_REPMANAGER_1">Repository Manager</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_2">Starte den Repository Manager</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_3">Start Manager</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_4">Repository Manager</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_5">FTP Pfad</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_6">Entfernter FTP Pfad</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_7">FTP SSL</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_8">Benutze SSL for FTP Verbindung</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_9">Quell Pfad</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_10">Quell Pfad für den Repository Manager</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_11">WWW Pfad</string>
+     <string id="SCRIPT_TOOLS_REPMANAGER_12">WWW Pfad welcher zum FTP Pfad passt</string>
+
+  </strings>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Frame" type="PICTURE" posx="left" posy="top" picturenormal="background boxes" />
+
+  <element name="Anchor Effect Device Buttons" type="ANCHOR" posx="center" posy="middle" width="%90" height="%90">
+    <elements>
+      <element name="ArtistLabel"                                                     type="TEXTFIELD"  posx="center"         posy="top"                            height="of:height:Anchor Effect Device Buttons:/4"  caption="$lvar(onkyoAVR_10010)"                                           vtextalign='top' htextalign='left'  />
+      <element name="Artist"                                                          type="TEXTFIELD"  posx="center"         posy="of:top:last"                    height="of:height:last"                             caption="$var($dvar(definition_alias_mediaplayer_template)_artistname)"   vtextalign='middle' htextalign='center'  fontsize='%h60' />
+      <element name="AlbumLabel"                                                      type="TEXTFIELD"  posx="center"         posy="of:bottom:last"                 height="of:height:last"                             caption="$lvar(onkyoAVR_10011)"                                           vtextalign='top' htextalign='left' />
+      <element name="Album"                                                           type="TEXTFIELD"  posx="center"         posy="of:top:last"                    height="of:height:last"                             caption="$var($dvar(definition_alias_mediaplayer_template)_albumname)"    vtextalign='middle' htextalign='center' fontsize='%h60' />
+      <element name="TitleLabel"                                                      type="TEXTFIELD"  posx="center"         posy="of:bottom:last"                 height="of:height:last"                             caption="$lvar(onkyoAVR_10012)"                                           vtextalign='top' htextalign='left' />
+      <element name="Title"                                                           type="TEXTFIELD"  posx="center"         posy="of:top:last"                    height="of:height:last"                             caption="$var($dvar(definition_alias_mediaplayer_template)_titlename)"    vtextalign='middle' htextalign='center' fontsize='%h60' />
+      <element name="Streampos Textvalue"                                             type="TEXTFIELD"  posx="center"         posy="of:bottom:last"                 height="of:height:last"                             caption="$var($dvar(definition_alias_mediaplayer_template)_streampos)"    vtextalign='middle' htextalign='center' fontsize='%h60' />
+    </elements>
+  </element>
+
+</elements>
+

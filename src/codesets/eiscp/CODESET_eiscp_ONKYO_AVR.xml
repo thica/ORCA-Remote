@@ -1,0 +1,1734 @@
+<?xml version="1.0" encoding="utf-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>Onkyo EISCP</name>
+      <description language='English'>LAN Control for Onkyo Devices using EISCP</description>
+      <description language='German'>LAN Steuerung für Onkyo Geräte mittels EISCP</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/eiscp/CODESET_eiscp_ONKYO_AVR.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_eiscp_ONKYO_AVR.zip</sourcefile>
+          <targetpath>codesets/eiscp</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+            <dependency>
+                <type>interfaces</type>
+                <name>Onkyo EISCP (LAN)</name>
+            </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <!--
+      Aliases
+  -->
+
+  <action string="codeset" name="init"  waitforresponse='1' desc="Returns an XML description of the device configuration" cmd="NRIQSTN"/>
+
+  <action name="power_on" type="alias" cmd="main.system-power.on" />
+  <action name="power_off" type="alias" cmd="main.system-power.standby" />
+  <action name="ping" type="alias" cmd="main.late-night.query" />
+
+  <action name="up" type="alias" cmd="main.setup.up" />
+  <action name="down" type="alias" cmd="main.setup.down" />
+  <action name="left" type="alias" cmd="main.setup.left" />
+  <action name="right" type="alias" cmd="main.setup.right" />
+  <action name="ok" type="alias" cmd="main.setup.enter" />
+  <action name="menu" type="alias" cmd="main.setup.menu" />
+  <action name="exit" type="alias" cmd="main.setup.exit" />
+  <action name="home" type="alias" cmd="main.setup.home" />
+  <action name="return" type="alias" cmd="main.setup.exit" />
+  <action name="mute_toggle" type="alias" cmd="main.audio-muting.toggle" />
+  <action name='mute_on' type="alias" cmd="main.audio-muting.on" />
+  <action name='mute_off' type="alias" cmd="main.audio-muting.off" />
+  <action name='getvolume'  type="alias" desc="main.master-volume.query: gets the Volume Level"  cmd="main.master-volume.query" />
+  <action name='getvolumesub'   type="alias" desc="gets Subwoofer Level -15dB - 0dB - +12dB"  cmd="main.subwoofer-temporary-level.query" />
+  <action name='getvolumecenter' type="alias"  desc="gets Centerr Level -15dB - 0dB - +12dB"  cmd="main.center-temporary-level.query" />
+
+  <action name='setvolume' type="alias"  cmd='main.master-volume.hex' />
+  <action name='setvolumesub' type="alias"  cmd='main.subwoofer-temporary-level' />
+  <action name='setvolumecenter' type="alias"  cmd='main.center-temporary-level' />
+
+  <action name="volume_up" type="alias" cmd="main.master-volume.level-up" />
+  <action name="volume_down" type="alias" cmd="main.master-volume.level-down" />
+  <action name="volume_up_accelerated" type="alias" cmd="main.master-volume.level-up" />
+  <action name="volume_down_accelerated" type="alias" cmd="main.master-volume.level-down" />
+  <action name="volume_up_center" type="alias" cmd="main.center-temporary-level.up" />
+  <action name="volume_down_center" type="alias" cmd="main.center-temporary-level.down" />
+  <action name="volume_up_subwoofer" type="alias" cmd="main.subwoofer-temporary-level.up" />
+  <action name="volume_down_subwoofer" type="alias" cmd="main.subwoofer-temporary-level.down" />
+  <action name="source ipod" type="alias" cmd="main.input-selector.video4" />
+  <action name="source tuner" type="alias" cmd="main.input-selector.tuner" />
+  <action name="source radio" type="alias" cmd="main.input-selector.fm" />
+  <action name="source radio fm" type="alias" cmd="main.input-selector.fm" />
+  <action name="source radio am" type="alias" cmd="main.input-selector.am" />
+
+  <action name="source tv/sat" type="alias" cmd="main.input-selector.video2" />
+  <action name="source console" type="alias" cmd="main.input-selector.video3" />
+  <action name="source dvd" type="alias" cmd="main.input-selector.dvd" />
+  <action name="source tv/cbl" type="alias" cmd="main.input-selector.video2" />
+  <action name="source vcr" type="alias" cmd="main.input-selector.video1" />
+  <action name="source pc" type="alias" cmd="main.input-selector.video6" />
+  <action name="source aux 1" type="alias" cmd="main.input-selector.video4" />
+  <action name="source aux 2" type="alias" cmd="main.input-selector.video5" />
+  <action name="source usb" type="alias" cmd="main.input-selector.usb" />
+  <action name="source net" type="alias" cmd="main.input-selector.network" />
+
+  <action name="next_source" type="alias" cmd="main.input-selector.up" />
+  <action name="previous_source" type="alias" cmd="main.input-selector.down" />
+
+  <action name="source hdmi 1" type="alias" cmd="main.input-selector.video1" />
+  <action name="source hdmi 2" type="alias" cmd="main.input-selector.video2" />
+  <action name="source hdmi 3" type="alias" cmd="main.input-selector.video3" />
+  <action name="source hdmi 4" type="alias" cmd="main.input-selector.video4" />
+  <action name="tuning_up" type="alias" cmd="main.tuning.up" />
+  <action name="tuning_down" type="alias" cmd="main.tuning.down" />
+
+  <action name="key_1" type="alias" cmd="main.network-usb.1" />
+  <action name="key_2" type="alias" cmd="main.network-usb.2" />
+  <action name="key_3" type="alias" cmd="main.network-usb.3" />
+  <action name="key_4" type="alias" cmd="main.network-usb.4" />
+  <action name="key_5" type="alias" cmd="main.network-usb.5" />
+  <action name="key_6" type="alias" cmd="main.network-usb.6" />
+  <action name="key_7" type="alias" cmd="main.network-usb.7" />
+  <action name="key_8" type="alias" cmd="main.network-usb.8" />
+  <action name="key_9" type="alias" cmd="main.network-usb.9" />
+  <action name="key_0" type="alias" cmd="main.network-usb.0" />
+
+  <action name="effect 1" type="alias" cmd="main.listening-mode.movie" />
+  <action name="effect 2" type="alias" cmd="main.listening-mode.music" />
+  <action name="effect 3" type="alias" cmd="main.listening-mode.game" />
+  <action name="effect 4" type="alias" cmd="main.listening-mode.stereo" />
+  <action name="effect 5" type="alias" cmd="main.listening-mode.all-ch-stereo" />
+  <action name="effect 6" type="alias" cmd="main.listening-mode.direct" />
+
+  <action name='stop' type="alias" cmd="main.network-usb.stop" />
+  <action name='skip_back'  type="alias" cmd="main.network-usb.trdn" />
+  <action name='skip_forward'  type="alias" cmd="main.network-usb.trup" />
+  <action name='play'  type="alias" cmd="main.network-usb.play" />
+  <action name='fast_rewind'  type="alias" cmd="main.network-usb.rew" />
+  <action name='fast_forward'  type="alias" cmd="main.network-usb.ff" />
+  <action name='pause'  type="alias" cmd="main.network-usb.pause" />
+  <action name="repeat_toggle"  type="alias" cmd="main.network-usb.repeat" />
+  <action name="repeat_on"  type="alias" cmd="main.network-usb.repeat" />
+  <action name="repeat_off"  type="alias" cmd="main.network-usb.repeat" />
+  <action name="shuffle_toggle"  type="alias" cmd="main.network-usb.random" />
+  <action name="shuffle_on"  type="alias" cmd="main.network-usb.random" />
+  <action name="shuffle_off"  type="alias" cmd="main.network-usb.random" />
+
+  <action name="favorite 0" string="codeset" type="send" cmd="NLSL0" />
+  <action name="favorite 1" string="codeset" type="send" cmd="NLSL1" />
+  <action name="favorite 2" string="codeset" type="send" cmd="NLSL2" />
+  <action name="favorite 3" string="codeset" type="send" cmd="NLSL3" />
+  <action name="favorite 4" string="codeset" type="send" cmd="NLSL4" />
+  <action name="favorite 5" string="codeset" type="send" cmd="NLSL5" />
+  <action name="favorite 6" string="codeset" type="send" cmd="NLSL6" />
+  <action name="favorite 7" string="codeset" type="send" cmd="NLSL7" />
+  <action name="favorite 8" string="codeset" type="send" cmd="NLSL8" />
+  <action name="favorite 9" string="codeset" type="send" cmd="NLSL9" />
+
+  <!-- dont remove the blank -->
+  <action name="pgupstep ">
+    <action name="ups" type="alias" cmd="main.setup.up" />
+    <action string="wait"          time="300" />
+   </action>
+
+  <!-- dont remove the blank -->
+  <action name="pgdnstep ">
+    <action name="downs" type="alias" cmd="main.setup.down" />
+    <action string="wait"          time="300" />
+   </action>
+
+  <action name="favorite pgup" type="send" cmd='{"REPEAT":{"REPEATCMD":"pgupstep","REPEATVAR":"$cvar(PAGESIZE)"}}' />
+  <action name="favorite pgdn" type="send" cmd='{"REPEAT":{"REPEATCMD":"pgdnstep","REPEATVAR":"$cvar(PAGESIZE)"}}' />
+
+  <action name="service vtuner"  type="alias" cmd="main.input-selector.internet-radio" />
+
+  <!-- Channels used for FM/AM -->
+  <action name="channel_select"  type="alias" cmd="main.preset.no" />
+  <action name="channel_up"      type="alias" cmd="main.preset.up" />
+  <action name="channel_down"    type="alias" cmd="main.preset.down" />
+
+  <action name="tuning_stop"     type="alias" cmd="main.preset.down" />
+
+
+  <!--
+      Section: main
+  -->
+  <!--
+      Category:System Power Command
+  -->
+  <action string="codeset" name="main.system-power.standby" desc="sets System Standby"  cmd="PWR00" />
+  <action string="codeset" name="main.system-power.on" desc="sets System On"  cmd="PWR01" />
+  <action string="codeset" name="main.system-power.query" waitforresponse='1' desc="gets the System Power Status"  cmd="PWRQSTN" />
+  <!--
+      Category:Audio Muting Command
+  -->
+  <action string="codeset" name="main.audio-muting.off" desc="sets Audio Muting Off"  cmd="AMT00" />
+  <action string="codeset" name="main.audio-muting.on" desc="sets Audio Muting On"  cmd="AMT01" />
+  <action string="codeset" name="main.audio-muting.toggle" desc="sets Audio Muting Wrap-Around"  cmd="AMTTG" />
+  <action string="codeset" name="main.audio-muting.query" waitforresponse='1' desc="gets the Audio Muting State"  cmd="AMTQSTN" />
+  <!--
+      Category:Speaker A/B Command
+  -->
+  <action string="codeset" name="main.speaker-a.off" desc="sets Speaker Off"  cmd="SPA00" />
+  <action string="codeset" name="main.speaker-a.on" desc="sets Speaker On"  cmd="SPA01" />
+  <action string="codeset" name="main.speaker-a.up" desc="sets Speaker Switch Wrap-Around"  cmd="SPAUP" />
+  <action string="codeset" name="main.speaker-a.query" waitforresponse='1' desc="gets the Speaker State"  cmd="SPAQSTN" />
+
+  <action string="codeset" name="main.speaker-b.off" desc="sets Speaker Off"  cmd="SPB00" />
+  <action string="codeset" name="main.speaker-b.on" desc="sets Speaker On"  cmd="SPB01" />
+  <action string="codeset" name="main.speaker-b.up" desc="sets Speaker Switch Wrap-Around"  cmd="SPBUP" />
+  <action string="codeset" name="main.speaker-b.query" waitforresponse='1' desc="gets the Speaker State"  cmd="SPBQSTN" />
+  <!--
+      Category:Speaker Layout Command
+  -->
+  <action string="codeset" name="main.speaker-layout.surrback" desc="sets SurrBack Speaker"  cmd="SPLSB" />
+  <action string="codeset" name="main.speaker-layout.front-high" desc="sets Front High Speaker / SurrBack+Front High Speakers"  cmd="SPLFH" />
+  <action string="codeset" name="main.speaker-layout.front-wide" desc="sets Front Wide Speaker / SurrBack+Front Wide Speakers"  cmd="SPLFW" />
+  <action string="codeset" name="main.speaker-layout.front-high-front-wide-speakers" desc="sets, Front High+Front Wide Speakers"  cmd="SPLHW" />
+  <action string="codeset" name="main.speaker-layout.up" desc="sets Speaker Switch Wrap-Around"  cmd="SPLUP" />
+  <action string="codeset" name="main.speaker-layout.query" waitforresponse='1' desc="gets the Speaker State"  cmd="SPLQSTN" />
+  <!--
+      Category:Master Volume Command
+  -->
+  <action string="codeset" name="main.master-volume.hex" desc="Volume Level 0 to 100 or 0 to 80 (device dependent) ( In hexadecimal representation)"  cmd="MVL$cvar(volumetoset)" />
+  <action string="codeset" name="main.master-volume.level-up" desc="sets Volume Level Up"  cmd="MVLUP" />
+  <action string="codeset" name="main.master-volume.level-down" desc="sets Volume Level Down"  cmd="MVLDOWN" />
+  <action string="codeset" name="main.master-volume.level-up-1db-step" desc="sets Volume Level Up 1dB Step"  cmd="MVLUP1" />
+  <action string="codeset" name="main.master-volume.level-down-1db-step" desc="sets Volume Level Down 1dB Step"  cmd="MVLDOWN1" />
+  <action string="codeset" name="main.master-volume.query" waitforresponse='1' desc="gets the Volume Level"  cmd="MVLQSTN" />
+  <!--
+      Category:Tone(Front) Command
+  -->
+  <action string="codeset" name="main.tone-front.bass" desc="Front Bass (xx is -A...00...+A=[-10...0...+10 2 step]"  cmd="TFRB$cvar(value)" />
+  <action string="codeset" name="main.tone-front.treble" desc="Front Treble (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TFRT$cvar(value)" />
+  <action string="codeset" name="main.tone-front.bass-up" desc="sets Front Bass up(2 step)"  cmd="TFRBUP" />
+  <action string="codeset" name="main.tone-front.bass-down" desc="sets Front Bass down(2 step)"  cmd="TFRBDOWN" />
+  <action string="codeset" name="main.tone-front.treble-up" desc="sets Front Treble up(2 step)"  cmd="TFRTUP" />
+  <action string="codeset" name="main.tone-front.treble-down" desc="sets Front Treble down(2 step)"  cmd="TFRTDOWN" />
+  <action string="codeset" name="main.tone-front.query" waitforresponse='1' desc="gets Front Tone (BxxTxx=)"  cmd="TFRQSTN" />
+  <!--
+      Category:Tone(Front Wide) Command
+  -->
+  <action string="codeset" name="main.tone-front-wide.bass" desc="Front Wide Bass (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TFWB$cvar(value)" />
+  <action string="codeset" name="main.tone-front-wide.treble" desc="Front Wide Treble (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TFWT$cvar(value)" />
+  <action string="codeset" name="main.tone-front-wide.bass-up" desc="sets Front Wide Bass up(2 step)"  cmd="TFWBUP" />
+  <action string="codeset" name="main.tone-front-wide.bass-down" desc="sets Front Wide Bass down(2 step)"  cmd="TFWBDOWN" />
+  <action string="codeset" name="main.tone-front-wide.treble-up" desc="sets Front Wide Treble up(2 step)"  cmd="TFWTUP" />
+  <action string="codeset" name="main.tone-front-wide.treble-down" desc="sets Front Wide Treble down(2 step)"  cmd="TFWTDOWN" />
+  <action string="codeset" name="main.tone-front-wide.query" waitforresponse='1' desc="gets Front Wide Tone (BxxTxx=)"  cmd="TFWQSTN" />
+  <!--
+      Category:Tone(Front High) Command
+  -->
+  <action string="codeset" name="main.tone-front-high.bass" desc="Front High Bass (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TFHB$cvar(value)" />
+  <action string="codeset" name="main.tone-front-high.treble" desc="Front High Treble (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TFHT$cvar(value)" />
+  <action string="codeset" name="main.tone-front-high.bass-up" desc="sets Front High Bass up(2 step)"  cmd="TFHBUP" />
+  <action string="codeset" name="main.tone-front-high.bass-down" desc="sets Front High Bass down(2 step)"  cmd="TFHBDOWN" />
+  <action string="codeset" name="main.tone-front-high.treble-up" desc="sets Front High Treble up(2 step)"  cmd="TFHTUP" />
+  <action string="codeset" name="main.tone-front-high.treble-down" desc="sets Front High Treble down(2 step)"  cmd="TFHTDOWN" />
+  <action string="codeset" name="main.tone-front-high.query" waitforresponse='1' desc="gets Front High Tone (BxxTxx)"  cmd="TFHQSTN" />
+  <!--
+      Category:Tone(Center) Command
+  -->
+  <action string="codeset" name="main.tone-center.bass" desc="Center Bass (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TCTB$cvar(value)" />
+  <action string="codeset" name="main.tone-center.treble" desc="Center Treble (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TCTT$cvar(value)" />
+  <action string="codeset" name="main.tone-center.bass-up" desc="sets Center Bass up(2 step)"  cmd="TCTBUP" />
+  <action string="codeset" name="main.tone-center.bass-down" desc="sets Center Bass down(2 step)"  cmd="TCTBDOWN" />
+  <action string="codeset" name="main.tone-center.treble-up" desc="sets Center Treble up(2 step)"  cmd="TCTTUP" />
+  <action string="codeset" name="main.tone-center.treble-down" desc="sets Center Treble down(2 step)"  cmd="TCTTDOWN" />
+  <action string="codeset" name="main.tone-center.query" waitforresponse='1' desc="gets Cetner Tone (BxxTxx)"  cmd="TCTQSTN" />
+  <!--
+      Category:Tone(Surround) Command
+  -->
+  <action string="codeset" name="main.tone-surround.bass" desc="Surround Bass (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TSRB$cvar(value)" />
+  <action string="codeset" name="main.tone-surround.treble" desc="Surround Treble (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TSRT$cvar(value)" />
+  <action string="codeset" name="main.tone-surround.bass-up" desc="sets Surround Bass up(2 step)"  cmd="TSRBUP" />
+  <action string="codeset" name="main.tone-surround.bass-down" desc="sets Surround Bass down(2 step)"  cmd="TSRBDOWN" />
+  <action string="codeset" name="main.tone-surround.treble-up" desc="sets Surround Treble up(2 step)"  cmd="TSRTUP" />
+  <action string="codeset" name="main.tone-surround.treble-down" desc="sets Surround Treble down(2 step)"  cmd="TSRTDOWN" />
+  <action string="codeset" name="main.tone-surround.query" waitforresponse='1' desc="gets Surround Tone (BxxTxx)"  cmd="TSRQSTN" />
+  <!--
+      Category:Tone(Surround Back) Command
+  -->
+  <action string="codeset" name="main.tone-surround-back.bass" desc="Surround Back Bass (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TSBB$cvar(value)" />
+  <action string="codeset" name="main.tone-surround-back.treble" desc="Surround Back Treble (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TSBT$cvar(value)" />
+  <action string="codeset" name="main.tone-surround-back.bass-up" desc="sets Surround Back Bass up(2 step)"  cmd="TSBBUP" />
+  <action string="codeset" name="main.tone-surround-back.bass-down" desc="sets Surround Back Bass down(2 step)"  cmd="TSBBDOWN" />
+  <action string="codeset" name="main.tone-surround-back.treble-up" desc="sets Surround Back Treble up(2 step)"  cmd="TSBTUP" />
+  <action string="codeset" name="main.tone-surround-back.treble-down" desc="sets Surround Back Treble down(2 step)"  cmd="TSBTDOWN" />
+  <action string="codeset" name="main.tone-surround-back.query" waitforresponse='1' desc="gets Surround Back Tone (BxxTxx)"  cmd="TSBQSTN" />
+  <!--
+      Category:Tone(Subwoofer) Command
+  -->
+  <action string="codeset" name="main.tone-subwoofer.bass" desc="Subwoofer Bass (xx is -A=...00=...+A=[-10...0...+10 2 step]"  cmd="TSWB$cvar(value)" />
+  <action string="codeset" name="main.tone-subwoofer.bass-up" desc="sets Subwoofer Bass up(2 step)"  cmd="TSWBUP" />
+  <action string="codeset" name="main.tone-subwoofer.bass-down" desc="sets Subwoofer Bass down(2 step)"  cmd="TSWBDOWN" />
+  <action string="codeset" name="main.tone-subwoofer.query" waitforresponse='1' desc="gets Subwoofer Tone (BxxTxx)"  cmd="TSWQSTN" />
+  <!--
+      Category:Sleep Set Command
+  -->
+  <action string="codeset" name="main.sleep-set.time" desc="sets Sleep Time 1 - 90min ( In hexadecimal representation) 01 to 5A"  cmd="SLP$cvar(value)" />
+  <action string="codeset" name="main.sleep-set.time-off" desc="sets Sleep Time Off"  cmd="SLPOFF" />
+  <action string="codeset" name="main.sleep-set.up" desc="sets Sleep Time Wrap-Around UP"  cmd="SLPUP" />
+  <action string="codeset" name="main.sleep-set.query" waitforresponse='1' desc="gets The Sleep Time"  cmd="SLPQSTN" />
+  <!--
+      Category:Speaker Level Calibration Command
+  -->
+  <action string="codeset" name="main.speaker-level-calibration.test" desc="TEST Key"  cmd="SLCTEST" />
+  <action string="codeset" name="main.speaker-level-calibration.chsel" desc="CH SEL Key"  cmd="SLCCHSEL" />
+  <action string="codeset" name="main.speaker-level-calibration.up" desc="LEVEL + Key"  cmd="SLCUP" />
+  <action string="codeset" name="main.speaker-level-calibration.down" desc="LEVEL â KEY"  cmd="SLCDOWN" />
+  <!--
+      Category:Subwoofer (temporary) Level Command
+  -->
+  <action string="codeset" name="main.subwoofer-temporary-level" desc="sets Subwoofer Level -15dB - 0dB - +12dB"  cmd="SWL$cvar(volumetoset)" />
+  <action string="codeset" name="main.subwoofer-temporary-level.up" desc="LEVEL + Key"  cmd="SWLUP" />
+  <action string="codeset" name="main.subwoofer-temporary-level.down" desc="LEVEL â KEY"  cmd="SWLDOWN" />
+  <action string="codeset" name="main.subwoofer-temporary-level.query" waitforresponse='1' desc="gets the Subwoofer Level"  cmd="SWLQSTN" />
+  <!--
+      Category:Center (temporary) Level Command
+  -->
+  <action string="codeset" name="main.center-temporary-level" desc="sets Center Level -12dB - 0dB - +12dB"  cmd="CTL$cvar(volumetoset)" />
+  <action string="codeset" name="main.center-temporary-level.up" desc="LEVEL + Key"  cmd="CTLUP" />
+  <action string="codeset" name="main.center-temporary-level.down" desc="LEVEL â KEY"  cmd="CTLDOWN" />
+  <action string="codeset" name="main.center-temporary-level.query" waitforresponse='1' desc="gets the Subwoofer Level"  cmd="CTLQSTN" />
+  <!--
+      Category:Display Mode Command
+  -->
+  <action string="codeset" name="main.display-mode.selector-volume" desc="sets Selector + Volume Display Mode"  cmd="DIF00" />
+  <action string="codeset" name="main.display-mode.selector-listening" desc="sets Selector + Listening Mode Display Mode"  cmd="DIF01" />
+  <action string="codeset" name="main.display-mode.02" desc="Display Digital Format(temporary display)"  cmd="DIF02" />
+  <action string="codeset" name="main.display-mode.03" desc="Display Video Format(temporary display)"  cmd="DIF03" />
+  <action string="codeset" name="main.display-mode.toggle" desc="sets Display Mode Wrap-Around Up"  cmd="DIFTG" />
+  <action string="codeset" name="main.display-mode.query" waitforresponse='1' desc="gets The Display Mode"  cmd="DIFQSTN" />
+  <!--
+      Category:Dimmer Level Command
+  -->
+  <action string="codeset" name="main.dimmer-level.bright" desc="sets Dimmer Level Bright"  cmd="DIM00" />
+  <action string="codeset" name="main.dimmer-level.dim" desc="sets Dimmer Level Dim"  cmd="DIM01" />
+  <action string="codeset" name="main.dimmer-level.dark" desc="sets Dimmer Level Dark"  cmd="DIM02" />
+  <action string="codeset" name="main.dimmer-level.shut-off" desc="sets Dimmer Level Shut-Off"  cmd="DIM03" />
+  <action string="codeset" name="main.dimmer-level.bright-led-off" desc="sets Dimmer Level Bright and LED OFF"  cmd="DIM08" />
+  <action string="codeset" name="main.dimmer-level.dim" desc="sets Dimmer Level Wrap-Around Up"  cmd="DIMDIM" />
+  <action string="codeset" name="main.dimmer-level.query" waitforresponse='1' desc="gets The Dimmer Level"  cmd="DIMQSTN" />
+  <!--
+      Category:Setup Operation Command
+  -->
+  <action string="codeset" name="main.setup.menu" desc="Menu Key"  cmd="OSDMENU" />
+  <action string="codeset" name="main.setup.up" desc="Up Key"  cmd="OSDUP" />
+  <action string="codeset" name="main.setup.down" desc="Down Key"  cmd="OSDDOWN" />
+  <action string="codeset" name="main.setup.right" desc="Right Key"  cmd="OSDRIGHT" />
+  <action string="codeset" name="main.setup.left" desc="Left Key"  cmd="OSDLEFT" />
+  <action string="codeset" name="main.setup.enter" desc="Enter Key"  cmd="OSDENTER" />
+  <action string="codeset" name="main.setup.exit" desc="Exit Key"  cmd="OSDEXIT" />
+  <action string="codeset" name="main.setup.audio" desc="Audio Adjust Key"  cmd="OSDAUDIO" />
+  <action string="codeset" name="main.setup.video" desc="Video Adjust Key"  cmd="OSDVIDEO" />
+  <action string="codeset" name="main.setup.home" desc="Home Key"  cmd="OSDHOME" />
+  <!--
+      Category:Memory Setup Command
+  -->
+  <action string="codeset" name="main.memory-setup.str" desc="stores memory"  cmd="MEMSTR" />
+  <action string="codeset" name="main.memory-setup.rcl" desc="recalls memory"  cmd="MEMRCL" />
+  <action string="codeset" name="main.memory-setup.lock" desc="locks memory"  cmd="MEMLOCK" />
+  <action string="codeset" name="main.memory-setup.unlk" desc="unlocks memory"  cmd="MEMUNLK" />
+  <!--
+      Category:Audio Infomation Command
+  -->
+  <action string="codeset" name="main.audio-infomation.query" waitforresponse='1' desc="gets Infomation of Audio"  cmd="IFAQSTN" />
+  <!--
+      Category:Video Infomation Command
+  -->
+  <action string="codeset" name="main.video-infomation.query" waitforresponse='1' desc="gets Infomation of Video"  cmd="IFVQSTN" />
+  <!--
+      Category:Input Selector Command
+  -->
+  <action string="codeset" name="main.input-selector.video1" desc="sets VIDEO1, VCR/DVR"  cmd="SLI00" />
+  <action string="codeset" name="main.input-selector.video2" desc="sets VIDEO2, CBL/SAT"  cmd="SLI01" />
+  <action string="codeset" name="main.input-selector.video3" desc="sets VIDEO3, GAME/TV, GAME"  cmd="SLI02" />
+  <action string="codeset" name="main.input-selector.video4" desc="sets VIDEO4, AUX1(AUX)"  cmd="SLI03" />
+  <action string="codeset" name="main.input-selector.video5" desc="sets VIDEO5, AUX2"  cmd="SLI04" />
+  <action string="codeset" name="main.input-selector.video6" desc="sets VIDEO6, PC"  cmd="SLI05" />
+  <action string="codeset" name="main.input-selector.video7" desc="sets VIDEO7"  cmd="SLI06" />
+  <action string="codeset" name="main.input-selector.07" desc="Hidden1"  cmd="SLI07" />
+  <action string="codeset" name="main.input-selector.08" desc="Hidden2"  cmd="SLI08" />
+  <action string="codeset" name="main.input-selector.09" desc="Hidden3"  cmd="SLI09" />
+  <action string="codeset" name="main.input-selector.dvd" desc="sets DVD, BD/DVD"  cmd="SLI10" />
+  <action string="codeset" name="main.input-selector.tape-1" desc="sets TAPE(1), TV/TAPE"  cmd="SLI20" />
+  <action string="codeset" name="main.input-selector.tape2" desc="sets TAPE2"  cmd="SLI21" />
+  <action string="codeset" name="main.input-selector.phono" desc="sets PHONO"  cmd="SLI22" />
+  <action string="codeset" name="main.input-selector.cd" desc="sets CD, TV/CD"  cmd="SLI23" />
+  <action string="codeset" name="main.input-selector.fm" desc="sets FM"  cmd="SLI24" />
+  <action string="codeset" name="main.input-selector.am" desc="sets AM"  cmd="SLI25" />
+  <action string="codeset" name="main.input-selector.tuner" desc="sets TUNER"  cmd="SLI26" />
+  <action string="codeset" name="main.input-selector.music-server" desc="sets MUSIC SERVER, P4S, DLNA"  cmd="SLI27" />
+  <action string="codeset" name="main.input-selector.internet-radio" desc="sets INTERNET RADIO, iRadio Favorite"  cmd="SLI28" />
+  <action string="codeset" name="main.input-selector.usb" desc="sets USB/USB(Front)"  cmd="SLI29" />
+  <action string="codeset" name="main.input-selector.usb" desc="sets USB(Rear)"  cmd="SLI2A" />
+  <action string="codeset" name="main.input-selector.network" desc="sets NETWORK, NET"  cmd="SLI2B" />
+  <action string="codeset" name="main.input-selector.usb" desc="sets USB(toggle)"  cmd="SLI2C" />
+  <action string="codeset" name="main.input-selector.universal-port" desc="sets Universal PORT"  cmd="SLI40" />
+  <action string="codeset" name="main.input-selector.multi-ch" desc="sets MULTI CH"  cmd="SLI30" />
+  <action string="codeset" name="main.input-selector.xm" desc="sets XM"  cmd="SLI31" />
+  <action string="codeset" name="main.input-selector.sirius" desc="sets SIRIUS"  cmd="SLI32" />
+  <action string="codeset" name="main.input-selector.up" desc="sets Selector Position Wrap-Around Up"  cmd="SLIUP" />
+  <action string="codeset" name="main.input-selector.down" desc="sets Selector Position Wrap-Around Down"  cmd="SLIDOWN" />
+  <action string="codeset" name="main.input-selector.query" waitforresponse='1' desc="gets The Selector Position"  cmd="SLIQSTN" />
+  <!--
+      Category:RECOUT Selector Command
+  -->
+  <action string="codeset" name="main.recout-selector.video1" desc="sets VIDEO1"  cmd="SLR00" />
+  <action string="codeset" name="main.recout-selector.video2" desc="sets VIDEO2"  cmd="SLR01" />
+  <action string="codeset" name="main.recout-selector.video3" desc="sets VIDEO3"  cmd="SLR02" />
+  <action string="codeset" name="main.recout-selector.video4" desc="sets VIDEO4"  cmd="SLR03" />
+  <action string="codeset" name="main.recout-selector.video5" desc="sets VIDEO5"  cmd="SLR04" />
+  <action string="codeset" name="main.recout-selector.video6" desc="sets VIDEO6"  cmd="SLR05" />
+  <action string="codeset" name="main.recout-selector.video7" desc="sets VIDEO7"  cmd="SLR06" />
+  <action string="codeset" name="main.recout-selector.dvd" desc="sets DVD"  cmd="SLR10" />
+  <action string="codeset" name="main.recout-selector.tape" desc="sets TAPE(1)"  cmd="SLR20" />
+  <action string="codeset" name="main.recout-selector.tape2" desc="sets TAPE2"  cmd="SLR21" />
+  <action string="codeset" name="main.recout-selector.phono" desc="sets PHONO"  cmd="SLR22" />
+  <action string="codeset" name="main.recout-selector.cd" desc="sets CD"  cmd="SLR23" />
+  <action string="codeset" name="main.recout-selector.fm" desc="sets FM"  cmd="SLR24" />
+  <action string="codeset" name="main.recout-selector.am" desc="sets AM"  cmd="SLR25" />
+  <action string="codeset" name="main.recout-selector.tuner" desc="sets TUNER"  cmd="SLR26" />
+  <action string="codeset" name="main.recout-selector.music-server" desc="sets MUSIC SERVER"  cmd="SLR27" />
+  <action string="codeset" name="main.recout-selector.internet-radio" desc="sets INTERNET RADIO"  cmd="SLR28" />
+  <action string="codeset" name="main.recout-selector.multi-ch" desc="sets MULTI CH"  cmd="SLR30" />
+  <action string="codeset" name="main.recout-selector.xm" desc="sets XM"  cmd="SLR31" />
+  <action string="codeset" name="main.recout-selector.off" desc="sets OFF"  cmd="SLR7F" />
+  <action string="codeset" name="main.recout-selector.source" desc="sets SOURCE"  cmd="SLR80" />
+  <action string="codeset" name="main.recout-selector.query" waitforresponse='1' desc="gets The Selector Position"  cmd="SLRQSTN" />
+  <!--
+      Category:Audio Selector Command
+  -->
+  <action string="codeset" name="main.audio-selector.auto" desc="sets AUTO"  cmd="SLA00" />
+  <action string="codeset" name="main.audio-selector.multi-channel" desc="sets MULTI-CHANNEL"  cmd="SLA01" />
+  <action string="codeset" name="main.audio-selector.analog" desc="sets ANALOG"  cmd="SLA02" />
+  <action string="codeset" name="main.audio-selector.ilink" desc="sets iLINK"  cmd="SLA03" />
+  <action string="codeset" name="main.audio-selector.hdmi" desc="sets HDMI"  cmd="SLA04" />
+  <action string="codeset" name="main.audio-selector.coax" desc="sets COAX/OPT"  cmd="SLA05" />
+  <action string="codeset" name="main.audio-selector.balance" desc="sets BALANCE"  cmd="SLA06" />
+  <action string="codeset" name="main.audio-selector.arc" desc="sets ARC"  cmd="SLA07" />
+  <action string="codeset" name="main.audio-selector.up" desc="sets Audio Selector Wrap-Around Up"  cmd="SLAUP" />
+  <action string="codeset" name="main.audio-selector.query" waitforresponse='1' desc="gets The Audio Selector Status"  cmd="SLAQSTN" />
+  <!--
+      Category:12V Trigger A Command
+  -->
+  <action string="codeset" name="main.12v-trigger-a.off" desc="sets 12V Trigger A Off"  cmd="TGA00" />
+  <action string="codeset" name="main.12v-trigger-a.on" desc="sets 12V Trigger A On"  cmd="TGA01" />
+  <!--
+      Category:12V Trigger B Command
+  -->
+  <action string="codeset" name="main.12v-trigger-b.off" desc="sets 12V Trigger B Off"  cmd="TGB00" />
+  <action string="codeset" name="main.12v-trigger-b.on" desc="sets 12V Trigger B On"  cmd="TGB01" />
+  <!--
+      Category:12V Trigger C Command
+  -->
+  <action string="codeset" name="main.12v-trigger-c.off" desc="sets 12V Trigger C Off"  cmd="TGC00" />
+  <action string="codeset" name="main.12v-trigger-c.on" desc="sets 12V Trigger C On"  cmd="TGC01" />
+  <!--
+      Category:Video Output Selector (Japanese Model Only)
+  -->
+  <action string="codeset" name="main.video-output-selector.d4" desc="sets D4"  cmd="VOS00" />
+  <action string="codeset" name="main.video-output-selector.component" desc="sets Component"  cmd="VOS01" />
+  <action string="codeset" name="main.video-output-selector.query" waitforresponse='1' desc="gets The Selector Position"  cmd="VOSQSTN" />
+  <!--
+      Category:HDMI Output Selector
+  -->
+  <action string="codeset" name="main.hdmi-output-selector.no" desc="sets No, Analog"  cmd="HDO00" />
+  <action string="codeset" name="main.hdmi-output-selector.yes" desc="sets Yes/Out Main, HDMI Main"  cmd="HDO01" />
+  <action string="codeset" name="main.hdmi-output-selector.out-sub" desc="sets Out Sub, HDMI Sub"  cmd="HDO02" />
+  <action string="codeset" name="main.hdmi-output-selector.both" desc="sets, Both"  cmd="HDO03" />
+  <action string="codeset" name="main.hdmi-output-selector.both" desc="sets, Both(Main)"  cmd="HDO04" />
+  <action string="codeset" name="main.hdmi-output-selector.both" desc="sets, Both(Sub)"  cmd="HDO05" />
+  <action string="codeset" name="main.hdmi-output-selector.up" desc="sets HDMI Out Selector Wrap-Around Up"  cmd="HDOUP" />
+  <action string="codeset" name="main.hdmi-output-selector.query" waitforresponse='1' desc="gets The HDMI Out Selector"  cmd="HDOQSTN" />
+  <!--
+      Category:HDMI Audio Out
+  -->
+  <action string="codeset" name="main.hdmi-audio-out.off" desc="sets Off"  cmd="HAO00" />
+  <action string="codeset" name="main.hdmi-audio-out.on" desc="sets On"  cmd="HAO01" />
+  <action string="codeset" name="main.hdmi-audio-out.auto" desc="sets Auto"  cmd="HAO02" />
+  <action string="codeset" name="main.hdmi-audio-out.up" desc="sets HDMI Audio Out Wrap-Around Up"  cmd="HAOUP" />
+  <action string="codeset" name="main.hdmi-audio-out.query" waitforresponse='1' desc="gets HDMI Audio Out"  cmd="HAOQSTN" />
+  <!--
+      Category:Monitor Out Resolution
+  -->
+  <action string="codeset" name="main.monitor-out-resolution.through" desc="sets Through"  cmd="RES00" />
+  <action string="codeset" name="main.monitor-out-resolution.auto" desc="sets Auto(HDMI Output Only)"  cmd="RES01" />
+  <action string="codeset" name="main.monitor-out-resolution.480p" desc="sets 480p"  cmd="RES02" />
+  <action string="codeset" name="main.monitor-out-resolution.720p" desc="sets 720p"  cmd="RES03" />
+  <action string="codeset" name="main.monitor-out-resolution.1080i" desc="sets 1080i"  cmd="RES04" />
+  <action string="codeset" name="main.monitor-out-resolution.1080p" desc="sets 1080p(HDMI Output Only)"  cmd="RES05" />
+  <action string="codeset" name="main.monitor-out-resolution.1080p" desc="sets 1080p/24fs(HDMI Output Only)"  cmd="RES07" />
+  <action string="codeset" name="main.monitor-out-resolution.4k-upcaling" desc="sets 4K Upcaling(HDMI Output Only)"  cmd="RES08" />
+  <action string="codeset" name="main.monitor-out-resolution.source" desc="sets Source"  cmd="RES06" />
+  <action string="codeset" name="main.monitor-out-resolution.up" desc="sets Monitor Out Resolution Wrap-Around Up"  cmd="RESUP" />
+  <action string="codeset" name="main.monitor-out-resolution.query" waitforresponse='1' desc="gets The Monitor Out Resolution"  cmd="RESQSTN" />
+  <!--
+      Category:ISF Mode
+  -->
+  <action string="codeset" name="main.isf-mode.custom" desc="sets ISF Mode Custom"  cmd="ISF00" />
+  <action string="codeset" name="main.isf-mode.day" desc="sets ISF Mode Day"  cmd="ISF01" />
+  <action string="codeset" name="main.isf-mode.night" desc="sets ISF Mode Night"  cmd="ISF02" />
+  <action string="codeset" name="main.isf-mode.up" desc="sets ISF Mode State Wrap-Around Up"  cmd="ISFUP" />
+  <action string="codeset" name="main.isf-mode.query" waitforresponse='1' desc="gets The ISF Mode State"  cmd="ISFQSTN" />
+  <!--
+      Category:Video Wide Mode
+  -->
+  <action string="codeset" name="main.video-wide-mode.auto" desc="sets Auto"  cmd="VWM00" />
+  <action string="codeset" name="main.video-wide-mode.4-3" desc="sets 4:3"  cmd="VWM01" />
+  <action string="codeset" name="main.video-wide-mode.full" desc="sets Full"  cmd="VWM02" />
+  <action string="codeset" name="main.video-wide-mode.zoom" desc="sets Zoom"  cmd="VWM03" />
+  <action string="codeset" name="main.video-wide-mode.zoom" desc="sets Wide Zoom"  cmd="VWM04" />
+  <action string="codeset" name="main.video-wide-mode.smart-zoom" desc="sets Smart Zoom"  cmd="VWM05" />
+  <action string="codeset" name="main.video-wide-mode.up" desc="sets Video Zoom Mode Wrap-Around Up"  cmd="VWMUP" />
+  <action string="codeset" name="main.video-wide-mode.query" waitforresponse='1' desc="gets Video Zoom Mode"  cmd="VWMQSTN" />
+  <!--
+      Category:Video Picture Mode
+  -->
+  <action string="codeset" name="main.video-picture-mode.through" desc="sets Through"  cmd="VPM00" />
+  <action string="codeset" name="main.video-picture-mode.custom" desc="sets Custom"  cmd="VPM01" />
+  <action string="codeset" name="main.video-picture-mode.cinema" desc="sets Cinema"  cmd="VPM02" />
+  <action string="codeset" name="main.video-picture-mode.game" desc="sets Game"  cmd="VPM03" />
+  <action string="codeset" name="main.video-picture-mode.isf-day" desc="sets ISF Day"  cmd="VPM05" />
+  <action string="codeset" name="main.video-picture-mode.isf-night" desc="sets ISF Night"  cmd="VPM06" />
+  <action string="codeset" name="main.video-picture-mode.streaming" desc="sets Streaming"  cmd="VPM07" />
+  <action string="codeset" name="main.video-picture-mode.direct" desc="sets Direct"  cmd="VPM08" />
+  <action string="codeset" name="main.video-picture-mode.up" desc="sets Video Zoom Mode Wrap-Around Up"  cmd="VPMUP" />
+  <action string="codeset" name="main.video-picture-mode.query" waitforresponse='1' desc="gets Video Zoom Mode"  cmd="VPMQSTN" />
+  <!--
+      Category:Listening Mode Command
+  -->
+  <action string="codeset" name="main.listening-mode.stereo" desc="sets STEREO"  cmd="LMD00" />
+  <action string="codeset" name="main.listening-mode.direct" desc="sets DIRECT"  cmd="LMD01" />
+  <action string="codeset" name="main.listening-mode.surround" desc="sets SURROUND"  cmd="LMD02" />
+  <action string="codeset" name="main.listening-mode.film" desc="sets FILM, Game-RPG"  cmd="LMD03" />
+  <action string="codeset" name="main.listening-mode.thx" desc="sets THX"  cmd="LMD04" />
+  <action string="codeset" name="main.listening-mode.action" desc="sets ACTION, Game-Action"  cmd="LMD05" />
+  <action string="codeset" name="main.listening-mode.musical" desc="sets MUSICAL, Game-Rock"  cmd="LMD06" />
+  <action string="codeset" name="main.listening-mode.mono-movie" desc="sets MONO MOVIE"  cmd="LMD07" />
+  <action string="codeset" name="main.listening-mode.orchestra" desc="sets ORCHESTRA"  cmd="LMD08" />
+  <action string="codeset" name="main.listening-mode.unplugged" desc="sets UNPLUGGED"  cmd="LMD09" />
+  <action string="codeset" name="main.listening-mode.studio-mix" desc="sets STUDIO-MIX"  cmd="LMD0A" />
+  <action string="codeset" name="main.listening-mode.tv-logic" desc="sets TV LOGIC"  cmd="LMD0B" />
+  <action string="codeset" name="main.listening-mode.all-ch-stereo" desc="sets ALL CH STEREO"  cmd="LMD0C" />
+  <action string="codeset" name="main.listening-mode.theater-dimensional" desc="sets THEATER-DIMENSIONAL"  cmd="LMD0D" />
+  <action string="codeset" name="main.listening-mode.enhanced-7" desc="sets ENHANCED 7/ENHANCE, Game-Sports"  cmd="LMD0E" />
+  <action string="codeset" name="main.listening-mode.mono" desc="sets MONO"  cmd="LMD0F" />
+  <action string="codeset" name="main.listening-mode.pure-audio" desc="sets PURE AUDIO"  cmd="LMD11" />
+  <action string="codeset" name="main.listening-mode.multiplex" desc="sets MULTIPLEX"  cmd="LMD12" />
+  <action string="codeset" name="main.listening-mode.full-mono" desc="sets FULL MONO"  cmd="LMD13" />
+  <action string="codeset" name="main.listening-mode.dolby-virtual" desc="sets DOLBY VIRTUAL"  cmd="LMD14" />
+  <action string="codeset" name="main.listening-mode.dts-surround-sensation" desc="sets DTS Surround Sensation"  cmd="LMD15" />
+  <action string="codeset" name="main.listening-mode.audyssey-dsx" desc="sets Audyssey DSX"  cmd="LMD16" />
+  <action string="codeset" name="main.listening-mode.whole-house" desc="sets Whole House Mode"  cmd="LMD1F" />
+  <action string="codeset" name="main.listening-mode.straight-decode" desc="sets Straight Decode"  cmd="LMD40" />
+  <action string="codeset" name="main.listening-mode.dolby-ex" desc="sets Dolby EX"  cmd="LMD41" />
+  <action string="codeset" name="main.listening-mode.thx-cinema" desc="sets THX Cinema"  cmd="LMD42" />
+  <action string="codeset" name="main.listening-mode.thx-surround-ex" desc="sets THX Surround EX"  cmd="LMD43" />
+  <action string="codeset" name="main.listening-mode.thx-music" desc="sets THX Music"  cmd="LMD44" />
+  <action string="codeset" name="main.listening-mode.thx-games" desc="sets THX Games"  cmd="LMD45" />
+  <action string="codeset" name="main.listening-mode.thx-u2" desc="sets THX U2/S2/I/S Cinema/Cinema2"  cmd="LMD50" />
+  <action string="codeset" name="main.listening-mode.thx-musicmode" desc="sets THX MusicMode,THX U2/S2/I/S Music"  cmd="LMD51" />
+  <action string="codeset" name="main.listening-mode.thx-games" desc="sets THX Games Mode,THX U2/S2/I/S Games"  cmd="LMD52" />
+  <action string="codeset" name="main.listening-mode.plii" desc="sets PLII/PLIIx Movie"  cmd="LMD80" />
+  <action string="codeset" name="main.listening-mode.plii" desc="sets PLII/PLIIx Music"  cmd="LMD81" />
+  <action string="codeset" name="main.listening-mode.neo-6-cinema" desc="sets Neo:6 Cinema/Neo:X Cinema"  cmd="LMD82" />
+  <action string="codeset" name="main.listening-mode.neo-6-music" desc="sets Neo:6 Music/Neo:X Music"  cmd="LMD83" />
+  <action string="codeset" name="main.listening-mode.plii" desc="sets PLII/PLIIx THX Cinema"  cmd="LMD84" />
+  <action string="codeset" name="main.listening-mode.neo-6" desc="sets Neo:6/Neo:X THX Cinema"  cmd="LMD85" />
+  <action string="codeset" name="main.listening-mode.plii" desc="sets PLII/PLIIx Game"  cmd="LMD86" />
+  <action string="codeset" name="main.listening-mode.neural-surr" desc="sets Neural Surr"  cmd="LMD87" />
+  <action string="codeset" name="main.listening-mode.neural-thx" desc="sets Neural THX/Neural Surround"  cmd="LMD88" />
+  <action string="codeset" name="main.listening-mode.plii" desc="sets PLII/PLIIx THX Games"  cmd="LMD89" />
+  <action string="codeset" name="main.listening-mode.neo-6" desc="sets Neo:6/Neo:X THX Games"  cmd="LMD8A" />
+  <action string="codeset" name="main.listening-mode.plii" desc="sets PLII/PLIIx THX Music"  cmd="LMD8B" />
+  <action string="codeset" name="main.listening-mode.neo-6" desc="sets Neo:6/Neo:X THX Music"  cmd="LMD8C" />
+  <action string="codeset" name="main.listening-mode.neural-thx-cinema" desc="sets Neural THX Cinema"  cmd="LMD8D" />
+  <action string="codeset" name="main.listening-mode.neural-thx-music" desc="sets Neural THX Music"  cmd="LMD8E" />
+  <action string="codeset" name="main.listening-mode.neural-thx-games" desc="sets Neural THX Games"  cmd="LMD8F" />
+  <action string="codeset" name="main.listening-mode.pliiz-height" desc="sets PLIIz Height"  cmd="LMD90" />
+  <action string="codeset" name="main.listening-mode.neo-6-cinema-dts-surround-sensation" desc="sets Neo:6 Cinema DTS Surround Sensation"  cmd="LMD91" />
+  <action string="codeset" name="main.listening-mode.neo-6-music-dts-surround-sensation" desc="sets Neo:6 Music DTS Surround Sensation"  cmd="LMD92" />
+  <action string="codeset" name="main.listening-mode.neural-digital-music" desc="sets Neural Digital Music"  cmd="LMD93" />
+  <action string="codeset" name="main.listening-mode.pliiz-height-thx-cinema" desc="sets PLIIz Height + THX Cinema"  cmd="LMD94" />
+  <action string="codeset" name="main.listening-mode.pliiz-height-thx-music" desc="sets PLIIz Height + THX Music"  cmd="LMD95" />
+  <action string="codeset" name="main.listening-mode.pliiz-height-thx-games" desc="sets PLIIz Height + THX Games"  cmd="LMD96" />
+  <action string="codeset" name="main.listening-mode.pliiz-height-thx-u2" desc="sets PLIIz Height + THX U2/S2 Cinema"  cmd="LMD97" />
+  <action string="codeset" name="main.listening-mode.pliiz-height-thx-u2" desc="sets PLIIz Height + THX U2/S2 Music"  cmd="LMD98" />
+  <action string="codeset" name="main.listening-mode.pliiz-height-thx-u2" desc="sets PLIIz Height + THX U2/S2 Games"  cmd="LMD99" />
+  <action string="codeset" name="main.listening-mode.neo-x-game" desc="sets Neo:X Game"  cmd="LMD9A" />
+  <action string="codeset" name="main.listening-mode.pliix" desc="sets PLIIx/PLII Movie + Audyssey DSX"  cmd="LMDA0" />
+  <action string="codeset" name="main.listening-mode.pliix" desc="sets PLIIx/PLII Music + Audyssey DSX"  cmd="LMDA1" />
+  <action string="codeset" name="main.listening-mode.pliix" desc="sets PLIIx/PLII Game + Audyssey DSX"  cmd="LMDA2" />
+  <action string="codeset" name="main.listening-mode.neo-6-cinema-audyssey-dsx" desc="sets Neo:6 Cinema + Audyssey DSX"  cmd="LMDA3" />
+  <action string="codeset" name="main.listening-mode.neo-6-music-audyssey-dsx" desc="sets Neo:6 Music + Audyssey DSX"  cmd="LMDA4" />
+  <action string="codeset" name="main.listening-mode.neural-surround-audyssey-dsx" desc="sets Neural Surround + Audyssey DSX"  cmd="LMDA5" />
+  <action string="codeset" name="main.listening-mode.neural-digital-music-audyssey-dsx" desc="sets Neural Digital Music + Audyssey DSX"  cmd="LMDA6" />
+  <action string="codeset" name="main.listening-mode.dolby-ex-audyssey-dsx" desc="sets Dolby EX + Audyssey DSX"  cmd="LMDA7" />
+  <action string="codeset" name="main.listening-mode.up" desc="sets Listening Mode Wrap-Around Up"  cmd="LMDUP" />
+  <action string="codeset" name="main.listening-mode.down" desc="sets Listening Mode Wrap-Around Down"  cmd="LMDDOWN" />
+  <action string="codeset" name="main.listening-mode.movie" desc="sets Listening Mode Wrap-Around Up"  cmd="LMDMOVIE" />
+  <action string="codeset" name="main.listening-mode.music" desc="sets Listening Mode Wrap-Around Up"  cmd="LMDMUSIC" />
+  <action string="codeset" name="main.listening-mode.game" desc="sets Listening Mode Wrap-Around Up"  cmd="LMDGAME" />
+  <action string="codeset" name="main.listening-mode.thx" desc="sets Listening Mode Wrap-Around Up"  cmd="LMDTHX" />
+  <action string="codeset" name="main.listening-mode.auto" desc="sets Listening Mode Wrap-Around Up"  cmd="LMDAUTO" />
+  <action string="codeset" name="main.listening-mode.surr" desc="sets Listening Mode Wrap-Around Up"  cmd="LMDSURR" />
+  <action string="codeset" name="main.listening-mode.stereo" desc="sets Listening Mode Wrap-Around Up"  cmd="LMDSTEREO" />
+  <action string="codeset" name="main.listening-mode.query" waitforresponse='1' desc="gets The Listening Mode"  cmd="LMDQSTN" />
+  <!--
+      Category:Late Night Command
+  -->
+  <action string="codeset" name="main.late-night.off" desc="sets Late Night Off"  cmd="LTN00" />
+  <action string="codeset" name="main.late-night.low-dolbydigital" desc="sets Late Night Low@DolbyDigital,On@Dolby TrueHD"  cmd="LTN01" />
+  <action string="codeset" name="main.late-night.high-dolbydigital" desc="sets Late Night High@DolbyDigital,(On@Dolby TrueHD)"  cmd="LTN02" />
+  <action string="codeset" name="main.late-night.auto-dolby-truehd" desc="sets Late Night Auto@Dolby TrueHD"  cmd="LTN03" />
+  <action string="codeset" name="main.late-night.up" desc="sets Late Night State Wrap-Around Up"  cmd="LTNUP" />
+  <action string="codeset" name="main.late-night.query" waitforresponse='1' desc="gets The Late Night Level"  cmd="LTNQSTN" />
+  <!--
+      Category:Cinema Filter Command
+  -->
+  <action string="codeset" name="main.cinema-filter.off" desc="sets Cinema Filter Off"  cmd="RAS00" />
+  <action string="codeset" name="main.cinema-filter.on" desc="sets Cinema Filter On"  cmd="RAS01" />
+  <action string="codeset" name="main.cinema-filter.up" desc="sets Cinema Filter State Wrap-Around Up"  cmd="RASUP" />
+  <action string="codeset" name="main.cinema-filter.query" waitforresponse='1' desc="gets The Cinema Filter State"  cmd="RASQSTN" />
+  <!--
+      Category:Audyssey 2EQ/MultEQ/MultEQ XT
+  -->
+  <action string="codeset" name="main.audyssey-2eq-multeq-multeq-xt.off" desc="sets Audyssey 2EQ/MultEQ/MultEQ XT Off"  cmd="ADY00" />
+  <action string="codeset" name="main.audyssey-2eq-multeq-multeq-xt.on" desc="sets Audyssey 2EQ/MultEQ/MultEQ XT On/Movie"  cmd="ADY01" />
+  <action string="codeset" name="main.audyssey-2eq-multeq-multeq-xt.music" desc="sets Audyssey 2EQ/MultEQ/MultEQ XT Music"  cmd="ADY02" />
+  <action string="codeset" name="main.audyssey-2eq-multeq-multeq-xt.up" desc="sets Audyssey 2EQ/MultEQ/MultEQ XT State Wrap-Around Up"  cmd="ADYUP" />
+  <action string="codeset" name="main.audyssey-2eq-multeq-multeq-xt.query" waitforresponse='1' desc="gets The Audyssey 2EQ/MultEQ/MultEQ XT State"  cmd="ADYQSTN" />
+  <!--
+      Category:Audyssey Dynamic EQ
+  -->
+  <action string="codeset" name="main.audyssey-dynamic-eq.off" desc="sets Audyssey Dynamic EQ Off"  cmd="ADQ00" />
+  <action string="codeset" name="main.audyssey-dynamic-eq.on" desc="sets Audyssey Dynamic EQ On"  cmd="ADQ01" />
+  <action string="codeset" name="main.audyssey-dynamic-eq.up" desc="sets Audyssey Dynamic EQ State Wrap-Around Up"  cmd="ADQUP" />
+  <action string="codeset" name="main.audyssey-dynamic-eq.query" waitforresponse='1' desc="gets The Audyssey Dynamic EQ State"  cmd="ADQQSTN" />
+  <!--
+      Category:Audyssey Dynamic Volume
+  -->
+  <action string="codeset" name="main.audyssey-dynamic-volume.off" desc="sets Audyssey Dynamic Volume Off"  cmd="ADV00" />
+  <action string="codeset" name="main.audyssey-dynamic-volume.light" desc="sets Audyssey Dynamic Volume Light"  cmd="ADV01" />
+  <action string="codeset" name="main.audyssey-dynamic-volume.medium" desc="sets Audyssey Dynamic Volume Medium"  cmd="ADV02" />
+  <action string="codeset" name="main.audyssey-dynamic-volume.heavy" desc="sets Audyssey Dynamic Volume Heavy"  cmd="ADV03" />
+  <action string="codeset" name="main.audyssey-dynamic-volume.up" desc="sets Audyssey Dynamic Volume State Wrap-Around Up"  cmd="ADVUP" />
+  <action string="codeset" name="main.audyssey-dynamic-volume.query" waitforresponse='1' desc="gets The Audyssey Dynamic Volume State"  cmd="ADVQSTN" />
+  <!--
+      Category:Dolby Volume
+  -->
+  <action string="codeset" name="main.dolby-volume.off" desc="sets Dolby Volume Off"  cmd="DVL00" />
+  <action string="codeset" name="main.dolby-volume.low" desc="sets Dolby Volume Low/On"  cmd="DVL01" />
+  <action string="codeset" name="main.dolby-volume.mid" desc="sets Dolby Volume Mid"  cmd="DVL02" />
+  <action string="codeset" name="main.dolby-volume.high" desc="sets Dolby Volume High"  cmd="DVL03" />
+  <action string="codeset" name="main.dolby-volume.up" desc="sets Dolby Volume State Wrap-Around Up"  cmd="DVLUP" />
+  <action string="codeset" name="main.dolby-volume.query" waitforresponse='1' desc="gets The Dolby Volume State"  cmd="DVLQSTN" />
+  <!--
+      Category:Music Optimizer
+  -->
+  <action string="codeset" name="main.music-optimizer.off" desc="sets Music Optimizer Off"  cmd="MOT00" />
+  <action string="codeset" name="main.music-optimizer.on" desc="sets Music Optimizer On"  cmd="MOT01" />
+  <action string="codeset" name="main.music-optimizer.up" desc="sets Music Optimizer State Wrap-Around Up"  cmd="MOTUP" />
+  <action string="codeset" name="main.music-optimizer.query" waitforresponse='1' desc="gets The Dolby Volume State"  cmd="MOTQSTN" />
+  <!--
+      Category:Tuning Command (Include Tuner Pack Model Only)
+  -->
+  <action string="codeset" name="main.tuning" desc="sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz / SR nnnnn ch) put 0 in the first two digits of nnnnn at SR"  cmd="TUN$cvar(value)" />
+  <action string="codeset" name="main.tuning.direct" desc="starts/restarts Direct Tuning Mode"  cmd="TUNDIRECT" />
+  <action string="codeset" name="main.tuning.0-in-direct-mode" desc="sets 0 in Direct Tuning Mode"  cmd="TUN0" />
+  <action string="codeset" name="main.tuning.1-in-direct-mode" desc="sets 1 in Direct Tuning Mode"  cmd="TUN1" />
+  <action string="codeset" name="main.tuning.2-in-direct-mode" desc="sets 2 in Direct Tuning Mode"  cmd="TUN2" />
+  <action string="codeset" name="main.tuning.3-in-direct-mode" desc="sets 3 in Direct Tuning Mode"  cmd="TUN3" />
+  <action string="codeset" name="main.tuning.4-in-direct-mode" desc="sets 4 in Direct Tuning Mode"  cmd="TUN4" />
+  <action string="codeset" name="main.tuning.5-in-direct-mode" desc="sets 5 in Direct Tuning Mode"  cmd="TUN5" />
+  <action string="codeset" name="main.tuning.6-in-direct-mode" desc="sets 6 in Direct Tuning Mode"  cmd="TUN6" />
+  <action string="codeset" name="main.tuning.7-in-direct-mode" desc="sets 7 in Direct Tuning Mode"  cmd="TUN7" />
+  <action string="codeset" name="main.tuning.8-in-direct-mode" desc="sets 8 in Direct Tuning Mode"  cmd="TUN8" />
+  <action string="codeset" name="main.tuning.9-in-direct-mode" desc="sets 9 in Direct Tuning Mode"  cmd="TUN9" />
+  <action string="codeset" name="main.tuning.up" desc="sets Tuning Frequency Wrap-Around Up"  cmd="TUNUP" />
+  <action string="codeset" name="main.tuning.down" desc="sets Tuning Frequency Wrap-Around Down"  cmd="TUNDOWN" />
+  <action string="codeset" name="main.tuning.query" waitforresponse='1' desc="gets The Tuning Frequency"  cmd="TUNQSTN" />
+  <!--
+      Category:Preset Command (Include Tuner Pack Model Only)
+  -->
+  <action string="codeset" name="main.preset.no" desc="sets Preset No. 1 - 40 (to 30 on some devices) ( In hexadecimal representation)"  cmd="PRS$cvar(value)" />
+  <action string="codeset" name="main.preset.up" desc="sets Preset No. Wrap-Around Up"  cmd="PRSUP" />
+  <action string="codeset" name="main.preset.down" desc="sets Preset No. Wrap-Around Down"  cmd="PRSDOWN" />
+  <action string="codeset" name="main.preset.query" waitforresponse='1' desc="gets The Preset No."  cmd="PRSQSTN" />
+  <!--
+      Category:Preset Memory Command (Include Tuner Pack Model Only)
+  -->
+  <action string="codeset" name="main.preset-memory.no" desc="sets Preset No. 1 - 40 (to 30 on some devices) ( In hexadecimal representation)"  cmd="PRM$cvar(value)" />
+  <!--
+      Category:RDS Information Command (RDS Model Only)
+  -->
+  <action string="codeset" name="main.rds-information.00" desc="Display RT Information"  cmd="RDS00" />
+  <action string="codeset" name="main.rds-information.01" desc="Display PTY Information"  cmd="RDS01" />
+  <action string="codeset" name="main.rds-information.02" desc="Display TP Information"  cmd="RDS02" />
+  <action string="codeset" name="main.rds-information.up" desc="Display RDS Information Wrap-Around Change"  cmd="RDSUP" />
+  <!--
+      Category:PTY Scan Command (RDS Model Only)
+  -->
+  <action string="codeset" name="main.pty-scan.no" desc="sets PTY No 0 - 30 ( In hexadecimal representation)"  cmd="PTS$cvar(value)" />
+  <action string="codeset" name="main.pty-scan.enter" desc="Finish PTY Scan"  cmd="PTSENTER" />
+  <!--
+      Category:TP Scan Command (RDS Model Only)
+  -->
+  <action string="codeset" name="main.tp-scan" desc="Start TP Scan (When Dont Have Parameter)"  cmd="TPS" />
+  <action string="codeset" name="main.tp-scan.enter" desc="Finish TP Scan"  cmd="TPSENTER" />
+  <!--
+      Category:XM Channel Name Info (XM Model Only)
+  -->
+  <action string="codeset" name="main.xm-channel-name-info.query" waitforresponse='1' desc="gets XM Channel Name"  cmd="XCNQSTN" />
+  <!--
+      Category:XM Artist Name Info (XM Model Only)
+  -->
+  <action string="codeset" name="main.xm-artist-name-info.query" waitforresponse='1' desc="gets XM Artist Name"  cmd="XATQSTN" />
+  <!--
+      Category:XM Title Info (XM Model Only)
+  -->
+  <action string="codeset" name="main.xm-title-info.query" waitforresponse='1' desc="gets XM Title"  cmd="XTIQSTN" />
+  <!--
+      Category:XM Channel Number Command (XM Model Only)
+  -->
+  <action string="codeset" name="main.xm-channel-number.up" desc="sets XM Channel Wrap-Around Up"  cmd="XCHUP" />
+  <action string="codeset" name="main.xm-channel-number.down" desc="sets XM Channel Wrap-Around Down"  cmd="XCHDOWN" />
+  <action string="codeset" name="main.xm-channel-number.query" waitforresponse='1' desc="gets XM Channel Number"  cmd="XCHQSTN" />
+  <!--
+      Category:XM Category Command (XM Model Only)
+  -->
+  <action string="codeset" name="main.xm-category.up" desc="sets XM Category Wrap-Around Up"  cmd="XCTUP" />
+  <action string="codeset" name="main.xm-category.down" desc="sets XM Category Wrap-Around Down"  cmd="XCTDOWN" />
+  <action string="codeset" name="main.xm-category.query" waitforresponse='1' desc="gets XM Category"  cmd="XCTQSTN" />
+  <!--
+      Category:SIRIUS Channel Name Info (SIRIUS Model Only)
+  -->
+  <action string="codeset" name="main.sirius-channel-name-info.query" waitforresponse='1' desc="gets SIRIUS Channel Name"  cmd="SCNQSTN" />
+  <!--
+      Category:SIRIUS Artist Name Info (SIRIUS Model Only)
+  -->
+  <action string="codeset" name="main.sirius-artist-name-info.query" waitforresponse='1' desc="gets SIRIUS Artist Name"  cmd="SATQSTN" />
+  <!--
+      Category:SIRIUS Title Info (SIRIUS Model Only)
+  -->
+  <action string="codeset" name="main.sirius-title-info.query" waitforresponse='1' desc="gets SIRIUS Title"  cmd="STIQSTN" />
+  <!--
+      Category:SIRIUS Channel Number Command (SIRIUS Model Only)
+  -->
+  <action string="codeset" name="main.sirius-channel-number.up" desc="sets SIRIUS Channel Wrap-Around Up"  cmd="SCHUP" />
+  <action string="codeset" name="main.sirius-channel-number.down" desc="sets SIRIUS Channel Wrap-Around Down"  cmd="SCHDOWN" />
+  <action string="codeset" name="main.sirius-channel-number.query" waitforresponse='1' desc="gets SIRIUS Channel Number"  cmd="SCHQSTN" />
+  <!--
+      Category:SIRIUS Category Command (SIRIUS Model Only)
+  -->
+  <action string="codeset" name="main.sirius-category.up" desc="sets SIRIUS Category Wrap-Around Up"  cmd="SCTUP" />
+  <action string="codeset" name="main.sirius-category.down" desc="sets SIRIUS Category Wrap-Around Down"  cmd="SCTDOWN" />
+  <action string="codeset" name="main.sirius-category.query" waitforresponse='1' desc="gets SIRIUS Category"  cmd="SCTQSTN" />
+  <!--
+      Category:SIRIUS Parental Lock Command (SIRIUS Model Only)
+  -->
+  <action string="codeset" name="main.sirius-parental-lock.input" desc="displays Please input the Lock password"  cmd="SLKINPUT" />
+  <action string="codeset" name="main.sirius-parental-lock.wrong" desc="displays The Lock password is wrong"  cmd="SLKWRONG" />
+  <!--
+      Category:HD Radio Artist Name Info (HD Radio Model Only)
+  -->
+  <action string="codeset" name="main.hd-radio-artist-name-info.query" waitforresponse='1' desc="gets HD Radio Artist Name"  cmd="HATQSTN" />
+  <!--
+      Category:HD Radio Channel Name Info (HD Radio Model Only)
+  -->
+  <action string="codeset" name="main.hd-radio-channel-name-info.query" waitforresponse='1' desc="gets HD Radio Channel Name"  cmd="HCNQSTN" />
+  <!--
+      Category:HD Radio Title Info (HD Radio Model Only)
+  -->
+  <action string="codeset" name="main.hd-radio-title-info.query" waitforresponse='1' desc="gets HD Radio Title"  cmd="HTIQSTN" />
+  <!--
+      Category:HD Radio Detail Info (HD Radio Model Only)
+  -->
+  <action string="codeset" name="main.hd-radio-detail-info.query" waitforresponse='1' desc="gets HD Radio Title"  cmd="HDSQSTN" />
+  <!--
+      Category:HD Radio Channel Program Command (HD Radio Model Only)
+  -->
+  <action string="codeset" name="main.hd-radio-channel-program.directly" desc="sets directly HD Radio Channel Program (1 to 8)"  cmd="HPR$cvar(value)" />
+  <action string="codeset" name="main.hd-radio-channel-program.query" waitforresponse='1' desc="gets HD Radio Channel Program"  cmd="HPRQSTN" />
+  <!--
+      Category:HD Radio Blend Mode Command (HD Radio Model Only)
+  -->
+  <action string="codeset" name="main.hd-radio-blend-mode.auto" desc="sets HD Radio Blend Mode Auto"  cmd="HBL00" />
+  <action string="codeset" name="main.hd-radio-blend-mode.analog" desc="sets HD Radio Blend Mode Analog"  cmd="HBL01" />
+  <action string="codeset" name="main.hd-radio-blend-mode.query" waitforresponse='1' desc="gets the HD Radio Blend Mode Status"  cmd="HBLQSTN" />
+  <!--
+      Category:HD Radio Tuner Status (HD Radio Model Only)
+  -->
+  <action string="codeset" name="main.hd-radio-tuner-status.mmnnoo" desc="mmnnoo HD Radio Tuner Status (3 bytes) mm -> 00 not HD, 01 HD nn -> current Program 01-08 oo -> receivable Program (8 bits are represented in hexadecimal notation. Each bit shows receivable or not.) " cmd="HTS$cvar(value)" />
+  <action string="codeset" name="main.hd-radio-tuner-status.query" waitforresponse='1' desc="gets the HD Radio Tuner Status"  cmd="HTSQSTN" />
+  <!--
+      Category:Network/USB Operation Command (Network Model Only after TX-NR905)
+  -->
+  <action string="codeset" name="main.network-usb.play" desc="PLAY KEY"  cmd="NTCPLAY" />
+  <action string="codeset" name="main.network-usb.stop" desc="STOP KEY"  cmd="NTCSTOP" />
+  <action string="codeset" name="main.network-usb.pause" desc="PAUSE KEY"  cmd="NTCPAUSE" />
+  <action string="codeset" name="main.network-usb.trup" desc="TRACK UP KEY"  cmd="NTCTRUP" />
+  <action string="codeset" name="main.network-usb.trdn" desc="TRACK DOWN KEY"  cmd="NTCTRDN" />
+  <action string="codeset" name="main.network-usb.ff" desc="FF KEY (CONTINUOUS*)"  cmd="NTCFF" />
+  <action string="codeset" name="main.network-usb.rew" desc="REW KEY (CONTINUOUS*)"  cmd="NTCREW" />
+  <action string="codeset" name="main.network-usb.repeat" desc="REPEAT KEY"  cmd="NTCREPEAT" />
+  <action string="codeset" name="main.network-usb.random" desc="RANDOM KEY"  cmd="NTCRANDOM" />
+  <action string="codeset" name="main.network-usb.display" desc="DISPLAY KEY"  cmd="NTCDISPLAY" />
+  <action string="codeset" name="main.network-usb.album" desc="ALBUM KEY"  cmd="NTCALBUM" />
+  <action string="codeset" name="main.network-usb.artist" desc="ARTIST KEY"  cmd="NTCARTIST" />
+  <action string="codeset" name="main.network-usb.genre" desc="GENRE KEY"  cmd="NTCGENRE" />
+  <action string="codeset" name="main.network-usb.playlist" desc="PLAYLIST KEY"  cmd="NTCPLAYLIST" />
+  <action string="codeset" name="main.network-usb.right" desc="RIGHT KEY"  cmd="NTCRIGHT" />
+  <action string="codeset" name="main.network-usb.left" desc="LEFT KEY"  cmd="NTCLEFT" />
+  <action string="codeset" name="main.network-usb.up" desc="UP KEY"  cmd="NTCUP" />
+  <action string="codeset" name="main.network-usb.down" desc="DOWN KEY"  cmd="NTCDOWN" />
+  <action string="codeset" name="main.network-usb.select" desc="SELECT KEY"  cmd="NTCSELECT" />
+  <action string="codeset" name="main.network-usb.0" desc="0 KEY"  cmd="NTC0" />
+  <action string="codeset" name="main.network-usb.1" desc="1 KEY"  cmd="NTC1" />
+  <action string="codeset" name="main.network-usb.2" desc="2 KEY"  cmd="NTC2" />
+  <action string="codeset" name="main.network-usb.3" desc="3 KEY"  cmd="NTC3" />
+  <action string="codeset" name="main.network-usb.4" desc="4 KEY"  cmd="NTC4" />
+  <action string="codeset" name="main.network-usb.5" desc="5 KEY"  cmd="NTC5" />
+  <action string="codeset" name="main.network-usb.6" desc="6 KEY"  cmd="NTC6" />
+  <action string="codeset" name="main.network-usb.7" desc="7 KEY"  cmd="NTC7" />
+  <action string="codeset" name="main.network-usb.8" desc="8 KEY"  cmd="NTC8" />
+  <action string="codeset" name="main.network-usb.9" desc="9 KEY"  cmd="NTC9" />
+  <action string="codeset" name="main.network-usb.delete" desc="DELETE KEY"  cmd="NTCDELETE" />
+  <action string="codeset" name="main.network-usb.caps" desc="CAPS KEY"  cmd="NTCCAPS" />
+  <action string="codeset" name="main.network-usb.location" desc="LOCATION KEY"  cmd="NTCLOCATION" />
+  <action string="codeset" name="main.network-usb.language" desc="LANGUAGE KEY"  cmd="NTCLANGUAGE" />
+  <action string="codeset" name="main.network-usb.setup" desc="SETUP KEY"  cmd="NTCSETUP" />
+  <action string="codeset" name="main.network-usb.return" desc="RETURN KEY"  cmd="NTCRETURN" />
+  <action string="codeset" name="main.network-usb.chup" desc="CH UP(for iRadio)"  cmd="NTCCHUP" />
+  <action string="codeset" name="main.network-usb.chdn" desc="CH DOWN(for iRadio)"  cmd="NTCCHDN" />
+  <action string="codeset" name="main.network-usb.menu" desc="MENU"  cmd="NTCMENU" />
+  <action string="codeset" name="main.network-usb.top" desc="TOP MENU"  cmd="NTCTOP" />
+  <action string="codeset" name="main.network-usb.mode" desc="MODE(for iPod) STD vs EXT"  cmd="NTCMODE" />
+  <action string="codeset" name="main.network-usb.list" desc="LIST vs PLAYBACK"  cmd="NTCLIST" />
+  <!--
+      Category:NET/USB Artist Name Info
+  -->
+  <action string="codeset" name="main.net-usb-artist-name-info.query" waitforresponse='1' desc="gets iPod Artist Name"  cmd="NATQSTN" />
+  <!--
+      Category:NET/USB Album Name Info
+  -->
+  <action string="codeset" name="main.net-usb-album-name-info.query" waitforresponse='1' desc="gets iPod Album Name"  cmd="NALQSTN" />
+  <!--
+      Category:NET/USB Title Name
+  -->
+  <action string="codeset" name="main.net-usb-title-name.query" waitforresponse='1' desc="gets HD Radio Title"  cmd="NTIQSTN" />
+  <!--
+      Category:NET/USB Time Info
+  -->
+  <action string="codeset" name="main.net-usb-time-info.mm-ss-mm-ss" desc="NET/USB Time Info (Elapsed time/Track Time Max 99:59) mm:ss/mm:ss"  cmd="NTM$cvar(value)" />
+  <action string="codeset" name="main.net-usb-time-info.query" waitforresponse='1' desc="gets iPod Time Info"  cmd="NTMQSTN" />
+  <!--
+      Category:NET/USB Track Info
+  -->
+  <action string="codeset" name="main.net-usb-track-info.query" waitforresponse='1' desc="gets iPod Time Info"  cmd="NTRQSTN" />
+  <!--
+      Category:NET/USB Play Status
+  -->
+  <action string="codeset" name="main.net-usb-play-status.prs" desc="NET/USB Play Status (3 letters) p -> Play Status: S: STOP, P: Play, p: Pause, F: FF, R: FR r -> Repeat Status: -: Off, R: All, F: Folder, 1: Repeat 1, s -> Shuffle Status: -: Off, S: All , A: Album, F: Folder "  cmd="NSTprs" />
+  <action string="codeset" name="main.net-usb-play-status.query" waitforresponse='1' desc="gets the Net/USB Status"  cmd="NSTQSTN" />
+  <!--
+      Category:Internet Radio Preset Command
+  -->
+  <action string="codeset" name="main.internet-radio-preset" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="NPR$cvar(value)" />
+  <action string="codeset" name="main.internet-radio-preset.set" desc="preset memory current station"  cmd="NPRSET" />
+  <!--
+      Category:NET/USB List Info
+  -->
+  <action string="codeset" name="main.net-usb-list-info.ti" desc="Too Large, see reference"  cmd="NLSti" />
+  <!--
+      Category:NET/USB Jacket Art (When Jacket Art is available and Output for Network Control Only)
+  -->
+  <action string="codeset" name="main.net-usb-jacket-art.query"  desc="Request Image" cmd="NJAREQ" />
+  <action string="codeset" name="main.net-usb-jacket-art.setbmp" desc="Set ImageType Bmp" cmd="NJABMP" />
+  <action string="codeset" name="main.net-usb-jacket-art.setlink" desc="Set ImageType Bmp" cmd="NJALINK" />
+
+  <!--
+      Category:NET Service(for Network Control Only)
+  -->
+  <action string="codeset" name="main.net-service" desc="select Network Service directly ss -> Network Serveice i-> Acount Info 0: No 1: Yes aaaa...aaaa  bbbb...bbbb Password ( 128 Unicode letters [UTF-8 encoded] max )"  cmd="NSV$cvar(value)0" />
+
+  <action string="codeset" name="main.input-selector" desc="select Input directly"  cmd="SLI$cvar(value)" />
+
+  <action string="codeset" name="main.listening-mode" desc="Select Listening Mode directly"  cmd="LMD$cvar(value)" />
+
+
+  <!--
+      Category:NET Keyboard(for Network Control Only)
+  -->
+  <action string="codeset" name="main.net-keyboard" desc="waiting Keyboard Input" cmd="NKY$cvar(value)" />
+  <action string="codeset" name="main.net-keyboard.letter" desc="set Keyboard Input letter" cmd="NKYNKY$cvar(value)" />
+  <!--
+      Category:NET Popup Message(for Network Control Only)
+  -->
+  <action string="codeset" name="main.net-popup-message" desc="x -> Popup Display Type" cmd="NPU$cvar(value)" />
+  <!--
+      Category:iPod Mode Change (with USB Connection Only)
+  -->
+  <action string="codeset" name="main.ipod-mode-change.std" desc="Standerd Mode"  cmd="NMDSTD" />
+  <action string="codeset" name="main.ipod-mode-change.ext" desc="Extend Mode(If available)"  cmd="NMDEXT" />
+  <action string="codeset" name="main.ipod-mode-change.vdc" desc="Video Contents in Extended Mode"  cmd="NMDVDC" />
+  <action string="codeset" name="main.ipod-mode-change.query" waitforresponse='1' desc="gets iPod Mode Status"  cmd="NMDQSTN" />
+  <!--
+      Category:CD Player Operation Command
+  -->
+  <action string="codeset" name="main.cd-player.power" desc="POWER ON/OFF"  cmd="CCDPOWER" />
+  <action string="codeset" name="main.cd-player.track" desc="TRACK+"  cmd="CCDTRACK" />
+  <action string="codeset" name="main.cd-player.play" desc="PLAY"  cmd="CCDPLAY" />
+  <action string="codeset" name="main.cd-player.stop" desc="STOP"  cmd="CCDSTOP" />
+  <action string="codeset" name="main.cd-player.pause" desc="PAUSE"  cmd="CCDPAUSE" />
+  <action string="codeset" name="main.cd-player.skip-f" desc=">>I"  cmd="CCDSKIP.F" />
+  <action string="codeset" name="main.cd-player.skip-r" desc="I"  cmd="CCDSKIP.R" />
+  <action string="codeset" name="main.cd-player.memory" desc="MEMORY"  cmd="CCDMEMORY" />
+  <action string="codeset" name="main.cd-player.clear" desc="CLEAR"  cmd="CCDCLEAR" />
+  <action string="codeset" name="main.cd-player.repeat" desc="REPEAT"  cmd="CCDREPEAT" />
+  <action string="codeset" name="main.cd-player.random" desc="RANDOM"  cmd="CCDRANDOM" />
+  <action string="codeset" name="main.cd-player.disp" desc="DISPLAY"  cmd="CCDDISP" />
+  <action string="codeset" name="main.cd-player.d-mode" desc="D.MODE"  cmd="CCDD.MODE" />
+  <action string="codeset" name="main.cd-player.ff" desc="FF >>"  cmd="CCDFF" />
+  <action string="codeset" name="main.cd-player.rew" desc="REW"  cmd="CCDREW" />
+  <action string="codeset" name="main.cd-player.op-cl" desc="OPEN/CLOSE"  cmd="CCDOP/CL" />
+  <action string="codeset" name="main.cd-player.1" desc="1.0"  cmd="CCD1" />
+  <action string="codeset" name="main.cd-player.2" desc="2.0"  cmd="CCD2" />
+  <action string="codeset" name="main.cd-player.3" desc="3.0"  cmd="CCD3" />
+  <action string="codeset" name="main.cd-player.4" desc="4.0"  cmd="CCD4" />
+  <action string="codeset" name="main.cd-player.5" desc="5.0"  cmd="CCD5" />
+  <action string="codeset" name="main.cd-player.6" desc="6.0"  cmd="CCD6" />
+  <action string="codeset" name="main.cd-player.7" desc="7.0"  cmd="CCD7" />
+  <action string="codeset" name="main.cd-player.8" desc="8.0"  cmd="CCD8" />
+  <action string="codeset" name="main.cd-player.9" desc="9.0"  cmd="CCD9" />
+  <action string="codeset" name="main.cd-player.0" desc="0.0"  cmd="CCD0" />
+  <action string="codeset" name="main.cd-player.10" desc="10.0"  cmd="CCD10" />
+  <action string="codeset" name="main.cd-player.10" desc="+10"  cmd="CCD+10" />
+  <action string="codeset" name="main.cd-player.d-skip" desc="DISC +"  cmd="CCDD.SKIP" />
+  <action string="codeset" name="main.cd-player.disc-f" desc="DISC +"  cmd="CCDDISC.F" />
+  <action string="codeset" name="main.cd-player.disc-r" desc="DISC -"  cmd="CCDDISC.R" />
+  <action string="codeset" name="main.cd-player.disc1" desc="DISC1"  cmd="CCDDISC1" />
+  <action string="codeset" name="main.cd-player.disc2" desc="DISC2"  cmd="CCDDISC2" />
+  <action string="codeset" name="main.cd-player.disc3" desc="DISC3"  cmd="CCDDISC3" />
+  <action string="codeset" name="main.cd-player.disc4" desc="DISC4"  cmd="CCDDISC4" />
+  <action string="codeset" name="main.cd-player.disc5" desc="DISC5"  cmd="CCDDISC5" />
+  <action string="codeset" name="main.cd-player.disc6" desc="DISC6"  cmd="CCDDISC6" />
+  <action string="codeset" name="main.cd-player.stby" desc="STANDBY"  cmd="CCDSTBY" />
+  <action string="codeset" name="main.cd-player.pon" desc="POWER ON"  cmd="CCDPON" />
+  <!--
+      Category:TAPE1(A) Operation Command
+  -->
+  <action string="codeset" name="main.tape1-a.play-f" desc="PLAY >"  cmd="CT1PLAY.F" />
+  <action string="codeset" name="main.tape1-a.play-r" desc="PLAY rev"  cmd="CT1PLAY.R" />
+  <action string="codeset" name="main.tape1-a.stop" desc="STOP"  cmd="CT1STOP" />
+  <action string="codeset" name="main.tape1-a.rc-pau" desc="REC/PAUSE"  cmd="CT1RC/PAU" />
+  <action string="codeset" name="main.tape1-a.ff" desc="FF >>"  cmd="CT1FF" />
+  <action string="codeset" name="main.tape1-a.rew" desc="REW "  cmd="CT1REW" />
+  <!--
+      Category:TAPE2(B) Operation Command
+  -->
+  <action string="codeset" name="main.tape2-b.play-f" desc="PLAY >"  cmd="CT2PLAY.F" />
+  <action string="codeset" name="main.tape2-b.play-r" desc="PLAY "  cmd="CT2PLAY.R" />
+  <action string="codeset" name="main.tape2-b.stop" desc="STOP"  cmd="CT2STOP" />
+  <action string="codeset" name="main.tape2-b.rc-pau" desc="REC/PAUSE"  cmd="CT2RC/PAU" />
+  <action string="codeset" name="main.tape2-b.ff" desc="FF >>"  cmd="CT2FF" />
+  <action string="codeset" name="main.tape2-b.rew" desc="REW"  cmd="CT2REW" />
+  <action string="codeset" name="main.tape2-b.op-cl" desc="OPEN/CLOSE"  cmd="CT2OP/CL" />
+  <action string="codeset" name="main.tape2-b.skip-f" desc=">>I"  cmd="CT2SKIP.F" />
+  <action string="codeset" name="main.tape2-b.skip-r" desc="I"  cmd="CT2SKIP.R" />
+  <action string="codeset" name="main.tape2-b.rec" desc="REC"  cmd="CT2REC" />
+  <!--
+      Category:Graphics Equalizer Operation Command
+  -->
+  <action string="codeset" name="main.graphics-equalizer.power" desc="POWER ON/OFF"  cmd="CEQPOWER" />
+  <action string="codeset" name="main.graphics-equalizer.preset" desc="PRESET"  cmd="CEQPRESET" />
+  <!--
+      Category:DAT Recorder Operation Command
+  -->
+  <action string="codeset" name="main.dat-recorder.play" desc="PLAY"  cmd="CDTPLAY" />
+  <action string="codeset" name="main.dat-recorder.rc-pau" desc="REC/PAUSE"  cmd="CDTRC/PAU" />
+  <action string="codeset" name="main.dat-recorder.stop" desc="STOP"  cmd="CDTSTOP" />
+  <action string="codeset" name="main.dat-recorder.skip-f" desc=">>I"  cmd="CDTSKIP.F" />
+  <action string="codeset" name="main.dat-recorder.skip-r" desc="I"  cmd="CDTSKIP.R" />
+  <action string="codeset" name="main.dat-recorder.ff" desc="FF >>"  cmd="CDTFF" />
+  <action string="codeset" name="main.dat-recorder.rew" desc="REW"  cmd="CDTREW" />
+  <!--
+      Category:DVD Player Operation Command (via RIHD only after TX-NR509)
+  -->
+  <action string="codeset" name="main.dvd-player.power" desc="POWER ON/OFF"  cmd="CDVPOWER" />
+  <action string="codeset" name="main.dvd-player.pwron" desc="POWER ON"  cmd="CDVPWRON" />
+  <action string="codeset" name="main.dvd-player.pwroff" desc="POWER OFF"  cmd="CDVPWROFF" />
+  <action string="codeset" name="main.dvd-player.play" desc="PLAY"  cmd="CDVPLAY" />
+  <action string="codeset" name="main.dvd-player.stop" desc="STOP"  cmd="CDVSTOP" />
+  <action string="codeset" name="main.dvd-player.skip-f" desc=">>I"  cmd="CDVSKIP.F" />
+  <action string="codeset" name="main.dvd-player.skip-r" desc="I"  cmd="CDVSKIP.R" />
+  <action string="codeset" name="main.dvd-player.ff" desc="FF >>"  cmd="CDVFF" />
+  <action string="codeset" name="main.dvd-player.rew" desc="REW"  cmd="CDVREW" />
+  <action string="codeset" name="main.dvd-player.pause" desc="PAUSE"  cmd="CDVPAUSE" />
+  <action string="codeset" name="main.dvd-player.lastplay" desc="LAST PLAY"  cmd="CDVLASTPLAY" />
+  <action string="codeset" name="main.dvd-player.subton-off" desc="SUBTITLE ON/OFF"  cmd="CDVSUBTON/OFF" />
+  <action string="codeset" name="main.dvd-player.subtitle" desc="SUBTITLE"  cmd="CDVSUBTITLE" />
+  <action string="codeset" name="main.dvd-player.setup" desc="SETUP"  cmd="CDVSETUP" />
+  <action string="codeset" name="main.dvd-player.topmenu" desc="TOPMENU"  cmd="CDVTOPMENU" />
+  <action string="codeset" name="main.dvd-player.menu" desc="MENU"  cmd="CDVMENU" />
+  <action string="codeset" name="main.dvd-player.up" desc="UP"  cmd="CDVUP" />
+  <action string="codeset" name="main.dvd-player.down" desc="DOWN"  cmd="CDVDOWN" />
+  <action string="codeset" name="main.dvd-player.left" desc="LEFT"  cmd="CDVLEFT" />
+  <action string="codeset" name="main.dvd-player.right" desc="RIGHT"  cmd="CDVRIGHT" />
+  <action string="codeset" name="main.dvd-player.enter" desc="ENTER"  cmd="CDVENTER" />
+  <action string="codeset" name="main.dvd-player.return" desc="RETURN"  cmd="CDVRETURN" />
+  <action string="codeset" name="main.dvd-player.disc-f" desc="DISC +"  cmd="CDVDISC.F" />
+  <action string="codeset" name="main.dvd-player.disc-r" desc="DISC -"  cmd="CDVDISC.R" />
+  <action string="codeset" name="main.dvd-player.audio" desc="AUDIO"  cmd="CDVAUDIO" />
+  <action string="codeset" name="main.dvd-player.random" desc="RANDOM"  cmd="CDVRANDOM" />
+  <action string="codeset" name="main.dvd-player.op-cl" desc="OPEN/CLOSE"  cmd="CDVOP/CL" />
+  <action string="codeset" name="main.dvd-player.angle" desc="ANGLE"  cmd="CDVANGLE" />
+  <action string="codeset" name="main.dvd-player.1" desc="1.0"  cmd="CDV1" />
+  <action string="codeset" name="main.dvd-player.2" desc="2.0"  cmd="CDV2" />
+  <action string="codeset" name="main.dvd-player.3" desc="3.0"  cmd="CDV3" />
+  <action string="codeset" name="main.dvd-player.4" desc="4.0"  cmd="CDV4" />
+  <action string="codeset" name="main.dvd-player.5" desc="5.0"  cmd="CDV5" />
+  <action string="codeset" name="main.dvd-player.6" desc="6.0"  cmd="CDV6" />
+  <action string="codeset" name="main.dvd-player.7" desc="7.0"  cmd="CDV7" />
+  <action string="codeset" name="main.dvd-player.8" desc="8.0"  cmd="CDV8" />
+  <action string="codeset" name="main.dvd-player.9" desc="9.0"  cmd="CDV9" />
+  <action string="codeset" name="main.dvd-player.10" desc="10.0"  cmd="CDV10" />
+  <action string="codeset" name="main.dvd-player.0" desc="0.0"  cmd="CDV0" />
+  <action string="codeset" name="main.dvd-player.search" desc="SEARCH"  cmd="CDVSEARCH" />
+  <action string="codeset" name="main.dvd-player.disp" desc="DISPLAY"  cmd="CDVDISP" />
+  <action string="codeset" name="main.dvd-player.repeat" desc="REPEAT"  cmd="CDVREPEAT" />
+  <action string="codeset" name="main.dvd-player.memory" desc="MEMORY"  cmd="CDVMEMORY" />
+  <action string="codeset" name="main.dvd-player.clear" desc="CLEAR"  cmd="CDVCLEAR" />
+  <action string="codeset" name="main.dvd-player.abr" desc="A-B REPEAT"  cmd="CDVABR" />
+  <action string="codeset" name="main.dvd-player.step-f" desc="STEP"  cmd="CDVSTEP.F" />
+  <action string="codeset" name="main.dvd-player.step-r" desc="STEP BACK"  cmd="CDVSTEP.R" />
+  <action string="codeset" name="main.dvd-player.slow-f" desc="SLOW"  cmd="CDVSLOW.F" />
+  <action string="codeset" name="main.dvd-player.slow-r" desc="SLOW BACK"  cmd="CDVSLOW.R" />
+  <action string="codeset" name="main.dvd-player.zoomtg" desc="ZOOM"  cmd="CDVZOOMTG" />
+  <action string="codeset" name="main.dvd-player.zoomup" desc="ZOOM UP"  cmd="CDVZOOMUP" />
+  <action string="codeset" name="main.dvd-player.zoomdn" desc="ZOOM DOWN"  cmd="CDVZOOMDN" />
+  <action string="codeset" name="main.dvd-player.progre" desc="PROGRESSIVE"  cmd="CDVPROGRE" />
+  <action string="codeset" name="main.dvd-player.vdoff" desc="VIDEO ON/OFF"  cmd="CDVVDOFF" />
+  <action string="codeset" name="main.dvd-player.conmem" desc="CONDITION MEMORY"  cmd="CDVCONMEM" />
+  <action string="codeset" name="main.dvd-player.funmem" desc="FUNCTION MEMORY"  cmd="CDVFUNMEM" />
+  <action string="codeset" name="main.dvd-player.disc1" desc="DISC1"  cmd="CDVDISC1" />
+  <action string="codeset" name="main.dvd-player.disc2" desc="DISC2"  cmd="CDVDISC2" />
+  <action string="codeset" name="main.dvd-player.disc3" desc="DISC3"  cmd="CDVDISC3" />
+  <action string="codeset" name="main.dvd-player.disc4" desc="DISC4"  cmd="CDVDISC4" />
+  <action string="codeset" name="main.dvd-player.disc5" desc="DISC5"  cmd="CDVDISC5" />
+  <action string="codeset" name="main.dvd-player.disc6" desc="DISC6"  cmd="CDVDISC6" />
+  <action string="codeset" name="main.dvd-player.foldup" desc="FOLDER UP"  cmd="CDVFOLDUP" />
+  <action string="codeset" name="main.dvd-player.folddn" desc="FOLDER DOWN"  cmd="CDVFOLDDN" />
+  <action string="codeset" name="main.dvd-player.p-mode" desc="PLAY MODE"  cmd="CDVP.MODE" />
+  <action string="codeset" name="main.dvd-player.asctg" desc="ASPECT(Toggle)"  cmd="CDVASCTG" />
+  <action string="codeset" name="main.dvd-player.cdpcd" desc="CD CHAIN REPEAT"  cmd="CDVCDPCD" />
+  <action string="codeset" name="main.dvd-player.mspup" desc="MULTI SPEED UP"  cmd="CDVMSPUP" />
+  <action string="codeset" name="main.dvd-player.mspdn" desc="MULTI SPEED DOWN"  cmd="CDVMSPDN" />
+  <action string="codeset" name="main.dvd-player.pct" desc="PICTURE CONTROL"  cmd="CDVPCT" />
+  <action string="codeset" name="main.dvd-player.rsctg" desc="RESOLUTION(Toggle)"  cmd="CDVRSCTG" />
+  <action string="codeset" name="main.dvd-player.init" desc="Return to Factory Settings"  cmd="CDVINIT" />
+  <!--
+      Category:MD Recorder Operation Command
+  -->
+  <action string="codeset" name="main.md-recorder.power" desc="POWER ON/OFF"  cmd="CMDPOWER" />
+  <action string="codeset" name="main.md-recorder.play" desc="PLAY"  cmd="CMDPLAY" />
+  <action string="codeset" name="main.md-recorder.stop" desc="STOP"  cmd="CMDSTOP" />
+  <action string="codeset" name="main.md-recorder.ff" desc="FF >>"  cmd="CMDFF" />
+  <action string="codeset" name="main.md-recorder.rew" desc="REW"  cmd="CMDREW" />
+  <action string="codeset" name="main.md-recorder.p-mode" desc="PLAY MODE"  cmd="CMDP.MODE" />
+  <action string="codeset" name="main.md-recorder.skip-f" desc=">>I"  cmd="CMDSKIP.F" />
+  <action string="codeset" name="main.md-recorder.skip-r" desc="I"  cmd="CMDSKIP.R" />
+  <action string="codeset" name="main.md-recorder.pause" desc="PAUSE"  cmd="CMDPAUSE" />
+  <action string="codeset" name="main.md-recorder.rec" desc="REC"  cmd="CMDREC" />
+  <action string="codeset" name="main.md-recorder.memory" desc="MEMORY"  cmd="CMDMEMORY" />
+  <action string="codeset" name="main.md-recorder.disp" desc="DISPLAY"  cmd="CMDDISP" />
+  <action string="codeset" name="main.md-recorder.scroll" desc="SCROLL"  cmd="CMDSCROLL" />
+  <action string="codeset" name="main.md-recorder.m-scan" desc="MUSIC SCAN"  cmd="CMDM.SCAN" />
+  <action string="codeset" name="main.md-recorder.clear" desc="CLEAR"  cmd="CMDCLEAR" />
+  <action string="codeset" name="main.md-recorder.random" desc="RANDOM"  cmd="CMDRANDOM" />
+  <action string="codeset" name="main.md-recorder.repeat" desc="REPEAT"  cmd="CMDREPEAT" />
+  <action string="codeset" name="main.md-recorder.enter" desc="ENTER"  cmd="CMDENTER" />
+  <action string="codeset" name="main.md-recorder.eject" desc="EJECT"  cmd="CMDEJECT" />
+  <action string="codeset" name="main.md-recorder.1" desc="1.0"  cmd="CMD1" />
+  <action string="codeset" name="main.md-recorder.2" desc="2.0"  cmd="CMD2" />
+  <action string="codeset" name="main.md-recorder.3" desc="3.0"  cmd="CMD3" />
+  <action string="codeset" name="main.md-recorder.4" desc="4.0"  cmd="CMD4" />
+  <action string="codeset" name="main.md-recorder.5" desc="5.0"  cmd="CMD5" />
+  <action string="codeset" name="main.md-recorder.6" desc="6.0"  cmd="CMD6" />
+  <action string="codeset" name="main.md-recorder.7" desc="7.0"  cmd="CMD7" />
+  <action string="codeset" name="main.md-recorder.8" desc="8.0"  cmd="CMD8" />
+  <action string="codeset" name="main.md-recorder.9" desc="9.0"  cmd="CMD9" />
+  <action string="codeset" name="main.md-recorder.10-0" desc="10/0"  cmd="CMD10/0" />
+  <action string="codeset" name="main.md-recorder" desc="--/---"  cmd="CMDcvar(value)" />
+  <action string="codeset" name="main.md-recorder.name" desc="NAME"  cmd="CMDNAME" />
+  <action string="codeset" name="main.md-recorder.group" desc="GROUP"  cmd="CMDGROUP" />
+  <action string="codeset" name="main.md-recorder.stby" desc="STANDBY"  cmd="CMDSTBY" />
+  <!--
+      Category:CD-R Recorder Operation Command
+  -->
+  <action string="codeset" name="main.cd-r-recorder.power" desc="POWER ON/OFF"  cmd="CCRPOWER" />
+  <action string="codeset" name="main.cd-r-recorder.p-mode" desc="PLAY MODE"  cmd="CCRP.MODE" />
+  <action string="codeset" name="main.cd-r-recorder.play" desc="PLAY"  cmd="CCRPLAY" />
+  <action string="codeset" name="main.cd-r-recorder.stop" desc="STOP"  cmd="CCRSTOP" />
+  <action string="codeset" name="main.cd-r-recorder.skip-f" desc=">>I"  cmd="CCRSKIP.F" />
+  <action string="codeset" name="main.cd-r-recorder.skip-r" desc="I"  cmd="CCRSKIP.R" />
+  <action string="codeset" name="main.cd-r-recorder.pause" desc="PAUSE"  cmd="CCRPAUSE" />
+  <action string="codeset" name="main.cd-r-recorder.rec" desc="REC"  cmd="CCRREC" />
+  <action string="codeset" name="main.cd-r-recorder.clear" desc="CLEAR"  cmd="CCRCLEAR" />
+  <action string="codeset" name="main.cd-r-recorder.repeat" desc="REPEAT"  cmd="CCRREPEAT" />
+  <action string="codeset" name="main.cd-r-recorder.1" desc="1.0"  cmd="CCR1" />
+  <action string="codeset" name="main.cd-r-recorder.2" desc="2.0"  cmd="CCR2" />
+  <action string="codeset" name="main.cd-r-recorder.3" desc="3.0"  cmd="CCR3" />
+  <action string="codeset" name="main.cd-r-recorder.4" desc="4.0"  cmd="CCR4" />
+  <action string="codeset" name="main.cd-r-recorder.5" desc="5.0"  cmd="CCR5" />
+  <action string="codeset" name="main.cd-r-recorder.6" desc="6.0"  cmd="CCR6" />
+  <action string="codeset" name="main.cd-r-recorder.7" desc="7.0"  cmd="CCR7" />
+  <action string="codeset" name="main.cd-r-recorder.8" desc="8.0"  cmd="CCR8" />
+  <action string="codeset" name="main.cd-r-recorder.9" desc="9.0"  cmd="CCR9" />
+  <action string="codeset" name="main.cd-r-recorder.10-0" desc="10/0"  cmd="CCR10/0" />
+  <action string="codeset" name="main.cd-r-recorder" desc="--/---"  cmd="CCRcvar(value)" />
+  <action string="codeset" name="main.cd-r-recorder.scroll" desc="SCROLL"  cmd="CCRSCROLL" />
+  <action string="codeset" name="main.cd-r-recorder.op-cl" desc="OPEN/CLOSE"  cmd="CCROP/CL" />
+  <action string="codeset" name="main.cd-r-recorder.disp" desc="DISPLAY"  cmd="CCRDISP" />
+  <action string="codeset" name="main.cd-r-recorder.random" desc="RANDOM"  cmd="CCRRANDOM" />
+  <action string="codeset" name="main.cd-r-recorder.memory" desc="MEMORY"  cmd="CCRMEMORY" />
+  <action string="codeset" name="main.cd-r-recorder.ff" desc="FF"  cmd="CCRFF" />
+  <action string="codeset" name="main.cd-r-recorder.rew" desc="REW"  cmd="CCRREW" />
+  <action string="codeset" name="main.cd-r-recorder.stby" desc="STANDBY"  cmd="CCRSTBY" />
+  <!--
+      Category:Universal PORT Operation Command
+  -->
+  <action string="codeset" name="main.universal-port.setup" desc="SETUP"  cmd="CPTSETUP" />
+  <action string="codeset" name="main.universal-port.up" desc="UP/Tuning Up"  cmd="CPTUP" />
+  <action string="codeset" name="main.universal-port.down" desc="DOWN/Tuning Down"  cmd="CPTDOWN" />
+  <action string="codeset" name="main.universal-port.left" desc="LEFT/Multicast Down"  cmd="CPTLEFT" />
+  <action string="codeset" name="main.universal-port.right" desc="RIGHT/Multicast Up"  cmd="CPTRIGHT" />
+  <action string="codeset" name="main.universal-port.enter" desc="ENTER"  cmd="CPTENTER" />
+  <action string="codeset" name="main.universal-port.return" desc="RETURN"  cmd="CPTRETURN" />
+  <action string="codeset" name="main.universal-port.disp" desc="DISPLAY"  cmd="CPTDISP" />
+  <action string="codeset" name="main.universal-port.play" desc="PLAY/BAND"  cmd="CPTPLAY" />
+  <action string="codeset" name="main.universal-port.stop" desc="STOP"  cmd="CPTSTOP" />
+  <action string="codeset" name="main.universal-port.pause" desc="PAUSE"  cmd="CPTPAUSE" />
+  <action string="codeset" name="main.universal-port.skip-f" desc=">>I"  cmd="CPTSKIP.F" />
+  <action string="codeset" name="main.universal-port.skip-r" desc="I"  cmd="CPTSKIP.R" />
+  <action string="codeset" name="main.universal-port.ff" desc="FF >>"  cmd="CPTFF" />
+  <action string="codeset" name="main.universal-port.rew" desc="REW"  cmd="CPTREW" />
+  <action string="codeset" name="main.universal-port.repeat" desc="REPEAT"  cmd="CPTREPEAT" />
+  <action string="codeset" name="main.universal-port.shuffle" desc="SHUFFLE"  cmd="CPTSHUFFLE" />
+  <action string="codeset" name="main.universal-port.prsup" desc="PRESET UP"  cmd="CPTPRSUP" />
+  <action string="codeset" name="main.universal-port.prsdn" desc="PRESET DOWN"  cmd="CPTPRSDN" />
+  <action string="codeset" name="main.universal-port.0" desc="0.0"  cmd="CPT0" />
+  <action string="codeset" name="main.universal-port.1" desc="1.0"  cmd="CPT1" />
+  <action string="codeset" name="main.universal-port.2" desc="2.0"  cmd="CPT2" />
+  <action string="codeset" name="main.universal-port.3" desc="3.0"  cmd="CPT3" />
+  <action string="codeset" name="main.universal-port.4" desc="4.0"  cmd="CPT4" />
+  <action string="codeset" name="main.universal-port.5" desc="5.0"  cmd="CPT5" />
+  <action string="codeset" name="main.universal-port.6" desc="6.0"  cmd="CPT6" />
+  <action string="codeset" name="main.universal-port.7" desc="7.0"  cmd="CPT7" />
+  <action string="codeset" name="main.universal-port.8" desc="8.0"  cmd="CPT8" />
+  <action string="codeset" name="main.universal-port.9" desc="9.0"  cmd="CPT9" />
+  <action string="codeset" name="main.universal-port.10" desc="10/+10/Direct Tuning"  cmd="CPT10" />
+  <action string="codeset" name="main.universal-port.mode" desc="MODE"  cmd="CPTMODE" />
+  <!--
+      Category:iPod Artist Name Info (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.ipod-artist-name-info" desc="iPod Artist Name (variable-length, 64 letters max ASCII letter only)"  cmd="IAT$cvar(value)" />
+  <action string="codeset" name="main.ipod-artist-name-info.query" waitforresponse='1' desc="gets iPod Artist Name"  cmd="IATQSTN" />
+  <!--
+      Category:iPod Album Name Info (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.ipod-album-name-info" desc="iPod Album Name (variable-length, 64 letters max ASCII letter only)"  cmd="IAL$cvar(value)" />
+  <action string="codeset" name="main.ipod-album-name-info.query" waitforresponse='1' desc="gets iPod Album Name"  cmd="IALQSTN" />
+  <!--
+      Category:iPod Title Name (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.ipod-title-name" desc="iPod Title Name (variable-length, 64 letters max ASCII letter only)"  cmd="ITI$cvar(value)" />
+  <action string="codeset" name="main.ipod-title-name.query" waitforresponse='1' desc="gets iPod Title Name"  cmd="ITIQSTN" />
+  <!--
+      Category:iPod Time Info (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.ipod-time-info" desc="iPod Time Info (Elapsed time/Track Time Max 99:59) mm:ss/mm:ss"  cmd="ITM$cvar(value)" />
+  <action string="codeset" name="main.ipod-time-info.query" waitforresponse='1' desc="gets iPod Time Info"  cmd="ITMQSTN" />
+  <!--
+      Category:iPod Track Info (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.ipod-track-info" desc="iPod Track Info (Current Track/Toral Track Max 9999)"  cmd="ITR$cvar(value)" />
+  <action string="codeset" name="main.ipod-track-info.query" waitforresponse='1' desc="gets iPod Time Info"  cmd="ITRQSTN" />
+  <!--
+      Category:iPod Play Status (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.ipod-play-status.prs" desc="iPod Play Status (3 letters)"  cmd="ISTprs" />
+  <action string="codeset" name="main.ipod-play-status.query" waitforresponse='1' desc="gets the iPod Play Status"  cmd="ISTQSTN" />
+  <!--
+      Category:iPod List Info (Universal Port Dock Extend Mode Only)
+  -->
+  <action string="codeset" name="main.ipod-list-info" desc="iPod List Info"  cmd="ILStlp$cvar(value)" />
+  <!--
+      Category:iPod Mode Change (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.ipod-mode-change.std" desc="Standerd Mode"  cmd="IMDSTD" />
+  <action string="codeset" name="main.ipod-mode-change.ext" desc="Extend Mode(If available)"  cmd="IMDEXT" />
+  <action string="codeset" name="main.ipod-mode-change.vdc" desc="Video Contents in Extended Mode"  cmd="IMDVDC" />
+  <action string="codeset" name="main.ipod-mode-change.query" waitforresponse='1' desc="gets iPod Mode Status"  cmd="IMDQSTN" />
+  <!--
+      Category:Tuning Command (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.tuning" desc="sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz)"  cmd="UTN$cvar(value)" />
+  <action string="codeset" name="main.tuning.up" desc="sets Tuning Frequency Wrap-Around Up"  cmd="UTNUP" />
+  <action string="codeset" name="main.tuning.down" desc="sets Tuning Frequency Wrap-Around Down"  cmd="UTNDOWN" />
+  <action string="codeset" name="main.tuning.query" waitforresponse='1' desc="gets The Tuning Frequency"  cmd="UTNQSTN" />
+  <!--
+      Category:DAB Preset Command (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.dab-preset.no-1-40" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="UPRVarrange from 1 to 40" />
+  <action string="codeset" name="main.dab-preset.up" desc="sets Preset No. Wrap-Around Up"  cmd="UPRUP" />
+  <action string="codeset" name="main.dab-preset.down" desc="sets Preset No. Wrap-Around Down"  cmd="UPRDOWN" />
+  <action string="codeset" name="main.dab-preset.query" waitforresponse='1' desc="gets The Preset No."  cmd="UPRQSTN" />
+  <!--
+      Category:Preset Memory Command (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.preset-memory" desc="Memory Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="UPM$cvar(value)" />
+  <!--
+      Category:HD Radio Channel Program Command (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.hd-radio-channel-program.directly" desc="sets directly HD Radio Channel Program"  cmd="UHP$cvar(value)" />
+  <action string="codeset" name="main.hd-radio-channel-program.query" waitforresponse='1' desc="gets HD Radio Channel Program"  cmd="UHPQSTN" />
+  <!--
+      Category:HD Radio Blend Mode Command (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.hd-radio-blend-mode.auto" desc="sets HD Radio Blend Mode Auto"  cmd="UHB00" />
+  <action string="codeset" name="main.hd-radio-blend-mode.analog" desc="sets HD Radio Blend Mode Analog"  cmd="UHB01" />
+  <action string="codeset" name="main.hd-radio-blend-mode.query" desc="gets the HD Radio Blend Mode Status"  cmd="UHBQSTN" />
+  <!--
+      Category:HD Radio Artist Name Info (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.hd-radio-artist-name-info" desc="HD Radio Artist Name (variable-length, 64 letters max)"  cmd="UHA$cvar(value)" />
+  <action string="codeset" name="main.hd-radio-artist-name-info.query" waitforresponse='1' desc="gets HD Radio Artist Name"  cmd="UHAQSTN" />
+  <!--
+      Category:HD Radio Channel Name Info (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.hd-radio-channel-name-info" desc="HD Radio Channel Name (Station Name) (7lettters)"  cmd="UHC$cvar(value)" />
+  <action string="codeset" name="main.hd-radio-channel-name-info.query" waitforresponse='1' desc="gets HD Radio Channel Name"  cmd="UHCQSTN" />
+  <!--
+      Category:HD Radio Title Info (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.hd-radio-title-info" desc="HD Radio Title (variable-length, 64 letters max)"  cmd="UHT$cvar(value)" />
+  <action string="codeset" name="main.hd-radio-title-info.query" waitforresponse='1' desc="gets HD Radio Title"  cmd="UHTQSTN" />
+  <!--
+      Category:HD Radio Detail Info (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.hd-radio-detail-info" desc="HD Radio Title"  cmd="UHD$cvar(value)" />
+  <action string="codeset" name="main.hd-radio-detail-info.query" waitforresponse='1' desc="gets HD Radio Title"  cmd="UHDQSTN" />
+  <!--
+      Category:HD Radio Tuner Status (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.hd-radio-tuner-status.mmnnoo" desc="HD Radio Tuner Status (3 bytes)" cmd="UHSmmnnoo" />
+  <action string="codeset" name="main.hd-radio-tuner-status.query" waitforresponse='1' desc="gets the HD Radio Tuner Status"  cmd="UHSQSTN" />
+  <!--
+      Category:DAB Sation Name (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.dab-sation-name" desc="Sation Name (9 letters)"  cmd="UDS$cvar(value)" />
+  <action string="codeset" name="main.dab-sation-name.query" waitforresponse='1' desc="gets The Tuning Frequency"  cmd="UDSQSTN" />
+  <!--
+      Category:DAB Display Info (Universal Port Dock Only)
+  -->
+  <action string="codeset" name="main.dab-display-info.DAB_Program_Type" desc="DAB Program Type (8 letters)"  cmd="UDDPT:$cvar(value)" />
+  <action string="codeset" name="main.dab-display-info.DAB_Bitrate_Audio Type" desc="DAB Bitrate and Audio Type (m:Bitrate xxxkbps,n:Audio Type Stereo/Mono)"  cmd="UDDAT:$cvar(value)" />
+  <action string="codeset" name="main.dab-display-info.DAB_Multiplex_Name" desc="DAB Multiplex Name (9 letters)"  cmd="UDDMN:$cvar(value)" />
+  <action string="codeset" name="main.dab-display-info.DAB_Multiplex_Band_ID" desc="DAB Multiplex Band ID(mmm) and Freq(nnnn.nnMHz) Info"  cmd="UDDMF:$cvar(value)" />
+  <action string="codeset" name="main.dab-display-info.pt" desc="gets and display DAB Program Info"  cmd="UDDPT" />
+  <action string="codeset" name="main.dab-display-info.at" desc="gets and display DAB Bitrate and Audio Type"  cmd="UDDAT" />
+  <action string="codeset" name="main.dab-display-info.mn" desc="gets and display DAB Multicast Name"  cmd="UDDMN" />
+  <action string="codeset" name="main.dab-display-info.mf" desc="gets and display DAB Multicast Band and Freq Info"  cmd="UDDMF" />
+  <action string="codeset" name="main.dab-display-info.up" desc="gets and dispaly DAB Infomation Wrap-Around Up"  cmd="UDDUP" />
+  <!--
+      Section: zone2
+  -->
+  <!--
+      Category:Zone2 Power Command
+  -->
+  <action string="codeset" name="zone2.power.standby" desc="sets Zone2 Standby"  cmd="ZPW00" />
+  <action string="codeset" name="zone2.power.on" desc="sets Zone2 On"  cmd="ZPW01" />
+  <action string="codeset" name="zone2.power.query" waitforresponse='1' desc="gets the Zone2 Power Status"  cmd="ZPWQSTN" />
+  <!--
+      Category:Zone2 Muting Command
+  -->
+  <action string="codeset" name="zone2.muting.off" desc="sets Zone2 Muting Off"  cmd="ZMT00" />
+  <action string="codeset" name="zone2.muting.on" desc="sets Zone2 Muting On"  cmd="ZMT01" />
+  <action string="codeset" name="zone2.muting.toggle" desc="sets Zone2 Muting Wrap-Around"  cmd="ZMTTG" />
+  <action string="codeset" name="zone2.muting.query" waitforresponse='1' desc="gets the Zone2 Muting Status"  cmd="ZMTQSTN" />
+  <!--
+      Category:Zone2 Volume Command
+  -->
+  <action string="codeset" name="zone2.volume" desc="Volume Level 0 â 100 ( In hexadecimal representation)"  cmd="ZVL$cvar(value)" />
+  <action string="codeset" name="zone2.volume.level-up" desc="sets Volume Level Up"  cmd="ZVLUP" />
+  <action string="codeset" name="zone2.volume.level-down" desc="sets Volume Level Down"  cmd="ZVLDOWN" />
+  <action string="codeset" name="zone2.volume.query" waitforresponse='1' desc="gets the Volume Level"  cmd="ZVLQSTN" />
+  <!--
+      Category:Zone2 Tone Command
+  -->
+  <action string="codeset" name="zone2.tone.bass" desc="sets Zone2 Bass"  cmd="ZTNB$cvar(value)" />
+  <action string="codeset" name="zone2.tone.treble" desc="sets Zone2 Treble"  cmd="ZTNT$cvar(value)" />
+  <action string="codeset" name="zone2.tone.bass-up" desc="sets Bass Up (2 Step)"  cmd="ZTNBUP" />
+  <action string="codeset" name="zone2.tone.bass-down" desc="sets Bass Down (2 Step)"  cmd="ZTNBDOWN" />
+  <action string="codeset" name="zone2.tone.treble-up" desc="sets Treble Up (2 Step)"  cmd="ZTNTUP" />
+  <action string="codeset" name="zone2.tone.treble-down" desc="sets Treble Down (2 Step)"  cmd="ZTNTDOWN" />
+  <action string="codeset" name="zone2.tone.query" waitforresponse='1' desc="gets Zone2 Tone (BxxTxx)"  cmd="ZTNQSTN" />
+  <!--
+      Category:Zone2 Balance Command
+  -->
+  <action string="codeset" name="zone2.balance" desc="sets Zone2 Balance"  cmd="ZBL$cvar(value)" />
+  <action string="codeset" name="zone2.balance.up" desc="sets Balance Up (to R 2 Step)"  cmd="ZBLUP" />
+  <action string="codeset" name="zone2.balance.down" desc="sets Balance Down (to L 2 Step)"  cmd="ZBLDOWN" />
+  <action string="codeset" name="zone2.balance.query" waitforresponse='1' desc="gets Zone2 Balance"  cmd="ZBLQSTN" />
+  <!--
+      Category:ZONE2 Selector Command
+  -->
+  <action string="codeset" name="zone2.selector.video1" desc="sets VIDEO1, VCR/DVR"  cmd="SLZ00" />
+  <action string="codeset" name="zone2.selector.video2" desc="sets VIDEO2, CBL/SAT"  cmd="SLZ01" />
+  <action string="codeset" name="zone2.selector.video3" desc="sets VIDEO3, GAME/TV, GAME"  cmd="SLZ02" />
+  <action string="codeset" name="zone2.selector.video4" desc="sets VIDEO4, AUX1(AUX)"  cmd="SLZ03" />
+  <action string="codeset" name="zone2.selector.video5" desc="sets VIDEO5, AUX2"  cmd="SLZ04" />
+  <action string="codeset" name="zone2.selector.video6" desc="sets VIDEO6, PC"  cmd="SLZ05" />
+  <action string="codeset" name="zone2.selector.video7" desc="sets VIDEO7"  cmd="SLZ06" />
+  <action string="codeset" name="zone2.selector.hidden1" desc="sets Hidden1"  cmd="SLZ07" />
+  <action string="codeset" name="zone2.selector.hidden2" desc="sets Hidden2"  cmd="SLZ08" />
+  <action string="codeset" name="zone2.selector.hidden3" desc="sets Hidden3"  cmd="SLZ09" />
+  <action string="codeset" name="zone2.selector.dvd" desc="sets DVD, BD/DVD"  cmd="SLZ10" />
+  <action string="codeset" name="zone2.selector.tape" desc="sets TAPE(1)"  cmd="SLZ20" />
+  <action string="codeset" name="zone2.selector.tape2" desc="sets TAPE2"  cmd="SLZ21" />
+  <action string="codeset" name="zone2.selector.phono" desc="sets PHONO"  cmd="SLZ22" />
+  <action string="codeset" name="zone2.selector.cd" desc="sets CD, TV/CD"  cmd="SLZ23" />
+  <action string="codeset" name="zone2.selector.fm" desc="sets FM"  cmd="SLZ24" />
+  <action string="codeset" name="zone2.selector.am" desc="sets AM"  cmd="SLZ25" />
+  <action string="codeset" name="zone2.selector.tuner" desc="sets TUNER"  cmd="SLZ26" />
+  <action string="codeset" name="zone2.selector.music-server" desc="sets MUSIC SERVER, P4S, DLNA"  cmd="SLZ27" />
+  <action string="codeset" name="zone2.selector.internet-radio" desc="sets INTERNET RADIO, iRadio Favorite"  cmd="SLZ28" />
+  <action string="codeset" name="zone2.selector.usb" desc="sets USB/USB(Front)"  cmd="SLZ29" />
+  <action string="codeset" name="zone2.selector.usb" desc="sets USB(Rear)"  cmd="SLZ2A" />
+  <action string="codeset" name="zone2.selector.network" desc="sets NETWORK, NET"  cmd="SLZ2B" />
+  <action string="codeset" name="zone2.selector.usb" desc="sets USB(toggle)"  cmd="SLZ2C" />
+  <action string="codeset" name="zone2.selector.universal-port" desc="sets Universal PORT"  cmd="SLZ40" />
+  <action string="codeset" name="zone2.selector.multi-ch" desc="sets MULTI CH"  cmd="SLZ30" />
+  <action string="codeset" name="zone2.selector.xm" desc="sets XM"  cmd="SLZ31" />
+  <action string="codeset" name="zone2.selector.sirius" desc="sets SIRIUS"  cmd="SLZ32" />
+  <action string="codeset" name="zone2.selector.off" desc="sets OFF"  cmd="SLZ7F" />
+  <action string="codeset" name="zone2.selector.source" desc="sets SOURCE"  cmd="SLZ80" />
+  <action string="codeset" name="zone2.selector.up" desc="sets Selector Position Wrap-Around Up"  cmd="SLZUP" />
+  <action string="codeset" name="zone2.selector.down" desc="sets Selector Position Wrap-Around Down"  cmd="SLZDOWN" />
+  <action string="codeset" name="zone2.selector.query" waitforresponse='1' desc="gets The Selector Position"  cmd="SLZQSTN" />
+  <!--
+      Category:Tuning Command
+  -->
+  <action string="codeset" name="zone2.tuning" desc="sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz / XM nnnnn ch)"  cmd="TUN$cvar(value)" />
+  <action string="codeset" name="zone2.tuning.up" desc="sets Tuning Frequency Wrap-Around Up"  cmd="TUNUP" />
+  <action string="codeset" name="zone2.tuning.down" desc="sets Tuning Frequency Wrap-Around Down"  cmd="TUNDOWN" />
+  <action string="codeset" name="zone2.tuning.query" waitforresponse='1' desc="gets The Tuning Frequency"  cmd="TUNQSTN" />
+  <!--
+      Category:Tuning Command
+  -->
+  <action string="codeset" name="zone2.tuning.freq" desc="sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz / SR nnnnn ch)"  cmd="TUZ$cvar(value)" />
+  <action string="codeset" name="zone2.tuning.direct" desc="starts/restarts Direct Tuning Mode"  cmd="TUZDIRECT" />
+  <action string="codeset" name="zone2.tuning.0-in-direct-mode" desc="sets 0 in Direct Tuning Mode"  cmd="TUZ0" />
+  <action string="codeset" name="zone2.tuning.1-in-direct-mode" desc="sets 1 in Direct Tuning Mode"  cmd="TUZ1" />
+  <action string="codeset" name="zone2.tuning.2-in-direct-mode" desc="sets 2 in Direct Tuning Mode"  cmd="TUZ2" />
+  <action string="codeset" name="zone2.tuning.3-in-direct-mode" desc="sets 3 in Direct Tuning Mode"  cmd="TUZ3" />
+  <action string="codeset" name="zone2.tuning.4-in-direct-mode" desc="sets 4 in Direct Tuning Mode"  cmd="TUZ4" />
+  <action string="codeset" name="zone2.tuning.5-in-direct-mode" desc="sets 5 in Direct Tuning Mode"  cmd="TUZ5" />
+  <action string="codeset" name="zone2.tuning.6-in-direct-mode" desc="sets 6 in Direct Tuning Mode"  cmd="TUZ6" />
+  <action string="codeset" name="zone2.tuning.7-in-direct-mode" desc="sets 7 in Direct Tuning Mode"  cmd="TUZ7" />
+  <action string="codeset" name="zone2.tuning.8-in-direct-mode" desc="sets 8 in Direct Tuning Mode"  cmd="TUZ8" />
+  <action string="codeset" name="zone2.tuning.9-in-direct-mode" desc="sets 9 in Direct Tuning Mode"  cmd="TUZ9" />
+  <action string="codeset" name="zone2.tuning.up" desc="sets Tuning Frequency Wrap-Around Up"  cmd="TUZUP" />
+  <action string="codeset" name="zone2.tuning.down" desc="sets Tuning Frequency Wrap-Around Down"  cmd="TUZDOWN" />
+  <action string="codeset" name="zone2.tuning.query" waitforresponse='1' desc="gets The Tuning Frequency"  cmd="TUZQSTN" />
+  <!--
+      Category:Preset Command
+  -->
+  <action string="codeset" name="zone2.preset.no" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="PRS$cvar(value)" />
+  <action string="codeset" name="zone2.preset.up" desc="sets Preset No. Wrap-Around Up"  cmd="PRSUP" />
+  <action string="codeset" name="zone2.preset.down" desc="sets Preset No. Wrap-Around Down"  cmd="PRSDOWN" />
+  <action string="codeset" name="zone2.preset.query" waitforresponse='1' desc="gets The Preset No."  cmd="PRSQSTN" />
+  <!--
+      Category:Preset Command
+  -->
+  <action string="codeset" name="zone2.preset.no" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="PRZ$cvar(value)" />
+  <action string="codeset" name="zone2.preset.up" desc="sets Preset No. Wrap-Around Up"  cmd="PRZUP" />
+  <action string="codeset" name="zone2.preset.down" desc="sets Preset No. Wrap-Around Down"  cmd="PRZDOWN" />
+  <action string="codeset" name="zone2.preset.query" waitforresponse='1' desc="gets The Preset No."  cmd="PRZQSTN" />
+  <!--
+      Category:Net-Tune/Network Operation Command(Net-Tune Model Only)
+  -->
+  <action string="codeset" name="zone2.net-tune-network.playz" desc="PLAY KEY"  cmd="NTCPLAYz" />
+  <action string="codeset" name="zone2.net-tune-network.stopz" desc="STOP KEY"  cmd="NTCSTOPz" />
+  <action string="codeset" name="zone2.net-tune-network.pausez" desc="PAUSE KEY"  cmd="NTCPAUSEz" />
+  <action string="codeset" name="zone2.net-tune-network.trupz" desc="TRACK UP KEY"  cmd="NTCTRUPz" />
+  <action string="codeset" name="zone2.net-tune-network.trdnz" desc="TRACK DOWN KEY"  cmd="NTCTRDNz" />
+  <!--
+      Category:Net-Tune/Network Operation Command(Network Model Only)
+  -->
+  <action string="codeset" name="zone2.net-tune-network.play" desc="PLAY KEY"  cmd="NTZPLAY" />
+  <action string="codeset" name="zone2.net-tune-network.stop" desc="STOP KEY"  cmd="NTZSTOP" />
+  <action string="codeset" name="zone2.net-tune-network.pause" desc="PAUSE KEY"  cmd="NTZPAUSE" />
+  <action string="codeset" name="zone2.net-tune-network.trup" desc="TRACK UP KEY"  cmd="NTZTRUP" />
+  <action string="codeset" name="zone2.net-tune-network.trdn" desc="TRACK DOWN KEY"  cmd="NTZTRDN" />
+  <action string="codeset" name="zone2.net-tune-network.chup" desc="CH UP(for iRadio)"  cmd="NTZCHUP" />
+  <action string="codeset" name="zone2.net-tune-network.chdn" desc="CH DOWN(for iRadio)"  cmd="NTZCHDN" />
+  <action string="codeset" name="zone2.net-tune-network.ff" desc="FF KEY (CONTINUOUS*) (for iPod 1wire)"  cmd="NTZFF" />
+  <action string="codeset" name="zone2.net-tune-network.rew" desc="REW KEY (CONTINUOUS*) (for iPod 1wire)"  cmd="NTZREW" />
+  <action string="codeset" name="zone2.net-tune-network.repeat" desc="REPEAT KEY(for iPod 1wire)"  cmd="NTZREPEAT" />
+  <action string="codeset" name="zone2.net-tune-network.random" desc="RANDOM KEY(for iPod 1wire)"  cmd="NTZRANDOM" />
+  <action string="codeset" name="zone2.net-tune-network.display" desc="DISPLAY KEY(for iPod 1wire)"  cmd="NTZDISPLAY" />
+  <action string="codeset" name="zone2.net-tune-network.right" desc="RIGHT KEY(for iPod 1wire)"  cmd="NTZRIGHT" />
+  <action string="codeset" name="zone2.net-tune-network.left" desc="LEFT KEY(for iPod 1wire)"  cmd="NTZLEFT" />
+  <action string="codeset" name="zone2.net-tune-network.up" desc="UP KEY(for iPod 1wire)"  cmd="NTZUP" />
+  <action string="codeset" name="zone2.net-tune-network.down" desc="DOWN KEY(for iPod 1wire)"  cmd="NTZDOWN" />
+  <action string="codeset" name="zone2.net-tune-network.select" desc="SELECT KEY(for iPod 1wire)"  cmd="NTZSELECT" />
+  <action string="codeset" name="zone2.net-tune-network.return" desc="RETURN KEY(for iPod 1wire)"  cmd="NTZRETURN" />
+  <!--
+      Category:Internet Radio Preset Command (Network Model Only)
+  -->
+  <action string="codeset" name="zone2.internet-radio-preset.no" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="NPZ$cvar(value)" />
+  <!--
+      Category:Listening Mode Command
+  -->
+  <action string="codeset" name="zone2.listening-mode.stereo" desc="sets STEREO"  cmd="LMZ00" />
+  <action string="codeset" name="zone2.listening-mode.direct" desc="sets DIRECT"  cmd="LMZ01" />
+  <action string="codeset" name="zone2.listening-mode.mono" desc="sets MONO"  cmd="LMZ0F" />
+  <action string="codeset" name="zone2.listening-mode.multiplex" desc="sets MULTIPLEX"  cmd="LMZ12" />
+  <action string="codeset" name="zone2.listening-mode.dvs" desc="sets DVS(Pl2)"  cmd="LMZ87" />
+  <action string="codeset" name="zone2.listening-mode.dvs" desc="sets DVS(NEO6)"  cmd="LMZ88" />
+  <!--
+      Category:Late Night Command
+  -->
+  <action string="codeset" name="zone2.late-night.off" desc="sets Late Night Off"  cmd="LTZ00" />
+  <action string="codeset" name="zone2.late-night.low" desc="sets Late Night Low"  cmd="LTZ01" />
+  <action string="codeset" name="zone2.late-night.high" desc="sets Late Night High"  cmd="LTZ02" />
+  <action string="codeset" name="zone2.late-night.up" desc="sets Late Night State Wrap-Around Up"  cmd="LTZUP" />
+  <action string="codeset" name="zone2.late-night.query" waitforresponse='1' desc="gets The Late Night Level"  cmd="LTZQSTN" />
+  <!--
+      Category:Re-EQ/Academy Filter Command
+  -->
+  <action string="codeset" name="zone2.re-eq-academy-filter.both-off" desc="sets Both Off"  cmd="RAZ00" />
+  <action string="codeset" name="zone2.re-eq-academy-filter.on" desc="sets Re-EQ On"  cmd="RAZ01" />
+  <action string="codeset" name="zone2.re-eq-academy-filter.on" desc="sets Academy On"  cmd="RAZ02" />
+  <action string="codeset" name="zone2.re-eq-academy-filter.up" desc="sets Re-EQ/Academy State Wrap-Around Up"  cmd="RAZUP" />
+  <action string="codeset" name="zone2.re-eq-academy-filter.query" waitforresponse='1' desc="gets The Re-EQ/Academy State"  cmd="RAZQSTN" />
+  <!--
+      Section: zone3
+  -->
+  <!--
+      Category:Zone3 Power Command
+  -->
+  <action string="codeset" name="zone3.power.standby" desc="sets Zone3 Standby"  cmd="PW300" />
+  <action string="codeset" name="zone3.power.on" desc="sets Zone3 On"  cmd="PW301" />
+  <action string="codeset" name="zone3.power.query" waitforresponse='1' desc="gets the Zone3 Power Status"  cmd="PW3QSTN" />
+  <!--
+      Category:Zone3 Muting Command
+  -->
+  <action string="codeset" name="zone3.muting.off" desc="sets Zone3 Muting Off"  cmd="MT300" />
+  <action string="codeset" name="zone3.muting.on" desc="sets Zone3 Muting On"  cmd="MT301" />
+  <action string="codeset" name="zone3.muting.toggle" desc="sets Zone3 Muting Wrap-Around"  cmd="MT3TG" />
+  <action string="codeset" name="zone3.muting.query" waitforresponse='1' desc="gets the Zone3 Muting Status"  cmd="MT3QSTN" />
+  <!--
+      Category:Zone3 Volume Command
+  -->
+  <action string="codeset" name="zone3.volume" desc="Volume Level 0 â 100 ( In hexadecimal representation)"  cmd="VL3$cvar(value)" />
+  <action string="codeset" name="zone3.volume.level-up" desc="sets Volume Level Up"  cmd="VL3UP" />
+  <action string="codeset" name="zone3.volume.level-down" desc="sets Volume Level Down"  cmd="VL3DOWN" />
+  <action string="codeset" name="zone3.volume.query" waitforresponse='1' desc="gets the Volume Level"  cmd="VL3QSTN" />
+  <!--
+      Category:Zone3 Tone Command
+  -->
+  <action string="codeset" name="zone3.tone.b-xx" desc="Zone3 Bass"  cmd="TN3B$cvar(value)" />
+  <action string="codeset" name="zone3.tone.t-xx" desc="Zone3 Treble"  cmd="TN3T$cvar(value)" />
+  <action string="codeset" name="zone3.tone.bass-up" desc="sets Bass Up (2 Step)"  cmd="TN3BUP" />
+  <action string="codeset" name="zone3.tone.bass-down" desc="sets Bass Down (2 Step)"  cmd="TN3BDOWN" />
+  <action string="codeset" name="zone3.tone.treble-up" desc="sets Treble Up (2 Step)"  cmd="TN3TUP" />
+  <action string="codeset" name="zone3.tone.treble-down" desc="sets Treble Down (2 Step)"  cmd="TN3TDOWN" />
+  <action string="codeset" name="zone3.tone.query" waitforresponse='1' desc="gets Zone3 Tone (BxxTxx)"  cmd="TN3QSTN" />
+  <!--
+      Category:Zone3 Balance Command
+  -->
+  <action string="codeset" name="zone3.balance" desc="Zone3 Balance"  cmd="BL3$cvar(value)" />
+  <action string="codeset" name="zone3.balance.up" desc="sets Balance Up (to R 2 Step)"  cmd="BL3UP" />
+  <action string="codeset" name="zone3.balance.down" desc="sets Balance Down (to L 2 Step)"  cmd="BL3DOWN" />
+  <action string="codeset" name="zone3.balance.query" waitforresponse='1' desc="gets Zone3 Balance"  cmd="BL3QSTN" />
+  <!--
+      Category:ZONE3 Selector Command
+  -->
+  <action string="codeset" name="zone3.selector.video1" desc="sets VIDEO1, VCR/DVR"  cmd="SL300" />
+  <action string="codeset" name="zone3.selector.video2" desc="sets VIDEO2, CBL/SAT"  cmd="SL301" />
+  <action string="codeset" name="zone3.selector.video3" desc="sets VIDEO3, GAME/TV, GAME"  cmd="SL302" />
+  <action string="codeset" name="zone3.selector.video4" desc="sets VIDEO4, AUX1(AUX)"  cmd="SL303" />
+  <action string="codeset" name="zone3.selector.video5" desc="sets VIDEO5, AUX2"  cmd="SL304" />
+  <action string="codeset" name="zone3.selector.video6" desc="sets VIDEO6, PC"  cmd="SL305" />
+  <action string="codeset" name="zone3.selector.video7" desc="sets VIDEO7"  cmd="SL306" />
+  <action string="codeset" name="zone3.selector.hidden1" desc="sets Hidden1"  cmd="SL307" />
+  <action string="codeset" name="zone3.selector.hidden2" desc="sets Hidden2"  cmd="SL308" />
+  <action string="codeset" name="zone3.selector.hidden3" desc="sets Hidden3"  cmd="SL309" />
+  <action string="codeset" name="zone3.selector.dvd" desc="sets DVD"  cmd="SL310" />
+  <action string="codeset" name="zone3.selector.tape" desc="sets TAPE(1)"  cmd="SL320" />
+  <action string="codeset" name="zone3.selector.tape2" desc="sets TAPE2"  cmd="SL321" />
+  <action string="codeset" name="zone3.selector.phono" desc="sets PHONO"  cmd="SL322" />
+  <action string="codeset" name="zone3.selector.cd" desc="sets CD, TV/CD"  cmd="SL323" />
+  <action string="codeset" name="zone3.selector.fm" desc="sets FM"  cmd="SL324" />
+  <action string="codeset" name="zone3.selector.am" desc="sets AM"  cmd="SL325" />
+  <action string="codeset" name="zone3.selector.tuner" desc="sets TUNER"  cmd="SL326" />
+  <action string="codeset" name="zone3.selector.music-server" desc="sets MUSIC SERVER, P4S, DLNA"  cmd="SL327" />
+  <action string="codeset" name="zone3.selector.internet-radio" desc="sets INTERNET RADIO, iRadio Favorite"  cmd="SL328" />
+  <action string="codeset" name="zone3.selector.usb" desc="sets USB/USB(Front)"  cmd="SL329" />
+  <action string="codeset" name="zone3.selector.usb" desc="sets USB(Rear)"  cmd="SL32A" />
+  <action string="codeset" name="zone3.selector.network" desc="sets NETWORK, NET"  cmd="SL32B" />
+  <action string="codeset" name="zone3.selector.usb" desc="sets USB(toggle)"  cmd="SL32C" />
+  <action string="codeset" name="zone3.selector.universal-port" desc="sets Universal PORT"  cmd="SL340" />
+  <action string="codeset" name="zone3.selector.multi-ch" desc="sets MULTI CH"  cmd="SL330" />
+  <action string="codeset" name="zone3.selector.xm" desc="sets XM"  cmd="SL331" />
+  <action string="codeset" name="zone3.selector.sirius" desc="sets SIRIUS"  cmd="SL332" />
+  <action string="codeset" name="zone3.selector.source" desc="sets SOURCE"  cmd="SL380" />
+  <action string="codeset" name="zone3.selector.up" desc="sets Selector Position Wrap-Around Up"  cmd="SL3UP" />
+  <action string="codeset" name="zone3.selector.down" desc="sets Selector Position Wrap-Around Down"  cmd="SL3DOWN" />
+  <action string="codeset" name="zone3.selector.query" waitforresponse='1' desc="gets The Selector Position"  cmd="SL3QSTN" />
+  <!--
+      Category:Tuning Command
+  -->
+  <action string="codeset" name="zone3.tuning" desc="sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz)"  cmd="TUN$cvar(value)" />
+  <action string="codeset" name="zone3.tuning.up" desc="sets Tuning Frequency Wrap-Around Up"  cmd="TUNUP" />
+  <action string="codeset" name="zone3.tuning.down" desc="sets Tuning Frequency Wrap-Around Down"  cmd="TUNDOWN" />
+  <action string="codeset" name="zone3.tuning.query" waitforresponse='1' desc="gets The Tuning Frequency"  cmd="TUNQSTN" />
+  <!--
+      Category:Tuning Command
+  -->
+  <action string="codeset" name="zone3.tuning.freq" desc="sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz / SR nnnnn ch)"  cmd="TU3$cvar(value)" />
+  <action string="codeset" name="zone3.tuning.direct" desc="starts/restarts Direct Tuning Mode"  cmd="TU3DIRECT" />
+  <action string="codeset" name="zone3.tuning.0-in-direct-mode" desc="sets 0 in Direct Tuning Mode"  cmd="TU30" />
+  <action string="codeset" name="zone3.tuning.1-in-direct-mode" desc="sets 1 in Direct Tuning Mode"  cmd="TU31" />
+  <action string="codeset" name="zone3.tuning.2-in-direct-mode" desc="sets 2 in Direct Tuning Mode"  cmd="TU32" />
+  <action string="codeset" name="zone3.tuning.3-in-direct-mode" desc="sets 3 in Direct Tuning Mode"  cmd="TU33" />
+  <action string="codeset" name="zone3.tuning.4-in-direct-mode" desc="sets 4 in Direct Tuning Mode"  cmd="TU34" />
+  <action string="codeset" name="zone3.tuning.5-in-direct-mode" desc="sets 5 in Direct Tuning Mode"  cmd="TU35" />
+  <action string="codeset" name="zone3.tuning.6-in-direct-mode" desc="sets 6 in Direct Tuning Mode"  cmd="TU36" />
+  <action string="codeset" name="zone3.tuning.7-in-direct-mode" desc="sets 7 in Direct Tuning Mode"  cmd="TU37" />
+  <action string="codeset" name="zone3.tuning.8-in-direct-mode" desc="sets 8 in Direct Tuning Mode"  cmd="TU38" />
+  <action string="codeset" name="zone3.tuning.9-in-direct-mode" desc="sets 9 in Direct Tuning Mode"  cmd="TU39" />
+  <action string="codeset" name="zone3.tuning.up" desc="sets Tuning Frequency Wrap-Around Up"  cmd="TU3UP" />
+  <action string="codeset" name="zone3.tuning.down" desc="sets Tuning Frequency Wrap-Around Down"  cmd="TU3DOWN" />
+  <action string="codeset" name="zone3.tuning.query" waitforresponse='1' desc="gets The Tuning Frequency"  cmd="TU3QSTN" />
+  <!--
+      Category:Preset Command
+  -->
+  <action string="codeset" name="zone3.preset.no-1-40" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="PRSVarrange from 1 to 40" />
+  <action string="codeset" name="zone3.preset.no-1-30" desc="sets Preset No. 1 - 30 ( In hexadecimal representation)"  cmd="PRSVarrange from 1 to 30" />
+  <action string="codeset" name="zone3.preset.up" desc="sets Preset No. Wrap-Around Up"  cmd="PRSUP" />
+  <action string="codeset" name="zone3.preset.down" desc="sets Preset No. Wrap-Around Down"  cmd="PRSDOWN" />
+  <action string="codeset" name="zone3.preset.query" waitforresponse='1' desc="gets The Preset No."  cmd="PRSQSTN" />
+  <!--
+      Category:Preset Command
+  -->
+  <action string="codeset" name="zone3.preset.no-1-40" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="PR3Varrange from 1 to 40" />
+  <action string="codeset" name="zone3.preset.no-1-30" desc="sets Preset No. 1 - 30 ( In hexadecimal representation)"  cmd="PR3Varrange from 1 to 30" />
+  <action string="codeset" name="zone3.preset.up" desc="sets Preset No. Wrap-Around Up"  cmd="PR3UP" />
+  <action string="codeset" name="zone3.preset.down" desc="sets Preset No. Wrap-Around Down"  cmd="PR3DOWN" />
+  <action string="codeset" name="zone3.preset.query" waitforresponse='1' desc="gets The Preset No."  cmd="PR3QSTN" />
+  <!--
+      Category:Net-Tune/Network Operation Command(Net-Tune Model Only)
+  -->
+  <action string="codeset" name="zone3.net-tune-network.playz" desc="PLAY KEY"  cmd="NTCPLAYz" />
+  <action string="codeset" name="zone3.net-tune-network.stopz" desc="STOP KEY"  cmd="NTCSTOPz" />
+  <action string="codeset" name="zone3.net-tune-network.pausez" desc="PAUSE KEY"  cmd="NTCPAUSEz" />
+  <action string="codeset" name="zone3.net-tune-network.trupz" desc="TRACK UP KEY"  cmd="NTCTRUPz" />
+  <action string="codeset" name="zone3.net-tune-network.trdnz" desc="TRACK DOWN KEY"  cmd="NTCTRDNz" />
+  <!--
+      Category:Net-Tune/Network Operation Command(Network Model Only)
+  -->
+  <action string="codeset" name="zone3.net-tune-network.play" desc="PLAY KEY"  cmd="NT3PLAY" />
+  <action string="codeset" name="zone3.net-tune-network.stop" desc="STOP KEY"  cmd="NT3STOP" />
+  <action string="codeset" name="zone3.net-tune-network.pause" desc="PAUSE KEY"  cmd="NT3PAUSE" />
+  <action string="codeset" name="zone3.net-tune-network.trup" desc="TRACK UP KEY"  cmd="NT3TRUP" />
+  <action string="codeset" name="zone3.net-tune-network.trdn" desc="TRACK DOWN KEY"  cmd="NT3TRDN" />
+  <action string="codeset" name="zone3.net-tune-network.chup" desc="CH UP(for iRadio)"  cmd="NT3CHUP" />
+  <action string="codeset" name="zone3.net-tune-network.chdn" desc="CH DOWNP(for iRadio)"  cmd="NT3CHDN" />
+  <action string="codeset" name="zone3.net-tune-network.ff" desc="FF KEY (CONTINUOUS*) (for iPod 1wire)"  cmd="NT3FF" />
+  <action string="codeset" name="zone3.net-tune-network.rew" desc="REW KEY (CONTINUOUS*) (for iPod 1wire)"  cmd="NT3REW" />
+  <action string="codeset" name="zone3.net-tune-network.repeat" desc="REPEAT KEY(for iPod 1wire)"  cmd="NT3REPEAT" />
+  <action string="codeset" name="zone3.net-tune-network.random" desc="RANDOM KEY(for iPod 1wire)"  cmd="NT3RANDOM" />
+  <action string="codeset" name="zone3.net-tune-network.display" desc="DISPLAY KEY(for iPod 1wire)"  cmd="NT3DISPLAY" />
+  <action string="codeset" name="zone3.net-tune-network.right" desc="RIGHT KEY(for iPod 1wire)"  cmd="NT3RIGHT" />
+  <action string="codeset" name="zone3.net-tune-network.left" desc="LEFT KEY(for iPod 1wire)"  cmd="NT3LEFT" />
+  <action string="codeset" name="zone3.net-tune-network.up" desc="UP KEY(for iPod 1wire)"  cmd="NT3UP" />
+  <action string="codeset" name="zone3.net-tune-network.down" desc="DOWN KEY(for iPod 1wire)"  cmd="NT3DOWN" />
+  <action string="codeset" name="zone3.net-tune-network.select" desc="SELECT KEY(for iPod 1wire)"  cmd="NT3SELECT" />
+  <action string="codeset" name="zone3.net-tune-network.return" desc="RETURN KEY(for iPod 1wire)"  cmd="NT3RETURN" />
+  <!--
+      Category:Internet Radio Preset Command (Network Model Only)
+  -->
+  <action string="codeset" name="zone3.internet-radio-preset.no" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="NP3$cvar(value)" />
+  <!--
+      Section: zone4
+  -->
+  <!--
+      Category:Zone4 Power Command
+  -->
+  <action string="codeset" name="zone4.power.standby" desc="sets Zone4 Standby"  cmd="PW400" />
+  <action string="codeset" name="zone4.power.on" desc="sets Zone4 On"  cmd="PW401" />
+  <action string="codeset" name="zone4.power.query" waitforresponse='1' desc="gets the Zone4 Power Status"  cmd="PW4QSTN" />
+  <!--
+      Category:Zone4 Muting Command
+  -->
+  <action string="codeset" name="zone4.muting.off" desc="sets Zone4 Muting Off"  cmd="MT400" />
+  <action string="codeset" name="zone4.muting.on" desc="sets Zone4 Muting On"  cmd="MT401" />
+  <action string="codeset" name="zone4.muting.toggle" desc="sets Zone4 Muting Wrap-Around"  cmd="MT4TG" />
+  <action string="codeset" name="zone4.muting.query" waitforresponse='1' desc="gets the Zone4 Muting Status"  cmd="MT4QSTN" />
+  <!--
+      Category:Zone4 Volume Command
+  -->
+  <action string="codeset" name="zone4.volume" desc="Volume Level 0 â 100 ( In hexadecimal representation)"  cmd="VL4$cvar(value)" />
+  <action string="codeset" name="zone4.volume.level-up" desc="sets Volume Level Up"  cmd="VL4UP" />
+  <action string="codeset" name="zone4.volume.level-down" desc="sets Volume Level Down"  cmd="VL4DOWN" />
+  <action string="codeset" name="zone4.volume.query" waitforresponse='1' desc="gets the Volume Level"  cmd="VL4QSTN" />
+  <!--
+      Category:ZONE4 Selector Command
+  -->
+  <action string="codeset" name="zone4.selector.video1" desc="sets VIDEO1, VCR/DVR"  cmd="SL400" />
+  <action string="codeset" name="zone4.selector.video2" desc="sets VIDEO2, CBL/SAT"  cmd="SL401" />
+  <action string="codeset" name="zone4.selector.video3" desc="sets VIDEO3, GAME/TV, GAME"  cmd="SL402" />
+  <action string="codeset" name="zone4.selector.video4" desc="sets VIDEO4, AUX1(AUX)"  cmd="SL403" />
+  <action string="codeset" name="zone4.selector.video5" desc="sets VIDEO5, AUX2"  cmd="SL404" />
+  <action string="codeset" name="zone4.selector.video6" desc="sets VIDEO6"  cmd="SL405" />
+  <action string="codeset" name="zone4.selector.video7" desc="sets VIDEO7"  cmd="SL406" />
+  <action string="codeset" name="zone4.selector.hidden1" desc="sets Hidden1"  cmd="SL407" />
+  <action string="codeset" name="zone4.selector.hidden2" desc="sets Hidden2"  cmd="SL408" />
+  <action string="codeset" name="zone4.selector.hidden3" desc="sets Hidden3"  cmd="SL409" />
+  <action string="codeset" name="zone4.selector.dvd" desc="sets DVD"  cmd="SL410" />
+  <action string="codeset" name="zone4.selector.tape-1" desc="sets TAPE(1), TV/TAPE"  cmd="SL420" />
+  <action string="codeset" name="zone4.selector.tape2" desc="sets TAPE2"  cmd="SL421" />
+  <action string="codeset" name="zone4.selector.phono" desc="sets PHONO"  cmd="SL422" />
+  <action string="codeset" name="zone4.selector.cd" desc="sets CD, TV/CD"  cmd="SL423" />
+  <action string="codeset" name="zone4.selector.fm" desc="sets FM"  cmd="SL424" />
+  <action string="codeset" name="zone4.selector.am" desc="sets AM"  cmd="SL425" />
+  <action string="codeset" name="zone4.selector.tuner" desc="sets TUNER"  cmd="SL426" />
+  <action string="codeset" name="zone4.selector.music-server" desc="sets MUSIC SERVER, P4S, DLNA"  cmd="SL427" />
+  <action string="codeset" name="zone4.selector.internet-radio" desc="sets INTERNET RADIO, iRadio Favorite"  cmd="SL428" />
+  <action string="codeset" name="zone4.selector.usb" desc="sets USB/USB(Front)"  cmd="SL429" />
+  <action string="codeset" name="zone4.selector.usb" desc="sets USB(Rear)"  cmd="SL42A" />
+  <action string="codeset" name="zone4.selector.network" desc="sets NETWORK, NET"  cmd="SL42B" />
+  <action string="codeset" name="zone4.selector.usb" desc="sets USB(toggle)"  cmd="SL42C" />
+  <action string="codeset" name="zone4.selector.universal-port" desc="sets Universal PORT"  cmd="SL440" />
+  <action string="codeset" name="zone4.selector.multi-ch" desc="sets MULTI CH"  cmd="SL430" />
+  <action string="codeset" name="zone4.selector.xm" desc="sets XM"  cmd="SL431" />
+  <action string="codeset" name="zone4.selector.sirius" desc="sets SIRIUS"  cmd="SL432" />
+  <action string="codeset" name="zone4.selector.source" desc="sets SOURCE"  cmd="SL480" />
+  <action string="codeset" name="zone4.selector.up" desc="sets Selector Position Wrap-Around Up"  cmd="SL4UP" />
+  <action string="codeset" name="zone4.selector.down" desc="sets Selector Position Wrap-Around Down"  cmd="SL4DOWN" />
+  <action string="codeset" name="zone4.selector.query" waitforresponse='1' desc="gets The Selector Position"  cmd="SL4QSTN" />
+  <!--
+      Category:Tuning Command
+  -->
+  <action string="codeset" name="zone4.tuning" desc="sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz)"  cmd="TUN$cvar(value)" />
+  <action string="codeset" name="zone4.tuning.up" desc="sets Tuning Frequency Wrap-Around Up"  cmd="TUNUP" />
+  <action string="codeset" name="zone4.tuning.down" desc="sets Tuning Frequency Wrap-Around Down"  cmd="TUNDOWN" />
+  <action string="codeset" name="zone4.tuning.query" waitforresponse='1' desc="gets The Tuning Frequency"  cmd="TUNQSTN" />
+  <!--
+      Category:Tuning Command
+  -->
+  <action string="codeset" name="zone4.tuning.freq" desc="sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz)"  cmd="TU4$cvar(value)" />
+  <action string="codeset" name="zone4.tuning.direct" desc="starts/restarts Direct Tuning Mode"  cmd="TU4DIRECT" />
+  <action string="codeset" name="zone4.tuning.0-in-direct-mode" desc="sets 0 in Direct Tuning Mode"  cmd="TU40" />
+  <action string="codeset" name="zone4.tuning.1-in-direct-mode" desc="sets 1 in Direct Tuning Mode"  cmd="TU41" />
+  <action string="codeset" name="zone4.tuning.2-in-direct-mode" desc="sets 2 in Direct Tuning Mode"  cmd="TU42" />
+  <action string="codeset" name="zone4.tuning.3-in-direct-mode" desc="sets 3 in Direct Tuning Mode"  cmd="TU43" />
+  <action string="codeset" name="zone4.tuning.4-in-direct-mode" desc="sets 4 in Direct Tuning Mode"  cmd="TU44" />
+  <action string="codeset" name="zone4.tuning.5-in-direct-mode" desc="sets 5 in Direct Tuning Mode"  cmd="TU45" />
+  <action string="codeset" name="zone4.tuning.6-in-direct-mode" desc="sets 6 in Direct Tuning Mode"  cmd="TU46" />
+  <action string="codeset" name="zone4.tuning.7-in-direct-mode" desc="sets 7 in Direct Tuning Mode"  cmd="TU47" />
+  <action string="codeset" name="zone4.tuning.8-in-direct-mode" desc="sets 8 in Direct Tuning Mode"  cmd="TU48" />
+  <action string="codeset" name="zone4.tuning.9-in-direct-mode" desc="sets 9 in Direct Tuning Mode"  cmd="TU49" />
+  <action string="codeset" name="zone4.tuning.up" desc="sets Tuning Frequency Wrap-Around Up"  cmd="TU4UP" />
+  <action string="codeset" name="zone4.tuning.down" desc="sets Tuning Frequency Wrap-Around Down"  cmd="TU4DOWN" />
+  <action string="codeset" name="zone4.tuning.query" waitforresponse='1' desc="gets The Tuning Frequency"  cmd="TU4QSTN" />
+  <!--
+      Category:Preset Command
+  -->
+  <action string="codeset" name="zone4.preset.no" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="PRS$cvar(value)" />
+  <action string="codeset" name="zone4.preset.up" desc="sets Preset No. Wrap-Around Up"  cmd="PRSUP" />
+  <action string="codeset" name="zone4.preset.down" desc="sets Preset No. Wrap-Around Down"  cmd="PRSDOWN" />
+  <action string="codeset" name="zone4.preset.query" waitforresponse='1' desc="gets The Preset No."  cmd="PRSQSTN" />
+  <!--
+      Category:Preset Command
+  -->
+  <action string="codeset" name="zone4.preset.no" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="PR4$cvar(value)" />
+  <action string="codeset" name="zone4.preset.up" desc="sets Preset No. Wrap-Around Up"  cmd="PR4UP" />
+  <action string="codeset" name="zone4.preset.down" desc="sets Preset No. Wrap-Around Down"  cmd="PR4DOWN" />
+  <action string="codeset" name="zone4.preset.query" waitforresponse='1' desc="gets The Preset No."  cmd="PR4QSTN" />
+  <!--
+      Category:Net-Tune/Network Operation Command(Net-Tune Model Only)
+  -->
+  <action string="codeset" name="zone4.net-tune-network.playz" desc="PLAY KEY"  cmd="NTCPLAYz" />
+  <action string="codeset" name="zone4.net-tune-network.stopz" desc="STOP KEY"  cmd="NTCSTOPz" />
+  <action string="codeset" name="zone4.net-tune-network.pausez" desc="PAUSE KEY"  cmd="NTCPAUSEz" />
+  <action string="codeset" name="zone4.net-tune-network.trupz" desc="TRACK UP KEY"  cmd="NTCTRUPz" />
+  <action string="codeset" name="zone4.net-tune-network.trdnz" desc="TRACK DOWN KEY"  cmd="NTCTRDNz" />
+  <!--
+      Category:Net-Tune/Network Operation Command(Network Model Only)
+  -->
+  <action string="codeset" name="zone4.net-tune-network.play" desc="PLAY KEY"  cmd="NT4PLAY" />
+  <action string="codeset" name="zone4.net-tune-network.stop" desc="STOP KEY"  cmd="NT4STOP" />
+  <action string="codeset" name="zone4.net-tune-network.pause" desc="PAUSE KEY"  cmd="NT4PAUSE" />
+  <action string="codeset" name="zone4.net-tune-network.trup" desc="TRACK UP KEY"  cmd="NT4TRUP" />
+  <action string="codeset" name="zone4.net-tune-network.trdn" desc="TRACK DOWN KEY"  cmd="NT4TRDN" />
+  <action string="codeset" name="zone4.net-tune-network.ff" desc="FF KEY (CONTINUOUS*) (for iPod 1wire)"  cmd="NT4FF" />
+  <action string="codeset" name="zone4.net-tune-network.rew" desc="REW KEY (CONTINUOUS*) (for iPod 1wire)"  cmd="NT4REW" />
+  <action string="codeset" name="zone4.net-tune-network.repeat" desc="REPEAT KEY(for iPod 1wire)"  cmd="NT4REPEAT" />
+  <action string="codeset" name="zone4.net-tune-network.random" desc="RANDOM KEY(for iPod 1wire)"  cmd="NT4RANDOM" />
+  <action string="codeset" name="zone4.net-tune-network.display" desc="DISPLAY KEY(for iPod 1wire)"  cmd="NT4DISPLAY" />
+  <action string="codeset" name="zone4.net-tune-network.right" desc="RIGHT KEY(for iPod 1wire)"  cmd="NT4RIGHT" />
+  <action string="codeset" name="zone4.net-tune-network.left" desc="LEFT KEY(for iPod 1wire)"  cmd="NT4LEFT" />
+  <action string="codeset" name="zone4.net-tune-network.up" desc="UP KEY(for iPod 1wire)"  cmd="NT4UP" />
+  <action string="codeset" name="zone4.net-tune-network.down" desc="DOWN KEY(for iPod 1wire)"  cmd="NT4DOWN" />
+  <action string="codeset" name="zone4.net-tune-network.select" desc="SELECT KEY(for iPod 1wire)"  cmd="NT4SELECT" />
+  <action string="codeset" name="zone4.net-tune-network.return" desc="RETURN KEY(for iPod 1wire)"  cmd="NT4RETURN" />
+  <!--
+      Category:Internet Radio Preset Command (Network Model Only)
+  -->
+  <action string="codeset" name="zone4.internet-radio-preset.no" desc="sets Preset No. 1 - 40 ( In hexadecimal representation)"  cmd="NP4$cvar(value)" />
+  <!--
+      Section: dock
+  -->
+  <!--
+      Category:Command for Docking Station via RI
+  -->
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.on" desc="sets Dock On"  cmd="CDSPWRON" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.standby" desc="sets Dock Standby"  cmd="CDSPWROFF" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.ply-res" desc="PLAY/RESUME Key"  cmd="CDSPLY/RES" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.stop" desc="STOP Key"  cmd="CDSSTOP" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.skip-f" desc="TRACK UP Key"  cmd="CDSSKIP.F" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.skip-r" desc="TRACK DOWN Key"  cmd="CDSSKIP.R" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.pause" desc="PAUSE Key"  cmd="CDSPAUSE" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.ply-pau" desc="PLAY/PAUSE Key"  cmd="CDSPLY/PAU" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.ff" desc="FF Key"  cmd="CDSFF" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.rew" desc="FR Key"  cmd="CDSREW" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.album" desc="ALBUM UP Key"  cmd="CDSALBUM+" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.album" desc="ALBUM DONW Key"  cmd="CDSALBUM-" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.plist" desc="PLAYLIST UP Key"  cmd="CDSPLIST+" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.plist" desc="PLAYLIST DOWN Key"  cmd="CDSPLIST-" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.chapt" desc="CHAPTER UP Key"  cmd="CDSCHAPT+" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.chapt" desc="CHAPTER DOWN Key"  cmd="CDSCHAPT-" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.random" desc="SHUFFLE Key"  cmd="CDSRANDOM" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.repeat" desc="REPEAT Key"  cmd="CDSREPEAT" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.mute" desc="MUTE Key"  cmd="CDSMUTE" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.blight" desc="BACKLIGHT Key"  cmd="CDSBLIGHT" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.menu" desc="MENU Key"  cmd="CDSMENU" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.enter" desc="SELECT Key"  cmd="CDSENTER" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.up" desc="CUSOR UP Key"  cmd="CDSUP" />
+  <action string="codeset" name="dock.command-for-docking-station-via-ri.down" desc="CURSOR DOWN Key"  cmd="CDSDOWN" />
+</includes>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <setting title="$lvar(kodi_10520)" type="title" />
+    <setting title="$lvar(kodi_10508)" desc="$lvar(kodi_10509)" var="$dvar(definition_alias_mediaplayer_template)moviefav1" type="string" default="Action" />
+    <setting title="$lvar(kodi_10510)" desc="$lvar(kodi_10511)" var="$dvar(definition_alias_mediaplayer_template)moviefav2" type="string" default="Fantasy" />
+    <setting title="$lvar(kodi_10512)" desc="$lvar(kodi_10513)" var="$dvar(definition_alias_mediaplayer_template)moviefav3" type="string" default="Horror" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN"          default="websocket" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN"         default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON"       default="wake_on_lan" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON"      default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME"        default="websocket" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME"       default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCOMMAND"          default="Send Power On" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"           default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND"     default="Send Ping" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_DISCOVERACTION"          default="ping" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"           default="device kodi" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"              default="Kodi Media Center" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWSEARCHANDINPUT"      default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWCHANNELUPDOWN"       default="1" />
+
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD"           default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE"           default="EXTENDED 2" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE"          default="CMDBUTTONS" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"           default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_MAXVOLUME"               default="100" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE"       default="Slider" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_VOLUMENOTIFICATION"      default="1" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[1]"         default="icon:menu" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[1]"   default="$lvar(1024)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[1]"          default="Send Menu" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[2]"         default="icon:arrow_back" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[2]"   default="$lvar(1054)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[2]"          default="Send Exit" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[3]"         default="icon:osd" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[3]"   default="$lvar(1087)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[3]"          default="Send OSD" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[4]"         default="icon:info" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[4]"   default="$lvar(1022)" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[4]"          default="Send Info" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1]"        default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2]"        default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[3]"        default="0" />
+    <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[4]"        default="0" />
+
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[1]"    default='$lvar(1050)' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[1]"  default='Send Subtitles Toggle $dvar(definition_alias_mediaplayer_template)' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[2]"    default='$lvar(1053)'              />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[2]"  default='Send Next Subtitle'       />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[3]"    default='$lvar(kodi_10527)'        />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[3]"  default='Send Mark Watched'        />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[4]"    default='$lvar(1071)'              />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[4]"  default='Send Audiochannel Next'   />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[5]"    default='$lvar(1064)'              />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[5]"  default='Send Previous Chapter'    />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[6]"    default='$lvar(1065)'              />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[6]"  default='Send Next Chapter'        />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[7]"    default='$lvar(1025)'              />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[7]"  default='Send Menu2'               />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[8]"    default='$lvar(1062)'              />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[8]"  default='Send Escape'              />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[9]"    default='$lvar(kodi_10520):::$var($dvar(definition_alias_mediaplayer_template)moviefav1):::$var($dvar(definition_alias_mediaplayer_template)moviefav2):::$var($dvar(definition_alias_mediaplayer_template)moviefav3)' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[9]"  default='Send Show Movie Genre Favorites #1 $dvar(definition_alias_mediaplayer_template):::Send Show Movie Genre Favorites #2 $dvar(definition_alias_mediaplayer_template):::Send Show Movie Genre Favorites #3 $dvar(definition_alias_mediaplayer_template)' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[10]"   default='$lvar(kodi_10006):::$lvar(kodi_10521):::$lvar(kodi_10523):::$lvar(kodi_10524):::$lvar(kodi_10525)' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[10]" default='ShowMovieTitles $dvar(definition_alias_mediaplayer_template):::ShowTvshowTitles $dvar(definition_alias_mediaplayer_template):::ShowMusicVideoTitles $dvar(definition_alias_mediaplayer_template):::ShowMusicArtists $dvar(definition_alias_mediaplayer_template)' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[11]"   default='' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[11]" default='' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[12]"   default='' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[12]" default='' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[13]"   default='' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[13]" default='' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdname[14]"   default='' />
+    <default var="$dvar(definition_alias_cmdfavorites_template)_cmdaction[14]" default='' />
+</settings>
+

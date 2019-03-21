@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>DVBViewer Control by DVBViewer Webserver/URL</name>
+      <description language='English'>DVBViewer control using the DVBViewer Webserver</description>
+      <description language='German'>DVBViewer Konrolle über den DVBViewer Webserver</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_DVBVIEWER.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_DVBVIEWER.zip</sourcefile>
+          <targetpath>codesets/url</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>URL-Web</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <!-- Translates Orca Actions to Interface Commands action = Orca Action    -->
+
+  <action string="codeset" name='logon'            type="encode" waitforresponse='1' requesttype='GET' cmd='/' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="channel_down"     type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="channel_up"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=9' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="previous_tv_channel"  type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=63' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="mute_toggle"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=25' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action name="mute_on"          type="alias" cmd='mute_toggle'/>
+  <action name="mute_off"         type="alias" cmd='mute_toggle'/>
+
+  <action string="codeset" name="volume_up"        type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=26' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="volume_down"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=27' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="key_0"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=40' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_1"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=41' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_2"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=42' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_3"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=43' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_4"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=44' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_5"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=45' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_6"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=46' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_7"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=47' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_8"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=48' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="key_9"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=49' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="channel_select" type="string" cmd='{"REPEAT":{"REPEATCMD":"key_","REPEATVAR":"$cvar(CHANNELNUM)"}}' />
+
+  <!-- OSD Menü öffnen -->
+  <action string="codeset" name="menu"             type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=111' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="dvdmenu"          type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8246' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <!-- der Senderverlauf (die 10 letzten Kanäle)  bei Bild in Bild Tonumschaltung 		DVD Hauptmenü aufrufen -->
+  <action string="codeset" name="button_red"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=74' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- EPG zur Zeit(alle Sender)  bei Bild in Bild Bildwechsel  versch. Funktionen (im OSD ersichtlich) Sprung von -10 Sekunden (bei mehrmaliger Anwendung kurz hintereinander erhöht sich die Sprungzeit -10,-30,-60,-120,-300 -Zeit kann eingestellt werden sh. tweaks.txt)-->
+  <action string="codeset" name="button_green"     type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=75' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- Favoritenliste    versch. Funktionen (im OSD ersichtlich)  Sprung von +10 Sekunden (bei mehrmaliger Anwendung kurz hintereinander erhöht sich die Sprungzeit +10,+30,+60,+120,+300 -Zeit  kann eingestellt werden sh. tweaks.txt)-->
+  <action string="codeset" name="button_yellow"    type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=76' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- Menü mit Hilfe, Pause, Aufnahme, Untertitel, Audiospur Hilfe Menü mit Hilfe und versch. Funktionen (z.B. Untertitel, Audiospur)-->
+  <action string="codeset" name="button_blue"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=77' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-OK -->
+  <action string="codeset" name="ok"               type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=73' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-Left -->
+  <action string="codeset" name="left"             type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=2000' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-Right -->
+  <action string="codeset" name="right"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=2100' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-Up -->
+  <action string="codeset" name="up"               type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=78' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-Down -->
+  <action string="codeset" name="down"             type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=79' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-Close-->
+  <action string="codeset" name="exit"             type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=84' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- Hide All  alle Leisten und Statuszeile aus/einblenden -->
+  <action string="codeset" name="esc"              type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=71' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <!-- OSD-Previous OSD Seite- -->
+  <action string="codeset" name="page_up"          type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=83' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-Next OSD Seite+ -->
+  <action string="codeset" name="page_down"        type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=82' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="page_first"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=80' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="page_last"        type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=81' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="hibernate"        type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12323' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="suspend"          type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12324' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="power_off"        type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12325' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="power_on_real"    type="encode" waitforresponse='1' requesttype='GET' cmd='/noservice.html?start=Start+DVB+Viewer&amp;aktion=noservice' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip,deflate"}' />
+  <action string="codeset" name="closeapp"         type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12326' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="reboot"           type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12329' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action name="shutdown"         type="alias" cmd='power_off'/>
+
+
+  <!-- Power on sequnce -->
+
+  <action name="power_on">
+      <action string="call"   actionname="power_on_real"/>
+      <action string="wait"   time="1000"    />
+      <action string="codeset" name="power_on_step1" type="encode" waitforresponse='1' requesttype='GET' cmd='/fb.html?command=5' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  />
+      <action string="codeset" name="power_on"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=41' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  </action>
+
+
+  <action string="codeset" name="favorite 0"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=11' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite 1"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=11' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite 2"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite 3"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=13' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite 4"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=14' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite 5"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=15' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite 6"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=16' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite 7"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=17' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite 8"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=18' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite 9"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=19' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite next"   type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=20' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="favorite prev"   type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=21' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-Show Favorites TV Favoritenliste -->
+  <action string="codeset" name="favorites"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8200' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="audiochannel_next"    type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=72' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-Show Audiomenu -->
+  <action string="codeset" name="audiochannel_select"  type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8248' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="pause"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=0' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="play"             type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=92' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="stop"             type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=114' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="fast_rewind"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12305' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="fast_forward"     type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12304' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="skip_back"        type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=112' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="skip_forward"     type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=113' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="record"           type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=34' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action name="pause_toggle"     type="alias" cmd="pause" />
+
+
+  <action name="next_chapter"     type="alias" cmd="skip_forward" />
+  <action name="previous_chapter" type="alias" cmd="skip_back" />
+
+  <!-- OSD-Teletext -->
+  <action string="codeset" name="teletext"         type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=101' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action name="teletext_toggle"  type="alias" cmd="teletext" />
+  <action name="teletext_on"      type="alias" cmd="teletext" />
+  <action name="teletext_off"     type="alias" cmd="teletext" />
+
+  <!-- Toggle Preview   ein/ausblenden des Bild in Bild Fensters-->
+  <action string="codeset" name="pip_toggle"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=16395' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action name="pip_on"           type="alias" cmd="pip_toggle" />
+  <action name="pip_off"          type="alias" cmd="pip_toggle" />
+  <action string="codeset" name="pip_mosaic"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8211' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <!-- OSD-Show EPG   Programmführer für den aktuellen Sender-->
+  <action string="codeset" name="epg"              type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8198' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- OSD-Show Now Programmführer für die aktuelle Zeit (wie OSDgrün)-->
+  <action string="codeset" name="guide"              type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8197' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <!-- Show Current Info  Blendet das detailierte EPG der aktuellen Sendung ein Zeigt Infos zum Film/Aufnahme EPG -->
+  <action string="codeset" name="info"             type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8264' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <!-- OSD-Show Subtitlemenu  Zeigt das Untertitelmenü  Zeigt Auswahl für DVD-Untertitel -->
+  <action string="codeset" name="subtitles_menue"  type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8247' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action name="subtitles_toggle" type="alias" cmd='subtitles_menue'/>
+  <action name="subtitles_on"     type="alias" cmd='subtitles_menue'/>
+  <action name="subtitles_off"    type="alias" cmd='subtitles_menue'/>
+  <action name="subtitles_next"   type="alias" cmd='subtitles_menue'/>
+  <action name="subtitles_prev"   type="alias" cmd='subtitles_menue'/>
+
+  <action string="codeset" name="aspect"           type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=22' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <!-- durch die ZoomPresets 0 - 3 springen (für 4:3 und 16:9 sind verschiedene Einstellungen möglich was insgesamt 8 Presets ergibt) -->
+  <action string="codeset" name="zoom"             type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=16394' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="eject"            type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12299' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action name="ping" type="alias" cmd="subtitles_off" />
+
+  <!-- OSD-Show Recordings OSD Fenster der Aufnahmen einblenden-->
+  <action string="codeset" name="recordings"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8196' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="help"             type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8213' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+
+  <!-- Non Standard actions start here-->
+  <action string="codeset" name="zoom_up"          type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=104' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="zoom_down"        type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=105' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="zoom_menue"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=23' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="zoom_standard"    type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=16389' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="zoom_level0"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=16390' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="zoom_level1"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=16391' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="zoom_level2"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=16392' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="zoom_level3"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=16393' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="showhtpc"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=2110' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showtimer"     type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8195' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showchannels"  type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8199' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showtimeline"  type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8201' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showpicture"   type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8202' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showmusic"     type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8203' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showvideo"     type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8204' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showvideowindow" type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=821' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="hidevideowindow" type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8214' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="shownews"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8205' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showweather"   type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8206' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showminiepg"   type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8207' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showcomputer"  type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8210' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showalarm"     type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8212' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="ontop"         type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=1' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="hidemenu"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=2' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="showstatusbar" type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=3' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="toolbar"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=4' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="fullscreen"    type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=5' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="desktop"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=32' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="clock_toggle"  type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=2010' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action name="clock_on"      type="alias"  cmd='clock_toggle' />
+  <action name="clock_off"     type="alias"  cmd='clock_toggle' />
+
+  <action string="codeset" name="minimize"      type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=16382' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="sysinfo"       type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8277' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="toggle_view"   type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8278' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="toggle_sort"   type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8279' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="toggle_sortdirection"   type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8280' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="update_egp"    type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8276' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <action string="codeset" name="increase_speed" type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12382' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="decrease_speed" type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=12383' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+  <!-- Portal select Portalauswahl (für Portalsender z.B. Premiere) -->
+  <action string="codeset" name="select_portal" type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=8254' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <!-- Stereo/Left/Right  Umschalten zwischen Stereo + linker/rechter Kanal -->
+  <action string="codeset" name="select_stereochannel"   type="encode" waitforresponse='0' requesttype='GET' cmd='/fb.html?command=95' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+
+
+
+  <!--
+    unimplemented actions
+
+    Display                       28                    Einstellfenster für Helligkeit, Kontrast, Farbe, Sättigung
+    TimeShift                     50                    startet Timeshiftaufnahme
+    TimeShiftWindow               51
+    TimeshiftStop                 52                    pausiert die Timeshiftwiedergabe
+    RebuildGraph                  53                    Wiedergabe neu aufbauen
+    TitlebarHide                  54                    aus/einblenden der Titelleiste (oberste Leiste mit dem minimieren Button)
+    BrightnessUp                  55                    Helligkeit +
+    BrightnessDown                56                    Helligkeit -
+    SaturationUp                  57                    Sättigung +
+    SaturationDown                58                    Sättigung -
+    ContrastUp                    59                    Kontrast +
+    ContrastDown                  60                    Kontrast -
+    HueUp                         61                    Farbton +
+    HueDown                       62                    Farbton -
+    Playlist                      64                    Öffnet Fenster zum Bearbeiten der Playlist
+    PlaylistStart                 65                    startet Wiedergabe der Playlist (immer vom Anfang, außer bei Zufallswiedergabe)
+    PlaylistNext                  66                    nächster Titel der Playlist
+    PlaylistPrevious              67                    vorheriger Titel der Playlist
+    PlaylistLoop                  68                    Playlist wird wiederholt (Endlosschleife)
+    PlaylistStop                  69                    Playlistwiedergabe wird beendet
+    PlaylistRandom                70                    Playlist auf Zufallswiedergabe schalten
+    Best Width                    89                    passt DVBViewer Fenster an die TVBildgröße an
+    Jump Minus 10                 102                   Sprung von -10 Sekunden (bei mehrmaliger Anwendung kurz hintereinander erhöht sich die Sprungzeit -10,-30,-60,-120,-300 -Zeit kann eingestellt werden sh. tweaks.txt)
+    Jump Plus 10                  103                   Sprung von +10 Sekunden (bei mehrmaliger Anwendung kurz hintereinander erhöht sich die Sprungzeit +10,+30,+60,+120,+300 -Zeit kann eingestellt werden sh. tweaks.txt)
+    StretchH Up                   106                   Bild in der Breite strecken +                                         Bild in der Breite strecken +
+    StretchH Down                 107                   Bild in der Breite strecken -                                         Bild in der Breite strecken -
+    StretchV Up                   108                   Bild in der Höhe strecken - (ja, hier ist up -)                                         Bild in der Höhe strecken - (ja, hier ist up -)
+    StretchV Down                 109                   Bild in der Höhe strecken + (ja, hier ist down +)                                         Bild in der Höhe strecken + (ja, hier ist down +)
+    Stretch Reset                 110                   Streckung zurücksetzten (auf Standard)                                         Streckung zurücksetzten (auf Standard)
+    Screenshot                    115
+    Equalizer                     116                   öffnet das Equalizerfenster
+    ChannelEdit                   117                   Öffnet den Senderlisteneditor
+    Last File                     118                   Letzte Datei abspielen (Wiedergabe wird vom letzten Stand fortgesetzt, klappt nicht mit DVD auf Festplatte)
+    ChannelScan                   119                   öffnet den Sendersuchlauf
+    Video Output A/B              132                   Video A/B umschalten                                         Video A/B umschalten
+    Audio Output A/B              133                   Audio A/B umschalten                                         Audio A/B umschalten
+    DVB Source Properties         134                   Zeigt die Eigenschaftsseite des DVBViewer Filter an
+    Recorded Shows and Timer statistics     2011        öffnet das Aufnahme- und Gerätestatistikfenster
+    Keep Timeshift File                     2012        Timeshiftdatei behalten aktivieren/deaktivieren
+    Shader None                  2014                   Deaktiviert den aktuell eingestellten Shader
+    Shader Last                  2015                   Aktiviert den Shader der zuletzt eingestellt war
+
+    Play DVD                     8250
+    Clear Channel usage counter  8255
+    Stop Renderer                8256                   Stopt den Renderer
+    Play AudioCD                 8257
+    OSD-CAM Window               8259
+    Refresh RecDB                8260                   Aufnahmedatenbank auffrischen
+    Cleanup RecDB                8261                   Aufnahmedatenbank säubern (nicht mehr vorhandene Dateien aus Liste löschen)
+    Compress RecDB               8262                   Aufnahmedatenbank komprimieren
+    Refresh Cleanup Compress RecDB  826                 Aufnahmedatenbank auffrischen, reinigen und komprimieren
+    Show Radio list              8265                   Zeigt die OSD Radiokanalliste
+    Toggle background            12297                  OSD Hintergrund ein/ausschalten
+    Add Bookmark                 1230                   Setzt ein Bookmark in der Videodatei/DVD
+    Show Playlist                12384                  OSD Playlistfenster öffnen
+    Stop Graph                   16383                  Der Wiedergabegraph wird gestoppt
+    Show Version                 16384                  zeigt die DVBViewer-Version als OSD Einblendung an
+    Disable Audio                16385                  Audio deaktivieren                                         Audio deaktivieren
+    Disable AudioVideo           16386                  Audio/Video deaktivieren                                         Audio/Video deaktivieren
+    Disable Video                16387                  Video deaktivieren                                         Video deaktivieren
+    Enable AudioVideo            16388                  Audio/Video wieder aktivieren                                         Audio/Video wieder aktivieren
+    Restore DefaultColors        16396                  setzt Helligkeit, Sättigung, Kontrast, Farbe auf die Standardeinstellungen
+  -->
+
+</includes>
+
+

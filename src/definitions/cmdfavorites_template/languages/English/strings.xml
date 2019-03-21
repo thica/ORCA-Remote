@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+
+    <string id="cmdtemplate_10500">Command Name</string>
+    <string id="cmdtemplate_10501">Button caption for command</string>
+    <string id="cmdtemplate_10502">Command Action</string>
+    <string id="cmdtemplate_10503">Action to be excuted</string>
+    <string id="cmdtemplate_10504">Command Favorites</string>
+    <string id="cmdtemplate_10505">Command Parameter</string>
+    <string id="cmdtemplate_10506">Parameter for command</string>
+
+</strings>

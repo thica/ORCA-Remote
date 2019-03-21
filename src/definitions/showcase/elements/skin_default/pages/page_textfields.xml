@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_TextFields">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+
+    <element name='Frame Left' type='ANCHOR' posx='%5' posy='%40' width='%21' height='%75' >
+      <element name='Frame top' type='ANCHOR' posy='top' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="top" height="of:width:self:*0.2" fontsize='%h50'  caption='$lvar(showcase_10002)' htextalign='left' vtextalign='top' />
+      </element>
+      <element name='Frame upper' type='ANCHOR' posy='%33' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="middle" height="of:width:self:*0.2" fontsize='%h60' textcolor='#ff0000ff' caption='$lvar(showcase_10002)' htextalign='left' vtextalign='middle' />
+      </element>
+      <element name='Frame lower' type='ANCHOR' posy='%66' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"  picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD" posy="bottom" height="of:width:self:*0.2" fontsize='%h70' textcolor='#ffff00ff' caption='$lvar(showcase_10002)' htextalign='left' vtextalign='bottom' />
+      </element>
+      <element name='Frame bottom' type='ANCHOR' posy='bottom' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="top"   height="of:width:self:*0.2" fontsize='%h60'  caption='$lvar(showcase_10002)' htextalign='left' vtextalign='top' italic='1'/>
+        <element name="Textblock" type="TEXTFIELD"  posy="middle" height="of:width:self:*0.2" fontsize='%h60'  caption='$lvar(showcase_10002)' htextalign='left' vtextalign='middle' bold='1'/>
+        <element name="Textblock" type="TEXTFIELD"  posy="bottom" height="of:width:self:*0.2" fontsize='%h60'  caption='$lvar(showcase_10002)' htextalign='left' vtextalign='bottom' italic='1' bold='1'/>
+      </element>
+    </element>
+
+    <element name='Frame Left2' type='ANCHOR' posx='%33' posy='%40' width='%21' height='%75' >
+      <element name='Frame top' type='ANCHOR' posy='top' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="top" height="of:width:self:*0.2" fontsize='%h50'  caption='$lvar(showcase_10002)' htextalign='center' vtextalign='top' fontid='Serif'/>
+      </element>
+      <element name='Frame upper' type='ANCHOR' posy='%33' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="middle" height="of:width:self:*0.2" fontsize='%h60' textcolor='#00ff00ff' caption='$lvar(showcase_10002)' htextalign='center' vtextalign='middle' fontid='Serif'/>
+      </element>
+      <element name='Frame lower' type='ANCHOR' posy='%66' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"  picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD" posy="bottom" height="of:width:self:*0.2" fontsize='%h70' textcolor='#00ffffff' caption='$lvar(showcase_10002)' htextalign='center' vtextalign='bottom' fontid='Serif'/>
+      </element>
+      <element name='Frame bottom' type='ANCHOR' posy='bottom' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="top"   height="of:width:self:*0.2" fontsize='%h60'  caption='$lvar(showcase_10002)' htextalign='center' vtextalign='top' italic='1' fontid='Serif'/>
+        <element name="Textblock" type="TEXTFIELD"  posy="middle" height="of:width:self:*0.2" fontsize='%h60'  caption='$lvar(showcase_10002)' htextalign='center' vtextalign='middle' bold='1' fontid='Serif'/>
+        <element name="Textblock" type="TEXTFIELD"  posy="bottom" height="of:width:self:*0.2" fontsize='%h60'  caption='$lvar(showcase_10002)' htextalign='center' vtextalign='bottom' italic='1' bold='1' fontid='Serif'/>
+      </element>
+    </element>
+
+    <element name='Frame right2' type='ANCHOR' posx='%66' posy='%40' width='%21' height='%75' >
+      <element name='Frame top' type='ANCHOR' posy='top' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="top" height="of:width:self:*0.2" fontsize='%h50'  caption='$lvar(showcase_10002)' htextalign='right' vtextalign='top' fontid='Mono'/>
+      </element>
+      <element name='Frame upper' type='ANCHOR' posy='%33' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="middle" height="of:width:self:*0.2" fontsize='%h60' textcolor='#0000ffff' caption='$lvar(showcase_10002)' htextalign='right' vtextalign='middle' fontid='Mono'/>
+      </element>
+      <element name='Frame lower' type='ANCHOR' posy='%66' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"  picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD" posy="bottom" height="of:width:self:*0.2" fontsize='%h70' textcolor='#00aaaaff' caption='$lvar(showcase_10002)' htextalign='right' vtextalign='bottom' fontid='Mono'/>
+      </element>
+      <element name='Frame bottom' type='ANCHOR' posy='bottom' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="top"   height="of:width:self:*0.2" fontsize='%h60'  caption='$lvar(showcase_10002)' htextalign='right' vtextalign='top' italic='1' fontid='Mono'/>
+        <element name="Textblock" type="TEXTFIELD"  posy="middle" height="of:width:self:*0.2" fontsize='%h60'  caption='$lvar(showcase_10002)' htextalign='right' vtextalign='middle' bold='1' fontid='Mono'/>
+        <element name="Textblock" type="TEXTFIELD"  posy="bottom" height="of:width:self:*0.2" fontsize='%h60'  caption='$lvar(showcase_10002)' htextalign='right' vtextalign='bottom' italic='1' bold='1' fontid='Mono'/>
+      </element>
+    </element>
+
+    <element name='Frame right' type='ANCHOR' posx='%95' posy='%40' width='%21' height='%75' >
+      <element name='Frame top' type='ANCHOR' posy='top' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="top" height="of:width:self:*0.2" fontsize='%h50'  caption='icon:volume_up' htextalign='right' vtextalign='top' />
+      </element>
+      <element name='Frame upper' type='ANCHOR' posy='%33' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="middle" height="of:width:self:*0.2" fontsize='%h60' textcolor='#0000ffff' caption='icon:volume_down' htextalign='right' vtextalign='middle' />
+      </element>
+      <element name='Frame lower' type='ANCHOR' posy='%66' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"  picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD" posy="bottom" height="of:width:self:*0.2" fontsize='%h70' textcolor='#aaaaaaff' caption='icon:volume_mute' htextalign='right' vtextalign='bottom' />
+      </element>
+      <element name='Frame bottom' type='ANCHOR' posy='bottom' height="of:width:self:*0.45" >
+        <element name="Frame"     type="PICTURE"    picturenormal="background boxes" />
+        <element name="Textblock" type="TEXTFIELD"  posy="top"   height="of:width:self:*0.2" fontsize='%h60'  caption='icon:arrow_left' htextalign='center' vtextalign='top' italic='1' />
+        <element name="Textblock" type="TEXTFIELD"  posy="middle" height="of:width:self:*0.2" fontsize='%h60'  caption='icon:arrow_right' htextalign='center' vtextalign='middle' bold='1' />
+        <element name="Textblock" type="TEXTFIELD"  posy="bottom" height="of:width:self:*0.2" fontsize='%h60'  caption='icon:arrow_up' htextalign='center' vtextalign='bottom' italic='1' bold='1' />
+      </element>
+    </element>
+
+    <element name='Anchor Input Fields' type='ANCHOR' posx='center' posy='%95' width="%21" height="of:width:self:*0.2">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_input.xml" parse="xml" />
+    </element>
+
+    <element name="Textblock" type="TEXTFIELD" posx="%5" posy="%95" width="%21" height="of:width:self:*0.2" fontsize='%h50'  caption='With Background'  htextalign='center' backgroundcolor='#00aaaaff'/>
+
+  </elements>
+</page>

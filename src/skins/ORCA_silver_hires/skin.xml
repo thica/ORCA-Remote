@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<skin>
+
+  <pics>
+    <pic name="background" file="$var(SKINPATH)/pics/background.jpg"/>
+    <pic name="logo" file="$var(SKINPATH)/pics/Orca scaled.png"/>
+    <pic name="background boxes" file="$var(SKINPATH)/pics/background boxes.png"/>
+    <pic name="background input" file="$var(SKINPATH)/pics/background boxes.png"/>
+    <pic name="mediacircle" file="$var(SKINPATH)/pics/button mediacircle.png"/>
+    <pic name="transmit" file="$var(SKINPATH)/pics/picture transmit.png"/>
+    <pic name="nopic" file="$var(SKINPATH)/pics/nopic.jpg"/>
+    <pic name="transparentpic" file="$var(SKINPATH)/pics/transparentpic.png"/>
+    <pic name="wait" file="$var(SKINPATH)/pics/wait.png"/>
+    <pic name="button page left normal" file="$var(SKINPATH)/pics/button page left normal.png"/>
+    <pic name="button page left pressed" file="$var(SKINPATH)/pics/button page left pressed.png"/>
+    <pic name="button page right normal" file="$var(SKINPATH)/pics/button page right normal.png"/>
+    <pic name="button page right pressed" file="$var(SKINPATH)/pics/button page right pressed.png"/>
+    <pic name="button wide normal" file="$var(SKINPATH)/pics/button wide normal.png"/>
+    <pic name="button wide pressed" file="$var(SKINPATH)/pics/button wide pressed.png"/>
+    <pic name="button wide framed normal" file="$var(SKINPATH)/pics/button wide framed normal.png"/>
+    <pic name="button wide framed pressed" file="$var(SKINPATH)/pics/button wide framed pressed.png"/>
+    <pic name="button square normal" file="$var(SKINPATH)/pics/button square normal.png"/>
+    <pic name="button square pressed" file="$var(SKINPATH)/pics/button square pressed.png"/>
+    <pic name="button square framed normal" file="$var(SKINPATH)/pics/button square framed normal.png"/>
+    <pic name="button square framed pressed" file="$var(SKINPATH)/pics/button square framed pressed.png"/>
+    <pic name="button round normal" file="$var(SKINPATH)/pics/button round normal.png"/>
+    <pic name="button round pressed" file="$var(SKINPATH)/pics/button round pressed.png"/>
+    <pic name="button round framed normal" file="$var(SKINPATH)/pics/button round framed normal.png"/>
+    <pic name="button round framed pressed" file="$var(SKINPATH)/pics/button round framed pressed.png"/>
+    <pic name="knob back" file="$var(SKINPATH)/pics/knob back.png"/>
+    <pic name="knob" file="$var(SKINPATH)/pics/knob.png"/>
+    <pic name="knob without marker" file="$var(SKINPATH)/pics/knob wheel only.png"/>
+    <pic name="knob marker only" file="$var(SKINPATH)/pics/knob marker only.png"/>
+    <pic name="device amplifier" file="$var(SKINPATH)/pics/devices/device amplifier.png"/>
+    <pic name="device htpc" file="$var(SKINPATH)/pics/devices/device htpc.png"/>
+    <pic name="device TV receiver" file="$var(SKINPATH)/pics/devices/device TV receiver.png"/>
+    <pic name="device tv" file="$var(SKINPATH)/pics/devices/device tv.png"/>
+    <pic name="device light" file="$var(SKINPATH)/pics/devices/device light.png"/>
+    <pic name="device NAS" file="$var(SKINPATH)/pics/devices/device NAS.png"/>
+    <pic name="device power strip" file="$var(SKINPATH)/pics/devices/device power strip.png"/>
+    <pic name="device game console" file="$var(SKINPATH)/pics/devices/device game console.png"/>
+    <pic name="device inetradio" file="$var(SKINPATH)/pics/devices/device inetradio.png"/>
+    <pic name="device nvidia shield" file="$var(SKINPATH)/pics/devices/device nvidia shield.png"/>
+    <pic name="device android" file="$var(SKINPATH)/pics/devices/device android.png"/>
+    <pic name="device firetv" file="$var(SKINPATH)/pics/devices/device firetv.png"/>
+    <pic name="device kodi" file="$var(SKINPATH)/pics/devices/device kodi.png"/>
+    <pic name="device heater" file="$var(SKINPATH)/pics/devices/device heater.png"/>
+    <pic name="activity tv" file="$var(SKINPATH)/pics/activities/activity-tv.png"/>
+    <pic name="activity movie" file="$var(SKINPATH)/pics/activities/activity-movie.png"/>
+    <pic name="activity video streaming" file="$var(SKINPATH)/pics/activities/activity-videostreaming.png"/>
+    <pic name="bulb off" file="$var(SKINPATH)/pics/devices/bulb off.png"/>
+    <pic name="bulb on" file="$var(SKINPATH)/pics/devices/bulb on.png"/>
+  </pics>
+  <attributes>
+    <attribute name="fontcolor button" att="$var(black)"/>
+    <attribute name="fontcolor text" att="$var(black)"/>
+    <attribute name="fontcolor file" att="$var(black)"/>
+    <attribute name="defaultfont" att="Sans"/>
+  </attributes>
+  <colors>
+    <color name="black">#000000ff</color>
+    <color name="blue">#0000ffff</color>
+    <color name="lime">#00ff00ff</color>
+    <color name="cyan">#00ffffff</color>
+    <color name="red">#ff0000ff</color>
+    <color name="magenta">#ff00ffff</color>
+    <color name="yellow">#ffff00ff</color>
+    <color name="white">#ffffffff</color>
+    <color name="nocolor">#ffffff00</color>
+    <color name="dimmed">#000000aa</color>
+    <color name="shadow">#00000088</color>
+    <color name="green">#008000ff</color>
+  </colors>
+
+  <!-- Redirects can be used to replace standards elements & pages with skin elements-->
+  <redirects>
+    <!--
+    Example
+    <redirect from="$var(STANDARDELEMENTSPATH)/block_input.xml" to="$var(SKINPATH)/block_input.xml"/>
+    <redirect from="$var(STANDARDPAGESPATH)/page_wait.xml" to="$var(SKINPATH)/page_wait.xml"/>
+    -->
+  </redirects>
+
+  <repositorymanager>
+    <entry>
+      <name>ORCA Hires Silver</name>
+      <description language='English'>ORCA Standard Skin, High Resolution, Silver Elements</description>
+      <description language='German'>ORCA Standard Skin, Hohe Auflösung, Silberne Elemente</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/skins/ORCA_silver_hires</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/skins/ORCA_silver_hires.zip</sourcefile>
+          <targetpath>skins</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+</skin>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface_setup>
+    <interface name="url">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="Port" parameter="80"/>
+            <setting name="Host" parameter="discover"/>
+            <setting name="TimeToClose" parameter="60"/>
+            <setting name="FNCodeset" parameter="CODESET_url_ENIGMA2.xml"/>
+            <setting name="User" parameter="root" />
+            <setting name="ParseResult" parameter="xml" />
+            <setting name="DiscoverScriptName" parameter="discover_enigma"/>
+            <setting name="DISCOVER_ENIGMA_models" parameter="['Enigma']"/>
+        </configuration>
+    </interface>
+    <interface name="wake_on_lan">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="IP" parameter="192.168.1.255"/>
+            <setting name="MAC" parameter="aa:bb:cc:dd:ee:ff"/>
+        </configuration>
+    </interface>
+    <interface name="telnet">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="Port" parameter="23"/>
+            <setting name="Host" parameter="linked:url:DEVICE_$dvar(definition_alias_mediaplayer_template):Host"/>
+            <setting name="TimeToClose" parameter="30"/>
+            <setting name="FNCodeset" parameter="CODESET_telnet_ENIGMA2.xml"/>
+            <setting name="User" parameter="root" />
+            <setting name="Password" parameter="" />
+            <setting name="ParseResult" parameter="no" />
+        </configuration>
+    </interface>
+</interface_setup>

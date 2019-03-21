@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <!-- Translates Orca Actions to Interface Commands action = Orca Action
+        String ('*' = default command) type = 'event' or 'key': tells, if Remoteghost
+        should send an EventGhost event or a Keystroke cmd = command to send, either
+        the event name, or the keystroke (look interface.py for keystrokes) -->
+
+  <repositorymanager>
+    <entry>
+      <name>DVBViewer Event/Plugin Control by Eventghost</name>
+      <description language='English'>DVBViewer Control using Eventghost / Plugin-Events</description>
+      <description language='German'>DVBViewer Kontrolle über Eventghost / Plugin-Events</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/remoteghost/CODESET_remoteghost_DVBVIEWER_plugin.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_remoteghost_DVBVIEWER_plugin.zip</sourcefile>
+          <targetpath>codesets/remoteghost</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Remoteghost Control for EventGhost</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action string="codeset" name="teletext" type="macro" cmd="DVBViewer: OSD-Teletext" />
+  <action string="codeset" name="epg" type="macro" cmd="DVBViewer: OSD-Show EPG" />
+  <action string="codeset" name="channel_down" type="macro" cmd="DVBViewer: Channel +" />
+  <action string="codeset" name="channel_up" type="macro" cmd="DVBViewer: Channel -" />
+  <action string="codeset" name="key_1" type="macro" cmd="DVBViewer: Channel 1" />
+  <action string="codeset" name="key_2" type="macro" cmd="DVBViewer: Channel 2" />
+  <action string="codeset" name="key_3" type="macro" cmd="DVBViewer: Channel 3" />
+  <action string="codeset" name="key_4" type="macro" cmd="DVBViewer: Channel 4" />
+  <action string="codeset" name="key_5" type="macro" cmd="DVBViewer: Channel 5" />
+  <action string="codeset" name="key_6" type="macro" cmd="DVBViewer: Channel 6" />
+  <action string="codeset" name="key_7" type="macro" cmd="DVBViewer: Channel 7" />
+  <action string="codeset" name="key_8" type="macro" cmd="DVBViewer: Channel 8" />
+  <action string="codeset" name="key_9" type="macro" cmd="DVBViewer: Channel 9" />
+  <action string="codeset" name="key_0" type="macro" cmd="DVBViewer: Channel 0" />
+  <action string="codeset" name="previous_tv_channel" type="macro" cmd="DVBViewer: Last Channel" />
+  <action string="codeset" name="pip_toggle" type="macro" cmd="todo" />
+  <action string="codeset" name="audiochannel_next" type="macro" cmd="DVBViewer: Audio Channel" />
+  <action string="codeset" name="menu" type="macro" cmd="DVBViewer: OSD-Menu" />
+  <action string="codeset" name="play" type="macro" cmd="DVBViewer: Play" />
+  <action string="codeset" name="stop" type="macro" cmd="DVBViewer: Stop" />
+  <action string="codeset" name="fast_rewind" type="macro" cmd="DVBViewer: Rewind" />
+  <action string="codeset" name="fast_forward" type="macro" cmd="DVBViewer: Forward" />
+  <action string="codeset" name="skip_back" type="macro" cmd="DVBViewer: Previous" />
+  <action string="codeset" name="skip_forward" type="macro" cmd="DVBViewer: Next" />
+  <action string="codeset" name="pause" type="macro" cmd="DVBViewer: Pause" />
+  <action string="codeset" name="record" type="macro" cmd="DVBViewer: Record" />
+  <action string="codeset" name="ok" type="macro" cmd="DVBViewer: OSD-OK" />
+  <action string="codeset" name="left" type="macro" cmd="DVBViewer: OSD-Left" />
+  <action string="codeset" name="right" type="macro" cmd="DVBViewer: OSD-Right" />
+  <action string="codeset" name="up" type="macro" cmd="DVBViewer: OSD-Up" />
+  <action string="codeset" name="down" type="macro" cmd="DVBViewer: OSD-Down" />
+  <action string="codeset" name="button_red" type="macro" cmd="DVBViewer: OSD-Red" />
+  <action string="codeset" name="button_green" type="macro" cmd="DVBViewer: OSD-Green" />
+  <action string="codeset" name="button_yellow" type="macro" cmd="OSD-Yellow" />
+  <action string="codeset" name="button_blue" type="macro" cmd="Onkyo ISCP: SendCommand: MVLQSTN" />
+  <action string="codeset" name="exit" type="macro" cmd="DVBViewer: OSD-Close" />
+  <action string="codeset" name="info" type="macro" cmd="DVBViewer: Show Statusbar" />
+  <action string="codeset" name="page_down" type="key" cmd="{PageDown}" />
+  <action string="codeset" name="channel_select" type="macro" cmd="$cvar(CHANNELNUM)" />
+  <action string="codeset" name="page_up" type="key" cmd="{PageUp}" />
+  <action string="codeset" name="volume_up" type="macro" cmd="DVBViewer: Volume Up" />
+  <action string="codeset" name="volume_down" type="macro" cmd="DVBViewer: Volume Down" />
+  <action string="codeset" name="subtitles_on" type="macro" cmd="DVBViewer: OSD-Show Subtitlemenu" />
+  <action string="codeset" name="esc" type="macro" cmd="DVBViewer: OSD-Close" />
+  <action string="codeset" name="next_chapter" type="macro" cmd="DVBViewer: Next" />
+  <action string="codeset" name="previous_chapter" type="macro" cmd="DVBViewer: Previous" />
+  <action string="codeset" name="mute_on" type="macro" cmd="DVBViewer: Disable Audio" />
+  <action string="codeset" name="mute_off" type="macro" cmd="DVBViewer: Enable Audio" />
+</includes>

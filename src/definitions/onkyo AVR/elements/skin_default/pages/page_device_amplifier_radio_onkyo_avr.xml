@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_$dvar(definition_alias_mediaplayer_template)_Radio'>
+  <page_parameter>
+    <interface>$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)</interface>
+    <configname>$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)</configname>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Main Screen' type='BACKGROUND' picturenormal='background' />
+    <element name='Anchor BottomGap' type='ANCHOR'  posy='bottom' height='%1' />
+
+    <element name='Anchor Left Buttons' type='ANCHOR' posx='%4' posy='of:totop:Anchor BottomGap' width='%30'  height='%86' >
+      <element name='Anchor streamInfo' type='ANCHOR' posy='bottom' height='%25'>
+        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_amplifier_streaminfo.xml" parse="xml" />
+      </element>
+      <element name='Anchor Gap1' type='ANCHOR'  posy='of:totop:Anchor streamInfo' height='%1' />
+      <element name='Anchor Effect Device Buttons' type='ANCHOR' posy='of:totop:last' width='of:width:Anchor streamInfo' height='of:width:self:*0.4'>
+        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_amplifier_dropdown.xml" parse="xml" />
+      </element>
+      <element name='Anchor Gap2' type='ANCHOR'  posy='of:totop:Anchor Effect Device Buttons' height='%1' />
+      <element name='Picture StreamPic' type='PICTURE' posx='center' posy='top' width="%80" height='of:width:self' picturenormal='$var($dvar(definition_alias_mediaplayer_template)_mediapicture)' action='Send' actionpars='{"commandname":"main.net-usb-jacket-art.query"}' />
+
+   </element>
+
+
+    <element name='Anchor Media section' type='ANCHOR' posx='%50' posy='of:totop:Anchor BottomGap' width='%21' height='%86'>
+      <element name='Frame Volumes' type='PICTURE' posy='middle' height='%55' picturenormal='background boxes' />
+      <element name='Button Mute' type='BUTTON' posx='center' posy='middle' width='%25' height='of:width:self' picturenormal='button round*' action='Send Mute Toggle' fontsize='%h30' iconfontsize='%h50' caption='icon:volume_mute' />
+      <element name='Anchor KNOB' type='ANCHOR'  posy='bottom'  height='of:width:self'>
+        <elements>
+          <element name="Amp Back" type="PICTURE" picturenormal="knob back" />
+          <element name="Main Volume" type="KNOB" posx="%50" posy="%50"  width="%86"  height="of:width:self" picturenormal="knob" action="$dvar(definition_alias_mediaplayer_template) Set Main Volume By Widget" destvar="$dvar(definition_alias_mediaplayer_template)_mainvolume" mindatavalue="0" maxdatavalue="$var($dvar(definition_alias_mediaplayer_template)_MAXVOLUME)" leftboundaryangle="-135" rightboundaryangle="+135"  roundpos="0" discardmoves="1" />
+          <element name="Main Volume Textvalue" type="TEXTFIELD" posx="center" posy="middle"  width="%30" height="%30" caption="$var($dvar(definition_alias_mediaplayer_template)_mainvolume)" fontsize='%h70' vtextalign='middle' htextalign='center' />
+        </elements>
+      </element>
+      <element name='Anchor Media Circle' type='ANCHOR' height='of:width:self'>
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_mediacircle.xml" parse="xml" />
+      </element>
+    </element>
+
+    <element name='Anchor Right' type='ANCHOR' posx='%96' posy='of:totop:Anchor BottomGap' width='%30' height='%86'>
+      <element name="Anchor Stream Control" type="ANCHOR"   height='%10' posy="bottom" >
+        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_amplifier_streamcontrol.xml" parse="xml" />
+       </element>
+      <element name='Anchor Gap3' type='ANCHOR'  posy='of:totop:Anchor Stream Control' height='%2' />
+
+      <element name="Anchor NumberPad" type="ANCHOR"   posx='center' posy="of:totop:last" width='%70' height='of:width:self:*1.33' >
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_numberpad.xml" parse="xml" />
+      </element>
+
+
+      <element name ='DropDown_Presets'  type='DROPDOWN'    posy="top" height='of:height:DropDown_Services'     picturenormal='button wide*'   fontsize="%h50" caption="$lvar(5019):::$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Presets_name[]" actions='Change Preset $dvar(definition_alias_mediaplayer_template)'  />
+
+
+
+
+    </element>
+
+
+    <element name='Button Show Page Amplifier Onky AVR From Left' type='BUTTON' posx='left' posy='middle' width='%2' height='of:width:self:*3' picturenormal='button page left*' action="Show Page" actionpars='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_template)"}'  effect="slide" direction="right" />
+
+
+  </elements>
+</page>

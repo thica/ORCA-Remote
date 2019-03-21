@@ -1,0 +1,16 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Configuration
+WikiDoc:Page:Preparation
+WikiDoc:TOCTitle:2=Preparation steps
+
+ORCA can be either used with preconfigured definitions, or you can create your own definition which fits to your needs. For the preconfigured definitions, you can download them easily from ORCA using the settings->Online resources page.
+
+If you want to create your own definition, try first, if you can start it with the standard components delivered out of the box. If that works (this means, you can start it)  quit ORCA and '''copy''' the default definition within your definitions folder to a new folder name within the same folder. You can also download a definition which fits to your needs from the forum and rename it to something unique to you.
+Never customize the default definitions or other provided definition sets, always work on a copy.
+
+Validate which interfaces you need to control your equipment. Make sure, if possible, that your communication hardware works in principle. For Lan2IR converter, there are tools from the vendor to setup the hardware, for other interfaces you might need to open ports on your firewall.
+Look into the forum, if somebody uploaded an codeset file for your equipment, this will save work.
+
+WikiDoc:End
+'''

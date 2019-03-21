@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <support>http://www.orca-remote.org/forum/</support>
+    <orientations>landscape,portrait</orientations>
+    <definitionvars>{"definition_alias_mediaplayer_template":"Mediaplayer",
+                     "definition_alias_appfavorites_template":"App Favorites",
+                     "definition_alias_cmdfavorites_template":"Command Favorites",
+                     "definition_alias_tvfavorites_template":"TV Channels"}</definitionvars>
+  </def_parameter>
+  <startskip condition="$dvar(definition_alias_mediaplayer_template_IMPORTPAGES)==0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="$var(DEFINITIONPATH)/page_*" parse="xml"></xi:include>
+      <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/page_*" parse="xml"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_smallsize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LS"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_smallsize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
+    </pages>
+  <stopskip/>
+
+  <definitionimports>
+    <definition
+        importlanguages ="1"
+        importpages     ="1"
+        importsettings  ="1"
+        importactions   ="1"
+        alias           ="$dvar(definition_alias_tvfavorites_template)"
+        definitionvars  ='{"definition_alias_tvfavorites_template":"$dvar(definition_alias_tvfavorites_template)"}'>tvfavorites_template</definition>
+
+      <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          alias           ="$dvar(definition_alias_appfavorites_template)"
+          definitionvars  ='{"definition_alias_appfavorites_template":"$dvar(definition_alias_appfavorites_template)"}'>appfavorites_template</definition>
+
+      <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          alias           ="$dvar(definition_alias_cmdfavorites_template)"
+          definitionvars  ='{"definition_alias_cmdfavorites_template":"$dvar(definition_alias_cmdfavorites_template)"}'>cmdfavorites_template</definition>
+
+  </definitionimports>
+
+  <settings>
+    <!-- Interfaces -->
+    <setting title="$lvar(561)" type='section' />
+    <setting title="$lvar(700)"                                    desc="$lvar(701)"               var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN"     type="scrolloptions" default="url" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(702)"                                    desc="$lvar(703)"               var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN"    type="string" default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <setting title="$lvar(705)"                                    desc="$lvar(705)"               var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON"  type="scrolloptions" default="url" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(706)"                                    desc="$lvar(707)"               var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_POWERON" type="string" default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <setting title="$lvar(723)"                                    desc="$lvar(724)"               var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME"   type="scrolloptions" default="url" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(725)"                                    desc="$lvar(726)"               var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME"  type="string" default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
+    <setting title="$lvar(727)"                                    desc="$lvar(728)"               var="$dvar(definition_alias_mediaplayer_template)_DISCOVERACTION"     type="string" default="ping" />
+
+    <!-- Power Control -->
+    <setting title="$lvar(mediaplayertemplate_10020)" type='section' />
+    <setting title="$lvar(708)"                                    desc="$lvar(709)"                        var="$dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE"       type="bool" default="1" />
+    <setting title="$lvar(mediaplayertemplate_10052)"              desc="$lvar(mediaplayertemplate_10053)"  var="$dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND" type='actions' default='Send Ping'       allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10021)"              desc="$lvar(mediaplayertemplate_10022)"  var="$dvar(definition_alias_mediaplayer_template)_POWERONCOMMAND"      type='actions' default='Send Power On'   allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10023)"              desc="$lvar(mediaplayertemplate_10024)"  var="$dvar(definition_alias_mediaplayer_template)_POWEROFFCOMMAND"     type='actions' default='Send Power Off'  allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10067)"              desc="$lvar(mediaplayertemplate_10068)"  var="$dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD"   type='actions' default='NoAction'        allowtextinput='1'  />
+
+    <!-- Audio Control -->
+    <setting title="$lvar(mediaplayertemplate_10062)" type='section' />
+    <setting title="$lvar(710)"                                    desc="$lvar(711)"                          var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"       type="bool" default="1" />
+    <setting title="$lvar(mediaplayertemplate_10050)"              desc="$lvar(mediaplayertemplate_10051)"    var="$dvar(definition_alias_mediaplayer_template)_MAXVOLUME"           type="numericslider" default="100" min="1" max="100" roundpos="0"/>
+    <setting title="$lvar(mediaplayertemplate_10047)"              desc="$lvar(mediaplayertemplate_10048)"    var="$dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE"   type="scrolloptions" default="Slider" options='"Slider","Buttons","None"'/>
+    <setting title="$lvar(mediaplayertemplate_10065)"              desc="$lvar(mediaplayertemplate_10066)"    var="$dvar(definition_alias_mediaplayer_template)_VOLUMENOTIFICATION"  type="bool" default="0"/>
+    <setting title="$lvar(mediaplayertemplate_10092)"              desc="$lvar(mediaplayertemplate_10093)"    var="$dvar(definition_alias_mediaplayer_template)_EXTERNALVOLUMEVAR"   type="string" default=""/>
+
+    <!-- Layout  -->
+    <setting title="$lvar(mediaplayertemplate_10064)" type='section' />
+    <setting title="$lvar(mediaplayertemplate_10058)"              desc="$lvar(mediaplayertemplate_10059)" var="$dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE"      type="scrolloptions" default="SMALL"  options='"SMALL","EXTENDED 1","EXTENDED 2","None"'/>
+    <setting title="$lvar(mediaplayertemplate_10060)"              desc="$lvar(mediaplayertemplate_10061)" var="$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE"     type="scrolloptions" default="TVICONS" options='"TVICONS","APPBUTTONS","CMDBUTTONS","None"'/>
+    <setting title="$lvar(mediaplayertemplate_10080)"              desc="$lvar(mediaplayertemplate_10081)" var="$dvar(definition_alias_mediaplayer_template)_SHOWPOWERBUTTONS"   type="bool" default="1" />
+    <setting title="$lvar(mediaplayertemplate_10083)"              desc="$lvar(mediaplayertemplate_10084)" var="$dvar(definition_alias_mediaplayer_template)_SHOWSEARCHANDINPUT" type="bool" default="0" />
+    <setting title="$lvar(mediaplayertemplate_10085)"              desc="$lvar(mediaplayertemplate_10086)" var="$dvar(definition_alias_mediaplayer_template)_SHOWCHANNELUPDOWN"  type="bool" default="1" />
+    <setting title="$lvar(mediaplayertemplate_10087)"              desc="$lvar(mediaplayertemplate_10088)" var="$dvar(definition_alias_mediaplayer_template)_NAVIGATIONBAR"     type="string"   default="$var(STANDARDELEMENTSPATH)/block_topline.xml" />
+
+    <!-- Menu Items -->
+    <setting title="$lvar(mediaplayertemplate_10063)"   type='title' />
+    <setting title="$lvar(mediaplayertemplate_10001) #1"           desc="$lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[1]"        type='scrolloptions' default='icon:info'    options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10003) #1"           desc="$lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[1]"         type='actions'       default='Send Info'                              allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10016) #1"           desc="$lvar(mediaplayertemplate_10017)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[1]"  type='scrolloptions' default=''             options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10001) #2"           desc="$lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[2]"        type='scrolloptions' default='icon:escape'  options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10003) #2"           desc="$lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[2]"         type='actions'       default='Send Escape'                            allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10016) #2"           desc="$lvar(mediaplayertemplate_10017)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[2]"  type='scrolloptions' default=''             options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10001) #3"           desc="$lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[3]"        type='scrolloptions' default='icon:menu'    options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10003) #3"           desc="$lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[3]"         type='actions'       default='Send Menu'                              allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10016) #3"           desc="$lvar(mediaplayertemplate_10017)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[3]"  type='scrolloptions' default=''             options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10001) #4"           desc="$lvar(mediaplayertemplate_10002)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[4]"        type='scrolloptions' default='icon:epg'     options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10003) #4"           desc="$lvar(mediaplayertemplate_10004)" var="$dvar(definition_alias_mediaplayer_template)_CMD_MENUEITEM[4]"         type='actions'       default='Send EPG'                               allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10016) #4"           desc="$lvar(mediaplayertemplate_10017)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_MENUEITEM[4]"  type='scrolloptions' default=''             options='"$LANGUAGELIST"' allowtextinput='1'/>
+
+    <!-- TV Button Bar -->
+    <setting title="$lvar(mediaplayertemplate_10009) 1"   type='title' />
+    <setting title="$lvar(mediaplayertemplate_10010) 1"            desc="$lvar(mediaplayertemplate_10011) 1" var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1]"              type="bool" default="1" />
+    <setting title="$lvar(mediaplayertemplate_10012) #1"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][1]"        type='scrolloptions'  default='$lvar(1094)'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #1"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][1]"         type='actions'        default='Send 3D'                                        allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10018) #1"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[1][1]"  type='scrolloptions'  default=''                     options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #2"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][2]"        type='scrolloptions'  default='icon:source_radio'    options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #2"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][2]"         type='actions'        default='Send Source Radio'                              allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10018) #2"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[1][2]"  type='scrolloptions'  default=''                     options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #3"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][3]"        type='scrolloptions'  default='icon:source_tv'       options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #3"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][3]"         type='actions'        default='Send Source TV'                                 allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10018) #3"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[1][3]"  type='scrolloptions'  default=''                     options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #4"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[1][4]"        type='scrolloptions'  default='$lvar(3105)'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #4"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[1][4]"         type='actions'        default='Send Source VCR'                                allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10018) #4"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[1][4]"  type='scrolloptions'  default=''                     options='"$LANGUAGELIST"' allowtextinput='1'/>
+
+    <!-- TV Button Bar  -->
+    <setting title="$lvar(mediaplayertemplate_10009) 2"   type='title' />
+    <setting title="$lvar(mediaplayertemplate_10010) 2"            desc="$lvar(mediaplayertemplate_10011) 2" var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2]"  type="bool" default="1" />
+    <setting title="$lvar(mediaplayertemplate_10012) #1"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][1]"        type='scrolloptions'  default='icon:prev_channel'          options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #1"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][1]"         type='actions'        default='Send Previous TV Channel'                             allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10018) #1"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][1]"  type='scrolloptions'  default=''                           options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #2"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][2]"        type='scrolloptions'  default='icon:subtitles'             options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #2"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][2]"         type='actions'        default='Send Subtitles Toggle'                                allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10018) #2"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][2]"  type='scrolloptions'  default=''                           options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #3"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][3]"        type='scrolloptions'  default='icon:aspect'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #3"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][3]"         type='actions'        default='Send Aspect'                                          allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10018) #3"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][3]"  type='scrolloptions'  default=''                           options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #4"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[2][4]"        type='scrolloptions'  default='$lvar(1096)'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #4"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[2][4]"         type='actions'        default='Send AVMode'                                          allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10018) #4"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[2][4]"  type='scrolloptions'  default=''                           options='"$LANGUAGELIST"' allowtextinput='1'/>
+
+    <!-- TV Button Bar -->
+    <setting title="$lvar(mediaplayertemplate_10009) 3"   type='title' />
+    <setting title="$lvar(mediaplayertemplate_10010) 3"            desc="$lvar(mediaplayertemplate_10011) 3" var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[3]"  type="bool" default="1" />
+    <setting title="$lvar(mediaplayertemplate_10012) #1"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][1]"        type='scrolloptions'  default='icon:teletext'              options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #1"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][1]"         type='actions'        default='Send Teletext Toggle'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10018) #1"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[3][1]"  type='scrolloptions'  default=''                         options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #2"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][2]"        type='scrolloptions'  default='icon:clock'               options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #2"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][2]"         type='actions'        default='Send Clock Toggle'                                    allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10018) #2"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[3][2]"  type='scrolloptions'  default=''                         options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #3"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][3]"        type='scrolloptions'  default='$lvar(3123)'              options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #3"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][3]"         type='actions'        default='Send Source NET'                                      allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10018) #3"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[3][3]"  type='scrolloptions'  default=''                         options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #4"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[3][4]"        type='scrolloptions'  default='$lvar(1079)'              options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #4"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[3][4]"         type='actions'        default='Send Return'                                          allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10018) #4"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[3][4]"  type='scrolloptions'  default=''                         options='"$LANGUAGELIST"' allowtextinput='1'/>
+
+    <!-- TV Button Bar -->
+    <setting title="$lvar(mediaplayertemplate_10009) 4"   type='title' />
+    <setting title="$lvar(mediaplayertemplate_10010) 4"            desc="$lvar(mediaplayertemplate_10011) 4" var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[4]"              type="bool" default="1" />
+    <setting title="$lvar(mediaplayertemplate_10012) #1"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[4][1]"        type='scrolloptions'  default='icon:square color:#ff0000ff'    options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #1"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][1]"         type='actions'        default='Send Button Red'                                          allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10018) #1"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[4][1]"  type='scrolloptions'  default=''                               options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #2"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[4][2]"        type='scrolloptions'  default='icon:square color:#00ff00ff'    options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #2"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][2]"         type='actions'        default='Send Button Green'                                        allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10018) #2"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[4][2]"  type='scrolloptions'  default=''                               options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #3"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[4][3]"        type='scrolloptions'  default='icon:square color:#ffff00ff'    options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #3"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][3]"         type='actions'        default='Send Button Yellow'                                       allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10018) #3"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[4][3]"  type='scrolloptions'  default=''                               options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10012) #4"           desc="$lvar(mediaplayertemplate_10013)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_BUTTONBARITEM[4][4]"        type='scrolloptions'  default='icon:square color:#0000ffff'    options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10014) #4"           desc="$lvar(mediaplayertemplate_10015)" var="$dvar(definition_alias_mediaplayer_template)_CMD_BUTTONBARITEM[4][4]"         type='actions'        default='Send Button Blue'                                         allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10018) #4"           desc="$lvar(mediaplayertemplate_10019)" var="$dvar(definition_alias_mediaplayer_template)_SECONDTEXT_BUTTONBARITEM[4][4]"  type='scrolloptions'  default=''                               options='"$LANGUAGELIST"' allowtextinput='1'/>
+
+    <!-- Numberpad -->
+    <setting title="$lvar(mediaplayertemplate_10070)"   type='title' />
+    <setting title="$lvar(mediaplayertemplate_10056)"              desc="$lvar(mediaplayertemplate_10057)" var="$dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD"  type="bool" default="1" />
+    <setting title="$lvar(mediaplayertemplate_10072) #1"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[1]"  type='scrolloptions'  default='1'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #1"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[1]"   type='actions'        default='Send Key 1'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #2"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[2]"  type='scrolloptions'  default='2'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #2"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[2]"   type='actions'        default='Send Key 2'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #3"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[3]"  type='scrolloptions'  default='3'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #3"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[3]"   type='actions'        default='Send Key 3'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #4"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[4]"  type='scrolloptions'  default='4'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #4"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[4]"   type='actions'        default='Send Key 4'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #5"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[5]"  type='scrolloptions'  default='5'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #5"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[5]"   type='actions'        default='Send Key 5'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #6"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[6]"  type='scrolloptions'  default='6'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #6"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[6]"   type='actions'        default='Send Key 6'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #7"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[7]"  type='scrolloptions'  default='7'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #7"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[7]"   type='actions'        default='Send Key 7'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #8"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[8]"  type='scrolloptions'  default='8'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #8"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[8]"   type='actions'        default='Send Key 8'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #9"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[9]"  type='scrolloptions'  default='9'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #9"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[9]"   type='actions'        default='Send Key 9'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #0"           desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[0]"  type='scrolloptions'  default='0'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #0"           desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[0]"   type='actions'        default='Send Key 0'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #10"          desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[10]" type='scrolloptions'  default='-'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #10"          desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[10]"  type='actions'        default='Send Key -'                                 allowtextinput='1'  />
+    <setting title="$lvar(mediaplayertemplate_10072) #11"          desc="$lvar(mediaplayertemplate_10073)" var="$dvar(definition_alias_mediaplayer_template)_TEXT_NUMBERPADBUTTON[11]" type='scrolloptions'  default='+'                options='"$LANGUAGELIST"' allowtextinput='1'/>
+    <setting title="$lvar(mediaplayertemplate_10074) #11"          desc="$lvar(mediaplayertemplate_10075)" var="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[11]"  type='actions'        default='Send Key +'                                 allowtextinput='1'  />
+
+    <!-- Other Settings -->
+    <setting title="$lvar(mediaplayertemplate_10049)"   type='title' />
+    <setting title="$lvar(mediaplayertemplate_10054)"              desc="$lvar(mediaplayertemplate_10055)" var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"  type='string' default='device tv'  />
+    <setting title="$lvar(mediaplayertemplate_10090)"              desc="$lvar(mediaplayertemplate_10091)" var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"  type='string' default='$dvar(definition_alias_mediaplayer_template)'  />
+
+    <!-- Gestures -->
+    <setting title="$lvar(731)"   type='section' />
+    <setting title="$lvar(732)"                                    desc="$lvar(739)"                       var="$dvar(definition_alias_mediaplayer_template)_USEGESTURES"      type="bool" default="1" />
+    <setting title="$lvar(733)"                                    desc="$lvar(734)"                       var="$dvar(definition_alias_mediaplayer_template)_INVERTGESTURES"   type="bool" default="0" />
+    <setting title="$lvar(735) #1"                                 desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[1]"    type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="wipelefttoright" />
+    <setting title="$lvar(737) #1"                                 desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[1]"  type='actions'                                 allowtextinput='1' default="Send Right" />
+    <setting title="$lvar(735) #2"                                 desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[2]"    type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="wiperighttoleft" />
+    <setting title="$lvar(737) #2"                                 desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[2]"  type='actions'                                 allowtextinput='1' default="Send Left" />
+    <setting title="$lvar(735) #3"                                 desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[3]"    type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="wipedowntoup" />
+    <setting title="$lvar(737) #3"                                 desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[3]"  type='actions'                                 allowtextinput='1' default="Send Up" />
+    <setting title="$lvar(735) #4"                                 desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[4]"    type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="wipeuptodown" />
+    <setting title="$lvar(737) #4"                                 desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[4]"  type='actions'                                 allowtextinput='1' default="Send Down" />
+    <setting title="$lvar(735) #5"                                 desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[5]"    type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="markleft" />
+    <setting title="$lvar(737) #5"                                 desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[5]"  type='actions'                                 allowtextinput='1' default="Send OK" />
+    <setting title="$lvar(735) #6"                                 desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[6]"    type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="markright" />
+    <setting title="$lvar(737) #6"                                 desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[6]"  type='actions'                                 allowtextinput='1' default="Send Exit" />
+    <setting title="$lvar(735) #7"                                 desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[7]"    type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="circletopclockwise" />
+    <setting title="$lvar(737) #7"                                 desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[7]"  type='actions'                                 allowtextinput='1' default="Send Exit" />
+    <setting title="$lvar(735) #8"                                 desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[8]"    type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="" />
+    <setting title="$lvar(737) #8"                                 desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[8]"  type='actions'                                 allowtextinput='1' default="NoAction" />
+    <setting title="$lvar(735) #9"                                 desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[9]"    type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="" />
+    <setting title="$lvar(737) #9"                                 desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[9]"  type='actions'                                 allowtextinput='1' default="NoAction" />
+    <setting title="$lvar(735) #10"                                desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[10]"   type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="" />
+    <setting title="$lvar(737) #10"                                desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[10]" type='actions'                                 allowtextinput='1' default="NoAction" />
+    <setting title="$lvar(735) #11"                                desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[11]"   type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="" />
+    <setting title="$lvar(737) #11"                                desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[11]" type='actions'                                 allowtextinput='1' default="NoAction" />
+    <setting title="$lvar(735) #12"                                desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[12]"   type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="" />
+    <setting title="$lvar(737) #12"                                desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[12]" type='actions'                                 allowtextinput='1' default="NoAction" />
+    <setting title="$lvar(735) #13"                                desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[13]"   type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="" />
+    <setting title="$lvar(737) #13"                                desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[13]" type='actions'                                 allowtextinput='1' default="NoAction" />
+    <setting title="$lvar(735) #14"                                desc="$lvar(736)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTURENAME[14]"   type='scrolloptions' options='"$GESTURESLIST"' allowtextinput='0' default="" />
+    <setting title="$lvar(737) #14"                                desc="$lvar(738)"                       var="$dvar(definition_alias_mediaplayer_template)_GESTUREACTION[14]" type='actions'                                 allowtextinput='1' default="NoAction" />
+
+  </settings>
+
+  <repositorymanager>
+    <entry>
+      <name>Generic Mediaplayer / TV template</name>
+      <description language='English'>Generic Template for TVs and DVB Receiver</description>
+      <description language='German'>Generisches Template für TVs und DVB Receiver</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/mediaplayer_template</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/mediaplayer_template.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>definitions</type>
+          <name>Standard TV Channels</name>
+        </dependency>
+        <dependency>
+           <type>definitions</type>
+           <name>Standard Applications Template</name>
+        </dependency>
+        <dependency>
+           <type>definitions</type>
+           <name>Standard Commands Template</name>
+        </dependency>
+          <dependency>
+              <type>wizard templates</type>
+              <name>KODI Media Center (JSON)</name>
+          </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/mediaplayer_template/definition.ini</file>
+        <file>$var(APPLICATIONPATH)/definitions/mediaplayer_template/interfacesettings*</file>
+        <file>$var(APPLICATIONPATH)/definitions/mediaplayer_template/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+
+</orca>

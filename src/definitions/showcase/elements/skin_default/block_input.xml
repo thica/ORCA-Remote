@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+  <element name='Background Inputfield' type='BUTTON' posx='left' posy='top' width='4100' height='840' picturenormal='background input'  />
+  <element name='Inputfield' type='TEXTINPUT' posx='%15' posy='%90' width='3800' height='680' fontsize='312'  htextalign='left' destvar='inputstring' action='Send String' picturenormal='none' actionpars='{"commandparameter":{"INPUTTEXT":"$var(inputstring)"}}'/>
+  <element name='Text' type='TEXTFIELD' posx='center' posy='middle' width='3800' height='800' fontsize='270'  caption='$lvar(1072)' vtextalign='top' htextalign='left' />
+</elements>

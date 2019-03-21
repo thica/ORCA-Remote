@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <action name="Show Page TV Popup Panasonic 4K" string="showpage Page_Device_$dvar(definition_alias_mediaplayer_panasonic_4k)_Popup"  />
+    <action name="Show Page TV Popup Panasonic" string="showpage Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)_Popup"  />
+
+    <action name="Send Restart KODI1"  >
+        <action name="Restart Kodi in Living Room" string="call Stop Start APP By Name $dvar(definition_alias_appfavorites_android)" appname="Kodi" APPINTERFACE="$var($dvar(definition_alias_mediaplayer_shield)_INTERFACE_MAIN)" APPCONFIGNAME="$var($dvar(definition_alias_mediaplayer_shield)_CONFIGNAME_MAIN)"/>
+    </action>
+
+    <action name="Send Restart KODI2"  >
+        <action name="Restart Kodi in Launge" string="call Stop Start APP By Name $dvar(definition_alias_appfavorites_android)" appname="Kodi" APPINTERFACE="$var($dvar(definition_alias_mediaplayer_firetv2)_INTERFACE_MAIN)" APPCONFIGNAME="$var($dvar(definition_alias_mediaplayer_firetv2)_CONFIGNAME_MAIN)"/>
+    </action>
+
+    <action name="Send Restart APIV"  >
+        <action name="Restart Amazon Instant Video in Living Room" string="call Stop Start APP By Name $dvar(definition_alias_appfavorites_android)" appname="Amazon Prime" APPINTERFACE="$var($dvar(definition_alias_mediaplayer_shield)_INTERFACE_MAIN)" APPCONFIGNAME="$var($dvar(definition_alias_mediaplayer_shield)_CONFIGNAME_MAIN)"/>
+    </action>
+
+  <action name="Send Reboot HTPC2"  string="Send Reboot" interface="$var($dvar(definition_alias_mediaplayer_firetv2)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_firetv2)_CONFIGNAME_MAIN)" />
+
+  <action name="FKT Reboot HTPC2">
+    <action string="showquestion" title="$lvar(5003)" message="$lvar(thica_10100)" actionyes="Send Reboot HTPC2"/>
+  </action>
+
+  <action replaceoption="appendtoexisting" name="Add NavigationBar $dvar(definition_activityalias_mediaplayer_tv1)">
+    <action name="adjust Activity TV1 page Button all off" string="loadelement" filename="$var(DEFINITIONPATH)/block_button_alloff_activitygroup_1.xml" pagename="Page_Device_$dvar(definition_activityalias_mediaplayer_tv1)"/>
+  </action>
+  <action replaceoption="appendtoexisting" name="Add NavigationBar $dvar(definition_alias_mediaplayer_panasonictvnet)">
+    <action name="adjust Activity TV2 page Button all off" string="loadelement" filename="$var(DEFINITIONPATH)/block_button_alloff_activitygroup_1.xml" pagename="Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)"/>
+  </action>
+  <action replaceoption="appendtoexisting" name="Add NavigationBar $dvar(definition_activityalias_mediaplayer_kodi1)">
+    <action name="adjust Activity MC1 page Button all off" string="loadelement" filename="$var(DEFINITIONPATH)/block_button_alloff_activitygroup_1.xml" pagename="Page_Device_$dvar(definition_activityalias_mediaplayer_kodi1)"/>
+  </action>
+  <action replaceoption="appendtoexisting" name="Add NavigationBar $dvar(definition_activityalias_mediaplayer_apiv1)">
+    <action name="adjust Activity APIV1 page Button all off" string="loadelement" filename="$var(DEFINITIONPATH)/block_button_alloff_activitygroup_1.xml" pagename="Page_Device_$dvar(definition_activityalias_mediaplayer_apiv1)"/>
+  </action>
+  <action replaceoption="appendtoexisting" name="Add NavigationBar $dvar(definition_activityalias_mediaplayer_kodi2)">
+    <action name="adjust Activity MC2 page Button all off" string="loadelement" filename="$var(DEFINITIONPATH)/block_button_alloff_activitygroup_2.xml" pagename="Page_Device_$dvar(definition_activityalias_mediaplayer_kodi2)"/>
+  </action>
+  <action replaceoption="appendtoexisting" name="Add NavigationBar $dvar(definition_activityalias_mediaplayer_ftv2)">
+    <action name="adjust Activity FireTv1 page Button all off" string="loadelement" filename="$var(DEFINITIONPATH)/block_button_alloff_activitygroup_2.xml" pagename="Page_Device_$dvar(definition_activityalias_mediaplayer_ftv2)"/>
+  </action>
+  <action replaceoption="appendtoexisting" name="Add NavigationBar $dvar(definition_activityalias_mediaplayer_games1)">
+    <action name="adjust Activity games1 page Button all off" string="loadelement" filename="$var(DEFINITIONPATH)/block_button_alloff_activitygroup_1.xml" pagename="Page_Device_$dvar(definition_activityalias_mediaplayer_games1)"/>
+  </action>
+
+
+  <!-- Set the Bouquet Num for the non Enigma Receiver -->
+
+  <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_enigma2)" replaceoption="renameexisting" newname="PageStart Page_Device_$dvar(definition_alias_mediaplayer_enigma2)_new">
+    <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=$var(thica_bouquet)" />
+    <action name="and call the org function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_enigma2)_new" />
+  </action>
+
+
+  <action name="PageStart Page_Device_$dvar(definition_activityalias_mediaplayer_tv1)" replaceoption="renameexisting" newname="PageStart Page_Device_$dvar(definition_activityalias_mediaplayer_tv1)_new">
+    <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=$var(thica_bouquet)" />
+    <action name="and call the org function" string="call PageStart Page_Device_$dvar(definition_activityalias_mediaplayer_tv1)_new" />
+  </action>
+
+  <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)" replaceoption="renameexisting" newname="PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)_new">
+    <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=1" />
+    <action name="and call the org function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)_new" />
+  </action>
+
+  <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonic_4k)" replaceoption="renameexisting" newname="PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonic_4k)_new">>
+    <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=1" />
+    <action name="and call the org function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonic_4k)_new" />
+  </action>
+
+    <!--- Lights  Commands -->
+  <xi:include href="$var(DEFINITIONPATH)/actions/customactions_hue.xml" parse="xml" />
+
+
+</includes>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <v:Envelope xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:d="http://www.w3.org/2001/XMLSchema" xmlns:c="http://schemas.xmlsoap.org/soap/encoding/" xmlns:v="http://schemas.xmlsoap.org/soap/envelope/" xmlns:n0="urn:loewe.de:RemoteTV:Tablet">
+  <v:Header />
+  <v:Body>
+   <n0:InjectRCKey>
+    <fcid>$cvar(FCID)</fcid>
+    <ClientId>$cvar(CLIENTID)</ClientId>
+    <n0:InputEventSequence i:type="n0:InputEventSequence"> 
+     <n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700-hdr" mode="press"   value="$cvar(codesetvar_rc_key)" />
+     <n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700-hdr" mode="release" value="$cvar(codesetvar_rc_key)" />
+    </n0:InputEventSequence>
+   </n0:InjectRCKey>
+  </v:Body>
+ </v:Envelope>

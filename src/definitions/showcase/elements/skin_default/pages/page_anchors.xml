@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Anchors">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+    <element name="Textblock Info" type="TEXTFIELD" posx="%10" posy="%30" width="%47" height="%21" fontsize='%h20'  caption='$lvar(showcase_10014)' htextalign='left' />
+
+    <element name='Anchor' type='ANCHOR' posx='%10' posy='%90' width='%90' height='%50' >
+      <element name='Anchor PPS' type='ANCHOR' posy='top' width='%10' height='of:width:self:*0.5' >
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecord.xml" parse="xml" />
+      </element>
+      <element name='Anchor PPS' type='ANCHOR' posy='%30' width='%16' height='of:width:self:*0.5' >
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecord.xml" parse="xml" />
+      </element>
+      <element name='Anchor PPS' type='ANCHOR' posy='bottom' width='%31' height='of:width:self:*0.5' >
+        <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecord.xml" parse="xml" />
+      </element>
+     </element>
+
+  </elements>
+</page>

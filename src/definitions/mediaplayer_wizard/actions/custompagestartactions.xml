@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes xmlns:xi="http://www.w3.org/2001/XInclude">
+  <pagestartaction name="definitionstart">
+      <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template"          linktype="call" actionname="FKT_OnTemplateName Changed $dvar(definition_alias_mediaplayer_wizard)" />
+      <action name="" string="setvar $dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template_orgvalue=$var($dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template)" />
+      <action name="INIT the Var for Installationhinstatus" string="setvar SHOWINSTALLATIONHINTWIZARDTEMPLATE=" />
+      <action name="Load Status" string="modifyvar" varname="SHOWINSTALLATIONHINT"  operator="load" parameter1="TRUE" parameter2="$var(DEFINITIONNAME)_WIZARDTEMPLATE"/>
+      <action name="if we haven't showed it by now" string="if '$var(SHOWINSTALLATIONHINT)'=='TRUE'"/>
+          <action name="SET Showflag for template hints to False" string="setvar SHOWINSTALLATIONHINT=FALSE" />
+          <action name="Save Status" string="modifyvar" varname="SHOWINSTALLATIONHINT"  operator="save"  parameter1="$var(DEFINITIONNAME)_WIZARDTEMPLATE"/>
+          <action name="SET Showflag to True" string="setvar SHOWINSTALLATIONHINT=TRUE" />
+          <action name="Save Status" string="modifyvar" varname="SHOWINSTALLATIONHINT"  operator="save"  parameter1="$var(DEFINITIONNAME)"/>
+      <action name="" string="endif" />
+  </pagestartaction>
+
+  <xi:include href="$dvar(definition_templatepath_mediaplayer_wizard)/$dvar(definition_templatename_mediaplayer_wizard)/actions/custompagestartactions.xml" parse="xml" ></xi:include>
+
+</includes>

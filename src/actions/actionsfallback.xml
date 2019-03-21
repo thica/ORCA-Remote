@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!-- This file will be executed, if we have a fresh install where no ORCA files has been downloaded by now -->
+<ORCA>
+  <appstartactions xmlns:xi="http://www.w3.org/2001/XInclude">
+    <appstartaction name="earlyappstart">
+      <action name="Update Splash"                            string="showsplashtext"         maintext="Loading global fonts" percentage="+2"/>
+      <action name="load core fonts"                          string="loaddefinitionfonts"    definitionname="ORCA"/>
+      <action name="Update Splash"                            string="showsplashtext"         maintext="Loading Languages"/>
+      <action name="Load core language"                       string="loadlanguages" />
+      <action name="askifupdate"                              string="showquestion" title="$lvar(420)" message="$lvar(421)" actionyes="Fkt_LoadRepository" actionno="StopApp"  />
+    </appstartaction>
+  </appstartactions>
+  <actions>
+      <action name="StopApp" string="stopapp" />
+      <action name="Fkt_LoadRepository">
+          <action name="Update Splash"     string="showsplashtext"  maintext="$lvar(416)"/>
+          <action name="Load repository"                            string="loadrepositorycontent"     />
+          <action name="Load Setup Definition"                      string="downloaddefinition"       definitionname="Setup" />
+      </action>
+  </actions>
+</ORCA>

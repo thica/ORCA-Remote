@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--$Revision$ -->
+<strings xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="$var(WIZARDTEMPLATESPATH)/mediaplayer wizard/android_adb/languages/German/strings.xml" parse="xml" ></xi:include>
+    <string id="nvidiashield_10000">Die NVIDIA Shield unterstützt nur verschlüsselte adb Verbindungen! Für Kodi auf der Shield muss der JSON Port angepasst werden. Lies das Wiki</string>
+</strings>

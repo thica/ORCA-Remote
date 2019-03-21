@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <action name="FKT SwitchOn $dvar(definition_alias_unraid)">
+    <action name="Send Power On Command" string="sendcommand" commandname="power_on" interface="$var($dvar(definition_alias_unraid)_INTERFACE_POWERON)" configname="$var($dvar(definition_alias_unraid)_CONFIGNAME_POWERON)" />
+    <action name="Set Power Status" string="setvar POWERSTATUS_$dvar(definition_alias_unraid)=ON" />
+  </action>
+  <action name="FKT SwitchOff $dvar(definition_alias_unraid)">
+    <action name="Send Power On Command" string="sendcommand" commandname="power_off"          interface="$var($dvar(definition_alias_unraid)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_unraid)_CONFIGNAME_MAIN)"  />
+    <action name="Set Power Status" string="setvar POWERSTATUS_$dvar(definition_alias_unraid)=OFF" />
+  </action>
+
+  <action name="Add NavigationBar $dvar(definition_alias_unraid)">
+      <action name="Add Topline" string="loadelement" filename="$var($dvar(definition_alias_unraid)_NAVIGATIONBAR)" pagename="Page_Device_$dvar(definition_alias_unraid)" condition="$var($dvar(definition_alias_unraid)_NAVIGATIONBAR)!="/>
+  </action>
+  <action name="FKT WaitForReady_$dvar(definition_alias_unraid)" />
+
+</includes>

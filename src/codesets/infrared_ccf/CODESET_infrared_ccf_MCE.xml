@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <repositorymanager>
+        <entry>
+            <name>MCE (Microsoft) IR simple</name>
+            <description language="English">MCE power on command using IR</description>
+            <description language="German">MCE power on Befehl über IR</description>
+            <author>Carsten Thielepape</author>
+            <version>3.70</version>
+            <minorcaversion>3.7.0</minorcaversion>
+            <sources>
+                <source>
+                    <local>$var(APPLICATIONPATH)/codesets/infrared_ccf/CODESET_infrared_ccf_MCE.xml</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_infrared_ccf_MCE.zip</sourcefile>
+                    <targetpath>codesets/infrared_ccf</targetpath>
+                </source>
+            </sources>
+            <dependencies>
+                <dependency>
+                    <type>interfaces</type>
+                    <name>iTach IR Control</name>
+                </dependency>
+                <dependency>
+                    <type>interfaces</type>
+                    <name>Keene Kira IR Control</name>
+                </dependency>
+                <dependency>
+                    <type>interfaces</type>
+                    <name>IR Control on Android devices</name>
+                </dependency>
+            </dependencies>
+        </entry>
+    </repositorymanager>
+
+    <action string="codeset" name="power_on_green" cmd_ccf="0000 0073 0000 0042 0061 0020 0010 0010 0010 0010 0011 001F 0010 0020 0030 0020 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0006 0020 0010 0011 000F 0011 000F 0011 001F 0010 0010 0010 0010 0010 0010 0010 0010 0020 0020 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0020 0010 0011 001F 0020 0920 0061 0020 0010 0010 0011 000F 0011 001F 0010 0020 0030 0020 0010 0010 0011 000F 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0020 0010 0010 0010 0011 000F 0011 001F 0010 0010 0010 0010 0010 0010 0010 0010 0020 0020 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0020 0010 0011 001F 0020 0E12" repeatcount="1" type="string"/>
+    <action string="codeset" name="power_on" cmd_ccf="0000 0073 0000 0044 0061 0020 0010 0010 0010 0010 0010 0020 0010 0020 0030 0020 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0020 0010 0011 000F 0010 0010 0011 0010 0010 001F 0010 0010 0010 0010 0010 0010 0020 0020 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0020 0010 0010 0020 0010 0010 0010 0180 0061 0020 0010 0010 0010 0010 0010 0020 0010 0020 0030 0020 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0020 0010 0010 0010 0010 0010 0010 0010 0010 0020 0010 0010 0010 0010 0010 0010 0020 0020 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0020 0010 0010 0020 0010 0010 0010 0E12" repeatcount="1" type="string"/>
+</includes>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Main Volume"         type="SLIDER"    posx="left"   posy="top"                   width="%30"                                        picturenormal="background boxes" picturebutton="button round normal" action="Set Volume $dvar(definition_alias_mediaplayer_template) by Widget"  mindatavalue="0" maxdatavalue="$var($dvar(definition_alias_mediaplayer_template)_MAXVOLUME)" destvar="$dvar(definition_alias_mediaplayer_template)_mainvolume"  roundpos="0" orientation="vertical" discardmoves="1" fontsize='%w50' iconfontsize='%w70'  caption='icon:volume'  />
+  <element name='Button Mute'         type='BUTTON'    posx='center' posy='middle'                width='%30'  height='of:width:self'                picturenormal='button round*' action='Send Mute Toggle' fontsize='%h30' iconfontsize='%h50'  caption='icon:volume_mute' />
+  <element name='Main Volume Textvalue' type='TEXTFIELD' posx='center' posy='of:bottom:Button Mute'              height='of:height:Button Mute:*0.5'                                 vtextalign='top'        fontsize='%h90' iconfontsize='%h90'  caption='$var($dvar(definition_alias_mediaplayer_template)_mainvolume)' />
+  <element name='Button VolUp'        type='BUTTON'    posx='center' posy='top'                   width='%30'  height='of:width:self'                picturenormal='button round*' action='Send Volume Up $dvar(definition_alias_mediaplayer_template)'   fontsize='%h30' iconfontsize='%h50'  caption='icon:volume_up'  />
+  <element name='Button VolDown'      type='BUTTON'    posx='center' posy='bottom'                width='%30'  height='of:width:self'                picturenormal='button round*' action='Send Volume Down $dvar(definition_alias_mediaplayer_template)' fontsize='%h30' iconfontsize='%h50'  caption='icon:volume_down'  />
+</elements>
+

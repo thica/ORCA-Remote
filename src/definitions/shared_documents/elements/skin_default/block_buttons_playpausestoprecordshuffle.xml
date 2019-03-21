@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name='Button Stop'         type='BUTTON' posx='left'          posy='top'             width='%20' height='%50' picturenormal='button square*' action='Send Stop'            fontsize='%h30' iconfontsize='%h70'  caption='icon:media_stop' />
+  <element name='Button Skip Back'    type='BUTTON' posx='of:right:last' posy='top'             width='%20' height='%50' picturenormal='button square*' action='Send Skip Back'       fontsize='%h30' iconfontsize='%h70'  caption='icon:media_skip_back' />
+  <element name='Button Skip Forward' type='BUTTON' posx='of:right:last' posy='top'             width='%20' height='%50' picturenormal='button square*' action='Send Skip Forward'    fontsize='%h30' iconfontsize='%h70'  caption='icon:media_skip_next' />
+  <element name='Button Play'         type='BUTTON' posx='of:right:last' posy='top'             width='%20' height='%50' picturenormal='button square*' action='Send Play'            fontsize='%h30' iconfontsize='%h70'  caption='icon:media_play' />
+  <element name='Button Pause'        type='BUTTON' posx='of:right:last' posy='top'             width='%20' height='%50' picturenormal='button square*' action='Send Pause'           fontsize='%h30' iconfontsize='%h70'  caption='icon:media_pause' />
+  <element name='Button Record'       type='BUTTON' posx='left'          posy='of:bottom:last'  width='%20' height='%50' picturenormal='button square*' action='Send Record'          fontsize='%h30' iconfontsize='%h70'  caption='icon:media_record color:$var(red)' />
+  <element name='Button FastRewind'   type='BUTTON' posx='of:right:last' posy='of:top:last'     width='%20' height='%50' picturenormal='button square*' action='Send Fast Rewind'     fontsize='%h30' iconfontsize='%h70'  caption='icon:media_fast_rewind' />
+  <element name='Button FastForward'  type='BUTTON' posx='of:right:last' posy='of:top:last'     width='%20' height='%50' picturenormal='button square*' action='Send Fast Forward'    fontsize='%h30' iconfontsize='%h70'  caption='icon:media_fast_forward' />
+  <element name='Button Shuffle'      type='BUTTON' posx='of:right:last' posy='of:top:last'     width='%20' height='%50' picturenormal='button square*' action='Send Shuffle Toggle'  fontsize='%h30' iconfontsize='%h70'  caption='icon:media_shuffle_toggle' />
+  <element name='Button Repeat'       type='BUTTON' posx='of:right:last' posy='of:top:last'     width='%20' height='%50' picturenormal='button square*' action='Send Repeat Toggle'   fontsize='%h30' iconfontsize='%h70'  caption='icon:media_repeat_toggle' />
+</elements>

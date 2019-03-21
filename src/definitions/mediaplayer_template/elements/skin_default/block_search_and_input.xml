@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Anchor SearchAndInput' type='ANCHOR' posx='left' posy='of:totop:last' height='%50'>
+        <element name='Anchor Input Fields' type='ANCHOR'   posy='bottom' height='of:width:self:*0.2'>
+            <xi:include href="$var(STANDARDELEMENTSPATH)/block_input.xml" parse="xml" />
+        </element>
+        <element name='Anchor Search Fields' type='ANCHOR'  posy='of:totop:Anchor Input Fields' height='of:width:self:*0.2'>
+            <xi:include href="$var(STANDARDELEMENTSPATH)/block_search.xml" parse="xml" />
+        </element>
+    </element>
+</elements>

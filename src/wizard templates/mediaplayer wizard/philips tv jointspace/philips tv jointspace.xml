@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<orca>
+    <repositorymanager>
+        <entry>
+            <name>Philips TV via Jointpace 16 to 10 wide</name>
+            <description language='English'>Philips TV remote using Jointspace (for mediaplayer template)</description>
+            <description language='German'>Philips TV remote über Jointspace (Für Mediaplayer Template)</description>
+            <author>Carsten Thielepape</author>
+            <version>3.70</version>
+            <minorcaversion>3.7.0</minorcaversion>
+            <sources>
+                <source>
+                    <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/philips tv jointspace</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/wizard templates/philips tv jointspace.zip</sourcefile>
+                    <targetpath>wizard templates/mediaplayer wizard</targetpath>
+                </source>
+            </sources>
+            <dependencies>
+                <dependency>
+                    <type>definitions</type>
+                    <name>Mediaplayer Wizard</name>
+                </dependency>
+                <dependency>
+                    <type>codesets</type>
+                    <name>Jointspace/Philips (URL)</name>
+                </dependency>
+                <dependency>
+                    <type>codesets</type>
+                    <name>CEC control using Telnet</name>
+                </dependency>
+            </dependencies>
+        </entry>
+    </repositorymanager>
+</orca>

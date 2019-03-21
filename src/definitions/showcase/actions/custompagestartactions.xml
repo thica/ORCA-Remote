@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+
+    <action name="" string="setvar INTERFACE_VIDEO=orca_video" />
+    <action name="" string="setvar VIDEO_INTERFACE_1=$var(INTERFACE_VIDEO)" />
+    <action name="" string="setvar VIDEO_CONFIGNAME_1=STREAM_Bunny" />
+    <action name="" string="setvar VIDEO_INTERFACE_2=$var(INTERFACE_VIDEO)" />
+    <action name="" string="setvar VIDEO_CONFIGNAME_2=STREAM_RED" />
+
+    <action name="" string="setvar STATUSBUTTONBISTATE=0" />
+    <action name="" string="setvar STATUSBUTTONTRISTATE=ON" />
+    <action name="" string="setvar LIMITEDKNOB=10" />
+    <action name="" string="setvar LIMITEDKNOB_degree=0" />
+    <action name="" string="setvar LIMITEDKNOB_absdegree=0" />
+    <action name="" string="setvar LIMITEDKNOB_direction=" />
+
+    <action name="" string="setvar ENDLESSKNOB=10" />
+    <action name="" string="setvar ENDLESSKNOB_degree=0" />
+    <action name="" string="setvar ENDLESSKNOB_absdegree=0" />
+    <action name="" string="setvar ENDLESSKNOB_direction=" />
+    <action name="" string="setvar SLIDERHOR=0" />
+    <action name="" string="setvar SLIDERVER=0" />
+    <action name="" string="setvar VOLUME=100" />
+    <action name="" string="setvar CIRCLE4ENDANGLE=90" />
+    <action name="" string="setvar RECTANGLECOLOR=#00FF00FF" />
+    <action name="" string="setvar UPDOWN=Up" />
+    <action name="" string="setvar incvalue=0" />
+
+    <action name="" string="setvar video1_position=0" />
+    <action name="" string="setvar video1_len=0" />
+    <action name="" string="setvar video2_position=0" />
+    <action name="" string="setvar video2_len=0" />
+
+  </pagestartaction>
+  <pagestartaction name="definitionstart">
+    <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Main" />
+    <action name="Init Effect" string="setvar EFFECT=slide"/>
+  </pagestartaction>
+  <pagestartaction name="Page_Knobs">
+
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+
+    <action name="" string="updatewidget Knob Limited Textvalue" />
+    <action name="" string="updatewidget Knob Volume Limited" />
+    <action name="" string="updatewidget Knob Endless Textvalue" />
+    <action name="" string="updatewidget Knob Volume Endless" />
+
+    <action name="" string="addvarlink" varname="LIMITEDKNOB" linktype="widget" widgetname="Knob Limited Textvalue" />
+    <action name="" string="addvarlink" varname="LIMITEDKNOB" linktype="widget" widgetname="Knob Limited Textvalue#2" />
+    <action name="" string="addvarlink" varname="LIMITEDKNOB_degree" linktype="widget" widgetname="Knob Limited Textdegree" />
+    <action name="" string="addvarlink" varname="LIMITEDKNOB_absdegree" linktype="widget" widgetname="Knob Limited Textabsdegree" />
+    <action name="" string="addvarlink" varname="LIMITEDKNOB_direction" linktype="widget" widgetname="Knob Limited Textdirection" />
+
+    <action name="" string="addvarlink" varname="ENDLESSKNOB" linktype="widget" widgetname="Knob Endless Textvalue" />
+    <action name="" string="addvarlink" varname="ENDLESSKNOB_degree" linktype="widget" widgetname="Knob Endless Textdegree" />
+    <action name="" string="addvarlink" varname="ENDLESSKNOB_absdegree" linktype="widget" widgetname="Knob Endless Textabsdegree" />
+    <action name="" string="addvarlink" varname="ENDLESSKNOB_direction" linktype="widget" widgetname="Knob Endless Textdirection" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Sound">
+      <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+      <action name="" string="addvarlink" varname="VOLUME" linktype="widget" widgetname="Volume Textvalue" />
+    </pagestartaction>
+
+
+    <pagestartaction name="Page_Anchors">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+  </pagestartaction>
+
+  <pagestartaction name="Page_Buttons">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+  </pagestartaction>
+
+  <pagestartaction name="Page_Pictures">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+  </pagestartaction>
+
+  <pagestartaction name="Page_TextFields">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+  </pagestartaction>
+
+  <pagestartaction name="Page_Widget_Alignment">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+  </pagestartaction>
+
+  <pagestartaction name="Page_Icons">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+  </pagestartaction>
+
+  <pagestartaction name="Page_ShowFileDemo">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+    <action name="Update Widget Logfile" string="updatewidget Definition File1" />
+    <action name="Update Widget Logfile" string="updatewidget Definition File2" />
+    <action name="Update Widget Logfile" string="updatewidget Definition File3" />
+
+  </pagestartaction>
+
+
+  <pagestartaction name="Page_Gestures">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+    <action name="" string="addgesture" widgetname="Background" gesturename="wipelefttoright" actionname="Show Page Gestures2 From Left" />
+    <action name="" string="addgesture" widgetname="Background" gesturename="wiperighttoleft" actionname="Show Page Gestures2 From Right" />
+    <action name="" string="addgesture" widgetname="Background" gesturename="wipeuptodown" actionname="Show Page Gestures2 From Bottom" />
+    <action name="" string="addgesture" widgetname="Background" gesturename="wipedowntoup" actionname="Show Page Gestures2 From Top" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Gestures2">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+    <action name="" string="addgesture" widgetname="Background" gesturename="wipelefttoright" actionname="Show Page Gestures From Left" />
+    <action name="" string="addgesture" widgetname="Background" gesturename="wiperighttoleft" actionname="Show Page Gestures From Right" />
+    <action name="" string="addgesture" widgetname="Background" gesturename="wipeuptodown" actionname="Show Page Gestures From Bottom" />
+    <action name="" string="addgesture" widgetname="Background" gesturename="wipedowntoup" actionname="Show Page Gestures From Top" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Widget_Overview">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+    <action name="Update Widget Logfile" string="updatewidget Definition File" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Video">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+    <action name="" string="addtrigger" triggername ="position"  actionname="trigger_on_positionvideo2changed" retvar="video2_position"  interface="$var(VIDEO_INTERFACE_2)" configname="$var(VIDEO_CONFIGNAME_2)"/>
+    <action name="" string="addtrigger" triggername ="duration"  actionname="trigger_on_durationvideo2changed" retvar="video2_len"  interface="$var(VIDEO_INTERFACE_2)" configname="$var(VIDEO_CONFIGNAME_2)"/>
+    <action name="" string="addtrigger" triggername ="position"  actionname="trigger_on_positionvideo1changed" retvar="video1_position"  interface="$var(VIDEO_INTERFACE_1)" configname="$var(VIDEO_CONFIGNAME_1)"/>
+    <action name="" string="addtrigger" triggername ="duration"  actionname="trigger_on_durationvideo1changed" retvar="video1_len"  interface="$var(VIDEO_INTERFACE_1)" configname="$var(VIDEO_CONFIGNAME_1)"/>
+  </pagestartaction>
+
+  <pagestopaction name="Page_Video">
+    <action name="" string="addtrigger" triggername ="position"  interface="$var(VIDEO_INTERFACE_2)" configname="$var(VIDEO_CONFIGNAME_2)"/>
+    <action name="" string="addtrigger" triggername ="duration"  interface="$var(VIDEO_INTERFACE_2)" configname="$var(VIDEO_CONFIGNAME_2)"/>
+    <action name="" string="addtrigger" triggername ="position"  interface="$var(VIDEO_INTERFACE_1)" configname="$var(VIDEO_CONFIGNAME_1)"/>
+    <action name="" string="addtrigger" triggername ="duration"  interface="$var(VIDEO_INTERFACE_1)" configname="$var(VIDEO_CONFIGNAME_1)"/>
+  </pagestopaction>
+
+
+</includes>

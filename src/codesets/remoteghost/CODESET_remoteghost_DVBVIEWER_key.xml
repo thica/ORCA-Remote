@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>DVBViewer Key Control by Eventghost</name>
+      <description language='English'>DVBViewer Control using Eventghost / Keystrokes</description>
+      <description language='German'>DVBViewer Kontrolle über Eventghost / Tastaturbefehle</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/remoteghost/CODESET_remoteghost_DVBVIEWER_key.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_remoteghost_DVBVIEWER_key.zip</sourcefile>
+          <targetpath>codesets/remoteghost</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Remoteghost Control for EventGhost</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <!-- Translates Orca Actions to Interface Commands action = Orca Action
+        String ('*' = default command) type = 'event' or 'key': tells, if Remoteghost
+        should send an EventGhost event or a Keystroke cmd = command to send, either
+        the event name, or the keystroke (look interface.py for keystrokes) -->
+  <action string="codeset" name="teletext" type="key" cmd="v" />
+  <action string="codeset" name="epg" type="key" cmd="m" />
+  <action string="codeset" name="channel_down" type="key" cmd="{PageDown}" />
+  <action string="codeset" name="channel_up" type="key" cmd="{PageUp}" />
+  <action string="codeset" name="key_1" type="key" cmd="1" />
+  <action string="codeset" name="key_2" type="key" cmd="2" />
+  <action string="codeset" name="key_3" type="key" cmd="3" />
+  <action string="codeset" name="key_4" type="key" cmd="4" />
+  <action string="codeset" name="key_5" type="key" cmd="5" />
+  <action string="codeset" name="key_6" type="key" cmd="6" />
+  <action string="codeset" name="key_7" type="key" cmd="7" />
+  <action string="codeset" name="key_8" type="key" cmd="8" />
+  <action string="codeset" name="key_9" type="key" cmd="9" />
+  <action string="codeset" name="key_0" type="key" cmd="0" />
+  <action string="codeset" name="previous_tv_channel" type="key" cmd="{Ctrl+N}" />
+  <action string="codeset" name="pip_toggle" type="key" cmd="{Shift+Subtract}" />
+  <action string="codeset" name="audiochannel_next" type="key" cmd="a" />
+  <action string="codeset" name="menu" type="key" cmd="c" />
+  <action string="codeset" name="play" type="key" cmd="p" />
+  <action string="codeset" name="stop" type="key" cmd="x" />
+  <action string="codeset" name="fast_rewind" type="key" cmd="r" />
+  <action string="codeset" name="fast_forward" type="key" cmd="f" />
+  <action string="codeset" name="skip_back" type="key" cmd="," />
+  <action string="codeset" name="skip_forward" type="key" cmd="." />
+  <action string="codeset" name="pause" type="key" cmd="{space}" />
+  <action string="codeset" name="record" type="key" cmd="q" />
+  <action string="codeset" name="ok" type="key" cmd="{Enter}" />
+  <action string="codeset" name="left" type="key" cmd="{Left}" />
+  <action string="codeset" name="right" type="key" cmd="{Right}" />
+  <action string="codeset" name="up" type="key" cmd="{Up}" />
+  <action string="codeset" name="down" type="key" cmd="{Down}" />
+  <action string="codeset" name="button_red" type="key" cmd="{F5}" />
+  <action string="codeset" name="button_green" type="key" cmd="{F6}" />
+  <action string="codeset" name="button_yellow" type="key" cmd="{F7}" />
+  <action string="codeset" name="button_blue" type="key" cmd="{F8}" />
+  <action string="codeset" name="exit" type="key" cmd="{Backspace}" />
+  <action string="codeset" name="info" type="key" cmd="i" />
+  <action string="codeset" name="page_down" type="key" cmd="{PageDown}" />
+  <action string="codeset" name="channel_select" type="key" cmd="$cvar(CHANNELNUM)" />
+  <action string="codeset" name="page_up" type="key" cmd="{PageUp}" />
+  <action string="codeset" name="volume_up" type="key" cmd="+" />
+  <action string="codeset" name="volume_down" type="key" cmd="-" />
+  <action string="codeset" name="subtitles_on" type="key" cmd="t" />
+  <action string="codeset" name="esc" type="key" cmd="{Esc}" />
+  <action string="codeset" name="next_chapter" type="key" cmd="[" />
+  <action string="codeset" name="previous_chapter" type="key" cmd="]" />
+  <action string="codeset" name="test" type="macro" cmd="Start Winamp" />
+</includes>

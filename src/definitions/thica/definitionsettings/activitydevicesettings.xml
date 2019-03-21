@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[1]"    default="device TV receiver" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[1]"       default="$lvar(3002)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[1]"  default="Page_Device_$dvar(definition_alias_mediaplayer_enigma2)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[2]"    default="device amplifier" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[2]"       default="$lvar(3006)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[2]"  default="Page_Device_$dvar(definition_alias_mediaplayer_onkyoavr)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[3]"    default="device nvidia shield" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[3]"       default="NVidia Shield" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[3]"  default="Page_Device_$dvar(definition_alias_mediaplayer_shield)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[4]"    default="device tv" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[4]"       default="$lvar(3001)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[4]"  default="Page_Device_$dvar(definition_alias_mediaplayer_panasonic_4k)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[5]"    default="device kodi" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[5]"       default="$lvar(3016) Shield" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[5]"  default="Page_Device_$dvar(definition_alias_mediaplayer_kodi1)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[6]"    default="device NAS" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[6]"       default="$lvar(3008)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[6]"  default="Page_Device_$dvar(definition_alias_unraid)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[8]"    default="device light" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[8]"       default="$lvar(3018)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[8]"  default="Page_Device_$dvar(definition_alias_philips_hue)_Universal" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[9]"    default="$var(DEFINITIONPATH[philips hue])/pics/logo.png" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[9]"       default="Philips HUE" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[9]"  default="Page_Device_$dvar(definition_alias_philips_hue)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[10]"   default="device firetv" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[10]"      default="FireTV  $lvar(thica_10009)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[10]" default="Page_Device_$dvar(definition_alias_mediaplayer_firetv2)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[11]"   default="device tv" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[11]"      default="$lvar(3001) $lvar(thica_10009)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[11]" default="Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[12]"   default="device kodi" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[12]"      default="$lvar(3016) $lvar(thica_10009)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[12]" default="Page_Device_$dvar(definition_alias_mediaplayer_kodi2)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[13]"   default="device heater" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[13]"      default="$lvar(thica_10015)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[13]" default="Page_Device_$dvar(definition_alias_elv_max)" />
+
+</settings>
+

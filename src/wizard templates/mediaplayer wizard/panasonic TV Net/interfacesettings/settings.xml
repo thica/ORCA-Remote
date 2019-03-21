@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface_setup>
+    <interface name="url">
+        <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
+            <setting name="Port" parameter="55000"/>
+            <setting name="Host" parameter="discover"/>
+            <setting name="Password" parameter=""/>
+            <setting name="User" parameter="root"/>
+            <setting name="ParseResult" parameter="no"/>
+            <setting name="TokenizeString" parameter=":"/>
+            <setting name="ResultEndString" parameter="[LF]"/>
+            <setting name="TimeToClose" parameter="0"/>
+            <setting name="FNCodeset" parameter="CODESET_url_VIERA.xml"/>
+            <setting name="DiscoverScriptName" parameter="discover_upnp"/>
+            <setting name="DISCOVER_UPNP_manufacturer" parameter="Panasonic"/>
+        </configuration>
+    </interface>
+</interface_setup>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<orca>
+    <repositorymanager>
+        <entry>
+            <name>Fire TV (adb)</name>
+            <description language='English'>Fire TV Remote Control (using adb/TCP)</description>
+            <description language='German'>Fire TV Fernbedienung (verwendet adb/TCP)</description>
+
+            <author>Carsten Thielepape</author>
+            <version>3.70</version>
+            <minorcaversion>3.7.0</minorcaversion>
+            <skip>0</skip>
+            <sources>
+                <source>
+                    <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/firetv_adb</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/wizard templates/firetv_adb.zip</sourcefile>
+                    <targetpath>wizard templates/mediaplayer wizard</targetpath>
+                </source>
+            </sources>
+            <dependencies>
+                <dependency>
+                    <type>codesets</type>
+                    <name>Android adb Fire TV</name>
+                </dependency>
+                <dependency>
+                    <type>wizard templates</type>
+                    <name>Generic Android Device (adb)</name>
+                </dependency>
+            </dependencies>
+        </entry>
+    </repositorymanager>
+</orca>

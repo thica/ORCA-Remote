@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String
+	cmd = command to send, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>Raspbmc Power off / Reboot / Telnet</name>
+      <description language='English'>Power off / Reboot commands for Raspbmc using Telnet</description>
+      <description language='German'>Power off / Reboot Befehle für Raspbmc über Telnet</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/telnet/CODESET_telnet_RASPBMC.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_telnet_RASPBMC.zip</sourcefile>
+          <targetpath>codesets/telnet</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Telnet</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action string="codeset" name='power_off' waitforresponse='0' cmd='nohup sudo shutdown now\n' />
+  <action string="codeset" name='reboot' waitforresponse='0' cmd='nohup sudo reboot\n' />
+  <action string="codeset" name="mount_nas_drives"  waitforresponse='0' cmd="nohup sudo mount -all" />
+  <action string="codeset" name="restart KODI"  waitforresponse='0' cmd="sudo initctl stop kodi;sudo initctl start kodi" />
+
+</includes>

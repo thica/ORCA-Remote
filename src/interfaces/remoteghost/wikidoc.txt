@@ -1,0 +1,181 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-remoteghost
+WikiDoc:TOCTitle:RemoteGhost
+= RemoteGhost =
+The RemoteGhost interface sends commands via TCP to EventGhost. You can pass events, keyboard strokes and mouse clicks. The interface support several actions/commands, so you need to customize two files to make it work for your environment. The RemoteGhost interface is bi-directional, so you can set triggers based on EventGhost log outputs.
+= Settings =
+
+The following settings are supported by the interface
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|host
+|Host-Name or IP-Address of your PC
+|-
+|port
+|The port, usual 1024
+|-
+|prefix
+|The prefix is added to all events, this might help to distinguish between different codesets.
+|-
+|FNCodeset
+|Filename of your codeset.
+|}</div>
+
+The host parameter defines the host name or IP address of the device you want to control. The port needs to match your port, you configured in the EventGhost ORCA plugin. The default is 1024. You need to define the codeset filename, which contains the command set for your device (eg: which commands to send by given ORCA commands). The prefix is added to all events, this might help to distinguish between different codesets.
+
+A simple codeset file could look like that:
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<codeset>
+  <code action="teletext" type="key" cmd="v" />
+  <code action="epg" type="key" cmd="m" />
+  <code action="channel_down" type="key" cmd="{PageDown}" />
+  <code action="channel_up" type="key" cmd="{PageUp}" />
+  <code action="key_1" type="key" cmd="1" />
+  <code action="key_2" type="key" cmd="2" />
+  <code action="key_3" type="key" cmd="3" />
+  <code action="key_4" type="key" cmd="4" />
+  <code action="key_5" type="key" cmd="5" />
+  <code action="key_6" type="key" cmd="6" />
+  <code action="key_7" type="key" cmd="7" />
+  <code action="key_8" type="key" cmd="8" />
+  <code action="key_9" type="key" cmd="9" />
+  <code action="key_0" type="key" cmd="0" />
+  <code action="previous_tv_channel" type="key" cmd="{Ctrl+N}" />
+  <code action="pip_toggle" type="key" cmd="{Shift+Subtract}" />
+  <code action="audiochannel_next" type="key" cmd="a" />
+  <code action="menu" type="key" cmd="c" />
+  <code action="play" type="key" cmd="p" />
+  <code action="stop" type="key" cmd="x" />
+  <code action="fast_rewind" type="key" cmd="r" />
+  <code action="fast_forward" type="key" cmd="f" />
+  <code action="skip_back" type="key" cmd="," />
+  <code action="skip_forward" type="key" cmd="." />
+  <code action="pause" type="key" cmd="{space}" />
+  <code action="record" type="key" cmd="q" />
+  <code action="ok" type="key" cmd="{Enter}" />
+  <code action="left" type="key" cmd="{Left}" />
+  <code action="right" type="key" cmd="{Right}" />
+  <code action="up" type="key" cmd="{Up}" />
+  <code action="down" type="key" cmd="{Down}" />
+  <code action="button_red" type="key" cmd="{F5}" />
+  <code action="button_green" type="key" cmd="{F6}" />
+  <code action="button_yellow" type="key" cmd="{F7}" />
+  <code action="button_blue" type="key" cmd="{F8}" />
+  <code action="exit" type="key" cmd="{Backspace}" />
+  <code action="info" type="key" cmd="i" />
+  <code action="page_down" type="key" cmd="{PageDown}" />
+  <code action="channel_select" type="key" cmd="{CHANNELNUM}" />
+  <code action="page_up" type="key" cmd="{PageUp}" />
+  <code action="volume_up" type="key" cmd="+" />
+  <code action="volume_down" type="key" cmd="-" />
+  <code action="subtitles_on" type="key" cmd="t" />
+  <code action="esc" type="key" cmd="{Esc}" />
+  <code action="next_chapter" type="key" cmd="[" />
+  <code action="previous_chapter" type="key" cmd="]" />
+  <code action="test" type="macro" cmd="Start Winamp" />
+</codeset>
+</syntaxhighlight></div>
+
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|action
+|Defines, to which ORCA action the EventGhost command should be send
+|-
+|type
+|Here you can define, what type of command you like to send to EventGhost. You can choose between 'key','event','mouse'. Read the explanation below how to use these options.
+Remark: There is an option to trigger a macro directly, which is not stable by now.
+|-
+|cmd
+|This is the command to transmit to EventGhost.
+|}
+
+Variable replacement: You can use variable placeholder to use variables in your EventGhost command string
+
+{| class="wikitable"
+! align="left" | var
+! align="left" | Description
+|-
+|{INPUTSTRING}
+|This sends all chars in par3 as individual keystrokes. The Input funktion uses this
+|-
+|{CHANNELNUM}
+|Send the channel numbers as one text command
+|}
+
+
+== Special keystrokes ==
+
+To emulate special-keys, you have to enclose a keyword in curly braces. For example if you want to have a cursor-up-key you write **{Up}**. You can combine multiple keywords with the plus sign to get key-combinations like
+
+{Shift+Ctrl+F1} or {Ctrl+V}
+
+Some keys differentiate between the left or the right side of the keyboard
+and can then be prefixed with an "L" or "R", like the Windows-Key:
+
+{Win} or {LWin} or {RWin}
+
+And here is the list of the remaining keywords EventGhost understands:
+
+The following commands must have a 'key' eventtype
+
+    | **{Ctrl}** or **{Control}**
+    | **{Shift}**
+    | **{Alt}**
+    | **{Return}** or **{Enter}**
+    | **{Back}** or **{Backspace}**
+    | **{Tab}** or **{Tabulator}**
+    | **{Esc}** or **{Escape}**
+    | **{Spc}** or **{Space}**
+    | **{Up}**
+    | **{Down}**
+    | **{Left}**
+    | **{Right}**
+    | **{PgUp}** or **{PageUp}**
+    | **{PgDown}** or **{PageDown}**
+    | **{Home}**
+    | **{End}**
+    | **{Ins}** or **{Insert}**
+    | **{Del}** or **{Delete}**
+    | **{Pause}**
+    | **{Capslock}**
+    | **{Numlock}**
+    | **{Scrolllock}**
+    | **{F1}, {F2}, ... , {F24}**
+    | **{Apps}** (This is the context-menu-key)
+    |
+    | These will emulate keys from the numpad:
+    | **{Divide}**
+    | **{Multiply}**
+    | **{Subtract}**
+    | **{Add}**
+    | **{Decimal}**
+    | **{Numpad0}, {Numpad1}, ... , {Numpad9}**
+
+All other strings will be passed as keystrokes without conversion
+
+== Mouse commands ==
+
+The following commands must have a 'mouse' eventtype:
+
+    | **{MOUSE_LEFT_CLICK}**
+    | **{MOUSE_RIGHT_CLICK}**
+
+You can have as much actions as you like in your assignment file. You can use the same codesetfile for several configurations.
+
+= Configure Eventghost =
+
+You need to copy the Eventghost plugin, which is part of the interface, into the plugins directory of Eventghost. You can change the port in the EventGhost plugin when you like.
+
+
+WikiDoc:End
+'''

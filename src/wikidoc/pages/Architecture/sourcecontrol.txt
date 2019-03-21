@@ -1,0 +1,12 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Architecture
+WikiDoc:Page:Source Control
+WikiDoc:TOCTitle:2=Source Control
+
+The sources are available on [https://github.com/thica/ORCA-Remote Github]. Branches are named to city names of capitals, so we start with "Amsterdam".
+
+A personal note: I am quite unexperienced with Git, so, before pulling the sources and coding anything, please contact me.
+
+WikiDoc:End
+'''

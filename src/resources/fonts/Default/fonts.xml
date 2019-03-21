@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontdef>
+
+    <repositorymanager>
+    <entry>
+      <name>Default Fonts</name>
+      <description language='English'>Orca default fonts</description>
+      <description language='German'>Orca Standard Schriften</description>
+      <author>Carsten Thielepape</author>
+      <version>3.70</version>
+      <minorcaversion>3.7.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(RESOURCEPATH)/fonts/Default</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/fonts/default.zip</sourcefile>
+          <targetpath>resources/fonts</targetpath>
+        </source>
+      </sources>
+    </entry>
+  </repositorymanager>
+
+  <fonts>
+    <font>
+      <name>Sans</name>
+      <file face="normal">$var(RESOURCEPATH)/fonts/Default/NotoSans-SemiCondensed.ttf</file>
+      <file face="bold">$var(RESOURCEPATH)/fonts/Default/NotoSans-SemiCondensedBold.ttf</file>
+      <file face="italic">$var(RESOURCEPATH)/fonts/Default/NotoSans-SemiCondensedItalic.ttf</file>
+      <file face="bolditalic">$var(RESOURCEPATH)/fonts/Default/NotoSans-SemiCondensedBoldItalic.ttf</file>
+    </font>
+    <font>
+      <name>Serif</name>
+      <file face="normal">$var(RESOURCEPATH)/fonts/Default/NotoSerif-SemiCondensed.ttf</file>
+      <file face="bold">$var(RESOURCEPATH)/fonts/Default/NotoSerif-SemiCondensedBold.ttf</file>
+      <file face="italic">$var(RESOURCEPATH)/fonts/Default/NotoSerif-SemiCondensedItalic.ttf</file>
+      <file face="bolditalic">$var(RESOURCEPATH)/fonts/Default/NotoSerif-SemiCondensedBoldItalic.ttf</file>
+    </font>
+    <font>
+      <name>Mono</name>
+      <file face="normal">$var(RESOURCEPATH)/fonts/Default/NotoSansMono-SemiCondensed.ttf</file>
+      <file face="bold">$var(RESOURCEPATH)/fonts/Default/NotoSansMono-SemiCondensedBold.ttf</file>
+      <file face="italic">$var(RESOURCEPATH)/fonts/Default/NotoSansMono-SemiCondensed.ttf</file>
+      <file face="bolditalic">$var(RESOURCEPATH)/fonts/Default/NotoSansMono-SemiCondensedBold.ttf</file>
+    </font>
+  </fonts>
+
+  <icons>
+    <icon name="media_play"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE037;" scale="1.0"/>
+    <icon name="media_stop"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE047;" scale="1.0"/>
+    <icon name="media_skip_back"      font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE045;" scale="1.0"/>
+    <icon name="media_skip_next"      font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE044;" scale="1.0"/>
+    <icon name="media_record"         font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE061;" scale="1.0"/>
+    <icon name="media_pause"          font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE034;" scale="1.0"/>
+    <icon name="media_fast_rewind"    font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE020;" scale="1.0"/>
+    <icon name="media_fast_forward"   font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE01F;" scale="1.0"/>
+    <icon name="media_shuffle_toggle" font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE043;" scale="1.0"/>
+    <icon name="media_repeat_toggle"  font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE040;" scale="1.0"/>
+    <icon name="volume"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE04E;" scale="1.0"/>
+    <icon name="volume_up"            font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE050;" scale="1.0"/>
+    <icon name="volume_down"          font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE04D;" scale="1.0"/>
+    <icon name="volume_mute"          font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE04F;" scale="1.0"/>
+    <icon name="power_on"             font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8AC;" scale="1.0"/>
+    <icon name="power_off"            font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8AC;" scale="1.0"/>
+
+    <icon name="osd_up"               font="$var(RESOURCEPATH)/fonts/Default/Arrows.ttf"                char="S"        scale="2.0"/>
+    <icon name="osd_down"             font="$var(RESOURCEPATH)/fonts/Default/Arrows.ttf"                char="T"        scale="2.0"/>
+    <icon name="osd_left"             font="$var(RESOURCEPATH)/fonts/Default/Arrows.ttf"                char="R"        scale="2.0"/>
+    <icon name="osd_right"            font="$var(RESOURCEPATH)/fonts/Default/Arrows.ttf"                char="Q"        scale="2.0"/>
+    <icon name="osd_next"             font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5CE;" scale="1.4"/>
+    <icon name="osd_prev"             font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5CF;" scale="1.4"/>
+
+    <icon name="arrow_left"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5C4;" scale="1.0"/>
+    <icon name="arrow_right"          font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5C8;" scale="1.0"/>
+    <icon name="arrow_up"             font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5D8;" scale="1.0"/>
+    <icon name="arrow_down"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5DB;" scale="1.0"/>
+    <icon name="arrow_back"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE15E;" scale="1.0"/>
+    <icon name="close_window"         font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5CD;" scale="1.0"/>
+
+    <icon name="source_radio"         font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE03E;" scale="1.0"/>
+    <icon name="source_pvr"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE05D;" scale="1.0"/>
+    <icon name="source_sdcard"        font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE1C2;" scale="1.0"/>
+    <icon name="source_usb"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE1E0;" scale="1.0"/>
+    <icon name="source_nas"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE1DB;" scale="1.0"/>
+    <icon name="source_cloud"         font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE2BD;" scale="1.0"/>
+    <icon name="source_dock"          font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE30E;" scale="1.0"/>
+    <icon name="source_pc"            font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE30C;" scale="1.0"/>
+    <icon name="source_tv"            font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE333;" scale="1.0"/>
+    <icon name="source_music"         font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE030;" scale="1.0"/>
+
+    <icon name="source_bluetooth"     font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE1A7;" scale="1.0"/>
+    <icon name="source_svideo"        font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8C3;" scale="1.0"/>
+    <icon name="source_favorites"     font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE87D;" scale="1.0"/>
+    <icon name="source_component"     font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8C0;" scale="1.0"/>
+    <icon name="source_hdmi"          font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8C2;" scale="1.0"/>
+    <icon name="source_antenna"       font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8BF;" scale="1.0"/>
+    <icon name="source_games"         font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE30F;" scale="1.0"/>
+
+    <icon name="square"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE047;" scale="1.2"/>
+    <icon name="search"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8B6;" scale="1.0"/>
+    <icon name="input"                font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE150;" scale="1.0"/>
+    <icon name="settings"             font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8B8;" scale="1.0"/>
+    <icon name="help"                 font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8FD;" scale="1.0"/>
+    <icon name="info"                 font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE88F;" scale="1.0"/>
+    <icon name="menu"                 font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5D2;" scale="1.0"/>
+    <icon name="escape"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE15E;" scale="1.0"/>
+    <icon name="aspect"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE85B;" scale="1.0"/>
+
+    <icon name="brightness"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE3AB;" scale="1.0"/>
+    <icon name="audiochannel"         font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE3A1;" scale="1.0"/>
+    <icon name="clock"                font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE924;" scale="1.0"/>
+    <icon name="timer"                font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE01B;" scale="1.0"/>
+    <icon name="subtitles"            font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE048;" scale="1.0"/>
+    <icon name="audioeffect"          font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE049;" scale="1.0"/>
+    <icon name="epg"                  font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE051;" scale="1.0"/>
+    <icon name="home"                 font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE88A;" scale="1.0"/>
+    <icon name="pip"                  font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8AA;" scale="1.0"/>
+    <icon name="teletext"             font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE02F;" scale="1.0"/>
+
+    <icon name="source"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE890;" scale="1.0"/>
+    <icon name="prev_channel"         font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8BA;" scale="1.0"/>
+    <icon name="context"              font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5D4;" scale="1.0"/>
+    <icon name="user"                 font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE7FD;" scale="1.0"/>
+    <icon name="functions"            font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE24A;" scale="1.0"/>
+    <icon name="osd"                  font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE913;" scale="1.0"/>
+    <icon name="escape"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE15F;" scale="1.0"/>
+    <icon name="translate"            font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE3E8;" scale="1.0"/>
+
+  </icons>
+
+
+
+</fontdef>

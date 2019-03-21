@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Anchor Dropdown Inner" type="ANCHOR" >
+    <elements>
+      <element name ='DropDown Rooms'   type='DROPDOWN'  sorted='0' posy='top'  height="%50"  picturenormal='button wide*' caption="$lvar(elvmax_10101):::$dvar(definition_alias_elv_max)_room_name[]"  actions='OnWidgetChangeRoom_$dvar(definition_alias_elv_max)'  />
+      <element name ='DropDown Devices' type='DROPDOWN'  sorted='0' posy='of:bottom:last'  height="of:height:last"  picturenormal='button wide*' caption="$lvar(elvmax_10102):::$dvar(definition_alias_elv_max)_device_name[]"  actions='OnWidgetChangeDevice_$dvar(definition_alias_elv_max)'  />
+    </elements>
+  </element>
+</elements>

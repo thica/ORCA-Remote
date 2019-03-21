@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_1">Gesten aufzeichnen</string>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_2">Zeichne eigene Gesten auf</string>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_3">Gesten aufzeichnen</string>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_4">Gesten</string>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_5">Die Gesten werden in der Datei 'gestures.log' im ORCA Verzeichnis gespeichert</string>
+</strings>

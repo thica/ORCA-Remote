@@ -1,0 +1,114 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-json-tcp
+WikiDoc:TOCTitle:json-tcp (KODI)
+= json-tcp =
+The json TCP interface sends json commands via TCP to a device. It has been designed to control Kodi, but there are Kodi specifics in the interface. This is a bi-directional interface, which means, that the interface can read information using json as well and can set variables based on json responses.
+
+The following settings are supported by the interface
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|Host
+|Host-Name or IP-Address of your android device. Could be "discover" as well. For "discover" you need to set the discover parameters of your Android device.
+Could be "linked:interfacename:configname:parametername". In this case, the host/ip-address will be pulled from a different interface.
+|-
+|Port
+|Port Address of your adb interfaces. Defaults is 5555
+|-
+|FNCodeset
+|Filename of your codeset. Without path
+|-
+|DiscoverManufacturer
+|For Autodiscover: The discover manufacturer of your device
+|-
+|DiscoverModels
+|For Autodiscover: List of models which are accepted by discover. Seperated by commata
+|-
+|DiscoverPrettyName
+|For Autodiscover: Pretty name of the device to discover
+|-
+|DiscoverServiceTypes
+|For Autodiscover: Service Types to discover. Defaults to "urn:dial-multiscreen-org:service:dial:1"
+|-
+|DiscoverTimeOut
+|For Autodiscover: Timeout to discover a device in seconds. Defaults to 5
+|-
+|SaveDiscoveredIP
+|For Autodiscover: Flag if the discovered IP should be saved. Prevents to discover every app start.
+|-
+|OldDiscoveredIP
+|For Autodiscover: The last discoverd IP-Address. Delete, if you want the force a new discover
+|-
+|TimeToClose
+|Timeout in seconds, until the connection from the interface to the device will be close.
+* -1 The connection will not be closed
+* 0 The connection will be closed immediately
+* all other, Timeout in seconds
+|-
+|DisableInterFaceOnError
+|Disables the interface, if an error occurs. Prevents the interface to continue to send commands to a broken connection.
+|-
+|DisconnectInterFaceOnSleep
+|Disconnects the interface, when your remote control device goes to sleep
+|}</div>
+
+Discover uses the upnp discover protocol. Pleaser refer to the discover upnp documentation for details on discover.
+
+You need to define the codeset filename, which contains the command set for your device
+
+A codeset file could look like that (shortened version):
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String -->
+<codeset>
+  <!-- KEYCODE_DPAD_CENTER /  enter=66-->
+  <action string="codeset" name='ok' waitforresponse='0' cmd='Shell' params="input keyevent 23" />
+  <!-- KEYCODE_DPAD_XXXX -->
+  <action string="codeset" name='left' waitforresponse='0' cmd='Shell' params="input keyevent 21" />
+</codeset>
+</syntaxhighlight></div>
+
+{| class="wikitable"
+! align="left" | Attribute
+! align="left" | Description
+|-
+|action
+|Defines, to which ORCA action the  command should be send
+|-
+|getvar
+|This defines, which information will be collected from the json respons., Only the last attribute will be used. If an attribute belongs to a list, only the first list entry is parsed.
+|-
+|ldestvar
+|This defines, which variable should be set by the information parsed by getvar. This variable is local to the interface and local to the configuration
+|-
+|gdestvar
+|This defines, which variable should be set by the information parsed by getvar. This variable is global to all ORCA functions
+|-
+|cmd
+|This is the command to transmit using adb.
+|}
+
+Variable replacement: You can use variable placeholder to use variables in your adb command string
+
+{| class="wikitable"
+! align="left" | var
+! align="left" | Description
+|-
+|var()
+|Uses a global variable name to be replaced
+|-
+|lvar()
+|Uses a language variable name to be replaced
+|-
+|cvar()
+|Uses a local variable to be replaced
+|}
+
+You can have as much actions as you like in your codeset file. You can use the same codeset file for several configurations. You should have a "ping" command in your codeset
+WikiDoc:End
+'''

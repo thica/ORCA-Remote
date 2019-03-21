@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+
+    <string id="apptemplate_10500">App Name</string>
+    <string id="apptemplate_10501">Quickstart Application Name</string>
+    <string id="apptemplate_10502">App start command</string>
+    <string id="apptemplate_10503">Command to start the application</string>
+    <string id="apptemplate_10504">Application Favorites</string>
+
+</strings>
