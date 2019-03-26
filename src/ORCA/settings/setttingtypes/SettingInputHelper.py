@@ -25,7 +25,6 @@ __all__ = ['SettingInputHelper']
 class SettingInputHelper(SettingString):
     """ Shows in input field for settings """
 
-    # noinspection PyMissingConstructor
     def __init__(self, **kwargs):
         self.settings = None
         self.action   = ""

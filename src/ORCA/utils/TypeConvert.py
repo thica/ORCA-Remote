@@ -179,7 +179,6 @@ def ToUnicode(Obj):
                 except Exception as e:
                     return Obj.decode('utf-8','replace')
             else:
-                # noinspection PyCompatibility
                 return unicode(str(Obj))
         except Exception as e:
             LogError(u'Unicode Transfer Error',e)
@@ -255,11 +254,32 @@ def ToDic(uString):
     if uString==u'':
         return {}
 
+    uRet = ''
+
     try:
         if uString.startswith(u'{'):
-            uRet=json.loads(uString)
-        else:
-            uRet=ast.literal_eval(uString)
+            try:
+                uRet=json.loads(uString)
+            except Exception:
+                pass
+        if not isinstance(uRet, dict):
+            try:
+                uRet=ast.literal_eval(uString)
+            except Exception:
+                pass
+        if not isinstance(uRet, dict):
+            uString = uString.replace("\'", "\"")
+
+        if uString.startswith(u'{'):
+            try:
+                uRet=json.loads(uString)
+            except Exception:
+                pass
+        if not isinstance(uRet, dict):
+            try:
+                uRet=ast.literal_eval(uString)
+            except Exception:
+                pass
 
         if not isinstance(uRet, dict):
             LogError(u'ToDic: can\'t convert string to dic:'+uString)
@@ -334,7 +354,6 @@ def ToInt(uString):
         return 0
 
 
-# noinspection PyCompatibility
 def ToLong(uString):
     """
     converts a (unicode) string into a long integer

@@ -57,8 +57,6 @@ import ORCA.Globals as Globals
 </root>
 '''
 
-
-
 class cScript(cToolsTemplate):
     """
     WikiDoc:Doc

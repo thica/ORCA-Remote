@@ -209,7 +209,7 @@ class cPath(object):
                     if bSubDirs:
                         oDirList.extend((cPath(uRootDir) + oItem).GetFileList( bSubDirs, bFullPath))
         except Exception as e:
-            uMsg = u'can\'t get File list:' + ToUnicode(e) + " :" + uRootDir
+            uMsg = u'can\'t get File list:' + ToUnicode(str(e)) + " :" + uRootDir
             Logger.warning(uMsg)
 
         return oDirList

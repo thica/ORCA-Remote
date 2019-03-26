@@ -6,7 +6,7 @@ WikiDoc:TOCTitle:elv max
 
 The ELV MAX definition control radiator thermostats from ELV and IQ3. It uses the cube it transfer commands to the thermostats.
 Remark: Vacation mode is not supportet (Date / Time Picker Widget not available by now)
-Remark: Return of current temperature is not reliable, no clue, why.
+Remark: Return of current temperature is not reliable, no clue, why (but it looks like a cube bug).
 
 Key features:
 * Works for large screen sizes and all orientations
@@ -16,13 +16,11 @@ Key features:
 * Autodiscover the cube
 * No logon required
 
-[[File:mediaplayer_template_main_large_landscape.png|link=]]
+[[File:elv_max_main_large_landscape.png|link=]]
+
+[[File:elv_max_main_large_portrait.png|link=]]
 
 The main page in large screen and landscape mode
-
-[[File:mediaplayer_template_main_small_landscape.png|link=]]
-
-The main page in small screen and landscape mode
 
 
 WikiDoc:End
@@ -32,13 +30,13 @@ WikiDoc:Doc
 WikiDoc:Context:Reference_Definitions
 WikiDoc:Page:Reference Definition elv max
 WikiDoc:TOCTitle:elv max
-
+s
 
 The ELV MAX definition control radiator thermostats from ELV and IQ3. It uses the cube it transfer commands to the thermostats. It is designed to use the elv_max interface with the default codeset for it.
 All actions are within the customcommands action file, the layout is for large portrait and and landscape devices. Smaller devices will work, but controls will be small.
 
 [[File:mediaplayer_template_main_large_landscape.png|link=]]
-The main page in large screen and landscape mode. For more details please have a look in the user decription for the defintion
+The main page in large screen and landscape mode. For more details please have a look in the user decription for the definition
 
 This definition has the following capabilities
 
@@ -62,10 +60,6 @@ This definition has the following capabilities
 
 = Definitionvars =
 This definition uses the following definitionvars:
-
-    <setting title="$lvar(elvmax_10202)" desc="$lvar(elvmax_10203)"    var="$dvar(definition_alias_elv_max)_max_temperature" type="numericslider" default="25" min="0" max="60" roundpos="0"/>
-    <setting title="$lvar(elvmax_10204)" desc="$lvar(elvmax_10204)"    var="$dvar(definition_alias_elv_max)_min_temperature" type="numericslider" default="10" min="0" max="60" roundpos="0"/>
-    <setting title="$lvar(elvmax_10240)" desc="$lvar(elvmax_10241)"    var="$dvar(definition_alias_elv_max)_NAVIGATIONBAR"   type="string"   default="$var(STANDARDELEMENTSPATH)/block_topline.xml" />
 
 * "definition_alias_elv_max": default value = "ELV_MAX"
 

@@ -96,7 +96,6 @@ class cScript(cDiscoverScriptTemplate):
         self.iDiscoverCount       = 0
         self.iMaxDiscoverCount    = 3
         self.oDiscoverObject      = ciTachDiscover(self.aiTachDevices,self)
-        self.StartThread()
     def __del__(self):
         self.StopThread([])
 
@@ -114,6 +113,7 @@ class cScript(cDiscoverScriptTemplate):
 
         cDiscoverScriptTemplate.Init(self, uScriptName, oFnScript)
         self.oScriptConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.StartThread()
 
     def StartThread(self):
         if self.iDiscoverCount < self.iMaxDiscoverCount:

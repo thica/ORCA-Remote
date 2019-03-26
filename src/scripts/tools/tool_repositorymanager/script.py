@@ -87,13 +87,13 @@ class cScript(cToolsTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.uHost           = Globals.oParameter.uFTPServer
-            self.aScriptIniSettings.uUser           = Globals.oParameter.uFTPUser
-            self.aScriptIniSettings.uPassword       = Globals.oParameter.uFTPPassword
-            self.aScriptIniSettings.uFTPPath        = Globals.oParameter.uFTPServerPath
-            self.aScriptIniSettings.uPathRepSource  = Globals.oParameter.oPathRepSource
-            self.aScriptIniSettings.uWWWServerPath  = Globals.oParameter.uWWWServerPath
-            self.aScriptIniSettings.bFTPSSL         = ToBool(Globals.oParameter.uFTPSSL)
+            self.aScriptIniSettings.uHost           = oScript.oEnvParameter.uFTPServer
+            self.aScriptIniSettings.uUser           = oScript.oEnvParameter.uFTPUser
+            self.aScriptIniSettings.uPassword       = oScript.oEnvParameter.uFTPPassword
+            self.aScriptIniSettings.uFTPPath        = oScript.oEnvParameter.uFTPServerPath
+            self.aScriptIniSettings.uPathRepSource  = oScript.oEnvParameter.oPathRepSource
+            self.aScriptIniSettings.uWWWServerPath  = oScript.oEnvParameter.uWWWServerPath
+            self.aScriptIniSettings.bFTPSSL         = ToBool(oScript.oEnvParameter.uFTPSSL)
 
             uVersion = str(Globals.iVersion)
             self.aScriptIniSettings.uWWWServerPath  = self.aScriptIniSettings.uWWWServerPath.replace(uVersion,"$var(REPVERSION)")
@@ -101,13 +101,13 @@ class cScript(cToolsTemplate):
 
     class cScriptParameter(cParameter):
         def AddParameter(self,oParser):
-            oParser.add_argument('--ftpserver', default=GetEnvVar('ORCAFTPSERVER'), action=cParserAction, oParameter=self, dest="uFTPServer", help='Set the FTP Server address for the repository manager (can be passed as ORCAFTPSERVER environment var)')
-            oParser.add_argument('--ftpserverpath', default=GetEnvVar('ORCAFTPSERVERPATH'), action=cParserAction, oParameter=self, dest="uFTPServerPath", help='Set the FTP Server path for the repository manager (can be passed as ORCAFTPSERVERPATH environment var)')
-            oParser.add_argument('--ftpuser', default=GetEnvVar('ORCAFTPUSER'), action=cParserAction, oParameter=self, dest="uFTPUser", help='Set the username for the FTP Server for the repository manager (can be passed as ORCAFTPUSER environment var)')
-            oParser.add_argument('--ftppassword', default=GetEnvVar('ORCAFTPPW'), action=cParserAction, oParameter=self, dest="uFTPPassword", help='Set the password for the FTP Server for the repository manager (can be passed as ORCAFTPPW environment var)')
-            oParser.add_argument('--ftpssl', default=GetEnvVar('ORCAFTPSSL'), action=cParserAction, oParameter=self, dest="uFTPSSL", help='Flag 0/1 to use SSL to connect to the FTP server (can be passed as ORCAFTPSSL environment var)')
-            oParser.add_argument('--ftprepsourcepath', default=GetEnvVar('ORCAREPSOURCEPATH',Globals.oPathRoot.string), action=cParserAction, oParameter=self, dest="oPathRepSource", help='Changes the path for repository manager where to find the repositry files to upload (can be passed as ORCAREPSOURCEPATH environment var)')
-            oParser.add_argument('--wwwserverpath', default=GetEnvVar('ORCAWWWSERVERPATH'), action=cParserAction, oParameter=self, dest="uWWWServerPath", help='Set the WWW Server path for the repository manager  (can be passed as ORCAWWWSERVERPATH environment var)')
+            oParser.add_argument('--ftpserver',         default=GetEnvVar('ORCAFTPSERVER'),                              action=cParserAction, oParameter=self, dest="uFTPServer",      help='Set the FTP Server address for the repository manager (can be passed as ORCAFTPSERVER environment var)')
+            oParser.add_argument('--ftpserverpath',     default=GetEnvVar('ORCAFTPSERVERPATH'),                          action=cParserAction, oParameter=self, dest="uFTPServerPath",  help='Set the FTP Server path for the repository manager (can be passed as ORCAFTPSERVERPATH environment var)')
+            oParser.add_argument('--ftpuser',           default=GetEnvVar('ORCAFTPUSER'),                                action=cParserAction, oParameter=self, dest="uFTPUser",        help='Set the username for the FTP Server for the repository manager (can be passed as ORCAFTPUSER environment var)')
+            oParser.add_argument('--ftppassword',       default=GetEnvVar('ORCAFTPPW'),                                  action=cParserAction, oParameter=self, dest="uFTPPassword",    help='Set the password for the FTP Server for the repository manager (can be passed as ORCAFTPPW environment var)')
+            oParser.add_argument('--ftpssl',            default=GetEnvVar('ORCAFTPSSL'),                                 action=cParserAction, oParameter=self, dest="uFTPSSL",         help='Flag 0/1 to use SSL to connect to the FTP server (can be passed as ORCAFTPSSL environment var)')
+            oParser.add_argument('--ftprepsourcepath',  default=GetEnvVar('ORCAREPSOURCEPATH',Globals.oPathRoot.string), action=cParserAction, oParameter=self, dest="oPathRepSource",  help='Changes the path for repository manager where to find the repositry files to upload (can be passed as ORCAREPSOURCEPATH environment var)')
+            oParser.add_argument('--wwwserverpath',     default=GetEnvVar('ORCAWWWSERVERPATH'),                          action=cParserAction, oParameter=self, dest="uWWWServerPath",  help='Set the WWW Server path for the repository manager  (can be passed as ORCAWWWSERVERPATH environment var)')
 
     def __init__(self):
         cToolsTemplate.__init__(self)
@@ -115,9 +115,7 @@ class cScript(cToolsTemplate):
         self.uSortOrder      = u'auto'
         self.uSettingSection = u'tools'
         self.uSettingTitle   = u"Repository Manager"
-        oParameter      = self.cScriptParameter()
-        for uKey in oParameter:
-            Globals.oParameter[uKey]= oParameter[uKey]
+        self.oEnvParameter   = self.cScriptParameter()
 
     def Init(self,uScriptName,uScriptFile=u''):
         """
@@ -171,8 +169,8 @@ class cScript(cToolsTemplate):
         self.LoadActions()
 
     def GetConfigJSON(self):
-        return {"FTPPath": {"type": "varstring", "active":"enabled", "order":16,  "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_5)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_6)","key": "FTPPath", "default":Globals.oParameter.uFTPServerPath, "section": "$var(ScriptConfigSection)"},
-                "FTPSSL":  {"type": "bool",   "active":"enabled", "order":17,  "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_7)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_8)","key": "FTPSSL", "default":ToBool(Globals.oParameter.uFTPSSL),"section": "$var(ScriptConfigSection)"},
-                "PathRepSource": {"type": "path", "active": "enabled", "order": 18, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)", "key": "PathRepSource", "default": Globals.oParameter.oPathRepSource.unixstring, "section": "$var(ScriptConfigSection)"},
-                "WWWServerPath": {"type": "varstring", "active": "enabled", "order": 19, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_11)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_12)", "key": "WWWServerPath", "default": Globals.oParameter.uWWWServerPath,"section": "$var(ScriptConfigSection)"}
+        return {"FTPPath":       {"type": "varstring", "active":"enabled", "order":16, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_5)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_6)", "key": "FTPPath",       "default": self.oEnvParameter.uFTPServerPath,            "section": "$var(ScriptConfigSection)"},
+                "FTPSSL":        {"type": "bool",      "active":"enabled", "order":17, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_7)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_8)", "key": "FTPSSL",        "default": ToBool(self.oEnvParameter.uFTPSSL),           "section": "$var(ScriptConfigSection)"},
+                "PathRepSource": {"type": "path",      "active":"enabled", "order":18, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ScriptConfigSection)"},
+                "WWWServerPath": {"type": "varstring", "active":"enabled", "order":19, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_11)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_12)","key": "WWWServerPath", "default": self.oEnvParameter.uWWWServerPath,            "section": "$var(ScriptConfigSection)"}
                 }

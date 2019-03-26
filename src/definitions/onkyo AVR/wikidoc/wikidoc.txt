@@ -24,7 +24,7 @@ Key features are:
 IMPORTANT/Remarks: You need to enable network standby of your Onkyo receiver to get power on and discover working!
 
 [[File:ORCA_MAIN.png|link=]]
-The main receiver page. 
+The main receiver page.
 Usual the screen will be switched to the network services if you select the service from the services dropdown. You can reach the network services directly, if you press the N Button on the right edge of the page.
 Usual the screen will be switched to the radio services if you select the service from the services dropdown. You can reach the radio services directly, if you press the R Button on the right edge of the page.
 
@@ -45,7 +45,7 @@ The main page, dropdown for inputs/source control. The available sources will be
 [[File:ORCA_MAIN_EFFECTS.png|link=]]
 The main page, dropdown for audio effects. The available audio effects will be pulled from the receiver. Note: The names for the audio effects may differ from the display, as the receiver just returns a number, and the correct name to the number might be different on different models.
 
-If the dropdowns are empty, the defintion struggled to get valid receiver information from the device. Try to press at the receiver symbol to pull them again. Some ONKYO receiver have a weak network stack so the network communication gets broken for a while. Nothing I can fix.
+If the dropdowns are empty, the definition struggled to get valid receiver information from the device. Try to press at the receiver symbol to pull them again. Some ONKYO receiver have a weak network stack so the network communication gets broken for a while. Nothing I can fix.
 
 
 = Settings =

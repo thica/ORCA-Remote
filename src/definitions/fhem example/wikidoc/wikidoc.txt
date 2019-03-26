@@ -1,0 +1,130 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:DefinitionsForUser
+WikiDoc:Page:Userdescription Definition fhem example
+WikiDoc:TOCTitle:mediaplayer_wizard
+= FHEM Example =
+The fhem example definition is more a showcase haow to intercat with a FHEM home automatisation server , rather than a ready to use definition. It defines 4 swiches and for dimmer slider and two group switches
+
+[[File:fhem example main.png|link=]]
+
+This definition has the following capabilities
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Capability
+! align="left" | Description
+|-
+|Orientation
+|Landscape
+|-
+|Screen Size
+|
+* large / portrait
+|-
+|Interfaces
+|telnet
+|}</div>
+
+= Settings =
+
+This definition has the following settings:
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|Label dimmer (1 to 4)
+|The (screen) label for the dimmer
+|-
+|FHEM label dimmer (1 to 4)
+|The fhem label for the dimmer
+|-
+|Label switch (1 to 4)
+|The (screen) label for the switch
+|-
+|FHEM label switch (1 to 4)
+|The fhem label for the switch
+|}</div>
+WikiDoc:End
+'''
+
+
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Definitions
+WikiDoc:Page:Reference Definition fhem20 example
+WikiDoc:TOCTitle:fhem20 example
+
+The fhem example definition is more a showcase haow to intercat with a FHEM home automatisation server , rather than a ready to use definition. It defines 4 swiches and for dimmer slider and two group switches
+
+= definitionvars =
+
+This definition uses the following definitionvars:
+
+* "definition_alias_FHEMFS20LIGHTS" : default value = "FHEMFS20LIGHTS"
+
+= Settings =
+
+$dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1"
+$dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1"
+
+var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMERx_LABEL"
+var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMERx_NAME_FHEM"
+var="$dvar(definition_alias_FHEMFS20LIGHTS)_DIMMERALL_LABEL"
+var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCHx_LABEL"
+var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCHx_NAME_FHEM"
+var="$dvar(definition_alias_FHEMFS20LIGHTS)_SWITCHALL_LABEL"
+
+
+= elements =
+The following elements are defined for use:
+
+No common blocks
+
+= pages =
+The following pages are defined:
+
+Page_Device_$dvar(definition_alias_FHEMFS20LIGHTS)
+
+= actions =
+The following actions are defined:
+
+Note: The action structure is quiet old and could be reworked much simpler. But I don't use fhem anymore so I can't test it, so I will not rework it.
+
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer all
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 1
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 2
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 3
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Dim Dimmer 4
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Send Dim Dimmer
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer all
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 1
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 2
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 3
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Dimmer 4
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Dimmer
+* Send Switch Off Dimmer all
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Dimmer 1
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Dimmer 2
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Dimmer 3
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Dimmer 4
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Dimmer
+* Fkt DezToFS20DimSteps">
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch all
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 1
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 2
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 3
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch On Switch 4
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Switch
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch all
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 1
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 2
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 3
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch 4
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Switch
+* $dvar(definition_alias_FHEMFS20LIGHTS)_Fkt INITFS20DIMMERVARS
+
+WikiDoc:End
+'''

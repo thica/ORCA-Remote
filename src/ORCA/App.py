@@ -27,7 +27,6 @@ from kivy.app                              import App
 from kivy.clock                            import Clock
 from kivy.config                           import Config as kivyConfig
 from kivy.config                           import ConfigParser as OrcaConfigParser
-# noinspection PyProtectedMember
 from kivy.logger                           import FileHandler
 from kivy.logger                           import Logger
 from kivy.metrics                          import Metrics
@@ -345,17 +344,13 @@ class ORCA_App(App):
         it will set setting defaults, if we do not have an ini file by now
         """
         try:
-            '''
-            if Globals.oParameter.oPathLog is not None:
+            if Globals.oParameter.oPathLog.string:
                 oPathLogfile = Globals.oParameter.oPathLog
-            else:
-                oPathLogfile = cPath(Globals.oPathRoot) + "logs"
-            oPathLogfile.Create()
-            kivyConfig.set('kivy', 'log_dir', oPathLogfile.string)
-            kivyConfig.write()
-            uOrgLogFn=Logger.manager.loggerDict["kivy"].handlers[1].filename
-            Logger.debug(u"Init: Original Startup Logile at :"+uOrgLogFn)
-            '''
+                oPathLogfile.Create()
+                kivyConfig.set('kivy', 'log_dir', oPathLogfile.string)
+                kivyConfig.write()
+                uOrgLogFn=Logger.manager.loggerDict["kivy"].handlers[1].filename
+                Logger.debug(u"Init: Replacing Logfile Location to :"+Globals.oParameter.oPathLog.string)
 
             Logger.level=Logger.level
 
@@ -517,7 +512,6 @@ class ORCA_App(App):
         """
         Getting the orientation of the App and sets to system vars for it
         """
-        # noinspection PyProtectedMember
         Logger.debug(
             u'Setting Orientation Variables #1: Screen Size: [%s], Width: [%s], Heigth: [%s], Orientation: [%s]' % (
             str(Globals.fScreenSize), str(self._app_window._size[0]), str(self._app_window._size[1]),
@@ -563,7 +557,7 @@ class ORCA_App(App):
         Globals.oPathAction                 = Globals.oPathRoot + u'actions'
         Globals.oPathCodesets               = Globals.oPathRoot + u'codesets'
         Globals.oPathSoundsRoot             = Globals.oPathRoot + u'sounds'
-        if Globals.oParameter.oPathTmp:
+        if Globals.oParameter.oPathTmp.string:
             Globals.oPathTmp = Globals.oParameter.oPathTmp
         else:
             Globals.oPathTmp = Globals.oPathRoot + u'tmp'

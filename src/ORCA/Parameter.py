@@ -24,7 +24,6 @@ from ORCA.utils.Path        import cPath
 from ORCA.vars.Helpers      import GetEnvVar
 from ORCA.utils.Platform    import OS_GetSystemUserPath
 from ORCA.vars.QueryDict    import QueryDict
-from ORCA.vars.Helpers      import CopyDict
 import argparse
 
 __all__ = ['cParameter','cParserAction']
@@ -57,6 +56,7 @@ class cParameter(QueryDict):
         oParser.parse_args(aArgs)
 
     def AddParameter(self,oParser):
+
         oParser.add_argument('--debugpath',        default=GetEnvVar('DEBUGPATH'),                                  action=cParserAction, oParameter=self, dest="oPathDebug",     help='Changes the path for ORCA files (can be passed as DEBUGPATH environment var)')
         oParser.add_argument('--logpath',          default=GetEnvVar('ORCALOGPATH'),                                action=cParserAction, oParameter=self, dest="oPathLog",       help='Changes the path for ORCA/Kivy log files (can be passed as ORCALOGPATH environment var)')
         oParser.add_argument('--tmppath',          default=GetEnvVar('ORCATMPPATH'),                                action=cParserAction, oParameter=self, dest="oPathTmp",       help='Changes the path for ORCA temp folder (can be passed as ORCATMPPATH environment var)')
@@ -70,3 +70,4 @@ class cParameter(QueryDict):
                     aRet.append(uArg)
                     break
         return aRet
+

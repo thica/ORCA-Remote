@@ -1,1 +1,1 @@
-[[https://github.com/thica/ORCA-Remote/tree/master/src/wikidoc/images/orca.png]]
+[[https://github.com/thica/ORCA-Remote/blob/master/src/wikidoc/images/orca.png]]

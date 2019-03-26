@@ -111,12 +111,12 @@ class cWikiPage(object):
         """ writes the Wiki Doc File """
 
         oFileName=cFileName(uPath) + (self.uPage+".mediawiki")
-        oFileName.Delete()
-        f = open(oFileName.string, 'a')
+        # oFileName.Delete()
+        f = open(oFileName.string, 'w')
 
         # _Header.md currently not working, so add it static
         if self.uWikiApp == "GITWIKI":
-            f.write("[[https://github.com/thica/ORCA-Remote/tree/master/src/wikidoc/images/orca.png]]\r\n")
+            f.write("[[https://github.com/thica/ORCA-Remote/blob/master/src/wikidoc/images/orca.png]]\r\n")
 
         for uLine in self.uContent:
             f.write(EscapeUnicode(uLine)+u"\n")
@@ -179,16 +179,15 @@ class cWikiPage(object):
                         LogError(u'Wikidoc:unable to find linked filename: [%s] [%s] [%s]' % (uFileName,uLine,self.uPage))
                 # adjust syntaxhighlighting to GIT Wiki
 
-                # uLine = uLine.replace('<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">', "'''xml")
-                # uLine = uLine.replace('</syntaxhighlight></div>',"'''")
-                uLine = uLine.replace('<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">', '----<div style="overflow-x: auto;"><code><nowiki>')
-                uLine = uLine.replace('</syntaxhighlight></div>',"</nowiki></code></div>\r\n----")
+                uLine = uLine.replace('<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">', '<div style="overflow-x: auto;">\r\n```xml')
+                uLine = uLine.replace('</syntaxhighlight></div>',"```\r\n</div>")
+                # uLine = uLine.replace('<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">', '----<div style="overflow-x: auto;"><code><nowiki>')
+                # uLine = uLine.replace('</syntaxhighlight></div>',"</nowiki></code></div>\r\n----")
 
                 if "syntaxhighlight" in uLine:
                     Logger.warning("Unsupported Syntax Highlight: [%s] [%s] " %(self.uPage,uLine))
                 self.uContent[iIndex]=uLine
 
-                ''' https://github.com/thica/ORCA-Remote/blob/master/src/wikidoc/images/widgets/button/widget_button%20round%20framed%20pressed.png '''
 
 class cWikiDoc(object):
     """ Class to create the ORCA Wiki Documentation """

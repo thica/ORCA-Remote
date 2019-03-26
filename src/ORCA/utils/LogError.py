@@ -45,7 +45,6 @@ def LogError(uMsg, oException=None, bTrackStack = False):
             uStackText = ''.join(traceback.format_list(traceback.extract_stack())[:-2])
         if PY2:
             try:
-                # noinspection PyCompatibility
                 uStackText=unicode(string=uStackText,errors='replace')
             except Exception as e:
                 pass

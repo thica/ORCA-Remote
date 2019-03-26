@@ -59,8 +59,6 @@ from WikiDoc                                import cWikiDoc
 </root>
 '''
 
-
-
 class cScript(cToolsTemplate):
     """
     WikiDoc:Doc
@@ -83,24 +81,26 @@ class cScript(cToolsTemplate):
 
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
+            '''
+            :param oScript: cScript
+            '''
+
             cBaseScriptSettings.__init__(self,oScript)
-            # Globals.oParameter values will be added in this script
-            self.aScriptIniSettings.uHost               = Globals.oParameter.uWikiServer
-            self.aScriptIniSettings.uFTPPath            = Globals.oParameter.uWikiPath
-            self.aScriptIniSettings.uUser               = Globals.oParameter.uWikiUser
-            self.aScriptIniSettings.uPassword           = Globals.oParameter.uWikiPassword
-            self.aScriptIniSettings.uWikiTargetFolder   = Globals.oParameter.uWikiTargetFolder
-            self.aScriptIniSettings.uWikiApp            = Globals.oParameter.uWikiApp
+            self.aScriptIniSettings.uHost               = oScript.oEnvParameter.uWikiServer
+            self.aScriptIniSettings.uFTPPath            = oScript.oEnvParameter.uWikiPath
+            self.aScriptIniSettings.uUser               = oScript.oEnvParameter.uWikiUser
+            self.aScriptIniSettings.uPassword           = oScript.oEnvParameter.uWikiPassword
+            self.aScriptIniSettings.uWikiTargetFolder   = oScript.oEnvParameter.uWikiTargetFolder
+            self.aScriptIniSettings.uWikiApp            = oScript.oEnvParameter.uWikiApp
 
     class cScriptParameter(cParameter):
         def AddParameter(self,oParser):
-            oParser.add_argument('--wikiserver', default=GetEnvVar('ORCAWIKISERVER', 'www.orca-remote.org'), action=cParserAction, oParameter=self, dest="uWikiServer",help='Set the WWW server address for the ORCA Wikipedia (can be passed as ORCAWIKISERVER environment var)')
-            oParser.add_argument('--wikipath', default=GetEnvVar('ORCAWIKIPATH', '/mediawiki/'), action=cParserAction, oParameter=self, dest="uWikiPath", help='Set the WWW server path for the ORCA Wikipedia (can be passed as ORCAWIKIPATH environment var)')
-            oParser.add_argument('--wikiuser', default=GetEnvVar('ORCAWIKIUSER'), action=cParserAction, oParameter=self, dest="uWikiUser", help='Set the initialisation username for the ORCA Wikipedia (can be passed as ORCAWIKIUSER environment var)')
-            oParser.add_argument('--wikipassword', default=GetEnvVar('ORCAWIKIPW'), action=cParserAction, oParameter=self, dest="uWikiPassword", help='Set the initialisation password for the ORCA Wikipedia (can be passed as ORCAWIKIPW environment var)')
-            oParser.add_argument('--wikitargetfolder', default=GetEnvVar('ORCAWIKITARGETFOLDER',Globals.oPathTmp.string), action=cParserAction, oParameter=self, dest="uWikiTargetFolder", help='Sets local folder for the wiki files')
-            oParser.add_argument('--wikiapp', default=GetEnvVar('ORCAWIKIAPP',"MEDIAWIKI"), action=cParserAction, oParameter=self, dest="uWikiApp", help='Sets the target for the wiki files (MEDIAWIKI or GITWIKI)')
-
+            oParser.add_argument('--wikiserver',        default=GetEnvVar('ORCAWIKISERVER', 'www.orca-remote.org'),         action=cParserAction, oParameter=self, dest="uWikiServer",      help='Set the WWW server address for the ORCA Wikipedia (can be passed as ORCAWIKISERVER environment var)')
+            oParser.add_argument('--wikipath',          default=GetEnvVar('ORCAWIKIPATH', '/mediawiki/'),                   action=cParserAction, oParameter=self, dest="uWikiPath",        help='Set the WWW server path for the ORCA Wikipedia (can be passed as ORCAWIKIPATH environment var)')
+            oParser.add_argument('--wikiuser',          default=GetEnvVar('ORCAWIKIUSER'),                                  action=cParserAction, oParameter=self, dest="uWikiUser",        help='Set the initialisation username for the ORCA Wikipedia (can be passed as ORCAWIKIUSER environment var)')
+            oParser.add_argument('--wikipassword',      default=GetEnvVar('ORCAWIKIPW'),                                    action=cParserAction, oParameter=self, dest="uWikiPassword",    help='Set the initialisation password for the ORCA Wikipedia (can be passed as ORCAWIKIPW environment var)')
+            oParser.add_argument('--wikitargetfolder',  default=GetEnvVar('ORCAWIKITARGETFOLDER',Globals.oPathTmp.string),  action=cParserAction, oParameter=self, dest="uWikiTargetFolder",help='Sets local folder for the wiki files')
+            oParser.add_argument('--wikiapp',           default=GetEnvVar('ORCAWIKIAPP',"MEDIAWIKI"),                       action=cParserAction, oParameter=self, dest="uWikiApp",         help='Sets the target for the wiki files (MEDIAWIKI or GITWIKI)')
 
     def __init__(self):
         cToolsTemplate.__init__(self)
@@ -108,9 +108,7 @@ class cScript(cToolsTemplate):
         self.uSortOrder      = u'auto'
         self.uSettingSection = u'tools'
         self.uSettingTitle   = u"WikiDoc"
-        oParameter      = self.cScriptParameter()
-        for uKey in oParameter:
-            Globals.oParameter[uKey]= oParameter[uKey]
+        self.oEnvParameter   = self.cScriptParameter()
 
     def Init(self,uScriptName,uScriptFile=u''):
         """
@@ -133,6 +131,7 @@ class cScript(cToolsTemplate):
     def WikiDoc(self, *args, **kwargs):
         oSetting                    = self.GetSettingObjectForConfigName(self.uConfigName)
         dArgs                       = {}
+
         dArgs["Host"]              = kwargs.get("Host",oSetting.aScriptIniSettings.uHost)
         dArgs["WikiPath"]          = kwargs.get("WikiPath",oSetting.aScriptIniSettings.uWikiPath)
         dArgs["User"]              = kwargs.get("WikiUser",oSetting.aScriptIniSettings.uUser)
@@ -148,7 +147,7 @@ class cScript(cToolsTemplate):
         cToolsTemplate.Register(self,*args, **kwargs)
         Globals.oNotifications.RegisterNotification("STARTSCRIPTWIKIDOC", fNotifyFunction=self.WikiDoc,   uDescription="Script WikiDoc")
 
-        oScriptSettingPlugin = cScriptSettingPlugin()
+        oScriptSettingPlugin               = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uScriptName
         oScriptSettingPlugin.uSettingName  = "ORCA"
         oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
@@ -157,6 +156,6 @@ class cScript(cToolsTemplate):
         Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uScriptName,oScriptSettingPlugin=oScriptSettingPlugin)
 
     def GetConfigJSON(self):
-        return {"WikiPath":         {"type": "string", "active": "enabled", "order": 16, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_5)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_6)","key": "WikiPath", "default":Globals.oParameter.uWikiPath, "section": "$var(ScriptConfigSection)"},
+        return {"WikiPath":         {"type": "string", "active": "enabled", "order": 16, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_5)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_6)","key": "WikiPath", "default":self.oParameter.uWikiPath, "section": "$var(ScriptConfigSection)"},
                 "WikiTargetFolder": {"type": "string", "active": "enabled", "order": 17, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_7)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_8)", "key": "WikiTargetFolder", "default": Globals.oPathTmp.string, "section": "$var(ScriptConfigSection)"}
                 }

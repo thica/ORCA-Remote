@@ -76,7 +76,6 @@ class cDiscover_List(cBasePopup):
         #resize the Scrollcontent to fit to all Childs. Needs to be done, after the popup has been shown
         Clock.schedule_once(self.SetScrollSize, 0)
 
-    # noinspection PyUnusedLocal
     def SetScrollSize(self, *args):
         """  Sets the size of the scoll window of the results """
         iHeight=0
@@ -87,7 +86,6 @@ class cDiscover_List(cBasePopup):
                 iHeight=iHeight+oChild.height
         self.oScrollContent.size=(self.oPopup.width,iHeight)
 
-    # noinspection PyUnusedLocal
     def On_Cancel(self,instance):
         """ call handler for abort """
         cBasePopup.ClosePopup(self)

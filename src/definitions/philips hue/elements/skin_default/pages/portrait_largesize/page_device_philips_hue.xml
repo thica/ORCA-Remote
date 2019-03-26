@@ -20,8 +20,13 @@
     </element>
 
     <element name='Anchor BottomTop' type='ANCHOR' posx='left' posy='top' height='%6' />
-    <element name='Anchor Lights' type='ANCHOR' posx='%5' posy='of:bottom:Anchor BottomTop' width='of:height:self' height='%45'>
-      <xi:include href="$var(DEFINITIONPATH)/block_buttons_lightselect.xml" parse="xml" />
+    <element name='Anchor Lights' type='ANCHOR' posx='%5' posy='of:bottom:Anchor BottomTop' width='%60' height='%46'>
+      <element name ='Text Light HUE'      type='TEXTFIELD'                         height="of:width:self:/5"   caption="$var(HUELIGHTNAME)"  />
+      <element name ='Text LightType HUE'  type='TEXTFIELD'   posy='of:bottom:last' height="of:height:last"   width="%70"  caption="$var(HUELIGHTCATEGORY)"  />
+      <element name ='Text LightNum HUE'   type='TEXTFIELD'   posy='of:top:last'  posx="of:right:last"  height="of:height:last"   width="%30"  caption="$var(HUELIGHTNUM)"  />
+
+      <element name ='DropDown Lights HUE'  type='DROPDOWN'  sorted='1' posy='of:bottom:last'  height="of:height:last"   fontsizeold="%h30"  picturenormal='button wide*' caption="Lights:::$dvar(definition_alias_philips_hue)_status_name[]"  actions='Change Light $dvar(definition_alias_philips_hue)'  />
+
     </element>
 
   </elements>

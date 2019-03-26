@@ -316,7 +316,7 @@ class cInterFaceConfig(object):
 
     def CreateSettingJsonCombined(self, oSetting, bIncludeDiscoverSettings=True):
         """
-        Creates a json dict which holds all the setting defintions of
+        Creates a json dict which holds all the setting definitions of
         the core interface plus the settings from the discover script (if requested)
 
         :rtype: dict

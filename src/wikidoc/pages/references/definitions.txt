@@ -4,7 +4,7 @@ WikiDoc:Context:References
 WikiDoc:Page:Definitions References Overview
 WikiDoc:TOCTitle:Description how to use predefined definitions
 
-Please refer to the details of the following pre defined definitions. This is aimed to give you the requiered information how to use/adapt those defintions in your own definition ,mainly by importing them.
+Please refer to the details of the following pre defined definitions. This is aimed to give you the requiered information how to use/adapt those definitions in your own definition ,mainly by importing them.
 
 WikiDoc:TOC:Reference_Definitions:List:sorted
 

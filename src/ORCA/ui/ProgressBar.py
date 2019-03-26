@@ -92,7 +92,6 @@ class cProgressBar(cBasePopup):
         self.oProgressBar.max   = lMax
         self.lMax               = lMax
 
-    # noinspection PyUnusedLocal
     def OnCancel(self, *largs):
         """ Cancel event handler """
         self.bCancel=True

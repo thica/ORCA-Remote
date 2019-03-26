@@ -22,6 +22,7 @@
       <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
       <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_smallsize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
       <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+      <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
     </pages>
   <stopskip/>
 

@@ -7,7 +7,7 @@
     <element name='Background Clear' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
     <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitdevicemessage_ll.xml" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
     <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitdevicemessage_ls.xml" parse="xml" condition="$var(SCREEN)==SCREEN_LS"></xi:include>
-    <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitdevicemessage_ll.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
-    <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitdevicemessage_ls.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitdevicemessage_pl.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_waitdevicemessage_ps.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
   </elements>
 </page>

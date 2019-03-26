@@ -92,7 +92,6 @@ class SettingNumericSlider(SettingNumeric):
         """ updates the text value, whne the slider is moved """
         self.textvalue.text=ToUnicode(Round(instance.value,self.iRoundPos))
 
-    # noinspection PyBroadException,PyBroadException
     def On_Enter(self,instance):
         """  when the user enters a value without slider """
         try:

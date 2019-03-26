@@ -19,6 +19,7 @@
       <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
       <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
       <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/page_*" parse="xml" ></xi:include>
       <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
     </pages>
   <stopskip/>

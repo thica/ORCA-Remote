@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<page name='Page_Device_$dvar(definition_alias_FHEMFS20LIGHTS)_'>
+<page name='Page_Device_$dvar(definition_alias_FHEMFS20LIGHTS)'>
   <page_parameter>
     <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
     <interface>$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)</interface>

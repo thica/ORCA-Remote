@@ -33,8 +33,6 @@ from ORCA.Parameter                         import cParserAction
 from ORCA.vars.Helpers                      import GetEnvVar
 from IRDB                                   import ShowITachIRDB
 
-
-
 '''
 <root>
   <repositorymanager>
@@ -85,12 +83,12 @@ class cScript(cToolsTemplate):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
             self.aScriptIniSettings.uHost     = u"http://irdbservice.cloudapp.net:8080/"
-            self.aScriptIniSettings.uUser     = Globals.oParameter.uIRDBUser
-            self.aScriptIniSettings.uPassword = Globals.oParameter.uIRDBPassword
+            self.aScriptIniSettings.uUser     = oScript.oVarParameter.uIRDBUser
+            self.aScriptIniSettings.uPassword = oScript.oVarParameter.uIRDBPassword
 
     class cScriptParameter(cParameter):
         def AddParameter(self,oParser):
-            oParser.add_argument('--irdbuser', default=GetEnvVar('IRDBUSER'), action=cParserAction, oParameter=self, dest="uIRDBUser", help='Set the initialisation username for the IRDB (can be passed as IRDBUSER environment var)')
+            oParser.add_argument('--irdbuser',     default=GetEnvVar('IRDBUSER'),     action=cParserAction, oParameter=self, dest="uIRDBUser",     help='Set the initialisation username for the IRDB (can be passed as IRDBUSER environment var)')
             oParser.add_argument('--irdbpassword', default=GetEnvVar('IRDBPASSWORD'), action=cParserAction, oParameter=self, dest="uIRDBPassword", help='Set the initialisation password for the IRDB (can be passed as IRDBPASSWORD environment var)')
 
     def __init__(self):
@@ -99,9 +97,7 @@ class cScript(cToolsTemplate):
         self.uSortOrder      = u'auto'
         self.uSettingSection = u'tools'
         self.uSettingTitle   = u"IRDB ITach"
-        oParameter           = self.cScriptParameter()
-        for uKey in oParameter:
-            Globals.oParameter[uKey]= oParameter[uKey]
+        self.oEnvParameter   = self.cScriptParameter()
 
     def Init(self,uScriptName,uScriptFile=u''):
         """

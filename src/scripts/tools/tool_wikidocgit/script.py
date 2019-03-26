@@ -86,15 +86,15 @@ class cScript(cToolsTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.uHost                   = Globals.oParameter.uWikiGitServer
-            self.aScriptIniSettings.uWikiGitTargetFolder    = Globals.oParameter.uWikiGitTargetFolder
-            self.aScriptIniSettings.uWikiGitApp             = Globals.oParameter.uWikiGitApp
+            self.aScriptIniSettings.uHost                   = oScript.oEnvParameter.uWikiGitServer
+            self.aScriptIniSettings.uWikiGitTargetFolder    = oScript.oEnvParameter.uWikiGitTargetFolder
+            self.aScriptIniSettings.uWikiGitApp             = oScript.oEnvParameter.uWikiGitApp
 
     class cScriptParameter(cParameter):
         def AddParameter(self,oParser):
-            oParser.add_argument('--wikigitserver',       default=GetEnvVar('ORCAWIKIGITSERVER', 'https://github.com/thica/ORCA-Remote/blob/master'), action=cParserAction, oParameter=self, dest="uWikiGitServer",help='Set the Git Path to the ORCA Images (can be passed as ORCAGITWIKISERVER environment var)')
-            oParser.add_argument('--wikigittargetfolder', default=GetEnvVar('ORCAWIKIGITTARGETFOLDER',Globals.oPathTmp.string), action=cParserAction, oParameter=self, dest="uWikiGitTargetFolder", help='Sets local folder for the wiki files')
-            oParser.add_argument('--wikigitapp',          default=GetEnvVar('ORCAWIKIGITAPP',"GITWIKI"), action=cParserAction, oParameter=self, dest="uWikiGitApp", help='Sets the target for the wiki files (MEDIAWIKI or GITWIKI)')
+            oParser.add_argument('--wikigitserver',       default=GetEnvVar('ORCAWIKIGITSERVER',     'https://github.com/thica/ORCA-Remote/blob/master'), action=cParserAction, oParameter=self, dest="uWikiGitServer",       help='Set the Git Path to the ORCA Images (can be passed as ORCAGITWIKISERVER environment var)')
+            oParser.add_argument('--wikigittargetfolder', default=GetEnvVar('ORCAWIKIGITTARGETFOLDER',Globals.oPathTmp.string),                           action=cParserAction, oParameter=self, dest="uWikiGitTargetFolder", help='Sets local folder for the wiki files')
+            oParser.add_argument('--wikigitapp',          default=GetEnvVar('ORCAWIKIGITAPP',"GITWIKI"),                                                  action=cParserAction, oParameter=self, dest="uWikiGitApp",          help='Sets the target for the wiki files (MEDIAWIKI or GITWIKI)')
 
     def __init__(self):
         cToolsTemplate.__init__(self)
@@ -102,9 +102,7 @@ class cScript(cToolsTemplate):
         self.uSortOrder      = u'auto'
         self.uSettingSection = u'tools'
         self.uSettingTitle   = u"WikiDoc GIT"
-        oParameter      = self.cScriptParameter()
-        for uKey in oParameter:
-            Globals.oParameter[uKey]= oParameter[uKey]
+        self.oEnvParameter   = self.cScriptParameter()
 
     def Init(self,uScriptName,uScriptFile=u''):
         """
@@ -126,11 +124,10 @@ class cScript(cToolsTemplate):
         oSetting                    = self.GetSettingObjectForConfigName(self.uConfigName)
         dArgs                       = {}
 
-        dArgs["Host"]              = kwargs.get("Host",oSetting.aScriptIniSettings.uHost)
+        dArgs["Host"]              = kwargs.get("Host",               oSetting.aScriptIniSettings.uHost)
         dArgs["WikiTargetFolder"]  = kwargs.get("WikiGitTargetFolder",oSetting.aScriptIniSettings.uWikiGitTargetFolder)
-        dArgs["WikiApp"]           = kwargs.get("WikiGitApp",oSetting.aScriptIniSettings.uWikiGitApp)
+        dArgs["WikiApp"]           = kwargs.get("WikiGitApp",         oSetting.aScriptIniSettings.uWikiGitApp)
         Globals.oNotifications.SendNotification("STARTSCRIPTWIKIDOC",**dArgs)
-
         Logger.debug(u'WikidocGit Finished')
 
     def Register(self, *args, **kwargs):
@@ -146,6 +143,6 @@ class cScript(cToolsTemplate):
         Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uScriptName,oScriptSettingPlugin=oScriptSettingPlugin)
 
     def GetConfigJSON(self):
-        return {"WikiPath":         {"type": "string", "active": "enabled", "order": 16, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_5)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_6)","key": "WikiPath", "default":Globals.oParameter.uWikiPath, "section": "$var(ScriptConfigSection)"},
-                "WikiTargetFolder": {"type": "string", "active": "enabled", "order": 17, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_7)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_8)", "key": "WikiTargetFolder", "default": Globals.oPathTmp.string, "section": "$var(ScriptConfigSection)"}
+        return {"WikiPath":         {"type": "string", "active": "enabled", "order": 16, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_5)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_6)", "key": "WikiPath",         "default": self.oEnvParameter.uWikiPath, "section": "$var(ScriptConfigSection)"},
+                "WikiTargetFolder": {"type": "string", "active": "enabled", "order": 17, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_7)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_8)", "key": "WikiTargetFolder", "default": Globals.oPathTmp.string,      "section": "$var(ScriptConfigSection)"}
                 }

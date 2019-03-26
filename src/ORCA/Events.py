@@ -248,7 +248,7 @@ class cEvents(object):
         uToUseConfigName = ReplaceVars(uToUseConfigName)
         uToUseInterFace  = ReplaceVars(uToUseInterFace)
 
-        # We already should have loaded all interfaces at Defintionstart, but if this fails caused by heavy var tweaking, we ensure to load it here
+        # We already should have loaded all interfaces at Definitionstart, but if this fails caused by heavy var tweaking, we ensure to load it here
         Globals.oInterFaces.LoadInterface(uToUseInterFace)
 
         return uToUseInterFace,uToUseConfigName

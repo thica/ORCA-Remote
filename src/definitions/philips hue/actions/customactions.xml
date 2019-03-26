@@ -13,7 +13,7 @@
       <action name="Check if pairing is requiered"      string="call $dvar(definition_alias_philips_hue) Fkt Philips Hue Pair User" />"
       <action name="Get Current Config"                 string="call $dvar(definition_alias_philips_hue) Fkt Get Current Config" />"
       <action name="Get all configs"                    string="sendcommand" commandname="get_config_alllights" retvar="$dvar(definition_alias_philips_hue)_status" interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  />
-=     <action name="Update the dropdown list of lights" string="updatewidget DropDown Lights HUE" ignoremissing="1"/>
+      <action name="Update the dropdown list of lights" string="updatewidget DropDown Lights HUE" ignoremissing="1"/>
       <action name="Get config for Light"               string="call $dvar(definition_alias_philips_hue) FKT_OnHueLightnumVChanged" condition="$var($dvar(definition_alias_philips_hue)_status_index[0])!=-1"/>
     </action>
 
@@ -82,7 +82,7 @@
         <action name="Set Command to Check If on"     string="setvar DEVICECHECKIFONCMD=$dvar(definition_alias_philips_hue) Check if PhilipsHue Paired" />
         <action name="Set Pause between poll"         string="setvar DEVICEWAITTIME=500" />
         <action name="Set String for Wait Popup"      string="setvar WAITFORMESSAGE=Press Pair Button on HUE Bridge" />
-        <action name="Set Return Page"                string="setvar PAGEWAITRETURN=Page_Device_$dvar(definition_alias_philips_hue)" />
+        <action name="Set Return Page"                string="setvar PAGEWAITRETURN=$var(DEFINITIONSTARTPAGE)" />
         <action name="Wait until Online"              string="call Fkt WaitForDeviceReady" condition="$var(DEVICEISONLINE)==FALSE" />"
       <action name="endif" string="endif" />"
   </action>

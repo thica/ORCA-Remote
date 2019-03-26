@@ -15,5 +15,23 @@ Orca is based on the [http://kivy.org/#home Kivy] framework. Kivy is a portable 
 
 Due to the lack of availability of any Apple devices. MacOSx and IOS is untested.
 
+To setup a development environment for ORCA ou ned the following components:
+
+* A PC running Windows 7/10 or Linux (Ubuntu is tested)
+* Python installed (Version 2.7 or 3.7 or both)
+* Pycharm as IDE
+* install kivy following the instruction from the kivy home page (incl. gstreamer)
+
+Within Pycharm you need to add the following python modules
+* future
+* mw-client
+* plyer
+* requests
+* rsa
+* urllib3
+* wakeonlan
+* ws4py
+
+
 WikiDoc:End
 '''

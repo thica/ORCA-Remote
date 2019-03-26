@@ -5,7 +5,7 @@
   </pagestartaction>
 
   <pagestartaction name="definitionstart">
-    <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Device_$dvar(definition_alias_FHEMFS20LIGHTS)_" />
+    <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Device_$dvar(definition_alias_FHEMFS20LIGHTS)" />
   </pagestartaction>
 
 </includes>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements>
+  <element name='Shadow' type='RECTANGLE' posx='%54' posy='%51'  width="%84" height="of:width:self:*0.30" backgroundcolor='$var(shadow)' />
+    <element name='Anchor Message' type='ANCHOR' posx="%50" posy="%50" width="%84" height="of:width:self:*0.30">
+      <element name='Background'       type='PICTURE'   posx='left'       posy='top'  picturenormal='background boxes' />
+      <element name="Picture Wait"     type="PICTURE"   posx="right"      posy="%15"     width="of:height:self"    height="%40"        picturenormal="wait" />
+      <element name='Picture Transmit' type='PICTURE'   posx='of:toleft:last' posy='of:top:last' width='of:width:last' height="of:height:last" picturenormal='transmit' enabled='0' />
+      <element name="Message Wait"     type="TEXTFIELD" posx="%5"         posy="of:top:last" width="%65"       height="of:height:last" htextalign="left"  caption="$var(WAITFORMESSAGE)" fontsize='%h35'  />
+      <element name="Button Cancel"    type="BUTTON"    posx="left"       posy="bottom"  width="%50"       height="%42"        picturenormal="button wide*" action="Fkt WaitForDeviceAbort"   fontsize="%h35" caption="$lvar(5009)" />
+      <element name="Button PowerOn"   type="BUTTON"    posx="right"      posy="bottom"  width="%50"       height="%42"        picturenormal="button wide*" action="Fkt WaitForDevicePowerOn" fontsize="%h35" caption="$lvar(1001)" />
+    </element>
+</elements>

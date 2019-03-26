@@ -1,0 +1,136 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:DefinitionsForUser
+WikiDoc:Page:Userdescription Definition philips hue
+WikiDoc:TOCTitle:philips hue
+= Philips Hue =
+The Phillips Hue definition controls Philips Hue devices by controlling the hue bridge. You need to pair Orca with the bridge.
+You can use two different screens to control the lamps. One screen you detailled control options including color control.
+The second screen gives you the option to control and dim all lamps at the same time.
+
+[[File:philips_hue_detailed_large_landscape.png|link=]]
+[[File:philips_hue_universal_large_landscape.png|link=]]
+[[File:philips_hue_detailed_large_portrait.png|link=]]
+[[File:philips_hue_universal_large_portrait.png|link=]]
+
+This definition has the following capabilities
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Capability
+! align="left" | Description
+|-
+|Orientation
+|Landscape and portrait
+|-
+|Screen Size
+|
+* large / landscape
+* large / portrait
+|-
+|Interfaces
+|url
+|}</div>
+
+= Settings =
+
+This definition has the following settings:
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|Startpage
+|The startpage for the definition, could be either Universal or Detailed
+|-
+|Control Type (x)
+|The control type for the device: Dimmable or just on/off device
+|-
+|Name (x)
+|The name of the device
+|}</div>
+WikiDoc:End
+'''
+
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Definitions
+WikiDoc:Page:Reference Definition philips_hue
+WikiDoc:TOCTitle:philips_hue
+
+The Phillips Hue definition controls Philips Hue devices by controlling the hue bridge. You need to pair Orca with the bridge.
+You can use two different screens to control the lamps. One screen you detailled control options including color control.
+The second screen gives you the option to control and dim all lamps at the same time.
+
+= definitionvars =
+
+This definition uses the following definitionvars:
+
+* "definition_alias_philips_hue" : default value = "PHILIPS_HUE"
+* * philips_hue_dimmer_num : will be used to include a specific dimmer or switch block (1 to 8)
+
+= Settings =
+
+This template defines the following settings:
+
+== Interfaces ==
+
+$dvar(definition_alias_philips_hue)_INTERFACE_MAIN: The main interface to control the device (url)
+$dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN : The main configuration name to control the device
+
+== Devices ==
+$dvar(definition_alias_philips_hue)_CONTROL_NAME[x] : The name of the device (x=1 to 8)
+$dvar(definition_alias_philips_hue)_CONTROL_TYPE[x] : The control type of the device (x=1 to 8) (Dimmer, Swith or None to disable the device)
+
+==  others ==
+
+$dvar(definition_alias_philips_hue)_STARTPAGE : The startpage for the definition (Universal or Detailed)
+$dvar(definition_alias_philips_hue)_NAVIGATIONBAR : The topline xml for the definition
+
+= elements =
+The following elements are defined for use:
+
+block_buttons_lightselect : The selection block for an individula light on the detailed page
+block_inner: A selector block for switch or dimmer
+block_dimmer: All elements to define a dimmer
+block switch : All elements to define a switch
+
+= pages =
+The following pages are defined:
+
+* Page_Device_$dvar(definition_alias_philips_hue)
+* Page_Device_$dvar(definition_alias_philips_hue)_Universal
+* Page_Device_$dvar(definition_alias_philips_hue) Colorpicker Popup
+
+= actions =
+The following actions are defined:
+
+* Add NavigationBar $dvar(definition_alias_philips_hue) : Adds the Navigation bar
+* PageStart Page_Device_$dvar(definition_alias_philips_hue) : Explicit Pagestart actions : eg.: triggers eamples
+* $dvar(definition_alias_philips_hue) Set Lights Philips Hue by Widget :
+* $dvar(definition_alias_philips_hue) Dim Lights Philips Hue by Widget : Dims a device
+* $dvar(definition_alias_philips_hue) Fkt Philips Hue Power On : Swithes off a device
+* $dvar(definition_alias_philips_hue) Fkt Philips Hue Power Off : Swithes on a device
+* $dvar(definition_alias_philips_hue) Fkt Get Current Config : Gets the Bridge Config
+* $dvar(definition_alias_philips_hue) FKT_OnHueLightnumVChanged : Will be called, when a new devices has been selected, to update the values
+* $dvar(definition_alias_philips_hue) Fkt Philips Hue Pair User : Pairs the bridge
+* $dvar(definition_alias_philips_hue) Fkt WaitForPhilipsHue Paired : Wait for the bridge to get paired
+* $dvar(definition_alias_philips_hue) Check if PhilipsHue Paired : Check if the bridge is paired
+* RGBToXY : Converts a RGB to a Hue XY value
+* $dvar(definition_alias_philips_hue) Send Switch On Lamp : Sub funtion to switch on a device
+* $dvar(definition_alias_philips_hue) Send Switch Off Lamp : Sub funtion to switch off a device
+* $dvar(definition_alias_philips_hue) Send Dim Lamp : Sub funtion to dim a device
+* Fkt Send Dim Dimmer
+* Fkt Switch Off Dimmer
+* $dvar(definition_alias_philips_hue) Show ColorPicker
+* Change Light $dvar(definition_alias_philips_hue)
+* FKT Find Ligths Index $dvar(definition_alias_philips_hue)
+* $dvar(definition_alias_philips_hue) Get lights IDs for Settings Names
+
+= scripts =
+
+The definition uses the helper_enigma script
+
+WikiDoc:End
+'''
