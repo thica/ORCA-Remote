@@ -25,12 +25,10 @@ import socket
 import select
 from kivy.logger                            import Logger
 
-from ORCA.Compat                            import PY2
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
 from ORCA.utils.TypeConvert                 import ToFloat
-from ORCA.utils.TypeConvert                 import ToUnicode
 from ORCA.vars.QueryDict                    import QueryDict
 
 '''
@@ -88,7 +86,7 @@ class cScript(cDiscoverScriptTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.fTimeOut                     = 5.0
+            self.aIniSettings.fTimeOut                     = 5.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
@@ -96,9 +94,9 @@ class cScript(cDiscoverScriptTemplate):
         self.uSerial         = u''
         self.aResults        = []
 
-    def Init(self,uScriptName,uScriptFile=u''):
-        cDiscoverScriptTemplate.Init(self, uScriptName, uScriptFile)
-        self.oScriptConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+    def Init(self,uObjectName,uScriptFile=u''):
+        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
     def GetHeaderLabels(self):
         return ['$lvar(5029)','$lvar(SCRIPT_DISC_ELVMAX_1)','$lvar(5035)']
@@ -134,7 +132,7 @@ class cScript(cDiscoverScriptTemplate):
         uSerial        = kwargs.get('serialnumber',"")
         uConfigName    = kwargs.get('configname',self.uConfigName)
         oSetting       = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        fTimeOut       = ToFloat(kwargs.get('timeout', oSetting.aScriptIniSettings.fTimeOut))
+        fTimeOut       = ToFloat(kwargs.get('timeout', oSetting.aIniSettings.fTimeOut))
         del self.aResults[:]
 
         Logger.debug (u'Try to discover ELV MAX device:  %s ' % uSerial)

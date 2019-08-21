@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
     Copyright (C) 2013-2019  Carsten Thielepape
@@ -20,7 +19,6 @@
 
 import                      logging
 from functools              import partial
-from copy                   import copy
 
 from kivy.logger            import Logger
 from kivy.clock             import Clock
@@ -28,7 +26,6 @@ from kivy.compat            import string_types
 
 
 from ORCA.Action                        import CreateActionForSimpleActionList
-from ORCA.Action                        import GetActionID
 from ORCA.EventTimer                    import cAllTimer
 from ORCA.Queue                         import GetActiveQueue
 from ORCA.Queue                         import GetNewQueue
@@ -47,12 +44,7 @@ from ORCA.actions.VarControl            import cEventActionsVarControl
 from ORCA.actions.WidgetControl         import cEventActionsWidgetControl
 from ORCA.actions.Notifications         import cEventActionsNotifications
 
-from ORCA.ui.ShowErrorPopUp             import ShowErrorPopUp
-from ORCA.utils.CheckCondition          import CheckCondition
-from ORCA.utils.LogError                import LogError
 from ORCA.utils.TypeConvert             import ToUnicode
-from ORCA.vars.Access                   import GetVar
-from ORCA.vars.Access                   import SetVar
 from ORCA.vars.Replace                  import ReplaceVars
 
 import ORCA.Globals as Globals
@@ -108,12 +100,11 @@ class cEvents(object):
         ResumeQueue()
         Clock.schedule_once(partial(GetActiveQueue().WorkOnQueue,self.bForceState),0)
 
-
     def ExecuteActionsNewQueue(self,aActions, oParentWidget, bForce=False):
         """ Execute all actions in a new queue, new queue will atomatic appended to the queue stack"""
-        oQueue = GetNewQueue()
-        oQueue.bForceState = bForce
-        bRet = self._ExecuteActions(aActions=aActions,oParentWidget=oParentWidget)
+        oQueue              = GetNewQueue()
+        oQueue.bForceState  = bForce
+        bRet                = self._ExecuteActions(aActions=aActions,oParentWidget=oParentWidget)
         return bRet
 
     def ExecuteActions(self,aActions, oParentWidget):
@@ -126,73 +117,14 @@ class cEvents(object):
     def _ExecuteActions(self,aActions, oParentWidget):
         """ This functions just adds the action commands to the queue and calls the scheduler at the end """
 
-        oQueue = GetActiveQueue()
+        oQueue      = GetActiveQueue()
+        bForceState = oQueue.bForceState
+        oQueue.AddActions(aActions, oParentWidget)
 
-        for aTmpAction in aActions:
-            oAction = copy(aTmpAction)
-            oAction.oParentWidget = oParentWidget
-
-            iActionId=oAction.iActionId
-
-            ''' this enables to any function to call without call statement from an macro, as long as the action exists'''
-            if iActionId==Globals.oActions.oActionType.NoAction:
-                if oAction.uActionString.lower()!="noaction":
-                    oAction.iActionId=-1
-                    aTmpActions = Globals.oActions.GetActionList(uActionName = oAction.uActionString, bNoCopy = True)
-                    if aTmpActions is not None:
-                        iActionId=aTmpActions[0].iActionId
-
-            if iActionId == Globals.oActions.oActionType.SendCommand:
-                oTmpAction = copy(aTmpAction)
-                oTmpAction.dActionPars['string']='enabletransmitterpicture'
-                oTmpAction.iActionId = GetActionID(oTmpAction.dActionPars['string'])
-                self.__InsertToQueue(oTmpAction, oQueue)
-            if iActionId == Globals.oActions.oActionType.ShowPage:
-                oTmpAction = copy(aTmpAction)
-                oTmpAction.dActionPars['string'] = 'call'
-                oTmpAction.dActionPars['actionname'] = 'PAGESTOPACTIONS'
-                oTmpAction.iActionId = GetActionID(oTmpAction.dActionPars['string'])
-                self.__InsertToQueue(oTmpAction, oQueue)
-
-            self.__InsertToQueue(oAction, oQueue)
-
-            if iActionId == Globals.oActions.oActionType.ShowPage:
-                oTmpAction = copy(aTmpAction)
-                uPagenameToCall = oAction.dActionPars.get('pagename','')
-                if uPagenameToCall == "":
-                    if oAction.oParentWidget is not None:
-                        uPagenameToCall = oAction.oParentWidget.dActionPars.get('pagename','')
-                oTmpAction.dActionPars['string'] = 'call'
-                oTmpAction.dActionPars['actionname'] = 'PAGESTARTACTIONS'
-                oTmpAction.dActionPars['pagename'] = uPagenameToCall
-                oTmpAction.dActionPars['currentpagename'] = GetVar(uVarName = 'CURRENTPAGE')
-                #oTmpAction.dActionPars['currentpagename'] = GetVar('LASTPAGE')
-                oTmpAction.iActionId = GetActionID(oTmpAction.dActionPars['string'])
-                self.__InsertToQueue(oTmpAction, oQueue)
-            if iActionId == Globals.oActions.oActionType.SendCommand:
-                oTmpAction = copy(aTmpAction)
-                oTmpAction.dActionPars['string'] = 'disabletransmitterpicture'
-                oTmpAction.iActionId = GetActionID(oTmpAction.dActionPars['string'])
-                self.__InsertToQueue(oTmpAction, oQueue)
-
-        oQueue = GetActiveQueue()
-        if not oQueue.bForceState:
+        if not bForceState:
             Clock.schedule_once(partial(oQueue.WorkOnQueue,oQueue.bForceState), 0)
         else:
             return oQueue.WorkOnQueue(oQueue.bForceState)
-
-    def __InsertToQueue(self,oAction, oQueue):
-        """ insert an action to the latest queue """
-        if not oAction.bForce:
-            oQueue.aActionQueue.append(copy(oAction))
-        else:
-            self.WorkOnQueueDoAction(oAction)
-        return
-
-    def ForceWorkQueue(self):
-        """ explicit starts a queue """
-        GetActiveQueue().WorkOnQueue(True,None)
-
 
 
     def GetTargetInterfaceAndConfig(self,oAction):
@@ -222,8 +154,9 @@ class cEvents(object):
             if uToUseInterFace==u'':
                 uAnchorName=oAction.oParentWidget.uAnchorName
                 while uAnchorName!=u'':
-                    oTmpAnchor=oAction.oParentWidget.oParentScreenPage.dWidgets.get(uAnchorName)
-                    if oTmpAnchor:
+                    aTmpAnchor = oAction.oParentWidget.oParentScreenPage.dWidgets[uAnchorName]
+                    if aTmpAnchor:
+                        oTmpAnchor = aTmpAnchor[0]
                         uToUseInterFace=oTmpAnchor.uInterFace
                         uAnchorName=oTmpAnchor.uInterFace
                     if uToUseInterFace!="":
@@ -234,9 +167,9 @@ class cEvents(object):
             if uToUseConfigName==u'':
                 uAnchorName=oAction.oParentWidget.uAnchorName
                 while uAnchorName!=u'':
-                    # oTmpAnchor=oAction.oParentWidget.oParentScreenPage.dWidgets.get(oAction.oParentWidget.uAnchorName)
-                    oTmpAnchor = oAction.oParentWidget.oParentScreenPage.dWidgets.get(uAnchorName)
-                    if oTmpAnchor:
+                    aTmpAnchors = oAction.oParentWidget.oParentScreenPage.dWidgets[uAnchorName]
+                    if aTmpAnchors:
+                        oTmpAnchor=aTmpAnchors[0]
                         uToUseConfigName=oTmpAnchor.uConfigName
                         uAnchorName=oTmpAnchor.uInterFace
                     if uToUseConfigName!="":
@@ -253,62 +186,6 @@ class cEvents(object):
 
         return uToUseInterFace,uToUseConfigName
 
-    def WorkOnQueueDoAction(self,oAction):
-        """ Executes a single action in a queue (including condition verifying)"""
-
-        iRet=0
-        bCheckSuccess=CheckCondition(oAction)
-
-        if oAction.iActionId==Globals.oActions.oActionType.If:
-            # we do the If statement only in case of the condition fails
-            if bCheckSuccess:
-                self.LogAction("if",oAction, "executing actions")
-            # we need to run the if command in any way to skip the actions
-            bCheckSuccess=not bCheckSuccess
-
-        if bCheckSuccess:
-            #We set / replace Action Command Pars by Definition/Button pars
-            #if oAction.oParentWidget:
-            #    self.CopyActionPars(dTarget=oAction.dActionPars,dSource=oAction.oParentWidget.dActionPars,uReplaceOption="donotcopyempty")
-
-            iRet=self.ExecuteAction(oAction)
-            if iRet != -2:
-                SetVar(uVarName = u'LASTERRORCODE', oVarValue = ToUnicode(iRet))
-                if iRet != 0:
-                    Logger.debug("Action returned LASTERRORCODE "+ ToUnicode(iRet))
-        return iRet
-
-    def ExecuteAction(self,oAction):
-        """ Executes a single action in a queue (excluding condition verifying)"""
-
-        try:
-            oAction.uActionString=ReplaceVars(oAction.uActionString)
-            oFunction=self.dActionFunctions.get(oAction.iActionId)
-            if oFunction:
-                return oFunction(oAction)
-            else:
-                ''' this enables to use standardactions / actions without call, but assigning parameters like interface and configname '''
-
-                aActions=Globals.oActions.GetActionList(uActionName = oAction.uActionString, bNoCopy = True)
-                if aActions:
-                    if len(aActions)>1:
-                        Logger.error("you can''t use multiline actions as short cut, use call instead")
-
-                    oFunction=self.dActionFunctions.get(aActions[0].iActionId)
-                    if oFunction:
-                        oAction.uActionString=ReplaceVars(aActions[0].uActionString)
-                        self.CopyActionPars(dTarget=oAction.dActionPars,dSource=aActions[0].dActionPars,uReplaceOption="donotreplacetarget")
-                        if not oAction.uRetVar:
-                            oAction.uRetVar=aActions[0].uRetVar
-                        return oFunction(oAction)
-                Logger.error("ExecuteAction: Action not Found:"+oAction.uActionName+':'+oAction.uActionString)
-                return 0
-        except Exception as e:
-            uMsg=LogError('Error executing Action:'+self.CreateDebugLine(oAction=oAction, uTxt=''),e)
-            ShowErrorPopUp(uMessage=uMsg)
-            return False
-
-        return False
 
     def CopyActionPars(self, dSource, dTarget, uReplaceOption, bIgnoreHiddenWords=False):
         """
@@ -333,6 +210,7 @@ class cEvents(object):
             for uKey in dSource:
                 if not uKey in self.aHiddenKeyWords:
                     dTarget[uKey]=dSource[uKey]
+
 
     def CreateDebugLine(self,oAction, uTxt):
         """ Creates a debugline for the logger """

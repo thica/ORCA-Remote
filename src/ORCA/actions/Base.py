@@ -22,6 +22,6 @@ __all__ = ['cEventActionBase']
 
 class cEventActionBase(object):
     """ All Actions for the event dispatcher """
-    def __init__(self, oEvenDispatcher):
-        self.oEvenDispatcher  = oEvenDispatcher
+    def __init__(self, oEventDispatcher):
+        self.oEventDispatcher  = oEventDispatcher
 

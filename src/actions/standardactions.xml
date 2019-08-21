@@ -360,7 +360,6 @@
 
     <action name="KeyHandler_PageWait_ESC">
         <action name="Stop Loop"  string="setvar ONPAUSE=FALSE" force="1"/>
-        <action name="leave page" string="gotolastpage" />
     </action>
 
 
@@ -388,14 +387,14 @@
     returns DISCOVERFAILED = TRUE, if discover was not successfull
     -->
       <action name="Init var" string="setvar DISCOVERFAILED=FALSE" />
-      <action name="Check, if we already found something" string="getinterfacesetting" interfacename="$var(DiscoverSingle_parameter_DISCOVERINTERFACE)" configname="$var(DiscoverSingle_parameter_DISCOVERCONFIG)" varname="OldDiscoveredIP" retvar="TMPOLDIP"/>
+      <action name="Check, if we already found something" string="getinterfacesetting" interfacename="$par(DISCOVERINTERFACE)" configname="$par(DISCOVERCONFIG)" varname="OldDiscoveredIP" retvar="TMPOLDIP"/>
       <action name="If we dont have found something previously" string ="if" condition="$var(TMPOLDIP)==" />
-        <action name="Show message" string="showquestion" title="$lvar(597)" message="$lvar(450) $var(DiscoverSingle_parameter_DISCOVERDETAILS)" dontstopqueue="1"/>
+        <action name="Show message" string="showquestion" title="$lvar(597)" message="$lvar(450) $par(DISCOVERDETAILS)" dontstopqueue="1"/>
         <action name="Wait to make sure, popup comes" string="wait 500" />
-        <action name="Direct Discover" string="discover" interface="$var(DiscoverSingle_parameter_DISCOVERINTERFACE)" configname="$var(DiscoverSingle_parameter_DISCOVERCONFIG)"/>
+        <action name="Direct Discover" string="discover" interface="$par(DISCOVERINTERFACE)" configname="$par(DISCOVERCONFIG)"/>
         <action name="Save errorcode" string="setvar lasterror=$var(LASTERRORCODE)" />
         <action name="Close message" string="showquestion" close="1"/>
-        <action name="Show message on Failure" string="showquestion" title="$lvar(595)" message="$lvar(451) $var(DiscoverSingle_parameter_DISCOVERDETAILS)" actionyes="dummy" condition="$var(lasterror)!=0"/>
+        <action name="Show message on Failure" string="showquestion" title="$lvar(595)" message="$lvar(451) $par(DISCOVERDETAILS)" actionyes="dummy" condition="$var(lasterror)!=0"/>
         <action name="if we have not discovered anything by now, set return var" string="setvar DISCOVERFAILED=TRUE" condition="$var(lasterror)!=0"/>
       <action name="" string ="endif" />
     </action>
@@ -408,7 +407,7 @@
       <action name="SET" string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
       <action name="if not failed"   string="if $var(LASTERRORCODE)==0" />
         <action name="SET" string="setvar TMPBREAKLOOP=0" />
-        <action name="loop through all files" string="forin"  varname="REPMAN_ZIPSOURCEFILENAMES[]" dstvarname="REPMAN_ZIPFILENAME" level="1" actionname="CreateZipFilesForRepository_Sub" breakvar="TMPBREAKLOOP" />
+        <action name="loop through all files" string="forin"  varname="REPMAN_ZIPSOURCEFILENAMES[]" level="1" actionname="CreateZipFilesForRepository_Sub" breakvar="TMPBREAKLOOP" />
         <action name="SET" string="setvar RESULTERRORCODE=$var(LASTERRORCODE)" />
       <action name="endif not failed" string="endif" />
       <action name="Close the Progressbar" string="showprogressbar"  />
@@ -418,20 +417,20 @@
 
 
     <action name="CreateZipFilesForRepository_Sub">
-        <action name="Create DestFileName part 1"  string="setvar dstfilename=REPMAN_ZIPDESTFILENAMES[$var(REPMAN_ZIPFILENAME_index)]" />
+        <action name="Create DestFileName part 1"  string="setvar dstfilename=REPMAN_ZIPDESTFILENAMES[$par(forin_index)]" />
         <action name="Create DestFileName part 2"  string="modifyvar" varname="dstfilename" operator="fromvar"  />
-        <action name="Create RenovePath part 1"    string="setvar removepath=REPMAN_ZIPREMOVEPATH[$var(REPMAN_ZIPFILENAME_index)]" />
+        <action name="Create RenovePath part 1"    string="setvar removepath=REPMAN_ZIPREMOVEPATH[$par(forin_index)]" />
         <action name="Create RemovePath part 2"    string="modifyvar" varname="removepath" operator="fromvar"  />
-        <action name="Create ZipType part 1"       string="setvar ziptype=REPMAN_ZIPTYPE[$var(REPMAN_ZIPFILENAME_index)]" />
+        <action name="Create ZipType part 1"       string="setvar ziptype=REPMAN_ZIPTYPE[$par(forin_index)]" />
         <action name="Create ZipType part 2"       string="modifyvar" varname="ziptype" operator="fromvar"  />
         <action name="increase scrollbar pointer"  string="modifyvar"             varname="TMPPOS" operator="increase"  parameter1="1" />
-        <action name="Update the Progressbar"      string="showprogressbar"       message="$var(REPMAN_ZIPFILENAME_value) -> $var(dstfilename)" current="$var(TMPPOS)" />
+        <action name="Update the Progressbar"      string="showprogressbar"       message="$par(forin_value) -> $var(dstfilename)" current="$var(TMPPOS)" />
         <action name="If we Zip a Path"            string="if $var(ziptype)==folder"   />
-          <action name="Create SkipFiles part 1"   string="setvar skipfiles=REPMAN_ZIPSKIPFILES[$var(REPMAN_ZIPFILENAME_index)]" />
+          <action name="Create SkipFiles part 1"   string="setvar skipfiles=REPMAN_ZIPSKIPFILES[$par(forin_index)]" />
           <action name="Create SkipFiles part 2"   string="modifyvar" varname="skipfiles" operator="fromvar"  />
-          <action name="ZIP Folder" string='modifyfile' operator='zipfolder'  path="$var(REPMAN_ZIPFILENAME_value)" dstfilename="$var(dstfilename)" removepath="$var(removepath)" skipfiles="$var(skipfiles)"/>
+          <action name="ZIP Folder" string='modifyfile' operator='zipfolder'  path="$par(forin_value)" dstfilename="$var(dstfilename)" removepath="$var(removepath)" skipfiles="$var(skipfiles)"/>
         <action name="EndIf we Zip a Path"         string="endif"   />
-        <action name="ZIP File" string='modifyfile' operator='zipfile'  filename="$var(REPMAN_ZIPFILENAME_value)" dstfilename="$var(dstfilename)" removepath="$var(removepath)" condition="$var(ziptype)==file" />
+        <action name="ZIP File" string='modifyfile' operator='zipfile'  filename="$par(forin_value)" dstfilename="$var(dstfilename)" removepath="$var(removepath)" condition="$var(ziptype)==file" />
 
         <action name="Break loop on Error"         string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
     </action>

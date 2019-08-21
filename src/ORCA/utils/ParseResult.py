@@ -328,7 +328,7 @@ class cResultParser(object):
                 iErrNo = oException.errno
         if iErrNo is None:
             iErrNo = 12345
-        uRet = LogError (self.uDebugContext+u': '+ uMsg + " (%d) " % (iErrNo),oException)
+        uRet = LogError (self.uDebugContext +u': ' + uMsg + " (%d) " % iErrNo, oException)
         return uRet
 
 def fixLazyJsonWithComments (in_text):

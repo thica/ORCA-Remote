@@ -4,6 +4,8 @@ WikiDoc:Context:DefinitionsForUser
 WikiDoc:Page:Userdescription Definition tvfavorites_template
 WikiDoc:TOCTitle:tvfavorites_template
 
+= TVFavorites Template =
+
 This is a template definition not for single / direct use. It provides the settings and widgets to switch TV channels.
 
 WikiDoc:End
@@ -13,6 +15,8 @@ WikiDoc:Doc
 WikiDoc:Context:Reference_Definitions
 WikiDoc:Page:Reference Definition tvfavorites_template
 WikiDoc:TOCTitle:tvfavorites_template
+
+= Overview =
 
 This template definition provides the settings and elements to switch TV channels. Please notice, that the widget needs to be loaded into a square anchor.
 

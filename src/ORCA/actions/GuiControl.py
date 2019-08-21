@@ -70,11 +70,14 @@ class cEventActionsGuiControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'ShowPage',oAction)
-        uEffect         = ReplaceVars(oAction.dActionPars.get("effect",""))
-        uDirection      = ReplaceVars(oAction.dActionPars.get("direction",""))
-        uPageName       = ReplaceVars(oAction.dActionPars.get("pagename",""))
-        uCurrentEffect  = ""
+        self.oEventDispatcher.LogAction(u'ShowPage',oAction)
+        uEffect             = ReplaceVars(oAction.dActionPars.get("effect",""))
+        uDirection          = ReplaceVars(oAction.dActionPars.get("direction",""))
+        uPageName           = ReplaceVars(oAction.dActionPars.get("pagename",""))
+        uCurrentDirection   = ""
+        uCurrentEffect      = ""
+        self.oEventDispatcher.bDoNext = False
+
         if uEffect:
             uCurrentEffect=Globals.oTheScreen.uCurrentEffect
         if uDirection:
@@ -87,7 +90,7 @@ class cEventActionsGuiControl(cEventActionBase):
             Globals.oTheScreen.SetPageEffect(uCurrentEffect)
         if uDirection:
             Globals.oTheScreen.SetPageEffectDirection(uDirection=uCurrentDirection)
-        self.oEvenDispatcher.bDoNext = False
+        self.oEventDispatcher.bDoNext = False
         fSleep(0.1)
 
         return iRet
@@ -136,9 +139,7 @@ class cEventActionsGuiControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'SetPageEffect',oAction)
-
-        self.oEvenDispatcher.bDoNext = True
+        self.oEventDispatcher.LogAction(u'SetPageEffect',oAction)
         uEffect    = ReplaceVars(oAction.dActionPars.get("effect",""))
         uDirection = ReplaceVars(oAction.dActionPars.get("direction",""))
 

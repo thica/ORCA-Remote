@@ -27,6 +27,7 @@ from ORCA.utils.TypeConvert     import ToInt
 import ORCA.Globals as Globals
 
 try:
+    # noinspection PyUnresolvedReferences
     from   plyer                 import irblaster
 except Exception as e:
     Logger.info("plyer not available")
@@ -72,6 +73,8 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
     class cInterFaceSettings(oBaseInterFaceInfrared.cInterface.cInterFaceSettings):
         def __init__(self,oInterFace):
             oBaseInterFaceInfrared.cInterface.cInterFaceSettings.__init__(self,oInterFace)
+            self.bIsConnected = False
+            self.bOnError     = False
 
         def Connect(self):
 
@@ -102,9 +105,9 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
         oBaseInterFaceInfrared.cInterface.__init__(self)
         self.aSettings   = {}
         self.oSetting = None
-    def Init(self, uInterFaceName, oFnInterFace=None):
-        cBaseInterFace.Init(self,uInterFaceName, oFnInterFace)
-        self.oInterFaceConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+    def Init(self, uObjectName, oFnObject=None):
+        cBaseInterFace.Init(self,uObjectName, oFnObject)
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
 
     def DeInit(self, **kwargs):
         oBaseInterFaceInfrared.cInterface.DeInit(self,**kwargs)

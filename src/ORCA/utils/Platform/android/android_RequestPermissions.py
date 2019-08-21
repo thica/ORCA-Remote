@@ -19,16 +19,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.utils.Path import cPath
-import ORCA.Globals as Globals
-import os
-import sys
+from android.permissions import request_permissions, Permission
 
-def GetInstallationDataPath():
-    """ Gets the path to the folder where the installer places the ORCA files"""
 
-    sPathname = os.path.dirname(sys.argv[0])
-    uAppPath = os.path.abspath(sPathname)
-    oPathRoot=cPath(uAppPath)
-
-    return oPathRoot
+def RequestPermissions():
+    request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
+    return True

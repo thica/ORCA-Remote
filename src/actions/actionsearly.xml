@@ -45,6 +45,9 @@
             <action name="Update Splash"                            string="showsplashtext"  maintext="Loading Languages" percentage="+2"/>
             <action name="load core languages"                      string="loadlanguages" />
 
+            <action1 name="Check Permissions"                        string="checkpermissions" />
+
+
             <action name="Update Splash"                            string="showsplashtext"             maintext="$lvar(423)" percentage="+1"/>
             <action name="Register KeyHandler Scripts"              string="registerscriptgroup"        groupname="KEYHANDLER"/>
             <action name="Update Splash"                            string="showsplashtext"             maintext="$lvar(424)" percentage="+1"/>

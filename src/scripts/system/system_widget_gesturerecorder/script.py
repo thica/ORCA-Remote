@@ -180,8 +180,10 @@ class cScript(cSystemTemplate):
 
     def __init__(self):
         cSystemTemplate.__init__(self)
-        self.uSubType       = u'WIDGET'
-        self.uSortOrder     = u"auto"
+        self.uSubType           = u'WIDGET'
+        self.uSortOrder         = u'auto'
+        self.uIniFileLocation   = u'none'
+
 
     def RunScript(self, *args, **kwargs):
         Globals.oNotifications.RegisterNotification("UNKNOWNWIDGET",fNotifyFunction=self.AddWidgetFromXmlNode,uDescription="Script Widget GestureRecorder")

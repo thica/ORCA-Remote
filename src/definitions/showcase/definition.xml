@@ -43,9 +43,9 @@
 
   <repositorymanager>
     <entry>
-      <name>ORCA Showcase 16 to 10 wide</name>
+      <name>ORCA Showcase</name>
       <description language='English'>Showcase definition to provide an overview of available screen elements</description>
-      <description language='German'>Showcase definition, um einen Überblick über die verfügbaren Bildschirmelemente zu geben</description>
+      <description language='German'>Showcase Definition, um einen Überblick über die verfügbaren Bildschirmelemente zu geben</description>
       <author>Carsten Thielepape</author>
       <version>3.70</version>
       <minorcaversion>3.7.0</minorcaversion>

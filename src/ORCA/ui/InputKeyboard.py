@@ -57,7 +57,7 @@ class cInputKeyboard(cBasePopup):
         uText=GetVar(uVarName = self.uDestVar)
         if uText is None:
             uText=u''
-        Logger.debug("InputKeyboard: Preassigning Value [%s]" % (uText))
+        Logger.debug("InputKeyboard: Preassigning Value [%s]" % uText)
         #self.oTextInput = textinput = TextInput(text=uText, focus=False,multiline=False, size_hint_y=None, height='30dp')
         self.oTextInput = textinput = TextInput(text=uText,multiline=False, size_hint_y=None, height='30dp')
         self.oTextInput.bind(on_text_validate=self.On_Enter)

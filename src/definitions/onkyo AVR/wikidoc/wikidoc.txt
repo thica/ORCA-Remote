@@ -4,6 +4,8 @@ WikiDoc:Context:DefinitionsForUser
 WikiDoc:Page:Userdescription Definition onkyo AVR
 WikiDoc:TOCTitle:onkyo AVR
 
+= Onkyo AVR =
+
 This definition controls ONKYO AVR receiver using the ONKYO EISCP network protocol. It autodetects your receiver on the network and pulls most information from it to initialize the definition. Will work for network enabled receiver only.
 
 Key features are:
@@ -61,6 +63,8 @@ WikiDoc:Doc
 WikiDoc:Context:Reference_Definitions
 WikiDoc:Page:Reference Definition onkyo AVR
 WikiDoc:TOCTitle:onkyo AVR
+
+= Overview =
 
 This definition controls ONKYO AVR receiver using the ONKYO EISCP network protocol. It uses the mediaplayer_template definition but is not integrated into the mediaplayer_wizard framework.
 

@@ -45,28 +45,6 @@ __all__ = ["cFileName"]
 class cFileName(object):
     def __init__(self,uFile = u''):
 
-        '''
-        if Logger.level == logging.DEBUG:
-            import inspect
-            frame = inspect.currentframe()
-            try:
-                aStack = inspect.stack()
-                for aLine in aStack:
-                    if not aLine[1].endswith("FileName.py"):
-                        aCodeLine = aLine[-2]
-                        uCodeLine = aCodeLine[0]
-                        uVarName=uCodeLine.split("=")[0].strip()
-                        tVarName=uVarName.split(".")
-                        if len(tVarName)==2:
-                            uVarName=tVarName[-1]
-                            if not uVarName.startswith("oFn"):
-                                if not "[" in uVarName:
-                                    print (uVarName)
-                        break
-            finally:
-                del frame
-        '''
-
         self.oPath      = cPath()
         if isinstance(uFile, string_types):
             self.uRaw       = uFile
@@ -248,7 +226,7 @@ class cFileName(object):
         try:
             return os.path.getsize(self.string)
         except Exception as e:
-            LogError (u'can\'t get filesize [%s]' % (self.string),e)
+            LogError (u'can\'t get filesize [%s]' % self.string, e)
             return -1
 
 

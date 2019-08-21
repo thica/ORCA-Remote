@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Translates Orca Actions to Interface Commands action = Orca Action String
-	cmd = command to send, -->
+cmd = command to send, -->
 
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 

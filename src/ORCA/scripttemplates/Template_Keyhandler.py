@@ -38,7 +38,7 @@ class cKeyhandlerTemplate(cBaseScript):
         return 0
 
     def Register(self,*args,**kwargs):
-        self.iHash=Globals.oNotifications.RegisterNotification(uNotification="on_key",fNotifyFunction=self.HandleKey,uDescription=self.uScriptName, aValueLinks=[{"in":"key","out":"key"}])
+        self.iHash=Globals.oNotifications.RegisterNotification(uNotification="on_key",fNotifyFunction=self.HandleKey,uDescription=self.uObjectName, aValueLinks=[{"in":"key","out":"key"}])
 
     def UnRegister(self,*args,**kwargs):
         Globals.oNotifications.UnRegisterNotification_ByHash(self.iHash)

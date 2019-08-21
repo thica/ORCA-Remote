@@ -19,24 +19,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from kivy.logger            import Logger
-from jnius                  import autoclass
-from jnius                  import detach
+import os
+import sys
+from ORCA.utils.Path import cPath
 
-def GetLocale():
-    """ gets the locale / language from the system """
-    uCurrent = 'English'
-    ourlocale = "en"
+def GetInstallationDataPath():
+    """ Gets the path to the folder where the installer places the ORCA files"""
 
-    try:
-        Logger.debug("Attempting to get default locale from Java...")
-        JavaUtilLocale = autoclass('java.util.Locale')
-        jlocale = JavaUtilLocale
-        ourlocale = jlocale.getDefault().getLanguage()
-    except Exception:
-        Logger.debug("Unable to get locale from Java...")
-    Logger.debug("Javalocale:"+str(ourlocale))
+    sPathname = os.path.dirname(sys.argv[0])
+    uAppPath = os.path.abspath(sPathname)
+    oPathRoot=cPath(uAppPath)
 
-    if ourlocale == "de":
-        uCurrent="German"
-    return uCurrent
+    return oPathRoot

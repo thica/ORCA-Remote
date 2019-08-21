@@ -41,9 +41,7 @@ dSplitActions = {   'if':           {'DstPars': ['condition'],          'SrcPars
 
 def CreateActionForSimpleActionList(dAction):
     """ Creates a single action for the actionlist """
-    oAction = cAction()
-    oAction.ParseAction(dAction)
-    return oAction
+    return cAction(pars=dAction)
 
 def GetActionID(uID):
     """ Returns the action to an ID """
@@ -65,7 +63,7 @@ class cActionType(object):
 class cAction(object):
     """ The Action Representation """
 
-    def __init__(self):
+    def __init__(self,**kwargs):
         self.bForce             = False
         self.dActionPars        = {}
         self.dCommandParameter  = {}  # just internal for interfaces
@@ -76,6 +74,22 @@ class cAction(object):
         self.uActionTapType     = u'both'  # could be both, single, double
         self.uFileName          = u''
         self.uRetVar            = u''
+        self.uFunctionContext   = u''
+
+        if "actionname" in kwargs:
+            self.iActionId             = GetActionID(kwargs["actionname"])
+            self.dActionPars['string'] = kwargs["actionname"]
+            self.uActionString         = kwargs["actionname"]
+        if "actionstring" in kwargs:
+            self.dActionPars['string'] = kwargs["actionstring"]
+            self.uActionString         = kwargs["actionstring"]
+
+        self.oParentWidget    = kwargs.get("parentwidget",None)
+        self.uFunctionContext = kwargs.get("functionname", "")
+
+        if "pars" in kwargs:
+            self.ParseAction(oSource=kwargs["pars"],oParentWidget=self.oParentWidget)
+
 
     def __copy__(self):
         oRes=cAction()
@@ -94,6 +108,7 @@ class cAction(object):
         oRes.uActionTapType     = self.uActionTapType
         oRes.uFileName          = self.uFileName
         oRes.uRetVar            = self.uRetVar
+        oRes.uFunctionContext   = self.uFunctionContext
 
         return oRes
 
@@ -110,6 +125,11 @@ class cAction(object):
                 self.dActionPars=oSource
             else:
                 self.dActionPars=copy(oSource.attrib)
+
+            if self.uFunctionContext:
+                for uKey in self.dActionPars:
+                    self.dActionPars[uKey]=self.dActionPars[uKey].replace("$par(","$var("+self.uFunctionContext+"_parameter_")
+
 
             self.uActionString      =  self.dActionPars.get(u'string',u'noaction')
             self.SplitAction(self.uActionString)

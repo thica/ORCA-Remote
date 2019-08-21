@@ -44,7 +44,6 @@ from ORCA.utils.TypeConvert         import  ToUnicode
 from ORCA.Skin                      import  cSkin
 from ORCA.vars.Replace              import  ReplaceVars
 from ORCA.vars.Globals              import  InitSystemVars
-from ORCA.vars.Access               import  SetVar
 from ORCA.vars.Actions              import  Var_Increase
 from ORCA.ScreenPages               import  cScreenPages
 
@@ -84,7 +83,6 @@ class cTheScreen(EventDispatcher):
 
         # Name of the Current page
         # List for settings dialog
-        self.aActionTime        = None
         self.bIntransition      = False
         self.dGestures.clear()
         self.dPopups.clear()
@@ -104,7 +102,7 @@ class cTheScreen(EventDispatcher):
         self.uFirstPageName     = u''
         self.uInterFaceToConfig = u''
         self.uScriptToConfig    = u''
-        self.uConfigToConfig   = u''
+        self.uConfigToConfig    = u''
         self.uSplashText        = u''
         if Globals.oTheScreen:
             Globals.oTheScreen.oSkin.dSkinRedirects.clear()
@@ -148,7 +146,7 @@ class cTheScreen(EventDispatcher):
             if oPage is None:
                 Logger.error(u'ShowPage: Wrong Pagename given:'+uPageName)
                 self.DumpPages()
-                uPageName =    'Page_None'
+                uPageName = 'Page_None'
                 oPage=self.oScreenPages.get(uPageName)
                 self.oCurrentPage=oPage
             else:
@@ -165,7 +163,7 @@ class cTheScreen(EventDispatcher):
             oPage.iESCPressCount = 0
 
             if not oPage.bIsPopUp:
-                self.oRootSM.current              = uPageName
+                self.oRootSM.current        = uPageName
             else:
                 self.oPopupPage=oPage
                 #self.oRoot.add_widget(oPage.oScreen)
@@ -204,6 +202,7 @@ class cTheScreen(EventDispatcher):
         else:
             uPageName=ReplaceVars(uPageName)
             oPage=self.oScreenPages.get(uPageName)
+
         if oPage is None:
             Logger.debug(u'IsPopup: Wrong Pagename given: [%s/%s]' % (uPageName,uPageNameOrg))
             return False
@@ -299,8 +298,8 @@ class cTheScreen(EventDispatcher):
         if "@" in uWidgetName:
             uWidgetName,uPageName=uWidgetName.split(u"@")
 
-        uWidgetNameRep=ReplaceVars(uWidgetName)
-        uPageNameRep=ReplaceVars(uPageName)
+        uWidgetNameRep = ReplaceVars(uWidgetName)
+        uPageNameRep   = ReplaceVars(uPageName)
         if uPageNameRep=="":
             if self.oCurrentPage is not None:
                 uPageNameRep=self.oCurrentPage.uPageName
@@ -320,9 +319,10 @@ class cTheScreen(EventDispatcher):
                     Logger.error (uMsg)
             else:
                 if uWidgetNameRep != "*":
-                    oWidget = oPage.dWidgets.get(uWidgetNameRep)
-                    if oWidget is not None:
-                        aRet.append(oWidget)
+                    aWidgets = oPage.dWidgets[uWidgetNameRep]
+                    if aWidgets:
+                        for oWidget in aWidgets:
+                            aRet.append(oWidget)
                     else:
                         if uPageNameRep!="*":
                             if not bIgnoreError:
@@ -339,37 +339,6 @@ class cTheScreen(EventDispatcher):
         return aRet
 
 
-    def FindWidget(self,oScreenPage,uWidgetName,bDoNotCreatePage=False):
-        """ Finds a widget with a given name """
-        uWidgetNameRep=ReplaceVars(uWidgetName)
-        if oScreenPage is None:
-            oScreenPage=self.oCurrentPage
-
-        if oScreenPage is None:
-            uMsg=u'The Screen: Page for Widget not found:'+uWidgetNameRep
-            Logger.error (uMsg)
-            return None
-
-        oWidget = oScreenPage.dWidgets.get(uWidgetNameRep)
-        if not oWidget is None:
-            if not oScreenPage.bIsInit and not bDoNotCreatePage:
-                oScreenPage.Create()
-            return oWidget
-        Logger.warning ("Can't find widget [%s] on current page [%s], looking on all pages" % (uWidgetName,oScreenPage.uPageName))
-
-        for oPageName in self.oScreenPages:
-            oPage=self.oScreenPages[oPageName]
-            oWidget = oPage.dWidgets.get(uWidgetNameRep)
-            if not oWidget is None:
-                if not oPage.bIsInit and not bDoNotCreatePage:
-                    oPage.Create()
-                return oWidget
-
-        uMsg=u'The Screen: Widget not found:'+uWidgetNameRep
-        Logger.error (uMsg)
-
-        return None
-
     def on_motion(self, window,etype, motionevent):
         """ To detect, if we still have a down touch if we missed the touch_up message so we do not want endless repeat """
         self.uLastTouchType  = etype
@@ -384,3 +353,52 @@ class cTheScreen(EventDispatcher):
                 if uFilter in uKey:
                     Logger.error(uKey)
 
+"""
+
+
+    def FindWidget(self,oScreenPage,uWidgetName,bDoNotCreatePage=False):
+        '''
+        Finds widgets with a given name
+        :param oScreenPage: The page to look for, if empty, the current page will be searched
+        :param str: uWidgetName: The name of the Widget
+        :param bool: bDoNotCreatePage: If True, pages will not be cretaed, otherwise the page will be created to ensure, the widget is valid
+        :return: list of Widgets
+        :rtype list
+        '''
+
+
+
+        uWidgetNameRep=ReplaceVars(uWidgetName)
+        if oScreenPage is None:
+            oScreenPage=self.oCurrentPage
+
+        if oScreenPage is None:
+            uMsg=u'The Screen: Page for Widget not found:'+uWidgetNameRep
+            Logger.error (uMsg)
+            return []
+
+        aWidgets = oScreenPage.dWidgets[uWidgetNameRep]
+        if aWidgets:
+            for oWidget in aWidgets:
+                if not oScreenPage.bIsInit and not bDoNotCreatePage:
+                    oScreenPage.Create()
+            return aWidgets
+        Logger.warning ("Can't find widget [%s] on current page [%s], looking on all pages" % (uWidgetName,oScreenPage.uPageName))
+
+        # this returns widgets just on the first page we find them, not of all pages
+        for oPageName in self.oScreenPages:
+            oPage=self.oScreenPages[oPageName]
+            aWidgets = oPage.dWidgets[uWidgetNameRep]
+            if aWidgets:
+                for oWidget in aWidgets:
+                    if not oPage.bIsInit and not bDoNotCreatePage:
+                        oPage.Create()
+                return aWidgets
+
+        uMsg=u'The Screen: Widget not found:'+uWidgetNameRep
+        Logger.error (uMsg)
+
+        return []
+
+
+"""

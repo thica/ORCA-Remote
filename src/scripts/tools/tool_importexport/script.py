@@ -80,10 +80,12 @@ class cScript(cToolsTemplate):
 
     def __init__(self):
         cToolsTemplate.__init__(self)
-        self.uSubType        = u'IRDB'
-        self.uSortOrder      = u'auto'
-        self.uSettingSection = u'tools'
-        self.uSettingTitle   = u"Import Export"
+        self.uSubType           = u'IRDB'
+        self.uSortOrder         = u'auto'
+        self.uSettingSection    = u'tools'
+        self.uSettingTitle      = u'Import Export'
+        self.uIniFileLocation   = u'none'
+
 
     def RunScript(self, *args, **kwargs):
         cToolsTemplate.RunScript(self,*args, **kwargs)
@@ -113,13 +115,13 @@ class cScript(cToolsTemplate):
         Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-DOEXPORT", fNotifyFunction=self.ExportOrcaFiles, uDescription="Script Tools Import / Export")
 
         oScriptSettingPlugin = cScriptSettingPlugin()
-        oScriptSettingPlugin.uScriptName   = self.uScriptName
+        oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "ORCA"
         oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
         oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_4)"
         oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_1)","desc": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_IMPORTEXPORT_3)","id":"button_notification_STARTSCRIPTIMPORTEXPORT-EXPORT"}]}',
                                               u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_5)","desc": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_5)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_IMPORTEXPORT_7)","id":"button_notification_STARTSCRIPTIMPORTEXPORT-IMPORT"}]}']
-        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uScriptName,oScriptSettingPlugin=oScriptSettingPlugin)
+        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
         self.LoadActions()
 

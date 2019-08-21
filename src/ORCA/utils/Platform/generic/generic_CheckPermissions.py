@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
     ORCA Open Remote Control Application
     Copyright (C) 2013-2019  Carsten Thielepape
@@ -18,8 +19,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.vars.QueryDict    import cMonitoredSettings
+# from ORCA.utils.Platform import OS_GetUserDataPath
+from ORCA.utils.Platform import OS_GetUserDownloadsDataPath
+import ORCA.Globals as Globals
 
-class cInterfaceMonitoredSettings(cMonitoredSettings):
-    def WriteVar(self,sName,oValue):
-        self.oBaseSettings.SetContextVar("CONFIG_" + sName.upper()[1:], oValue)
+
+def CheckPermissions():
+    """ We assume to have all permissions, as long we do not OS specific code"""
+
+    '''
+    if Globals.oPathRoot is not None:
+        return Globals.oPathRoot.IsWriteable()
+    else:
+        return OS_GetUserDataPath().IsWriteable()
+    '''
+
+    if Globals.oPathUserDownload is not None:
+        return Globals.oPathUserDownload.IsWriteable()
+    else:
+        return OS_GetUserDownloadsDataPath().IsWriteable()

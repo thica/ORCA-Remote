@@ -31,7 +31,6 @@ from ORCA.scripttemplates.Template_Tools    import cToolsTemplate
 from ORCA.vars.Replace                      import ReplaceVars
 from ORCA.vars.Access                       import SetVar
 from ORCA.utils.TypeConvert                 import ToBool
-from ORCA.utils.Path                        import cPath
 from ORCA.Parameter                         import cParameter
 from ORCA.Parameter                         import cParserAction
 from ORCA.vars.Helpers                      import GetEnvVar
@@ -87,17 +86,21 @@ class cScript(cToolsTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.uHost           = oScript.oEnvParameter.uFTPServer
-            self.aScriptIniSettings.uUser           = oScript.oEnvParameter.uFTPUser
-            self.aScriptIniSettings.uPassword       = oScript.oEnvParameter.uFTPPassword
-            self.aScriptIniSettings.uFTPPath        = oScript.oEnvParameter.uFTPServerPath
-            self.aScriptIniSettings.uPathRepSource  = oScript.oEnvParameter.oPathRepSource
-            self.aScriptIniSettings.uWWWServerPath  = oScript.oEnvParameter.uWWWServerPath
-            self.aScriptIniSettings.bFTPSSL         = ToBool(oScript.oEnvParameter.uFTPSSL)
+            self.aIniSettings.uHost           = oScript.oEnvParameter.uFTPServer
+            self.aIniSettings.uUser           = oScript.oEnvParameter.uFTPUser
+            self.aIniSettings.uPassword       = oScript.oEnvParameter.uFTPPassword
+            self.aIniSettings.uFTPPath        = oScript.oEnvParameter.uFTPServerPath
+            self.aIniSettings.oPathRepSource  = oScript.oEnvParameter.oPathRepSource
+            self.aIniSettings.uWWWServerPath  = oScript.oEnvParameter.uWWWServerPath
+            self.aIniSettings.bFTPSSL         = ToBool(oScript.oEnvParameter.uFTPSSL)
 
             uVersion = str(Globals.iVersion)
-            self.aScriptIniSettings.uWWWServerPath  = self.aScriptIniSettings.uWWWServerPath.replace(uVersion,"$var(REPVERSION)")
-            self.aScriptIniSettings.uFTPPath        = self.aScriptIniSettings.uFTPPath.replace(uVersion,"$var(REPVERSION)")
+            self.aIniSettings.uWWWServerPath  = self.aIniSettings.uWWWServerPath.replace(uVersion,"$var(REPVERSION)")
+            self.aIniSettings.uFTPPath        = self.aIniSettings.uFTPPath.replace(uVersion,"$var(REPVERSION)")
+        def WriteConfigToIniFile(self):
+            # this avoids, that the Ini file will be changed from given command line / environment settings
+            # nevertheless, once changes have been writen to the ini file, they will be used , regardless of any env / commandline parameter
+            pass
 
     class cScriptParameter(cParameter):
         def AddParameter(self,oParser):
@@ -106,29 +109,29 @@ class cScript(cToolsTemplate):
             oParser.add_argument('--ftpuser',           default=GetEnvVar('ORCAFTPUSER'),                                action=cParserAction, oParameter=self, dest="uFTPUser",        help='Set the username for the FTP Server for the repository manager (can be passed as ORCAFTPUSER environment var)')
             oParser.add_argument('--ftppassword',       default=GetEnvVar('ORCAFTPPW'),                                  action=cParserAction, oParameter=self, dest="uFTPPassword",    help='Set the password for the FTP Server for the repository manager (can be passed as ORCAFTPPW environment var)')
             oParser.add_argument('--ftpssl',            default=GetEnvVar('ORCAFTPSSL'),                                 action=cParserAction, oParameter=self, dest="uFTPSSL",         help='Flag 0/1 to use SSL to connect to the FTP server (can be passed as ORCAFTPSSL environment var)')
-            oParser.add_argument('--ftprepsourcepath',  default=GetEnvVar('ORCAREPSOURCEPATH',Globals.oPathRoot.string), action=cParserAction, oParameter=self, dest="oPathRepSource",  help='Changes the path for repository manager where to find the repositry files to upload (can be passed as ORCAREPSOURCEPATH environment var)')
+            oParser.add_argument('--repsourcepath',     default=GetEnvVar('ORCAREPSOURCEPATH',Globals.oPathRoot.string), action=cParserAction, oParameter=self, dest="oPathRepSource",  help='Changes the path for repository manager where to find the repositry files to upload (can be passed as ORCAREPSOURCEPATH environment var)')
             oParser.add_argument('--wwwserverpath',     default=GetEnvVar('ORCAWWWSERVERPATH'),                          action=cParserAction, oParameter=self, dest="uWWWServerPath",  help='Set the WWW Server path for the repository manager  (can be passed as ORCAWWWSERVERPATH environment var)')
 
     def __init__(self):
         cToolsTemplate.__init__(self)
-        self.uSubType        = u'REPOSITORY'
-        self.uSortOrder      = u'auto'
-        self.uSettingSection = u'tools'
-        self.uSettingTitle   = u"Repository Manager"
-        self.oEnvParameter   = self.cScriptParameter()
+        self.uSubType         = u'REPOSITORY'
+        self.uSortOrder       = u'auto'
+        self.uSettingSection  = u'tools'
+        self.uSettingTitle    = u"Repository Manager"
+        self.oEnvParameter    = self.cScriptParameter()
 
-    def Init(self,uScriptName,uScriptFile=u''):
+    def Init(self,uObjectName,uScriptFile=u''):
         """
         Init function for the script
 
-        :param string uScriptName: The name of the script (to be passed to all scripts)
+        :param string uObjectName: The name of the script (to be passed to all scripts)
         :param uScriptFile: The file of the script (to be passed to all scripts)
         """
 
-        cToolsTemplate.Init(self, uScriptName, uScriptFile)
-        self.oScriptConfig.dDefaultSettings['User']['active']                        = "enabled"
-        self.oScriptConfig.dDefaultSettings['Password']['active']                    = "enabled"
-        self.oScriptConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        cToolsTemplate.Init(self, uObjectName, uScriptFile)
+        self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
 
     def RunScript(self, *args, **kwargs):
         cToolsTemplate.RunScript(self,*args, **kwargs)
@@ -137,18 +140,18 @@ class cScript(cToolsTemplate):
 
     def StartRepositoryManager(self, *args, **kwargs):
         oSetting                = self.GetSettingObjectForConfigName(self.uConfigName)
-        SetVar(uVarName=u'REPOSITORYWWWPATH',  oVarValue=oSetting.aScriptIniSettings.uWWWServerPath)
-        SetVar(uVarName=u"REPMAN_FTPSERVER",   oVarValue=oSetting.aScriptIniSettings.uHost)
-        SetVar(uVarName=u"REPMAN_FTPPATH",     oVarValue=oSetting.aScriptIniSettings.uFTPPath)
-        SetVar(uVarName=u"REPMAN_FTPUSER",     oVarValue=oSetting.aScriptIniSettings.uUser)
-        SetVar(uVarName=u"REPMAN_FTPPASSWORD", oVarValue=oSetting.aScriptIniSettings.uPassword)
+        SetVar(uVarName=u'REPOSITORYWWWPATH',  oVarValue=oSetting.aIniSettings.uWWWServerPath)
+        SetVar(uVarName=u"REPMAN_FTPSERVER",   oVarValue=oSetting.aIniSettings.uHost)
+        SetVar(uVarName=u"REPMAN_FTPPATH",     oVarValue=oSetting.aIniSettings.uFTPPath)
+        SetVar(uVarName=u"REPMAN_FTPUSER",     oVarValue=oSetting.aIniSettings.uUser)
+        SetVar(uVarName=u"REPMAN_FTPPASSWORD", oVarValue=oSetting.aIniSettings.uPassword)
 
-        if oSetting.aScriptIniSettings.bFTPSSL:
+        if oSetting.aIniSettings.bFTPSSL:
             SetVar(uVarName=u"REPMAN_FTPSSL",oVarValue=u"1")
         else:
-            SetVar(uVarName=u"REPMAN_FTPSSL", oVarValue=u"0")
+            SetVar(uVarName=u"REPMAN_FTPSSL",oVarValue=u"0")
 
-        RepositoryManager(oPathRepSource = cPath(oSetting.aScriptIniSettings.uPathRepSource))
+        RepositoryManager(oPathRepSource = oSetting.aIniSettings.oPathRepSource)
 
     def CreateRepositoryVarArray(self,  *args, **kwargs):
         uBaseLocalDir  = ReplaceVars(kwargs.get("baselocaldir",(Globals.oPathTmp + "RepManager").string))
@@ -160,17 +163,17 @@ class cScript(cToolsTemplate):
         Globals.oNotifications.RegisterNotification("CREATEREPOSITORYVARARRAY",     fNotifyFunction=self.CreateRepositoryVarArray, uDescription="Script Repository Manager")
 
         oScriptSettingPlugin = cScriptSettingPlugin()
-        oScriptSettingPlugin.uScriptName   = self.uScriptName
+        oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "TOOLS"
         oScriptSettingPlugin.uSettingPage  = "$lvar(699)"
         oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_REPMANAGER_4)"
         oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_REPMANAGER_1)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_REPMANAGER_3)","id":"button_notification_STARTSCRIPTREPOSITORYMANAGER"}]}']
-        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uScriptName,oScriptSettingPlugin=oScriptSettingPlugin)
+        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
         self.LoadActions()
 
     def GetConfigJSON(self):
-        return {"FTPPath":       {"type": "varstring", "active":"enabled", "order":16, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_5)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_6)", "key": "FTPPath",       "default": self.oEnvParameter.uFTPServerPath,            "section": "$var(ScriptConfigSection)"},
-                "FTPSSL":        {"type": "bool",      "active":"enabled", "order":17, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_7)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_8)", "key": "FTPSSL",        "default": ToBool(self.oEnvParameter.uFTPSSL),           "section": "$var(ScriptConfigSection)"},
-                "PathRepSource": {"type": "path",      "active":"enabled", "order":18, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ScriptConfigSection)"},
-                "WWWServerPath": {"type": "varstring", "active":"enabled", "order":19, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_11)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_12)","key": "WWWServerPath", "default": self.oEnvParameter.uWWWServerPath,            "section": "$var(ScriptConfigSection)"}
+        return {"FTPPath":       {"type": "varstring", "active":"enabled", "order":16, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_5)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_6)", "key": "FTPPath",       "default": self.oEnvParameter.uFTPServerPath,            "section": "$var(ObjectConfigSection)"},
+                "FTPSSL":        {"type": "bool",      "active":"enabled", "order":17, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_7)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_8)", "key": "FTPSSL",        "default": ToBool(self.oEnvParameter.uFTPSSL),           "section": "$var(ObjectConfigSection)"},
+                "PathRepSource": {"type": "path",      "active":"enabled", "order":18, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"},
+                "WWWServerPath": {"type": "varstring", "active":"enabled", "order":19, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_11)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_12)","key": "WWWServerPath", "default": self.oEnvParameter.uWWWServerPath,            "section": "$var(ObjectConfigSection)"}
                 }

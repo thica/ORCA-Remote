@@ -95,14 +95,18 @@ def ScanDefinitionNames():
     """
     Parses the Definition description to give definition names
     """
+
+    aHide = ["appfavorites_template","cmdfavorites_template","tvfavorites_template","activity_template"]
+
     if len(this.dDefinitionReps)==0:
         for uDefinitionName in Globals.aDefinitionList:
-            if Globals.dDefinitionPathes.get(uDefinitionName) is None:
-                oDefinitionPathes=cDefinitionPathes(uDefinitionName)
-                Globals.dDefinitionPathes[uDefinitionName]=oDefinitionPathes
-            oRepManagerEntry=cRepManagerEntry(Globals.dDefinitionPathes[uDefinitionName].oFnDefinition)
-            if oRepManagerEntry.ParseFromXML():
-                this.dDefinitionReps[uDefinitionName]=oRepManagerEntry.oRepEntry.uName
+            if not uDefinitionName in aHide:
+                if Globals.dDefinitionPathes.get(uDefinitionName) is None:
+                    oDefinitionPathes=cDefinitionPathes(uDefinitionName)
+                    Globals.dDefinitionPathes[uDefinitionName]=oDefinitionPathes
+                oRepManagerEntry=cRepManagerEntry(Globals.dDefinitionPathes[uDefinitionName].oFnDefinition)
+                if oRepManagerEntry.ParseFromXML():
+                    this.dDefinitionReps[uDefinitionName]=oRepManagerEntry.oRepEntry.uName
 
 
 def BuildSettingOptionList_sub(uIn,uRepType):
@@ -136,6 +140,7 @@ def BuildSettingsString():
             iLast=iLast-1
 
     ScanDefinitionNames()
+    Globals.oScripts.LoadScripts()
 
     # here we build to large settings panel string
     uOrcaSettingsJSON = u'[{{ "type": "title","title": "$lvar(501)" }},\n' \
@@ -146,7 +151,7 @@ def BuildSettingsString():
                         u'{{"type": "scrolloptions","title": "$lvar(508)","desc": "$lvar(509)","section": "ORCA","key": "skin","options":[{skinlist}]}},\n' \
                         u'{{"type": "scrolloptions","title": "$lvar(634)","desc": "$lvar(635)","section": "ORCA","key": "sounds","options":[{soundlist}]}},\n' \
                         u'{{"type": "scrolloptions","title": "$lvar(561)","desc": "$lvar(562)","section": "ORCA","key": "interface","options":[{interfacelist}] }},\n' \
-                        u'{{"type": "scrolloptionsoptions","title": "$lvar(577)","desc": "$lvar(578)","section": "ORCA","key": "script","options":[{scriptmanagestrings}] , "suboptions":[[{scriptlist}],[{scriptlist}]],"alwaysonchange":"1","novaluechange":"1" }},\n' \
+                        u'{{"type": "scrolloptionsoptions","title": "$lvar(577)","desc": "$lvar(578)","section": "ORCA","key": "script","options":[{scriptmanagestrings}] , "suboptions":[[{scriptlistconfig}],[{scriptlist}]],"alwaysonchange":"1","novaluechange":"1" }},\n' \
                         u'{{"type": "bool","title": "$lvar(510)","desc": "$lvar(511)","section": "ORCA","key": "initpagesatstartup"}},\n' \
                         u'{{"type": "numericslider","title": "$lvar(512)","desc": "$lvar(513)","section": "ORCA","key": "delayedpageinitinterval","min":"0", "max":"60" ,"roundpos":"0"}},\n' \
                         u'{{"type": "bool","title": "$lvar(514)","desc": "$lvar(515)","section": "ORCA","key": "ignoreatlas"}},\n' \
@@ -184,6 +189,7 @@ def BuildSettingsString():
                         scriptmanagestrings     = BuildSettingOptionList(['$lvar(516)','$lvar(517)']), \
                         skinlist                = BuildSettingOptionList(Globals.aSkinList), \
                         soundlist               = BuildSettingOptionList(Globals.oSound.aSoundsList), \
+                        scriptlistconfig        = BuildSettingOptionList(Globals.oScripts.aScriptNameListWithConfig), \
                         scriptlist              = BuildSettingOptionList(Globals.oScripts.aScriptNameList), \
                         interfacelist           = BuildSettingOptionList(aInterfaceList))
 
@@ -215,7 +221,7 @@ def BuildSettingsStringDefinitionList():
                 uSubSetting+= u'{"type": "buttons","title": "%s","desc": "%s","section": "ORCA","key": "button_changedefinitionsetting","buttons":[{"title":"$lvar(716)","id":"button_%s"}]},' %(uPublicTitle,oDef.uDefDescription,oDef.uAlias )
 
     if uMainSetting != u'':
-        uOrcaSettingsJSON  =u'[{ "type": "title","title":  "$lvar(717)" },\n %s]' % (uMainSetting)
+        uOrcaSettingsJSON  =u'[{ "type": "title","title":  "$lvar(717)" },\n %s]' % uMainSetting
         if uSubSetting!=u'':
             uOrcaSettingsJSON = u'%s,{ "type": "title","title":  "$lvar(718)" },\n %s]' % (uOrcaSettingsJSON[:-1],uSubSetting[:-1])
     else:
@@ -280,7 +286,7 @@ def BuildSettingsStringOnlineResources():
             iCountBlanks+=1
             if iCountBlanks>1:
                 continue
-        uReps+=u'{"type": "string","title":    "$lvar(671)","desc": "$lvar(672)","section": "ORCA","key": "repository%d"},\n' %(i)
+        uReps+=u'{"type": "string","title":    "$lvar(671)","desc": "$lvar(672)","section": "ORCA","key": "repository%d"},\n' % i
 
 
     uOrcaSettingsJSON  =u'[{ "type": "title","title":  "$lvar(670)" },\n' \

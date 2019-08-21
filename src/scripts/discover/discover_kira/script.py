@@ -25,7 +25,6 @@ import socket
 import threading
 
 from kivy.logger                            import Logger
-from kivy.compat                            import PY2
 
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
@@ -33,7 +32,7 @@ from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
 from ORCA.utils.LogError                    import LogError
 from ORCA.utils.TypeConvert                 import ToFloat
 from ORCA.utils.TypeConvert                 import ToBool
-from ORCA.utils.TypeConvert                 import ToBytes
+from ORCA.utils.PyXSocket                   import cPyXSocket
 from ORCA.vars.QueryDict                    import QueryDict
 
 import ORCA.Globals as Globals
@@ -88,7 +87,7 @@ class cScript(cDiscoverScriptTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.fTimeOut                     = 10.0
+            self.aIniSettings.fTimeOut                     = 10.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
@@ -97,24 +96,23 @@ class cScript(cDiscoverScriptTemplate):
         self.aThreads        = []
         self.oReq            = QueryDict()
 
-    def Init(self,uScriptName,uScriptFile=u''):
+    def Init(self,uObjectName,uScriptFile=u''):
         """
         Init function for the script
 
-        :param string uScriptName: The name of the script (to be passed to all scripts)
+        :param string uObjectName: The name of the script (to be passed to all scripts)
         :param uScriptFile: The file of the script (to be passed to all scripts)
         """
-        cDiscoverScriptTemplate.Init(self, uScriptName, uScriptFile)
-        self.oScriptConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
     def GetHeaderLabels(self):
         return ['$lvar(5029)','$lvar(5035)','$lvar(6002)']
 
     def ListDiscover(self):
 
-        dArgs                   = {}
-        dArgs["onlyonce"]       = 0
-        dArgs["ipversion"]      = "IPv4Only"
+        dArgs                   = {"onlyonce": 0,
+                                   "ipversion": "IPv4Only"}
         aDevices                = {}
 
         self.Discover(**dArgs)
@@ -143,7 +141,7 @@ class cScript(cDiscoverScriptTemplate):
         uConfigName              = kwargs.get('configname',self.uConfigName)
         oSetting                 = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
         self.oReq.bReturnPort    = ToBool(kwargs.get('returnport',"0"))
-        fTimeOut                 = ToFloat(kwargs.get('timeout',oSetting.aScriptIniSettings.fTimeOut))
+        fTimeOut                 = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
         uIPVersion               = kwargs.get('ipversion',"IPv4Only")
         bOnlyOnce                = ToBool(kwargs.get('onlyonce',"1"))
 
@@ -153,7 +151,6 @@ class cScript(cDiscoverScriptTemplate):
         del self.aThreads[:]
 
         try:
-            oThread = None
             if uIPVersion == "IPv4Only" or uIPVersion == "All" or (uIPVersion == "Auto" and Globals.uIPAddressV6 == ""):
                 oThread = cThread_Discover_Kira(bOnlyOnce=bOnlyOnce,oReq=self.oReq,uIPVersion="IPv4Only", fTimeOut=fTimeOut, oCaller=self)
                 self.aThreads.append(oThread)
@@ -259,7 +256,7 @@ class cThread_Discover_Kira(threading.Thread):
             return
 
         except Exception as e:
-            LogError(u'Error on discover Kira (%s)' % (self.uIPVersion), e)
+            LogError(u'Error on discover Kira (%s)' % self.uIPVersion, e)
             if oSocket:
                 oSocket.close()
             return
@@ -273,13 +270,11 @@ class cThread_Discover_Kira(threading.Thread):
             iUDP_PORT   = 30303
             uMessage = u'disD'
 
-            oSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            # oSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            oSocket = cPyXSocket(socket.AF_INET, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
             oSocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 20)
-            if PY2:
-                oSocket.sendto(uMessage, (uUDP_IP, iUDP_PORT))
-            else:
-                oSocket.sendto(ToBytes(uMessage), (uUDP_IP, iUDP_PORT))
+            oSocket.SendTo(uMessage, (uUDP_IP, iUDP_PORT))
             return oSocket
 
         if self.uIPVersion == "IPv6Only":
@@ -295,13 +290,10 @@ class cThread_Discover_Kira(threading.Thread):
             iUDP_PORT = 30303
             uMessage = u'disD'
 
-            oSocket = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+            oSocket = cPyXSocket(socket.AF_INET6, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
             oSocket.setsockopt(IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 20)
-            if PY2:
-                oSocket.sendto(uMessage, (uUDP_IP, iUDP_PORT))
-            else:
-                oSocket.sendto(ToBytes(uMessage), (uUDP_IP, iUDP_PORT))
+            oSocket.SendTo(uMessage, (uUDP_IP, iUDP_PORT))
             return oSocket
 
         return None

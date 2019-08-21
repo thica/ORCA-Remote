@@ -77,7 +77,7 @@ class cFTP(object):
                 uNewDir += uSep + uServerDir
                 if not self.DirExists(cPath(uNewDir)):
                     try:
-                        Logger.debug('Attempting to create directory (%s) ...' % (uNewDir))
+                        Logger.debug('Attempting to create directory (%s) ...' % uNewDir)
                         self.oFTP.mkd(uNewDir)
                     except Exception as e:
                         LogError('can\'t create directory (%s) ...' % (uNewDir),e)

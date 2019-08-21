@@ -110,13 +110,14 @@ class cScript(cBaseScript):
 
     def __init__(self):
         cBaseScript.__init__(self)
-        self.uType          = u'HELPERS'
-        self.dServices      = {}
-        self.dLogos         = {}
+        self.uType              = u'HELPERS'
+        self.dServices          = {}
+        self.dLogos             = {}
+        self.uIniFileLocation   = u'none'
 
-    def Init(self,uScriptName,uScriptFile=u''):
+    def Init(self,uObjectName,uScriptFile=u''):
         """ Main Init, loads the Enigma Script"""
-        cBaseScript.Init(self,uScriptName,uScriptFile)
+        cBaseScript.Init(self,uObjectName,uScriptFile)
 
     def RunScript(self, *args, **kwargs):
         """ Main Entry point, parses the cmd_type and calls the relevant functions """
@@ -131,7 +132,7 @@ class cScript(cBaseScript):
                     return self.AssignChannels(**kwargs)
 
         except Exception as e:
-            self.ShowError("Can''t run Enigma Helper script, invalid parameter",e)
+            self.ShowError(uMsg="Can''t run Enigma Helper script, invalid parameter",uParConfigName=self.uConfigName,oException=e)
             return 1
 
     def AssignChannels(self, **kwargs):
@@ -154,7 +155,7 @@ class cScript(cBaseScript):
             aBouquets = dServices.get("Bouquets",[])
             for dBouquetDetail in aBouquets:
                 iBouquetNumber = dBouquetDetail["BouquetNum"]
-                if iBouquetNumber <5:
+                if iBouquetNumber <6:
                     uBouquetName   = dBouquetDetail["Name"]
                     uVarName = uAlias + "_bouquet_name["+str(iBouquetNumber)+"]"
                     uVarValue = uBouquetName
@@ -177,7 +178,7 @@ class cScript(cBaseScript):
             Globals.oDefinitionConfigParser.write()
 
         except Exception as e:
-            self.ShowError("Can''t assign channelnumbers", e)
+            self.ShowError(uMsg="Can''t assign channelnumbers", uParConfigName=self.uConfigName,oException=e)
 
     def GetChannelReference(self, **kwargs):
         """
@@ -202,7 +203,7 @@ class cScript(cBaseScript):
             uReference      = self.dServices[uContext]["Channels"][int(uChannelNum)]["Reference"]
             SetVar(uVarName=uDstVarName , uContext=uContext, oVarValue=uReference)
         except Exception as e:
-            self.ShowError("Can''t find channelreference:"+uChannelNum+" context:"+uContext, e)
+            self.ShowError(uMsg="Can''t find channelreference:"+uChannelNum+" context:"+uContext, uParConfigName=self.uConfigName, oException=e)
             if not uContext in self.dServices:
                 self.ShowError("Context not found, available context:")
                 for uKey in self.dServices:
@@ -282,7 +283,7 @@ class cScript(cBaseScript):
             else:
                 self.ShowError("No Services Data in Source Var:"+uResultVar)
         except Exception as e:
-            self.ShowError("Can''t parse services, invalid xml", e)
+            self.ShowError(uMsg="Can''t parse services, invalid xml", uParConfigName=self.uConfigName, oException=e)
         return 0
 
     def FindChannelLogo(self,uChannelName):

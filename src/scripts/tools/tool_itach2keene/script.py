@@ -95,12 +95,12 @@ class cScript(cToolsTemplate):
         Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED", fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools iTach2Keene")
         Globals.oNotifications.RegisterNotification("STARTSCRIPTITACH2KEENE", fNotifyFunction=self.ShowPageItach2Keene, uDescription="Script Tools iTach2Keene")
         oScriptSettingPlugin = cScriptSettingPlugin()
-        oScriptSettingPlugin.uScriptName   = self.uScriptName
+        oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "ORCA"
         oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
         oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_ITACH2KEENE_4)"
         oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_ITACH2KEENE_1)","desc": "$lvar(SCRIPT_TOOLS_ITACH2KEENE_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_ITACH2KEENE_3)","id":"button_notification_STARTSCRIPTITACH2KEENE"}]}']
-        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uScriptName,oScriptSettingPlugin=oScriptSettingPlugin)
+        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
         ''' If we press ESC on the iTach2Keene page, goto to the settings page '''
 

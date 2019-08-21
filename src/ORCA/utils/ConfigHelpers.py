@@ -32,7 +32,7 @@ __all__ = ['Config_GetDefault_Bool',
            'Config_GetDefault_Path']
 
 def Config_GetDefault_Bool(oConfig, uSection, uOption, uDefaultValue):
-    return (Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue) == u'1')
+    return Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue) == u'1'
 
 def Config_GetDefault_Float(oConfig, uSection, uOption, uDefaultValue):
     return ToFloat(Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue))

@@ -33,6 +33,9 @@ from kivy.compat            import PY2
 from ORCA.utils.Path        import cPath
 from ORCA.utils.Platform    import OS_GetSystemUserPath
 from ORCA.utils.TypeConvert import ToBytes
+from ORCA.utils.TypeConvert import ToUnicode
+
+from ORCA.utils.PyXSocket   import cPyXSocket
 
 import ORCA.Globals as Globals
 
@@ -54,13 +57,27 @@ def MakeWireIDs(ids):
   wire_to_id = {wire: cmd_id for cmd_id, wire in id_to_wire.items()}
   return id_to_wire, wire_to_id
 
+
 def CalculateChecksum(data):
     # The checksum is just a sum of all the bytes. I swear.
-    if not PY2:
-        return sum(data) & 0xFFFFFFFF
-    else:
-        return sum(map(ord, data)) & 0xFFFFFFFF
 
+    if not PY2:
+        if isinstance(data,str):
+            data = data.encode('utf-8')
+
+    if isinstance(data, bytearray):
+        total = sum(data)
+    elif isinstance(data, bytes):
+        if data and isinstance(data[0], bytes):
+            # Python 2 bytes (str) index as single-character strings.
+            total = sum(map(ord, data))
+        else:
+            # Python 3 bytes index as numbers (and PY2 empty strings sum() to 0)
+            total = sum(data)
+    else:
+        # Unicode strings (should never see?)
+        total = sum(map(ord, data))
+    return total & 0xFFFFFFFF
 
 class cIP_Connection(object):
     """ The pysical (TCP/IP) Connection to the target device """
@@ -82,13 +99,12 @@ class cIP_Connection(object):
         :return: True / False
         """
 
-        self.oSocket     = None
         self.fTimeOut    = fTimeOut
         self.uHost       = uHost
         self.uPort       = uPort
 
-        self.oSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.oSocket.setblocking(0)
+        self.oSocket = cPyXSocket(socket.AF_INET, socket.SOCK_STREAM)
+        self.oSocket.SetBlocking(0)
         self.oSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.oSocket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
         self.oSocket.settimeout(fTimeOut)
@@ -247,8 +263,13 @@ class cADB_Commands(object):
           An instance of this class if the device connected successfully.
         """
         if not uIdentifier:
-            uIdentifier = u"ORCA_"+Globals.uMACAddressDash
+            uIdentifier = u"ORCA_" + Globals.uMACAddressDash
+
         self.uDeviceState = self.oADB_Message.Connect(uIdentifier=uIdentifier, **kwargs)
+        if not PY2:
+            if isinstance(self.uDeviceState,bytes):
+                self.uDeviceState=ToUnicode(self.uDeviceState)
+
         # Remove banner and colons after device state (state::banner)
         self.uDeviceState = self.uDeviceState.split(':')[0]
         return self
@@ -372,7 +393,7 @@ class cADB_Message(object):
             return bData
 
 
-    def Connect(self,  uIdentifier='notadb', aRsa_keys=None, fTimeOut=0.1):
+    def Connect(self,  uIdentifier=b'notadb', aRsa_keys=None, fTimeOut=0.1):
         """Establish a new connection to the device.
 
         Args:
@@ -395,6 +416,10 @@ class cADB_Message(object):
               various product information.
 
         """
+
+        if not PY2:
+            if isinstance(uIdentifier,str):
+                uIdentifier=ToBytes(uIdentifier)
 
         if aRsa_keys is None:
             aRsa_keys = []
@@ -492,6 +517,11 @@ class cADB_Message(object):
         """
         if self.Open(uDestination='%s:%s' % (uService, uCommand),fTimeOut=fTimeOut):
             for uData in self.oADB_Connection.ReadUntilClose():
+                if not PY2:
+                    print (uData)
+                    if isinstance(uData,bytes):
+                        uData=ToUnicode(uData)
+                    print (uData)
                 yield uData
 
     def Close(self):
@@ -506,7 +536,11 @@ class cADB_Message(object):
 
 class _Accum(object):
     def __init__(self):
-        self._buf = ''
+        if PY2:
+            self._buf = ''
+        else:
+            self._buf = b''
+
     def update(self, msg):
         self._buf += msg
     def digest(self):
@@ -566,10 +600,8 @@ class cADB_Helper(object):
 
     def Load_RSA_KEYS(self):
 
-        aKeyPathes = []
-
-        #default adb key path
-        aKeyPathes.append(cPath(OS_GetSystemUserPath()+'.android/adbkey'))
+        # default adb key path
+        aKeyPathes = [cPath(OS_GetSystemUserPath() + '.android/adbkey')]
 
         #default Android Path
         if Globals.uPlatform==u'android':

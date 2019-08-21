@@ -82,9 +82,13 @@ class cScript(cToolsTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.uHost     = u"http://irdbservice.cloudapp.net:8080/"
-            self.aScriptIniSettings.uUser     = oScript.oVarParameter.uIRDBUser
-            self.aScriptIniSettings.uPassword = oScript.oVarParameter.uIRDBPassword
+            self.aIniSettings.uHost     = u"http://irdbservice.cloudapp.net:8080/"
+            self.aIniSettings.uUser     = oScript.oEnvParameter.uIRDBUser
+            self.aIniSettings.uPassword = oScript.oEnvParameter.uIRDBPassword
+        def WriteConfigToIniFile(self):
+            # this avoids, that the Ini file will be changed from given command line / environment settings
+            # nevertheless, once changes have been writen to the ini file, they will be used , regardless of any env / commandline parameter
+            pass
 
     class cScriptParameter(cParameter):
         def AddParameter(self,oParser):
@@ -99,18 +103,18 @@ class cScript(cToolsTemplate):
         self.uSettingTitle   = u"IRDB ITach"
         self.oEnvParameter   = self.cScriptParameter()
 
-    def Init(self,uScriptName,uScriptFile=u''):
+    def Init(self,uObjectName,uScriptFile=u''):
         """
         Init function for the script
 
-        :param string uScriptName: The name of the script (to be passed to all scripts)
+        :param string uObjectName: The name of the script (to be passed to all scripts)
         :param uScriptFile: The file of the script (to be passed to all scripts)
         """
 
-        cToolsTemplate.Init(self, uScriptName, uScriptFile)
-        self.oScriptConfig.dDefaultSettings['User']['active']                        = "enabled"
-        self.oScriptConfig.dDefaultSettings['Password']['active']                    = "enabled"
-        self.oScriptConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        cToolsTemplate.Init(self, uObjectName, uScriptFile)
+        self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
 
     def RunScript(self, *args, **kwargs):
         cToolsTemplate.RunScript(self,*args, **kwargs)
@@ -118,18 +122,19 @@ class cScript(cToolsTemplate):
             self.ShowIRDB(self, *args, **kwargs)
 
     def ShowIRDB(self, *args, **kwargs):
-        oSetting                = self.GetSettingObjectForConfigName(self.uConfigName)
-        ShowITachIRDB(uHost=oSetting.aScriptIniSettings.uHost,uUser=oSetting.aScriptIniSettings.uUser,uPassword=oSetting.aScriptIniSettings.uPassword)
+        uConfigName             = kwargs.get('configname',self.uConfigName)
+        oSetting                = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
+        ShowITachIRDB(uHost=oSetting.aIniSettings.uHost,uUser=oSetting.aIniSettings.uUser,uPassword=oSetting.aIniSettings.uPassword)
 
     def Register(self, *args, **kwargs):
         cToolsTemplate.Register(self,*args, **kwargs)
         Globals.oNotifications.RegisterNotification("STARTSCRIPTIRDBITACH", fNotifyFunction=self.ShowIRDB, uDescription="Script Tools IRDB iTach")
         oScriptSettingPlugin = cScriptSettingPlugin()
-        oScriptSettingPlugin.uScriptName   = self.uScriptName
+        oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "ORCA"
         oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
         oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_IRDBITACH_4)"
         oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_IRDBITACH_1)","desc": "$lvar(SCRIPT_TOOLS_IRDBITACH_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_IRDBITACH_3)","id":"button_notification_STARTSCRIPTIRDBITACH"}]}']
-        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uScriptName,oScriptSettingPlugin=oScriptSettingPlugin)
+        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
 

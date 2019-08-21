@@ -179,8 +179,8 @@ class cWikiPage(object):
                         LogError(u'Wikidoc:unable to find linked filename: [%s] [%s] [%s]' % (uFileName,uLine,self.uPage))
                 # adjust syntaxhighlighting to GIT Wiki
 
-                uLine = uLine.replace('<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">', '<div style="overflow-x: auto;">\r\n```xml')
-                uLine = uLine.replace('</syntaxhighlight></div>',"```\r\n</div>")
+                uLine = uLine.replace('<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">', '<div style="overflow-x: auto;">\n```xml')
+                uLine = uLine.replace('</syntaxhighlight></div>',"```\n</div>")
                 # uLine = uLine.replace('<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">', '----<div style="overflow-x: auto;"><code><nowiki>')
                 # uLine = uLine.replace('</syntaxhighlight></div>',"</nowiki></code></div>\r\n----")
 

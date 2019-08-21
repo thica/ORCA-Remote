@@ -46,7 +46,7 @@ class cEventActionsAppControl(cEventActionBase):
     """ Actions for getting/writings settings """
 
     def ExecuteActionDump(self,oAction):
-        self.doc_end_ = """
+        """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
         WikiDoc:Page:Actions-Dump
@@ -83,7 +83,6 @@ class cEventActionsAppControl(cEventActionBase):
         uFilter         = ReplaceVars(oAction.dActionPars.get("filter",""))
         uDefinitionName = ReplaceVars(oAction.dActionPars.get("definitionname",""))
 
-        self.oEvenDispatcher.bDoNext = True
         if uType=="pages":
             Globals.oTheScreen.DumpPages(uFilter)
         elif uType=="queue":
@@ -125,8 +124,7 @@ class cEventActionsAppControl(cEventActionBase):
         |}</div>
         WikiDoc:End
         """
-        self.oEvenDispatcher.LogAction(u'SetReturnCode',oAction)
-        self.oEvenDispatcher.bDoNext = True
+        self.oEventDispatcher.LogAction(u'SetReturnCode',oAction)
         uCode = oAction.dActionPars.get("code","0")
         return ToInt(uCode)
 
@@ -149,8 +147,7 @@ class cEventActionsAppControl(cEventActionBase):
         |}</div>
         WikiDoc:End
         """
-        self.oEvenDispatcher.bDoNext = True
-        self.oEvenDispatcher.LogAction(u'NoAction',oAction)
+        self.oEventDispatcher.LogAction(u'NoAction',oAction)
         return -2
 
 
@@ -172,8 +169,7 @@ class cEventActionsAppControl(cEventActionBase):
         |}</div>
         WikiDoc:End
         """
-        self.oEvenDispatcher.bDoNext = True
-        self.oEvenDispatcher.LogAction(u'WaitForConnectivity',oAction)
+        self.oEventDispatcher.LogAction(u'WaitForConnectivity',oAction)
         if not Globals.oWaitForConnectivity.bIsWaiting:
             Globals.oWaitForConnectivity.Wait()
         return -2
@@ -207,27 +203,26 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'DefineTimer',oAction)
+        self.oEventDispatcher.LogAction(u'DefineTimer',oAction)
 
         uTimerName     = ReplaceVars(oAction.dActionPars.get("timername",""))
         uInterval      = ReplaceVars(oAction.dActionPars.get("interval",""))
         uSwitch        = ReplaceVars(oAction.dActionPars.get("switch",""))
         uActionName    = ReplaceVars(oAction.dActionPars.get("actionname",""))
 
-        self.oEvenDispatcher.bDoNext = True
         if uSwitch==u'on':
-            if not self.oEvenDispatcher.oAllTimer.HasTimer(uTimerName):
+            if not self.oEventDispatcher.oAllTimer.HasTimer(uTimerName):
                 oCustomTimer=cCustomTimer( uTimerName, uActionName,ToFloat(uInterval))
-                self.oEvenDispatcher.oAllTimer.AddTimer(uTimerName,oCustomTimer)
+                self.oEventDispatcher.oAllTimer.AddTimer(uTimerName,oCustomTimer)
                 oCustomTimer.StartTimer()
                 return 0
             else:
-                Logger.warning (u'Action: DefineTimer, timer already exist:',uTimerName)
+                Logger.warning (u'Action: DefineTimer, timer already exist:'+uTimerName)
                 return 1
 
         if uSwitch==u'off':
-            if self.oEvenDispatcher.oAllTimer.HasTimer(uTimerName):
-                self.oEvenDispatcher.oAllTimer.DeleteTimer(uTimerName)
+            if self.oEventDispatcher.oAllTimer.HasTimer(uTimerName):
+                self.oEventDispatcher.oAllTimer.DeleteTimer(uTimerName)
                 return 0
             else:
                 Logger.warning (u'Action: DefineTimer, timer does not exist:'+uTimerName)
@@ -272,10 +267,9 @@ class cEventActionsAppControl(cEventActionBase):
         * click
         WikiDoc:End
         """
-        self.oEvenDispatcher.LogAction(u'PlaySound',oAction)
+        self.oEventDispatcher.LogAction(u'PlaySound',oAction)
         uSoundName     = ReplaceVars(oAction.dActionPars.get("soundname",""))
         uVolume        = ReplaceVars(oAction.dActionPars.get("volume","100"))
-        self.oEvenDispatcher.bDoNext = True
         Globals.oSound.PlaySound(uSoundName,uVolume)
         return -2
 
@@ -305,8 +299,7 @@ class cEventActionsAppControl(cEventActionBase):
         oFrom   = cFileName("").ImportFullPath(oAction.dActionPars.get("from",""))
         oTo     = cFileName("").ImportFullPath(oAction.dActionPars.get("to",""))
 
-        self.oEvenDispatcher.LogAction(u'Redirect',oAction)
-        self.oEvenDispatcher.bDoNext = True
+        self.oEventDispatcher.LogAction(u'Redirect',oAction)
         Globals.oTheScreen.oSkin.dSkinRedirects[oFrom.string]=oTo
         return -2
 
@@ -389,7 +382,7 @@ class cEventActionsAppControl(cEventActionBase):
         uRemovePath      = ReplaceVars(oAction.dActionPars.get("removepath",""))
         aSkipFiles       = ToList(ReplaceVars(oAction.dActionPars.get("skipfiles",'[]')))
 
-        self.oEvenDispatcher.LogAction(u'ModifyFile',oAction)
+        self.oEventDispatcher.LogAction(u'ModifyFile',oAction)
 
         if uFileName.startswith('$var(DEFINITIONPATH'):
             oFileName = cFileName().ImportFullPath(uFileName)

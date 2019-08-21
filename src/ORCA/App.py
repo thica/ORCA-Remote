@@ -68,10 +68,10 @@ from ORCA.utils.Network                    import GetLocalIPV4
 from ORCA.utils.Network                    import GetLocalIPV6
 from ORCA.utils.Network                    import GetMACAddress
 from ORCA.utils.Network                    import cWaitForConnectivity
+from ORCA.utils.CheckPermissions           import cCheckPermissions
 from ORCA.utils.Platform                   import OS_GetDefaultNetworkCheckMode
 from ORCA.utils.Platform                   import OS_GetDefaultStretchMode
 from ORCA.utils.Platform                   import OS_GetLocale
-from ORCA.utils.Platform                   import OS_GetSystemUserPath
 from ORCA.utils.Platform                   import OS_GetWindowSize
 from ORCA.utils.Platform                   import OS_GetInstallationDataPath
 from ORCA.utils.Platform                   import OS_GetUserDownloadsDataPath
@@ -84,9 +84,9 @@ from ORCA.utils.TypeConvert                import ToIntVersion
 from ORCA.utils.TypeConvert                import ToUnicode
 from ORCA.utils.wait.StartWait             import StartWait
 from ORCA.utils.wait.StopWait              import StopWait
-from ORCA.utils.wait.IsWaiting             import IsWaiting
 from ORCA.definition.DefinitionContext     import SetDefinitionPathes
 from ORCA.Queue                            import ClearQueue
+
 
 class ORCA_App(App):
     """ The Main Orca Class, here starts all """
@@ -101,11 +101,11 @@ class ORCA_App(App):
         App.__init__(self)
 
         # Don't Move or change
-        self.sVersion="3.7.0"
-        self.sBranch="Canberra"
+        self.sVersion="4.5.0"
+        self.sBranch="Dublin"
 
         #todo: Remove in release
-        Logger.setLevel(logging.DEBUG)
+        # Logger.setLevel(logging.DEBUG)
 
         Globals.uVersion                                    = ToUnicode(self.sVersion)
         Globals.iVersion                                    = ToIntVersion(Globals.uVersion)      # string of App Version
@@ -129,6 +129,7 @@ class ORCA_App(App):
 
         Globals.oOrcaConfigParser                            = OrcaConfigParser()
         Globals.oActions                                     = cActions()
+        Globals.oCheckPermissions                            = cCheckPermissions()     # Object for checking, if we have permissions
         Globals.oDefinitions                                 = cDefinitions()           # Object which holds all loaded definitions
         Globals.oDownLoadSettings                            = cDownLoad_Settings()     # Object, for managing the settings dialog for download repositories
         Globals.oNotifications                               = cNotifications()
@@ -151,10 +152,13 @@ class ORCA_App(App):
         self.uDefinitionToDelete                             = u''
         self.oPathSkinRoot                                   = None
         self.uSoundsName                                     = u''
+        self.tOldSize                                        = (0,0)
 
         SetVar(uVarName = u'WAITFORROTATION', oVarValue = '0')
         OS_GetWindowSize()
         Logger.info(u'Init: ORCA Remote Application started: Version %s (%s):' % (Globals.uVersion, Globals.uPlatform))
+
+        # Globals.oCheckPermissions.Wait()
 
     def build(self):
         """
@@ -166,6 +170,7 @@ class ORCA_App(App):
         """
 
         try:
+            Globals.oCheckPermissions.Wait()
             kivyConfig.set('graphics', 'kivy_clock', 'interrupt')
             Globals.oTheScreen = cTheScreenWithInit()       # Create the Screen Object
             Globals.oEvents = cEvents()                     # Create the Scheduler
@@ -180,7 +185,11 @@ class ORCA_App(App):
     def On_Size(self, win, size):
         """ Function called by the Framework, when the size or rotation has changed """
 
+        if self.tOldSize==size:
+            return
+
         Logger.debug("Resize/rotation detected %d %d" % (size[0], size[1]))
+        self.tOldSize = size
         Globals.iAppWidth, Globals.iAppHeight = size
 
         if Globals.iAppWidth < Globals.iAppHeight:
@@ -304,7 +313,8 @@ class ORCA_App(App):
             Globals.uIPAddressV6, Globals.uIPGateWayAssumedV6 = GetLocalIPV6()
             Globals.uMACAddressColon, Globals.uMACAddressDash = GetMACAddress()
             if Globals.oParameter.oPathDebug.string:
-                Globals.oPathRoot = Globals.oParameter.oPathDebug
+                Globals.oPathRoot     = Globals.oParameter.oPathDebug
+                Globals.oPathAppReal  = Globals.oParameter.oPathDebug
 
             Logger.info('OrcaAppInit (Root/Real): Path: ' + Globals.oPathAppReal)
             Logger.info('OrcaAppInit (Root)     : Path: ' + Globals.oPathRoot)
@@ -567,7 +577,12 @@ class ORCA_App(App):
         self.oPathSkinRoot                 = Globals.oPathRoot + u'skins'
         Globals.oPathScripts               = Globals.oPathRoot + u'scripts'
         Globals.oPathLanguageRoot          = Globals.oPathRoot + u'languages'
+        oPathGlobalSettings                = Globals.oPathRoot + u'globalsettings'
+        Globals.oPathGlobalSettingsScripts = oPathGlobalSettings + u'scripts'
+        Globals.oPathGlobalSettingsInterfaces = oPathGlobalSettings + u'interfaces'
+
         oPathWizardTemplates               = Globals.oPathRoot + u"wizard templates"
+
 
         Globals.oPathTmp.Create()
         Globals.oPathInterface.Create()
@@ -581,6 +596,10 @@ class ORCA_App(App):
         Globals.oPathSharedDocuments.Create()
         Globals.oPathLanguageRoot.Create()
         oPathWizardTemplates.Create()
+        oPathGlobalSettings.Create()
+        Globals.oPathGlobalSettingsScripts.Create()
+        Globals.oPathGlobalSettingsInterfaces.Create()
+
         (Globals.oPathSharedDocuments + 'actions').Create()
 
     def InitPathes(self):
@@ -594,7 +613,7 @@ class ORCA_App(App):
         if oPathCheck.Exists():
             Globals.oPathStandardPages          =  oPathCheck
         else:
-            Globals.oPathStandardPages          = Globals.oPathSharedDocuments + "elements"+("skin_default")
+            Globals.oPathStandardPages          = (Globals.oPathSharedDocuments + "elements") +"skin_default"
         Globals.oPathUserDownload               = OS_GetUserDownloadsDataPath()
         Globals.oPathStandardElements           = Globals.oPathStandardPages
         Globals.oPathStandardPages              = Globals.oPathStandardPages + "pages"
@@ -639,7 +658,7 @@ class ORCA_App(App):
         """
         return self.open_settings()
 
-    def On_CloseSetting(self, *kwArgs):
+    def On_CloseSetting(self, **kwArgs):
         pass
 
     def on_config_change(self, config, section, key, value):
@@ -725,24 +744,16 @@ class ORCA_App(App):
                 return True
             Globals.oNotifications.SendNotification("on_pause")
             Globals.bOnSleep = True
-            # on_resume might not et fired , so we use a fallback to schedule it further more
-            Clock.schedule_once(self.on_resume2, 2.1)
         else:
             Logger.warning("Duplicate on_pause, this should not happen")
             # Globals.bOnSleep = False
         return True
 
-        Clock.schedule_once(self.on_resume2, 2.1)
-
     def on_resume(self):
         # this is the normal entry point, if android would work
-        self.on_resume2()
-        return True
-
-    def on_resume2(self, *largs):
-        # fallback, scheduled by on_pause
         Globals.oNotifications.SendNotification("on_resume")
         Globals.bOnSleep = False
+        return True
 
     def open_settings(self, *largs):
         # creates the settings panel (framework function)

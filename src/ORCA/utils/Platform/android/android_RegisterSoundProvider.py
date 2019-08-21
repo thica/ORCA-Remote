@@ -23,13 +23,18 @@ AudioAndroid: implementation of Sound with Android Core Function
 
 """
 
+from jnius                                import detach
+from ORCA.utils.LogError                  import LogError
+from ORCA.utils.Platform.android_helper   import GetAndroidModule
+
+
+
 from kivy.logger        import Logger
 Logger.debug("Loading Module android_RegisterSoundprovider")
 
 
 
 from kivy.clock         import Clock
-from kivy.utils         import platform
 from kivy.core.audio    import Sound, SoundLoader
 from kivy.logger        import Logger
 
@@ -37,7 +42,9 @@ from kivy.logger        import Logger
 oMPlayer = None
 
 try:
+    # noinspection PyUnresolvedReferences
     from jnius import autoclass
+    # noinspection PyUnresolvedReferences
     from jnius import detach
     oMediaPlayer  = autoclass('android.media.MediaPlayer')
     oMPlayer      = oMediaPlayer()
@@ -56,7 +63,9 @@ class SoundAndroid(Sound):
         return u'mp3'
 
     def __init__(self, *args, **kwargs):
-        self._data = oMPlayer
+        self._data      = oMPlayer
+        self.start_time = 0
+        self.secs       = 0
         super(SoundAndroid, self).__init__(**kwargs)
 
     def _check_play(self, p_dt):
@@ -119,7 +128,7 @@ class SoundAndroid(Sound):
     def seek(self, position):
         if not self._data:
             return
-        self._data.seekTo(timepos * 1000)
+        self._data.seekTo(position * 1000)
 
 '''
     def get_pos(self):

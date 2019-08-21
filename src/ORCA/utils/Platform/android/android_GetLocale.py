@@ -19,23 +19,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from kivy.logger                          import Logger
-from jnius                                import detach
-from ORCA.utils.LogError                  import LogError
-from ORCA.utils.Platform.android_helper   import GetAndroidModule
 
-def SystemIsOnline():
-    """
-    verifies, if the system has a network connection by system APIs (not by ping)
-    returns true, if OS doesn't support it
-    """
+from kivy.logger            import Logger
+# noinspection PyUnresolvedReferences
+from jnius                  import autoclass
+
+def GetLocale():
+    """ gets the locale / language from the system """
+    uCurrent = 'English'
+    ourlocale = "en"
+
     try:
-        Logger.debug("Checking Android network connectivity")
-        Hardware = GetAndroidModule("Hardware")
-        bRet=Hardware.checkNetwork()
-        detach()
-        return bRet
-    except Exception as e:
-        LogError('SystemIsOnline:',e)
-        return True
+        Logger.debug("Attempting to get default locale from Java...")
+        JavaUtilLocale = autoclass('java.util.Locale')
+        jlocale = JavaUtilLocale
+        ourlocale = jlocale.getDefault().getLanguage()
+    except Exception:
+        Logger.debug("Unable to get locale from Java...")
+    Logger.debug("Javalocale:"+str(ourlocale))
 
+    if ourlocale == "de":
+        uCurrent="German"
+    return uCurrent

@@ -64,10 +64,10 @@ class cInterface(cBaseInterFace):
     def GetConfigCodesetList(self):
         aRet=cBaseInterFace.GetConfigCodesetList(self)
         # adjust the codeset path to load infrared generic formats
-        uTmpName=self.uInterFaceName
-        self.uInterFaceName="infrared_ccf"
+        uTmpName=self.uObjectName
+        self.uObjectName="infrared_ccf"
         aRet+=cBaseInterFace.GetConfigCodesetList(self)
-        self.uInterFaceName=uTmpName
+        self.uObjectName=uTmpName
         return aRet
 
 
@@ -75,8 +75,8 @@ class cInterface(cBaseInterFace):
         uRet = cBaseInterFace.FindCodesetFile(self,uFNCodeset)
         if uRet:
             return uRet
-        uTmpName=self.uInterFaceName
-        self.uInterFaceName="infrared_ccf"
+        uTmpName=self.uObjectName
+        self.uObjectName="infrared_ccf"
         uRet = cBaseInterFace.FindCodesetFile(self,uFNCodeset)
-        self.uInterFaceName=uTmpName
+        self.uObjectName=uTmpName
         return uRet

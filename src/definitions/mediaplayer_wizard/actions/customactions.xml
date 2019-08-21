@@ -16,7 +16,7 @@
 
     <action name="FKT Select Template $dvar(definition_alias_mediaplayer_wizard)" >
         <!-- Called by the drop down button on the wizard page -->
-        <action name="Set Name, rest will be triggered by var link" string="setvar $dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template=$var(FKT Select Template $dvar(definition_alias_mediaplayer_wizard)_parameter_DROPDOWNVALUE)"/>
+        <action name="Set Name, rest will be triggered by var link" string="setvar $dvar(definition_alias_mediaplayer_wizard)_mediaplayer_template=$par(DROPDOWNVALUE)"/>
     </action>
 
     <action name="FKT_OnTemplateName Changed $dvar(definition_alias_mediaplayer_wizard)">

@@ -26,9 +26,9 @@ class cInterFaceResultParser(cResultParser):
         super(cInterFaceResultParser, self).__init__()
         self.oInterFace     = oInterFace
         self.uConfigName    = uConfigName
-        self.uInterFaceName = oInterFace.uInterFaceName
-        self.uDebugContext  = "Interface: % s , Config: %s:" % (self.uInterFaceName,self.uConfigName)
-        self.uContext       = self.uInterFaceName + '/' + self.uConfigName
+        self.uObjectName    = oInterFace.uObjectName
+        self.uDebugContext  = "Interface: % s , Config: %s:" % (self.uObjectName,self.uConfigName)
+        self.uContext       = self.uObjectName + '/' + self.uConfigName
         self.oAction        = None
         self.oSetting       = None
 

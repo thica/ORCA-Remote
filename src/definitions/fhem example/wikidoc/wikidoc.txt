@@ -2,8 +2,10 @@
 WikiDoc:Doc
 WikiDoc:Context:DefinitionsForUser
 WikiDoc:Page:Userdescription Definition fhem example
-WikiDoc:TOCTitle:mediaplayer_wizard
+WikiDoc:TOCTitle:fhem example
+
 = FHEM Example =
+
 The fhem example definition is more a showcase haow to intercat with a FHEM home automatisation server , rather than a ready to use definition. It defines 4 swiches and for dimmer slider and two group switches
 
 [[File:fhem example main.png|link=]]
@@ -54,8 +56,10 @@ WikiDoc:End
 '''
 WikiDoc:Doc
 WikiDoc:Context:Reference_Definitions
-WikiDoc:Page:Reference Definition fhem20 example
-WikiDoc:TOCTitle:fhem20 example
+WikiDoc:Page:Reference Definition fhem example
+WikiDoc:TOCTitle:fhem example
+
+= Overview =
 
 The fhem example definition is more a showcase haow to intercat with a FHEM home automatisation server , rather than a ready to use definition. It defines 4 swiches and for dimmer slider and two group switches
 

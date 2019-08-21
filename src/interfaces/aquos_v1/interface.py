@@ -61,21 +61,22 @@ class cInterface(cBaseInterFace):
             cBaseInterFaceSettings.__init__(self,oInterFace)
             self.oSocket      = None
 
-            self.aInterFaceIniSettings.uHost                    = u"discover"
-            self.aInterFaceIniSettings.uPort                    = u"4998"
-            self.aInterFaceIniSettings.uUser                    = u"user"
-            self.aInterFaceIniSettings.uPassword                = u"pass"
-            self.aInterFaceIniSettings.uFNCodeset               = u"CODESET_aquos_v1_AQUOS.xml"
-            self.aInterFaceIniSettings.fTimeOut                 = 2.0
-            self.aInterFaceIniSettings.iTimeToClose             = -1
-            self.aInterFaceIniSettings.uDiscoverScriptName      = u"discover_upnp"
+            self.aIniSettings.uHost                    = u"discover"
+            self.aIniSettings.uPort                    = u"4998"
+            self.aIniSettings.uUser                    = u"user"
+            self.aIniSettings.uPassword                = u"pass"
+            self.aIniSettings.uFNCodeset               = u"CODESET_aquos_v1_AQUOS.xml"
+            self.aIniSettings.fTimeOut                 = 2.0
+            self.aIniSettings.iTimeToClose             = -1
+            self.aIniSettings.uDiscoverScriptName      = u"discover_upnp"
+            self.sResponse                             = ''
 
         def Connect(self):
 
             if not cBaseInterFaceSettings.Connect(self):
                 return False
             try:
-                for res in socket.getaddrinfo(self.aInterFaceIniSettings.uHost, int(self.aInterFaceIniSettings.uPort), socket.AF_INET, socket.SOCK_STREAM):
+                for res in socket.getaddrinfo(self.aIniSettings.uHost, int(self.aIniSettings.uPort), socket.AF_INET, socket.SOCK_STREAM):
                     af, socktype, proto, canonname, sa = res
                     try:
                         self.oSocket = socket.socket(af, socktype, proto)
@@ -91,11 +92,11 @@ class cInterface(cBaseInterFace):
                         continue
                     break
                 if self.oSocket is None:
-                    self.ShowError(u'Cannot open socket'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort)
+                    self.ShowError(u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                     self.bOnError=True
                     return
-                if not self.aInterFaceIniSettings.uUser==u'':
-                    self.oSocket.send(self.aInterFaceIniSettings.uUser + "\r" + self.aInterFaceIniSettings.uPassword + "\r")
+                if not self.aIniSettings.uUser==u'':
+                    self.oSocket.send(self.aIniSettings.uUser + "\r" + self.aIniSettings.uPassword + "\r")
                     # Receive the prompts (will be "Login:\r\nPassword:")
                     self.sResponse = self.oSocket.recv(2048)
                     self.ShowDebug(u'Login Response'+self.sResponse)
@@ -103,7 +104,7 @@ class cInterface(cBaseInterFace):
                 self.oSocket.setsockopt( socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
                 self.bIsConnected =True
             except Exception as e:
-                self.ShowError(u'Cannot open socket #2'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
 
         def Disconnect(self):
@@ -113,7 +114,7 @@ class cInterface(cBaseInterFace):
                 self.oSocket.close()
                 self.bOnError = False
             except Exception as e:
-                self.ShowError(u'Cant Disconnect'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Cant Disconnect'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
 
     def __init__(self):
         cBaseInterFace.__init__(self)
@@ -122,18 +123,18 @@ class cInterface(cBaseInterFace):
         self.uResponse      = u''
         self.iBufferSize    = 1024
 
-    def Init(self, uInterFaceName, oFnInterFace=None):
-        cBaseInterFace.Init(self, uInterFaceName, oFnInterFace)
-        self.oInterFaceConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['User']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['Password']['active']                    = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+    def Init(self, uObjectName, oFnObject=None):
+        cBaseInterFace.Init(self, uObjectName, oFnObject)
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
 
     def DeInit(self, **kwargs):
@@ -145,18 +146,18 @@ class cInterface(cBaseInterFace):
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
         uCmd=oAction.uCmd
         uCmd=(uCmd+"       ")[:8]
-        self.ShowInfo(u'Sending Command: '+uCmd + u' to '+oSetting.aInterFaceIniSettings.uHost+':'+oSetting.aInterFaceIniSettings.uPort,oSetting.uConfigName)
+        self.ShowInfo(u'Sending Command: '+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
 
         oSetting.Connect()
         iRet=1
         if oSetting.bIsConnected:
             uMsg=uCmd+u'\r'
             try:
-                uMsg=ReplaceVars(uMsg,self.uInterFaceName+'/'+oSetting.uConfigName)
+                uMsg=ReplaceVars(uMsg,self.uObjectName+'/'+oSetting.uConfigName)
                 uMsg=ReplaceVars(uMsg)
                 oSetting.oSocket.sendall(uMsg)
                 self.sResponse = oSetting.oSocket.recv(self.iBufferSize)
-                Logger.debug(u'Interface '+self.uInterFaceName+': resonse:'+self.sResponse)
+                Logger.debug(u'Interface '+self.uObjectName+': resonse:'+self.sResponse)
                 self.ShowDebug(u'Response'+self.sResponse,oSetting.uConfigName)
 
                 if 'OK' in self.sResponse:
@@ -167,11 +168,11 @@ class cInterface(cBaseInterFace):
                 self.ShowError(u'Cant Send Message',u'',e)
                 iRet=1
         if oSetting.bIsConnected:
-            if oSetting.aInterFaceIniSettings.iTimeToClose==0:
+            if oSetting.aIniSettings.iTimeToClose==0:
                 oSetting.Disconnect()
-            elif oSetting.aInterFaceIniSettings.iTimeToClose!=-1:
+            elif oSetting.aIniSettings.iTimeToClose!=-1:
                 Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aInterFaceIniSettings.iTimeToClose)
+                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
 
         self.iLastRet=iRet
         return iRet

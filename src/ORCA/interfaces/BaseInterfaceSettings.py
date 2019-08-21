@@ -26,43 +26,41 @@ from ORCA                                       import Globals as Globals
 from ORCA.Action                                import GetActionID
 from ORCA.Action                                import cAction
 from ORCA.interfaces.BaseTrigger                import cBaseTrigger
-from ORCA.interfaces.InterfaceMonitoredSettings import cInterfaceMonitoredSettings
+from ORCA.BaseSettings                          import cBaseSettings
 from ORCA.ui.ShowErrorPopUp                     import ShowErrorPopUp
 from ORCA.utils.CachedFile                      import CachedFile
-from ORCA.utils.ConfigHelpers                   import Config_GetDefault_Str
-from ORCA.utils.LogError                        import LogErrorSmall
-from ORCA.utils.TypeConvert                     import ToInt, ToFloat, ToBool, ToUnicode
-from ORCA.vars.Replace                          import ReplaceVars
+from ORCA.utils.TypeConvert                     import ToBool
 from ORCA.utils.XML                             import Orca_FromString, Orca_include, orca_et_loader
 from ORCA.vars.Access                           import SetVar
 
+
 __all__ = ['cBaseInterFaceSettings']
 
-class cBaseInterFaceSettings(object):
+class cBaseInterFaceSettings(cBaseSettings):
     """ A base class for the interfacesettings """
     def __init__(self, oInterFace):
         # some default settings, which should be there even if not configered by the interface
         # use the exact spelling as in the settings json
 
+        super(cBaseInterFaceSettings,self).__init__(oInterFace)
+
         self.oInterFace                                         = oInterFace
         self.uConfigName                                        = "DEVICE_DEFAULT"
+        self.uType                                              = "interface"
 
-        self.aInterFaceIniSettings                              = cInterfaceMonitoredSettings(self)
-        self.aInterFaceIniSettings.bDisableInterFaceOnError     = False
-        self.aInterFaceIniSettings.bDisconnectInterFaceOnSleep  = True
-        self.aInterFaceIniSettings.bInitCompleted               = False
-        self.aInterFaceIniSettings.fTimeOut                     = 1.0
-        self.aInterFaceIniSettings.iTimeToClose                 = -1
-        self.aInterFaceIniSettings.uFNCodeset                   = u''
-        self.aInterFaceIniSettings.uHost                        = u'192.168.1.2'
-        self.aInterFaceIniSettings.uParseResultOption           = u''
-        self.aInterFaceIniSettings.uParseResultTokenizeString   = u''
-        self.aInterFaceIniSettings.uPort                        = u'80'
-        self.aInterFaceIniSettings.uResultEndString             = u'\\n'
-        self.aInterFaceIniSettings.uDiscoverScriptName          = u''
+        self.aIniSettings.bDisableInterFaceOnError              = False
+        self.aIniSettings.bDisconnectInterFaceOnSleep           = True
+        self.aIniSettings.fTimeOut                              = 1.0
+        self.aIniSettings.iTimeToClose                          = -1
+        self.aIniSettings.uFNCodeset                            = u''
+        self.aIniSettings.uHost                                 = u'192.168.1.2'
+        self.aIniSettings.uParseResultOption                    = u''
+        self.aIniSettings.uParseResultTokenizeString            = u''
+        self.aIniSettings.uPort                                 = u'80'
+        self.aIniSettings.uResultEndString                      = u'\\n'
+        self.aIniSettings.uDiscoverScriptName                   = u''
         self.bInConnect                                         = False
         self.bIsConnected                                       = False
-        self.bOnError                                           = False
         self.bResumeConnection                                  = False
         self.dTriggers                                          = {}
         self.iDiscoverCount                                     = 0
@@ -72,8 +70,6 @@ class cBaseInterFaceSettings(object):
         self.dStandardActions                                   = {"ping":None,"defaultresponse":None}
         self.bStandardActionsLoaded                             = False
         self.oResultParser                                      = None
-        self.uContext                                           = u''
-        self.uSection                                           = None
 
     def ReadStandardActions(self):
         """ Reads the standard codeset codes eg ping """
@@ -88,7 +84,7 @@ class cBaseInterFaceSettings(object):
         """
         Sub Routine to read the standard actions
 
-        :param cAction oTargetAction: The Action for a standradextion, should be None as input
+        :param cAction|None oTargetAction: The Action for a standradextion, should be None as input
         :param string uActionName: The Actionname
         """
 
@@ -116,79 +112,10 @@ class cBaseInterFaceSettings(object):
         else:
             return 0
 
-    def ReadConfigFromIniFile(self,uConfigName):
-        """
-        Reads the interface config file
-
-        :param string uConfigName: The configuration name to read
-        :return: None
-        """
-
-        if self.aInterFaceIniSettings.bInitCompleted:
-            return
-        self.aInterFaceIniSettings.bInitCompleted = True
-
-        if uConfigName != u'':
-            self.uConfigName = uConfigName
-            self.uContext=self.oInterFace.uInterFaceName+u'/'+self.uConfigName
-            self.SetContextVar(uVarName="context",uVarValue=self.uContext)
-
-        self.uSection = self.uConfigName
-
-        try:
-            self.oInterFace.oInterFaceConfig.LoadConfig()
-            SetVar(uVarName = u'InterfaceCodesetList',   oVarValue = self.oInterFace.CreateCodsetListJSONString())
-            SetVar(uVarName = u'InterfaceConfigSection', oVarValue = uConfigName)
-            dIniDef = self.oInterFace.oInterFaceConfig.CreateSettingJsonCombined(self)
-
-            for uKey2 in dIniDef:
-                oLine       = dIniDef[uKey2]
-                uType       = oLine.get("type")
-                uKey        = oLine.get("key")
-                uDefault    = oLine.get("default")
-
-                if uKey is None or uDefault is None:
-                    continue
-
-                # we replace JSON defaults by interface-settings defaults, if exists
-                if self.aInterFaceIniSettings.queryget(uKey) is not None:
-                    uDefault = self.aInterFaceIniSettings.queryget(uKey)
-
-                uResult     = Config_GetDefault_Str(self.oInterFace.oInterFaceConfig.oConfigParser,self.uSection, uKey,uDefault)
-
-                if uType == "scrolloptions" or uType == "string":
-                    self.aInterFaceIniSettings[uKey]=ReplaceVars(uResult)
-                elif uType == "numeric" or uType == "numericslider":
-                    self.aInterFaceIniSettings[uKey]=ToInt(uResult)
-                elif uType == "numericfloat" :
-                    self.aInterFaceIniSettings[uKey]=ToFloat(uResult)
-                elif uType == "bool":
-                    self.aInterFaceIniSettings[uKey]=ToBool(uResult)
-                elif uType == "title" or uType=="buttons":
-                    pass
-                else:
-                    self.ShowError(u'Cannot read config name (base), wrong attribute:'+self.oInterFace.oInterFaceConfig.oFnConfig.string + u' Section:'+self.uSection+" " +oLine["type"])
-
-                if uKey == 'FNCodeset':
-                    self.ReadCodeset()
-
-            self.oInterFace.oInterFaceConfig.oConfigParser.write()
-        except Exception as e:
-            self.ShowError(u'Cannot read config name (base):'+self.oInterFace.oInterFaceConfig.oFnConfig.string + u' Section:'+self.uSection,e)
-            return
-
-    def SetContextVar(self,uVarName,uVarValue):
-        """ Sets a var within the interface context
-
-        :param string uVarName: The name of the var
-        :param string uVarValue: The value if the var
-        """
-        SetVar(uVarName = uVarName, oVarValue = ToUnicode(uVarValue), uContext = self.oInterFace.uInterFaceName+u'/'+self.uConfigName)
-
     def Discover(self,**kwargs):
         """ helper for the discover scripts"""
 
-        if self.aInterFaceIniSettings.uHost!="discover":
+        if self.aIniSettings.uHost!="discover":
             return True
 
         self.iDiscoverCount += 1
@@ -196,42 +123,41 @@ class cBaseInterFaceSettings(object):
             return False
 
         self.ShowDebug(u'Try to discover device')
-        uDiscoverScriptName = self.aInterFaceIniSettings.uDiscoverScriptName
+        uDiscoverScriptName = self.aIniSettings.uDiscoverScriptName
         dParams={}
 
-        for uKey in self.aInterFaceIniSettings:
+        for uKey in self.aIniSettings:
             if uKey[1:].startswith(uDiscoverScriptName.upper()):
                 uParamKey=uKey[len(uDiscoverScriptName)+2:]
-                dParams[uParamKey]=self.aInterFaceIniSettings[uKey]
+                dParams[uParamKey]=self.aIniSettings[uKey]
 
         dResult = Globals.oScripts.RunScript(uDiscoverScriptName, **dParams)
         oException = dResult.get('Exception','')
         if oException is None or oException=='':
             for uKey in dResult:
                 if uKey != Exception:
-                    self.aInterFaceIniSettings[uKey]=dResult[uKey]
+                    self.aIniSettings[uKey]=dResult[uKey]
                 if uKey == 'Host' and dResult.get("Hostname","")=="":
-                    if self.aInterFaceIniSettings.bSaveDiscoveredIP:
-                        self.oInterFace.oInterFaceConfig.oConfigParser.set(self.uSection, u'olddiscoveredip', self.aInterFaceIniSettings.uHost)
-                        self.oInterFace.oInterFaceConfig.oConfigParser.write()
+                    if self.aIniSettings.bSaveDiscoveredIP:
+                        self.oInterFace.oObjectConfig.oConfigParser.set(self.uSection, u'olddiscoveredip', self.aIniSettings.uHost)
+                        self.oInterFace.oObjectConfig.oConfigParser.write()
                 if uKey == 'Hostname' and dResult.get("Hostname","")!="":
-                    self.aInterFaceIniSettings["Host"]=dResult[uKey]
-                    if self.aInterFaceIniSettings.bSaveDiscoveredIP:
-                        self.oInterFace.oInterFaceConfig.oConfigParser.set(self.uSection, u'olddiscoveredip', self.aInterFaceIniSettings.uHostname)
-                        self.oInterFace.oInterFaceConfig.oConfigParser.write()
+                    self.aIniSettings["Host"]=dResult[uKey]
+                    if self.aIniSettings.bSaveDiscoveredIP:
+                        self.oInterFace.oObjectConfig.oConfigParser.set(self.uSection, u'olddiscoveredip', self.aIniSettings.uHostname)
+                        self.oInterFace.oObjectConfig.oConfigParser.write()
 
             return True
         else:
-            self.ShowError(u'Can''t discover device:' + self.oInterFace.oInterFaceConfig.oFnConfig.string + u' Section:' + self.uSection, oException)
+            self.ShowError(u'Can''t discover device:' + self.oInterFace.oObjectConfig.oFnConfig.string + u' Section:' + self.uSection, oException)
             return False
-        return True
 
     def ReadCodeset(self):
         """  reads the codeset file """
-        oCodesetFileName = self.oInterFace.FindCodesetFile(self.aInterFaceIniSettings.uFNCodeset)
+        oCodesetFileName = self.oInterFace.FindCodesetFile(self.aIniSettings.uFNCodeset)
 
         if oCodesetFileName is None:
-            self.ShowDebug(u'Cannot Read Codeset (Not Found):' + self.aInterFaceIniSettings.uFNCodeset)
+            self.ShowDebug(u'Cannot Read Codeset (Not Found):' + self.aIniSettings.uFNCodeset)
             return
 
 
@@ -307,11 +233,11 @@ class cBaseInterFaceSettings(object):
         oAction.uGlobalDestVar              = oAction.dActionPars.get(u'gdestvar',          u'RESULT_' + oAction.uActionName)
         oAction.uGetVar                     = oAction.dActionPars.get(u'getvar',            u'')
         oAction.bWaitForResponse            = ToBool(oAction.dActionPars.get(u'waitforresponse',   u'0'))
-        oAction.uParseResultOption          = oAction.dActionPars.get(u'parseoption',       self.aInterFaceIniSettings.uParseResultOption)
-        oAction.uParseResultTokenizeString  = oAction.dActionPars.get(u'parsetoken',        self.aInterFaceIniSettings.uParseResultTokenizeString)
-        oAction.uResultEndString            = oAction.dActionPars.get(u'parseendstring',    self.aInterFaceIniSettings.uResultEndString)
+        oAction.uParseResultOption          = oAction.dActionPars.get(u'parseoption',       self.aIniSettings.uParseResultOption)
+        oAction.uParseResultTokenizeString  = oAction.dActionPars.get(u'parsetoken',        self.aIniSettings.uParseResultTokenizeString)
+        oAction.uResultEndString            = oAction.dActionPars.get(u'parseendstring',    self.aIniSettings.uResultEndString)
 
-        oAction.dActionPars['interface']  = self.oInterFace.uInterFaceName
+        oAction.dActionPars['interface']  = self.oInterFace.uObjectName
         oAction.dActionPars['configname'] = self.uConfigName
 
         if oAction.dActionPars.get('varcontext','')=="codeset":
@@ -331,7 +257,7 @@ class cBaseInterFaceSettings(object):
         if self.bOnError:
             self.ShowDebug(u'Interface Connect: Interface is on Error, setting interface to disconnected')
             self.bIsConnected=False
-        if not self.aInterFaceIniSettings.bDisableInterFaceOnError:
+        if not self.aIniSettings.bDisableInterFaceOnError:
             self.bOnError=False
         if self.bIsConnected:
             self.ShowDebug(u'Interface Connect: Interface is connected, no connect required.')
@@ -340,21 +266,21 @@ class cBaseInterFaceSettings(object):
         if self.bOnError:
             return False
 
-        uOldHost=self.aInterFaceIniSettings.uHost
-        if self.aInterFaceIniSettings.get("bSaveDiscoveredIP") is not None and self.aInterFaceIniSettings.get("uOldDiscoveredIP") is not None:
-            if self.aInterFaceIniSettings.bSaveDiscoveredIP and self.aInterFaceIniSettings.uOldDiscoveredIP != '' and self.aInterFaceIniSettings.uHost== u'discover':
-                self.aInterFaceIniSettings.uHost=self.aInterFaceIniSettings.uOldDiscoveredIP
-                self.ShowDebug("Reusing previous discovered IP:"+self.aInterFaceIniSettings.uOldDiscoveredIP)
-            elif self.aInterFaceIniSettings.uHost==u'discover':
+        uOldHost=self.aIniSettings.uHost
+        if self.aIniSettings.get("bSaveDiscoveredIP") is not None and self.aIniSettings.get("uOldDiscoveredIP") is not None:
+            if self.aIniSettings.bSaveDiscoveredIP and self.aIniSettings.uOldDiscoveredIP != '' and self.aIniSettings.uHost== u'discover':
+                self.aIniSettings.uHost=self.aIniSettings.uOldDiscoveredIP
+                self.ShowDebug("Reusing previous discovered IP:"+self.aIniSettings.uOldDiscoveredIP)
+            elif self.aIniSettings.uHost==u'discover':
                 bRet=self.Discover()
                 if not bRet:
-                    if self.aInterFaceIniSettings.uOldDiscoveredIP!="":
-                        self.aInterFaceIniSettings.uHost=self.aInterFaceIniSettings.uOldDiscoveredIP
-        if self.aInterFaceIniSettings.uHost.startswith('linked:'):
-            self.aInterFaceIniSettings.uHost=self.oInterFace.oInterFaceConfig.GetSettingParFromVar(self.aInterFaceIniSettings.uHost)
-            self.ShowDebug(u'Pulled crosslinked var: %s=%s' %(uOldHost,self.aInterFaceIniSettings.uHost))
+                    if self.aIniSettings.uOldDiscoveredIP!="":
+                        self.aIniSettings.uHost=self.aIniSettings.uOldDiscoveredIP
+        if self.aIniSettings.uHost.startswith('linked:'):
+            self.aIniSettings.uHost=self.oInterFace.oObjectConfig.GetSettingParFromVar(self.aIniSettings.uHost)
+            self.ShowDebug(u'Pulled crosslinked var: %s=%s' %(uOldHost,self.aIniSettings.uHost))
 
-        if self.aInterFaceIniSettings.uHost=="discover":
+        if self.aIniSettings.uHost=="discover":
             return False
 
         return True
@@ -488,30 +414,3 @@ class cBaseInterFaceSettings(object):
         self.ShowDebug(u'Closing Connection')
         Clock.unschedule(self.FktDisconnect)
         return True
-    def ShowWarning(self,uMsg):
-        """ Shows a warning """
-        uRet=u'Interface '+self.oInterFace.uInterFaceName+u'/'+self.uConfigName+u': '+ uMsg
-        Logger.warning (uRet)
-        return uRet
-    def ShowInfo(self,uMsg):
-        """ Shows a warning """
-        uRet=u'Interface '+self.oInterFace.uInterFaceName+u'/'+self.uConfigName+u': '+ uMsg
-        Logger.info (uRet)
-        return uRet
-    def ShowDebug(self,uMsg):
-        """ Shows a debug message """
-        uRet=u'Interface '+self.oInterFace.uInterFaceName+u'/'+self.uConfigName+u': '+ uMsg
-        Logger.debug (uRet)
-        return uRet
-    def ShowError(self,uMsg, oException=None):
-        """ Shows an error"""
-        iErrNo = 0
-        if oException is not None:
-            if hasattr(oException,'errno'):
-                iErrNo=oException.errno
-        if iErrNo is None:
-            iErrNo=-1
-
-        uRet = LogErrorSmall (u'Interface %s/%s %s (%d):' %( self.oInterFace.uInterFaceName,self.uConfigName, uMsg,iErrNo),oException)
-
-        return uRet

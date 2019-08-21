@@ -160,14 +160,14 @@ class cInterFaces(object):
             aActions=[]
             for uInterFaceName in self.dInterfaces:
                 oInterFace=self.dInterfaces[uInterFaceName]
-                if oInterFace.oInterFaceConfig.oConfigParser.filename =='':
-                    oInterFace.oInterFaceConfig.oConfigParser.LoadConfig(self)
-                for uConfigName in oInterFace.oInterFaceConfig.oConfigParser.sections():
+                if oInterFace.oObjectConfig.oConfigParser.filename =='':
+                    oInterFace.oObjectConfig.oConfigParser.LoadConfig(self)
+                for uConfigName in oInterFace.oObjectConfig.oConfigParser.sections():
                     if uConfigName != "DEVICE_DEFAULT":
                         oSetting=oInterFace.GetSettingObjectForConfigName(uConfigName)
                         if bForce:
-                            oSetting.aInterFaceIniSettings.uOldDiscoveredIP = ""
-                        if oSetting.aInterFaceIniSettings.uHost=="discover" and oSetting.aInterFaceIniSettings.uOldDiscoveredIP  == "":
+                            oSetting.aIniSettings.uOldDiscoveredIP = ""
+                        if oSetting.aIniSettings.uHost=="discover" and oSetting.aIniSettings.uOldDiscoveredIP  == "":
                             Globals.oEvents.AddToSimpleActionList(aActions, [{'name': 'Discover single with gui', 'string': 'discover', 'interface': uInterFaceName, 'configname': uConfigName, 'gui': '1'}])
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
             return 0

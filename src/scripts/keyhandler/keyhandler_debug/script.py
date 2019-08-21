@@ -76,8 +76,9 @@ class cScript(cKeyhandlerTemplate):
 
     def __init__(self):
         cKeyhandlerTemplate.__init__(self)
-        self.uSubType   = u'DEBUG'
-        self.uSortOrder = u"last"
+        self.uSubType           = u'DEBUG'
+        self.uSortOrder         = u'last'
+        self.uIniFileLocation   = u'none'
 
     def HandleKey(self,**kwargs):
         cKeyhandlerTemplate.HandleKey(self, **kwargs)

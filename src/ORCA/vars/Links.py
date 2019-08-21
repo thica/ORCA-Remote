@@ -41,7 +41,7 @@ def VarHasLinks(uVarName):
     :return: True if the variable has linked actions, otherwise False
     """
 
-    return (ORCA.vars.Globals.dUserVarLinks.get(uVarName) is not None)
+    return ORCA.vars.Globals.dUserVarLinks.get(uVarName) is not None
 
 def SetVarLink(uVarName, oActions):
     """

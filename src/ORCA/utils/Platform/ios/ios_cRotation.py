@@ -22,9 +22,11 @@
 from   kivy.logger           import Logger
 
 try:
+    # noinspection PyUnresolvedReferences
     from pyobjus import autoclassios
+    # noinspection PyUnresolvedReferences
     from pyobjus.dylib_manager import load_framework
-    Logger.debug("Sucessfully loaded autoclass, detach")
+    Logger.debug("Sucessfully loaded autoclassios, load_framework")
 except Exception as e:
     Logger.error("Not able to load autoclassios" + str(e))
 

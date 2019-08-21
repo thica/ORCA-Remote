@@ -36,6 +36,7 @@ from ORCA.utils.TypeConvert         import ToUnicode
 from ORCA.utils.Platform            import OS_SystemIsOnline, OS_Ping
 from ORCA.utils.wait.StartWait      import StartWait
 from ORCA.utils.wait.StopWait       import StopWait
+from ORCA.utils.PyXSocket           import cPyXSocket
 from ORCA.vars.Access               import ExistLVar
 
 import ORCA.Globals as Globals
@@ -88,7 +89,7 @@ def GetLocalIPV6():
         # Not necessary successfull
         s.connect(('2001:0db8:85a3:0000:0000:8a2e:0370:7334', 1))
         IP = s.getsockname()[0]
-    except Exception as e:
+    except Exception:
         return uMyIP, uMyGateway
     finally:
         s.close()
@@ -98,10 +99,6 @@ def GetLocalIPV6():
 def GetLocalIPV4():
 
     GetLocalIPV6()
-
-    uMyIP       = u''
-    uMyGateway  = u''
-    uMySubNet   = u''
 
     # Fast but not safe
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -124,10 +121,10 @@ def GetLocalIPV4_FallBack():
     def udp_listening_server():
         """ the server component """
         try:
-            oInSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            oInSocket = cPyXSocket(socket.AF_INET, socket.SOCK_DGRAM)
             #s.bind(('<broadcast>', 8888))
             oInSocket.bind(("0.0.0.0", 18888))
-            oInSocket.setblocking(0)
+            oInSocket.SetBlocking(0)
             while True:
                 result = select.select([oInSocket],[],[])
                 msg, address = result[0][0].recvfrom(1024)

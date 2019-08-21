@@ -228,6 +228,7 @@ class cITachToKeene(BoxLayout):
         super(cITachToKeene, self).__init__(**RemoveNoClassArgs(kwargs,BoxLayout))
         self.uCodesetFileName    = ''
 
+        self.oContent           = None
         self.oLayoutHeaders     = BoxLayout(size_hint_y= None , height= 30)
         self.oLayoutButtons     = BoxLayout(size_hint_y= None , height= 30)
         self.oLayoutPanels      = BoxLayout()

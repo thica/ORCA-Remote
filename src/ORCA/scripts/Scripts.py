@@ -40,15 +40,15 @@ class cScriptSettingPlugin(object):
         self.uSettingTitle = u''
         self.aSettingJson  = []
 
-
 class cScripts(object):
     """ container for all scripts """
     def __init__(self):
-        self.aScriptNameList          = [] # list of all names of all scripts
-        self.dScriptPathList          = {} # dict of all script pathes of all scripts
-        self.dScripts                 = {} # dict of all scripts
-        self.dModules                 = {} # dict of all python modules for all scripts
-        self.dScriptSettingPlugins    = {} # dict of all settings to pulled into the various setting pages (optional)
+        self.aScriptNameList            = [] # list of all names of all scripts
+        self.aScriptNameListWithConfig  = [] # list of all names of all scripts, which have configs
+        self.dScriptPathList            = {} # dict of all script pathes of all scripts
+        self.dScripts                   = {} # dict of all scripts
+        self.dModules                   = {} # dict of all python modules for all scripts
+        self.dScriptSettingPlugins      = {} # dict of all settings to pulled into the various setting pages (optional)
     def Init(self):
         """ dummy """
         pass
@@ -94,7 +94,13 @@ class cScripts(object):
                 else:
                     oPathScriptSkinElements = oPathScriptSkinElements + "skin_default"
 
-                SetVar(uVarName="SCRIPTPATHSKINELEMENTS[%s]" % (uScriptName), oVarValue=oPathScriptSkinElements.string)
+                SetVar(uVarName="SCRIPTPATHSKINELEMENTS[%s]" % uScriptName, oVarValue=oPathScriptSkinElements.string)
+
+    def LoadScripts(self):
+        """ Loads all scripts """
+
+        for uScriptName in self.aScriptNameList:
+            self.LoadScript(uScriptName)
 
     def LoadScript(self,uScriptName):
         """
@@ -125,6 +131,8 @@ class cScripts(object):
             oScript = oModule.cScript()
             oScript.Init(uScriptName, oFnScript)
             self.dScripts[uScriptName]=oScript
+            if oScript.uIniFileLocation != "none":
+                self.aScriptNameListWithConfig.append(uScriptName)
             return oModule
         except Exception as e:
             uMsg=LogError(u'Scripts: Fatal Error Loading Script: '+uScriptName+ u' :',e)
@@ -172,7 +180,8 @@ class cScripts(object):
                         if len(tElements)==2:
                             uSortOrder  = tElements[0]
                             uScriptName = tElements[1]
-                            bFound = False
+                            bFound      = False
+                            iIndex2     = -1
                             for iIndex2 in range(len(aScriptList)):
                                 if self.dScripts[aScriptList[iIndex2]].uScriptName == uScriptName:
                                     bFound = True

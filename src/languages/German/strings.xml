@@ -399,6 +399,8 @@
   <string id="5031">Modell</string>
   <string id="5040">Warnung</string>
   <string id="5041">Komprimiere Datei</string>
+  <string id="5042">ORCA benötigt Schreib Zugriff, bitte gewähren</string>
+  <string id="5043">Zugriff gewähren</string>
 
   <!--Generic Interfaces Config Strings for multi interface use-->
   <string id="6000">Zuordnung/Codeset</string>

@@ -4,6 +4,8 @@ WikiDoc:Context:DefinitionsForUser
 WikiDoc:Page:Userdescription Definition cmdfavorites_template
 WikiDoc:TOCTitle:cmdfavorites_template
 
+= CmdFavorites Template =
+
 This is a template definition not for single / direct use. It provides the settings and widgets to send commands on your remote device (if supported).
 
 WikiDoc:End
@@ -13,6 +15,8 @@ WikiDoc:Doc
 WikiDoc:Context:Reference_Definitions
 WikiDoc:Page:Reference Definition cmdfavorites_template
 WikiDoc:TOCTitle:cmdfavorites_template
+
+= Overview =
 
 This template definition provides the settings and elements to send commands. Please notice, that the left and right blocks and the screenshot below are defined to use them in your definition (landscape and portrait mode). There are popups defined as well.
 

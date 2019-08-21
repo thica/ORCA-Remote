@@ -174,7 +174,7 @@ class cZipPath(cPath):
                     else:
                         if uFile.endswith("*.py"):
                             i=1
-                        Logger.debug(u'Skip Zipping File [%s]' % (uFile))
+                        Logger.debug(u'Skip Zipping File [%s]' % uFile)
 
             oZipFile.close()
             return True

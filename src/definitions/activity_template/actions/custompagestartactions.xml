@@ -11,10 +11,10 @@
     </pagestartaction>
     <pagestartaction name="Page_Devices_$dvar(definition_activity_template)">
       <action name="Disable Buttons on first page start" string="if $var(PAGESTARTCOUNT_$var(CURRENTPAGE))==1" />
-        <action name="Loop through all Devices" string="forin" varname="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[]"  dstvarname="TMPDEVICENAME" level="1" actionname="FKT DisableUnusedDeviceButtons" />
+        <action name="Loop through all Devices" string="forin" varname="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[]"  level="1" actionname="FKT DisableUnusedDeviceButtons" />
       <action name="end if" string="endif" />
       <action name="Set Default Keyhandler" string="if $var(PAGESTARTCOUNT_$var(CURRENTPAGE))==1" />
-        <action name="Loop through all Devices" string="forin" varname="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[]"  dstvarname="TMPDEVICEPAGE" level="1" actionname="FKT SetActivityDevicesKeyhandler" />
+        <action name="Loop through all Devices" string="forin" varname="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[]"  level="1" actionname="FKT SetActivityDevicesKeyhandler" />
       <action name="end if" string="endif" />
     </pagestartaction>
 

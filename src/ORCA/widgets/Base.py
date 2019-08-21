@@ -42,10 +42,6 @@ from kivy.utils                        import get_color_from_hex
 from kivy.graphics                     import Color
 from kivy.metrics                      import dp,sp
 from kivy.uix.layout                   import Layout
-from kivy.uix.settings                 import Settings
-
-
-from kivy.compat                       import PY2
 
 from ORCA.utils.CheckCondition         import CheckCondition
 from ORCA.utils.LogError               import LogError
@@ -64,6 +60,23 @@ __all__ = ['cWidgetBase','GetColorFromHex','GetHexFromColor','oWidgetType']
 
 oLastWidget=None
 oLastWidgetSave=None
+
+def GetColorFromHex(uColor):
+    """
+    Helper function to get a rgba tuple from a hex string
+    :rtype: tuple
+    :param string uColor: HEX representation of a color eg:#00FF0040
+    :return: A tuple in the format (r,g,b,a), wher all values are floats between 0 and 1, (return 0,1,0,1 in case of an error)
+    """
+
+    try:
+        return get_color_from_hex(ReplaceVars(uColor.lower()))
+    except Exception as e:
+        return Color(0, 1, 0, 1)
+
+
+uColorUndefined = "#00000001"
+tColorUndefined = GetColorFromHex(uColorUndefined)
 
 class cWidgetType (object):
     """
@@ -98,18 +111,6 @@ class cWidgetType (object):
             setattr(self,uName,iValue)
             self.WidgetTypeToId[uName.upper()] = iValue
 
-def GetColorFromHex(uColor):
-    """
-    Helper function to get a rgba tuple from a hex string
-    :rtype: tuple
-    :param string uColor: HEX representation of a color eg:#00FF0040
-    :return: A tuple in the format (r,g,b,a), wher all values are floats between 0 and 1, (return 0,1,0,1 in case of an error)
-    """
-
-    try:
-        return get_color_from_hex(ReplaceVars(uColor.lower()))
-    except Exception as e:
-        return Color(0, 1, 0, 1)
 
 def GetHexFromColor(aColor):
     try:
@@ -217,19 +218,21 @@ class cWidgetBase(object):
     WikiDoc:End
     """
 
+    # noinspection PyUnresolvedReferences
     def __init__(self,**kwargs):
 
         self.bHasText=kwargs.get('hastext')
         if self.bHasText is None:
             self.bHasText=False
 
-        self.aKwArgs             = {}
+        self.aWidgetActions      = []
         self.bBold               = False
         self.bEnabled            = True
         self.bItalic             = False
         self.bIcon               = False
         self.bNoTextSize         = False
         self.dActionPars         = {} # Actionpars will be passed to Actions within command set, existing pars will be replaced!
+        self.dKwArgs             = {}
         self.fOrgOpacity         = 1.0
         self.fScale              = 1.0
         self.fRationX            = 1.0
@@ -239,6 +242,8 @@ class cWidgetBase(object):
         self.iAnchorPosY         = 0
         self.iAnchorWidth        = 0
         self.iFontSize           = 30
+        self.iGapX               = 0
+        self.iGapY               = 0
         self.iIconFontSize       = 50
         self.iFontSizeInit       = 30
         self.iHeight             = 10
@@ -250,6 +255,8 @@ class cWidgetBase(object):
         self.iWidgetType         = oWidgetType.NoWidget
         self.iWidth              = 10
         self.iWidthInit          = 10
+        self.oBorder             = None
+        self.oDef                = None
         self.oObject             = None         # oOBject is the kivy Widget
         self.oParent             = None
         self.oParentScreenPage   = None
@@ -279,6 +286,7 @@ class cWidgetBase(object):
         self.uTapType            = u''
         self.uvTextAlign         = u'top'
 
+    # noinspection PyUnresolvedReferences
     def ParseXMLBaseNode (self,oXMLNode,oParentScreenPage, uAnchor):
 
         try:
@@ -314,20 +322,25 @@ class cWidgetBase(object):
                 self.uAnchorName=uAnchor
 
             if self.uAnchorName:
-                self.oTmpAnchor=self.oParentScreenPage.dWidgets.get(self.uAnchorName)
-                if self.oTmpAnchor is not None:
+                # we use only the first Anchor with that name
+                aTmpAnchors=self.oParentScreenPage.dWidgets[self.uAnchorName]
+                if aTmpAnchors:
+                    self.oTmpAnchor=aTmpAnchors[-1]
                     # oTmpAnchor is already aligned to screen size
                     self.iAnchorPosX         = self.oTmpAnchor.iPosX
                     self.iAnchorPosY         = self.oTmpAnchor.iPosY
                     self.iAnchorWidth        = self.oTmpAnchor.iWidth
                     self.iAnchorHeight       = self.oTmpAnchor.iHeight
+                else:
+                    self.oTmpAnchor=None
+
 
             # We parse for Text and change later to integer
             self.iWidth = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'width', False, u''))
             self.iHeight = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'height', False, u''))
 
-            iAnchorWidth        = (self.iAnchorWidth)
-            iAnchorHeight       = (self.iAnchorHeight)
+            iAnchorWidth        = self.iAnchorWidth
+            iAnchorHeight       = self.iAnchorHeight
 
             bApplyWidth=False
 
@@ -475,13 +488,13 @@ class cWidgetBase(object):
 
                 sFontSize               =   GetXMLTextAttribute (oXMLNode,u'fontsize',      False,'0')
                 sIconFontSize           =   GetXMLTextAttribute (oXMLNode, u'iconfontsize', False, sFontSize)
-                self.tTextColor         =   GetXMLTextAttribute (oXMLNode,u'textcolor',     False,u'')
+                self.tTextColor         =   GetColorFromHex(GetXMLTextAttribute (oXMLNode,u'textcolor',False,uColorUndefined))
                 self.SetCaption(GetXMLTextAttribute(oXMLNode,u'caption',False,u''))
                 self.uOrgSecondCaption  =   GetXMLTextAttribute(oXMLNode,u'secondcaption',False,u'')
 
                 Globals.oTheScreen.oFonts.dUsedFonts[self.uFontIndex]=True
 
-                if self.tTextColor == u'':
+                if self.tTextColor == tColorUndefined:
                     if self.iWidgetType == oWidgetType.Button or self.iWidgetType == oWidgetType.DropDown or self.iWidgetType == oWidgetType.Switch:
                         self.tTextColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('fontcolor button')
                     elif self.iWidgetType == oWidgetType.TextField or self.iWidgetType == oWidgetType.TextInput or self.iWidgetType == oWidgetType.Slider:
@@ -490,10 +503,8 @@ class cWidgetBase(object):
                         self.tTextColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('fontcolor file')
                     elif self.iWidgetType == oWidgetType.BackGround:
                         self.tTextColor = GetColorFromHex(u'#FFFFFFFF')
-                    if self.tTextColor is None or self.tTextColor == u'':
+                    if self.tTextColor == tColorUndefined:
                         self.tTextColor = GetColorFromHex(u'#FFFFFFFF')
-                else:
-                    self.tTextColor = GetColorFromHex(self.tTextColor)
 
                 if sFontSize == "0":
                     if self.iWidgetType == oWidgetType.Button or self.iWidgetType == oWidgetType.DropDown or self.iWidgetType == oWidgetType.Switch:
@@ -677,13 +688,13 @@ class cWidgetBase(object):
             if not Class=='':
                 if Class.__name__.startswith("c"):
                     # Just add to ORCA classes, passing custom parameter to Kivy classes crashes on Python 3
-                    self.aKwArgs['ORCAWIDGET']=self
+                    self.dKwArgs['ORCAWIDGET']=self
 
-                self.oObject = Class(**self.aKwArgs)
+                self.oObject = Class(**self.dKwArgs)
                 self.oObject.oOrcaWidget = self
                 if Globals.oParameter.bShowBorders:
                     if (not isinstance(self.oObject, Layout)) and (not self.iWidgetType == oWidgetType.Knob) and (not self.iWidgetType == oWidgetType.FileViewer):
-                        self.oBorder = cBorder(**self.aKwArgs)
+                        self.oBorder = cBorder(**self.dKwArgs)
                         self.oObject.add_widget(self.oBorder)
 
             return True
@@ -807,7 +818,7 @@ class cWidgetBase(object):
         if iPos > 0:
             uColor = uIcon[iPos + 7:]
             uIcon = uIcon[:iPos]
-            oWidget.tTextColor = uColor
+            oWidget.tTextColor = GetColorFromHex(uColor)
 
         dIcon = Globals.dIcons.get(uIcon)
         if dIcon:
@@ -818,7 +829,7 @@ class cWidgetBase(object):
             oWidget.fScale = dIcon["scale"]
 
     def AddArg(self,sKey,oValue):
-        self.aKwArgs[sKey] = oValue
+        self.dKwArgs[sKey] = oValue
 
     def SetWidgetFontStyle(self,bBold,bItalic,sColor):
         if bBold is not None:

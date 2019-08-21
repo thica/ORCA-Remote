@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
     ORCA Open Remote Control Application
     Copyright (C) 2013-2019  Carsten Thielepape
@@ -18,8 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.vars.QueryDict    import cMonitoredSettings
 
-class cScriptMonitoredSettings(cMonitoredSettings):
-    def WriteVar(self,sName,oValue):
-        self.oBaseSettings.SetContextVar("CONFIG_" + sName.upper()[1:], oValue)
+def RequestPermissions():
+    """  Nothing Generic to do"""
+    return True

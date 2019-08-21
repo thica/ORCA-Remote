@@ -42,6 +42,7 @@ class SettingPicture(SettingFile):
 
         self.oLayout =FloatLayout(size_hint=(1, 1))
         super(SettingPicture, self).__init__(**RemoveNoClassArgs(kwargs,SettingFile))
+        oFnPic = cFileName()
 
         try:
             oFnPic      = cFileName().ImportFullPath(self.value)
@@ -53,7 +54,7 @@ class SettingPicture(SettingFile):
             self.add_widget(self.oLayout)
             self.content.children[1].text=''
         except Exception as e:
-            uMsg=u'Settings: Picture: can\'t load image file: '+ToUnicode(e)+ " "+oFnPic
+            uMsg=u'Settings: Picture: can\'t load image file: '+ToUnicode(e)+ " "+oFnPic.string
             Logger.error (uMsg)
 
     def set_value(self, section, key, value):

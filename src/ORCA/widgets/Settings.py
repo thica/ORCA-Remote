@@ -22,6 +22,7 @@
 from random                         import random
 from functools                      import partial
 from kivy.uix.settings              import SettingsWithSidebar
+from kivy.uix.settings              import SettingsWithSpinner
 from kivy.clock                     import Clock
 from kivy.logger                    import Logger
 from ORCA.settings.AppSettings      import BuildSettingsStringPowerStatus
@@ -76,10 +77,10 @@ class cWidgetSettings(cWidgetFileViewer):
 
     def __init__(self, **kwargs):
         super(cWidgetSettings, self).__init__(**kwargs)
-        self.uSettingsType = u''
-        self.oXMLNode = None
-        self.aSettingObjects={}
-        self.oReAssignObject=None
+        self.uSettingsType      = u''
+        self.oXMLNode           = None
+        self.aSettingObjects    = {}
+        self.oReAssignObject    = None
 
     def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
         self.uSettingsType  = GetXMLTextAttribute(oXMLNode,u'settingstype', False,u'interface')
@@ -114,18 +115,18 @@ class cWidgetSettings(cWidgetFileViewer):
                     self.oParent.add_widget(self.oObject)
                     oInterFace=Globals.oInterFaces.dInterfaces.get(Globals.oTheScreen.uInterFaceToConfig)
                     if oInterFace:
-                        oInterFace.oInterFaceConfig.ConfigureKivySettings(oKivySetting=self.oObject)
+                        oInterFace.oObjectConfig.ConfigureKivySettings(oKivySetting=self.oObject)
                         self.oObject.bind(on_close=self.On_SettingsClose)
                     return True
                 return False
 
             if self.uSettingsType==u'script':
-                if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
+                if self.CreateBase(Parent=oParent, Class=SettingsWithSpinner):
                     self.oParent.add_widget(self.oObject)
                     Globals.oScripts.LoadScript(Globals.oTheScreen.uScriptToConfig)
                     oScript=Globals.oScripts.dScripts.get(Globals.oTheScreen.uScriptToConfig)
                     if oScript:
-                        oScript.oScriptConfig.ConfigureKivySettings(oKivySetting=self.oObject)
+                        oScript.oObjectConfig.ConfigureKivySettings(oKivySetting=self.oObject)
                         self.oObject.bind(on_close=self.On_SettingsClose)
                     return True
                 return False
@@ -136,7 +137,7 @@ class cWidgetSettings(cWidgetFileViewer):
                     oInterFace=Globals.oInterFaces.dInterfaces.get(Globals.oTheScreen.uInterFaceToConfig)
                     uConfigName=Globals.oTheScreen.uConfigToConfig
                     if oInterFace:
-                        oInterFace.oInterFaceConfigDiscover.ConfigureKivySettingsForDiscoverParameter(oKivySetting=self.oObject, uConfigName=uConfigName)
+                        oInterFace.oObjectConfigDiscover.ConfigureKivySettingsForDiscoverParameter(oKivySetting=self.oObject, uConfigName=uConfigName)
                         self.oObject.bind(on_close=self.On_SettingsDiscoverClose)
                     return True
                 return False
@@ -171,7 +172,7 @@ class cWidgetSettings(cWidgetFileViewer):
                     self.oParent.add_widget(self.oObject)
                     uDefinitionName=Globals.uDefinitionToConfigure
                     oDef=Globals.oDefinitions[uDefinitionName]
-                    uSettingsJSON =u'[{ "type": "title","title": "%s" },{"type": "info","title": "$lvar(587)","section": "ORCA","info":"$var(VERSION)"}]' %(oDef.uDefPublicTitle)
+                    uSettingsJSON =u'[{ "type": "title","title": "%s" },{"type": "info","title": "$lvar(587)","section": "ORCA","info":"$var(VERSION)"}]' % oDef.uDefPublicTitle
                     for uVisSection in oDef.dDefinitionSettingsJSON:
                         uSettingsJSON=oDef.dDefinitionSettingsJSON[uVisSection]
                         uSettingsJSON=ReplaceVars(uSettingsJSON)
@@ -188,10 +189,11 @@ class cWidgetSettings(cWidgetFileViewer):
     def UpdateWidget(self):
 
         if self.oObject is None:
-            return
+            pass
+            # return
 
         if self.oParent is not None:
-            if  (self.uSettingsType=='definition'):
+            if self.uSettingsType== 'definition':
                 uDefinitionName = Globals.uDefinitionToConfigure
                 oObject = self.aSettingObjects.get(uDefinitionName)
                 if oObject is not None:

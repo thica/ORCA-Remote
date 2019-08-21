@@ -95,6 +95,6 @@ class cWidgetCircle(cWidgetGeoClass):
         if self.oObject is None:
             Logger.error("Can't modify Angle of Circle before its created:"+self.uName)
             return False
-        return self.oObject.ModifyAngle(**self.aKwArgs)
+        return self.oObject.ModifyAngle(**self.dKwArgs)
     def UpdateWidget(self):
         self.ModifyAngle()

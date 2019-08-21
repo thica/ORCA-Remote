@@ -10,8 +10,9 @@
         <default var="$dvar(definition_alias_mediaplayer_template)_SHOWCHANNELUPDOWN"           default="0" />
         <default var="$dvar(definition_alias_mediaplayer_template)_GETCURRENTVOL"               default="1" />
 
-        <default var="$dvar(definition_alias_appfavorites_template)_appname[6]"   default="Amazon Prime" />
+        <default var="$dvar(definition_alias_appfavorites_template)_appname[6]"   default="Amazon Prime Test" />
         <default var="$dvar(definition_alias_appfavorites_template)_execname[6]"  default="com.amazon.amazonvideo.livingroom/com.amazon.ignition.IgnitionActivity" />
+        <default var="$dvar(definition_alias_appfavorites_template)_stopname[6]"  default="com.amazon.amazonvideo.livingroom" />
 
     </settings>
 </settings>

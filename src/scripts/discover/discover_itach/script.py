@@ -85,7 +85,7 @@ class cScript(cDiscoverScriptTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.fTimeOut                     = 30.0
+            self.aIniSettings.fTimeOut                     = 30.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
@@ -103,16 +103,16 @@ class cScript(cDiscoverScriptTemplate):
         super(cScript, self).DeInit(**kwargs)
         self.StopThread([])
 
-    def Init(self,uScriptName,oFnScript=None):
+    def Init(self,uObjectName,oFnObject=None):
         """
         Init function for the script
 
-        :param string uScriptName: The name of the script (to be passed to all scripts)
-        :param cFileName oFnScript: The file of the script (to be passed to all scripts)
+        :param string uObjectName: The name of the script (to be passed to all scripts)
+        :param cFileName oFnObject: The file of the script (to be passed to all scripts)
         """
 
-        cDiscoverScriptTemplate.Init(self, uScriptName, oFnScript)
-        self.oScriptConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        cDiscoverScriptTemplate.Init(self, uObjectName, oFnObject)
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
         self.StartThread()
 
     def StartThread(self):
@@ -134,7 +134,7 @@ class cScript(cDiscoverScriptTemplate):
         oSetting = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
 
         if len(self.aiTachDevices)==0:
-            sleep(oSetting.aScriptIniSettings.fTimeOut)
+            sleep(oSetting.aIniSettings.fTimeOut)
 
         for oDeviceKey in self.aiTachDevices:
             oDevice=self.aiTachDevices[oDeviceKey]
@@ -156,7 +156,7 @@ class cScript(cDiscoverScriptTemplate):
             uConfigName = kwargs['configname']
 
         oSetting = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        fTimeOut = oSetting.aScriptIniSettings.fTimeOut
+        fTimeOut = oSetting.aIniSettings.fTimeOut
 
         if "timeout" in kwargs:
             fTimeOut = ToFloat(kwargs['timeout'])
@@ -205,9 +205,11 @@ class ciTachDiscover(object):
         self.aDevices = aDevices
         self.cScript  = cScriptClass
         self.oSocket  = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    def Run(self,fTimeOut):
+    def Run(self,*args):
 
         self.bStopThreadEvent = False
+
+        fTimeOut = args[0]
 
         Logger.debug (u'iTach Start Discover Thread')
 

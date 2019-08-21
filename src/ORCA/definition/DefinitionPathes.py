@@ -49,6 +49,7 @@ class cDefinitionPathes(object):
         self.oFnDefinitionIni                   = cFileName(self.oPathDefinition) + u'definition.ini'
         self.oPathDefinitionInterfaceSettings   = self.oPathDefinition + u'interfacesettings'
         self.oPathDefinitionScriptSettings      = self.oPathDefinition + u'scriptsettings'
+        self.oFnDefinitionLanguage              = None
         self.oFnDefinitionLanguageFallBack      = cFileName(self.oPathDefinition + u'languages/English')+ "strings.xml"
         self.oPathDefinitionSkinElements        = self.oPathDefinition + u'elements'
         oPathCheck = self.oPathDefinitionSkinElements + ("skin_" + Globals.uSkinName)

@@ -30,7 +30,8 @@ import ORCA.Globals as Globals
 class cInterFaceConfigDiscover(object):
     def __init__(self,oInterFace):
         self.oInterFace         = oInterFace
-        self.oConfigParser      = oInterFace.oInterFaceConfig.oConfigParser
+        self.oConfigParser      = oInterFace.oObjectConfig.oConfigParser
+        self.uConfigName        = ""
     def Init(self):
         """ Init function, sets the configuration file name and add the default sections """
         pass
@@ -45,7 +46,7 @@ class cInterFaceConfigDiscover(object):
         :return: The KivySetting object
         """
 
-        SetVar(uVarName=u'InterfaceConfigSection', oVarValue=uConfigName)
+        SetVar(uVarName=u'ObjectConfigSection', oVarValue=uConfigName)
         self.uConfigName = uConfigName
         RegisterSettingTypes(oKivySetting)
         oSetting = self.oInterFace.GetSettingObjectForConfigName(uConfigName=uConfigName)
@@ -84,7 +85,7 @@ class cInterFaceConfigDiscover(object):
         """ reacts, if user changes a setting """
         if uKey != "CheckDiscover":
             oSetting = self.oInterFace.GetSettingObjectForConfigName(uConfigName=uSection)
-            oSetting.aInterFaceIniSettings[uKey]=uValue
+            oSetting.aIniSettings[uKey]=uValue
         else:
             self.CheckDiscover(uSection = uSection)
 
@@ -92,13 +93,13 @@ class cInterFaceConfigDiscover(object):
 
         self.oInterFace.ShowDebug(u'Testing to discover settings')
         oSetting = self.oInterFace.GetSettingObjectForConfigName(uConfigName=uSection)
-        uDiscoverScriptName = oSetting.aInterFaceIniSettings.uDiscoverScriptName
+        uDiscoverScriptName = oSetting.aIniSettings.uDiscoverScriptName
         dParams={}
 
-        for uKey in oSetting.aInterFaceIniSettings:
+        for uKey in oSetting.aIniSettings:
             if uKey[1:].startswith(uDiscoverScriptName.upper()):
                 uParamKey=uKey[len(uDiscoverScriptName)+2:]
-                dParams[uParamKey]=oSetting.aInterFaceIniSettings[uKey]
+                dParams[uParamKey]=oSetting.aIniSettings[uKey]
 
         dResult = Globals.oScripts.RunScript(uDiscoverScriptName, **dParams)
         oException = dResult.get('Exception',None)
@@ -113,22 +114,22 @@ class cInterFaceConfigDiscover(object):
         """ Shows the settings page """
         Globals.oTheScreen.AddActionToQueue([{'string': 'updatewidget', 'widgetname': 'Interfacesettings_discover'}])
 
-    def CreateSettingJsonCombined(self, oSetting):
+    def CreateSettingJsonCombined(self, **kwargs):
         """
         Creates a json dict which holds all the setting definitions of
         the core interface plus the settings from the discover script (if requested)
 
         :rtype: dict
-        :param cBaseInterFaceSettings oSetting: an IterFaceSettings Object
         :return: a dict of combined settings
         """
+
         dRet = {}
 
-        for uKey in self.oInterFace.oInterFaceConfig.dSettingsCombined:
-            uSection = self.oInterFace.oInterFaceConfig.dSettingsCombined[uKey].get('scriptsection')
+        for uKey in self.oInterFace.oObjectConfig.dSettingsCombined:
+            uSection = self.oInterFace.oObjectConfig.dSettingsCombined[uKey].get('scriptsection')
             if uSection:
-                dRet[uKey]=self.oInterFace.oInterFaceConfig.dSettingsCombined[uKey]
-                dRet[uKey]['section'] = "$var(InterfaceConfigSection)"
+                dRet[uKey]=self.oInterFace.oObjectConfig.dSettingsCombined[uKey]
+                dRet[uKey]['section'] = "$var(ObjectConfigSection)"
 
         self.CreateDiscoverScriptListVar()
         return dRet
@@ -140,7 +141,7 @@ class cInterFaceConfigDiscover(object):
         """
 
         uScripts = ""
-        for uScriptName in self.oInterFace.oInterFaceConfig.aDiscoverScriptList:
+        for uScriptName in self.oInterFace.oObjectConfig.aDiscoverScriptList:
             uScriptSubTypeName = Globals.oScripts.dScripts[uScriptName].uSubType
             if uScriptSubTypeName in self.oInterFace.aDiscoverScriptsBlackList:
                continue

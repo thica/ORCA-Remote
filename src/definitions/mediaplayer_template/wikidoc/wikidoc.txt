@@ -4,6 +4,8 @@ WikiDoc:Context:DefinitionsForUser
 WikiDoc:Page:Userdescription Definition mediaplayer_template
 WikiDoc:TOCTitle:mediaplayer_template
 
+= Mediaplayer Template =
+
 The mediaplayer_template is on of the most flexible definitions of ORCA. It is designed to fit for most devices which plays media, like TVs , DVB receiver, DVD/BR player, software player, streaming devices...
 There it is high customizable through the definition settings. Not all setting combinations will work, so therefore you might need to play around with the settings.
 Furthermore the template is used by the mediaplayer_wizards, which pushes tested settings into the mediaplayer_template and might add some functions as well.
@@ -50,6 +52,8 @@ WikiDoc:Doc
 WikiDoc:Context:Reference_Definitions
 WikiDoc:Page:Reference Definition mediaplayer_template
 WikiDoc:TOCTitle:mediaplayer_template
+
+= Overview =
 
 The mediaplayer_template is on of the most flexible definitions of ORCA. It is designed to fit for most devices which plays media, like TVs , DVB receiver, DVD/BR player, software player, streaming devices...
 There it is high customizable through the definition settings. Not all setting combinations will work, so therefore you might need to play around with the settings.

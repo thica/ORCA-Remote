@@ -57,15 +57,15 @@ class cInterface(cBaseInterFace):
         def __init__(self,oInterFace):
             cBaseInterFaceSettings.__init__(self,oInterFace)
             self.oWidgetPlayer    = None
-            self.aInterFaceIniSettings.uParseResultOption           = u'tokenize'
-            self.aInterFaceIniSettings.uParseResultTokenizeString   = u':'
+            self.aIniSettings.uParseResultOption           = u'tokenize'
+            self.aIniSettings.uParseResultTokenizeString   = u':'
 
         def ReadConfigFromIniFile(self,uConfigName):
             cBaseInterFaceSettings.ReadConfigFromIniFile(self,uConfigName)
-            self.aInterFaceIniSettings.uParseResultOption           = u'tokenize'
-            self.aInterFaceIniSettings.uParseResultTokenizeString   = u':'
-            self.aInterFaceIniSettings.uStream                      = ReplaceVars(self.aInterFaceIniSettings.uStream)
-            self.aInterFaceIniSettings.uFNCodeset                   = u"CODESET_orca_video_default.xml"
+            self.aIniSettings.uParseResultOption           = u'tokenize'
+            self.aIniSettings.uParseResultTokenizeString   = u':'
+            self.aIniSettings.uStream                      = ReplaceVars(self.aIniSettings.uStream)
+            self.aIniSettings.uFNCodeset                   = u"CODESET_orca_video_default.xml"
 
             return
 
@@ -74,7 +74,7 @@ class cInterface(cBaseInterFace):
             if not cBaseInterFaceSettings.Connect(self):
                 return False
             try:
-                aWidgetPlayer = Globals.oTheScreen.FindWidgets(uPageName = self.oAction.oParentWidget.oParentScreenPage.uPageName, uWidgetName = self.aInterFaceIniSettings.uWidgetName)
+                aWidgetPlayer = Globals.oTheScreen.FindWidgets(uPageName = self.oAction.oParentWidget.oParentScreenPage.uPageName, uWidgetName = self.aIniSettings.uWidgetName)
                 if len(aWidgetPlayer)>0:
                     self.oWidgetPlayer= aWidgetPlayer[0]
                 if self.oWidgetPlayer is not None:
@@ -118,11 +118,11 @@ class cInterface(cBaseInterFace):
         self.aSettings   = {}
         self.oSetting = None
 
-    def Init(self, uInterFaceName, oFnInterFace=None):
-        cBaseInterFace.Init(self, uInterFaceName, oFnInterFace)
-        self.oInterFaceConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
+    def Init(self, uObjectName, oFnObject=None):
+        cBaseInterFace.Init(self, uObjectName, oFnObject)
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
 
     def DeInit(self, **kwargs):
         cBaseInterFace.DeInit(self,**kwargs)
@@ -130,23 +130,23 @@ class cInterface(cBaseInterFace):
             self.aSettings[aSetting].DeInit()
 
     def GetConfigJSON(self):
-        return {"WidgetName": {"active": "enabled", "order": 3, "type": "string", "title": "$lvar(IFACE_OVIDEO_1)",  "desc": "$lvar(IFACE_OVIDEO_1)",  "section": "$var(InterfaceConfigSection)","key": "WidgetName",  "default":"select"   },
-                "Stream":     {"active": "enabled", "order": 4, "type": "string", "title": "$lvar(IFACE_OVIDEO_3)",  "desc": "$lvar(IFACE_OVIDEO_4)",  "section": "$var(InterfaceConfigSection)","key": "Stream",      "default":"rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"  }
+        return {"WidgetName": {"active": "enabled", "order": 3, "type": "string", "title": "$lvar(IFACE_OVIDEO_1)",  "desc": "$lvar(IFACE_OVIDEO_1)",  "section": "$var(ObjectConfigSection)","key": "WidgetName",  "default":"select"   },
+                "Stream":     {"active": "enabled", "order": 4, "type": "string", "title": "$lvar(IFACE_OVIDEO_3)",  "desc": "$lvar(IFACE_OVIDEO_4)",  "section": "$var(ObjectConfigSection)","key": "Stream",      "default":"rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"  }
                }
 
     def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
         uCmd=ReplaceVars(oAction.uCmd)
-        uCmd=ReplaceVars(uCmd,self.uInterFaceName+'/'+oSetting.uConfigName)
+        uCmd=ReplaceVars(uCmd,self.uObjectName+'/'+oSetting.uConfigName)
 
-        self.ShowInfo(u'Sending Command: %s to %s (%s:%s)' % (uCmd,oSetting.aInterFaceIniSettings.uWidgetName,oSetting.uConfigName,oSetting.aInterFaceIniSettings.uStream))
+        self.ShowInfo(u'Sending Command: %s to %s (%s:%s)' % (uCmd,oSetting.aIniSettings.uWidgetName,oSetting.uConfigName,oSetting.aIniSettings.uStream))
         oSetting.Connect()
 
         iRet=1
         if oSetting.bIsConnected:
             try:
-                iRet,sValue=oSetting.oWidgetPlayer.StatusControl(uCmd,oSetting.aInterFaceIniSettings.uStream)
+                iRet,sValue=oSetting.oWidgetPlayer.StatusControl(uCmd,oSetting.aIniSettings.uStream)
                 iRet=0
             except Exception as e:
                 self.ShowError(u'can\'t Send Message',u'',e)

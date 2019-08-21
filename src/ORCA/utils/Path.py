@@ -47,6 +47,7 @@ def CleanUp(uFinal):
         uFinal = uFinal.replace("//", "/")
     while "\\\\" in uFinal:
         uFinal = uFinal.replace("\\\\", "\\")
+
     return AdjustPathToOs(ReplaceVars(uFinal))
 
 def AdjustPathToUnix(uPath):
@@ -65,29 +66,9 @@ def AdjustPathToUnix(uPath):
 
 class cPath(object):
     def __init__(self, uPath=u''):
-
-        '''
-        if Logger.level == logging.DEBUG:
-            import inspect
-            frame = inspect.currentframe()
-            try:
-                aStack = inspect.stack()
-                for aLine in aStack:
-                    if not aLine[1].endswith("Path.py"):
-                        aCodeLine = aLine[-2]
-                        uCodeLine = aCodeLine[0]
-                        uVarName=uCodeLine.split("=")[0].strip()
-                        tVarName=uVarName.split(".")
-                        if len(tVarName)==2:
-                            uVarName=tVarName[-1]
-                            if not uVarName.startswith("oPath"):
-                                if not "[" in uVarName:
-                                    print (uVarName)
-                        break
-            finally:
-                del frame
-        '''
-
+        """
+        :param unicode|cPath uPath:
+        """
         if isinstance(uPath, string_types):
             self.uRaw       = uPath
         elif isinstance(uPath, cPath):
@@ -119,7 +100,8 @@ class cPath(object):
 
     def Normalize(self):
         if self.uRaw:
-            self.uRaw+=uSeparator
+            # self.uRaw+=uSeparator
+            self.uRaw += "/"
 
     def ImportFullPath(self,uFnFullName):
         self.uRaw=os.path.dirname(uFnFullName)
@@ -170,6 +152,7 @@ class cPath(object):
         """
 
         oDirList = []
+        uRootDir = u''
         try:
 
             # stdout_encoding = sys.getfilesystemencoding()
@@ -197,8 +180,8 @@ class cPath(object):
         """
 
         oDirList = []
+        uRootDir = self.string
         try:
-            uRootDir = self.string
             for oItem in listdir(uRootDir):
                 if not isdir(join(uRootDir, oItem)):
                     if not bFullPath:
@@ -335,7 +318,7 @@ class cPath(object):
         except Exception:
             return False
 
-    def IsWritable(self):
+    def IsWriteable(self):
         """
         Checks, if we have write access to a folder
 

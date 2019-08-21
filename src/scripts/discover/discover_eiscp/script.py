@@ -97,7 +97,7 @@ class cScript(cDiscoverScriptTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.fTimeOut                     = 10.0
+            self.aIniSettings.fTimeOut                     = 10.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
@@ -108,24 +108,23 @@ class cScript(cDiscoverScriptTemplate):
         self.bOnlyOnce       = True
         self.uIPVersion      = "Auto"
 
-    def Init(self,uScriptName,uScriptFile=u''):
+    def Init(self,uObjectName,uScriptFile=u''):
         """
         Init function for the script
 
-        :param string uScriptName: The name of the script (to be passed to all scripts)
+        :param string uObjectName: The name of the script (to be passed to all scripts)
         :param uScriptFile: The file of the script (to be passed to all scripts)
         """
 
-        cDiscoverScriptTemplate.Init(self, uScriptName, uScriptFile)
-        self.oScriptConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
     def GetHeaderLabels(self):
         return ['$lvar(5029)','$lvar(6002)','$lvar(5031)','$lvar(5032)']
 
     def ListDiscover(self):
-        dArgs                   = {}
-        dArgs["onlyonce"]       = 0
-        dArgs["ipversion"]      = "All"
+        dArgs                   = {"onlyonce": 0,
+                                   "ipversion": "All"}
         aDevices                = {}
 
         self.Discover(**dArgs)
@@ -153,7 +152,7 @@ class cScript(cDiscoverScriptTemplate):
         self.oReq.clear()
         uConfigName             = kwargs.get('configname',self.uConfigName)
         oSetting                = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        fTimeOut                = ToFloat(kwargs.get('timeout',oSetting.aScriptIniSettings.fTimeOut))
+        fTimeOut                = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
         self.oReq.uModels       = kwargs.get('models',"")
         bOnlyOnce               = ToBool(kwargs.get('onlyonce',"1"))
         uIPVersion              = kwargs.get('ipversion',"IPv4Only")
@@ -265,7 +264,7 @@ class cThread_Discover_EISCP(threading.Thread):
             return
 
         except Exception as e:
-            LogError(u'Error on discover EISCP (%s)' % (self.uIPVersion),e)
+            LogError(u'Error on discover EISCP (%s)' % self.uIPVersion, e)
             if oSocket:
                 oSocket.close()
             return

@@ -73,7 +73,7 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'RemoveDefinitionSetting',oAction)
+        self.oEventDispatcher.LogAction(u'RemoveDefinitionSetting',oAction)
         uDefinitionName = ReplaceVars(oAction.dActionPars.get("definitionname",""))
         uSettingVar     = ReplaceVars(oAction.dActionPars.get("settingname",""))
         uSettingVarOrg  = oAction.dActionPars.get("settingname","")
@@ -171,10 +171,9 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.bDoNext = True
-        self.oEvenDispatcher.aHiddenKeyWords.remove('configname')
-        self.oEvenDispatcher.LogAction(u'SaveInterfaceSetting',oAction)
-        self.oEvenDispatcher.aHiddenKeyWords.append('configname')
+        self.oEventDispatcher.aHiddenKeyWords.remove('configname')
+        self.oEventDispatcher.LogAction(u'SaveInterfaceSetting',oAction)
+        self.oEventDispatcher.aHiddenKeyWords.append('configname')
 
         uInterfaceName       = ReplaceVars(oAction.dActionPars.get("interfacename",""))
         uConfigName          = ReplaceVars(oAction.dActionPars.get("configname",""))
@@ -187,9 +186,9 @@ class cEventActionsSettings(cEventActionBase):
             oInterFace=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
 
         if oInterFace is None:
-            LogError(u'Action: Save Interface Setting failed: Interface: %s  Interface not found!' % (uInterfaceName))
+            LogError(u'Action: Save Interface Setting failed: Interface: %s  Interface not found!' % uInterfaceName)
             return 1
-        oInterFace.oInterFaceConfig.WriteDefinitionConfigPar(uSectionName=uConfigName, uVarName=uVarName, uVarValue=uVarValue, bForce=True)
+        oInterFace.oObjectConfig.WriteDefinitionConfigPar(uSectionName=uConfigName, uVarName=uVarName, uVarValue=uVarValue, bForce=True)
         return 0
 
     def ExecuteActionGetInterfaceSetting(self,oAction):
@@ -227,8 +226,7 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.bDoNext = True
-        self.oEvenDispatcher.LogAction(u'GetInterfaceSetting',oAction)
+        self.oEventDispatcher.LogAction(u'GetInterfaceSetting',oAction)
 
         uInterfaceName       = ReplaceVars(oAction.dActionPars.get("interfacename",""))
         uConfigName          = ReplaceVars(oAction.dActionPars.get("configname",""))
@@ -244,7 +242,7 @@ class cEventActionsSettings(cEventActionBase):
             LogError(u'Action: Get Interface Setting failed: Interface: %s  Interface not found!' % (uInterfaceName))
             return 1
 
-        SetVar(uVarName = uRetVar, oVarValue = oInterFace.oInterFaceConfig.GetSettingParFromIni(uConfigName,uVarName))
+        SetVar(uVarName = uRetVar, oVarValue = oInterFace.oObjectConfig.GetSettingParFromIni(uConfigName,uVarName))
 
         return 0
 
@@ -284,9 +282,7 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'GetSaveOrcaSetting',oAction)
-        self.oEvenDispatcher.bDoNext = True
-
+        self.oEventDispatcher.LogAction(u'GetSaveOrcaSetting',oAction)
         uConfigType          = ReplaceVars(oAction.dActionPars.get("configtype",""))
         uVarName             = ReplaceVars(oAction.dActionPars.get("varname",""))
         uVarValue            = oAction.dActionPars.get("varvalue","")

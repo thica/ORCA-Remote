@@ -156,21 +156,34 @@ class ITachIRDB(cBasePopup):
     def __init__(self):
         super(ITachIRDB,self).__init__()
 
-        self.oBrandsSelector = None
-        self.uOldBrand       = u''
-        self.uOldType        = u''
-        self.uOldModel       = u''
         self.aBrands         = []
-        self.aTypes          = []
         self.aModels         = []
-        self.dTranslations   = {}
-        self.oCodesetName    = None
-        self.oTextTypes      = None
-        self.oTextModels     = None
+        self.aTypes          = []
         self.bStopWait       = False
+        self.bStopWait       = False
+        self.dTranslations   = {}
+        self.IRDBInterface   = None
+        self.oBrandsSelector = None
+        self.oBtnBrands      = None
+        self.oBtnModels      = None
+        self.oBtnTypes       = None
+        self.oCodesetName    = None
+        self.oOptionOptimizeChannelSelect = None
+        self.oOptionWriteCCF = None
+        self.oOptionWriteITach = None
+        self.oProgressBar    = None
+        self.oSelector       = None
+        self.oTextBrands     = None
+        self.oTextModels     = None
+        self.oTextModels     = None
+        self.oTextTypes      = None
+        self.oTextTypes      = None
         self.uHost           = u''
-        self.uUser           = u''
+        self.uOldBrand       = u''
+        self.uOldModel       = u''
+        self.uOldType        = u''
         self.uPassword       = u''
+        self.uUser           = u''
 
     def ConvertItach2CCF(self):
         #todo : remove when we know, it is not used anymore

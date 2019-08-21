@@ -18,13 +18,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from collections                    import defaultdict
 from xml.etree.ElementTree          import tostring
 from kivy.logger                    import Logger
 from kivy.uix.screenmanager         import Screen
 from kivy.uix.widget                import Widget
 
-from ORCA.ui.BasePopup              import IsPopupActive
-from ORCA.ui.BasePopup              import CloseActivePopup
 from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
 from ORCA.utils.CachedFile          import CachedFile
 from ORCA.utils.LogError            import LogError
@@ -77,7 +76,7 @@ class cScreenPage(object):
         #ordered array of widgets
         self.aWidgets               = []
         #indexed array of widgets
-        self.dWidgets               = {}
+        self.dWidgets               = defaultdict(list)
 
         self.iESCPressCount         = 0
 
@@ -116,6 +115,7 @@ class cScreenPage(object):
         self.dFktsCreateWidget[oWidgetType.FileBrowser]      = self._AddWidgetFromXmlNode_Class,cWidgetFileBrowser
         self.dFktsCreateWidget[oWidgetType.NoWidget]         = self._AddWidgetFromXmlNode_None,None
         self.dFktsCreateWidget[oWidgetType.SkipWidget]       = self._AddWidgetFromXmlNode_Skip,None
+
 
     def InitPageFromXmlNode(self,oXMLNode):
         """ Get Page Definitions """
@@ -217,32 +217,33 @@ class cScreenPage(object):
 
     def _ReplaceWidgetFromXmlNode(self,oXMLNode, uReplaceWidgetName):
 
-        #first find the org Widget
-        oWidget=self.dWidgets.get(uReplaceWidgetName)
+        # first find the org Widgets
+        # if you will replace a widget, which is multiple on a page, the outcome is unpredictable
 
-        if oWidget is None:
-            return
+        for oWidget in self.dWidgets[uReplaceWidgetName]:
 
-        oXMLNode.set("posx","of:left:"+uReplaceWidgetName)
-        oXMLNode.set("posy","of:top:"+uReplaceWidgetName)
-        oXMLNode.set("width","of:width:"+uReplaceWidgetName)
-        oXMLNode.set("height","of:height:"+uReplaceWidgetName)
+            oXMLNode.set("posx","of:left:"+uReplaceWidgetName)
+            oXMLNode.set("posy","of:top:"+uReplaceWidgetName)
+            oXMLNode.set("width","of:width:"+uReplaceWidgetName)
+            oXMLNode.set("height","of:height:"+uReplaceWidgetName)
 
-        # Parse a spefific Widget from an xml definition
-        oTmpWidget=cWidgetBase()
-        #First get the widget type to know which widget to create
-        oTmpWidget.GetWidgetTypeFromXmlNode(oXMLNode)
-        self.dFktsCreateWidget[oTmpWidget.iWidgetType][0](oXMLNode, "",self.dFktsCreateWidget[oTmpWidget.iWidgetType][1])
-        self.dWidgets.pop(uReplaceWidgetName)
-        self.aWidgets.remove(oWidget)
-        if (oWidget.oObject) is not None:
-            oWidget.oObject.parent.remove_widget(oWidget.oObject)
-        #oNewWidget.Create(self.oWidgetBackGround.oObject)
+            # Parse a spefific Widget from an xml definition
+            oTmpWidget=cWidgetBase()
+            #First get the widget type to know which widget to create
+            oTmpWidget.GetWidgetTypeFromXmlNode(oXMLNode)
+            self.dFktsCreateWidget[oTmpWidget.iWidgetType][0](oXMLNode, "",self.dFktsCreateWidget[oTmpWidget.iWidgetType][1])
+
+            self.dWidgets.pop(uReplaceWidgetName)
+            self.aWidgets.remove(oWidget)
+            if oWidget.oObject is not None:
+                oWidget.oObject.parent.remove_widget(oWidget.oObject)
+            #oNewWidget.Create(self.oWidgetBackGround.oObject)
 
         return
 
     def RemoveWidget(self,oWidget):
         """ Removes a widget from the page """
+
         self.dWidgets.pop(oWidget.uName)
         self.aWidgets.remove(oWidget)
         if oWidget.oObject is not None:
@@ -294,7 +295,7 @@ class cScreenPage(object):
                     if not oTmpWidget.InitWidgetFromXml(oXMLNode,self, uAnchor):
                         return oTmpWidget
             self.aWidgets.append(oTmpWidget)
-            self.dWidgets[oTmpWidget.uName]=oTmpWidget
+            self.dWidgets[oTmpWidget.uName].append(oTmpWidget)
             self._AddElements(oXMLNode=oXMLNode, uAnchor=uAnchor)
         return oTmpWidget
 
@@ -302,14 +303,14 @@ class cScreenPage(object):
         oTmpAnchor=oClass()
         if oTmpAnchor.InitWidgetFromXml(oXMLNode,self, uAnchor):
             self.aWidgets.append(oTmpAnchor)
-            self.dWidgets[oTmpAnchor.uName]=oTmpAnchor
+            self.dWidgets[oTmpAnchor.uName].append(oTmpAnchor)
             self._AddElements(oXMLNode=oXMLNode, uAnchor=oTmpAnchor.uName)
 
     def _AddWidgetFromXmlNode_Text(self,oXMLNode, uAnchor,oClass):
         oTmpText=oClass()
         if oTmpText.InitWidgetFromXml(oXMLNode,self, uAnchor):
             self.aWidgets.append(oTmpText)
-            self.dWidgets[oTmpText.uName]=oTmpText
+            self.dWidgets[oTmpText.uName].append(oTmpText)
             if oTmpText.bIsClock:
                 self.aClockWidgetsIndex.append(len(self.aWidgets)-1)
             if oTmpText.bIsDate:

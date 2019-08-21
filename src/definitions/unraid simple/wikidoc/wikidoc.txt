@@ -4,6 +4,8 @@ WikiDoc:Context:DefinitionsForUser
 WikiDoc:Page:Userdescription Definition unraid simple
 WikiDoc:TOCTitle:unraid simple
 
+= Unraid Simple =
+
 The unraid simple definition has only two function. It can power on or switch off the unraid server (NAS).
 As it uses Wake On Lan for Power On and Telnet to Power Off it might fit for other devices as well.
 Switch off is not fully reliable, but this is more an Unraid bug.
@@ -26,6 +28,7 @@ WikiDoc:Context:Reference_Definitions
 WikiDoc:Page:Reference Definition unraid simple
 WikiDoc:TOCTitle:unraid simple
 
+= Overview =
 
 The unraid simple definition has only two function. It can power on or switch off the unraid server (NAS).
 As it uses Wake On Lan for Power On and Telnet to Power Off it might fit for other devices as well.

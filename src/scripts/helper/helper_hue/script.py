@@ -108,10 +108,12 @@ class cScript(cBaseScript):
 
     def __init__(self):
         cBaseScript.__init__(self)
-        self.uType = u'HELPERS'
-    def Init(self,uScriptName,uScriptFile=u''):
+        self.uType              = u'HELPERS'
+        self.uIniFileLocation   = u"none"
+
+    def Init(self,uObjectName,uScriptFile=u''):
         """ Main Init, loads the HueConverter Script"""
-        cBaseScript.Init(self,uScriptName,uScriptFile)
+        cBaseScript.Init(self,uObjectName,uScriptFile)
         self.oHueConverter = self._LoadHueConverter()
         self.dStatus = {}
 
@@ -322,7 +324,7 @@ class cScript(cBaseScript):
             self.oResultParser.SetVar2(str(dLight['state'].get('any_on', "true")), "", uPrefix, u'Storing Group Configuration', uAddName=u"_all_on" + uIndex)
             self.oResultParser.SetVar2(dLight['state'].get('class', 'unknown'), "", uPrefix, u'Storing Group Configuration', uAddName=u"_class" + uIndex)
 
-            if (x!=0.0 or y!=0.0):
+            if x!=0.0 or y!=0.0:
                 tGammut = self._GetGamut(dLight.get('modelid', ""))
                 oConverter = self.oHueConverter.Converter(tGammut)
                 r, g, b = oConverter.xy_to_rgb(x, y, bri)

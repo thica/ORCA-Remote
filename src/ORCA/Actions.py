@@ -63,7 +63,7 @@ class cActions(object):
             self.LoadActionsSub(oET_Root ,u'actions',u'action',self.dActionsCommands,oFnActionFile.string)
 
         except Exception as e:
-            uMsg=LogError(u'TheScreen: Fatal Error:Load Appstart Action XmlFile (%s)' % (oFnActionFile.string),e)
+            uMsg=LogError(u'TheScreen: Fatal Error:Load Appstart Action XmlFile (%s)' % oFnActionFile.string, e)
             ShowErrorPopUp(uTitle="Fatal Error",uMessage=uMsg,bAbort=True)
 
         aActions=self.dActionsPageStart.get(u'earlyappstart')
@@ -72,16 +72,14 @@ class cActions(object):
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         oET_Root=None
 
-    def __ParseXMLActions(self, oXMLNode, aActions):
+    def __ParseXMLActions(self, oXMLNode, aActions,uFunctionName):
+        bFound = False
         for oXMLAction in oXMLNode.findall('action'):
-            oTmpAction=cAction()
-            oTmpAction.ParseAction(oXMLAction,None)
-            aActions.append(oTmpAction)
+            aActions.append(cAction(pars=oXMLAction,functionname=uFunctionName))
+            bFound = True
         # If we got no child actions, then we use the Command Tag as a single action
-        if len(aActions)==0:
-            oTmpAction=cAction()
-            oTmpAction.ParseAction(oXMLNode,None)
-            aActions.append(oTmpAction)
+        if bFound == False:
+            aActions.append(cAction(pars=oXMLNode,functionname=uFunctionName))
 
     def LoadActionsSub(self,oET_Root,uSegmentTag, uListTag,aTargetDic,uFileName=u''):
         """
@@ -124,7 +122,7 @@ class cActions(object):
                         if uReplaceOption=='renamemeifexist' and bOldExist:
                             uName=uNewname
 
-                        self.__ParseXMLActions(oET_Includes,aActions)
+                        self.__ParseXMLActions(oXMLNode=oET_Includes,aActions=aActions,uFunctionName=uName)
                         aTargetDic[uName]=aActions
 
         except Exception as e:
@@ -157,19 +155,21 @@ class cActions(object):
         else:
             Logger.debug("Action:"+uActionName)
             for oAction in aActions:
+                # noinspection PyUnresolvedReferences
                 if oAction.iActionId==Globals.oActions.oActionType.EndIf:
                     self.iIndent-=2
                 oAction.Dump(4+self.iIndent)
+                # noinspection PyUnresolvedReferences
                 if oAction.iActionId==Globals.oActions.oActionType.If:
                     self.iIndent+=2
 
     def SetActionList(self, uActionName, aActions):
-        ''' Adds an Actionlist to the global list of Actions '''
+        """ Adds an Actionlist to the global list of Actions """
         self.dActionsCommands[uActionName] = aActions
 
 
     def GetActionList(self, uActionName, bNoCopy):
-        ''' Returns a (copy of an) action (list)  '''
+        """ Returns a (copy of an) action (list)  """
 
         if bNoCopy:
             return self.dActionsCommands.get(uActionName)
@@ -177,7 +177,7 @@ class cActions(object):
             return self._CopyActonList(self.dActionsCommands,uActionName)
 
     def GetPageStartActionList(self, uActionName, bNoCopy):
-        ''' Returns a (copy of an) action (list)  '''
+        """ Returns a (copy of an) action (list)  """
 
         if bNoCopy:
             return self.dActionsPageStart.get(uActionName)
@@ -185,14 +185,14 @@ class cActions(object):
             return self._CopyActonList(self.dActionsPageStart,uActionName)
 
     def GetPageStopActionList(self, uActionName, bNoCopy):
-        ''' Returns a (copy of an) action (list)  '''
+        """ Returns a (copy of an) action (list)  """
         if bNoCopy:
             return self.dActionsPageStop.get(uActionName)
         else:
             return self._CopyActonList(self.dActionsPageStop,uActionName)
 
     def _CopyActonList(self,dActionList,uActionName):
-        ''' Creates a copy of an action list  '''
+        """ Creates a copy of an action list  """
         aList = dActionList.get(uActionName)
         if aList is None:
             return None

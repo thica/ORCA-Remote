@@ -232,7 +232,7 @@ class cScrollableLabelLargeInner(RecycleView):
         if self.bNoXScroll:
             self.layout_manager.width=self.width
         else:
-            self.layout_manager.width=(self.iMaxCharwidth)*self.iMaxCharsPerLine
+            self.layout_manager.width= self.iMaxCharwidth * self.iMaxCharsPerLine
         self.viewclass              = self.cLineLayout
         self.refresh_from_data()
 
@@ -247,9 +247,10 @@ class cScrollableLabelLargeInner(RecycleView):
         if self.size==[100,100]:
             return
 
-        bDoLineBreak=False
-        self.iMaxCharwidth=self.oLabel._label.get_extents('W')[0]
-        self.iMaxCharsPerLine=int(self.width/self.iMaxCharwidth)
+        aData                   = []
+        bDoLineBreak            = False
+        self.iMaxCharwidth      = self.oLabel._label.get_extents('W')[0]
+        self.iMaxCharsPerLine   = int(self.width/self.iMaxCharwidth)
 
         if not self.bNoXScroll:
             self.aData = self.text.split('\n')
@@ -295,7 +296,7 @@ class cScrollableLabelLargeInner(RecycleView):
                             aData.append(u'')
                     self.oLabel.text = ""
 
-            self.aData=aData
+            self.aData = aData
             self.SetData(aData)
         else:
             self.SetData(self.aData)

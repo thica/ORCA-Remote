@@ -81,17 +81,22 @@ class cScript(cToolsTemplate):
 
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
-            '''
+            """
             :param oScript: cScript
-            '''
+            """
 
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.uHost               = oScript.oEnvParameter.uWikiServer
-            self.aScriptIniSettings.uFTPPath            = oScript.oEnvParameter.uWikiPath
-            self.aScriptIniSettings.uUser               = oScript.oEnvParameter.uWikiUser
-            self.aScriptIniSettings.uPassword           = oScript.oEnvParameter.uWikiPassword
-            self.aScriptIniSettings.uWikiTargetFolder   = oScript.oEnvParameter.uWikiTargetFolder
-            self.aScriptIniSettings.uWikiApp            = oScript.oEnvParameter.uWikiApp
+            self.aIniSettings.uHost               = oScript.oEnvParameter.uWikiServer
+            self.aIniSettings.uFTPPath            = oScript.oEnvParameter.uWikiPath
+            self.aIniSettings.uUser               = oScript.oEnvParameter.uWikiUser
+            self.aIniSettings.uPassword           = oScript.oEnvParameter.uWikiPassword
+            self.aIniSettings.uWikiTargetFolder   = oScript.oEnvParameter.uWikiTargetFolder
+            self.aIniSettings.uWikiApp            = oScript.oEnvParameter.uWikiApp
+
+        def WriteConfigToIniFile(self):
+            # this avoids, that the Ini file will be changed from given command line / environment settings
+            # nevertheless, once changes have been writen to the ini file, they will be used , regardless of any env / commandline parameter
+            pass
 
     class cScriptParameter(cParameter):
         def AddParameter(self,oParser):
@@ -110,18 +115,18 @@ class cScript(cToolsTemplate):
         self.uSettingTitle   = u"WikiDoc"
         self.oEnvParameter   = self.cScriptParameter()
 
-    def Init(self,uScriptName,uScriptFile=u''):
+    def Init(self,uObjectName,uScriptFile=u''):
         """
         Init function for the script
 
-        :param string uScriptName: The name of the script (to be passed to all scripts)
+        :param string uObjectName: The name of the script (to be passed to all scripts)
         :param uScriptFile: The file of the script (to be passed to all scripts)
         """
 
-        cToolsTemplate.Init(self, uScriptName, uScriptFile)
-        self.oScriptConfig.dDefaultSettings['User']['active']                        = "enabled"
-        self.oScriptConfig.dDefaultSettings['Password']['active']                    = "enabled"
-        self.oScriptConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        cToolsTemplate.Init(self, uObjectName, uScriptFile)
+        self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
 
     def RunScript(self, *args, **kwargs):
         cToolsTemplate.RunScript(self,*args, **kwargs)
@@ -130,14 +135,12 @@ class cScript(cToolsTemplate):
 
     def WikiDoc(self, *args, **kwargs):
         oSetting                    = self.GetSettingObjectForConfigName(self.uConfigName)
-        dArgs                       = {}
-
-        dArgs["Host"]              = kwargs.get("Host",oSetting.aScriptIniSettings.uHost)
-        dArgs["WikiPath"]          = kwargs.get("WikiPath",oSetting.aScriptIniSettings.uWikiPath)
-        dArgs["User"]              = kwargs.get("WikiUser",oSetting.aScriptIniSettings.uUser)
-        dArgs["Password"]          = kwargs.get("WikiPassword",oSetting.aScriptIniSettings.uPassword)
-        dArgs["WikiTargetFolder"]  = kwargs.get("WikiTargetFolder",oSetting.aScriptIniSettings.uWikiTargetFolder)
-        dArgs["WikiApp"]           = kwargs.get("WikiApp",oSetting.aScriptIniSettings.uWikiApp)
+        dArgs                       = {"Host":              kwargs.get("Host",              oSetting.aIniSettings.uHost),
+                                       "WikiPath":          kwargs.get("WikiPath",          oSetting.aIniSettings.uWikiPath),
+                                       "User":              kwargs.get("WikiUser",          oSetting.aIniSettings.uUser),
+                                       "Password":          kwargs.get("WikiPassword",      oSetting.aIniSettings.uPassword),
+                                       "WikiTargetFolder":  kwargs.get("WikiTargetFolder",  oSetting.aIniSettings.uWikiTargetFolder),
+                                       "WikiApp":           kwargs.get("WikiApp",           oSetting.aIniSettings.uWikiApp)}
 
         oWikiDoc                    = cWikiDoc(**dArgs)
         oWikiDoc.Run()
@@ -148,14 +151,14 @@ class cScript(cToolsTemplate):
         Globals.oNotifications.RegisterNotification("STARTSCRIPTWIKIDOC", fNotifyFunction=self.WikiDoc,   uDescription="Script WikiDoc")
 
         oScriptSettingPlugin               = cScriptSettingPlugin()
-        oScriptSettingPlugin.uScriptName   = self.uScriptName
+        oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "ORCA"
         oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
         oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_WIKIDOC_4)"
         oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_WIKIDOC_1)","desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_WIKIDOC_3)","id":"button_notification_STARTSCRIPTWIKIDOC"}]}']
-        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uScriptName,oScriptSettingPlugin=oScriptSettingPlugin)
+        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
     def GetConfigJSON(self):
-        return {"WikiPath":         {"type": "string", "active": "enabled", "order": 16, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_5)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_6)","key": "WikiPath", "default":self.oParameter.uWikiPath, "section": "$var(ScriptConfigSection)"},
-                "WikiTargetFolder": {"type": "string", "active": "enabled", "order": 17, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_7)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_8)", "key": "WikiTargetFolder", "default": Globals.oPathTmp.string, "section": "$var(ScriptConfigSection)"}
+        return {"WikiPath":         {"type": "string", "active": "enabled", "order": 16, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_5)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_6)","key": "WikiPath", "default":self.oEnvParameter.uWikiPath, "section": "$var(ObjectConfigSection)"},
+                "WikiTargetFolder": {"type": "string", "active": "enabled", "order": 17, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_7)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_8)", "key": "WikiTargetFolder", "default": Globals.oPathTmp.string, "section": "$var(ObjectConfigSection)"}
                 }

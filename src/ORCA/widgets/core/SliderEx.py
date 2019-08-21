@@ -42,25 +42,25 @@ class cSliderEx(Slider):
         self.uMoveType=u''
         self.canvas.clear()
         if self.orientation==u'horizontal':
-            fGap = (self.height - sp(32))/2
-            self.x = self.x + fGap
-            self.fBackGroundSize=self.height/4 - (fGap)*2
-            tKnobPos=(self.value_pos[0] - (self.height/2), self.value_pos[1] )
-            tKnobSize=(self.height, self.height)
-            self.oKnob=BorderImage(border=(0, 0, 0, 0),pos= tKnobPos, size= tKnobSize,source=self.uButtonPic)
+            fGap                    = (self.height - sp(32))/2
+            self.x                  = self.x + fGap
+            self.fBackGroundSize    = self.height / 4 - fGap * 2
+            tKnobPos                = (self.value_pos[0] - (self.height/2), self.value_pos[1] )
+            tKnobSize               = (self.height, self.height)
+            self.oKnob              = BorderImage(border=(0, 0, 0, 0),pos= tKnobPos, size= tKnobSize,source=self.uButtonPic)
             self.canvas.add(Color(1., 1., 1.))
-            self.oBorderImage=BorderImage(border=(0, 0, 0, 0), pos= (self.x, self.center_y - (self.fBackGroundSize/2)) ,size= (self.width-fGap, self.fBackGroundSize), source=self.uBackgroundPic)
+            self.oBorderImage       = BorderImage(border=(0, 0, 0, 0), pos= (self.x, self.center_y - (self.fBackGroundSize/2)) ,size= (self.width-fGap, self.fBackGroundSize), source=self.uBackgroundPic)
             self.canvas.add(self.oBorderImage)
         else:
-            fGap = (self.width - sp(32))/2
-            self.y = self.y + fGap
-            self.height = self.height - (fGap)*2
-            self.fBackGroundSize=self.width/4
-            tKnobPos=(self.value_pos[0] , self.value_pos[1] - (self.width/2))
-            tKnobSize=(self.width, self.width)
-            self.oKnob=BorderImage(border=(0, 0, 0, 0),pos= tKnobPos, size= tKnobSize,source=self.uButtonPic)
+            fGap                    = (self.width - sp(32))/2
+            self.y                  = self.y + fGap
+            self.height             = self.height - fGap * 2
+            self.fBackGroundSize    = self.width/4
+            tKnobPos                = (self.value_pos[0] , self.value_pos[1] - (self.width/2))
+            tKnobSize               = (self.width, self.width)
+            self.oKnob              = BorderImage(border=(0, 0, 0, 0),pos= tKnobPos, size= tKnobSize,source=self.uButtonPic)
             self.canvas.add(Color(1., 1., 1.))
-            self.oBorderImage=BorderImage(border=(0, 0, 0, 0), pos= (self.center_x - (self.fBackGroundSize/2), self.y ) ,size= (self.fBackGroundSize, self.height-fGap), source=self.uBackgroundPic)
+            self.oBorderImage       = BorderImage(border=(0, 0, 0, 0), pos= (self.center_x - (self.fBackGroundSize/2), self.y ) ,size= (self.fBackGroundSize, self.height-fGap), source=self.uBackgroundPic)
             self.canvas.add(self.oBorderImage)
 
         self.canvas.add(self.oKnob)

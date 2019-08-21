@@ -69,10 +69,8 @@ class cCustomTimer(object):
             return True
 
         aActions=Globals.oActions.GetActionList(uActionName = self.uActionName, bNoCopy = False)
-        if aActions is not None:
-            #Logger.debug ('CustomTimer: Scheduling Timer:' + self.sTimerName+':'+self.sActionName)
-            #This function need to return True, otherwise the timer will stop
-            Globals.oEvents.ExecuteActions(aActions=aActions,oParentWidget=None)
-        else:
-            Logger.error("Can''t find timer action:"+self.uActionName)
+        if aActions is None:
+            aActions = Globals.oEvents.CreateSimpleActionList([{'string': self.uActionName, 'name': self.uActionName, "force":True}])
+
+        Globals.oEvents.ExecuteActions(aActions=aActions, oParentWidget=None)
         return True

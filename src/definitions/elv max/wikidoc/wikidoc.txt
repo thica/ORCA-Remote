@@ -4,6 +4,8 @@ WikiDoc:Context:DefinitionsForUser
 WikiDoc:Page:Userdescription Definition elv_max
 WikiDoc:TOCTitle:elv max
 
+= ELV Max =
+
 The ELV MAX definition control radiator thermostats from ELV and IQ3. It uses the cube it transfer commands to the thermostats.
 Remark: Vacation mode is not supportet (Date / Time Picker Widget not available by now)
 Remark: Return of current temperature is not reliable, no clue, why (but it looks like a cube bug).
@@ -30,7 +32,8 @@ WikiDoc:Doc
 WikiDoc:Context:Reference_Definitions
 WikiDoc:Page:Reference Definition elv max
 WikiDoc:TOCTitle:elv max
-s
+
+= Overview =
 
 The ELV MAX definition control radiator thermostats from ELV and IQ3. It uses the cube it transfer commands to the thermostats. It is designed to use the elv_max interface with the default codeset for it.
 All actions are within the customcommands action file, the layout is for large portrait and and landscape devices. Smaller devices will work, but controls will be small.
@@ -67,14 +70,13 @@ This definition uses the following definitionvars:
 This template defines the following settings:
 
 == Interfaces ==
-$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN : The main interface to control the device
-$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN : The main configuration name to control the device
+* $dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN : The main interface to control the device
+* $dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN : The main configuration name to control the device
 
 == Others ==
-$dvar(definition_alias_elv_max)_max_temperature: Maximum Temperature for the Knob
-$dvar(definition_alias_elv_max)_min_temperature: Minimum Temperature for the Knob
-$dvar(definition_alias_mediaplayer_template)_NAVIGATIONBAR : xml block name of the navigation bar
-
+* $dvar(definition_alias_elv_max)_max_temperature: Maximum Temperature for the Knob
+* $dvar(definition_alias_elv_max)_min_temperature: Minimum Temperature for the Knob
+* $dvar(definition_alias_mediaplayer_template)_NAVIGATIONBAR : xml block name of the navigation bar
 
 = How to import =
 

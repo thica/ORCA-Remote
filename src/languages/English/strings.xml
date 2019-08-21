@@ -546,6 +546,9 @@
   <string id="5035">Hostname</string>
   <string id="5040">Warning</string>
   <string id="5041">Zipping File</string>
+  <string id="5042">ORCA requires write access, please grant</string>
+  <string id="5043">Grant Access</string>
+
 
   <!--Generic Interfaces Config Strings for multi interface use-->
   <string id="6000">Codeset</string>

@@ -85,6 +85,7 @@ def ToBytes(uStr):
         if PY2:
             bRet = bytes(uStr)
         else:
+            # noinspection PyArgumentList
             bRet = bytes(uStr, 'utf-8')
     except Exception as e:
         LogError(u'ToBytes: Convert error, using fallback', e)
@@ -259,25 +260,33 @@ def ToDic(uString):
     try:
         if uString.startswith(u'{'):
             try:
-                uRet=json.loads(uString)
+                return json.loads(uString)
             except Exception:
                 pass
+
         if not isinstance(uRet, dict):
             try:
-                uRet=ast.literal_eval(uString)
+                if "\\" in uString:
+                    uString2 = uString.replace("\\","***BaCkSlAsH***")
+                    uRet     = ast.literal_eval(uString2)
+                    DictUnescaceBackslash(uRet)
+                    return uRet
+                else:
+                    return ast.literal_eval(uString)
             except Exception:
                 pass
+
         if not isinstance(uRet, dict):
             uString = uString.replace("\'", "\"")
 
         if uString.startswith(u'{'):
             try:
-                uRet=json.loads(uString)
+                return json.loads(uString)
             except Exception:
                 pass
         if not isinstance(uRet, dict):
             try:
-                uRet=ast.literal_eval(uString)
+                return ast.literal_eval(uString)
             except Exception:
                 pass
 
@@ -289,6 +298,25 @@ def ToDic(uString):
         LogErrorSmall(u'ToDic: Dictionary Convert error',e)
         LogErrorSmall(uString)
     return uString
+
+def DictUnescaceBackslash(oDict):
+    """
+    Unescapes previous escapes backslashes in dict strings
+    :param dict oDict:
+    """
+
+    try:
+        for key, value in iteritems(oDict):
+            if isinstance(value, dict):
+                DictUnescaceBackslash(value)
+            elif isinstance(value, string_types):
+                oDict[key]=oDict[key].replace("***BaCkSlAsH***","\\")
+            elif isinstance(value, list):
+                for elem in value:
+                    DictUnescaceBackslash(elem)
+    except Exception as e:
+        LogError(u'DictUnescaceBackslash',e)
+
 
 def ToList(uString):
     """
@@ -487,9 +515,3 @@ def EscapeUnicode(Obj):
 
     return ToUnicode(Obj.encode('ascii', 'xmlcharrefreplace'))
 
-    '''
-    if PY2:
-        return ToUnicode(Obj.encode('ascii', 'xmlcharrefreplace'))
-    else:
-        return Obj
-    '''

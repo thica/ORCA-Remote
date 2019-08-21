@@ -106,6 +106,11 @@ class cLanguage(object):
         self.dIDToString                = {}
         self.oLocales                   = cLocales()
         self.aLoadedFiles               = []
+        self.oFnLanguagePrimary         = None
+        self.oFnLanguageEnglish         = None
+        self.oFnLanguageFallBackPrimary = None
+        self.oFnLanguageFallBackEngLish = None
+
         # add some basic strings, even before we load the language files (for messages)
         self.SetString("5000", "Continue")
         self.SetString("5001", "Yes")
@@ -118,6 +123,7 @@ class cLanguage(object):
         self.SetString("5009", "Cancel")
         self.SetString("5010", "Message")
         self.SetString("452",  "OK")
+
 
     def Init(self):
         self.oFnLanguagePrimary              = cFileName(Globals.oPathLanguageRoot + Globals.uLanguage) + u'strings.xml'
@@ -223,7 +229,7 @@ class cLanguage(object):
                 oFnFile = cFileName().ImportFullPath(Globals.oScripts.dScriptPathList[uContext].string + "/" + Globals.uScriptLanguageFileTail)
                 self._LoadXmlFile(oFnFile)
         elif uType == "INTERFACE":
-            oFnFile = cFileName().ImportFullPath(Globals.oFnInterfaceLanguageFallBack.string % (uContext))
+            oFnFile = cFileName().ImportFullPath(Globals.oFnInterfaceLanguageFallBack.string % uContext)
             self._LoadXmlFile(oFnFile)
             if not Globals.uLanguage==u'English':
                 oFnFile = cFileName().ImportFullPath(Globals.oFnInterfaceLanguage.string % (uContext))

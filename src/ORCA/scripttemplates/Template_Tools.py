@@ -32,9 +32,9 @@ class cToolsTemplate(cBaseScript):
         self.iHash      = 0
         self.aScriptSettingPlugins = []
 
-    def Init(self,uScriptName,oFnScript=None):
-        cBaseScript.Init(self,uScriptName,oFnScript)
-        self.oFnXML     = cFileName(Globals.oScripts.dScriptPathList[self.uScriptName])+"script.xml"
+    def Init(self,uObjectName,oFnObject=None):
+        cBaseScript.Init(self,uObjectName,oFnObject)
+        self.oFnXML     = cFileName(Globals.oScripts.dScriptPathList[self.uObjectName])+"script.xml"
 
     def RunScript(self, *args, **kwargs):
         """ main entry point to run the script """

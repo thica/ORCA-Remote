@@ -64,14 +64,14 @@ class cInterface(cBaseInterFace):
         self.aSettings   = {}
 
     def GetConfigJSON(self):
-        return {"MAC": {"active": "enabled", "order": 0, "type": "string", "title": "$lvar(IFACE_WOL_3)", "desc": "$lvar(IFACE_WOL_4)",  "section": "$var(InterfaceConfigSection)","key": "MAC",  "default":"aa:bb:cc:dd:ee:ff"}
+        return {"MAC": {"active": "enabled", "order": 0, "type": "string", "title": "$lvar(IFACE_WOL_3)", "desc": "$lvar(IFACE_WOL_4)",  "section": "$var(ObjectConfigSection)","key": "MAC",  "default":"aa:bb:cc:dd:ee:ff"}
                 }
 
     def DoAction(self,oAction):
         self.ShowDebug(u'Request Action Wakeup')
         oSetting=self.GetSettingObjectForConfigName(oAction.dActionPars.get(u'configname',u''))
         if oAction.dActionPars.get("commandname")=="power_on":
-            return self.WakeOnLan(oSetting.aInterFaceIniSettings.uMAC)
+            return self.WakeOnLan(oSetting.aIniSettings.uMAC)
         else:
             Logger.error("wake_lan interface only supports the power_on command")
             return False

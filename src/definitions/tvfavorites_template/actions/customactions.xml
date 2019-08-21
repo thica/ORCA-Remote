@@ -12,7 +12,7 @@
      </action>
 
      <action name="$dvar(definition_alias_tvfavorites_template)_switchbouquet_byindex">
-        <action name="get bouqet num"     string="setvar BOUQETNUM=$var($dvar(definition_alias_tvfavorites_template)_switchbouquet_byindex_parameter_DROPDOWNINDEX)" />
+        <action name="get bouqet num"     string="setvar BOUQETNUM=$par(DROPDOWNINDEX)" />
         <action name="adjust bouqet num"  string="modifyvar"  varname="BOUQETNUM" operator="increase" parameter1="1"  parameter2="10" />
         <action name="and call switching function" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var(BOUQETNUM)" />
      </action>
@@ -20,30 +20,31 @@
      <action name="$dvar(definition_alias_tvfavorites_template)_switchbouquet">
         <action name="Check if widget exists on current page"         string="getwidgetattribute" widgetname="Button CH1" attributename="exists" retvar="TMPWIDGETEXISTS" />
         <action name="leave if we havent imported the tv channels"    string="if" condition="$var(TMPWIDGETEXISTS)==1"/>
-          <action name="get bouquet number" string="setvar $dvar(definition_alias_tvfavorites_template)_bouquet=$var($dvar(definition_alias_tvfavorites_template)_switchbouquet_parameter_BOUQUETNUM)" />
-          <action name="and loop through channels of bouquet" string="forin" varname="$dvar(definition_alias_tvfavorites_template)_tvlogo[$var($dvar(definition_alias_tvfavorites_template)_bouquet)][]"  dstvarname="TMP_CHANNEL" level="2" actionname="$dvar(definition_alias_tvfavorites_template)_switchbouquet_sub" />
+          <action name="get bouquet number" string="setvar $dvar(definition_alias_tvfavorites_template)_bouquet=$par(BOUQUETNUM)" />
+          <action name="and loop through channels of bouquet" string="forin" varname="$dvar(definition_alias_tvfavorites_template)_tvlogo[$var($dvar(definition_alias_tvfavorites_template)_bouquet)][]" level="2" actionname="$dvar(definition_alias_tvfavorites_template)_switchbouquet_sub" />
         <action name="endif" string="endif" />
      </action>
 
     <action name="$dvar(definition_alias_tvfavorites_template)_switchbouquet_sub" >
       <action name="compose widget name part 1"                     string="setvar tmpwidgetname=Button CH"   />
-      <action name="compose widget name part 2"                     string="modifyvar" varname="tmpwidgetname" operator="concatenate" parameter1="$var(TMP_CHANNEL_index)"  />
+      <action name="compose widget name part 2"                     string="modifyvar" varname="tmpwidgetname" operator="concatenate" parameter1="$par(forin_index)"  />
 
-      <action name="check if text or image" string="modifyvar" varname="$var(TMP_CHANNEL_value)" operator="find" parameter1="text:" parameter2="tmpfindresult"/>"
+      <action name="check if text or image" string="modifyvar" varname="$par(forin_value)" operator="find" parameter1="text:" parameter2="tmpfindresult"/>"
       <action name="if do not have text" string="goto channeltext" condition="$var(tmpfindresult)=0" />
       <action name="delete tv text" string="setwidgetattribute"  widgetname="$var(tmpwidgetname)" attributename="caption"       attributevalue="" />
-      <action name="set tvlogo"     string="setwidgetattribute"  widgetname="$var(tmpwidgetname)" attributename="picturenormal" attributevalue="$var(TMP_CHANNEL_value)" condition="$var(TMP_CHANNEL_value)!=discover"/>
-      <action name="set tvlogo"     string="setwidgetattribute"  widgetname="$var(tmpwidgetname)" attributename="picturenormal" attributevalue="transparentpic" condition="$var(TMP_CHANNEL_value)==discover"/>
+      <action name="set tvlogo"     string="setwidgetattribute"  widgetname="$var(tmpwidgetname)" attributename="picturenormal" attributevalue="$par(forin_value)" condition="$par(forin_value)!=discover"/>
+      <action name="set tvlogo"     string="setwidgetattribute"  widgetname="$var(tmpwidgetname)" attributename="picturenormal" attributevalue="transparentpic" condition="$par(forin_value)==discover"/>
       <action name="exit function" string="goto switchbouquet_exit"  />
       <action name="channeltext"  />
-      <action name="Remove text:"  string="modifyvar"   varname="TMP_CHANNEL_value" operator="getpart" parameter1="5"  />
+      <action name="Remove text:"  string="modifyvar"   varname="$dvar(definition_alias_tvfavorites_template)_switchbouquet_sub_parameter_forin_value" operator="getpart" parameter1="5"  />
+
       <action name="delete tvlogo" string="setwidgetattribute"  widgetname="$var(tmpwidgetname)" attributename="picturenormal" attributevalue="transparentpic" />
-      <action name="set tv text"   string="setwidgetattribute"  widgetname="$var(tmpwidgetname)" attributename="caption"       attributevalue="$var(TMP_CHANNEL_value)" />
+      <action name="set tv text"   string="setwidgetattribute"  widgetname="$var(tmpwidgetname)" attributename="caption"       attributevalue="$par(forin_value)" />
       <action name="switchbouquet_exit"  />
     </action>
 
     <action name="$dvar(definition_alias_tvfavorites_template)_switchchannel" >
-      <action name="compose channel name part 1" string="setvar tmpchannelnum=$dvar(definition_alias_tvfavorites_template)_tvchannel[$var($dvar(definition_alias_tvfavorites_template)_bouquet)][$var($dvar(definition_alias_tvfavorites_template)_switchchannel_parameter_CHANNELNUM)]"   />
+      <action name="compose channel name part 1" string="setvar tmpchannelnum=$dvar(definition_alias_tvfavorites_template)_tvchannel[$var($dvar(definition_alias_tvfavorites_template)_bouquet)][$par(CHANNELNUM)]"   />
       <action name="compose cannel  name part 2" string="modifyvar" operator="fromvar" varname="tmpchannelnum" />
       <action name="Switch Channel" string="Send Channel Select" commandparameter='{"CHANNELNUM":"$var(tmpchannelnum)"}' />"
     </action>

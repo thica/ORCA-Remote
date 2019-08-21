@@ -59,6 +59,8 @@ WikiDoc:Context:Reference_Definitions
 WikiDoc:Page:Reference Definition philips_hue
 WikiDoc:TOCTitle:philips_hue
 
+= Overview =
+
 The Phillips Hue definition controls Philips Hue devices by controlling the hue bridge. You need to pair Orca with the bridge.
 You can use two different screens to control the lamps. One screen you detailled control options including color control.
 The second screen gives you the option to control and dim all lamps at the same time.

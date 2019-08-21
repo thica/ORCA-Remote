@@ -52,14 +52,14 @@ from ORCA.utils.Network     import Ping
 
 class cInterface(cBaseInterFace):
 
-    def Init(self, uInterFaceName, oFnInterFace=None):
-        cBaseInterFace.Init(self, uInterFaceName, oFnInterFace)
-        self.oInterFaceConfig.dDefaultSettings['Host']['active']  = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['Host']['desc']    = "$lvar(IFACE_PING_1)"
+    def Init(self, uObjectName, oFnObject=None):
+        cBaseInterFace.Init(self, uObjectName, oFnObject)
+        self.oObjectConfig.dDefaultSettings['Host']['active']  = "enabled"
+        self.oObjectConfig.dDefaultSettings['Host']['desc']    = "$lvar(IFACE_PING_1)"
 
     def DoAction(self,oAction):
         oSetting=self.GetSettingObjectForConfigName(oAction.dActionPars.get(u'configname',u''))
-        if Ping(oSetting.aInterFaceIniSettings.uHost):
+        if Ping(oSetting.aIniSettings.uHost):
             return 0
         else:
             return 1

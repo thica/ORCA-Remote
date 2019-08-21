@@ -31,12 +31,14 @@ __all__ = ['ShowErrorPopUp','ShowMessagePopUp']
 
 class cShowErrorPopUp(cRaiseQuestion):
     """ Class to show an error popup """
-    def ShowError(self,uTitle='',uMessage='',bAbort=False,uTextContinue='',uTextQuit='',uStringDetails=u''):
+    def ShowError(self,uTitle=u'',uMessage=u'',bAbort=False,uTextContinue=u'',uTextQuit=u'',uStringDetails=u''):
         """Show an Error Message as Popup
-
-        sTitle:      Title for Popup
-        sMessage:    Message to Show
-        bAbort:      Terminates application after showing the popup (User decision)
+        :param unicode uTitle: Title for Popup
+        :param unicode uMessage: Message to Show
+        :param bool bAbort: Terminates application after showing the popup (User decision)
+        :param unicode uTextContinue: Caption for the continue button
+        :param unicode uTextQuit: Caption for te Quit Button
+        :param unicode uStringDetails: The details text
         Returns:     Nothing
         """
 
@@ -48,10 +50,12 @@ class cShowErrorPopUp(cRaiseQuestion):
             self.RaiseQuestion(uTitle=uTitle,uMessage=uMessage, fktYes=self.fktContinue,uStringYes=uTextContinue,uStringDetails=uStringDetails)
         return
 
+    # noinspection PyUnusedLocal,PyMethodMayBeStatic
     def fktErrorPopUpClose(self, *largs):
         """ Stops ORCA on user request """
         Globals.oApp.StopApp()
 
+    # noinspection PyUnusedLocal,PyMethodMayBeStatic
     def fktContinue(self, *largs):
         """ Stops waiting and continues ORCA """
         StopWait()

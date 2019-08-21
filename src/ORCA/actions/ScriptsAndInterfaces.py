@@ -40,10 +40,10 @@ __all__ = ['cEventActionsScriptsAndInterfaces']
 class cEventActionsScriptsAndInterfaces(cEventActionBase):
     """ Actions for for Scripts and Interfaces (sendcommand, runscript,...)) """
 
-    def __init__(self, oEvenDispatcher):
+    def __init__(self, oEventDispatcher):
         # to pass sendcommand actionpars to codeset actionpars
         self.dActionPars={}
-        super(cEventActionsScriptsAndInterfaces, self).__init__(oEvenDispatcher)
+        super(cEventActionsScriptsAndInterfaces, self).__init__(oEventDispatcher)
 
     def ExecuteActionRegisterScriptGroup(self,oAction):
         """
@@ -69,11 +69,9 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'RegisterScriptGroup:',oAction)
-
+        self.oEventDispatcher.LogAction(u'RegisterScriptGroup:',oAction)
         uGroupName = oAction.dActionPars.get("groupname","")
         Globals.oScripts.RegisterScriptGroup(uGroupName)
-
         return -2
 
 
@@ -118,7 +116,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'RunScript:',oAction)
+        self.oEventDispatcher.LogAction(u'RunScript:',oAction)
 
         uScriptName             = oAction.dActionPars.get("scriptname","")
         dParameters             = ToDic(ReplaceVars(oAction.dActionPars.get("commandparameter","{}")))
@@ -175,14 +173,12 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
 
         uAction  = ReplaceVars(oAction.dActionPars.get("actionname",""))
         uRetVar  = ReplaceVars(oAction.dActionPars.get("retvar",""))
-
-        self.oEvenDispatcher.bDoNext = True
-        uInterFace, uConfigName = self.oEvenDispatcher.GetTargetInterfaceAndConfig(oAction)
+        uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction)
 
         if uAction!=u'' or uRetVar!=u'':
-            self.oEvenDispatcher.LogAction(u'Add Trigger',oAction,u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
+            self.oEventDispatcher.LogAction(u'Add Trigger',oAction,u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
         else:
-            self.oEvenDispatcher.LogAction(u'Del Trigger',oAction,u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
+            self.oEventDispatcher.LogAction(u'Del Trigger',oAction,u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
 
         oInterface=Globals.oInterFaces.dInterfaces.get(uInterFace)
         if oInterface:
@@ -242,7 +238,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         uCommandName               = ReplaceVars(oAction.dActionPars.get("commandname",""))
 
         try:
-            uInterFace, uConfigName = self.oEvenDispatcher.GetTargetInterfaceAndConfig(oAction)
+            uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction)
 
             oInterface=Globals.oInterFaces.dInterfaces.get(uInterFace)
             if oInterface:
@@ -260,7 +256,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
                     SetVar(uVarName = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = u'1')
                     LogError(u'Action: Send Command failed #1: [%s] Interface: %s Config: %s : Interface not found!' % (uCommandName, uInterFace,uConfigName))
                 else:
-                    LogError(u'Action: Send Command failed #2: [%s]:  No Interface given!' % (uCommandName))
+                    LogError(u'Action: Send Command failed #2: [%s]:  No Interface given!' % uCommandName)
                 return 1
         except Exception as e:
             SetVar(uVarName = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = u"1")
@@ -303,7 +299,6 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         uInterFace  = ReplaceVars(oAction.dActionPars.get(u'interface',''))
         uConfigName = ReplaceVars(oAction.dActionPars.get(u'configname',''))
         bGui        = ToBool(ReplaceVars(oAction.dActionPars.get(u'gui','0')))
-
         Logger.debug(u'Action: discover: Interface: %s Config: %s' % (uInterFace, uConfigName))
         return Globals.oInterFaces.DiscoverAll(uInterFaceName = uInterFace, uConfigName = uConfigName, bGui = bGui)
 
@@ -331,6 +326,9 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         </syntaxhighlight></div>
         WikiDoc:End
         """
+
+        uInterFace  = u""
+        uConfigName = u""
 
         try:
             uInterFace  = oAction.dActionPars.get(u'interface')

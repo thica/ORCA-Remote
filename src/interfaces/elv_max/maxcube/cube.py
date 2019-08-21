@@ -475,5 +475,5 @@ def temp_and_time(temp, time):
 
 
 def to_hex(value):
-    "Return value as hex word"
+    """Return value as hex word"""
     return format(value, "02x")

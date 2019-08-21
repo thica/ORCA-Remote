@@ -4,6 +4,8 @@ WikiDoc:Context:DefinitionsForUser
 WikiDoc:Page:Userdescription Definition appfavorites_template
 WikiDoc:TOCTitle:appfavorites_template
 
+= Appfavorites Template =
+
 This is a template definition not for single / direct use. It provides the settings and widgets to start applications on your remote device (if supported).
 
 WikiDoc:End
@@ -13,6 +15,8 @@ WikiDoc:Doc
 WikiDoc:Context:Reference_Definitions
 WikiDoc:Page:Reference Definition appfavorites_template
 WikiDoc:TOCTitle:appfavorites_template
+
+= Overview =
 
 This template definition provides the settings and elements to start applications. Please notice, that the left and right blocks and the screenshot below are defined to use them in your definition (landscape and portrait mode). There are popups defined as well.
 

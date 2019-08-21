@@ -7,4 +7,7 @@
     <string id="apptemplate_10502">Programm Start Befehl</string>
     <string id="apptemplate_10503">Kommandozeile um das Programm zu starten</string>
     <string id="apptemplate_10504">Programm Favoriten</string>
+    <string id="apptemplate_10505">Programm Stop Befehl</string>
+    <string id="apptemplate_10506">Kommandozeile um das Programm zu beenden</string>
+
 </strings>

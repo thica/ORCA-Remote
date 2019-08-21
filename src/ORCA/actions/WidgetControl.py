@@ -82,8 +82,7 @@ class cEventActionsWidgetControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.bDoNext = True
-        self.oEvenDispatcher.LogAction(u'LoadElement',oAction)
+        self.oEventDispatcher.LogAction(u'LoadElement',oAction)
         oDef=None
 
         uFnElement = oAction.dActionPars.get("filename","")
@@ -173,7 +172,7 @@ class cEventActionsWidgetControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.bDoNext = False
+        self.oEventDispatcher.bDoNext = False
         uWidgetName       = ReplaceVars(oAction.dActionPars.get("widgetname",""))
         uOption           = ReplaceVars(oAction.dActionPars.get("option",""))
         bIgnoreMissing    = ToBool(ReplaceVars(oAction.dActionPars.get("ignoremissing","0")))
@@ -198,7 +197,7 @@ class cEventActionsWidgetControl(cEventActionBase):
                         LogError("UpdateWidget: wrong index:[%s][%d]" % (Globals.oTheScreen.oCurrentPage.uPageName,iDateWidgetIndex))
             return -2
 
-        self.oEvenDispatcher.LogAction(u'UpdateWidget',oAction)
+        self.oEventDispatcher.LogAction(u'UpdateWidget',oAction)
         if oAction.oParentWidget is None:
             oParentScreenPage=Globals.oTheScreen.oCurrentPage
         else:
@@ -250,9 +249,7 @@ class cEventActionsWidgetControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'AddGestures',oAction)
-
-        self.oEvenDispatcher.bDoNext = True
+        self.oEventDispatcher.LogAction(u'AddGestures',oAction)
         uWidgetName    = ReplaceVars(oAction.dActionPars.get("widgetname",""))
         uGestureName   = ReplaceVars(oAction.dActionPars.get("gesturename",""))
         uActionName    = ReplaceVars(oAction.dActionPars.get("actionname",""))
@@ -329,7 +326,7 @@ class cEventActionsWidgetControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'SetWidgetAttribute',oAction)
+        self.oEventDispatcher.LogAction(u'SetWidgetAttribute',oAction)
 
         uWidgetName       = ReplaceVars(oAction.dActionPars.get("widgetname",""))
         uAttributeName    = ReplaceVars(oAction.dActionPars.get("attributename",""))
@@ -337,6 +334,7 @@ class cEventActionsWidgetControl(cEventActionBase):
         uTouchType        = ReplaceVars(oAction.dActionPars.get("touchtype",""))
         uAutoUpDate       = ReplaceVars(oAction.dActionPars.get("autoupdate",""))
         bIgnoreMissing    = ToBool(ReplaceVars(oAction.dActionPars.get("ignoremissing","0")))
+        self.oEventDispatcher.bDoNext = False
 
         try:
             uPageName=u''
@@ -474,7 +472,7 @@ class cEventActionsWidgetControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'GetWidgetAttribute',oAction)
+        self.oEventDispatcher.LogAction(u'GetWidgetAttribute',oAction)
 
         uWidgetName       = ReplaceVars(oAction.dActionPars.get("widgetname",""))
         uAttributeName    = ReplaceVars(oAction.dActionPars.get("attributename",""))

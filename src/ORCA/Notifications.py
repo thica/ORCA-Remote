@@ -32,7 +32,10 @@ class cNotifications(object):
         self.dNotificationsHash = {}
         self.dFilterPageNames   = {}
 
-    def RegisterNotification(self,uNotification,fNotifyFunction, uDescription="",bQuiet=False,aValueLinks=[],**kwargs):
+    def RegisterNotification(self, uNotification, fNotifyFunction, uDescription="", bQuiet=False, aValueLinks=None, **kwargs):
+
+        if aValueLinks is None:
+            aValueLinks = []
 
         dArgs                            = copy(kwargs)
         dArgs["notificationdescription"] = uDescription
@@ -44,17 +47,14 @@ class cNotifications(object):
         aNotificationFunctions           = self.dNotifications.get(uNotification, [])
 
         if iHash in self.dNotificationsHash:
-            bFound = True
+            Logger.warning("Duplicate notification registration %s:%s, replace old one" % (uNotification,dArgs["notificationdescription"]))
 
-        if not bFound:
-            dEntry = {"function":fNotifyFunction,"args":dArgs,"hash":iHash,"quiet":bQuiet,"valuelinks": aValueLinks}
-            aNotificationFunctions.append(dEntry)
-            self.dNotifications[uNotification]  = aNotificationFunctions
-            self.dNotificationsHash[iHash]      = dEntry
-            if uFilterPageName:
-                self.dFilterPageNames[uNotification+"_"+uFilterPageName] = iHash
-        else:
-            Logger.warning("Skippimg duplicate notification registration %s:%s" % (uNotification,dArgs["notificationdescription"]))
+        dEntry = {"function":fNotifyFunction,"args":dArgs,"hash":iHash,"quiet":bQuiet,"valuelinks": aValueLinks}
+        aNotificationFunctions.append(dEntry)
+        self.dNotifications[uNotification]  = aNotificationFunctions
+        self.dNotificationsHash[iHash]      = dEntry
+        if uFilterPageName:
+            self.dFilterPageNames[uNotification+"_"+uFilterPageName] = iHash
 
         return iHash
 
@@ -72,7 +72,7 @@ class cNotifications(object):
             if uFilterKey in self.dFilterPageNames:
                 del self.dFilterPageNames[uFilterKey]
         else:
-            Logger.error("Try to Degister notification with wrong hash")
+            Logger.error("Tried to Degister notification with wrong hash")
 
     def SendNotification(self,uNotification, **kwargs):
         dRet = {}

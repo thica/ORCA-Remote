@@ -4,7 +4,7 @@
     <entry>
       <name>ORCA Core Files</name>
       <description language='English'>ORCA Core Files necessary for proper operation (fonts, pics, actions,..)</description>
-      <description language='German'>Untentbehrliche ORCA Dateien (Schriften, Bilder, Aktionen)</description>
+      <description language='German'>Unentbehrliche ORCA Dateien (Schriften, Bilder, Aktionen)</description>
       <author>Carsten Thielepape</author>
       <version>3.70</version>
       <minorcaversion>3.7.0</minorcaversion>

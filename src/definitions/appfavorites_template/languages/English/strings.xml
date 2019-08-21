@@ -8,5 +8,6 @@
     <string id="apptemplate_10502">App start command</string>
     <string id="apptemplate_10503">Command to start the application</string>
     <string id="apptemplate_10504">Application Favorites</string>
-
+    <string id="apptemplate_10505">App stop command</string>
+    <string id="apptemplate_10506">Command to stop the application</string>
 </strings>

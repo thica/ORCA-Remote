@@ -690,7 +690,7 @@ def Var_LoadFile(uVarName, uFileName):
         uValue = LoadFile(oFileName)
         SetVar(uVarName=uVarName, oVarValue=uValue)
     except Exception as e:
-        LogError(u'Var_LoadFile: Error Loading File Content (%s:%s)' % (uVarName, oFileName.string), e)
+        LogError(u'Var_LoadFile: Error Loading File Content (%s:%s)' % (uVarName, uFileName), e)
         return u''
     return uValue
 

@@ -157,7 +157,7 @@ class cWidgetSlider(cWidgetBase):
     def OnNotifyChange(self,instance):
         """ will be called, when the slider will be moved """
 
-        if (self.bDiscardMoves) and (instance.uMoveType==u'move'):
+        if self.bDiscardMoves and (instance.uMoveType == u'move'):
             return
 
         if not self.bEnabled:

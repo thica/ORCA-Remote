@@ -21,16 +21,23 @@
 
 from   kivy.logger           import Logger
 
-def GetAndroidModule(uModuleName):
-    lClasses = ('org.kivy.android.','org.renpy.android.')
+def GetAndroidModule(uModuleName, uParClass = None):
+    if uParClass is not None:
+        lClasses = []
+        lClasses.append(uParClass+".")
+    else:
+        lClasses = ('org.kivy.android.','org.renpy.android.')
+
     oModule  = None
+    uLib     = ""
 
     try:
+        # noinspection PyUnresolvedReferences
         from jnius import autoclass
 
         for uClass in lClasses:
             try:
-                uLib=uClass+uModuleName
+                uLib = uClass + uModuleName
                 Logger.debug("Try to load Android Lib from %s" % uLib)
                 oModule = autoclass(uLib)
                 Logger.debug("Sucessfully loaded Android Lib from %s" % uLib)
@@ -38,8 +45,8 @@ def GetAndroidModule(uModuleName):
             except Exception:
                 pass
         if oModule is None:
-            Logger.error("Unable able to load Android %s Lib " % uModuleName)
+            Logger.error("Unable able to load Android %s Lib [%s]" % (uModuleName,uLib))
     except Exception as e:
-        Logger.error("Unable able to load Android %s Lib [%s]" %(uModuleName ,str(e)))
+        Logger.error("Unable able to load Android %s [%s] Lib [%s]" % (uModuleName ,uLib,str(e)))
 
     return oModule

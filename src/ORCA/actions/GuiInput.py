@@ -28,13 +28,14 @@ from ORCA.utils.wait.StartWait  import StartWait
 from ORCA.utils.wait.StopWait   import StopWait
 from ORCA.vars.Replace          import ReplaceVars
 from ORCA.utils.TypeConvert     import ToLong
+
 import ORCA.Globals as Globals
 __all__ = ['cEventActionsGuiInput']
 
 class cEventActionsGuiInput(cEventActionBase):
     """ Actions Gui Input (inputfields, MessageBoxes, ProgressBars) """
-    def __init__(self, oEvenDispatcher):
-        super(cEventActionsGuiInput, self).__init__(oEvenDispatcher)
+    def __init__(self, oEventDispatcher):
+        super(cEventActionsGuiInput, self).__init__(oEventDispatcher)
         self.oQuestionAction  = None
         self.oInputKeyboard   = None
 
@@ -80,7 +81,7 @@ class cEventActionsGuiInput(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'ShowProgressBar',oAction)
+        self.oEventDispatcher.LogAction(u'ShowProgressBar',oAction)
 
         uTitle   = ReplaceVars(oAction.dActionPars.get("title",""))
         uMessage = ReplaceVars(oAction.dActionPars.get("message",""))
@@ -88,18 +89,19 @@ class cEventActionsGuiInput(cEventActionBase):
         lCurrent = ToLong(uCurrent)
         uMax     = ReplaceVars(oAction.dActionPars.get("max",""))
         lMax     = ToLong(uMax)
+        self.oEventDispatcher.bDoNext = False
 
         if uTitle!=u'' and  lMax!=0:
             oProgressBar=cProgressBar()
             oProgressBar.Show(uTitle,uMessage,lMax)
-            self.oEvenDispatcher.aProgressBars.append(oProgressBar)
+            self.oEventDispatcher.aProgressBars.append(oProgressBar)
             return 0
 
-        if len(self.oEvenDispatcher.aProgressBars)==0:
+        if len(self.oEventDispatcher.aProgressBars)==0:
             LogError(u'Action: Showprogressbar Failed, no active progressar')
             return 1
 
-        oProgressBar=self.oEvenDispatcher.aProgressBars[-1]
+        oProgressBar=self.oEventDispatcher.aProgressBars[-1]
 
         if uTitle==u'' and  uCurrent!='':
             oProgressBar.Update(lCurrent,uMessage)
@@ -107,7 +109,7 @@ class cEventActionsGuiInput(cEventActionBase):
 
         if uTitle==u'' and uMessage==u'' and lCurrent==0:
             oProgressBar.ClosePopup()
-            self.oEvenDispatcher.aProgressBars.pop()
+            self.oEventDispatcher.aProgressBars.pop()
             return 0
 
         LogError(u'Action: Showprogressbar Failed, wrong parameter combination')
@@ -142,7 +144,8 @@ class cEventActionsGuiInput(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'ShowInputField: DestVar:',oAction)
+        self.oEventDispatcher.bDoNext = False
+        self.oEventDispatcher.LogAction(u'ShowInputField: DestVar:',oAction)
         uVarName    = oAction.dActionPars.get("varname","")
         self.oInputKeyboard=ShowKeyBoard(uVarName,None)
         return -2
@@ -154,7 +157,7 @@ class cEventActionsGuiInput(cEventActionBase):
         WikiDoc:Page:Actions-ShowQuestion
         WikiDoc:TOCTitle:showquestion
         = showquestion =
-        This actions open a separate page where the user can answer a question. Can be used to show a popup message as well
+        This action open a separate page where the user can answer a question. Can be used to show a popup message as well
 
         <div style="overflow:auto; ">
         {| class="wikitable"
@@ -190,14 +193,15 @@ class cEventActionsGuiInput(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'ShowQuestion',oAction)
+        self.oEventDispatcher.LogAction(u'ShowQuestion',oAction)
 
         oAction.uTitle     = ReplaceVars(oAction.dActionPars.get("title",""))
         oAction.uMessage   = ReplaceVars(oAction.dActionPars.get("message",""))
         oAction.uActionYes = ReplaceVars(oAction.dActionPars.get("actionyes",""))
         oAction.uActionNo  = ReplaceVars(oAction.dActionPars.get("actionno",""))
         uClose             = ReplaceVars(oAction.dActionPars.get("close",""))
-        uDontStopQueue      = ReplaceVars(oAction.dActionPars.get("dontstopqueue",""))
+        uDontStopQueue     = ReplaceVars(oAction.dActionPars.get("dontstopqueue",""))
+        self.oEventDispatcher.bDoNext = False
 
         if uClose:
             if self.oQuestionAction:
@@ -228,7 +232,5 @@ class cEventActionsGuiInput(cEventActionBase):
 
     def __fktExecuteActionShowQuestionOption(self,uActionName):
         if not uActionName==u'':
-            oAction=cAction()
-            oAction.dActionPars={'string':'call','actionname':uActionName}
-            oAction.iActionId = Globals.oActions.oActionType.Call
-            self.oEvenDispatcher.ExecuteAction(oAction)
+            aActions = Globals.oEvents.CreateSimpleActionList([{'name': 'ShowQuestionTask', 'string': 'call', 'actionname': uActionName}])
+            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions, oParentWidget=None)

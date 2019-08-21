@@ -1,0 +1,33 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Templates
+WikiDoc:Page:Userdescription Mediaplayer Template Enigma2
+WikiDoc:TOCTitle:Enigma 2
+
+= Enigma 2 =
+
+This wizard template configures Enigma 2 settings into the the mediaplayer template.
+
+Features:
+
+* Discovers your Enigma 2 Receiver (not available in deep standby or if switched off)
+* Auto configures your channels and bouquets
+* Power On either by WakeOnLan (if supported) or by WebInterface (normal standby , not deep standby)
+* Direct volume control, pulls current volume from the receiver
+
+Remarks:
+
+* The Engima Webinterface must be installed on the receiver
+* Password protected Webinterface is not tested
+* You should install the TV Logo Pack Large first
+* It pulls the first 29 channels from each of the first 4 bouquets
+* In the definition settings you can reload the channel settings if you changed them on your receiver
+* Some settings requre root telnet access, so you need to configure it the interface settings
+
+[[File:mpt_enigma_main.png|link=]]
+
+The main page in large screen and landscape mode
+
+
+WikiDoc:End
+'''

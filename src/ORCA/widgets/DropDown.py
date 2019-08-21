@@ -92,6 +92,9 @@ class cWidgetDropDown(cWidgetButton):
         self.uActionNames     = u''
         self.tFrameColor      = []
         self.bSorted          = False
+        self.oXMLNode         = None
+        self.iTmpAnchorWidth  = 0
+        self.iTmpAnchorHeight = 0
 
     def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
 
@@ -162,7 +165,7 @@ class cWidgetDropDown(cWidgetButton):
                     self.oXMLNode.set("action", "NoAction")
 
                     if self.uAnchorName:
-                        oTmpAnchor = self.oParentScreenPage.dWidgets.get(self.uAnchorName)
+                        oTmpAnchor = self.oParentScreenPage.dWidgets[self.uAnchorName][0]
                         oTmpAnchor.iWidth  = self.iTmpAnchorWidth
                         oTmpAnchor.iHeight = self.iTmpAnchorHeight
 

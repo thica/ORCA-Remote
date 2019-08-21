@@ -251,7 +251,8 @@ class ServerHandler(asynchat.async_chat):
 class Server(asyncore.dispatcher):
 
     def __init__ (self, port, handler):
-        self.handler = handler
+        self.handler        = handler
+        self.oServerHandler = None
 
         # Call parent class constructor explicitly
         asyncore.dispatcher.__init__(self)

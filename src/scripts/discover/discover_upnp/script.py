@@ -40,6 +40,7 @@ from ORCA.utils.TypeConvert                 import ToList
 from ORCA.utils.TypeConvert                 import ToBool
 from ORCA.utils.TypeConvert                 import ToUnicode
 from ORCA.utils.TypeConvert                 import ToBytes
+from ORCA.utils.PyXSocket                   import cPyXSocket
 
 from ORCA.vars.QueryDict                    import QueryDict
 
@@ -130,7 +131,7 @@ class cScript(cDiscoverScriptTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.fTimeOut                     = 15.0
+            self.aIniSettings.fTimeOut                     = 15.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
@@ -140,19 +141,18 @@ class cScript(cDiscoverScriptTemplate):
         self.aThreads        = []
         self.oReq            = QueryDict()
 
-    def Init(self,uScriptName,uScriptFile=u''):
-        cDiscoverScriptTemplate.Init(self, uScriptName, uScriptFile)
-        self.oScriptConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+    def Init(self,uObjectName,uScriptFile=u''):
+        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
     def GetHeaderLabels(self):
         return ['$lvar(5029)','$lvar(5035)','$lvar(5030)','$lvar(5031)','$lvar(5032)','$lvar(SCRIPT_DISC_UPNP_1)']
 
     def ListDiscover(self):
 
-        dArgs                   = {}
-        dArgs["onlyonce"]       = 0
-        dArgs["servicetypes"]   = "ssdp:all"
-        dArgs["ipversion"]      = "All"
+        dArgs                   = {"onlyonce":      0,
+                                   "servicetypes":  "ssdp:all",
+                                   "ipversion":     "All"}
         aDevices                = {}
 
         self.Discover(**dArgs)
@@ -188,7 +188,7 @@ class cScript(cDiscoverScriptTemplate):
         self.oReq.uModels        = kwargs.get('models',"")
         self.oReq.uFriendlyName  = kwargs.get('prettyname',"")
         self.oReq.bReturnPort    = ToBool(kwargs.get('returnport',"0"))
-        fTimeOut                 = ToFloat(kwargs.get('timeout',oSetting.aScriptIniSettings.fTimeOut))
+        fTimeOut                 = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
         uParST                   = kwargs.get('servicetypes',"ssdp:all")
         uIPVersion               = kwargs.get('ipversion',"IPv4Only")
         aST                      = uParST.split(',')
@@ -326,7 +326,7 @@ class cThread_Discover_UPNP(threading.Thread):
             return
 
         except Exception as e:
-            LogError(u'Error on discover uPnP (%s)' % (self.uIPVersion), e)
+            LogError(u'Error on discover uPnP (%s)' % self.uIPVersion, e)
             if oSocket:
                 oSocket.close()
             return
@@ -351,13 +351,10 @@ class cThread_Discover_UPNP(threading.Thread):
             iUDP_PORT   = 1900
             uMessage = u'M-SEARCH * HTTP/1.1\r\nHOST: %s:%d\r\nMAN: "ssdp:discover"\r\nMX: 2\r\nST: %s\r\n\r\n' % (uUDP_IP, iUDP_PORT, self.uST)
 
-            oSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            oSocket = cPyXSocket(socket.AF_INET, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
             oSocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
-            if PY2:
-                oSocket.sendto(uMessage, (uUDP_IP, iUDP_PORT))
-            else:
-                oSocket.sendto(ToBytes(uMessage), (uUDP_IP, iUDP_PORT))
+            oSocket.SendTo(uMessage, (uUDP_IP, iUDP_PORT))
             return oSocket
 
         if self.uIPVersion == "IPv6Only":
@@ -373,13 +370,10 @@ class cThread_Discover_UPNP(threading.Thread):
             iUDP_PORT = 1900
             uMessage = u'M-SEARCH * HTTP/1.1\r\nHOST: [%s]:%d\r\nMAN: "ssdp:discover"\r\nMX: 2\r\nST: %s\r\n\r\n' % (uUDP_IP, iUDP_PORT, self.uST)
 
-            oSocket = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+            oSocket = cPyXSocket(socket.AF_INET6, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
             oSocket.setsockopt(IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 2)
-            if PY2:
-                oSocket.sendto(uMessage, (uUDP_IP, iUDP_PORT))
-            else:
-                oSocket.sendto(ToBytes(uMessage), (uUDP_IP, iUDP_PORT))
+            oSocket.SendTo(uMessage, (uUDP_IP, iUDP_PORT))
             return oSocket
 
         return None

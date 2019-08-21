@@ -19,30 +19,32 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from os.path                 import sep, expanduser, isdir
 from kivy.logger             import Logger
-from ORCA.utils.Platform     import OS_ToPath
+# noinspection PyUnresolvedReferences
+from jnius                   import autoclass
 from ORCA.utils.Path         import cPath
 
 
 def GetUserDownloadsDataPath():
     """ returns the path to the download folder """
-    oRetPath = cPath(OS_ToPath(expanduser('~') + sep + 'Downloads'))
-    Logger.debug("Download Folder  = "+oRetPath.string)
+    uRetPath=u"/"
+    try:
+        Environment = autoclass('android.os.Environment')
+        uRetPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+        Logger.debug("Android Download Folder = "+uRetPath)
+    except Exception as e:
+        Logger.error("GetUserDownloadsDataPath for Android failed:"+str(e))
+    oRetPath = cPath(uRetPath)
 
-    if oRetPath.Exists():
-        return oRetPath
+    if not oRetPath.IsDir():
+        Logger.error("Downloadpath not valid:" + oRetPath.string)
 
-    Logger.error("Downloadpath not valid:"+oRetPath.string)
-    return cPath('')
+    return oRetPath
 
 
-#todo: enable as soon we can use the new toolchain
+
 '''
 from plyer                   import storagepath
-from kivy.logger             import Logger
-from ORCA.utils.Path         import cPath
-
 def GetUserDownloadsDataPath():
     """ returns the path to the download folder """
     uRetPath=u"/"

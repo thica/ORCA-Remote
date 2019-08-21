@@ -37,6 +37,8 @@
 
     <!-- Timer for the clock -->
     <action name="update page clocks" string="definetimer" timername="UpdatePageTimer" interval="1" switch="on" actionname="Update Page Clocks"/>
+    <!-- Timer for the resume cecker -->
+    <action name="check resume timer" string="definetimer" timername="CheckOnSleepTimer" interval="2" switch="on" actionname="checkonsleep"/>
 
     <!-- If ESC on First page , asked to finish app -->
     <action name="ESC Key Handler QuitApp" string="registernotification" filterpagename="FIRSTPAGE" notification="on_key_ESC" notifyaction="askonexit"/>
@@ -78,9 +80,9 @@
     <!-- If we press the close button on the powerstatus-settings page, goto to the settings page -->
     <action name="Button Close Powerstatus settings Key Handler Settings" string="registernotification" filterpagename="Page_PowerStati" notification="closesetting_powerstati"  notifyaction="gotosettingspage"/>
       <!-- If we press ESC on the download-settings page, goto to the settings page -->
-    <action name="ESC Key Handler download Settings" string="registernotification" filterpagename="Page_Settings_Download" notification="on_key_ESC"  notifyaction=""/>
+    <action name="ESC Key Handler download Settings" string="registernotification" filterpagename="Page_Settings_Download" notification="on_key_ESC"  notifyaction="gotosettingspage"/>
     <!-- If we press the close button on the download-settings page, goto to the settings page -->
-    <action name="Button Close download settings Key Handler Settings" string="registernotification" filterpagename="Page_Settings_Download" notification="=closesetting_download"  notifyaction="gotosettingspage"/>
+    <action name="Button Close download settings Key Handler Settings" string="registernotification" filterpagename="Page_Settings_Download" notification="closesetting_download"  notifyaction="gotosettingspage"/>
     <!-- If we press ESC on the logfile page, goto to the settings page -->
     <action name="ESC Key Handler Logfile" string="registernotification" filterpagename="Page_ShowFile" notification="on_key_ESC"  notifyaction="gotosettingspage"/>
     <!-- If we press ESC on the wait page, goto to the last page -->

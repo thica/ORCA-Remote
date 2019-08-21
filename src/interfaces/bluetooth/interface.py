@@ -152,7 +152,7 @@ class cInterface(cBaseInterFace):
 
     class cBluetoothSocket(object):
         def __init__(self):
-
+            self.uDeviceName = u""
             try:
                 if Globals.uPlatform==u'android':
                     from jnius import autoclass
@@ -197,11 +197,11 @@ class cInterface(cBaseInterFace):
 
                     if len(service_matches) == 0:
                         first_match = service_matches[0]
-                        self.aInterFaceIniSettings.uPort = first_match["port"]
-                        self.aInterFaceIniSettings.uHost = first_match["host"]
+                        self.aIniSettings.uPort = first_match["port"]
+                        self.aIniSettings.uHost = first_match["host"]
 
                         self.oSocket=BluetoothSocket( RFCOMM )
-                        self.oSocket.connect((self.aInterFaceIniSettings.uHost, self.aInterFaceIniSettings.uPort))
+                        self.oSocket.connect((self.aIniSettings.uHost, self.aIniSettings.uPort))
                         return True
                     LogError(u'Bluetooth device not found',None)
                     return False
@@ -217,7 +217,7 @@ class cInterface(cBaseInterFace):
                     oSocket.close()
                     return True
             except Exception as e:
-                Logger.error("Closing bluetooth connection for device %s failed" % (self.uDeviceName))
+                Logger.error("Closing bluetooth connection for device %s failed" % self.uDeviceName)
                 return False
 
         def send_all(self,uCommand):
@@ -258,17 +258,17 @@ class cInterface(cBaseInterFace):
             try:
                 try:
                     self.oSocket = self.oInterFace.cBluetoothSocket()
-                    self.oSocket.connect(self.aInterFaceIniSettings.uHost)
+                    self.oSocket.connect(self.aIniSettings.uHost)
                 except Exception as msg:
                     self.oSocket.close()
                     self.oSocket = None
                 if self.oSocket is None:
-                    self.ShowError(u'Interface not connected: Cannot open socket:'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,msg)
+                    self.ShowError(u'Interface not connected: Cannot open socket:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,msg)
                     self.bOnError=True
                     return
                 self.bIsConnected =True
             except Exception as e:
-                self.ShowError(u'Interface not connected: Cannot open socket #2:'+self.aInterFaceIniSettings.uHost.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Interface not connected: Cannot open socket #2:'+self.aIniSettings.uHost.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
                 return
 
@@ -390,16 +390,16 @@ class cInterface(cBaseInterFace):
                 uMsg=oAction.uCmd
                 try:
 
-                    uMsg=ReplaceVars(uMsg,self.uInterFaceName+'/'+oSetting.uConfigName)
+                    uMsg=ReplaceVars(uMsg,self.uObjectName+'/'+oSetting.uConfigName)
                     uMsg=ReplaceVars(uMsg)
-                    oAction.uGetVar         = ReplaceVars(oAction.uGetVar,self.uInterFaceName+'/'+oSetting.uConfigName)
+                    oAction.uGetVar         = ReplaceVars(oAction.uGetVar,self.uObjectName+'/'+oSetting.uConfigName)
                     oAction.uGetVar         = ReplaceVars(oAction.uGetVar)
 
                     uMsg=uMsg[:-1]+",\"id\":\"" +oSetting.uID+"\"}"
                     oSetting.uMsg=uMsg
                     oSetting.uRetVar=uRetVar
                     oSetting.uRetVar=uRetVar
-                    self.ShowInfo (u'Sending Command: '+uMsg + ' to '+oSetting.aInterFaceIniSettings.uHost+':'+oSetting.aInterFaceIniSettings.uPort,oSetting.uConfigName)
+                    self.ShowInfo (u'Sending Command: '+uMsg + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
                     #All response comes to receiver thread, so we should hold the queue until vars are set
                     if oSetting.oAction.bWaitForResponse:
                         StartWait(self.iWaitMs)
@@ -419,10 +419,10 @@ class cInterface(cBaseInterFace):
                     SetVar(uVarName = uRetVar,oVarValue = u"Error")
 
         if oSetting.bIsConnected:
-            if oSetting.aInterFaceIniSettings.iTimeToClose==0:
+            if oSetting.aIniSettings.iTimeToClose==0:
                 oSetting.Disconnect()
-            elif oSetting.aInterFaceIniSettings.iTimeToClose!=-1:
+            elif oSetting.aIniSettings.iTimeToClose!=-1:
                 Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aInterFaceIniSettings.iTimeToClose)
+                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
         return iRet
 

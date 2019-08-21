@@ -186,6 +186,7 @@ def Orca_includesub(elem, loader,uOrgDefinitionContext, oDef, uFileName="Unknown
 
     elemens=[]
     oReplacementVars=cDefinitionVars()
+    aSaveReplacementVars = []
     for e in elem:
         elemens.append(e)
 
@@ -396,7 +397,7 @@ def SplitMax(uPar):
 
     tRet=uPar.split(u":")
     if len(tRet)>1:
-        return (float(tRet[0]),float(tRet[1]))
+        return float(tRet[0]), float(tRet[1])
     else:
         return(float(uPar),0)
 

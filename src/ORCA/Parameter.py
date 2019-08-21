@@ -57,10 +57,10 @@ class cParameter(QueryDict):
 
     def AddParameter(self,oParser):
 
-        oParser.add_argument('--debugpath',        default=GetEnvVar('DEBUGPATH'),                                  action=cParserAction, oParameter=self, dest="oPathDebug",     help='Changes the path for ORCA files (can be passed as DEBUGPATH environment var)')
-        oParser.add_argument('--logpath',          default=GetEnvVar('ORCALOGPATH'),                                action=cParserAction, oParameter=self, dest="oPathLog",       help='Changes the path for ORCA/Kivy log files (can be passed as ORCALOGPATH environment var)')
-        oParser.add_argument('--tmppath',          default=GetEnvVar('ORCATMPPATH'),                                action=cParserAction, oParameter=self, dest="oPathTmp",       help='Changes the path for ORCA temp folder (can be passed as ORCATMPPATH environment var)')
-        oParser.add_argument('--showborders',      default=GetEnvVar('ORCASHOWBORDERS'),                            action=cParserAction, oParameter=self, dest="bShowBorders",   help='Flag 0/1 to show borders around all widgets (can be passed as ORCASHOWBORDERS environment var)')
+        oParser.add_argument('--debugpath',    default=GetEnvVar('DEBUGPATH'),       action=cParserAction, oParameter=self, dest="oPathDebug",     help='Changes the path for ORCA files (can be passed as DEBUGPATH environment var)')
+        oParser.add_argument('--logpath',      default=GetEnvVar('ORCALOGPATH'),     action=cParserAction, oParameter=self, dest="oPathLog",       help='Changes the path for ORCA/Kivy log files (can be passed as ORCALOGPATH environment var)')
+        oParser.add_argument('--tmppath',      default=GetEnvVar('ORCATMPPATH'),     action=cParserAction, oParameter=self, dest="oPathTmp",       help='Changes the path for ORCA temp folder (can be passed as ORCATMPPATH environment var)')
+        oParser.add_argument('--showborders',  default=GetEnvVar('ORCASHOWBORDERS'), action=cParserAction, oParameter=self, dest="bShowBorders",   help='Flag 0/1 to show borders around all widgets (can be passed as ORCASHOWBORDERS environment var)')
 
     def RemoveOtherArguments(self,oParser):
         aRet = []

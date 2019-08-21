@@ -79,7 +79,7 @@ class LoggerPatch(object):
 
         try:
             ct = self.oFormatter.converter(record.created)
-            t = time.strftime(u"%Y-%m-%d %H|%M|%S", ct)
+            t = time.strftime("%Y-%m-%d %H|%M|%S", ct)
             s = u"%s.%03d: " % (t, record.msecs)
             msg = record.msg
             if len(msg)>500:
@@ -125,9 +125,10 @@ class cScript(cSystemTemplate):
 
     def __init__(self):
         cSystemTemplate.__init__(self)
-        self.uSubType       = u'DEBUG'
-        self.uSortOrder     = u"last"
-        self.oLoggerPatch   = None
+        self.uSubType           = u'DEBUG'
+        self.uSortOrder         = u'last'
+        self.oLoggerPatch       = None
+        self.uIniFileLocation   = 'none'
 
     def Register(self,*args,**kwargs):
         if Logger.level == logging.DEBUG:

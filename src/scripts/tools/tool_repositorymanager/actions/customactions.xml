@@ -16,7 +16,7 @@
       <action name="SET" string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
       <action name="if not failed"   string="if $var(LASTERRORCODE)==0" />
         <action name="SET" string="setvar TMPBREAKLOOP=0" />
-        <action name="loop through all files" string="forin"  varname="REPMAN_LOCALFILENAMES[]" dstvarname="REPMAN_LOCALFILENAME" level="1" actionname="UploadRepository_Sub" breakvar="TMPBREAKLOOP" />
+        <action name="loop through all files" string="forin"  varname="REPMAN_LOCALFILENAMES[]" level="1" actionname="UploadRepository_Sub" breakvar="TMPBREAKLOOP" />
         <action name="SET" string="setvar RESULTERRORCODE=$var(LASTERRORCODE)" />
         <action name="Logout from FTP Server"   string="executeftpcommand" command="disconnect"  />
       <action name="endif not failed" string="endif" />
@@ -27,8 +27,8 @@
 
     <action name="UploadRepository_Sub">
         <action name="increase scrollbar pointer"  string="modifyvar"             varname="TMPPOS" operator="increase"  parameter1="1" />
-        <action name="Update the Progressbar"      string="showprogressbar"       message="$var(REPMAN_LOCALFILENAME_value)" current="$var(TMPPOS)" />
-        <action name="Upload File to FTP Server"   string="executeftpcommand"     command="uploadfile" localfile="$var(REPMAN_LOCALFILENAME_value)" localbasefolder="$var(REPMAN_LOCALBASENAME)" remotebasefolder="$var(REPMAN_FTPPATH)"/>
+        <action name="Update the Progressbar"      string="showprogressbar"       message="$par(forin_value)" current="$var(TMPPOS)" />
+        <action name="Upload File to FTP Server"   string="executeftpcommand"     command="uploadfile" localfile="$par(forin_value)" localbasefolder="$var(REPMAN_LOCALBASENAME)" remotebasefolder="$var(REPMAN_FTPPATH)"/>
         <action name="Break loop on Error"         string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
     </action>
 

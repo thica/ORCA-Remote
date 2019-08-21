@@ -79,7 +79,7 @@ def SetVarWithOutVarTranslation(uVarName, oVarValue, uContext=u''):
 
     :rtype: None
     :param string uVarName: Variable name to use. This can't be a variable
-    :param object oVarValue: Value to set, usually a unicode string, can be any other object.
+    :param oVarValue: Value to set, usually a unicode string, can be any other object.
     If you pass a dict, then for each dict member a varname with its value will get assigned (the dict member names will be separed by an underscore)
     If you pass a list or tuple, then for each list member a varname with its value will get assigned as a array [x] where x starts with 0)
     :param string uContext: The context for the variable. Internally the context will be added as a prefix to the variable name
@@ -128,6 +128,10 @@ def GetVar(uVarName, uContext=u''):
     :param string uContext: The context for the variable. Internally the context will be added as a prefix to the variable name
     :return: The variable value assigned to the variable. Usually a string, but can be an object as well
     """
+
+    if uVarName==u"":
+        return u''
+
     return ORCA.vars.Globals.dUserVars.get(uContext + ReplaceVars(uVarName),u'')
 
 def ExistLVar(uVarName):

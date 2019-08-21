@@ -196,7 +196,7 @@ class cWidgetKnob(cWidgetBase):
             self.oObject.add_widget(self.oObjectPicture)
 
             if Globals.oParameter.bShowBorders:
-                self.oBorder=cBorder(**self.aKwArgs)
+                self.oBorder=cBorder(**self.dKwArgs)
                 self.oParent.add_widget(self.oBorder)
             return True
         return False
@@ -204,7 +204,7 @@ class cWidgetKnob(cWidgetBase):
     def OnNotifyChange(self,instance):
         """ called, when the knob has been turned """
 
-        if (self.bDiscardMoves) and (instance.uMoveType==u'move'):
+        if self.bDiscardMoves and (instance.uMoveType == u'move'):
             return
 
         if not self.uDestVar==u'':

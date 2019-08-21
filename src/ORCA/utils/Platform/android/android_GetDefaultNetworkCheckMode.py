@@ -22,6 +22,6 @@
 
 def GetDefaultNetworkCheckMode():
     """ returns the default way for an OS hpw to check if a device is online"""
-    return "ping"
+    # return "ping"
     # temporary disabled until fixed by kivy
     return "system"

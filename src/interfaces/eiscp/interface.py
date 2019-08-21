@@ -44,9 +44,9 @@ from ORCA.utils.TypeConvert import ToUnicode
 from ORCA.utils.TypeConvert import ToBytes
 
 from ORCA.utils.wait.StartWait  import StartWait
-
 from ORCA.utils.XML         import *
 from ORCA.utils.FileName    import cFileName
+from ORCA.utils.PyXSocket   import cPyXSocket
 
 import ORCA.Globals as Globals
 
@@ -239,8 +239,8 @@ class cInterface(cBaseInterFace):
 
             if self.oSetting.oResultParser is None:
                 self.oSetting.oResultParser = cInterFaceResultParser(self.oInterFace, self.oSetting.uConfigName)
-                self.oSetting.oResultParser.uGlobalParseResultOption = self.oSetting.aInterFaceIniSettings.uParseResultOption
-                self.oSetting.oResultParser.uGlobalTokenizeString = self.oSetting.aInterFaceIniSettings.uParseResultTokenizeString
+                self.oSetting.oResultParser.uGlobalParseResultOption = self.oSetting.aIniSettings.uParseResultOption
+                self.oSetting.oResultParser.uGlobalTokenizeString = self.oSetting.aIniSettings.uParseResultTokenizeString
 
             for uAttributName in self.__dict__:
                 if uAttributName.startswith('uVar_'):
@@ -274,18 +274,18 @@ class cInterface(cBaseInterFace):
             self.dResponseActions   = {}
             self.bBusy              = False
 
-            self.aInterFaceIniSettings.uHost                        = u"discover"
-            self.aInterFaceIniSettings.uPort                        = u"60128"
-            self.aInterFaceIniSettings.uFNCodeset                   = u"CODESET_eiscp_ONKYO_AVR.xml"
-            self.aInterFaceIniSettings.fTimeOut                     = 2.0
-            self.aInterFaceIniSettings.iTimeToClose                 = -1
-            self.aInterFaceIniSettings.uDiscoverScriptName          = u"discover_eiscp"
-            self.aInterFaceIniSettings.uParseResultOption           = u'store'
-            self.aInterFaceIniSettings.fDISCOVER_EISCP_timeout      = 2.0
-            self.aInterFaceIniSettings.uDISCOVER_EISCP_models       = []
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_servicetypes  = "upnp:rootdevice"
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_manufacturer  = "Onkyo & Pioneer Corporation"
-            self.oThread                                            = None
+            self.aIniSettings.uHost                        = u"discover"
+            self.aIniSettings.uPort                        = u"60128"
+            self.aIniSettings.uFNCodeset                   = u"CODESET_eiscp_ONKYO_AVR.xml"
+            self.aIniSettings.fTimeOut                     = 2.0
+            self.aIniSettings.iTimeToClose                 = -1
+            self.aIniSettings.uDiscoverScriptName          = u"discover_eiscp"
+            self.aIniSettings.uParseResultOption           = u'store'
+            self.aIniSettings.fDISCOVER_EISCP_timeout      = 2.0
+            self.aIniSettings.uDISCOVER_EISCP_models       = []
+            self.aIniSettings.uDISCOVER_UPNP_servicetypes  = "upnp:rootdevice"
+            self.aIniSettings.uDISCOVER_UPNP_manufacturer  = "Onkyo & Pioneer Corporation"
+            self.oThread                                   = None
 
         def Connect(self):
 
@@ -297,19 +297,19 @@ class cInterface(cBaseInterFace):
             if not cBaseInterFaceSettings.Connect(self):
                 return False
 
-            if (self.aInterFaceIniSettings.uHost=="") or (self.aInterFaceIniSettings.uPort==u""):
+            if (self.aIniSettings.uHost=="") or (self.aIniSettings.uPort==u""):
                 self.ShowError(u'Cannot connect on empty host of port ')
                 self.bOnError=True
                 return False
 
 
             try:
-                self.oSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.oSocket.setblocking(0)
+                self.oSocket = cPyXSocket(socket.AF_INET, socket.SOCK_STREAM)
+                self.oSocket.SetBlocking(0)
                 self.oSocket.setsockopt( socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 self.oSocket.setsockopt( socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-                self.oSocket.settimeout(self.aInterFaceIniSettings.fTimeOut)
-                self.oSocket.connect((str(self.aInterFaceIniSettings.uHost),int(self.aInterFaceIniSettings.uPort)))
+                self.oSocket.settimeout(self.aIniSettings.fTimeOut)
+                self.oSocket.connect((str(self.aIniSettings.uHost),int(self.aIniSettings.uPort)))
                 if self.oThread:
                     self.bStopThreadEvent = True
                     self.oThread.join()
@@ -320,11 +320,11 @@ class cInterface(cBaseInterFace):
                 self.oThread.oParent = self
                 self.oThread.start()
             except socket.error as e:
-                self.ShowError(u'Cannot open socket:'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Cannot open socket:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.oSocket.close()
                 self.oSocket = None
             except Exception as e:
-                self.ShowError(u'Cannot open socket#2:'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Cannot open socket#2:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
 
             if self.oSocket is None:
@@ -345,7 +345,7 @@ class cInterface(cBaseInterFace):
             self.bOnError = False
 
         def CreateEISPHeader(self,uCmd):
-            uMessage = u'!' + str(self.aInterFaceIniSettings.iUnitType) + uCmd + '\x0a'
+            uMessage = u'!' + str(self.aIniSettings.iUnitType) + uCmd + '\x0a'
             iDataSize =  len(uMessage)
             return pack('!4sIIBxxx', self.bHeader, self.iHeaderSize, iDataSize, self.iVersion) + ToBytes(uMessage)
 
@@ -397,12 +397,12 @@ class cInterface(cBaseInterFace):
                 while len(data) < iSize:
                     packet = oSocket.recv(iSize - len(data))
                     if not packet:
-                        # self.ShowError("Can't get complete response 1")
+                        self.ShowError("Can't get complete response 1")
                         return data
                     data += packet
                 return data
             except Exception as e:
-                # self.ShowError(u"ReceiveAll:Can't receive response 2",e)
+                self.ShowError(u"ReceiveAll:Can't receive response 2",e)
                 return data
 
         def Receive(self):
@@ -433,9 +433,9 @@ class cInterface(cBaseInterFace):
                                     self.bBusy = False
                             self.bBusy = True
 
-                            # if oParent.aInterFaceIniSettings.iTimeToClose > 0:
+                            # if oParent.aIniSettings.iTimeToClose > 0:
                             #     Clock.unschedule(oParent.FktDisconnect)
-                            #     Clock.schedule_once(oParent.FktDisconnect, oParent.aInterFaceIniSettings.iTimeToClose)
+                            #     Clock.schedule_once(oParent.FktDisconnect, oParent.aIniSettings.iTimeToClose)
 
                             sResponseHeader = oParent.Helper_ReceiveAll(aReadSocket[0], 16)
                             if len(sResponseHeader)>0:
@@ -551,18 +551,18 @@ class cInterface(cBaseInterFace):
         self.dDeviceCaps        = {}
         self.InitDeviceCaps()
         self.InitLVM()
-        self.aDiscoverScriptsBlackList = ["iTach (Global Cache)","Keene Kira"]
+        self.aDiscoverScriptsBlackList = ["iTach (Global Cache)","Keene Kira","ELVMAX"]
 
-    def Init(self, uInterFaceName, oFnInterFace=None):
-        cBaseInterFace.Init(self,uInterFaceName, oFnInterFace)
-        self.oInterFaceConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+    def Init(self, uObjectName, oFnObject=None):
+        cBaseInterFace.Init(self,uObjectName, oFnObject)
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
     def DeInit(self, **kwargs):
         cBaseInterFace.DeInit(self,**kwargs)
@@ -570,7 +570,7 @@ class cInterface(cBaseInterFace):
             self.aSettings[aSetting].DeInit()
 
     def GetConfigJSON(self):
-        return {"UnitType": {"active": "enabled", "order": 3, "type": "numeric", "title": "$lvar(IFACE_EISCP_1)", "desc": "$lvar(IFACE_EISCP_2)", "section": "$var(InterfaceConfigSection)","key": "UnitType", "default":"1" }}
+        return {"UnitType": {"active": "enabled", "order": 3, "type": "numeric", "title": "$lvar(IFACE_EISCP_1)", "desc": "$lvar(IFACE_EISCP_2)", "section": "$var(ObjectConfigSection)","key": "UnitType", "default":"1" }}
 
     def DoAction(self,oAction):
         uCmd=oAction.dActionPars.get("commandname",'')
@@ -590,24 +590,24 @@ class cInterface(cBaseInterFace):
 
         uTst=uMsg[:3]
         if uTst==u'MVL' and uMsg!=u'MVLUP' and uMsg!=u'MVLDOWN' and not uMsg.endswith("QSTN"):
-            Var_Int2Hex(uVarName = self.uInterFaceName+'/'+oSetting.uConfigName+'volumetoset')
+            Var_Int2Hex(uVarName = self.uObjectName+'/'+oSetting.uConfigName+'volumetoset')
         if (uTst==u'CTL' or uTst==u'SWL') and not uMsg.endswith("QSTN"):
             uFormat='{:+03X}'
-            uKey = oSetting.aInterFaceIniSettings.uHost + oSetting.aInterFaceIniSettings.uPort
+            uKey = oSetting.aIniSettings.uHost + oSetting.aIniSettings.uPort
             if uKey in self.dDeviceSettings:
                 if uTst == u'CTL':
                     uFormat=self.dDeviceSettings[uKey].uVar_CTLFormat
                 else:
                     uFormat = self.dDeviceSettings[uKey].uVar_SWLFormat
-            Var_Int2Hex(uVarName = self.uInterFaceName + '/' + oSetting.uConfigName + 'volumetoset', uFormat = uFormat)
+            Var_Int2Hex(uVarName = self.uObjectName + '/' + oSetting.uConfigName + 'volumetoset', uFormat = uFormat)
 
-        uMsg            = ReplaceVars(uMsg,self.uInterFaceName+'/'+oSetting.uConfigName)
+        uMsg            = ReplaceVars(uMsg,self.uObjectName+'/'+oSetting.uConfigName)
         uMsg            = ReplaceVars(uMsg)
         oSetting.uMsg   = uMsg
         oSetting.uRetVar= uRetVar
 
         if uTst == u"NRI":
-            uKey = oSetting.aInterFaceIniSettings.uHost + oSetting.aInterFaceIniSettings.uPort
+            uKey = oSetting.aIniSettings.uHost + oSetting.aIniSettings.uPort
             if uKey in self.dDeviceSettings and False:
                 self.dDeviceSettings[uKey].WriteVars(uVarPrefix=uRetVar, oAction=oAction)
                 return 0
@@ -617,17 +617,17 @@ class cInterface(cBaseInterFace):
                 self.dDeviceSettings[uKey].WriteVars(uVarPrefix=uRetVar, oAction=oAction)
 
         # oSetting.Disconnect()
-        #Logger.info (u'Interface '+self.uInterFaceName+': Sending Command: '+sCommand + ' to '+oSetting.sHost+':'+oSetting.sPort)
+        #Logger.info (u'Interface '+self.uObjectName+': Sending Command: '+sCommand + ' to '+oSetting.sHost+':'+oSetting.sPort)
         while iTryCount<2:
             iTryCount+=1
             oSetting.Connect()
 
             if oSetting.bIsConnected:
                 try:
-                    oAction.uGetVar         = ReplaceVars(oAction.uGetVar,self.uInterFaceName+'/'+oSetting.uConfigName)
+                    oAction.uGetVar         = ReplaceVars(oAction.uGetVar,self.uObjectName+'/'+oSetting.uConfigName)
                     oAction.uGetVar         = ReplaceVars(oAction.uGetVar)
 
-                    self.ShowInfo (u'Sending Command: '+uMsg + ' to '+oSetting.aInterFaceIniSettings.uHost+':'+oSetting.aInterFaceIniSettings.uPort,oSetting.uConfigName)
+                    self.ShowInfo (u'Sending Command: '+uMsg + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
                     bMsg=oSetting.CreateEISPHeader(uMsg)
                     if oAction.bWaitForResponse:
                         #All response comes to receiver thread, so we should hold the queue until vars are set
@@ -646,16 +646,16 @@ class cInterface(cBaseInterFace):
                         SetVar(uVarName = uRetVar, oVarValue = u"Error")
             else:
                 if iTryCount==2:
-                    self.ShowWarning(u'Nothing done,not connected! ->[%s]' % (oAction.uActionName),oSetting.uConfigName)
+                    self.ShowWarning(u'Nothing done,not connected! ->[%s]' % oAction.uActionName, oSetting.uConfigName)
                 if uRetVar:
-                    SetVar(uVarName = uRetVar, oVarValue = u"Error")
+                    SetVar(uVarName = uRetVar, oVarValue = u"?")
 
         if oSetting.bIsConnected:
-            if oSetting.aInterFaceIniSettings.iTimeToClose==0:
+            if oSetting.aIniSettings.iTimeToClose==0:
                 oSetting.Disconnect()
-            elif oSetting.aInterFaceIniSettings.iTimeToClose!=-1:
+            elif oSetting.aIniSettings.iTimeToClose!=-1:
                 Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aInterFaceIniSettings.iTimeToClose)
+                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
         return iRet
 
     def NLSPage(self,oAction,uCmd):
@@ -698,7 +698,7 @@ class cInterface(cBaseInterFace):
 
     def Handle_NRI(self,oAction,sResponse,oSetting):
         # Parses the Onkyo Device Information and writes them into vars
-        uKey = oSetting.aInterFaceIniSettings.uHost + oSetting.aInterFaceIniSettings.uPort
+        uKey = oSetting.aIniSettings.uHost + oSetting.aIniSettings.uPort
         if uKey not in self.dDeviceSettings:
             self.dDeviceSettings[uKey] = self.cDeviceSettings(self, oSetting)
 
@@ -996,9 +996,7 @@ class cInterface(cBaseInterFace):
                                 'DRX-3' :        { "SWLFORMAT":"{0:0>+X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{0:0>+X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","03","05","06","08","09","0A","0B","0C","0D","0E","0F","13","40","80","82","83"]},
                                 'DRX-4' :        { "SWLFORMAT":"{0:0>+X}","SWLMIN":"-30","SWLMAX":"24","CTLFORMAT":"{0:0>+X}","CTLMIN":"-30","CTLMAX":"24","ListeningModes": ["00","01","02","03","04","05","06","08","09","0A","0B","0C","0D","0E","0F","13","40","42","43","44","45","50","51","52","80","82","83","84","85","89","8A","8B","8C"]},
                                 'DRX-5' :        { "SWLFORMAT":"{0:0>+X}","SWLMIN":"-30","SWLMAX":"24","CTLFORMAT":"{0:0>+X}","CTLMIN":"-30","CTLMAX":"24","ListeningModes": ["00","01","02","03","04","05","06","08","09","0A","0B","0C","0D","0E","0F","13","1F","40","42","43","44","45","50","51","52","80","82","83","84","85","89","8A","8B","8C"]},
-                                'DTC-7' :        { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F","11"]},
                                 'DTC-7' :        { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","07","08","09","0A","0B","0C","0D","0E","0F","80","81","82","83"]},
-                                'DTC-9.4' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F","11"]},
                                 'DTC-9.4' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","07","08","09","0A","0B","0C","0D","0E","0F","80","81","82","83"]},
                                 'DTC-9.8' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0F","13","40","41","42","43","50","51","52","80","81","82","83","84","85","86","88","89","8A"]},
                                 'DTR-10.5' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0E","0F","11","12","13","14","40","41","42","43","50","51","52","80","81","82","83","84","85","86"]},
@@ -1049,7 +1047,6 @@ class cInterface(cBaseInterFace):
                                 'DTR-60.7' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","03","04","05","06","08","09","0A","0B","0C","0D","0E","0F","13","1F","23","25","26","2E","40","42","43","44","45","50","51","52","80","82","83","84","85","89","8A","8B","8C"]},
                                 'DTR-7.1' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","03","04","05","06","07","08","09","0A","0B","0C","0D","0E","0F"]},
                                 'DTR-7.2' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F"]},
-                                'DTR-7.3' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F","11"]},
                                 'DTR-7.3' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","07","08","09","0A","0B","0C","0D","0E","0F","80","81","82","83"]},
                                 'DTR-7.4' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F","11","80","81","82","83","84","85"]},
                                 'DTR-7.6' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0F","11","13","40","41","42","43","50","51","52","80","81","82","83","84","85","86"]},
@@ -1062,7 +1059,6 @@ class cInterface(cBaseInterFace):
                                 'DTR-70.4' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","03","04","05","06","08","09","0A","0B","0C","0D","0E","0F","13","16","1F","23","25","26","2E","40","41","42","43","44","45","50","51","52","80","81","82","83","84","85","86","89","8A","8B","8C","90","94","95","96","97","98","99","9A","A0","A1","A2","A7"]},
                                 'DTR-70.6' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","03","04","05","06","08","09","0A","0B","0C","0D","0E","0F","13","1F","23","25","26","2E","40","42","43","44","45","50","51","52","80","82","83","85","8A","8C","9A"]},
                                 'DTR-8.2' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F"]},
-                                'DTR-8.3' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F","11"]},
                                 'DTR-8.3' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","07","08","09","0A","0B","0C","0D","0E","0F","80","81","82","83"]},
                                 'DTR-8.4' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F","11","80","81","82","83","84","85"]},
                                 'DTR-8.8' :      { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0F","13","40","41","42","43","50","51","52","80","81","82","83","84","85","86","88","89","8A"]},
@@ -1099,7 +1095,6 @@ class cInterface(cBaseInterFace):
                                 'TX-DS797' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F"]},
                                 'TX-DS898' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F"]},
                                 'TX-DS989' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","03","04","05","06","07","08","09","0A","0B","0C","0D","0E","0F"]},
-                                'TX-NA900' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","07","08","09","0A","0B","0C","0D","0E","0F","80","81","82","83"]},
                                 'TX-NA900' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F","11"]},
                                 'TX-NA905' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0F","11","13","40","41","42","43","50","51","52","80","81","82","83","84","85","86","88","89","8A"]},
                                 'TX-NA906' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0F","11","13","40","41","42","43","44","45","50","51","52","80","81","82","83","84","85","86","88","89","8A","8B","8C","8D","8E","8F"]},
@@ -1151,7 +1146,6 @@ class cInterface(cBaseInterFace):
                                 'TX-NR818AE' :   { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","03","04","05","06","08","09","0A","0B","0C","0D","0E","0F","11","13","16","1F","23","25","26","2E","40","41","42","43","44","45","50","51","52","80","81","82","83","84","85","86","89","8A","8B","8C","90","94","95","96","97","98","99","9A","A0","A1","A2","A7"]},
                                 'TX-NR828' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","03","04","05","06","08","09","0A","0B","0C","0D","0E","0F","11","13","16","1F","23","25","26","2E","40","41","42","43","44","45","50","51","52","80","81","82","83","84","85","86","89","8A","8B","8C","90","94","95","96","A0","A1","A2"]},
                                 'TX-NR838' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","03","04","05","06","08","09","0A","0B","0C","0D","0E","0F","11","13","1F","23","25","26","2E","40","41","42","43","44","45","50","51","52","80","81","82","83","84","85","86","89","8A","8B","8C","90","94","95","96"]},
-                                'TX-NR900' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F","11"]},
                                 'TX-NR900' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","07","08","09","0A","0B","0C","0D","0E","0F","80","81","82","83"]},
                                 'TX-NR901' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0E","0F","11","80","81","82","83","84","85"]},
                                 'TX-NR905' :     { "SWLFORMAT":"{:+03X}","SWLMIN":"-15","SWLMAX":"12","CTLFORMAT":"{:+03X}","CTLMIN":"-15","CTLMAX":"12","ListeningModes": ["00","01","02","04","07","08","09","0A","0B","0C","0D","0F","11","13","40","41","42","43","50","51","52","80","81","82","83","84","85","86","88","89","8A"]},

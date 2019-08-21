@@ -78,20 +78,23 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
     class cInterFaceSettings(oBaseInterFaceInfrared.cInterface.cInterFaceSettings):
         def __init__(self,oInterFace):
             oBaseInterFaceInfrared.cInterface.cInterFaceSettings.__init__(self,oInterFace)
-            self.oSocket      = None
-            self.aInterFaceIniSettings.uHost = u"discover"
-            self.aInterFaceIniSettings.uPort = u"65432"
-            self.aInterFaceIniSettings.uFNCodeset = u"Select"
-            self.aInterFaceIniSettings.uDiscoverScriptName = u"discover_kira"
-            self.aInterFaceIniSettings.iTimeToClose             = 0
-            self.aInterFaceIniSettings.fTimeOut = 2.0
+            self.oSocket                            = None
+            self.aIniSettings.uHost                 = u"discover"
+            self.aIniSettings.uPort                 = u"65432"
+            self.aIniSettings.uFNCodeset            = u"Select"
+            self.aIniSettings.uDiscoverScriptName   = u"discover_kira"
+            self.aIniSettings.iTimeToClose          = 0
+            self.aIniSettings.fTimeOut              = 2.0
+            self.bIsConnected                       = False
+            self.bOnError                           = False
+            self.sResponse                          = ''
 
         def Connect(self):
 
             if not oBaseInterFaceInfrared.cInterface.cInterFaceSettings.Connect(self):
                 return False
             try:
-                for res in socket.getaddrinfo(self.aInterFaceIniSettings.uHost, int(self.aInterFaceIniSettings.uPort), socket.AF_INET, socket.SOCK_DGRAM):
+                for res in socket.getaddrinfo(self.aIniSettings.uHost, int(self.aIniSettings.uPort), socket.AF_INET, socket.SOCK_DGRAM):
                     af, socktype, proto, canonname, sa = res
                     try:
                         self.oSocket = socket.socket(af, socktype, proto)
@@ -102,13 +105,13 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
                         continue
                     break
                 if self.oSocket is None:
-                    self.ShowError(u'Cannot open socket'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort)
+                    self.ShowError(u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                     self.bOnError=True
                     return
                 self.bIsConnected =True
 
             except Exception as e:
-                self.ShowError(u'Cannot open socket #2'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
 
         def Disconnect(self):
@@ -119,7 +122,7 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
                     self.oSocket.close()
                 self.bOnError = False
             except Exception as e:
-                self.ShowError(u'can\'t Disconnect'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'can\'t Disconnect'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
 
 
     def __init__(self):
@@ -129,16 +132,16 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
         self.uResponse = u''
         self.iBufferSize=1024
 
-    def Init(self, uInterFaceName, oFnInterFace=None):
-        cBaseInterFace.Init(self, uInterFaceName, oFnInterFace)
-        self.oInterFaceConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+    def Init(self, uObjectName, oFnObject=None):
+        cBaseInterFace.Init(self, uObjectName, oFnObject)
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
     def DeInit(self, **kwargs):
         oBaseInterFaceInfrared.cInterface.DeInit(self,**kwargs)
@@ -156,17 +159,17 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
 
         uCmd=ReplaceVars(oAction.uCmd)
 
-        self.ShowInfo(u'Sending Command: '+uCmd + u' to '+oSetting.aInterFaceIniSettings.uHost+':'+oSetting.aInterFaceIniSettings.uPort,oSetting.uConfigName)
+        self.ShowInfo(u'Sending Command: '+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
 
         oSetting.Connect()
         if oSetting.bIsConnected:
             uMsg=uCmd+u'\r\n'
             try:
-                uMsg=ReplaceVars(uMsg,self.uInterFaceName+'/'+oSetting.uConfigName)
+                uMsg=ReplaceVars(uMsg,self.uObjectName+'/'+oSetting.uConfigName)
                 if PY2:
-                    oSetting.oSocket.sendto(uMsg, (oSetting.aInterFaceIniSettings.uHost, int(oSetting.aInterFaceIniSettings.uPort)))
+                    oSetting.oSocket.sendto(uMsg, (oSetting.aIniSettings.uHost, int(oSetting.aIniSettings.uPort)))
                 else:
-                    oSetting.oSocket.sendto(ToBytes(uMsg), (oSetting.aInterFaceIniSettings.uHost, int(oSetting.aInterFaceIniSettings.uPort)))
+                    oSetting.oSocket.sendto(ToBytes(uMsg), (oSetting.aIniSettings.uHost, int(oSetting.aIniSettings.uPort)))
                 self.sResponse, addr =  oSetting.oSocket.recvfrom(self.iBufferSize)
                 if not PY2:
                     self.sResponse = ToUnicode(self.sResponse)
@@ -183,11 +186,11 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
 
                 iRet=1
         if oSetting.bIsConnected:
-            if oSetting.aInterFaceIniSettings.iTimeToClose==0:
+            if oSetting.aIniSettings.iTimeToClose==0:
                 oSetting.Disconnect()
-            elif oSetting.aInterFaceIniSettings.iTimeToClose!=-1:
+            elif oSetting.aIniSettings.iTimeToClose!=-1:
                 Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aInterFaceIniSettings.iTimeToClose)
+                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
         return iRet
 
 def CCfToKeene(sCCFString,iRepeatCount):

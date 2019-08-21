@@ -92,19 +92,19 @@ class cInterface(cBaseInterFace):
             self.uRetVar                                           = u''
 
             # default config fits for KODI
-            self.aInterFaceIniSettings.uHost                       = u"discover"
-            self.aInterFaceIniSettings.uPort                       = u"9090"
-            self.aInterFaceIniSettings.uService                    = u"ws://$cvar(HOST):$cvar(PORT)/jsonrpc"
+            self.aIniSettings.uHost                       = u"discover"
+            self.aIniSettings.uPort                       = u"9090"
+            self.aIniSettings.uService                    = u"ws://$cvar(HOST):$cvar(PORT)/jsonrpc"
 
-            self.aInterFaceIniSettings.uFNCodeset                  = u"CODESET_websocket_KODI-Leia.xml"
-            self.aInterFaceIniSettings.uParseResultOption          = u'json'
-            self.aInterFaceIniSettings.uDiscoverScriptName         = u"discover_upnp"
-            self.aInterFaceIniSettings.fDISCOVER_UPNP_timeout      = 5.0
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_models       = u'["Kodi"]'
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_servicetypes = "upnp:rootdevice"
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_manufacturer = "XBMC Foundation"
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_prettyname   = ""
-            self.aInterFaceIniSettings.bDISCOVER_UPNP_returnport   = False
+            self.aIniSettings.uFNCodeset                  = u"CODESET_websocket_KODI-Leia.xml"
+            self.aIniSettings.uParseResultOption          = u'json'
+            self.aIniSettings.uDiscoverScriptName         = u"discover_upnp"
+            self.aIniSettings.fDISCOVER_UPNP_timeout      = 5.0
+            self.aIniSettings.uDISCOVER_UPNP_models       = u'["Kodi"]'
+            self.aIniSettings.uDISCOVER_UPNP_servicetypes = "upnp:rootdevice"
+            self.aIniSettings.uDISCOVER_UPNP_manufacturer = "XBMC Foundation"
+            self.aIniSettings.uDISCOVER_UPNP_prettyname   = ""
+            self.aIniSettings.bDISCOVER_UPNP_returnport   = False
 
         def Connect(self):
 
@@ -115,8 +115,8 @@ class cInterface(cBaseInterFace):
 
             try:
                 if self.oWebSocket is None or self.oWebSocket.sock is None:
-                    uURL = ReplaceVars(self.aInterFaceIniSettings.uService)
-                    uURL = ReplaceVars(uURL,self.oInterFace.uInterFaceName+'/'+self.uConfigName+"CONFIG_")
+                    uURL = ReplaceVars(self.aIniSettings.uService)
+                    uURL = ReplaceVars(uURL,self.oInterFace.uObjectName+'/'+self.uConfigName+"CONFIG_")
                     self.oWebSocket=self.cWebSocketClient(uURL, heartbeat_freq=2.0)
                     self.oWebSocket.SetSettingObject(self)
                 self.oWebSocket.connect()
@@ -126,7 +126,7 @@ class cInterface(cBaseInterFace):
                 self.bInConnect = False
                 self.bIsConnected =True
             except Exception as e:
-                self.ShowError(u'Interface not connected: Cannot open socket #2:'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Interface not connected: Cannot open socket #2:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
                 return
 
@@ -178,21 +178,21 @@ class cInterface(cBaseInterFace):
         self.uResponse      = u''
         self.iWaitMs        = 100
 
-    def Init(self, uInterFaceName, oFnInterFace=None):
-        cBaseInterFace.Init(self, uInterFaceName, oFnInterFace)
-        self.oInterFaceConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['User']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['Password']['active']                    = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+    def Init(self, uObjectName, oFnObject=None):
+        cBaseInterFace.Init(self, uObjectName, oFnObject)
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
     def GetConfigJSON(self):
-        return {"Service": {"active": "enabled", "order": 3, "type": "string",         "title": "$lvar(IFACE_WEBSOCKET_1)", "desc": "$lvar(IFACE_WEBSOCKET_2)", "section": "$var(InterfaceConfigSection)","key": "Service",                  "default":"ws://$cvar(HOST):$cvar(PORT)/jsonrpc"}}
+        return {"Service": {"active": "enabled", "order": 3, "type": "string",         "title": "$lvar(IFACE_WEBSOCKET_1)", "desc": "$lvar(IFACE_WEBSOCKET_2)", "section": "$var(ObjectConfigSection)","key": "Service",                  "default":"ws://$cvar(HOST):$cvar(PORT)/jsonrpc"}}
 
     def DeInit(self, **kwargs):
         cBaseInterFace.DeInit(self,**kwargs)
@@ -219,15 +219,15 @@ class cInterface(cBaseInterFace):
                 uMsg=oAction.uCmd
                 try:
 
-                    uMsg=ReplaceVars(uMsg,self.uInterFaceName+'/'+oSetting.uConfigName)
+                    uMsg=ReplaceVars(uMsg,self.uObjectName+'/'+oSetting.uConfigName)
                     uMsg=ReplaceVars(uMsg)
-                    oAction.uGetVar         = ReplaceVars(oAction.uGetVar,self.uInterFaceName+'/'+oSetting.uConfigName)
+                    oAction.uGetVar         = ReplaceVars(oAction.uGetVar,self.uObjectName+'/'+oSetting.uConfigName)
                     oAction.uGetVar         = ReplaceVars(oAction.uGetVar)
 
                     oSetting.uMsg=uMsg
                     oSetting.uRetVar=uRetVar
                     oSetting.uRetVar=uRetVar
-                    self.ShowInfo (u'Sending Command: '+uMsg + ' to '+oSetting.aInterFaceIniSettings.uHost+':'+oSetting.aInterFaceIniSettings.uPort,oSetting.uConfigName)
+                    self.ShowInfo (u'Sending Command: '+uMsg + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
                     #All response comes to receiver thread, so we should hold the queue until vars are set
                     if oSetting.oAction.bWaitForResponse:
                         StartWait(self.iWaitMs)
@@ -247,10 +247,10 @@ class cInterface(cBaseInterFace):
                     SetVar(uVarName = uRetVar, oVarValue = u"Error")
 
         if oSetting.bIsConnected:
-            if oSetting.aInterFaceIniSettings.iTimeToClose==0:
+            if oSetting.aIniSettings.iTimeToClose==0:
                 oSetting.Disconnect()
-            elif oSetting.aInterFaceIniSettings.iTimeToClose!=-1:
+            elif oSetting.aIniSettings.iTimeToClose!=-1:
                 Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aInterFaceIniSettings.iTimeToClose)
+                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
         return iRet
 

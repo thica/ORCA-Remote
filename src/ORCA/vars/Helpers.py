@@ -95,6 +95,7 @@ def GetEnvVar(uVarName,uDefault=""):
 
     :rtype: string
     :param string uVarName: Name of the Environment variable to return
+    :param string uDefault: Optional: The default value, if no environment is given
     :return: The value of the variable or an empty string if not found
     """
     uRet=os.getenv(uVarName)
@@ -126,10 +127,11 @@ def Find_nth_Character(uStr1, uSubstr, iLevel):
             return None
     return iPos
 
+
 def CopyDict(dSrc):
+
     try:
         return json.loads(json.dumps(dSrc))
     except Exception as e:
         Logger.warning("Can't copy dict the preffered way:"+str(dSrc))
         return deepcopy(dSrc)
-        return dSrc

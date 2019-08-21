@@ -40,17 +40,15 @@
                       "definition_activityalias_mediaplayer_tv1":                   "Activity TV Living Room Mediaplayer",
                       "definition_activityalias_kodi1":                             "Activity Movies Living Room Kodi1 Wizard",
                       "definition_activityalias_mediaplayer_kodi1":                 "Activity Movies Living Room Kodi1 Mediaplayer",
-                      "definition_activityalias_games1":                            "Actvity Games Living Room",
-                      "definition_activityalias_mediaplayer_games1":                "Actvity Games Living Room Mediaplayer",
-                      "definition_activityalias_ftv2":                              "Actvity FireTV Launge Wizard",
-                      "definition_activityalias_mediaplayer_ftv2":                  "Actvity FireTV Launge Mediaplayer",
+                      "definition_activityalias_games1":                            "Activity Games Living Room",
+                      "definition_activityalias_mediaplayer_games1":                "Activity Games Living Room Mediaplayer",
+                      "definition_activityalias_ftv2":                              "Activity FireTV Launge Wizard",
+                      "definition_activityalias_mediaplayer_ftv2":                  "Activity FireTV Launge Mediaplayer",
                       "definition_activityalias_kodi2":                             "Activity Movies Launge Kodi2 Wizard",
                       "definition_activityalias_mediaplayer_kodi2":                 "Activity Movies Launge Kodi2 Mediaplayer",
                       "definition_activityalias_apiv1":                             "Activity Amazon Prime Living Room Shield Wizard",
                       "definition_activityalias_mediaplayer_apiv1":                 "Activity Amazon Prime Living Room Shield Mediaplayer"}</definitionvars>
   </def_parameter>
-
-
 
   <startskip condition="$dvar(definition_alias_thica_IMPORTPAGES)=0"/>
     <pages xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -263,7 +261,7 @@
                              "definition_templatepath_mediaplayer_wizard":           "$var(WIZARDTEMPLATESPATH)/mediaplayer wizard",
                              "definition_activity_template":                         "$dvar(definition_activity_template)"}'>mediaplayer_wizard</definition>
 
-     <!-- We use the Onkyo AVr definition for the games1 Living room (Wii doesn't support remote control by lan-->
+     <!-- We use the Onkyo AVR definition for the games1 Living room (Wii doesn't support remote control by lan-->
       <definition
           importlanguages = "1"
           importpages     = "1"

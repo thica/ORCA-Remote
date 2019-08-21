@@ -224,6 +224,35 @@
     <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][27]"      default="discover" />
     <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][28]"      default="discover" />
     <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][29]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][1]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][2]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][3]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][4]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][5]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][6]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][7]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][8]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][9]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][10]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][11]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][12]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][13]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][14]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][15]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][16]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][17]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][18]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][19]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][20]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][21]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][22]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][23]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][24]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][25]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][26]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][27]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][28]"      default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][29]"      default="discover" />
 
 
 

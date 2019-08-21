@@ -61,8 +61,7 @@ class cEventActionsNotifications(cEventActionBase):
         dActionPars                     = ToDic(ReplaceVars(oAction.dActionPars.get("actionpars","{}")))
         if not isinstance(dActionPars,dict):
             dActionPars = ToDic(oAction.dActionPars.get("actionpars", "{}"))
-        self.oEvenDispatcher.bDoNext    = True
-        self.oEvenDispatcher.LogAction(u'SendNotification',oAction)
+        self.oEventDispatcher.LogAction(u'SendNotification',oAction)
 
         Globals.oNotifications.SendNotification(uNotification,**dActionPars)
         return -2
@@ -98,9 +97,7 @@ class cEventActionsNotifications(cEventActionBase):
         """
 
         uPageName                       = ReplaceVars(oAction.dActionPars.get("filterpagename", ""))
-        self.oEvenDispatcher.bDoNext    = True
-
-        self.oEvenDispatcher.LogAction(u'RegisterNotification',oAction)
+        self.oEventDispatcher.LogAction(u'RegisterNotification',oAction)
 
         if uPageName == u"ALL":
             for uPageKey in Globals.oTheScreen.oScreenPages:

@@ -68,8 +68,7 @@ class cEventActionsFlowControl(cEventActionBase):
         """
 
         uLabel      = ReplaceVars(oAction.dActionPars.get("label",""))
-        self.oEvenDispatcher.bDoNext = True
-        self.oEvenDispatcher.LogAction(u'Goto',oAction)
+        self.oEventDispatcher.LogAction(u'Goto',oAction)
         i=0
         oQueue=GetActiveQueue()
         for oTmpAction in oQueue.aActionQueue:
@@ -77,7 +76,7 @@ class cEventActionsFlowControl(cEventActionBase):
                 oQueue.iActionQueuePos=i-1
                 return -2
             i+=1
-        uMsg=self.oEvenDispatcher.CreateDebugLine(oAction,'Wrong Goto')+u"\nFileName:"+oAction.uFileName
+        uMsg=self.oEventDispatcher.CreateDebugLine(oAction,'Wrong Goto')+u"\nFileName:"+oAction.uFileName
         Logger.error (uMsg)
         ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
         return -2
@@ -111,9 +110,8 @@ class cEventActionsFlowControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.bDoNext = True
         #This action will be called, if "IF" fails to goto the next end if
-        self.oEvenDispatcher.LogAction(u'If',oAction,"skip actions")
+        self.oEventDispatcher.LogAction(u'If',oAction,"skip actions")
         iLevel=-1
         oQueue=GetActiveQueue()
         i=oQueue.iActionQueuePos
@@ -126,11 +124,11 @@ class cEventActionsFlowControl(cEventActionBase):
             if oTmpAction.iActionId==Globals.oActions.oActionType.EndIf:
                 if iLevel==0:
                     oQueue.iActionQueuePos=i
-                    self.oEvenDispatcher.LogAction(u'EndIf', oTmpAction)
+                    self.oEventDispatcher.LogAction(u'EndIf', oTmpAction)
                     return -2
                 iLevel-=1
             i+=1
-        uMsg=self.oEvenDispatcher.CreateDebugLine(oAction,'Wrong If')+u"\nFileName:"+oAction.uFileName
+        uMsg=self.oEventDispatcher.CreateDebugLine(oAction,'Wrong If')+u"\nFileName:"+oAction.uFileName
         DumpQueue()
 
         for oTmpAction in oQueue.aActionQueue[iActionQueuePos:]:
@@ -162,8 +160,7 @@ class cEventActionsFlowControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.bDoNext = True
-        self.oEvenDispatcher.LogAction(u'EndIf',oAction)
+        self.oEventDispatcher.LogAction(u'EndIf',oAction)
         return -2
 
 
@@ -216,10 +213,10 @@ class cEventActionsFlowControl(cEventActionBase):
         WikiDoc:End
         """
 
-        #self.oEvenDispatcher.bDoNext = False
-        #self.oEvenDispatcher.bDoNext = True
+        #self.oEventDispatcher.bDoNext = False
+        #self.oEventDispatcher.bDoNext = True
 
-        self.oEvenDispatcher.LogAction(u'Call',oAction)
+        self.oEventDispatcher.LogAction(u'Call',oAction)
 
         uActionName      = ReplaceVars(oAction.dActionPars.get("actionname",""))
         uEnforce         = ReplaceVars(oAction.dActionPars.get("enforce",""))
@@ -252,7 +249,7 @@ class cEventActionsFlowControl(cEventActionBase):
                     else:
                         return 0
                 else:
-                    self.oEvenDispatcher.LogAction(u'Skipping PageStartAction',oAction,u' for: {0}'.format(uPageName))
+                    self.oEventDispatcher.LogAction(u'Skipping PageStartAction',oAction,u' for: {0}'.format(uPageName))
                     return 0
             elif uActionName=="PAGESTOPACTIONS":
                 # we want to prevent pagestop actions, if the new page is just a popup  or we enforce it
@@ -261,12 +258,12 @@ class cEventActionsFlowControl(cEventActionBase):
                     oFunction=Globals.oTheScreen.ShowPageGetPageStopActions(uPageName="$var(CURRENTPAGE)")
                     if oFunction is not None:
                         uActionName=u"PageStopAction"
-                        self.oEvenDispatcher.LogAction(u'Calling PageStopAction',oAction,u' for: {0}'.format(ReplaceVars("$var(CURRENTPAGE)")))
+                        self.oEventDispatcher.LogAction(u'Calling PageStopAction',oAction,u' for: {0}'.format(ReplaceVars("$var(CURRENTPAGE)")))
                         oAction.oParentWidget=Globals.oTheScreen.oCurrentPage.oWidgetBackGround
                     else:
                         return 0
                 else:
-                    self.oEvenDispatcher.LogAction(u'Skipping PageStopAction',oAction,u' for: {0}'.format(ReplaceVars("$var(CURRENTPAGE)")))
+                    self.oEventDispatcher.LogAction(u'Skipping PageStopAction',oAction,u' for: {0}'.format(ReplaceVars("$var(CURRENTPAGE)")))
                     return 0
 
         if oFunction is not None:
@@ -276,10 +273,10 @@ class cEventActionsFlowControl(cEventActionBase):
                 oTmpFunction.append(copy(oTmp))
 
             if oAction.oParentWidget is not None:
-                self.oEvenDispatcher.CopyActionPars(dTarget=oTmpFunction[0].dActionPars,dSource=oAction.oParentWidget.dActionPars,uReplaceOption="donotreplacetarget")
-                self.oEvenDispatcher.CopyActionPars(dTarget=oAction.dActionPars,dSource=oAction.oParentWidget.dActionPars,uReplaceOption="donotreplacetarget")
+                self.oEventDispatcher.CopyActionPars(dTarget=oTmpFunction[0].dActionPars,dSource=oAction.oParentWidget.dActionPars,uReplaceOption="donotreplacetarget")
+                self.oEventDispatcher.CopyActionPars(dTarget=oAction.dActionPars,dSource=oAction.oParentWidget.dActionPars,uReplaceOption="donotreplacetarget")
             else:
-                self.oEvenDispatcher.CopyActionPars(dTarget=oTmpFunction[0].dActionPars,dSource=oAction.dActionPars,uReplaceOption="donotreplacetarget")
+                self.oEventDispatcher.CopyActionPars(dTarget=oTmpFunction[0].dActionPars,dSource=oAction.dActionPars,uReplaceOption="donotreplacetarget")
 
             #for aActionParKey in oTmpFunction[0].dActionPars:
                 #SetVar(uActionName+"_parameter_"+aActionParKey,oTmpFunction[0].dActionPars[aActionParKey])
@@ -288,12 +285,12 @@ class cEventActionsFlowControl(cEventActionBase):
                     # SetVar(uVarName = uActionName+"_parameter_"+aActionParKey, oVarValue = oAction.dActionPars[aActionParKey])
                     SetVar(uVarName = uActionName+"_parameter_"+aActionParKey, oVarValue = ReplaceVars(oAction.dActionPars[aActionParKey]))
 
-            self.oEvenDispatcher.ExecuteActionsNewQueue(aActions=oTmpFunction,oParentWidget=oAction.oParentWidget,bForce=bForceState)
+            self.oEventDispatcher.ExecuteActionsNewQueue(aActions=oTmpFunction,oParentWidget=oAction.oParentWidget,bForce=bForceState)
             return 0
-        uMsg=self.oEvenDispatcher.CreateDebugLine(oAction,'Wrong Call')+u"\nFileName:"+oAction.uFileName
+        uMsg=self.oEventDispatcher.CreateDebugLine(oAction,'Wrong Call')+u"\nFileName:"+oAction.uFileName
         Logger.error (uMsg)
         for uKey in sorted(Globals.oActions.dActionsCommands):
-            LogError(u'Action: Call: Available Name: [%s]' % (uKey) )
+            LogError(u'Action: Call: Available Name: [%s]' % uKey)
         DumpQueue()
 
         ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
@@ -325,9 +322,9 @@ class cEventActionsFlowControl(cEventActionBase):
 
         """
 
-        self.oEvenDispatcher.LogAction(u'StopApp',oAction)
-        self.oEvenDispatcher.oAllTimer.DeleteAllTimer()
-        self.oEvenDispatcher.StopQueue()
+        self.oEventDispatcher.LogAction(u'StopApp',oAction)
+        self.oEventDispatcher.oAllTimer.DeleteAllTimer()
+        self.oEventDispatcher.StopQueue()
         Clock.schedule_once(self._ExecuteActionStopApp2)
         return -2
 
@@ -364,5 +361,5 @@ class cEventActionsFlowControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'Wait',oAction)
+        self.oEventDispatcher.LogAction(u'Wait',oAction)
         return -2

@@ -72,8 +72,9 @@ class cScript(cKeyhandlerTemplate):
 
     def __init__(self):
         cKeyhandlerTemplate.__init__(self)
-        self.uSubType   = u'SYSTEM'
-        self.uSortOrder = u"first"
+        self.uSubType           = u'SYSTEM'
+        self.uSortOrder         = u'first'
+        self.uIniFileLocation   = u'none'
 
         #this might get adjusted fo different platforms
         self.dTranslation = { "27": "ESC",

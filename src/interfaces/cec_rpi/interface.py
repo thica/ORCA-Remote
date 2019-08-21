@@ -59,32 +59,33 @@ class cInterface(oInterFaceTelnet.cInterface):
     class cInterFaceSettings(oInterFaceTelnet.cInterface.cInterFaceSettings):
         def __init__(self,oInterFace):
             oInterFaceTelnet.cInterface.cInterFaceSettings.__init__(self,oInterFace)
-            self.aInterFaceIniSettings.uSource_DeviceType      =  u"Recording 1"
-            self.aInterFaceIniSettings.uSource_DeviceID        =  u"00000"
-            self.aInterFaceIniSettings.uDestination_DeviceType =  u"TV"
-            self.aInterFaceIniSettings.uFNCodeset              =  u"CODESET_cec_rpi_telnet.xml"
+            self.aIniSettings.uSource_DeviceType      =  u"Recording 1"
+            self.aIniSettings.uSource_DeviceID        =  u"00000"
+            self.aIniSettings.uDestination_DeviceType =  u"TV"
+            self.aIniSettings.uFNCodeset              =  u"CODESET_cec_rpi_telnet.xml"
+            self.uTarget                              =  None
 
         def ReadConfigFromIniFile(self,uConfigName):
 
             oInterFaceTelnet.cInterface.cInterFaceSettings.ReadConfigFromIniFile(self,uConfigName)
 
             try:
-                self.SetContextVar('SOURCEID',self.aInterFaceIniSettings.uSource_DeviceID)
+                self.SetContextVar('SOURCEID',self.aIniSettings.uSource_DeviceID)
 
                 uSourceDevice='1'
                 uDestinationDevice='0'
                 for uKey in self.oInterFace.aTargets:
-                    if self.oInterFace.aTargets[uKey]==self.aInterFaceIniSettings.uSource_DeviceType:
+                    if self.oInterFace.aTargets[uKey]==self.aIniSettings.uSource_DeviceType:
                         uSourceDevice=uKey
                         self.SetContextVar('SOURCETYPE' ,uKey)
-                    if self.oInterFace.aTargets[uKey]==self.aInterFaceIniSettings.uDestination_DeviceType:
+                    if self.oInterFace.aTargets[uKey]==self.aIniSettings.uDestination_DeviceType:
                         uDestinationDevice=uKey
                         self.SetContextVar('DESTTYPE' ,uKey )
 
                 self.uTarget = uSourceDevice+uDestinationDevice
                 self.SetContextVar('TARGET' ,self.uTarget)
             except Exception as e:
-                self.ShowError(u'Cannot read config name:'+self.oInterFace.oInterFaceConfig.oFnConfig.string + u' Section:'+self.uSection,e)
+                self.ShowError(u'Cannot read config name:'+self.oInterFace.oObjectConfig.oFnConfig.string + u' Section:'+self.uSection,e)
             return
 
     def __init__(self):
@@ -98,9 +99,9 @@ class cInterface(oInterFaceTelnet.cInterface):
 
     def GetConfigJSON(self):
         dRet = oInterFaceTelnet.cInterface.GetConfigJSON(self)
-        dAdd = {"Source_DeviceType":      {"active": "enabled", "order": 10, "type": "scrolloptions",  "title": "Source Device Type",      "desc": "$lvar(6005)",  "section": "$var(InterfaceConfigSection)","key": "Source_DeviceType",           "default":"Recording 1", "options":["$var(VALUESTRING)"]},
-                "Source_DeviceID":        {"active": "enabled", "order": 11, "type": "string",         "title": "Source Device ID",        "desc": "$lvar(6005)",  "section": "$var(InterfaceConfigSection)","key": "Source_DeviceID",             "default":"00000"       },
-                "Destination_DeviceType": {"active": "enabled", "order": 12, "type": "scrolloptions",  "title": "Destination Device Type", "desc": "$lvar(6003)",  "section": "$var(InterfaceConfigSection)","key": "Destination_DeviceType",      "default":"TV", "options":["$var(VALUESTRING)"]}
+        dAdd = {"Source_DeviceType":      {"active": "enabled", "order": 10, "type": "scrolloptions",  "title": "Source Device Type",      "desc": "$lvar(6005)",  "section": "$var(ObjectConfigSection)","key": "Source_DeviceType",           "default":"Recording 1", "options":["$var(VALUESTRING)"]},
+                "Source_DeviceID":        {"active": "enabled", "order": 11, "type": "string",         "title": "Source Device ID",        "desc": "$lvar(6005)",  "section": "$var(ObjectConfigSection)","key": "Source_DeviceID",             "default":"00000"       },
+                "Destination_DeviceType": {"active": "enabled", "order": 12, "type": "scrolloptions",  "title": "Destination Device Type", "desc": "$lvar(6003)",  "section": "$var(ObjectConfigSection)","key": "Destination_DeviceType",      "default":"TV", "options":["$var(VALUESTRING)"]}
               }
 
         dRet.update(dAdd)

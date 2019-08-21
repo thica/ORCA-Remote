@@ -24,13 +24,14 @@ import traceback
 from kivy.logger    import Logger
 from ORCA.App       import ORCA_App
 
+
 ORCA = None
 try:
     ORCA = ORCA_App()
     if __name__ in ('__android__', '__main__'):
         ORCA.run()
 except Exception as exception:
-    uMsg = 'cORCA:Unexpected error:'+ str(exception)
+    uMsg = 'ORCA:Unexpected error:'+ str(exception)
     Logger.critical(uMsg)
     uMsg = traceback.format_exc()
     Logger.critical(uMsg)

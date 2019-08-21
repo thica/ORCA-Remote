@@ -133,7 +133,7 @@ class cTheScreenWithInit(cTheScreen):
         """ Loads the languages files """
         try:
             if uLanguageFileName:
-                Logger.info(u'TheScreen: Loading Language File [%s]' % (uLanguageFileName))
+                Logger.info(u'TheScreen: Loading Language File [%s]' % uLanguageFileName)
                 Globals.oLanguage.LoadXmlFile(uLanguageFileName)
             else:
                 Logger.info(u'TheScreen: Loading Language [%s]' % (Globals.uLanguage))

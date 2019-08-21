@@ -80,10 +80,11 @@ class cScript(cToolsTemplate):
 
     def __init__(self):
         cToolsTemplate.__init__(self)
-        self.uSubType        = u'GESTURERECORCER'
-        self.uSortOrder      = u'auto'
-        self.uSettingSection = u'tools'
-        self.uSettingTitle   = u"Gestures"
+        self.uSubType           = u'GESTURERECORCER'
+        self.uSortOrder         = u'auto'
+        self.uSettingSection    = u'tools'
+        self.uSettingTitle      = u'Gestures'
+        self.uIniFileLocation   = u'none'
 
     def ShowPageGestureRecorder(self, *args, **kwargs):
         Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_GestureRecorder')
@@ -98,12 +99,12 @@ class cScript(cToolsTemplate):
         Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED", fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools GestureRecorder")
         Globals.oNotifications.RegisterNotification("STARTSCRIPTGESTURERECORDER", fNotifyFunction=self.ShowPageGestureRecorder, uDescription="Script Tools GestureRecorder")
         oScriptSettingPlugin = cScriptSettingPlugin()
-        oScriptSettingPlugin.uScriptName   = self.uScriptName
+        oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "ORCA"
         oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
         oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_GESTURERECORDER_4)"
         oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_GESTURERECORDER_1)","desc": "$lvar(SCRIPT_TOOLS_GESTURERECORDER_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_GESTURERECORDER_3)","id":"button_notification_STARTSCRIPTGESTURERECORDER"}]}']
-        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uScriptName,oScriptSettingPlugin=oScriptSettingPlugin)
+        Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
         ''' If we press ESC on the Gestureboard page, goto to the settings page
             If we press the close button on the interface-settings page, goto to the settings page '''

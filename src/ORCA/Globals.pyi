@@ -11,6 +11,7 @@ from ORCA.Screen_Init                      import cTheScreenWithInit
 from ORCA.scripts.Scripts                  import cScripts
 from ORCA.Sound                            import cSound
 from ORCA.utils.Network                    import cWaitForConnectivity
+from ORCA.utils.CheckPermissions           import cCheckPermissions
 from ORCA.utils.Rotation                   import cRotation
 from ORCA.utils.FTP                        import cFTP
 from ORCA.utils.FileName                   import cFileName
@@ -27,6 +28,7 @@ aScriptList:                list
 aSkinList:                  list
 bClockWithSeconds:          bool
 bConfigCheckForNetwork:     bool
+bHasPermissions:            bool
 bIgnoreAtlas:               bool
 bInit:                      bool
 bInitPagesAtStart:          bool
@@ -90,6 +92,8 @@ oPathCookie:                 cPath
 oPathDefinitionRoot:         cPath
 oPathFonts:                  cPath
 oPathGestures:               cPath
+oPathGlobalSettingsScripts:  cPath
+oPathGlobalSettingsInterfaces: cPath
 oPathInterface:              cPath
 oPathLanguageRoot:           cPath
 oPathResources:              cPath
@@ -108,6 +112,7 @@ oScripts:                    cScripts
 oSound:                      cSound
 oTheScreen:                  cTheScreenWithInit
 oWaitForConnectivity:        cWaitForConnectivity
+oCheckPermissions:           cCheckPermissions
 oWinOrcaSettings:            Config
 uAuthor:                     str
 uBranch:                     str

@@ -44,19 +44,22 @@ def LoadFile(oFileName):
             f = open(oFileName.string, 'r')
             read_data = f.read()
         else:
+            f = None
             try:
                 #should work for all xml files
                 f= codecs.open(oFileName.string, 'r', encoding='utf-8')
                 read_data = f.read()
             except Exception as e:
-                f.close()
+                if f is not None:
+                    f.close()
                 # should work for common other files
                 try:
                     f = codecs.open(oFileName.string, 'r', encoding='latin1')
                     read_data = f.read()
                 except Exception as e:
                     #fallback
-                    f.close()
+                    if f is not None:
+                        f.close()
                     f = codecs.open(oFileName.string, 'r', encoding='utf-8', errors='ignore')
                     read_data = f.read()
         f.close()

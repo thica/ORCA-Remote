@@ -34,11 +34,12 @@ class cBorder(Widget):
 
         self.tBackGroundColor = kwargs.get('background_color',[0.5,0.5,0.5,1])
         self.fLineWidth       = float(kwargs.get('linewidth','1.0'))
-
+        self.oLine            = None
         super(cBorder, self).__init__(**RemoveNoClassArgs(kwargs,cBorder))
         # create the graphics
         self.Create_Border()
         self.bind(pos=self.update_graphics_pos,size=self.update_graphics_size)
+
 
     def Create_Border(self):
         """ draws the border """

@@ -161,7 +161,8 @@ class cLoadOnlineResource(EventDispatcher):
                 self.uUrl = urllib.parse.quote(uUrl, safe="%/:=&?~#+!$,;'@()*[]")
 
             #self.uUrl         = urllib.quote(uUrl,safe="%:=&?~#+!$,;'@()*[]")
-            self.oWeb         = UrlRequest(self.uUrl,on_success=self.OnSuccess,on_failure=self.OnFailure,on_error=self.OnError,on_progress=self.OnProgress, decode=False,file_path=self.uDest, debug=False)
+            #todo: fix ocaremote ssl problem and remove verify=false
+            self.oWeb         = UrlRequest(self.uUrl, verify=False, on_success=self.OnSuccess,on_failure=self.OnFailure,on_error=self.OnError,on_progress=self.OnProgress, decode=False,file_path=self.uDest, debug=False)
 
             return True
         except Exception as e:
@@ -251,7 +252,7 @@ class cLoadOnlineResource(EventDispatcher):
                             else:
                                 Logger.error("Failed to download zip:" + oZipFile.string)
                                 #todo: handle unzipped files
-                    oZipFile.Delete()
+                        oZipFile.Delete()
                 Logger.debug('LoadOnlineResource: Finished download Resource  [%s][%s]' % (self.uType,self.uName))
                 RegisterDownLoad(self.uType,self.uName,ToInt(self.uVersion))
             except Exception as e:
@@ -491,7 +492,7 @@ class cRepository(EventDispatcher):
     def LoadAllSubReps(self,uPath,aSubReps,bDoNotExecute):
         """ Load all sub reposities (dependencies) """
 
-        Logger.debug('Repository: Request to download reposity description: [%s]' %(uPath))
+        Logger.debug('Repository: Request to download reposity description: [%s]' % uPath)
 
         bDoRefresh=False
 
@@ -755,7 +756,7 @@ def RegisterDownLoad(uType,uName,iVersion):
         i=0
         for oInstalledRepKey in Globals.dInstalledReps:
             oInstalledRep=Globals.dInstalledReps[oInstalledRepKey]
-            uKey=u'installedrep%i_type' % (i)
+            uKey=u'installedrep%i_type' % i
             oConfig.set(u'ORCA', uKey, oInstalledRep.uType)
             uKey=u'installedrep%i_name' % (i)
             oConfig.set(u'ORCA', uKey, oInstalledRep.uName)

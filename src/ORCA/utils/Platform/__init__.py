@@ -23,7 +23,6 @@ from importlib              import import_module
 from kivy.logger            import Logger
 from kivy.utils             import platform
 from ORCA.utils.TypeConvert import ToUnicode
-from ORCA.utils.LogError    import LogError
 import kivy.core.window
 
 import ORCA.Globals as Globals
@@ -31,6 +30,7 @@ import ORCA.Globals as Globals
 __all__ = ['OS_ToPath',
            'OS_SystemIsOnline',
            'OS_Ping',
+           'OS_CheckPermissions',
            'OS_GetUserDataPath',
            'OS_GetDefaultNetworkCheckMode',
            'OS_GetDefaultStretchMode',
@@ -39,9 +39,10 @@ __all__ = ['OS_ToPath',
            'OS_GetRotationObject',
            'OS_GetUserDownloadsDataPath',
            'OS_GetSystemUserPath',
-           'OS_GetInstallationDataPath'
+           'OS_GetInstallationDataPath',
            'OS_Platform',
            'OS_RegisterSoundProvider',
+           'OS_RequestPermissions',
            'OS_Vibrate'
           ]
 
@@ -57,7 +58,7 @@ def GetFunction(uFunctionName):
     if oFunction is not None:
         return oFunction
 
-    uModule =  u'%s.%s_%s' % ("ORCA.utils.Platform",Globals.uPlatform,uFunctionName)
+    uModule =  u'%s.%s.%s_%s' % ("ORCA.utils.Platform",Globals.uPlatform,Globals.uPlatform,uFunctionName)
     try:
         oFunction = getattr(import_module(uModule), uFunctionName)
         Logger.info(u"Loaded Platform Module "+uModule)
@@ -66,7 +67,7 @@ def GetFunction(uFunctionName):
     except Exception as e:
         # LogError ("loading failed:"+uModule,e)
         pass
-    uModule =  '%s.%s_%s' % ("ORCA.utils.Platform","generic",uFunctionName)
+    uModule =  '%s.%s.%s_%s' % ("ORCA.utils.Platform","generic","generic",uFunctionName)
     try:
         oFunction = getattr(import_module(uModule), uFunctionName)
         Logger.info(u"Loaded Platform Module "+uModule)
@@ -78,6 +79,15 @@ def GetFunction(uFunctionName):
     Logger.error("Can't load platform module "+ uFunctionName)
     dFunctionCache[uFunctionName] = FunctionDummy
     return FunctionDummy
+
+def OS_CheckPermissions():
+    """  check and retrieve requiered permissions """
+    return GetFunction("CheckPermissions")()
+
+def OS_RequestPermissions():
+    """  Requests permissions from OS """
+    return GetFunction("RequestPermissions")()
+
 
 def OS_Platform():
     return ToUnicode(platform)

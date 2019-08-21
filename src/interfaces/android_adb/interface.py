@@ -75,18 +75,18 @@ class cInterface(cBaseInterFace):
 
         def __init__(self,oInterFace):
             cBaseInterFaceSettings.__init__(self,oInterFace)
-            self.aInterFaceIniSettings.uHost                       = u"discover"
-            self.aInterFaceIniSettings.uPort                       = u"5555"
-            self.aInterFaceIniSettings.uFNCodeset                  = u"CODESET_android_adb_DEFAULT.xml"
-            self.aInterFaceIniSettings.fTimeOut                    = 2.0
-            self.aInterFaceIniSettings.iTimeToClose                = -1
-            self.aInterFaceIniSettings.uDiscoverScriptName         = u"discover_upnp"
-            self.aInterFaceIniSettings.uParseResultOption          = u'store'
-            self.aInterFaceIniSettings.fDISCOVER_UPNP_timeout      = 5.0
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_models       = u"[]"
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_servicetypes = "urn:dial-multiscreen-org:service:dial:1"
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_manufacturer = ""
-            self.aInterFaceIniSettings.uDISCOVER_UPNP_prettyname   = ""
+            self.aIniSettings.uHost                       = u"discover"
+            self.aIniSettings.uPort                       = u"5555"
+            self.aIniSettings.uFNCodeset                  = u"CODESET_android_adb_DEFAULT.xml"
+            self.aIniSettings.fTimeOut                    = 2.0
+            self.aIniSettings.iTimeToClose                = -1
+            self.aIniSettings.uDiscoverScriptName         = u"discover_upnp"
+            self.aIniSettings.uParseResultOption          = u'store'
+            self.aIniSettings.fDISCOVER_UPNP_timeout      = 5.0
+            self.aIniSettings.uDISCOVER_UPNP_models       = u"[]"
+            self.aIniSettings.uDISCOVER_UPNP_servicetypes = "urn:dial-multiscreen-org:service:dial:1"
+            self.aIniSettings.uDISCOVER_UPNP_manufacturer = ""
+            self.aIniSettings.uDISCOVER_UPNP_prettyname   = ""
 
             # Load the helper
             oFn_Adb_Helper = cFileName(self.oInterFace.oPathMyCode) + u'adb_helper.py'
@@ -103,7 +103,7 @@ class cInterface(cBaseInterFace):
                 self.oDevice.Close()
                 return cBaseInterFaceSettings.Disconnect(self)
             except Exception as e:
-                self.ShowError(u'Cannot diconnect:'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Cannot diconnect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 return cBaseInterFaceSettings.Disconnect(self)
 
         def Connect(self):
@@ -112,21 +112,21 @@ class cInterface(cBaseInterFace):
             if not cBaseInterFaceSettings.Connect(self):
                 return False
 
-            if self.aInterFaceIniSettings.uHost=='':
+            if self.aIniSettings.uHost=='':
                 return False
 
             try:
-                self.oDevice.Connect(uHost=self.aInterFaceIniSettings.uHost, uPort=self.aInterFaceIniSettings.uPort,fTimeOut=self.aInterFaceIniSettings.fTimeOut)
-                self.oInterFace.oInterFaceConfig.WriteDefinitionConfigPar(uSectionName = self.uSection, uVarName= u'OldDiscoveredIP', uVarValue = self.aInterFaceIniSettings.uHost)
+                self.oDevice.Connect(uHost=self.aIniSettings.uHost, uPort=self.aIniSettings.uPort,fTimeOut=self.aIniSettings.fTimeOut)
+                self.oInterFace.oObjectConfig.WriteDefinitionConfigPar(uSectionName = self.uSection, uVarName= u'OldDiscoveredIP', uVarValue = self.aIniSettings.uHost)
                 self.bIsConnected=True
                 return self.bIsConnected
             except Exception as e:
                 if hasattr(e,"errno"):
                     if e.errno==10051:
                         self.bOnError=True
-                        self.ShowWarning(u'Cannot connect (No Network):'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort)
+                        self.ShowWarning(u'Cannot connect (No Network):'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                         return False
-                self.ShowError(u'Cannot connect:'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Cannot connect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
                 return False
 
@@ -134,18 +134,24 @@ class cInterface(cBaseInterFace):
         cBaseInterFace.__init__(self)
         self.aSettings              = {}
         self.oSetting               = None
-        self.aDiscoverScriptsBlackList = ["iTach (Global Cache)","Keene Kira"]
+        self.aDiscoverScriptsBlackList = ["iTach (Global Cache)","Keene Kira","ELVMAX"]
 
-    def Init(self,uInterFaceName,uInterFaceFile=u''):
-        cBaseInterFace.Init(self,uInterFaceName,uInterFaceFile)
-        self.oInterFaceConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+    def Init(self,uObjectName,oFnObject=None):
+        """ Initialisizes the Interface
+
+        :param string uObjectName: unicode : Name of the interface
+        :param cFileName oFnObject: The Filename of the interface
+        """
+
+        cBaseInterFace.Init(self,uObjectName,oFnObject)
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
     def DeInit(self,**kwargs):
         cBaseInterFace.DeInit(self,**kwargs)
@@ -155,8 +161,9 @@ class cInterface(cBaseInterFace):
     def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
-        iTryCount=0
-        iRet=1
+        iTryCount = 0
+        iRet      = 1
+        uTmpVar2  = ""
 
         if oAction.dActionPars.get('commandname') == "send_string":
             uTmpVar  = GetVar(uVarName = 'inputstring')
@@ -171,7 +178,7 @@ class cInterface(cBaseInterFace):
             oAction.uGlobalDestVar=uRetVar
 
         uParams = ReplaceVars(oAction.uParams)
-        uParams = ReplaceVars(uParams,self.uInterFaceName+'/'+oSetting.uConfigName)
+        uParams = ReplaceVars(uParams,self.uObjectName+'/'+oSetting.uConfigName)
 
         while iTryCount<2:
             iTryCount+=1
@@ -202,11 +209,11 @@ class cInterface(cBaseInterFace):
         self.iLastRet=iRet
 
         if not bNoLogOut:
-            if oSetting.aInterFaceIniSettings.iTimeToClose==0:
+            if oSetting.aIniSettings.iTimeToClose==0:
                 oSetting.Disconnect()
-            elif oSetting.aInterFaceIniSettings.iTimeToClose!=-1:
+            elif oSetting.aIniSettings.iTimeToClose!=-1:
                 Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aInterFaceIniSettings.iTimeToClose)
+                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
         return iRet
 
 

@@ -19,8 +19,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from xml.etree.ElementTree          import fromstring
+import                              logging
 
+from xml.etree.ElementTree          import fromstring
 from copy                           import copy
 
 from kivy.logger                    import Logger
@@ -140,14 +141,17 @@ class cDefinitions(object):
         for oDefinition in reversed(self.aDefinitionList_List):
             fPercentage=fPercentage+fPercentageStep
             if oDefinition.bImportLanguages:
-                aCommands=[{'name':'Update Percentage and DefinitionName','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
+                if Logger.getEffectiveLevel() != logging.DEBUG:
+                    aCommands = []
+                else:
+                    aCommands=[{'name':'Update Percentage and DefinitionName','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
                 if oDefinition.oDefinitionPathes.oFnDefinitionLanguageFallBack.Exists():
                     aCommands.append({'name':'Load Default Language File','string':'loadlanguages','languagefilename':oDefinition.oDefinitionPathes.oFnDefinitionLanguageFallBack.string,'definition':oDefinition.uName,'definitionalias':oDefinition.uAlias})
                 if not Globals.uLanguage==u'English':
                     oDefinition.oDefinitionPathes.LanguageChange()
                     if oDefinition.oDefinitionPathes.oFnDefinitionLanguage.Exists():
                         aCommands.append({'name':'Load Requested Language File','string':'loadlanguages','languagefilename':oDefinition.oDefinitionPathes.oFnDefinitionLanguage.string,'definition':oDefinition.uName,'definitionalias':oDefinition.uAlias})
-                if len(aCommands)>1:
+                if len(aCommands)>0:
                     Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
 
         Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
@@ -163,10 +167,13 @@ class cDefinitions(object):
         for oDefinition in reversed(self.aDefinitionList_List):
             fPercentage=fPercentage+fPercentageStep
             if oDefinition.bImportActions:
-                aCommands= [{'name': 'Update Percentage and Definition Name', 'string': 'showsplashtext', 'subtext': oDefinition.uDefPublicTitle, 'percentage': str(fPercentage)},
-                            {'name': 'Load the Definition Actions', "string": "loaddefinitionactions", "definitionname": oDefinition.uAlias}]
-                if len(aCommands)>1:
-                    Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
+                if Logger.getEffectiveLevel() != logging.DEBUG:
+                    aCommands = []
+                else:
+                    aCommands = [{'name': 'Update Percentage and Definition Name', 'string': 'showsplashtext', 'subtext': oDefinition.uDefPublicTitle, 'percentage': str(fPercentage)}]
+
+                aCommands.append({'name': 'Load the Definition Actions', "string": "loaddefinitionactions", "definitionname": oDefinition.uAlias})
+                Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
 
         Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
@@ -184,14 +191,13 @@ class cDefinitions(object):
             #for definition
             for oDefinition in reversed(self.aDefinitionList_List):
                 fPercentage=fPercentage+fPercentageStep
-                Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Update Percentage and Definition Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)},
-                                                                         {'name':'Load Fonts for Definition','string':'loaddefinitionfonts','definitionname':oDefinition.uAlias}])
-            '''
-            #Global
-            fPercentage=fPercentage+fPercentageStep
-            Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Update Percentage for ORCA','string':'showsplashtext','subtext':'ORCA','percentage':str(fPercentage)},
-                                                           {'name':'Load Fonts for Orca','string':'loaddefinitionfonts','definitionname':'ORCA'}])
-            '''
+                if Logger.getEffectiveLevel() != logging.DEBUG:
+                    aCommands = []
+                else:
+                    aCommands = [{'name':'Update Percentage and Definition Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
+                aCommands.append({'name':'Load Fonts for Definition','string':'loaddefinitionfonts','definitionname':oDefinition.uAlias})
+
+                Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
 
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         elif uDefinitionName=="ORCA":
@@ -217,9 +223,14 @@ class cDefinitions(object):
             aActions=Globals.oEvents.CreateSimpleActionList([{'name':'Show Message we load Gestures','string':'showsplashtext','maintext':'$lvar(404)'}])
             for oDefinition in reversed(self.aDefinitionList_List):
                 fPercentage=fPercentage+fPercentageStep
+                if Logger.getEffectiveLevel() != logging.DEBUG:
+                    aCommands = []
+                else:
+                    aCommands = [{'name':'Update Percentage and Definition Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
+                aCommands.append({'name':'Load Gestures for Definition','string':'loaddefinitiongestures','definitionname':oDefinition.uAlias})
+
                 if oDefinition.bImportActions:
-                    Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Update Percentage and Definition Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)},
-                                                                             {'name':'Load Gestures for Definition','string':'loaddefinitiongestures','definitionname':oDefinition.uAlias}])
+                    Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         else:
             self.dDefinitionList_Dict[uDefinitionName].LoadGestures()
@@ -239,8 +250,8 @@ class cDefinitions(object):
 
         if not uAlias in self.dDefinitionList_Dict:
             oDefinitionPathes=cDefinitionPathes(uDefinitionName)
-            SetVar(uVarName = "DEFINITIONPATH[%s]" %  (uDefinitionName), oVarValue = oDefinitionPathes.oPathDefinition.string)
-            SetVar(uVarName = "DEFINITIONPATHSKINELEMENTS[%s]" % (uDefinitionName), oVarValue=oDefinitionPathes.oPathDefinitionSkinElements.string)
+            SetVar(uVarName = "DEFINITIONPATH[%s]" % uDefinitionName, oVarValue = oDefinitionPathes.oPathDefinition.string)
+            SetVar(uVarName = "DEFINITIONPATHSKINELEMENTS[%s]" % uDefinitionName, oVarValue=oDefinitionPathes.oPathDefinitionSkinElements.string)
             Globals.dDefinitionPathes[uDefinitionName]=oDefinitionPathes
             SetDefinitionPathes(uDefinitionName)
 
@@ -351,8 +362,12 @@ class cDefinitions(object):
             # Scheduling Parsing of Definition XML Files
             for oDefinition in self.aDefinitionList_List:
                 fPercentage=fPercentage+fPercentageStep
-                Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Update Percentage and Definitioon Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)},
-                                                                         {'name':'And parse the definition','string':'parsedefinitionxml','definitionname':oDefinition.uAlias}])
+                if Logger.getEffectiveLevel() != logging.DEBUG:
+                    aCommands = []
+                else:
+                    aCommands = [{'name':'Update Percentage and Definitioon Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
+                aCommands.append({'name':'And parse the definition','string':'parsedefinitionxml','definitionname':oDefinition.uAlias})
+                Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
 
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         else:
@@ -372,9 +387,12 @@ class cDefinitions(object):
 
             for oDefinition in reversed(self.aDefinitionList_List):
                 fPercentage=fPercentage+fPercentageStep
-                Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Update Percentage and Interface Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)},
-                                                                         {'name':'Initialize the Interface','string':'initinterfacesettings','definitionname':oDefinition.uAlias}
-                                                                        ])
+                if Logger.getEffectiveLevel() != logging.DEBUG:
+                    aCommands = []
+                else:
+                    aCommands = [{'name':'Update Percentage and Interface Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
+                aCommands.append({'name':'Initialize the Interface','string':'initinterfacesettings','definitionname':oDefinition.uAlias})
+                Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
             Globals.oEvents.AddToSimpleActionList(aActions,    [{'name':'Show Message the we write all interface settings','string':'showsplashtext','subtext':"$lvar(456)",'percentage':str(fPercentage)},
                                                                          {'name':'Write all interface settings','string':'initinterfacesettings','definitionname':'WRITEALLSETTINGS'}
                                                                         ])
@@ -386,12 +404,12 @@ class cDefinitions(object):
                 if uInterfaceName in Globals.oInterFaces.oInterfaceList:
                     oInterface=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
                     if oInterface is None:
-                        Logger.info('Need to load unrecognized Interface [%s] for configuration' % (uInterfaceName))
+                        Logger.info('Need to load unrecognized Interface [%s] for configuration' % uInterfaceName)
                         Globals.oInterFaces.LoadInterface(uInterfaceName)
                         oInterface=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
                     if oInterface is not None:
                         for uConfigurationName in self.dInitInterfaceSettings[uInterfaceName]:
-                            oInterface.oInterFaceConfig.WriteDefinitionConfig(uSectionName = uConfigurationName ,dSettings = self.dInitInterfaceSettings[uInterfaceName][uConfigurationName])
+                            oInterface.oObjectConfig.WriteDefinitionConfig(uSectionName = uConfigurationName ,dSettings = self.dInitInterfaceSettings[uInterfaceName][uConfigurationName])
                 else:
                     Logger.warning('Interface [%s] not on device, so it will not be configured!' %(uInterfaceName))
 
@@ -420,9 +438,12 @@ class cDefinitions(object):
             aActions=Globals.oEvents.CreateSimpleActionList([{'name':'Show Message that we load the settings','string':'showsplashtext','maintext':'$lvar(414)'}])
             for oDefinition in reversed(self.aDefinitionList_List):
                 fPercentage=fPercentage+fPercentageStep
-                Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Update Percentage and Definition Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)},
-                                                                         {'name':'Load the settings for the Definition','string':'loaddefinitionsettings','definitionname':oDefinition.uAlias}
-                                                                        ])
+                if Logger.getEffectiveLevel() != logging.DEBUG:
+                    aCommands = []
+                else:
+                    aCommands = [{'name':'Update Percentage and Definition Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
+                aCommands.append({'name':'Load the settings for the Definition','string':'loaddefinitionsettings','definitionname':oDefinition.uAlias})
+                Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
 
             # Lets parse them (to init all default vars
             Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Parse all Settings and set defaults','string':'loaddefinitionsettings','definitionname':'PARSESETTINGS'}])

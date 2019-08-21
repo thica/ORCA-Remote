@@ -104,12 +104,12 @@ class cEventActionsVarControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'SetVar',oAction)
+        self.oEventDispatcher.LogAction(u'SetVar',oAction)
         uVarName    = ReplaceVars(oAction.dActionPars.get("varname",""))
         uVarValue   = ReplaceVars(oAction.dActionPars.get("varvalue",""))
         uVarContext = ReplaceVars(oAction.dActionPars.get("varcontext",""))
         SetVar(uVarName = uVarName, oVarValue = uVarValue, uContext = uVarContext)
-        self.oEvenDispatcher.bDoNext = not VarHasLinks(uVarName=uVarName)
+        self.oEventDispatcher.bDoNext = not VarHasLinks(uVarName=uVarName)
         return -2
 
     def ExecuteActionSetDefinitionVar(self,oAction):
@@ -127,7 +127,7 @@ class cEventActionsVarControl(cEventActionBase):
         uVarValue      = ReplaceVars(oAction.dActionPars.get("varvalue",""))
         uDefinitionName = ReplaceVars(oAction.dActionPars.get("definitionname",""))
 
-        self.oEvenDispatcher.LogAction(u'SetDefinitionVar',oAction)
+        self.oEventDispatcher.LogAction(u'SetDefinitionVar',oAction)
         if uDefinitionName=="":
             oDef=Globals.oDefinitions[0]
         else:
@@ -304,8 +304,7 @@ class cEventActionsVarControl(cEventActionBase):
         uParameter1    = oAction.dActionPars.get("parameter1","")
         uParameter2    = oAction.dActionPars.get("parameter2","")
         uOperator      = ReplaceVars(oAction.dActionPars.get("operator",""))
-        bNoVarDetails = False
-        self.oEvenDispatcher.bDoNext = True
+        bNoVarDetails  = False
 
         if uOperator==u'increase':
             Var_Increase(uVarName = uVarName,uStep = ReplaceVars(uParameter1), uMax = ReplaceVars(uParameter2))
@@ -401,9 +400,9 @@ class cEventActionsVarControl(cEventActionBase):
             LogError(u'Action: ModifyVar: Wrong modifier:'+uOperator )
             return 1
         if bNoVarDetails:
-            self.oEvenDispatcher.LogAction(u'ModifyVar',oAction)
+            self.oEventDispatcher.LogAction(u'ModifyVar',oAction)
         else:
-            self.oEvenDispatcher.LogAction(u'ModifyVar',oAction,"Result:"+GetVar(uVarName = uVarName))
+            self.oEventDispatcher.LogAction(u'ModifyVar',oAction,"Result:"+GetVar(uVarName = uVarName))
 
         return -2
 
@@ -455,8 +454,7 @@ class cEventActionsVarControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'AddVarLink',oAction)
-        self.oEvenDispatcher.bDoNext = True
+        self.oEventDispatcher.LogAction(u'AddVarLink',oAction)
 
         uLinkType      = oAction.dActionPars.get("linktype","")
         uVarName       = ReplaceVars(oAction.dActionPars.get("varname",""))
@@ -533,7 +531,7 @@ class cEventActionsVarControl(cEventActionBase):
         Varname:
         elementname_value    = "Apple"
         elementname_var      = "myarray[1]"
-        elementname_varcore  = "myarray"
+        actionname_parameter_elementname_varcore  = "myarray"
         elementname_index    = "1"
 
         <div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
@@ -559,16 +557,13 @@ class cEventActionsVarControl(cEventActionBase):
 
         WikiDoc:End
         """
-        self.oEvenDispatcher.LogAction(u'ForIn',oAction)
+        self.oEventDispatcher.LogAction(u'ForIn',oAction)
 
         uVarName    = ReplaceVars(oAction.dActionPars.get("varname",""))
         uDstVarName = ReplaceVars(oAction.dActionPars.get("dstvarname",""))
         iLevel      = ToInt(oAction.dActionPars.get("level","1"))
         uActionName = ReplaceVars(oAction.dActionPars.get("actionname",""))
-        uBreakVar   = ReplaceVars(oAction.dActionPars.get("breakvar","ForInBreakVar"))
-
-        self.oEvenDispatcher.bDoNext = True
-
+        uBreakVar   = ReplaceVars(oAction.dActionPars.get("breakvar",""))
         aActions=[]
 
         aVars=sorted(Var_GetArray(uVarName = uVarName,iLevel = iLevel))
@@ -584,15 +579,22 @@ class cEventActionsVarControl(cEventActionBase):
                 uVarCore=uVar[:iPosStart]
                 uVarIndex=uVar[iPosStart+1:iPosEnd]
 
-            self.oEvenDispatcher.AddToSimpleActionList(aActions,[{'name':'Set Var Value','string':'setvar','varname':uDstVarName+"_value",'varvalue':GetVar(uVarName = uVar)},
-                                                                 {'name':'Set Var Name','string':'setvar','varname':uDstVarName+"_var",'varvalue':uVar},
-                                                                 {'name':'Set Core Var Name','string':'setvar','varname':uDstVarName+"_varcore",'varvalue':uVarCore},
-                                                                 {'name':'Set Var Index','string':'setvar','varname':uDstVarName+"_index",'varvalue':uVarIndex},
-                                                                 {'name':'Call Action','string':'call','actionname':uActionName},
-                                                                 {'name':'Exit ForIn if requested','string':'goto', 'label': 'label_exitforinloop','condition':'$var('+uBreakVar+')!=0'}
-                                                                 ])
+            if uBreakVar==u'':
+                self.oEventDispatcher.AddToSimpleActionList(aActions,[{'name':'Call ForIn Action',
+                                                                       'string':'call','actionname':uActionName,
+                                                                       "forin_value":GetVar(uVarName = uVar),
+                                                                       "forin_var":uVar,
+                                                                       "forin_varcore":uVarCore,
+                                                                       "forin_index":uVarIndex,}])
+            else:
+                self.oEventDispatcher.AddToSimpleActionList(aActions,[{'name':'Call ForIn Action',
+                                                                       'string':'call','actionname':uActionName,
+                                                                       "forin_value":GetVar(uVarName = uVar),
+                                                                       "forin_var":uVar,
+                                                                       "forin_varcore":uVarCore,
+                                                                       "forin_index":uVarIndex,
+                                                                       "condition":"$var("+uBreakVar+")==0"}])
 
-        self.oEvenDispatcher.AddToSimpleActionList(aActions, [{'string': 'noaction', 'name':'label_exitforinloop' }])
-        self.oEvenDispatcher.ExecuteActionsNewQueue(aActions,None)
+
+        self.oEventDispatcher.ExecuteActionsNewQueue(aActions,None)
         return -2
-

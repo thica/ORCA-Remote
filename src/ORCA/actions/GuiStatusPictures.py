@@ -53,9 +53,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         """
 
         uPictureName       = ReplaceVars(oAction.dActionPars.get("picturename",""))
-
-        self.oEvenDispatcher.bDoNext = True
-        self.oEvenDispatcher.LogAction(u'SetTransmitterPicture',oAction)
+        self.oEventDispatcher.LogAction(u'SetTransmitterPicture',oAction)
         if oAction.oParentWidget is not None:
             oAction.oParentWidget.oParentScreenPage.SetTransmitterPicture(uTransmitterPictureName=uPictureName)
         else:
@@ -90,9 +88,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         """
 
         uPictureName       = ReplaceVars(oAction.dActionPars.get("picturename",""))
-
-        self.oEvenDispatcher.bDoNext = True
-        self.oEvenDispatcher.LogAction(u'SetWaitPicture',oAction)
+        self.oEventDispatcher.LogAction(u'SetWaitPicture',oAction)
         if oAction.oParentWidget is not None:
             oAction.oParentWidget.oParentScreenPage.SetWaitPicture(uWaitPictureName=uPictureName)
         else:
@@ -124,8 +120,8 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'EnableTransmitterPicture',oAction)
-        self.oEvenDispatcher.bDoNext = False
+        self.oEventDispatcher.LogAction(u'EnableTransmitterPicture',oAction)
+        self.oEventDispatcher.bDoNext = False
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit is not None:
                 Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit.EnableWidget(True)
@@ -155,8 +151,8 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.bDoNext = False
-        self.oEvenDispatcher.LogAction(u'DisableTransmitterPicture',oAction)
+        self.oEventDispatcher.bDoNext = False
+        self.oEventDispatcher.LogAction(u'DisableTransmitterPicture',oAction)
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit is not None:
                 Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit.EnableWidget(False)
@@ -186,8 +182,8 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'EnableWaitPicture',oAction)
-        self.oEvenDispatcher.bDoNext = False
+        self.oEventDispatcher.LogAction(u'EnableWaitPicture',oAction)
+        self.oEventDispatcher.bDoNext = False
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureWait is not None:
                 Globals.oTheScreen.oCurrentPage.oWidgetPictureWait.EnableWidget(True)
@@ -217,8 +213,8 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEvenDispatcher.LogAction(u'DisableWaitPicture',oAction)
-        self.oEvenDispatcher.bDoNext = False
+        self.oEventDispatcher.LogAction(u'DisableWaitPicture',oAction)
+        self.oEventDispatcher.bDoNext = False
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureWait is not None:
                 Globals.oTheScreen.oCurrentPage.oWidgetPictureWait.EnableWidget(False)

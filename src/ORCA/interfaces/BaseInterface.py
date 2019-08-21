@@ -21,18 +21,13 @@
 from kivy.logger                             import Logger
 from kivy.clock                              import Clock
 
-from ORCA.RepManagerEntry                    import cRepManagerEntry
+from ORCA.BaseObject                         import cBaseObject
 from ORCA.interfaces.BaseInterfaceSettings   import cBaseInterFaceSettings
 from ORCA.interfaces.InterfaceResultParser   import cInterFaceResultParser
 from ORCA.interfaces.InterfaceConfig         import cInterFaceConfig
 from ORCA.interfaces.InterfaceConfigDiscover import cInterFaceConfigDiscover
-
 from ORCA.utils.FileName                     import cFileName
-
-from ORCA.utils.LogError                     import LogError
 from ORCA.utils.TypeConvert                  import ToDic
-from ORCA.utils.TypeConvert                  import ToIntVersion
-from ORCA.utils.TypeConvert                  import ToUnicode
 from ORCA.vars.Replace                       import ReplaceVars
 from ORCA.vars.Access                        import SetVar
 
@@ -41,12 +36,12 @@ import ORCA.Globals as Globals
 __all__ = ['cBaseInterFace']
 
 
-class cBaseInterFace(object):
+class cBaseInterFace(cBaseObject):
     """ Basic Interface class """
 
     # Some Type hints
-    oInterFaceConfigDiscover = None  # type: cInterFaceConfigDiscover
-    oInterFaceConfig         = None  # type: cInterFaceConfig
+    oObjectConfigDiscover = None  # type: cInterFaceConfigDiscover
+    oObjectConfig         = None  # type: cInterFaceConfig
 
     class cInterFaceSettings(cBaseInterFaceSettings):
         """ Needs to be implemented by main interface class """
@@ -54,62 +49,30 @@ class cBaseInterFace(object):
 
     def __init__(self):
 
+        super(cBaseInterFace,self).__init__()
+
+        self.oObjectConfig              = None
+        self.oObjectConfigDiscover      = None
+        self.uObjectType                = "interface"
+
         self.aDiscoverScriptsBlackList  = []
         self.aDiscoverScriptsWhiteList  = []
-        self.aSettings                  = {}
-        self.bIsInit                    = False
-        self.iLastRet                   = 0
-        self.iMyVersion                 = ToIntVersion('1.0.0')
-        self.iOrcaVersion               = ToIntVersion('1.0.0')     #OrcaVersion defines for what Orca Version the Interface has been developed
         self.oAction                    = None
-        self.oInterFaceConfig           = None
-        self.oInterFaceConfigDiscover   = None
-        self.oFnInterFace               = None
-        self.uInterFaceName             = u''
-        self.oPathMyCode                = None
-        self.oPathMy                    = None
+        self.iLastRet                   = 0
 
-    def Init(self,uInterFaceName,oFnInterFace=None):
+    def Init(self,uObjectName,oFnObject=None):
         """ Initialisizes the Interface
 
-        :param string uInterFaceName: unicode : Name of the interface
-        :param cFileName oFnInterFace: The Filename of the interface
+        :param string uObjectName: unicode : Name of the interface
+        :param cFileName oFnObject: The Filename of the interface
         """
 
-        self.bIsInit            = True
-        self.uInterFaceName     = uInterFaceName
+        super(cBaseInterFace, self).Init(uObjectName,oFnObject)
 
-        if oFnInterFace is None:
-            oFnInterFacePy    = cFileName(Globals.oPathInterface +  uInterFaceName) + u'interface.py'
-            oFnInterFace      = cFileName(oFnInterFacePy)
-
-        self.oFnInterFace     = cFileName(oFnInterFace)
-
-        self.oPathMyCode        = Globals.oPathInterface + self.uInterFaceName
-        self.oPathMy            = Globals.oDefinitionPathes.oPathDefinitionInterfaceSettings +self.uInterFaceName
-        if not self.oPathMy.Exists():
-            self.oPathMy.Create()
-
-        self.oInterFaceConfig           = cInterFaceConfig(self)
-        self.oInterFaceConfig.Init()
-        self.oInterFaceConfigDiscover   = cInterFaceConfigDiscover(self)
-        self.oInterFaceConfigDiscover.Init()
-
-        Globals.oLanguage.LoadXmlFile("INTERFACE", uInterFaceName)
-
-        oRepManagerEntry=cRepManagerEntry(oFnInterFace)
-        if oRepManagerEntry.ParseFromSourceFile():
-            self.iMyVersion     = oRepManagerEntry.oRepEntry.iVersion
-            self.iOrcaVersion   = oRepManagerEntry.oRepEntry.iMinOrcaVersion
-            #OrcaVersion defines for what Orca Version the Interface has been developed
-        Globals.oNotifications.RegisterNotification("on_stopapp",self.DeInit,"Interface:"+self.uInterFaceName)
-        Globals.oNotifications.RegisterNotification("on_pause",self.OnPause,"Interface:"+self.uInterFaceName)
-        Globals.oNotifications.RegisterNotification("on_resume",self.OnResume,"Interface:"+self.uInterFaceName)
-        self.ShowDebug(u'Init')
-
-    def DeInit(self, **kwargs):
-        """ Deinitialisizes the interface """
-        self.ShowDebug(u'DeInit')
+        self.oObjectConfig           = cInterFaceConfig(self)
+        self.oObjectConfig.Init()
+        self.oObjectConfigDiscover   = cInterFaceConfigDiscover(self)
+        self.oObjectConfigDiscover.Init()
 
     def DoAction(self,oAction):
         """
@@ -143,7 +106,7 @@ class cBaseInterFace(object):
                     dRepeatCmds    = ToDic(uCmd)
                     uRepeatCmd     = dRepeatCmds["REPEAT"]["REPEATCMD"]
                     uRepeatVarName = dRepeatCmds["REPEAT"]["REPEATVAR"]
-                    uRepeatVar     = ReplaceVars(uRepeatVarName,self.uInterFaceName+u'/'+oSetting.uConfigName)
+                    uRepeatVar     = ReplaceVars(uRepeatVarName,self.uObjectName+u'/'+oSetting.uConfigName)
                     if uRepeatVar == "":
                         uRepeatVar = ReplaceVars(uRepeatVarName)
                     iLen = len(uRepeatVar)
@@ -157,7 +120,7 @@ class cBaseInterFace(object):
                                     oRepeatAction.dActionPars['nologout']='1'
                                 aExecActions.append(oRepeatAction)
                         else:
-                            Logger.error(u'Error Parsing/Sending Repeats, RepeatCommand not found %s' % (uKey2))
+                            Logger.error(u'Error Parsing/Sending Repeats, RepeatCommand not found %s' % uKey2)
 
                     for oTmpAction1 in reversed(aExecActions):
                         if oTmpAction1.iActionId  == Globals.oActions.oActionType.Codeset:
@@ -170,7 +133,7 @@ class cBaseInterFace(object):
                     aExecActions.append(oTmpAction)
 
         except Exception as e:
-            self.ShowError(u'Error Parsing/Sending Repeats %s' % (uCmd),"",e)
+            self.ShowError(u'Error Parsing/Sending Repeats %s' % uCmd,"",e)
             return 1
 
         Globals.oEvents.ExecuteActionsNewQueue(aExecActions, oAction.oParentWidget)
@@ -221,7 +184,7 @@ class cBaseInterFace(object):
         self.ShowInfo(u'OnPause')
         for aSetting in self.aSettings:
             oSetting=self.aSettings[aSetting]
-            if oSetting.aInterFaceIniSettings.bDisconnectInterFaceOnSleep:
+            if oSetting.aIniSettings.bDisconnectInterFaceOnSleep:
                 if oSetting.bIsConnected:
                     oSetting.bResumeConnection=True
                     self.aSettings[aSetting].Disconnect()
@@ -238,10 +201,10 @@ class cBaseInterFace(object):
                 oSetting.bResumeConnection=False
                 oSetting.Connect()
                 if oSetting.bIsConnected:
-                    if oSetting.aInterFaceIniSettings.get('iTimeToClose') is not None:
-                        if oSetting.aInterFaceIniSettings.iTimeToClose>0:
+                    if oSetting.aIniSettings.get('iTimeToClose') is not None:
+                        if oSetting.aIniSettings.iTimeToClose>0:
                             Clock.unschedule(oSetting.FktDisconnect)
-                            Clock.schedule_once(oSetting.FktDisconnect, oSetting.aInterFaceIniSettings.iTimeToClose)
+                            Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
 
     def FindCodesetFile(self,uFNCodeset):
         """
@@ -251,14 +214,14 @@ class cBaseInterFace(object):
         :param string uFNCodeset: The file name of the codeset file
         :return: The founded filename
         """
-        oFnName= cFileName(self.oPathMy)+uFNCodeset
+        oFnName= cFileName(self.oPathMyData)+uFNCodeset
         if oFnName.Exists():
             return oFnName
 
         oFnName=cFileName(Globals.oPathCodesets) + uFNCodeset
         if oFnName.Exists():
             return oFnName
-        oFnName = cFileName(Globals.oPathCodesets +  self.uInterFaceName) + uFNCodeset
+        oFnName = cFileName(Globals.oPathCodesets +  self.uObjectName) + uFNCodeset
         if oFnName.Exists():
             return oFnName
 
@@ -277,36 +240,11 @@ class cBaseInterFace(object):
 
         if oSetting.oResultParser is None:
             oSetting.oResultParser                          = cInterFaceResultParser(self, oSetting.uConfigName)
-            oSetting.oResultParser.uGlobalParseResultOption = oSetting.aInterFaceIniSettings.uParseResultOption
-            oSetting.oResultParser.uGlobalTokenizeString    = oSetting.aInterFaceIniSettings.uParseResultTokenizeString
+            oSetting.oResultParser.uGlobalParseResultOption = oSetting.aIniSettings.uParseResultOption
+            oSetting.oResultParser.uGlobalTokenizeString    = oSetting.aIniSettings.uParseResultTokenizeString
             if oAction is None:
                 return "",""
         return oSetting.oResultParser.ParseResult(oAction,uResponse,oSetting)
-
-
-    def GetSettingObjectForConfigName(self,uConfigName):
-        """
-        Creates/returns a config object
-
-        :rtype: cSetting
-        :param string uConfigName: The Name of the configuration
-        :return: a Setting object
-        """
-
-        oSetting=self.aSettings.get(uConfigName)
-
-        if oSetting is None:
-            uConfigName = ReplaceVars(uConfigName)
-            oSetting    = self.aSettings.get(uConfigName)
-
-        if uConfigName=='' or '$var' in  uConfigName:
-            uConfigName = ReplaceVars(uConfigName)
-
-        if oSetting is None:
-            oSetting=self.cInterFaceSettings(self)
-            self.aSettings[uConfigName]=oSetting
-            oSetting.ReadConfigFromIniFile(uConfigName)
-        return oSetting
 
     def GetConfigCodesetList(self):
         """
@@ -316,14 +254,15 @@ class cBaseInterFace(object):
         :return: A list of all codeset files for an interface
         """
         aCodesetFiles = []
-        uPattern=u"CODESET_"+self.uInterFaceName
-        oPathFolder = Globals.oPathCodesets + self.uInterFaceName
+        uPattern=u"CODESET_"+self.uObjectName
+        oPathFolder = Globals.oPathCodesets + self.uObjectName
         if oPathFolder.Exists():
             aCodesetFilesSub=oPathFolder.GetFolderList()
+            aCodesetFilesSub = oPathFolder.GetFileList(bSubDirs=False,bFullPath=False)
             for uFile in aCodesetFilesSub:
                 if uFile.startswith(uPattern):
                     aCodesetFiles.append(uFile)
-        aCodesetFilesSub=self.oPathMy.GetFolderList()
+        aCodesetFilesSub=self.oPathMyData.GetFileList(bSubDirs=True,bFullPath=False)
         for uFile in  aCodesetFilesSub:
             if uFile.startswith(uPattern):
                 aCodesetFiles.append(uFile)
@@ -346,93 +285,6 @@ class cBaseInterFace(object):
         uSettingsJSON+=uValueString
         return uSettingsJSON
 
-    def GetConfigJSON(self):
-        """
-        Abstract function, needs to be overriden by interface class
-
-        :rtype: dict
-        :return: Dummy funtion, returns empty dict
-        """
-        return {}
-
-    def _FormatShowMessage(self,uMsg,uParConfigName=""):
-        """
-        Creates a debug line for the interface
-
-        :rtype: string
-        :param string uMsg: The message to show
-        :param string uParConfigName:  The name of the configuration
-        :return: The formatted debug string
-        """
-        uConfigName = u''
-        if uParConfigName:
-            uConfigName = u'/' + uParConfigName
-
-        return u'Interface ' + self.uInterFaceName + uConfigName + u': ' + uMsg
-
-    def ShowWarning(self,uMsg,uParConfigName=""):
-        """
-        writes a warning message
-
-        :rtype: string
-        :param string uMsg: The warning message
-        :param string uParConfigName: The configuration name
-        :return: The written logfile entry
-        """
-        uRet = self._FormatShowMessage(uMsg,uParConfigName)
-        Logger.warning (uRet)
-        return uRet
-
-    def ShowDebug(self,uMsg,uParConfigName=""):
-        """
-        writes a debug message
-
-        :rtype: string
-        :param string uMsg: The debug message
-        :param string uParConfigName: The configuration name
-        :return: The written logfile entry
-        """
-        uRet = self._FormatShowMessage(uMsg,uParConfigName)
-        Logger.debug (uRet)
-        return uRet
-
-    def ShowInfo(self,uMsg,uParConfigName=""):
-        """
-        writes a info message
-
-        :rtype: string
-        :param string uMsg: The info message
-        :param string uParConfigName: The configuration name
-        :return: The written logfile entry
-        """
-
-        uRet = self._FormatShowMessage(uMsg,uParConfigName)
-        Logger.info (uRet)
-        return uRet
-
-    def ShowError(self,uMsg, uParConfigName="",oException=None):
-        """
-        writes an error message
-
-        :rtype: string
-        :param string uMsg: The error message
-        :param string uParConfigName: The configuration name
-        :param exception oException: Optional, an exception to show
-        :return: The written logfile entry
-        """
-
-        # uRet = self._FormatShowMessage(uMsg,uParConfigName)
-        # Logger.debug (uRet)
-        # return uRet
-        uRet = self._FormatShowMessage(uMsg,uParConfigName)
-        iErrNo = 0
-        if oException is not None:
-            if hasattr(oException,'errno'):
-                iErrNo = oException.errno
-        if iErrNo is  None:
-            iErrNo = 12345
-        if iErrNo!=0:
-            uRet = uRet + u" "+ToUnicode(iErrNo)
-        uRet=LogError (uRet,oException)
-        return uRet
+    def GetNewSettingObject(self):
+        return self.cInterFaceSettings(self)
 

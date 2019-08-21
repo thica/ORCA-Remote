@@ -21,19 +21,19 @@
         <element name="Button Success"      type="BUTTON"     posx="center" posy="of:bottom:last"   height="of:height:last" picturenormal='button square*' action="playsound" actionpars='{"soundname":"success","volume":"$var(VOLUME)"}'      fontsize='%h40'  caption="Success" />
       </element>
 
-    
+
     <element name='Anchor Standard Sounds'  type='ANCHOR'     posx='%95'    posy='middle' width='%40' height='%80'>
         <element name="Label custom"        type="TEXTFIELD"  posx="center" posy="top"              height="%7" caption="Custom Sounds"   vtextalign='top' htextalign='center' fontsize='%h70'  />
         <element name="Button WAV"          type="BUTTON"     posx="center" posy="of:bottom:last"   height="%10" picturenormal='button square*' action="playsound" actionpars='{"soundname":"$var(DEFINITIONPATH)/sounds/alien.wav","volume":"$var(VOLUME)"}' fontsize='%h40'  caption="WAV" />
         <element name="Button MP3"          type="BUTTON"     posx="center" posy="of:bottom:last"   height="%10" picturenormal='button square*' action="playsound" actionpars='{"soundname":"$var(DEFINITIONPATH)/sounds/dead.mp3","volume":"$var(VOLUME)"}' fontsize='%h40'  caption="MP3" />
     </element>
 
-     <element name='Anchor Slider Volume' type='ANCHOR' posx='center' posy='%99' width='%80' height='%20'>
-          <element name="Volume Label"                type="TEXTFIELD"  posx="center" posy="top"  width="%90" height="%20" caption="Volume"   vtextalign='top' htextalign='center' fontsize='%h100'  />
-          <element name="Slider Volume"               type="SLIDER"     posx="center" posy="middle"  width="%90" height="%60" picturenormal="background boxes" picturebutton="button round normal" mindatavalue="0" maxdatavalue="100" destvar="VOLUME"  roundpos="0" orientation="horizontal"/>
-          <element name="Volume Textvalue"            type="TEXTFIELD"  posx="center" posy="of:bottom:last"  width="%90" height="%20" caption="$var(VOLUME)"   vtextalign='top' htextalign='center' fontsize='%h100'  />
+     <element name='Anchor Slider Volume' type='ANCHOR' posx='center' posy='%98' width='%80' height='%20'>
+          <element name="Volume Label"                type="TEXTFIELD"  posx="center" posy="top"  width="%90" height="%30" caption="Volume"   vtextalign='top' htextalign='center' fontsize='%h70'  />
+          <element name="Slider Volume"               type="SLIDER"     posx="center" posy="middle"  width="%90" height="%40" picturenormal="background boxes" picturebutton="button round normal" mindatavalue="0" maxdatavalue="100" destvar="VOLUME"  roundpos="0" orientation="horizontal"/>
+          <element name="Volume Textvalue"            type="TEXTFIELD"  posx="center" posy="of:bottom:last"  width="%90" height="%30" caption="$var(VOLUME)"   vtextalign='top' htextalign='center' fontsize='%h70'  />
       </element>
-  
+
 
   </elements>
 </page>

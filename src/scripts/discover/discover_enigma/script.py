@@ -91,7 +91,7 @@ class cScript(cDiscoverScriptTemplate):
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aScriptIniSettings.fTimeOut                     = 1.0
+            self.aIniSettings.fTimeOut                     = 1.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
@@ -101,24 +101,22 @@ class cScript(cDiscoverScriptTemplate):
         self.aResults        = []
         self.aThreads        = []
 
-    def Init(self,uScriptName,uScriptFile=u''):
+    def Init(self,uObjectName,uScriptFile=u''):
         """
         Init function for the script
 
-        :param string uScriptName: The name of the script (to be passed to all scripts)
+        :param string uObjectName: The name of the script (to be passed to all scripts)
         :param uScriptFile: The file of the script (to be passed to all scripts)
         """
-        cDiscoverScriptTemplate.Init(self, uScriptName, uScriptFile)
-        self.oScriptConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
     def GetHeaderLabels(self):
         return ['$lvar(5029)','$lvar(5035)','$lvar(6002)','$lvar(5031)']
 
     def ListDiscover(self):
         oSetting                = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
-        fTimeOut                = oSetting.aScriptIniSettings.fTimeOut
-        dArgs                   = {}
-        dArgs["onlyonce"]       = 0
+        dArgs                   = {"onlyonce": 0}
 
         self.Discover(**dArgs)
 
@@ -150,7 +148,7 @@ class cScript(cDiscoverScriptTemplate):
 
         uConfigName             = kwargs.get('configname',self.uConfigName)
         oSetting                = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        fTimeOut                = ToFloat(kwargs.get('timeout',oSetting.aScriptIniSettings.fTimeOut))
+        fTimeOut                = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
         bOnlyOnce               = ToBool(kwargs.get('onlyonce', "1"))
 
         del self.aResults[:]

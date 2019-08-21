@@ -72,7 +72,7 @@ class cWidgetAnchor(cWidgetBase):
             self.CreateBase(Parent=oParent,Class='')
             self.AddArg('background_color',[1.0,0.0,1.0,1.0])
             self.AddArg('linewidth',"2")
-            self.oBorder=cBorder(**self.aKwArgs)
+            self.oBorder=cBorder(**self.dKwArgs)
             self.oParent.add_widget(self.oBorder)
         return True
 

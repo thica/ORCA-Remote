@@ -18,6 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import                              logging
 from kivy.logger                    import Logger
 from kivy.core.text                 import LabelBase
 from ORCA.utils.XML                 import GetXMLTextAttribute
@@ -142,8 +143,12 @@ class cFonts(object):
             for oFontIndex in self.dFonts:
                 oFont=self.dFonts[oFontIndex]
                 fPercentage=fPercentage+fPercentageStep
-                Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Update Percentage and Font Name','string':'showsplashtext','subtext':oFont.uName,'percentage':str(fPercentage)},
-                                                                        {'name':'Register the Font','string':'registerfonts','fontname':oFont.uName}])
+                if Logger.getEffectiveLevel() != logging.DEBUG:
+                    aCommands = []
+                else:
+                    aCommands = [{'name':'Update Percentage and Font Name','string':'showsplashtext','subtext':oFont.uName,'percentage':str(fPercentage)}]
+                aCommands.append({'name':'Register the Font','string':'registerfonts','fontname':oFont.uName})
+                Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
                 Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         else:
             oFont=self.dFonts[uFontName]

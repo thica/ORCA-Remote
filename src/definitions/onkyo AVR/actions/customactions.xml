@@ -17,8 +17,8 @@
 
   <action name="Change Service $dvar(definition_alias_mediaplayer_template)">
     <action name="Init Var" string="setvar tmp_serviceindex=" />
-    <action name="Get Button Text" string="setvar TMP_SERVICENAME=$var(Change Service $dvar(definition_alias_mediaplayer_template)_parameter_DROPDOWNVALUE)" />
-    <action name="Loop through servicelist" string="forin" varname="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_NetService_name[]"  dstvarname="TMP_SERVICENAME2" level="1" actionname="FKT Find Service Index $dvar(definition_alias_mediaplayer_template)" />
+    <action name="Get Button Text" string="setvar TMP_SERVICENAME=$par(DROPDOWNVALUE)" />
+    <action name="Loop through servicelist" string="forin" varname="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_NetService_name[]"  level="1" actionname="FKT Find Service Index $dvar(definition_alias_mediaplayer_template)" />
     <action name="If we found something" string="if" condition="tmp_serviceindex!=" />
       <action name="Compile Var Name" string="setvar tmpvarname=$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_NetService_id[$var(tmp_serviceindex)]" />
       <action name="Get the ID of the Service" string="modifyvar" operator="fromvar" varname="tmpvarname" />
@@ -33,13 +33,13 @@
   </action>
 
   <action name="FKT Find Service Index $dvar(definition_alias_mediaplayer_template)">
-    <action name="if service name is requested service name"  string="setvar tmp_serviceindex=$var(TMP_SERVICENAME2_index)" condition="$var(TMP_SERVICENAME2_value)==$var(TMP_SERVICENAME)"/>
+    <action name="if service name is requested service name"  string="setvar tmp_serviceindex=$par(forin_index)" condition="$var(TMP_SERVICENAME2_value)==$var(TMP_SERVICENAME)"/>
   </action>
 
   <action name="Change Preset $dvar(definition_alias_mediaplayer_template)">
     <action name="Init Var" string="setvar tmp_presetindex=" />
-    <action name="Get Button Text" string="setvar TMP_PRESETNAME=$var(Change Preset $dvar(definition_alias_mediaplayer_template)_parameter_DROPDOWNVALUE)" />
-    <action name="Loop through presetlist" string="forin" varname="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Presets_name[]"  dstvarname="TMP_PRESETNAME2" level="1" actionname="FKT Find Preset Index $dvar(definition_alias_mediaplayer_template)" />
+    <action name="Get Button Text" string="setvar TMP_PRESETNAME=$par(DROPDOWNVALUE)" />
+    <action name="Loop through presetlist" string="forin" varname="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Presets_name[]"  level="1" actionname="FKT Find Preset Index $dvar(definition_alias_mediaplayer_template)" />
     <action name="If we found something" string="if" condition="tmp_presetindex!=" />
       <action name="Compile Var Name" string="setvar tmpvarname=$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Presets_id[$var(tmp_presetindex)]" />
       <action name="Get the ID of the Preset" string="modifyvar" operator="fromvar" varname="tmpvarname" />
@@ -49,13 +49,13 @@
   </action>
 
   <action name="FKT Find Preset Index $dvar(definition_alias_mediaplayer_template)">
-    <action name="if preset name is requested preset name"  string="setvar tmp_presetindex=$var(TMP_PRESETNAME2_index)" condition="$var(TMP_PRESETNAME2_value)==$var(TMP_PRESETNAME)"/>
+    <action name="if preset name is requested preset name"  string="setvar tmp_presetindex=$par(forin_index)" condition="$par(forin_value)==$var(TMP_PRESETNAME)"/>
   </action>
 
   <action name="Change Source $dvar(definition_alias_mediaplayer_template)">
     <action name="Init Var" string="setvar tmp_sourceindex=" />
-    <action name="Get Button Text" string="setvar TMP_SOURCENAME=$var(Change Source $dvar(definition_alias_mediaplayer_template)_parameter_DROPDOWNVALUE)" />
-    <action name="Loop through sourcelist" string="forin" varname="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Sources_name[]"  dstvarname="TMP_SOURCENAME2" level="1" actionname="FKT Find Source Index $dvar(definition_alias_mediaplayer_template)" />
+    <action name="Get Button Text" string="setvar TMP_SOURCENAME=$par(DROPDOWNVALUE)" />
+    <action name="Loop through sourcelist" string="forin" varname="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Sources_name[]" level="1" actionname="FKT Find Source Index $dvar(definition_alias_mediaplayer_template)" />
     <action name="If we found something" string="if" condition="tmp_sourceindex!=" />
       <action name="Compile Var Name" string="setvar tmpvarname=$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Sources_id[$var(tmp_sourceindex)]" />
       <action name="Get the ID of the Source" string="modifyvar" operator="fromvar" varname="tmpvarname" />
@@ -73,43 +73,44 @@
   </action>
 
   <action name="FKT Find Source Index $dvar(definition_alias_mediaplayer_template)">
-    <action name="if source name is requested source name"  string="setvar tmp_sourceindex=$var(TMP_SOURCENAME2_index)" condition="$var(TMP_SOURCENAME2_value)==$var(TMP_SOURCENAME)"/>
+    <action name="if source name is requested source name"  string="setvar tmp_sourceindex=$par(forin_index)" condition="$par(forin_value)==$var(TMP_SOURCENAME)"/>
   </action>
 
   <action name="Change Mode $dvar(definition_alias_mediaplayer_template)">
-    <action name="Init Var" string="setvar tmp_modeindex=" />
-    <action name="Get Button Text" string="setvar TMP_MODENAME=$var(Change Mode $dvar(definition_alias_mediaplayer_template)_parameter_DROPDOWNVALUE)" />
-    <action name="Loop through modelist" string="forin" varname="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_ListeningMode_name[]"  dstvarname="TMP_MODENAME2" level="1" actionname="FKT Find Mode Index $dvar(definition_alias_mediaplayer_template)" />
-    <action name="If we found something" string="if" condition="tmp_modeindex!=" />
-      <action name="Compile Var Name" string="setvar tmpvarname=$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_ListeningMode_key[$var(tmp_modeindex)]" />
-      <action name="Get the ID of the Mode" string="modifyvar" operator="fromvar" varname="tmpvarname" />
-      <action name="And Call it" string='sendcommand'         commandname="main.listening-mode" commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-      <action name="Update Receiver Info" string="call $dvar(definition_alias_mediaplayer_template) Update All Triggers" />
-    <action name="endif" string="endif" />
+    <action name="Init Var"                       string="setvar tmp_modeindex=" />
+    <action name="Get Button Text"                string="setvar TMP_MODENAME=$par(DROPDOWNVALUE)" />
+    <action name="Loop through modelist"          string="forin" varname="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_ListeningMode_name[]" level="1" actionname="FKT Find Mode Index $dvar(definition_alias_mediaplayer_template)" />
+    <action name="If we found something"          string="if" condition="tmp_modeindex!=" />
+      <action name="Compile Var Name"             string="setvar tmpvarname=$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_ListeningMode_key[$var(tmp_modeindex)]" />
+      <action name="Get the ID of the Mode"       string="modifyvar" operator="fromvar" varname="tmpvarname" />
+      <action name="And Call it"                  string='sendcommand'         commandname="main.listening-mode" commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+      <action name="Update Receiver Info"         string="call $dvar(definition_alias_mediaplayer_template) Update All Triggers" />
+    <action name="endif"                          string="endif" />
    </action>
 
   <action name="FKT Find Mode Index $dvar(definition_alias_mediaplayer_template)">
-    <action name="if mode name is requested mode name"  string="setvar tmp_modeindex=$var(TMP_MODENAME2_index)" condition="$var(TMP_MODENAME2_value)==$var(TMP_MODENAME)"/>
+    <action name="if mode name is requested mode name"  string="setvar tmp_modeindex=$par(forin_index)" condition="$par(forin_value)==$var(TMP_MODENAME)"/>
   </action>
 
   <!--- eiscp Function linked to pagestart / pagestop-->
 
   <action name="$dvar(definition_alias_mediaplayer_template) Set Subwoofer Volume By Widget">
-    <action name="Sets the target var" string="setvar volumetoset=$var($dvar(definition_alias_mediaplayer_template)_subwoofervolume)" />
+    <action name="Sets the target var"          string="setvar volumetoset=$var($dvar(definition_alias_mediaplayer_template)_subwoofervolume)" />
     <action name="And set the subwoofer volume" string="call Send Set Volume Sub"/>
-    <action name="Update the text as well" string="updatewidget Amp Volume Sub Textvalue" />
+    <action name="Update the text as well"      string="updatewidget Amp Volume Sub Textvalue" />
   </action>
 
   <action name="$dvar(definition_alias_mediaplayer_template) Set Center Volume By Widget">
-    <action name="Sets the target var" string="setvar volumetoset=$var($dvar(definition_alias_mediaplayer_template)_centervolume)" />
-    <action name="And set the center volume" string="call Send Set Volume Center"/>
-    <action name="Update the text as well" string="updatewidget Amp Volume Center Textvalue" />
+    <action name="Sets the target var"        string="setvar volumetoset=$var($dvar(definition_alias_mediaplayer_template)_centervolume)" />
+    <action name="And set the center volume"  string="call Send Set Volume Center"/>
+    <action name="Update the text as well"    string="updatewidget Amp Volume Center Textvalue" />
   </action>
 
   <action name="$dvar(definition_alias_mediaplayer_template) Set Main Volume By Widget">
-    <action name="Sets the target var" string="setvar volumetoset=$var($dvar(definition_alias_mediaplayer_template)_mainvolume)" />
-    <action name="And set the center volume" string="call Send Set Volume"/>
-    <action name="Update the text as well" string="updatewidget Main Volume Textvalue" />
+    <action name="Sets the target var"              string="setvar volumetoset=$var($dvar(definition_alias_mediaplayer_template)_mainvolume)" />
+    <action name="And set the main volume"          string="call Send Set Volume"/>
+    <action name="Update all text as well"          string="updatewidget Main Volume Textvalue" />
+    <action name="Update all sliders/Knobs as well" string="updatewidget Main Volume" />
   </action>
 
 

@@ -24,17 +24,16 @@ import select
 import socket
 from threading              import Thread
 
-from kivy.clock             import Clock
-from kivy.logger            import Logger
+from kivy.clock                     import Clock
+from kivy.logger                    import Logger
 
-from ORCA.Compat            import PY2
-from ORCA.interfaces.BaseInterface import cBaseInterFace
+from ORCA.Compat                    import PY2
+from ORCA.interfaces.BaseInterface  import cBaseInterFace
 from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
-from ORCA.utils.Sleep       import fSleep
-from ORCA.utils.TypeConvert import ToUnicode
-from ORCA.utils.TypeConvert import ToBytes
-from ORCA.utils.wait.StartWait  import StartWait
-from ORCA.vars.Replace      import ReplaceVars
+from ORCA.utils.TypeConvert         import ToUnicode
+from ORCA.utils.TypeConvert         import ToBytes
+from ORCA.utils.wait.StartWait      import StartWait
+from ORCA.vars.Replace              import ReplaceVars
 
 '''
 <root>
@@ -124,16 +123,17 @@ class cInterface(cBaseInterFace):
     class cInterFaceSettings(cBaseInterFaceSettings):
         def __init__(self,oInterFace):
             cBaseInterFaceSettings.__init__(self,oInterFace)
-            self.oSocket                 = None
-            self.bStopThreadEvent        = False
-            self.iBufferSize             = 1024
-            self.oThread                 = None
-            self.aInterFaceIniSettings.uParseResultOption = u'store'
-            self.aInterFaceIniSettings.iTimeToClose = -1
+            self.aIniSettings.iTimeToClose          = -1
+            self.aIniSettings.uParseResultOption    = u'store'
+            self.bStopThreadEvent                   = False
+            self.iBufferSize                        = 1024
+            self.oSocket                            = None
+            self.oThread                            = None
+            self.uMsg                               = u''
 
         def ReadConfigFromIniFile(self,uConfigName):
             cBaseInterFaceSettings.ReadConfigFromIniFile(self,uConfigName)
-            self.aInterFaceIniSettings.uParseResultOption = u'store'
+            self.aIniSettings.uParseResultOption = u'store'
             return
 
         def Connect(self):
@@ -141,7 +141,7 @@ class cInterface(cBaseInterFace):
                 return False
 
             try:
-                for res in socket.getaddrinfo(self.aInterFaceIniSettings.uHost, int(self.aInterFaceIniSettings.uPort), socket.AF_UNSPEC, socket.SOCK_STREAM):
+                for res in socket.getaddrinfo(self.aIniSettings.uHost, int(self.aIniSettings.uPort), socket.AF_UNSPEC, socket.SOCK_STREAM):
                     af, socktype, proto, canonname, sa = res
                     try:
                         self.oSocket = socket.socket(af, socktype, proto)
@@ -168,12 +168,12 @@ class cInterface(cBaseInterFace):
                     self.oThread.start()
 
                 if self.oSocket is None:
-                    self.ShowError(u'Cannot open socket'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort)
+                    self.ShowError(u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                     self.bOnError=True
                     return
                 self.bIsConnected =True
             except Exception as e:
-                self.ShowError(u'Cannot open socket #2'+self.aInterFaceIniSettings.uHost+':'+self.aInterFaceIniSettings.uPort,e)
+                self.ShowError(u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
                 return
 
@@ -240,18 +240,18 @@ class cInterface(cBaseInterFace):
         self.oSetting       = None
         self.iWaitMs        = 2000
 
-    def Init(self, uInterFaceName, oFnInterFace=None):
-        cBaseInterFace.Init(self,uInterFaceName, oFnInterFace)
-        self.oInterFaceConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['ParseResult']['active']                 = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TokenizeString']['active']              = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oInterFaceConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+    def Init(self, uObjectName, oFnObject=None):
+        cBaseInterFace.Init(self,uObjectName, oFnObject)
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+        self.oObjectConfig.dDefaultSettings['ParseResult']['active']                 = "enabled"
+        self.oObjectConfig.dDefaultSettings['TokenizeString']['active']              = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
     def DeInit(self, **kwargs):
         cBaseInterFace.DeInit(self,**kwargs)
@@ -259,7 +259,7 @@ class cInterface(cBaseInterFace):
             self.aSettings[aSetting].DeInit()
 
     def GetConfigJSON(self):
-        return {"Prefix": {"active": "enabled", "order": 3, "type": "string",         "title": "$lvar(IFACE_RGHOST_1)", "desc": "$lvar(IFACE_RGHOST_2)", "section": "$var(InterfaceConfigSection)","key": "Prefix",                  "default":"ORCA_"}}
+        return {"Prefix": {"active": "enabled", "order": 3, "type": "string",         "title": "$lvar(IFACE_RGHOST_1)", "desc": "$lvar(IFACE_RGHOST_2)", "section": "$var(ObjectConfigSection)","key": "Prefix",                  "default":"ORCA_"}}
 
     def SendCommand(self,oAction,oSetting, uRetVar,bNoLogOut=False):
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
@@ -274,7 +274,7 @@ class cInterface(cBaseInterFace):
         if oAction.uType==u'command':
             uPrefix= u'c'
         elif oAction.uType==u'event':
-            uPrefix=u'e'+oSetting.aInterFaceIniSettings.uPreFix
+            uPrefix=u'e'+oSetting.aIniSettings.uPreFix
         elif oAction.uType==u'key':
             uPrefix= u'k'
         elif oAction.uType==u'macro':
@@ -288,9 +288,9 @@ class cInterface(cBaseInterFace):
         iRet=1
 
         uCmd=ReplaceVars(oAction.uCmd)
-        uCmd=ReplaceVars(uCmd,self.uInterFaceName+'/'+oSetting.uConfigName)
+        uCmd=ReplaceVars(uCmd,self.uObjectName+'/'+oSetting.uConfigName)
 
-        self.ShowInfo(u'Sending Command: '+uPrefix+uCmd + u' to '+oSetting.aInterFaceIniSettings.uHost+':'+oSetting.aInterFaceIniSettings.uPort,oSetting.uConfigName)
+        self.ShowInfo(u'Sending Command: '+uPrefix+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
 
         while iTryCount<2:
             iTryCount+=1
@@ -315,10 +315,10 @@ class cInterface(cBaseInterFace):
                     iRet=1
 
         if oSetting.bIsConnected:
-            if oSetting.aInterFaceIniSettings.iTimeToClose==0:
+            if oSetting.aIniSettings.iTimeToClose==0:
                 oSetting.Disconnect()
-            elif oSetting.aInterFaceIniSettings.iTimeToClose!=-1:
+            elif oSetting.aIniSettings.iTimeToClose!=-1:
                 Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aInterFaceIniSettings.iTimeToClose)
+                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
         return iRet
 

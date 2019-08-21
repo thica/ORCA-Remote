@@ -31,6 +31,7 @@ __all__ = ['cTouchRectangle']
 
 class cTouchRectangle(cOrcaButtonBehaviour,Widget):
 
+    # noinspection PyArgumentList
     background_color = ListProperty([0, 0, 0, 0])
 
     def __init__(self,**kwargs):
