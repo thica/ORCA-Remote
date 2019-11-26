@@ -20,18 +20,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__                 import annotations
+
+from typing                     import Union
+from typing                     import Dict
+from typing                     import List
+
 import socket
 
-from kivy.clock import Clock
-
-from ORCA.Compat                import PY2
-from ORCA.interfaces.BaseInterface import cBaseInterFace
 from ORCA.utils.LogError        import LogError
 from ORCA.utils.TypeConvert     import ToHex
 from ORCA.utils.TypeConvert     import ToInt
 from ORCA.utils.TypeConvert     import ToBytes
 from ORCA.utils.TypeConvert     import ToUnicode
 from ORCA.vars.Replace          import ReplaceVars
+from ORCA.utils.FileName        import cFileName
+from ORCA.Action                import cAction
+from ORCA.actions.ReturnCode    import eReturnCode
 
 '''
 <root>
@@ -41,8 +46,8 @@ from ORCA.vars.Replace          import ReplaceVars
       <description language='English'>Sends commands to Keene Kira devices to submit IR comands</description>
       <description language='German'>Sendet Befehle zu Keene Kira Geräten um IR Befehle zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/Keene_Kira</local>
@@ -61,7 +66,6 @@ from ORCA.vars.Replace          import ReplaceVars
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>Keene_Kira/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -70,15 +74,14 @@ from ORCA.vars.Replace          import ReplaceVars
 
 import ORCA.Globals as Globals
 
-oBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared')
+cBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass("cInterface")
 
+class cInterface(cBaseInterFaceInfrared):
 
-class cInterface(oBaseInterFaceInfrared.cInterface):
-
-    class cInterFaceSettings(oBaseInterFaceInfrared.cInterface.cInterFaceSettings):
-        def __init__(self,oInterFace):
-            oBaseInterFaceInfrared.cInterface.cInterFaceSettings.__init__(self,oInterFace)
-            self.oSocket                            = None
+    class cInterFaceSettings(cBaseInterFaceInfrared.cInterFaceSettings):
+        def __init__(self,oInterFace:cInterface):
+            cBaseInterFaceInfrared.cInterFaceSettings.__init__(self,oInterFace)
+            self.oSocket:Union[socket.socket,None]  = None
             self.aIniSettings.uHost                 = u"discover"
             self.aIniSettings.uPort                 = u"65432"
             self.aIniSettings.uFNCodeset            = u"Select"
@@ -87,11 +90,10 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
             self.aIniSettings.fTimeOut              = 2.0
             self.bIsConnected                       = False
             self.bOnError                           = False
-            self.sResponse                          = ''
 
-        def Connect(self):
+        def Connect(self) -> bool:
 
-            if not oBaseInterFaceInfrared.cInterface.cInterFaceSettings.Connect(self):
+            if not cBaseInterFaceInfrared.cInterFaceSettings.Connect(self):
                 return False
             try:
                 for res in socket.getaddrinfo(self.aIniSettings.uHost, int(self.aIniSettings.uPort), socket.AF_INET, socket.SOCK_DGRAM):
@@ -107,33 +109,36 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
                 if self.oSocket is None:
                     self.ShowError(u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                     self.bOnError=True
-                    return
+                    return False
                 self.bIsConnected =True
+                return True
 
             except Exception as e:
                 self.ShowError(u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
+                return False
 
-        def Disconnect(self):
-            if oBaseInterFaceInfrared.cInterface.cInterFaceSettings.Disconnect(self):
+        def Disconnect(self) -> bool:
+            if cBaseInterFaceInfrared.cInterFaceSettings.Disconnect(self):
                 return False
             try:
                 if self.oSocket:
                     self.oSocket.close()
                 self.bOnError = False
+                return True
             except Exception as e:
                 self.ShowError(u'can\'t Disconnect'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
-
+                return False
 
     def __init__(self):
-        oBaseInterFaceInfrared.cInterface.__init__(self)
-        self.aSettings   = {}
-        self.oSetting = None
-        self.uResponse = u''
-        self.iBufferSize=1024
+        cInterFaceSettings = self.cInterFaceSettings
+        cBaseInterFaceInfrared.__init__(self)
+        self.dSettings:Dict                             = {}
+        self.oSetting:Union[cInterFaceSettings,None]    = None
+        self.iBufferSize:int                            = 1024
 
-    def Init(self, uObjectName, oFnObject=None):
-        cBaseInterFace.Init(self, uObjectName, oFnObject)
+    def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
+        cBaseInterFaceInfrared.Init(self, uObjectName, oFnObject)
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
@@ -143,21 +148,22 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
         self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
-    def DeInit(self, **kwargs):
-        oBaseInterFaceInfrared.cInterface.DeInit(self,**kwargs)
-        for aSetting in self.aSettings:
-            self.aSettings[aSetting].DeInit()
+    def DeInit(self, **kwargs) -> None:
+        cBaseInterFaceInfrared.DeInit(self,**kwargs)
+        for uSettingName in self.dSettings:
+            self.dSettings[uSettingName].DeInit()
 
-    def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
-        cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+    def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
+        cBaseInterFaceInfrared.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
-        iRet=1
+        eRet:eReturnCode = eReturnCode.Error
 
         if oAction.uCCF_Code != u"":
+            # noinspection PyUnresolvedReferences
             oAction.uCmd=CCfToKeene(oAction.uCCF_Code,ToInt(oAction.uRepeatCount))
             oAction.uCCF_Code = u""
 
-        uCmd=ReplaceVars(oAction.uCmd)
+        uCmd:str=ReplaceVars(oAction.uCmd)
 
         self.ShowInfo(u'Sending Command: '+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
 
@@ -166,53 +172,39 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
             uMsg=uCmd+u'\r\n'
             try:
                 uMsg=ReplaceVars(uMsg,self.uObjectName+'/'+oSetting.uConfigName)
-                if PY2:
-                    oSetting.oSocket.sendto(uMsg, (oSetting.aIniSettings.uHost, int(oSetting.aIniSettings.uPort)))
+                oSetting.oSocket.sendto(ToBytes(uMsg), (oSetting.aIniSettings.uHost, int(oSetting.aIniSettings.uPort)))
+                byResponse, addr =  oSetting.oSocket.recvfrom(self.iBufferSize)
+                uResponse = ToUnicode(byResponse)
+                self.ShowDebug(u'Response'+uResponse,oSetting.uConfigName)
+                if 'ACK' in uResponse:
+                    eRet = eReturnCode.Success
                 else:
-                    oSetting.oSocket.sendto(ToBytes(uMsg), (oSetting.aIniSettings.uHost, int(oSetting.aIniSettings.uPort)))
-                self.sResponse, addr =  oSetting.oSocket.recvfrom(self.iBufferSize)
-                if not PY2:
-                    self.sResponse = ToUnicode(self.sResponse)
-                self.ShowDebug(u'Response'+self.sResponse,oSetting.uConfigName)
-                if 'ACK' in self.sResponse:
-                    iRet=0
-                else:
-                    iRet=1
+                    eRet = eReturnCode.Error
             except Exception as e:
-                if e.message!="timed out":
+                if str(e)!="timed out":
                     self.ShowError(u'Can\'t send message',oSetting.uConfigName,e)
                 else:
                     self.ShowWarning(u'Can\'t send message: time out',oSetting.uConfigName)
 
-                iRet=1
-        if oSetting.bIsConnected:
-            if oSetting.aIniSettings.iTimeToClose==0:
-                oSetting.Disconnect()
-            elif oSetting.aIniSettings.iTimeToClose!=-1:
-                Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
-        return iRet
+                eRet = eReturnCode.Error
 
-def CCfToKeene(sCCFString,iRepeatCount):
-    iX          = 0
-    iy          = 0
-    sTmpStr     = ''
-    iFreq       = 0
-    iPair_Count = 0
-    iLead_in    = 0
-    iMyInt      = []
-    iTint       = 0
-    aBurst_Time = []
-    iCycle_time = 0
+        self.CloseSettingConnection(oSetting=oSetting, bNoLogOut=bNoLogOut)
+        return eRet
 
-    if sCCFString=='':
-        return sCCFString
-    if sCCFString[0]=='{':
-        return sCCFString
+def CCfToKeene(uCCFString:str,iRepeatCount:int):
+    iX:int           = 0
+    iy:int           = 0
+    iMyInt:List      = []
+    aBurst_Time:List = []
 
-    sData       = sCCFString.strip()
-    iCodeLength = len(sData)
-    bError      = True
+    if uCCFString=='':
+        return uCCFString
+    if uCCFString[0]=='{':
+        return uCCFString
+
+    uData:str        = uCCFString.strip()
+    iCodeLength:int = len(uData)
+    bError:bool     = True
     try:
 
         while iX<255:
@@ -221,20 +213,16 @@ def CCfToKeene(sCCFString,iRepeatCount):
 
         iX=0
         while iX<iCodeLength:
-            sTmpStr = sData[iX: iX + 4]
-            aBurst_Time[iy]=int(sTmpStr,16)
+            uTmpStr = uData[iX: iX + 4]
+            aBurst_Time[iy]=int(uTmpStr,16)
             iy=iy+1
             iX=iX+5
 
-        iLast_code = iy / 2
         iFreq = int (4145 / aBurst_Time[1])
 
         iPair_Count = aBurst_Time[2]
         if iPair_Count == 0:
             iPair_Count = aBurst_Time[3]
-
-        #print "Frequency = " , iFreq
-        #print "Pair_count = " , iPair_Count
 
         iX=0
         while iX<iy:
@@ -256,24 +244,24 @@ def CCfToKeene(sCCFString,iRepeatCount):
             iX=iX+1
 
         iMyInt[iX + 2] = 8192   # over write the lead out space with 2000 X is one over when exits from for loop
-        sData = ""
+        uData = ""
 
         iX              = 0
         iEnd            = (iPair_Count * 2) + 3
         while iX<iEnd:
-            sData = sData + ToHex(iMyInt[iX]) + " "
+            uData = uData + ToHex(iMyInt[iX]) + " "
             iX=iX+1
         bError = False
     except Exception as e:
-        LogError('CCfToKeene:Can''t Convert',e)
-        LogError(sCCFString)
+        LogError(uMsg = 'CCfToKeene:Can''t Convert',oException=e)
+        LogError(uMsg = uCCFString)
 
     if bError:
         return ""
     else:
-        sRet="K "+ sData.strip().upper()
+        uRet="K "+ uData.strip().upper()
         if iRepeatCount>1:
-            sRet=sRet+' 4000 '+str(iRepeatCount)
-        return sRet
+            uRet=uRet+' 4000 '+str(iRepeatCount)
+        return uRet
 
 

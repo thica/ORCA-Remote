@@ -19,7 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+from typing                             import Tuple
 from kivy.uix.label                     import Label
 from kivy.graphics                      import Color
 from kivy.graphics                      import Rectangle
@@ -29,6 +29,8 @@ from ORCA.widgets.core.ButtonBehaviour  import cOrcaButtonBehaviour
 from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
 __all__ = ['cLabel']
 
+
+# noinspection PyUnusedLocal
 class cLabel(cOrcaButtonBehaviour,Label):
     """ base class for a label """
 
@@ -49,15 +51,15 @@ class cLabel(cOrcaButtonBehaviour,Label):
                 self.rect_bg = Rectangle(size=self.size,pos=self.pos)
             self.bind(pos=self.update_graphics_pos,size=self.update_graphics_size)
 
-    def update_graphics_pos(self, instance, value):
+    def update_graphics_pos(self, instance, value:Tuple) -> None:
         """ Update the label after position change """
         self.rect_bg.pos = value
 
-    def update_graphics_size(self, instance, value):
+    def update_graphics_size(self, instance, value:Tuple)  -> None:
         """ Update the label after size change """
         self.rect_bg.size = value
 
-    def on_touch_up(self, touch):
+    def on_touch_up(self, touch) -> bool:
         """ handles the touch event """
         if cOrcaButtonBehaviour.on_touch_up(self,touch):
             Label.on_touch_up(self,touch)

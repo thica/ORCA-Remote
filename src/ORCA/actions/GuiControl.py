@@ -21,6 +21,8 @@
 from ORCA.vars.Replace          import ReplaceVars
 from ORCA.actions.Base          import cEventActionBase
 from ORCA.utils.Sleep           import fSleep
+from ORCA.Action                import cAction
+from ORCA.actions.ReturnCode    import eReturnCode
 
 import ORCA.Globals as Globals
 
@@ -29,7 +31,7 @@ __all__ = ['cEventActionsGuiControl']
 class cEventActionsGuiControl(cEventActionBase):
     """ Gui Related Actions (showpage, ..) """
 
-    def ExecuteActionShowPage(self,oAction):
+    def ExecuteActionShowPage(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -71,12 +73,12 @@ class cEventActionsGuiControl(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'ShowPage',oAction)
-        uEffect             = ReplaceVars(oAction.dActionPars.get("effect",""))
-        uDirection          = ReplaceVars(oAction.dActionPars.get("direction",""))
-        uPageName           = ReplaceVars(oAction.dActionPars.get("pagename",""))
-        uCurrentDirection   = ""
-        uCurrentEffect      = ""
-        self.oEventDispatcher.bDoNext = False
+        uEffect:str                     = ReplaceVars(oAction.dActionPars.get("effect",""))
+        uDirection:str                  = ReplaceVars(oAction.dActionPars.get("direction",""))
+        uPageName:str                   = ReplaceVars(oAction.dActionPars.get("pagename",""))
+        uCurrentDirection:str           = ""
+        uCurrentEffect:str              = ""
+        self.oEventDispatcher.bDoNext   = False
 
         if uEffect:
             uCurrentEffect=Globals.oTheScreen.uCurrentEffect
@@ -85,17 +87,17 @@ class cEventActionsGuiControl(cEventActionBase):
         if uEffect or uDirection:
             self.ExecuteActionSetPageEffect(oAction)
 
-        iRet=Globals.oTheScreen.ShowPage(uPageName)
+        eRet:eReturnCode = Globals.oTheScreen.ShowPage(uPageName)
         if uEffect:
             Globals.oTheScreen.SetPageEffect(uCurrentEffect)
         if uDirection:
             Globals.oTheScreen.SetPageEffectDirection(uDirection=uCurrentDirection)
         self.oEventDispatcher.bDoNext = False
-        fSleep(0.1)
+        fSleep(0.01)
 
-        return iRet
+        return eRet
 
-    def ExecuteActionSetPageEffect(self,oAction):
+    def ExecuteActionSetPageEffect(self,oAction:cAction) -> eReturnCode:
 
         """
         WikiDoc:Doc
@@ -140,15 +142,15 @@ class cEventActionsGuiControl(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'SetPageEffect',oAction)
-        uEffect    = ReplaceVars(oAction.dActionPars.get("effect",""))
-        uDirection = ReplaceVars(oAction.dActionPars.get("direction",""))
+        uEffect:str    = ReplaceVars(oAction.dActionPars.get("effect",""))
+        uDirection:str = ReplaceVars(oAction.dActionPars.get("direction",""))
 
         if Globals.oTheScreen.SetPageEffect(uEffect=uEffect):
             if Globals.oTheScreen.SetPageEffectDirection(uDirection=uDirection):
-                return 0
+                return eReturnCode.Success
             else:
-                return 1
+                return eReturnCode.Error
 
         else:
-            return 1
+            return eReturnCode.Error
 

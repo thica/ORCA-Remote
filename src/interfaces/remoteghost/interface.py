@@ -20,20 +20,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__                             import annotations
+from typing                                 import Union
+from typing                                 import List
+from typing                                 import Dict
+
 import select
 import socket
-from threading              import Thread
-
-from kivy.clock                     import Clock
-from kivy.logger                    import Logger
-
-from ORCA.Compat                    import PY2
-from ORCA.interfaces.BaseInterface  import cBaseInterFace
-from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
-from ORCA.utils.TypeConvert         import ToUnicode
-from ORCA.utils.TypeConvert         import ToBytes
-from ORCA.utils.wait.StartWait      import StartWait
-from ORCA.vars.Replace              import ReplaceVars
+from threading                              import Thread
+from kivy.logger                            import Logger
+from ORCA.Action                            import cAction
+from ORCA.interfaces.BaseInterface          import cBaseInterFace
+from ORCA.interfaces.BaseInterfaceSettings  import cBaseInterFaceSettings
+from ORCA.utils.FileName                    import cFileName
+from ORCA.utils.TypeConvert                 import ToBytes
+from ORCA.utils.TypeConvert                 import ToUnicode
+from ORCA.utils.wait.StartWait              import StartWait
+from ORCA.vars.Replace                      import ReplaceVars
+from ORCA.actions.ReturnCode                import eReturnCode
 
 '''
 <root>
@@ -43,8 +47,8 @@ from ORCA.vars.Replace              import ReplaceVars
       <description language='English'>Interface to send commands to EventGhost</description>
       <description language='German'>Interface um Kommandos an EventGhost zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/remoteghost</local>
@@ -53,7 +57,6 @@ from ORCA.vars.Replace              import ReplaceVars
         </source>
       </sources>
       <skipfiles>
-        <file>remoteghost/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -121,22 +124,22 @@ And here is the list of the remaining keywords EventGhost understands:
 class cInterface(cBaseInterFace):
 
     class cInterFaceSettings(cBaseInterFaceSettings):
-        def __init__(self,oInterFace):
+        def __init__(self,oInterFace:cInterface):
             cBaseInterFaceSettings.__init__(self,oInterFace)
             self.aIniSettings.iTimeToClose          = -1
             self.aIniSettings.uParseResultOption    = u'store'
-            self.bStopThreadEvent                   = False
-            self.iBufferSize                        = 1024
-            self.oSocket                            = None
+            self.bStopThreadEvent:bool              = False
+            self.iBufferSize:int                    = 1024
+            self.oSocket:Union[socket.socket,None]  = None
             self.oThread                            = None
-            self.uMsg                               = u''
+            self.uMsg:str                           = u''
 
-        def ReadConfigFromIniFile(self,uConfigName):
+        def ReadConfigFromIniFile(self,uConfigName:str) -> None:
             cBaseInterFaceSettings.ReadConfigFromIniFile(self,uConfigName)
             self.aIniSettings.uParseResultOption = u'store'
             return
 
-        def Connect(self):
+        def Connect(self) -> bool:
             if not cBaseInterFaceSettings.Connect(self):
                 return False
 
@@ -170,16 +173,17 @@ class cInterface(cBaseInterFace):
                 if self.oSocket is None:
                     self.ShowError(u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                     self.bOnError=True
-                    return
+                    return False
                 self.bIsConnected =True
             except Exception as e:
                 self.ShowError(u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
-                return
+                return False
 
             self.ShowDebug(u'Interface connected!')
+            return True
 
-        def Disconnect(self):
+        def Disconnect(self) -> bool:
             if not cBaseInterFaceSettings.Disconnect(self):
                 return False
 
@@ -188,21 +192,25 @@ class cInterface(cBaseInterFace):
                 self.oThread.join()
                 self.oThread = None
             self.bOnError = False
+            return True
 
-        def Receive(self):
+        def Receive(self) -> None:
             #Main Listening Thread to receice eiscp messages
 
+            uResponses:str
+            uResponse:str
+            aResponses:List
             #Loop until closed by external flag
             try:
                 while not self.bStopThreadEvent:
                     if self.oSocket is not None:
-                        ready = select.select([self.oSocket], [], [],1.0)
+                        ready:List = select.select([self.oSocket], [], [],1.0)
                         # the first element of the returned list is a list of readable sockets
                         if ready[0]:
-                            sResponses = self.oSocket.recv(self.iBufferSize)
+                            byResponses = self.oSocket.recv(self.iBufferSize)
                             # there could be more than one response, so we need to split them
-                            uResponses = ToUnicode(sResponses)
-                            aResponses=uResponses.split("[EOL]")
+                            uResponses  = ToUnicode(byResponses)
+                            aResponses  = uResponses.split("[EOL]")
                             for uResponse in aResponses:
                                 # Todo: find proper encoding
                                 if not uResponse==u'' and not uResponse==u'ORCA.ORCA Connecting...':
@@ -235,12 +243,13 @@ class cInterface(cBaseInterFace):
 
 
     def __init__(self):
+        cInterFaceSettings=self.cInterFaceSettings
         cBaseInterFace.__init__(self)
-        self.aSettings      = {}
-        self.oSetting       = None
-        self.iWaitMs        = 2000
+        self.dSettings:Dict                             = {}
+        self.oSetting:Union[cInterFaceSettings,None]    = None
+        self.iWaitMs:int                                = 2000
 
-    def Init(self, uObjectName, oFnObject=None):
+    def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
         cBaseInterFace.Init(self,uObjectName, oFnObject)
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
@@ -253,22 +262,22 @@ class cInterface(cBaseInterFace):
         self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
-    def DeInit(self, **kwargs):
+    def DeInit(self, **kwargs) -> None:
         cBaseInterFace.DeInit(self,**kwargs)
-        for aSetting in self.aSettings:
-            self.aSettings[aSetting].DeInit()
+        for uSettingName in self.dSettings:
+            self.dSettings[uSettingName].DeInit()
 
-    def GetConfigJSON(self):
+    def GetConfigJSON(self) -> Dict:
         return {"Prefix": {"active": "enabled", "order": 3, "type": "string",         "title": "$lvar(IFACE_RGHOST_1)", "desc": "$lvar(IFACE_RGHOST_2)", "section": "$var(ObjectConfigSection)","key": "Prefix",                  "default":"ORCA_"}}
 
-    def SendCommand(self,oAction,oSetting, uRetVar,bNoLogOut=False):
+    # noinspection PyUnresolvedReferences
+    def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
-        uCmd=oAction.uCmd
-        uPrefix = u''
-
-        if uCmd==u'*':
-            uCmd=oAction.dActionPars['commandname']
+        uCmd:str
+        uPrefix:str      = u''
+        iTryCount:int    = 0
+        eRet:eReturnCode = eReturnCode.Error
 
         # call the function to pass string to eventghost
         if oAction.uType==u'command':
@@ -284,11 +293,10 @@ class cInterface(cBaseInterFace):
         else:
             Logger.warning (u'Invalid type: '+oAction.uType)
 
-        iTryCount=0
-        iRet=1
-
-        uCmd=ReplaceVars(oAction.uCmd)
-        uCmd=ReplaceVars(uCmd,self.uObjectName+'/'+oSetting.uConfigName)
+        uCmd = ReplaceVars(oAction.uCmd)
+        uCmd = ReplaceVars(uCmd,self.uObjectName+'/'+oSetting.uConfigName)
+        if uCmd==u'*':
+            uCmd=oAction.dActionPars['commandname']
 
         self.ShowInfo(u'Sending Command: '+uPrefix+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
 
@@ -303,22 +311,14 @@ class cInterface(cBaseInterFace):
                 uMsg=uPrefix+uCmd+u'\n'
                 try:
                     StartWait(self.iWaitMs)
-                    if PY2:
-                        oSetting.oSocket.sendall(uMsg)
-                    else:
-                        oSetting.oSocket.sendall(ToBytes(uMsg))
-                    iRet=0
+                    oSetting.oSocket.sendall(ToBytes(uMsg))
+                    eRet = eReturnCode.Success
                     break
                 except Exception as e:
-                    self.ShowError(u'can\'t Send Message',oSetting.uConfigName,e)
+                    self.ShowError(uMsg=u'can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
                     oSetting.Disconnect()
-                    iRet=1
+                    eRet = eReturnCode.Error
 
-        if oSetting.bIsConnected:
-            if oSetting.aIniSettings.iTimeToClose==0:
-                oSetting.Disconnect()
-            elif oSetting.aIniSettings.iTimeToClose!=-1:
-                Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
-        return iRet
+        self.CloseSettingConnection(oSetting=oSetting, bNoLogOut=bNoLogOut)
+        return eRet
 

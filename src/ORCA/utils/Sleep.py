@@ -24,10 +24,8 @@ from time                   import sleep
 
 __all__ = ['fSleep']
 
-def fSleep(fSeconds,bTick=False):
+def fSleep(fSeconds:float,bTick:bool=False) -> None:
     """ sleeps for a given tim in milliseconds """
     sleep(fSeconds)
     if bTick:
         pass
-        #starting kivy 1.72, calling tick makes the app unstable
-        #Clock.tick()

@@ -20,9 +20,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.interfaces.BaseInterface import cBaseInterFace
-from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
-from ORCA.vars.Replace          import ReplaceVars
+from __future__                             import annotations
+from typing                                 import Union
+from typing                                 import Dict
+from typing                                 import cast
+from ORCA.Action                            import cAction
+from ORCA.interfaces.BaseInterface          import cBaseInterFace
+from ORCA.interfaces.BaseInterfaceSettings  import cBaseInterFaceSettings
+from ORCA.utils.FileName                    import cFileName
+from ORCA.vars.Replace                      import ReplaceVars
+from ORCA.widgets.Video                     import cWidgetVideo
+from ORCA.actions.ReturnCode                import eReturnCode
 import ORCA.Globals as Globals
 
 '''
@@ -33,8 +41,8 @@ import ORCA.Globals as Globals
       <description language='English'>Interface to show videos and streams (experimental)</description>
       <description language='German'>Interface um Videos und Streams anzuzeigen (experimental)</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/orca_video</local>
@@ -43,7 +51,6 @@ import ORCA.Globals as Globals
         </source>
       </sources>
       <skipfiles>
-        <file>orca_video/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -54,29 +61,28 @@ import ORCA.Globals as Globals
 class cInterface(cBaseInterFace):
 
     class cInterFaceSettings(cBaseInterFaceSettings):
-        def __init__(self,oInterFace):
+        def __init__(self,oInterFace:cInterface):
             cBaseInterFaceSettings.__init__(self,oInterFace)
-            self.oWidgetPlayer    = None
+            self.oWidgetPlayer:Union[cWidgetVideo,None]    = None
             self.aIniSettings.uParseResultOption           = u'tokenize'
             self.aIniSettings.uParseResultTokenizeString   = u':'
 
-        def ReadConfigFromIniFile(self,uConfigName):
+        def ReadConfigFromIniFile(self,uConfigName:str) -> None:
             cBaseInterFaceSettings.ReadConfigFromIniFile(self,uConfigName)
             self.aIniSettings.uParseResultOption           = u'tokenize'
             self.aIniSettings.uParseResultTokenizeString   = u':'
             self.aIniSettings.uStream                      = ReplaceVars(self.aIniSettings.uStream)
             self.aIniSettings.uFNCodeset                   = u"CODESET_orca_video_default.xml"
-
             return
 
-        def Connect(self):
+        def Connect(self) -> bool:
 
             if not cBaseInterFaceSettings.Connect(self):
                 return False
             try:
                 aWidgetPlayer = Globals.oTheScreen.FindWidgets(uPageName = self.oAction.oParentWidget.oParentScreenPage.uPageName, uWidgetName = self.aIniSettings.uWidgetName)
                 if len(aWidgetPlayer)>0:
-                    self.oWidgetPlayer= aWidgetPlayer[0]
+                    self.oWidgetPlayer= cast(cWidgetVideo,aWidgetPlayer[0])
                 if self.oWidgetPlayer is not None:
                     self.bIsConnected =True
                     self.oWidgetPlayer.Connect(self)
@@ -91,7 +97,7 @@ class cInterface(cBaseInterFace):
                 self.bOnError=True
                 return False
 
-        def Disconnect(self):
+        def Disconnect(self) -> bool:
             if not cBaseInterFaceSettings.Disconnect(self):
                 return False
             if self.oWidgetPlayer is not None:
@@ -99,8 +105,12 @@ class cInterface(cBaseInterFace):
 
             self.bOnError = False
             self.oWidgetPlayer=None
+            return True
 
-        def Receive(self,uResponse):
+        def Receive(self,uResponse:str) -> None:
+            uCommand:str
+            uRetVal:str
+
             try:
                 uCommand,uRetVal=self.oInterFace.ParseResult(self.oAction,uResponse,self)
                 self.ShowDebug(u'Parsed Responses:'+uCommand+u':'+uRetVal)
@@ -114,41 +124,43 @@ class cInterface(cBaseInterFace):
                 self.ShowError(u'Error Receiving Response',e)
 
     def __init__(self):
+        cInterFaceSettings = self.cInterFaceSettings
         cBaseInterFace.__init__(self)
-        self.aSettings   = {}
-        self.oSetting = None
+        self.dSettings:Dict                             = {}
+        self.oSetting:Union[cInterFaceSettings,None]   = None
 
-    def Init(self, uObjectName, oFnObject=None):
+    def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
         cBaseInterFace.Init(self, uObjectName, oFnObject)
         self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
         self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
         self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
 
-    def DeInit(self, **kwargs):
+    def DeInit(self, **kwargs) -> None:
         cBaseInterFace.DeInit(self,**kwargs)
-        for aSetting in self.aSettings:
-            self.aSettings[aSetting].DeInit()
+        for uSettingName in self.dSettings:
+            self.dSettings[uSettingName].DeInit()
 
-    def GetConfigJSON(self):
+    def GetConfigJSON(self) -> Dict:
         return {"WidgetName": {"active": "enabled", "order": 3, "type": "string", "title": "$lvar(IFACE_OVIDEO_1)",  "desc": "$lvar(IFACE_OVIDEO_1)",  "section": "$var(ObjectConfigSection)","key": "WidgetName",  "default":"select"   },
                 "Stream":     {"active": "enabled", "order": 4, "type": "string", "title": "$lvar(IFACE_OVIDEO_3)",  "desc": "$lvar(IFACE_OVIDEO_4)",  "section": "$var(ObjectConfigSection)","key": "Stream",      "default":"rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"  }
                }
 
-    def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
+    def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
+        uCmd:str
         uCmd=ReplaceVars(oAction.uCmd)
         uCmd=ReplaceVars(uCmd,self.uObjectName+'/'+oSetting.uConfigName)
 
         self.ShowInfo(u'Sending Command: %s to %s (%s:%s)' % (uCmd,oSetting.aIniSettings.uWidgetName,oSetting.uConfigName,oSetting.aIniSettings.uStream))
         oSetting.Connect()
 
-        iRet=1
+        eRet:eReturnCode=eReturnCode.Error
         if oSetting.bIsConnected:
             try:
-                iRet,sValue=oSetting.oWidgetPlayer.StatusControl(uCmd,oSetting.aIniSettings.uStream)
-                iRet=0
+                oSetting.oWidgetPlayer.StatusControl(uCmd,oSetting.aIniSettings.uStream)
+                eRet = eReturnCode.Success
             except Exception as e:
-                self.ShowError(u'can\'t Send Message',u'',e)
-                iRet=1
-        return iRet
+                self.ShowError(uMsg=u'can\'t Send Message',uParConfigName=u'',oException=e)
+                eRet = eReturnCode.Error
+        return eRet

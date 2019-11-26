@@ -74,10 +74,10 @@
     <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(DIMMERCOLORBALL)" attributename="transparancy" attributevalue="$var(DIMVALUE)"/>
     <action name="Switch Off on low Dim Values" string="goto label_switchoff" condition="$var(DIMVALUE)&lt;=3"  />
     <action name="Make FS Values" string="call Fkt DezToFS20DimSteps" />
-    <action name="Dim it" string="sendcommand" commandname="dim" commandparameter='{"dimmer":"$var(DIMMER)","dimvalue":"$var(DIMVALUE)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="Dim it" string="sendcommand dim" commandparameter='{"dimmer":"$var(DIMMER)","dimvalue":"$var(DIMVALUE)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
     <action name="Done" string="goto label_end"/>
     <action name="label_switchoff" />
-    <action name="Switch it off" string="sendcommand" commandname="power_off" commandparameter='{"dimmer":"$var(DIMMER)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="Switch it off" string="sendcommand power_off" commandparameter='{"dimmer":"$var(DIMMER)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
     <action name="label_end" />
   </action>
 
@@ -125,9 +125,9 @@
 
   <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Dimmer">
     <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(DIMMERCOLORBALL)" attributename="transparancy" attributevalue="100"/>
-    <action name="" string="sendcommand" commandname="ramp_on_time" commandparameter='{"dimmer":"$var(DIMMER)","time":"3"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
-    <action name="" string="sendcommand" commandname="power_on" commandparameter='{"dimmer":"$var(DIMMER)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
-    <action name="" string="sendcommand" commandname="dim" commandparameter='{"dimmer":"$var(DIMMER)","dimvalue":"100"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand ramp_on_time" commandparameter='{"dimmer":"$var(DIMMER)","time":"3"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand power_on" commandparameter='{"dimmer":"$var(DIMMER)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand dim" commandparameter='{"dimmer":"$var(DIMMER)","dimvalue":"100"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
     <action name="" string="setvar $var(DIMVAR)=100" />
     <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
   </action>
@@ -176,8 +176,8 @@
 
   <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Dimmer">
     <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(DIMMERCOLORBALL)" attributename="transparancy" attributevalue="0"/>
-    <action name="" string="sendcommand" commandname="ramp_off_time" commandparameter='{"dimmer":"$var(DIMMER)","time":"3"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
-    <action name="" string="sendcommand" commandname="power_off" commandparameter='{"dimmer":"$var(DIMMER)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand ramp_off_time" commandparameter='{"dimmer":"$var(DIMMER)","time":"3"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand power_off" commandparameter='{"dimmer":"$var(DIMMER)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
     <action name="" string="setvar $var(DIMVAR)=0" />
     <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
   </action>
@@ -228,7 +228,7 @@
 
   <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch On Switch">
     <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(SWITCHCOLORBALL)" attributename="transparancy" attributevalue="100"/>
-    <action name="" string="sendcommand" commandname="power_on" commandparameter='{"dimmer":"$var(SWITCH)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand power_on" commandparameter='{"dimmer":"$var(SWITCH)"}' interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
   </action>
 
   <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Send Switch Off Switch all">
@@ -266,7 +266,7 @@
 
   <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt Switch Off Switch">
     <action name="Set Bulb Transparancy" string="setwidgetattribute" widgetname="$var(SWITCHCOLORBALL)" attributename="transparancy" attributevalue="0"/>
-    <action name="" string="sendcommand" commandname="power_off" commandparameter="{'dimmer':$var(SWITCH)}" interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
+    <action name="" string="sendcommand power_off" commandparameter="{'dimmer':$var(SWITCH)}" interface="$var($dvar(definition_alias_FHEMFS20LIGHTS)_INTERFACE_1)" configname="$var($dvar(definition_alias_FHEMFS20LIGHTS)_CONFIGNAME_1)" />
   </action>
 
   <action name="$dvar(definition_alias_FHEMFS20LIGHTS)_Fkt INITFS20DIMMERVARS">

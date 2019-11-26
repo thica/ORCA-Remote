@@ -19,8 +19,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.utils.Platform.linux_GetUserDataPath import GetUserDataPath as Linux_GetUserDataPath
+from ORCA.utils.Path import cPath
+from ORCA.utils.Platform.linux.linux_GetUserDataPath import GetUserDataPath as Linux_GetUserDataPath
 
-def GetUserDataPath():
+
+def GetUserDataPath() -> cPath:
     """ Gets the path to the user folder """
     return Linux_GetUserDataPath()

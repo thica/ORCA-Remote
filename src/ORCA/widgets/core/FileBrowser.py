@@ -97,6 +97,8 @@ from kivy.lang import Builder
 from kivy.utils import platform as core_platform
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
+from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
+
 
 __all__ = ('FileBrowser', )
 __version__ = '1.1'
@@ -122,7 +124,7 @@ def get_drives():
                 name = create_unicode_buffer(64)
                 # get name of the drive
                 drive = letter + u':'
-                res = GetVolumeInformationW(drive + sep, name, 64, None,None, None, None, 0)
+                GetVolumeInformationW(drive + sep, name, 64, None,None, None, None, 0)
                 drives.append((drive, name.value))
             bitmask >>= 1
     elif platform == 'linux':
@@ -369,6 +371,7 @@ class LinkTree(TreeView):
         if not node.path or node.nodes:
             return
         parent = node.path
+        # noinspection PyShadowingBuiltins
         next = walk(parent).next()
         if next:
             for path in next[1]:
@@ -592,9 +595,10 @@ class FileBrowser(BoxLayout):
         pass
 
     def __init__(self, **kwargs):
-        super(FileBrowser, self).__init__(**kwargs)
+        super(FileBrowser, self).__init__(**RemoveNoClassArgs(kwargs,FileBrowser))
         Clock.schedule_once(self._post_init)
 
+    # noinspection PyUnusedLocal
     def _post_init(self, *largs):
         self.ids.icon_view.bind(selection=partial(self._attr_callback, 'selection'),
                                 path=partial(self._attr_callback, 'path'),

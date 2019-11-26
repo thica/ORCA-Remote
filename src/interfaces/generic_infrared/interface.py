@@ -20,9 +20,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import List
+from typing import Union
 
 from ORCA.interfaces.BaseInterface import cBaseInterFace
 from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
+from ORCA.Action import cAction
+from ORCA.utils.FileName import cFileName
 
 '''
 <root>
@@ -32,8 +36,8 @@ from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
       <description language='English'>Base Interface Class for Infrared based Interfaces</description>
       <description language='German'>Basis Schnittstelle für Infrarot Schnittstellen</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/generic_infrared</local>
@@ -42,7 +46,6 @@ from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
         </source>
       </sources>
       <skipfiles>
-        <file>generic_infrared/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -53,30 +56,31 @@ class cInterface(cBaseInterFace):
 
     class cInterFaceSettings(cBaseInterFaceSettings):
 
-        def __init__(self,oInterFace):
+        def __init__(self,oInterFace:cBaseInterFace):
             cBaseInterFaceSettings.__init__(self,oInterFace)
 
-        def ReadAction(self,oAction):
+        def ReadAction(self,oAction:cAction) -> None:
             cBaseInterFaceSettings.ReadAction(self,oAction)
             oAction.uCCF_Code    = oAction.dActionPars.get(u'cmd_ccf',u'')
             oAction.uRepeatCount = oAction.dActionPars.get(u'repeatcount',u'´1')
 
-    def GetConfigCodesetList(self):
-        aRet=cBaseInterFace.GetConfigCodesetList(self)
+    def GetConfigCodesetList(self)  -> List[str]:
+        aRet:List[str]=cBaseInterFace.GetConfigCodesetList(self)
         # adjust the codeset path to load infrared generic formats
-        uTmpName=self.uObjectName
+        uTmpName:str=self.uObjectName
         self.uObjectName="infrared_ccf"
         aRet+=cBaseInterFace.GetConfigCodesetList(self)
         self.uObjectName=uTmpName
         return aRet
 
+    def FindCodesetFile(self, uFNCodeset:str) -> Union[cFileName,None]:
 
-    def FindCodesetFile(self, uFNCodeset):
-        uRet = cBaseInterFace.FindCodesetFile(self,uFNCodeset)
-        if uRet:
-            return uRet
-        uTmpName=self.uObjectName
-        self.uObjectName="infrared_ccf"
-        uRet = cBaseInterFace.FindCodesetFile(self,uFNCodeset)
-        self.uObjectName=uTmpName
+        uRet: Union[cFileName, None]
+        uRet = super().FindCodesetFile(uFNCodeset)
+
+        if uRet is None:
+            uTmpName=self.uObjectName
+            self.uObjectName="infrared_ccf"
+            uRet = cBaseInterFace.FindCodesetFile(self,uFNCodeset)
+            self.uObjectName=uTmpName
         return uRet

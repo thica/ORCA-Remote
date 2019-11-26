@@ -40,15 +40,15 @@ class SettingPicture(SettingFile):
     """ let the user select a picture from a folder """
     def __init__(self, **kwargs):
 
-        self.oLayout =FloatLayout(size_hint=(1, 1))
+        self.oLayout:FloatLayout = FloatLayout(size_hint=(1, 1))
         super(SettingPicture, self).__init__(**RemoveNoClassArgs(kwargs,SettingFile))
-        oFnPic = cFileName()
+        oFnPic:cFileName = cFileName()
 
         try:
-            oFnPic      = cFileName().ImportFullPath(self.value)
-            self.oPic   = Image(source=UnEscapeUnicode(ToAtlas(oFnPic)),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
-            oFnBack     = cFileName(Globals.oPathResources + "pics") + "imagepicker_background.png"
-            self.oBack  = Image(source=ToAtlas(oFnBack),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
+            oFnPic              = cFileName().ImportFullPath(self.value)
+            self.oPic:Image     = Image(source=UnEscapeUnicode(ToAtlas(oFnPic)),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
+            oFnBack:cFileName   = cFileName(Globals.oPathResources + "pics") + "imagepicker_background.png"
+            self.oBack:Image    = Image(source=ToAtlas(oFnBack),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
             self.oLayout.add_widget(self.oBack)
             self.oLayout.add_widget(self.oPic)
             self.add_widget(self.oLayout)
@@ -59,10 +59,10 @@ class SettingPicture(SettingFile):
 
     def set_value(self, section, key, value):
         value=EscapeUnicode(value)
-        return super(SettingPicture, self).set_value(section, key, value)
+        return super().set_value(section, key, value)
 
 
-    def _validate(self, instance):
+    def _validate(self, instance) -> None:
         """ displays the folder """
 
         SettingFile._validate(self,instance)

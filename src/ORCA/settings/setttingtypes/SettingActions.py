@@ -18,8 +18,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import ORCA.Globals as Globals
+from typing import List
+from typing import Union
 
+from xml.etree.ElementTree import Element
+
+from kivy.uix.popup import Popup
+from kivy.uix.widget import Widget
+import ORCA.Globals as Globals
 from ORCA.settings.setttingtypes.SettingScrollOptionsWithOptions import SettingScrollOptionsWithOptions
 from ORCA.settings.setttingtypes.SettingScrollOptions   import ScrollOptionsPopUp
 from ORCA.utils.XML                                     import LoadXMLFile
@@ -37,14 +43,14 @@ __all__ = ['SettingActions']
 class SettingActions(SettingScrollOptionsWithOptions):
     """ A setting class to select actions from the action list or from a codeset """
     def __init__(self, **kwargs):
-        self.aCodesetCmds=[]
-        self.actionpopup=None
-        self.oCodeSetActionsScrollOptionsPopup=None
+        self.aCodesetCmds:List[str]                             = []
+        self.oActionPopup:Union[Popup,None]                     = None
+        self.oCodeSetActionsScrollOptionsPopup:Union[Popup,None]=None
         kwargs["options"] = [ReplaceVars("$lvar(742)"),ReplaceVars("$lvar(743)"),ReplaceVars("$lvar(744)")]
         kwargs["suboptions"] = [["$ACTIONLISTSEND"], ["$ACTIONLIST"], ["$FILELIST[%s]" % Globals.oPathCodesets.string]]
-        super(SettingActions, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
-    def _set_suboption(self, instance):
+    def _set_suboption(self, instance:Widget) -> None:
         """ called, when the second option is selected """
         if instance.text.startswith('CODESET_'):
             self.subpopup.dismiss()
@@ -56,39 +62,41 @@ class SettingActions(SettingScrollOptionsWithOptions):
             self.subpopup.dismiss()
             self.popup.dismiss()
 
-    def _set_suboptioncodesetaction(self, instance):
+    def _set_suboptioncodesetaction(self, instance:Widget) -> None:
         """ called, when a codesetcode is selected """
         self.value = "SendCommand "+instance.text
-        self.actionpopup.dismiss()
+        self.oActionPopup.dismiss()
 
-    def _ReadCodeset(self,uFN):
+    def _ReadCodeset(self,uFN:str) -> None:
+
+        oXMLCode:Element
+        uCmd:str
         del self.aCodesetCmds[:]
         try:
-            oXMLCodeset = LoadXMLFile(cFileName(Globals.oPathCodesets) + uFN)
+            oXMLCodeset:Element = LoadXMLFile(cFileName(Globals.oPathCodesets) + uFN)
             Orca_include(oXMLCodeset,orca_et_loader)
             if oXMLCodeset is not None:
                 # First read imported codesets
-                oXMLImports = oXMLCodeset.find('imports')
+                oXMLImports:Element = oXMLCodeset.find('imports')
                 if oXMLImports is not None:
-                    oXMLImportCodesets=oXMLImports.find('codeset')
+                    oXMLImportCodesets:Element=oXMLImports.find('codeset')
                     if oXMLImportCodesets is not None:
-                        oXMLImportCodes=oXMLImportCodesets.findall('code')
-                        for oXMLCode in oXMLImportCodes:
+                        for oXMLCode in oXMLImportCodesets.findall('code'):
                             uCmd=GetXMLTextAttribute(oXMLCode,'action',False,'')
                             if uCmd:
                                 self.aCodesetCmds.append(uCmd)
 
-                oXMLCodes=oXMLCodeset.findall('code')
-                for oXMLCode in oXMLCodes:
+                for oXMLCode in oXMLCodeset.findall('code'):
                     uCmd=GetXMLTextAttribute(oXMLCode,'action',False,'')
                     if uCmd:
                         self.aCodesetCmds.append(uCmd)
 
         except Exception as e:
-            LogError('Error Reading Codeset',e)
-    def _ShowCodesetCodesPopup(self,uFN):
+            LogError(uMsg='Error Reading Codeset',oException=e)
+
+    def _ShowCodesetCodesPopup(self,uFN:str) -> None:
         kwargs={'title':uFN,'options':sorted(self.aCodesetCmds)}
         self.oCodeSetActionsScrollOptionsPopup=ScrollOptionsPopUp(**kwargs)
         self.oCodeSetActionsScrollOptionsPopup.CreatePopup(self.value,self._set_suboptioncodesetaction,None)
-        self.actionpopup=self.oCodeSetActionsScrollOptionsPopup.popup
+        self.oActionPopup=self.oCodeSetActionsScrollOptionsPopup.popup
 

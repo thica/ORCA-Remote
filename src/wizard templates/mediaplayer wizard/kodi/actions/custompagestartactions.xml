@@ -28,7 +28,7 @@
     <action name="set hint to add" string="setvar" varname="TEMPLATETHINT" varvalue="$lvar(kodi_10000)" />
     <action name="Add Template Installationshint" string="call FKT_AddTemplateInstallationsHint $dvar(definition_alias_mediaplayer_wizard)" />
 
-    <action1 name="test" string="sendcommand" commandname="getavailableresolutions"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
+    <action1 name="test" string="sendcommand getavailableresolutions"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
 
 
   </pagestartaction>

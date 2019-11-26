@@ -10,8 +10,8 @@ cmd = command to send, -->
       <description language='English'>Power off command for Unraid NAS Server using Telnet</description>
       <description language='German'>Power off Befehl für Unraid NAS Server über Telnet</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/telnet/CODESET_telnet_UNRAID.xml</local>
@@ -28,9 +28,6 @@ cmd = command to send, -->
     </entry>
   </repositorymanager>
 
-  <action string="codeset" name='power_off' waitforresponse='0' cmd='powerdown\n' />
-  <action name='power_off_byscreen' >
-      <action string="codeset" name='power_off_byscreen_pre' waitforresponse='1' cmd='screen -S "ORCAPOWERDOWNPRE" bash -c "shutdown -t 180 now" \n' />
-      <action string="codeset" name='power_off_byscreen'     waitforresponse='1' cmd='screen -S "ORCAPOWERDOWN" bash -c "powerdown" \n' />
-  </action>
+  <action string="codeset" name='power_off' waitforresponse='0' cmd='poweroff\n' />
+
 </includes>

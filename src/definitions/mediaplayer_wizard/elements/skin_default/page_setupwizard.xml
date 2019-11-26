@@ -7,7 +7,6 @@
     <element name='Background Main Screen' type='BACKGROUND' picturenormal='background'>
       <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==mediaplayer_wizard" />
     </element>
-
     <element name="Anchor Inner" type="ANCHOR" posx="center" posy="%30" width="%90" height="%70">
     <element name="Button select Template"  type="DROPDOWN" posx="center"  posy="top"  width="%50"  height="%20" picturenormal="button wide*" actions="FKT Select Template $dvar(definition_alias_mediaplayer_wizard)" caption="Please select template" captions="$DIRLIST[$var(WIZARDTEMPLATESPATH)/mediaplayer wizard]"/>
     </element>

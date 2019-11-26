@@ -26,7 +26,7 @@ import ORCA.Globals as Globals
 
 __all__ = ['StopWait']
 
-def StopWait():
+def StopWait() -> None:
     """
     Stops waiting
     """

@@ -20,24 +20,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__                            import annotations
+from typing                                import Dict
+from typing                                import Tuple
+from typing                                import Union
+
 import urllib
 import base64
-from time import sleep
-
-from kivy.clock             import Clock
-from kivy.network.urlrequest import UrlRequest
-
-from ORCA.interfaces.BaseInterface import cBaseInterFace
+from time                                  import sleep
+from kivy.network.urlrequest               import UrlRequest
+from ORCA.interfaces.BaseInterface         import cBaseInterFace
 from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
-from ORCA.vars.Replace      import ReplaceVars
-from ORCA.vars.Access import SetVar
-from ORCA.utils.TypeConvert import UnEscapeUnicode
-from ORCA.utils.TypeConvert  import ToUnicode
-from ORCA.utils.TypeConvert  import ToDic
-from ORCA.utils.TypeConvert  import ToBytes
-
-from ORCA.Compat            import *
-
+from ORCA.vars.Replace                     import ReplaceVars
+from ORCA.vars.Access                      import SetVar
+from ORCA.utils.TypeConvert                import UnEscapeUnicode
+from ORCA.utils.TypeConvert                import ToUnicode
+from ORCA.utils.TypeConvert                import ToDic
+from ORCA.utils.TypeConvert                import ToBytes
+from ORCA.utils.FileName                   import cFileName
+from ORCA.Action                           import cAction
+from ORCA.actions.ReturnCode               import eReturnCode
 
 '''
 <root>
@@ -47,8 +49,8 @@ from ORCA.Compat            import *
       <description language='English'>Interface to send web based commands</description>
       <description language='German'>Interface um webbasierte Kommandos zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/url</local>
@@ -63,20 +65,22 @@ from ORCA.Compat            import *
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>url/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
 </root>
 '''
 
+
+# noinspection PyProtectedMember
 class cInterface(cBaseInterFace):
 
+    # noinspection PyUnusedLocal
     class cInterFaceSettings(cBaseInterFaceSettings):
 
-        def __init__(self,oInterFace):
+        def __init__(self,oInterFace:cInterface):
             cBaseInterFaceSettings.__init__(self,oInterFace)
-            self.bIgnoreTimeOut                                    = False
+            self.bIgnoreTimeOut                           = False
             self.aIniSettings.uHost                       = u"discover"
             self.aIniSettings.uPort                       = u"80"
             self.aIniSettings.uFNCodeset                  = u"Select"
@@ -90,7 +94,7 @@ class cInterface(cBaseInterFace):
             self.aIniSettings.uDISCOVER_UPNP_manufacturer = ""
             self.aIniSettings.uDISCOVER_UPNP_prettyname   = ""
 
-        def ReadAction(self,oAction):
+        def ReadAction(self,oAction:cAction) -> None:
             cBaseInterFaceSettings.ReadAction(self,oAction)
             oAction.uParams      = oAction.dActionPars.get(u'params',u'')
             oAction.uRequestType = oAction.dActionPars.get(u'requesttype',u'POST')
@@ -98,33 +102,31 @@ class cInterface(cBaseInterFace):
             oAction.uProtocol    = oAction.dActionPars.get(u'protocol',u'http://')
 
 
-        def OnError(self,request,error):
+        def OnError(self,request,error) -> None:
             if self.bIgnoreTimeOut:
                 if str(error)=="timed out":
                     return
             if self.bIsConnected:
                 self.ShowError(u'Error Receiving Response (Error)',error)
             self.oInterFace.bStopWait      = True
-        def OnFailure(self,request,result):
+        def OnFailure(self,request,result) -> None:
             self.ShowError(u'Error Receiving Response (Failure)')
             self.oInterFace.bStopWait      = True
-        def OnReceive(self,oRequest,oResult):
+        def OnReceive(self,oRequest,oResult) -> None:
             self.ShowDebug(u'Received Response:'+ToUnicode(oResult))
             self.oInterFace.bStopWait      = True
-        def Disconnect(self):
+        def Disconnect(self) -> bool:
 
             if not self.bIsConnected:
                 return cBaseInterFaceSettings.Disconnect(self)
-
             try:
                 tRet = self.ExecuteStandardAction('logoff')
                 return cBaseInterFaceSettings.Disconnect(self)
-
             except Exception as e:
                 self.ShowError(u'Cannot diconnect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 return cBaseInterFaceSettings.Disconnect(self)
 
-        def Connect(self):
+        def Connect(self) -> bool:
 
             if self.bInConnect:
                 return True
@@ -159,15 +161,16 @@ class cInterface(cBaseInterFace):
                 return False
 
     def __init__(self):
+        cInterFaceSettings=self.cInterFaceSettings
         cBaseInterFace.__init__(self)
-        self.aSettings      = {}
-        self.oSetting       = None
-        self.uResponse      = u''
-        self.oReq           = None
-        self.bStopWait      = False
-        self.iWaitMs        = 2000
+        self.dSettings:Dict                             = {}
+        self.oSetting:Union[cInterFaceSettings,None]    = None
+        self.uResponse:str                              = u''
+        self.oReq                                       = None
+        self.bStopWait:bool                             = False
+        self.iWaitMs:int                               = 2000
 
-    def Init(self, uObjectName, oFnObject=None):
+    def Init(self, uObjectName: str, oFnObject: Union[cFileName,None] = None) -> None:
         cBaseInterFace.Init(self, uObjectName, oFnObject)
 
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
@@ -183,16 +186,16 @@ class cInterface(cBaseInterFace):
         self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
-    def DeInit(self, **kwargs):
+    def DeInit(self, **kwargs) -> None:
         cBaseInterFace.DeInit(self,**kwargs)
-        for aSetting in self.aSettings:
-            self.aSettings[aSetting].DeInit()
+        for uSettingName in self.dSettings:
+            self.dSettings[uSettingName].DeInit()
 
-    def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
+    def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
-        iTryCount = 0
-        iRet      = 1
+        iTryCount:int    = 0
+        eRet:eReturnCode = eReturnCode.Error
 
         oSetting.uRetVar=uRetVar
 
@@ -206,35 +209,29 @@ class cInterface(cBaseInterFace):
                 try:
                     iStatusCode, uRes = self.SendCommand_Helper(oAction,oSetting,self.uObjectName)
                     if iStatusCode == 200:
-                        iRet=0
+                        eRet = eReturnCode.Success
                         self.ShowDebug(u'Sending Command succeeded: : %d' % iStatusCode, oSetting.uConfigName)
                         break
                     elif iStatusCode == 0:
-                        iRet=200
+                        eRet = eReturnCode.Unknown
                         self.ShowWarning(u'Sending Command: Response should be 200, maybe error, maybe success: %d [%s]' % (iStatusCode,uRes),oSetting.uConfigName)
                         break
                     else:
-                        iRet=1
+                        eRet = eRet.Error
                         oSetting.bIsConnected=False
                         self.ShowError(u'Sending Command failed: %d [%s]' % (iStatusCode,ToUnicode(uRes)),oSetting.uConfigName)
                 except Exception as e:
-                    self.ShowError(u'can\'t Send Message',oSetting.uConfigName,e)
-                    iRet=1
+                    self.ShowError(uMsg=u'can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
+                    eRet = eReturnCode.Error
             else:
                 if iTryCount==2:
                     self.ShowWarning(u'Nothing done,not connected! ->[%s]' % oAction.uActionName, oSetting.uConfigName)
                 oSetting.bIsConnected=False
-        if not bNoLogOut:
-            if oSetting.aIniSettings.iTimeToClose==0:
-                oSetting.Disconnect()
-            elif oSetting.aIniSettings.iTimeToClose!=-1:
-                Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
 
-        self.iLastRet=iRet
-        return iRet
+        self.CloseSettingConnection(oSetting=oSetting, bNoLogOut=bNoLogOut)
+        return eRet
 
-    def NewWait(self,delay):
+    def NewWait(self,delay:float) -> None:
 
         #Replacement of the buggy UrlRquest wait function
 
@@ -245,7 +242,8 @@ class cInterface(cBaseInterFace):
                 self.bStopWait=False
                 break
 
-    def SendCommand_Helper(self,oAction,oSetting,uObjectName):
+    # noinspection PyUnresolvedReferences
+    def SendCommand_Helper(self,oAction:cAction,oSetting:cInterFaceSettings,uObjectName:str) -> Tuple[int,str]:
 
         iRet = None
         self.uResponse      = u''
@@ -275,14 +273,10 @@ class cInterface(cBaseInterFace):
                 pass
 
             if oAction.uType=='none':
-                return -1
+                return -1,""
 
             if oAction.uType=='encode':
-                if PY2:
-                    uData = urllib.urlencode(uData)
-                else:
-                    # noinspection PyUnresolvedReferences
-                    uData = urllib.parse.urlencode(uData)
+                uData = urllib.parse.urlencode(uData)
 
             uData = ReplaceVars(uData,uObjectName+u'/'+oSetting.uConfigName)
             uData = ReplaceVars(uData)
@@ -292,16 +286,13 @@ class cInterface(cBaseInterFace):
             if oAction.uActionName=='logon' or True:
                 # base64 encode the username and password
                 uTmp = ReplaceVars('%s:%s' % ('$cvar(CONTEXT_USER)','$cvar(CONTEXT_PASSWORD)'),uObjectName+u'/'+oSetting.uConfigName)
-                if PY2:
-                    sAuth = base64.encodestring(uTmp).replace('\n', '')
-                else:
-                    bTmp  = ToBytes(uTmp)
-                    #bTmp  = base64.encodestring(bTmp)
-                    # noinspection PyUnresolvedReferences
-                    bTmp = base64.encodebytes(bTmp)
-                    uTmp  = bTmp.decode( 'utf-8')
-                    sAuth = uTmp.replace('\n', '')
-                    #sAuth = base64.encodestring(bTmp).replace('\n', '')
+                bTmp  = ToBytes(uTmp)
+                #bTmp  = base64.encodestring(bTmp)
+                # noinspection PyUnresolvedReferences
+                bTmp = base64.encodebytes(bTmp)
+                uTmp  = bTmp.decode( 'utf-8')
+                sAuth = uTmp.replace('\n', '')
+                #sAuth = base64.encodestring(bTmp).replace('\n', '')
             #construct and send the header
             uHeader = oAction.uHeaders
             uHeader = ReplaceVars(uHeader,uObjectName+u'/'+oSetting.uConfigName)
@@ -310,7 +301,7 @@ class cInterface(cBaseInterFace):
 
             aHeader = ToDic(uHeader)
             for uKey in aHeader:
-                if isinstance(aHeader[uKey],string_types):
+                if isinstance(aHeader[uKey],str):
                     aHeader[uKey]=UnEscapeUnicode(aHeader[uKey])
 
             if not sAuth == u'':
@@ -330,12 +321,12 @@ class cInterface(cBaseInterFace):
             if oAction.bWaitForResponse:
                 self.NewWait(0.05)
                 if self.oReq.resp_status is not None:
-                    uCmd,uRetVal=self.ParseResult(oAction,self.oReq.result,oSetting)
+                    self.ParseResult(oAction,self.oReq.result,oSetting)
                     iRet=self.oReq.resp_status
                     self.uResponse = self.oReq.result
                 else:
                     if self.oReq._error is not None:
-                        self.uResponse = self.oReq._error.strerror
+                        self.uResponse = str(self.oReq._error)
                         iRet=self.oReq._error.errno
                 if iRet is None:
                     iRet=200
@@ -346,7 +337,7 @@ class cInterface(cBaseInterFace):
                 return 200,''
 
         except Exception as e:
-            self.ShowError(u'can\'t Send Message #2' ,oSetting.uConfigName,e)
+            self.ShowError(uMsg=u'can\'t Send Message #2' ,uParConfigName=oSetting.uConfigName,oException=e)
 
         return -1,''
 

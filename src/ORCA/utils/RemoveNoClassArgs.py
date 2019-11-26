@@ -19,35 +19,43 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-_ArgCache={}
+from typing import Dict
+from typing import List
+from typing import Any
+from typing import Callable
 
-def all_members(aClass):
+_ArgCache:dict={}
+
+
+def getmro(aClass:Any, recurse:Callable) ->List:
+    mro = [aClass]
+    for base in aClass.__bases__: mro.extend(recurse(base, recurse))
+    return mro
+
+
+def all_members(aClass:Any) -> Dict:
     try:
         # Try getting all relevant classes in method-resolution order
         mro = list(aClass.__mro__)
     except AttributeError:
         # If a class has no _ _mro_ _, then it's a classic class
-        def getmro(aClass, recurse):
-            mro = [aClass]
-            for base in aClass.__bases__: mro.extend(recurse(base, recurse))
-            return mro
         mro = getmro(aClass, getmro)
     mro.reverse(  )
     members = {}
     for someClass in mro: members.update(vars(someClass))
     return members
 
-def RemoveNoClassArgs(dInArgs, oObject):
+def RemoveNoClassArgs(dInArgs:Dict, oObject:Any) -> Dict:
     """ In python3 it triggers an error, if we pass ORCA Args at __Init__ to Kivy Widgets
         so we remove them
     """
 
-    dAllMembers=_ArgCache.get(oObject.__name__)
+    dAllMembers:Dict=_ArgCache.get(oObject.__name__)
     if dAllMembers is None:
         dAllMembers=all_members(oObject)
         _ArgCache[oObject.__name__]=dAllMembers
 
-    dOutArgs = {}
+    dOutArgs:Dict = {}
     for key in dInArgs:
         if key in dAllMembers:
             dOutArgs[key]=dInArgs[key]

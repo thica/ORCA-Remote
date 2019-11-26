@@ -18,6 +18,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                 import Dict
+from typing                 import List
+from typing                 import Union
+
 import gc
 import traceback
 from functools              import  partial
@@ -26,6 +30,9 @@ from kivy.logger            import  Logger
 from kivy.gesture           import  GestureDatabase
 from kivy.clock             import  Clock
 from kivy.event             import  EventDispatcher
+from kivy.uix.widget        import  Widget
+from kivy.uix.label         import  Label
+
 
 from kivy.uix.screenmanager import  ScreenManager
 from kivy.uix.screenmanager import  Screen
@@ -46,111 +53,143 @@ from ORCA.vars.Replace              import  ReplaceVars
 from ORCA.vars.Globals              import  InitSystemVars
 from ORCA.vars.Actions              import  Var_Increase
 from ORCA.ScreenPages               import  cScreenPages
+from ORCA.vars.Access               import  SetVar
+from ORCA.widgets.Base              import  cWidgetBase
+from ORCA.actions.ReturnCode        import  eReturnCode
 
 import ORCA.Globals as Globals
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage import cScreenPage
+    from ORCA.Gesture    import cGesture
+    from ORCA.Action     import cAction
+else:
+    from typing import TypeVar
+    cScreenPage = TypeVar("cScreenPage")
+    cGesture    = TypeVar("cGesture")
+    cAction     = TypeVar("cAction")
+
 
 class cTheScreen(EventDispatcher):
     """ The Main screen class """
 
     def __init__(self, *args, **kwargs):
         super(cTheScreen, self).__init__(*args, **kwargs)
-        self.bIntransition          = False
-        self.iRotateCount           = 0
-        self.oScreenPages           = {}
-        self.dPopups                = {}
-        self.oCurrentPage           = None
-        self.oFonts                 = cFonts()
-        self.dGestures              = {}
-        self.oPopupPage             = None
-        self.oRootSM                = ScreenManager()
-        self.oScreenPages           = cScreenPages()
-        self.oSkin                  = cSkin()
-        self.oSplashBackground      = Screen(name="SPLASH")
-        self.oSplashLogger          = None
-        self.oSplashLogger2         = None
-        self.uCurrentEffect         = u''
-        self.uCurrentEffectDirection =u''
-        self.uCurrentPageName       = None
-        self.uLastTouchType         = u''
-        self.uFirstPageName         = u''
+        self.bIntransition:bool                     = False
+        self.iBlockCount:int                        = 0
+        self.iBlockAskCount:int                     = 0
+        self.iRotateCount:int                       = 0
+        self.dPopups:Dict[str,Widget]               = {}
+        self.oCurrentPage:Union[cScreenPage,None]   = None
+        self.oFonts:cFonts                          = cFonts()
+        self.oGdb:Union[GestureDatabase,None]       = None
+        self.dGestures:Dict[str,cGesture]           = {}
+        self.iLastWidgetPage:int                    = 0
+        self.oPopupPage:Union[cScreenPage,None]     = None
+        self.oPopup:Union[cScreenPage,None]         = None
+        self.oRootSM:ScreenManager                  = ScreenManager()
+        self.oScreenPages:cScreenPages              = cScreenPages()
+        self.oSkin:cSkin                            = cSkin()
+        self.oSplashBackground:Screen               = Screen(name="SPLASH")
+        self.oSplashLogger:Union[Label,None]        = None
+        self.oSplashLogger2:Union[Label,None]       = None
+        self.uCurrentEffect:str                     = u''
+        self.uCurrentEffectDirection:str            = u''
+        self.uCurrentPageName:str                   = u''
+        self.uLastTouchType:str                     = u''
+        self.uFirstPageName:str                     = u''
+        self.uDefaultTransmitterPictureName:str     = u''
+        self.uDefaultWaitPictureName:str            = u''
+        self.uDefName:str                           = u''
+        self.uInterFaceToConfig:str                 = u''
+        self.uScriptToConfig:str                    = u''
+        self.uConfigToConfig:str                    = u''
+        self.uSplashText:str                        = u''
         self.oRootSM.add_widget(self.oSplashBackground)
         self.InitVars()
 
-    def InitVars(self):
+    def InitVars(self) -> None:
         """ (re) Initialisises all vars (also after a definition change) """
         InitSystemVars()
         Globals.oDefinitions.InitVars()
+        SetVar(uVarName = u'REPVERSION', oVarValue = ToUnicode(Globals.iVersion))
 
         # Name of the Current page
         # List for settings dialog
-        self.bIntransition      = False
+        self.bIntransition              = False
         self.dGestures.clear()
         self.dPopups.clear()
-        self.iLastWidgetPage    = 0
+        self.iLastWidgetPage            = 0
         Globals.oActions.InitVars()
-        self.oCurrentPage       = None
+        self.oCurrentPage               = None
         self.oFonts.DeInit()
-        self.oGdb               = GestureDatabase()
-        self.oPopup             = None
+        self.oGdb                       = GestureDatabase()
+        self.oPopup                     = None
         self.oScreenPages.DeInit()
-        self.uCurrentEffect     = u''
-        self.uCurrentEffectDirection =u''
-        self.uCurrentPageName   = u''
+        self.uCurrentEffect             = u''
+        self.uCurrentEffectDirection    = u''
+        self.uCurrentPageName           = u''
         self.uDefaultTransmitterPictureName = u''
-        self.uDefaultWaitPictureName = u''
-        self.uDefName           = u''
-        self.uFirstPageName     = u''
-        self.uInterFaceToConfig = u''
-        self.uScriptToConfig    = u''
-        self.uConfigToConfig    = u''
-        self.uSplashText        = u''
+        self.uDefaultWaitPictureName    = u''
+        self.uDefName                   = u''
+        self.uFirstPageName             = u''
+        self.uInterFaceToConfig         = u''
+        self.uScriptToConfig            = u''
+        self.uConfigToConfig            = u''
+        self.uSplashText                = u''
+        self.iBlockCount                = 0
+        self.iBlockAskCount             = 0
         if Globals.oTheScreen:
             Globals.oTheScreen.oSkin.dSkinRedirects.clear()
         gc.collect()
 
-    def DeInit(self,**kwargs):
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def DeInit(self,**kwargs) -> None:
         """ Deinitialisises the screen """
         Globals.oEvents.DeInit()
 
-    def ShowPage(self,uPageName,*largs):
+    # noinspection PyUnusedLocal
+    def ShowPage(self,uPageName:str,*largs) -> eReturnCode:
         """ Shows a specific page (waiting in case a transition is still in progress) """
         if not self.bIntransition:
             self._ShowPage(uPageName=uPageName)
-            return -2
+            return eReturnCode.Nothing
         else:
             Logger.debug ('Waiting to finish transition')
             Clock.schedule_once(partial(self.ShowPage,uPageName),0)
-            return -2
+            return eReturnCode.Nothing
 
-    def ShowPageGetPageStartActions(self,uPageName='Page_None'):
+    def ShowPageGetPageStartActions(self,uPageName:str='Page_None') -> List[cAction]:
         """ Returns the pagestartactions for a specific page """
-        aActions=Globals.oActions.GetPageStartActionList(uActionName=uPageName, bNoCopy=False)
-        oPage=self.oScreenPages.get(uPageName)
+        aActions:List[cAction] = Globals.oActions.GetPageStartActionList(uActionName=uPageName, bNoCopy=False)
+        oPage:cScreenPage      = self.oScreenPages.get(uPageName)
         if oPage:
             oPage.Create()
         return aActions
 
-    def ShowPageGetPageStopActions(self, uPageName=u''):
+    def ShowPageGetPageStopActions(self, uPageName:str = u'')  -> List[cAction]:
         """ Returns the pagestopactions for a specific page """
         if uPageName==u'':
             if self.oCurrentPage:
                 uPageName=self.oCurrentPage.uPageName
         return Globals.oActions.GetPageStopActionList(uActionName = uPageName, bNoCopy = False)
 
-    def _ShowPage(self,uPageName='Page_None'):
-
+    def _ShowPage(self,uPageName:str = 'Page_None') -> bool:
+        oPage:cScreenPage
+        uPageName:str
         try:
             if self.uCurrentPageName==uPageName:
                 return True
-            oPage=self.oScreenPages.get(uPageName)
+            oPage = self.oScreenPages.get(uPageName)
             if oPage is None:
                 Logger.error(u'ShowPage: Wrong Pagename given:'+uPageName)
                 self.DumpPages()
-                uPageName = 'Page_None'
-                oPage=self.oScreenPages.get(uPageName)
-                self.oCurrentPage=oPage
+                uPageName         = 'Page_None'
+                oPage             = self.oScreenPages.get(uPageName)
+                self.oCurrentPage = oPage
             else:
-                self.oCurrentPage=oPage
+                self.oCurrentPage = oPage
 
             self.oScreenPages.CreatePage(u'')
             Var_Increase(uVarName = "PAGESTARTCOUNT_"+oPage.uPageName)
@@ -169,8 +208,9 @@ class cTheScreen(EventDispatcher):
                 #self.oRoot.add_widget(oPage.oScreen)
                 self.oRootSM.current_screen.add_widget(oPage.oScreen)
 
-            oPage.uCallingPageName          = self.uCurrentPageName
-            self.uCurrentPageName           = uPageName
+            oPage.uCalledByPageName            = self.uCurrentPageName
+            self.oCurrentPage.uCallingPageName = "" # uPageName
+            self.uCurrentPageName              = uPageName
 
             if self.uFirstPageName==u'':
                 self.uFirstPageName=uPageName
@@ -182,19 +222,21 @@ class cTheScreen(EventDispatcher):
             return True
 
         except Exception as e:
+            uMsg:str
             uMsg = traceback.format_exc()
             Logger.debug (uMsg)
             Logger.debug("Rootsm:"+str(self.oRootSM))
             if self.oRootSM is not None:
                 Logger.debug("current_screen:"+str(self.oRootSM.current_screen))
 
-            uMsg=LogError(u'TheScreen: ShowPage: Page could not be activated:'+uPageName,e)
+            uMsg=LogError(uMsg=u'TheScreen: ShowPage: Page could not be activated:'+uPageName,oException=e)
             ShowErrorPopUp(uMessage=uMsg)
             return False
 
-    def IsPopup(self,uPageName=None):
+    def IsPopup(self,uPageName:Union[str,None]=None) -> bool:
         """ Detects/returns, if a page is a popup page """
-        uPageNameOrg=uPageName
+        oPage:cScreenPage
+        uPageNameOrg:str=uPageName
         if uPageName is None or uPageName=='':
             oPage=self.oCurrentPage
             if oPage is None:
@@ -209,18 +251,21 @@ class cTheScreen(EventDispatcher):
         else:
             return oPage.bIsPopUp
 
-    def On_Transition_Complete(self,oTransition):
+    # noinspection PyUnusedLocal
+    def On_Transition_Complete(self, oTransition) -> None:
         """ Called by the framework, when the transition has been finished, sets the flag, to stop waiting """
         self.bIntransition      = False
-    def On_Transition_Started(self,oTransition,Percentage):
+
+    # noinspection PyUnusedLocal
+    def On_Transition_Started(self, oTransition,Percentage)  -> None:
         """ Called by the framework, when the transition has been started """
         #print 'in Transition',oTransition.is_active,Percentage
         if Percentage==0:
             self.bIntransition      = True
 
-    def SetPageEffectDirection(self,uDirection='fade'):
+    def SetPageEffectDirection(self,uDirection:str='fade') -> bool:
         """ Sets the Page effect direction (in case , the effect has an direction) """
-        self.uCurrentEffectDirection=uDirection
+        self.uCurrentEffectDirection = uDirection
 
         try:
             if ToUnicode(type(self.oRootSM.transition)).endswith(u'SlideTransition\'>'):
@@ -228,13 +273,13 @@ class cTheScreen(EventDispatcher):
                     self.oRootSM.transition.direction=uDirection
             return True
         except Exception as e:
-            uMsg=LogError(u'TheScreen: Can not set page effect direction:' + uDirection ,e)
+            uMsg:str=LogError(uMsg=u'TheScreen: Can not set page effect direction:' + uDirection ,oException=e)
             ShowErrorPopUp(uMessage=uMsg)
             return False
 
-    def SetPageEffect(self,uEffect):
+    def SetPageEffect(self,uEffect:str) -> bool:
         """ Sets the page effect for showing a page """
-        self.uCurrentEffect=uEffect
+        self.uCurrentEffect = uEffect
         try:
             if uEffect==u'':
                 return True
@@ -266,20 +311,22 @@ class cTheScreen(EventDispatcher):
                     return True
                 self.oRootSM.transition = RiseInTransition()
 
+            # noinspection PyArgumentList
             self.oRootSM.transition.bind(on_complete=self.On_Transition_Complete)
+            # noinspection PyArgumentList
             self.oRootSM.transition.bind(on_progress=self.On_Transition_Started)
             return True
 
         except Exception as e:
-            uMsg=LogError(u'TheScreen: Can not set page effect:' + uEffect,e)
-            ShowErrorPopUp(uMessage=uMsg)
+            ShowErrorPopUp(uMessage=LogError(uMsg=u'TheScreen: Can not set page effect:' + uEffect,oException=e))
             return False
 
-    def AddActionShowPageToQueue(self,uPageName):
+    def AddActionShowPageToQueue(self,uPageName:str) -> None:
         """ Convinient function to show a page by the scheduler """
         self.AddActionToQueue([{'string':'showpage','pagename':uPageName}])
 
-    def AddActionToQueue(self,aActions, bNewQueue=False):
+    # noinspection PyMethodMayBeStatic
+    def AddActionToQueue(self,aActions:List[cAction], bNewQueue:bool=False) -> None:
         """ Adds Actions to the scheduler """
         aTmpActions=Globals.oEvents.CreateSimpleActionList(aActions)
         if bNewQueue:
@@ -287,14 +334,19 @@ class cTheScreen(EventDispatcher):
         else:
             Globals.oEvents.ExecuteActions(aActions=aTmpActions,oParentWidget=None)
 
-    def UpdateSetupWidgets(self):
+    def UpdateSetupWidgets(self) -> None:
         """ Updates all setup / settings widgets """
         for uPageName in self.oScreenPages:
             self.oScreenPages[uPageName].UpdateSetupWidgets()
 
-    def FindWidgets(self,uPageName,uWidgetName,bIgnoreError=False):
+    def FindWidgets(self,uPageName:str,uWidgetName:str,bIgnoreError:bool=False) -> List[cWidgetBase]:
         """ Find a set widgets with a given name """
-        aRet=[]
+        uWidgetNameRep:str
+        uPageNameRep:str
+        aPages:List[str]
+        aWidgets:List[cWidgetBase]
+
+        aRet:List[cWidgetBase] = []
         if "@" in uWidgetName:
             uWidgetName,uPageName=uWidgetName.split(u"@")
 
@@ -304,18 +356,18 @@ class cTheScreen(EventDispatcher):
             if self.oCurrentPage is not None:
                 uPageNameRep=self.oCurrentPage.uPageName
 
-        oPages=[]
+        aPages=[]
         if uPageNameRep!="*":
-            oPages.append(uPageNameRep)
+            aPages.append(uPageNameRep)
         else:
             for uPageNameRep in self.oScreenPages:
-                oPages.append(uPageNameRep)
+                aPages.append(uPageNameRep)
 
-        for uPageName in oPages:
+        for uPageName in aPages:
             oPage=self.oScreenPages.get(uPageName)
             if oPage is None:
                 if not bIgnoreError:
-                    uMsg=u'The Screen: Page [%s] for Widget [%s] not found:' % (uPageName,uWidgetNameRep)
+                    uMsg:str=u'The Screen: Page [%s] for Widget [%s] not found:' % (uPageName,uWidgetNameRep)
                     Logger.error (uMsg)
             else:
                 if uWidgetNameRep != "*":
@@ -333,17 +385,42 @@ class cTheScreen(EventDispatcher):
 
         if len(aRet)==0:
             if not bIgnoreError:
-                uMsg=u'The Screen: Widget not found:'+uWidgetNameRep
+                uMsg:str=u'The Screen: Widget not found:'+uWidgetNameRep
                 Logger.error (uMsg)
 
         return aRet
 
 
-    def on_motion(self, window,etype, motionevent):
+    def GuiIsBlocked(self) -> bool:
+        """ returns, if the Gui is Blocked"""
+        if self.iBlockCount>0:
+            Logger.debug("GUI action ignored, GUI is locked")
+            self.iBlockAskCount=self.iBlockAskCount+1
+        else:
+            self.iBlockAskCount = 0
+
+        if self.iBlockAskCount>5:
+            Logger.warning("Overiding locked GUI, (prevent unlocked GUI)")
+            self.iBlockCount = 0
+            self.iBlockAskCount = 0
+        return self.iBlockCount>0
+
+    def BlockGui(self,bStatus:bool) -> None:
+        """ Blocks or unblocks the Gui"""
+        if bStatus:
+            self.iBlockCount=self.iBlockCount+1
+        else:
+            self.iBlockCount = self.iBlockCount - 1
+        if self.iBlockCount<0:
+            Logger.warning("Unlocking mismatch, unlocking unlocked GUI")
+            self.iBlockCount = 0
+
+    # noinspection PyUnusedLocal
+    def on_motion(self, window,etype, motionevent) -> None:
         """ To detect, if we still have a down touch if we missed the touch_up message so we do not want endless repeat """
         self.uLastTouchType  = etype
 
-    def DumpPages(self, uFilter=''):
+    def DumpPages(self, uFilter:str='') -> None:
         """ Dumps the names of all pages to the log file"""
         Logger.error(u'Available Pages:')
         for uKey in sorted(self.oScreenPages):
@@ -352,53 +429,3 @@ class cTheScreen(EventDispatcher):
             else:
                 if uFilter in uKey:
                     Logger.error(uKey)
-
-"""
-
-
-    def FindWidget(self,oScreenPage,uWidgetName,bDoNotCreatePage=False):
-        '''
-        Finds widgets with a given name
-        :param oScreenPage: The page to look for, if empty, the current page will be searched
-        :param str: uWidgetName: The name of the Widget
-        :param bool: bDoNotCreatePage: If True, pages will not be cretaed, otherwise the page will be created to ensure, the widget is valid
-        :return: list of Widgets
-        :rtype list
-        '''
-
-
-
-        uWidgetNameRep=ReplaceVars(uWidgetName)
-        if oScreenPage is None:
-            oScreenPage=self.oCurrentPage
-
-        if oScreenPage is None:
-            uMsg=u'The Screen: Page for Widget not found:'+uWidgetNameRep
-            Logger.error (uMsg)
-            return []
-
-        aWidgets = oScreenPage.dWidgets[uWidgetNameRep]
-        if aWidgets:
-            for oWidget in aWidgets:
-                if not oScreenPage.bIsInit and not bDoNotCreatePage:
-                    oScreenPage.Create()
-            return aWidgets
-        Logger.warning ("Can't find widget [%s] on current page [%s], looking on all pages" % (uWidgetName,oScreenPage.uPageName))
-
-        # this returns widgets just on the first page we find them, not of all pages
-        for oPageName in self.oScreenPages:
-            oPage=self.oScreenPages[oPageName]
-            aWidgets = oPage.dWidgets[uWidgetNameRep]
-            if aWidgets:
-                for oWidget in aWidgets:
-                    if not oPage.bIsInit and not bDoNotCreatePage:
-                        oPage.Create()
-                return aWidgets
-
-        uMsg=u'The Screen: Widget not found:'+uWidgetNameRep
-        Logger.error (uMsg)
-
-        return []
-
-
-"""

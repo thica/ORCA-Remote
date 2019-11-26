@@ -19,25 +19,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Dict
+from typing import Union
 from ORCA.scripts.BaseScript import cBaseScript
 
 class cSystemTemplate(cBaseScript):
     """ template class for discover scripts """
     def __init__(self):
         cBaseScript.__init__(self)
-        self.uType      = u'SYSTEM'
-        self.iHash      = 0
+        self.uType:str      = u'SYSTEM'
+        self.iHash:int      = 0
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> Union[Dict,None]:
         """ main entry point to run the script """
         if 'register' in args or kwargs.get("caller")=="appstart":
             return self.Register(*args,**kwargs)
         elif "unregister" in args:
             return self.UnRegister(*args,**kwargs)
-        return 0
+        return None
 
-    def Register(self,*args,**kwargs):
-        pass
+    def Register(self,*args,**kwargs) -> None:
+        return None
 
-    def UnRegister(self,*args,**kwargs):
-        pass
+    # noinspection PyUnusedLocal,PyMethodMayBeStatic
+    def UnRegister(self,*args,**kwargs) -> None:
+        return None

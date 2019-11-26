@@ -18,6 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                             import Union
 from kivy.uix.boxlayout                 import BoxLayout
 from kivy.uix.popup                     import Popup
 from kivy.uix.colorpicker               import ColorPicker
@@ -35,40 +36,44 @@ class SettingColorPicker(SettingNumeric):
     def __init__(self, **kwargs):
         super(SettingColorPicker, self).__init__(**RemoveNoClassArgs(kwargs,SettingNumeric))
         self.newvalue = u''
-        self.colorpicker = None
+        self.oColorpicker:Union[ColorPicker,None] = None
 
-    def _create_popup(self, instance):
+    def _create_popup(self, instance) -> None:
         """ create popup layout  """
-        content = BoxLayout(orientation='vertical', spacing='5dp')
-        self.popup = popup = Popup(title=self.title,content=content, size_hint=(0.9, 0.9))
+        oContent:BoxLayout = BoxLayout(orientation='vertical', spacing='5dp')
+        self.popup = popup = Popup(title=self.title,content=oContent, size_hint=(0.9, 0.9))
 
         # Create the slider used for numeric input
-        self.colorpicker = colorpicker = ColorPicker()
+        oColorpicker:ColorPicker = ColorPicker()
+        self.oColorpicker = oColorpicker
 
-        content.add_widget(colorpicker)
-        content.add_widget(SettingSpacer())
+        oContent.add_widget(oColorpicker)
+        oContent.add_widget(SettingSpacer())
+
+        oBtn:cMultiLineButton
 
         # 2 buttons are created for accept or cancel the current value
-        btnlayout = BoxLayout(size_hint_y=None, height='50dp', spacing='5dp')
-        btn = cMultiLineButton(text=ReplaceVars('$lvar(5008)'), halign='center', valign='middle')
-        btn.bind(on_release=self._validate)
-        btnlayout.add_widget(btn)
-        btn = cMultiLineButton(text=ReplaceVars('$lvar(5009)'), halign='center', valign='middle')
-        btn.bind(on_release=self._dismiss)
-        btnlayout.add_widget(btn)
-        content.add_widget(btnlayout)
-        colorpicker.bind(color= self.On_Color)
+        oBtnlayout:BoxLayout = BoxLayout(size_hint_y=None, height='50dp', spacing='5dp')
+        oBtn = cMultiLineButton(text=ReplaceVars('$lvar(5008)'), halign='center', valign='middle')
+        oBtn.bind(on_release=self._validate)
+        oBtnlayout.add_widget(oBtn)
+        oBtn = cMultiLineButton(text=ReplaceVars('$lvar(5009)'), halign='center', valign='middle')
+        oBtn.bind(on_release=self._dismiss)
+        oBtnlayout.add_widget(oBtn)
+        oContent.add_widget(oBtnlayout)
+        oColorpicker.bind(color= self.On_Color)
         # all done, open the popup !
 
-        colorpicker.hex_color = self.value
+        oColorpicker.hex_color = self.value
 
         popup.open()
 
-    def On_Color(self,instance, value):
+    # noinspection PyUnusedLocal
+    def On_Color(self,instance:ColorPicker, value) -> None:
         """ called, when a color is selected """
         self.newvalue = instance.hex_color
 
-    def _validate(self, instance):
+    def _validate(self, instance:ColorPicker) -> None:
         """ User input ended """
         self._dismiss()
         if self.newvalue:

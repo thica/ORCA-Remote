@@ -7,7 +7,7 @@
     <fontsize_button>%h50</fontsize_button>
     <fontsize_text>%h50</fontsize_text>
     <author>Carsten Thielepape</author>
-    <version>3.70</version>
+    <version>4.6.0</version>
     <support>http://www.orca-remote.org/forum/</support>
     <definitionvars>{"definition_alias_cmdfavorites_template":"Command Favorites"}</definitionvars>
   </def_parameter>
@@ -84,8 +84,8 @@
       <description language='English'>Standard Template to start applications, not for direct use</description>
       <description language='German'>Standard Template um Programme zu starten, nicht direkt verwenden</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/cmdfavorites_template</local>
@@ -94,7 +94,6 @@
         </source>
       </sources>
       <skipfiles>
-        <file>$var(APPLICATIONPATH)/definitions/cmdfavorites_template/definition.ini</file>
         <file>$var(APPLICATIONPATH)/definitions/cndfavorites_template/atlas*</file>
 
       </skipfiles>

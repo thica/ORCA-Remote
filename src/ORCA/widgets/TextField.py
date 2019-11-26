@@ -19,10 +19,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+from xml.etree.ElementTree          import Element
+from kivy.uix.widget                import Widget
 from ORCA.widgets.Base              import cWidgetBase
 from ORCA.widgets.core.Label        import cLabel
 from ORCA.utils.XML                 import GetXMLBoolAttribute
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
+
 
 __all__ = ['cWidgetTextField']
 
@@ -88,17 +96,17 @@ class cWidgetTextField(cWidgetBase):
     """
 
     def __init__(self,**kwargs):
-        self.bIsClock = False
-        self.bIsDate = False
+        self.bIsClock:bool = False
+        self.bIsDate:bool = False
         super(cWidgetTextField, self).__init__(hastext=True)
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, sAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         self.bIsClock  = GetXMLBoolAttribute(oXMLNode,u'clock',    False,False)
         self.bIsDate   = GetXMLBoolAttribute(oXMLNode,u'date',    False,False)
-        return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , sAnchor)
+        return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
         if self.CreateBase(Parent=oParent,Class=cLabel):
             self.oParent.add_widget(self.oObject)

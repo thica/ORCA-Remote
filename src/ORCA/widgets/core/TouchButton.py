@@ -29,14 +29,14 @@ class cTouchButton(cOrcaButtonBehaviour,Button):
         Button.__init__(self,**RemoveNoClassArgs(kwargs,Button))
         cOrcaButtonBehaviour.__init__(self,**kwargs)
 
-    def on_touch_down(self, touch):
+    def on_touch_down(self, touch) -> bool:
         if cOrcaButtonBehaviour.on_touch_down(self,touch):
             Button.on_touch_down(self,touch)
             return True
         else:
             return False
 
-    def on_touch_up(self, touch):
+    def on_touch_up(self, touch) -> bool:
         if cOrcaButtonBehaviour.on_touch_up(self,touch):
             Button.on_touch_up(self,touch)
             return True

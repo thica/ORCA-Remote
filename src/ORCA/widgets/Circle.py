@@ -18,15 +18,22 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
-from kivy.logger import Logger
-
+from typing                             import Callable
+from xml.etree.ElementTree              import Element
+from kivy.logger                        import Logger
+from kivy.uix.widget                    import Widget
 from ORCA.widgets.GeoClass              import cWidgetGeoClass
 from ORCA.widgets.core.TouchCircle      import cTouchCircle
 from ORCA.utils.Atlas                   import ToAtlas
 from ORCA.utils.XML                     import GetXMLFloatAttributeVar
 from ORCA.utils.XML                     import GetXMLTextAttributeVar
 from ORCA.utils.FileName                import cFileName
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
 
 __all__ = ['cWidgetCircle']
 
@@ -74,21 +81,24 @@ class cWidgetCircle(cWidgetGeoClass):
 
     def __init__(self,**kwargs):
         super(cWidgetCircle, self).__init__(**kwargs)
-        self.oGeoClass        = cTouchCircle
-        self.fStartAngle      = 0
-        self.fEndAngle        = 360
+        self.oGeoClass:Callable      = cTouchCircle
+        self.fStartAngle:float       = 0.0
+        self.fEndAngle:float         = 360.0
         self.oFnPictureNormal = cFileName(u"")
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
-        self.oFnPictureNormal           = cFileName("").ImportFullPath(GetXMLTextAttributeVar(oXMLNode,u'picturenormal',    False,u''))
-        self.fStartAngle                = GetXMLFloatAttributeVar(oXMLNode,u'startangle',    False,u'0')
-        self.fEndAngle                  = GetXMLFloatAttributeVar(oXMLNode,u'stopangle',    False,u'0')
+
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+        self.oFnPictureNormal:cFileName = cFileName("").ImportFullPath(GetXMLTextAttributeVar(oXMLNode,u'picturenormal',    False,u''))
+        self.fStartAngle                = GetXMLFloatAttributeVar(oXMLNode,u'startangle',    False,0.0)
+        self.fEndAngle                  = GetXMLFloatAttributeVar(oXMLNode,u'stopangle',    False,0.0)
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
-    def Create(self,oParent):
+
+    def Create(self,oParent:Widget) -> bool:
         self.AddArg('source',       ToAtlas(self.oFnPictureNormal))
         self.AddArg('angle_start',  self.fStartAngle)
         self.AddArg('angle_end',    self.fEndAngle)
         return super(cWidgetCircle, self).Create(oParent)
-    def ModifyAngle(self):
+
+    def ModifyAngle(self) -> bool:
         """ Modifies the angle """
         self.AddArg('angle_start',  self.fStartAngle)
         self.AddArg('angle_end',    self.fEndAngle)
@@ -96,5 +106,7 @@ class cWidgetCircle(cWidgetGeoClass):
             Logger.error("Can't modify Angle of Circle before its created:"+self.uName)
             return False
         return self.oObject.ModifyAngle(**self.dKwArgs)
-    def UpdateWidget(self):
-        self.ModifyAngle()
+    def UpdateWidget(self) -> None:
+        super().UpdateWidget()
+        if self.oObject is not None:
+            self.ModifyAngle()

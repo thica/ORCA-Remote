@@ -18,17 +18,16 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
+from typing import Tuple
 import locale
 
-def GetLocale():
+def GetLocale() -> str:
     """ gets the locale / language from the system """
-    uCurrent = 'English'
-    ourlocale = "en"
+    uCurrent:str   = 'English'
 
     try:
-        current = locale.getdefaultlocale()
-        if "de_" in current[0]:
+        tCurrent:Tuple = locale.getdefaultlocale()
+        if "de_" in tCurrent[0]:
             uCurrent="German"
     except Exception:
         pass

@@ -20,7 +20,7 @@
 """
 
 import traceback
-
+from kivy.logger                    import Logger
 from ORCA.ui.RaiseQuestion          import cRaiseQuestion
 from ORCA.utils.wait.StartWait      import StartWait
 from ORCA.utils.wait.StopWait       import StopWait
@@ -31,14 +31,14 @@ __all__ = ['ShowErrorPopUp','ShowMessagePopUp']
 
 class cShowErrorPopUp(cRaiseQuestion):
     """ Class to show an error popup """
-    def ShowError(self,uTitle=u'',uMessage=u'',bAbort=False,uTextContinue=u'',uTextQuit=u'',uStringDetails=u''):
+    def ShowError(self,uTitle:str=u'',uMessage:str=u'',bAbort:bool=False,uTextContinue:str=u'',uTextQuit:str=u'',uStringDetails:str=u'') -> None:
         """Show an Error Message as Popup
-        :param unicode uTitle: Title for Popup
-        :param unicode uMessage: Message to Show
+        :param str uTitle: Title for Popup
+        :param str uMessage: Message to Show
         :param bool bAbort: Terminates application after showing the popup (User decision)
-        :param unicode uTextContinue: Caption for the continue button
-        :param unicode uTextQuit: Caption for te Quit Button
-        :param unicode uStringDetails: The details text
+        :param str uTextContinue: Caption for the continue button
+        :param str uTextQuit: Caption for te Quit Button
+        :param str uStringDetails: The details text
         Returns:     Nothing
         """
 
@@ -60,20 +60,21 @@ class cShowErrorPopUp(cRaiseQuestion):
         """ Stops waiting and continues ORCA """
         StopWait()
 
-def ShowErrorPopUp(uTitle='$lvar(5017)',uMessage=u'',bAbort=False,uTextContinue=u'$lvar(5000)',uTextQuit=u'$lvar(5005)',uStringDetails=u''):
+def ShowErrorPopUp(uTitle:str='$lvar(5017)',uMessage:str=u'',bAbort:bool=False,uTextContinue:str=u'$lvar(5000)',uTextQuit:str=u'$lvar(5005)',uStringDetails:str=u'') -> cShowErrorPopUp:
     """ Convinience function """
-    oShowErrorPopUp     = cShowErrorPopUp()
+    oShowErrorPopUp:cShowErrorPopUp = cShowErrorPopUp()
 
     if uStringDetails==u'':
         uStringDetails=traceback.format_exc()
+        Logger.error(uStringDetails)
 
     Globals.oSound.PlaySound(u'error')
     oShowErrorPopUp.ShowError(uTitle=uTitle, uMessage=uMessage, bAbort=bAbort, uTextContinue=uTextContinue, uTextQuit=uTextQuit,uStringDetails=uStringDetails)
     return oShowErrorPopUp
 
-def ShowMessagePopUp(uTitle=u'$lvar(5010)',uMessage=u'',uTextContinue=u'$lvar(5000)',uTextQuit=u'$lvar(5005)'):
+def ShowMessagePopUp(uTitle:str=u'$lvar(5010)',uMessage:str=u'',uTextContinue:str=u'$lvar(5000)',uTextQuit:str=u'$lvar(5005)') -> cShowErrorPopUp:
     """ Convinience function """
-    oShowErrorPopUp     = cShowErrorPopUp()
+    oShowErrorPopUp:cShowErrorPopUp = cShowErrorPopUp()
     Globals.oSound.PlaySound(u'message')
     oShowErrorPopUp.ShowError(uTitle=uTitle, uMessage=uMessage, bAbort=False, uTextContinue=uTextContinue, uTextQuit=uTextQuit)
     return oShowErrorPopUp

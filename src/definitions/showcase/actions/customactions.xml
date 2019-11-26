@@ -154,6 +154,21 @@
         <action string="setwidgetattribute" widgetname="Definition File3" attributename="fontsize" attributevalue="$var(FONTSIZE)" />
     </action>
 
+    <action name="FKT_ScrollContainer_DeleteMovie">
+        <action name="Create Var Name part1" string="setvar MOVIENAME=scrollcontent_movies_text[$par(CONTAINERVARINDEX)]"  />
+        <action name="Create Var Name part2" string="modifyvar" varname="MOVIENAME" operator="fromvar"  />
+        <action name="Create Var Name part1" string="setvar MOVIENAMEINDEX=$par(CONTAINERVARINDEX)"  />
+        <action name="askonexit" string="showquestion" title="Delete Movie" message="Do you want to delete movie $var(MOVIENAME)?" actionyes="FKT_ScrollContainer_DeleteMovieDo" actionno="dummy"/>
+    </action>
+
+    <action name="FKT_ScrollContainer_DeleteMovieDo">
+        <action name="Create Var Name part" string="setvar MOVIEINDEX2=scrollcontent_movies_text[$var(MOVIENAMEINDEX)]"  />
+        <action name="Delete VAr" string="modifyvar" varname="$var(MOVIEINDEX2)" operator="delete"  />
+        <action name="Update ScrollView" string="updatewidget ScrollBox right" />
+        <action name="Update ScrollView" string="updatewidget ScrollBox 2cnd right" />
+    </action>
+
+
 
 </includes>
 

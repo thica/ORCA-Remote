@@ -19,9 +19,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+# noinspection PyUnresolvedReferences
 from android.permissions import request_permissions, Permission
 
 
-def RequestPermissions():
+def RequestPermissions() -> bool:
     request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
     return True

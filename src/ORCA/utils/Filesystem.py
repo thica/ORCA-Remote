@@ -25,11 +25,10 @@ from ORCA.utils.Platform     import OS_ToPath
 __all__ = ['AdjustPathToOs']
 
 
-def AdjustPathToOs(uPath):
+def AdjustPathToOs(uPath: str) ->str:
     """
     Adjust a path to an OS specific syntax
 
-    :rtype: string
     :param string uPath: Path to convert to OS syntax
     :return: Adjusted Path
     """
@@ -37,6 +36,3 @@ def AdjustPathToOs(uPath):
     if uPath:
         return OS_ToPath(uPath)
     return uPath
-
-
-

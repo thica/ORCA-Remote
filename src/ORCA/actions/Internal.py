@@ -20,15 +20,17 @@
 
 from ORCA.actions.Base                  import cEventActionBase
 from ORCA.definition.DefinitionContext  import SetDefinitionContext
-from ORCA.Downloads                     import cLoadOnlineResource
+from ORCA.download.LoadOnlineResource   import cLoadOnlineResource
 from ORCA.utils.FTP                     import cFTP
 from ORCA.vars.Replace                  import ReplaceVars
 from ORCA.utils.TypeConvert             import ToBool
 from ORCA.utils.Path                    import cPath
 from ORCA.utils.FileName                import cFileName
+from ORCA.Action                        import cAction
+from ORCA.download.Repository           import oRepository
+from ORCA.actions.ReturnCode            import eReturnCode
 
 import ORCA.Globals as Globals
-
 
 __all__ = ['cEventActionsInternal']
 
@@ -40,7 +42,7 @@ class cEventActionsInternal(cEventActionBase):
         super(cEventActionsInternal, self).__init__(oEventDispatcher)
         self.oLoadOnlineResource = None
 
-    def ExecuteActionShowSplashText(self,oAction):
+    def ExecuteActionShowSplashText(self,oAction:cAction) -> eReturnCode:
         """
         showsplashtext:
         Displays a text on the splash screen
@@ -52,17 +54,17 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'ShowSplashText',oAction)
         self.oEventDispatcher.bDoNext = False
-        uMainText    = oAction.dActionPars.get("maintext","")
-        uSubText     = oAction.dActionPars.get("subtext","")
-        uPercentage  = oAction.dActionPars.get("percentage","")
+        uMainText:str    = oAction.dActionPars.get("maintext","")
+        uSubText:str     = oAction.dActionPars.get("subtext","")
+        uPercentage:str  = oAction.dActionPars.get("percentage","")
 
         if uMainText:
             Globals.oTheScreen.LogToSplashScreen(uMainText,uPercentage)
         if uSubText:
             Globals.oTheScreen.LogToSplashScreen2(uSubText,uPercentage)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadDefinitionParameter(self,oAction):
+    def ExecuteActionLoadDefinitionParameter(self,oAction:cAction) -> eReturnCode:
         """
             loaddefinitionparameter:
             Loads all definition parameter of all definitions into vars
@@ -72,9 +74,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'LoadDefinitionParameter',oAction)
         Globals.oDefinitions.LoadParameter()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionCheckToRotate(self,oAction):
+    def ExecuteActionCheckToRotate(self,oAction:cAction) -> eReturnCode:
         """
             checktorotate:
             Checks, if rotation is required. Needs to be excecuted before any pages are loaded
@@ -84,9 +86,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'CheckToRotate',oAction)
         Globals.oTheScreen.CheckToRotate()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadSkin(self,oAction):
+    def ExecuteActionLoadSkin(self,oAction:cAction) -> eReturnCode:
         """
         loadskin:
             Loads the configured skin
@@ -96,9 +98,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'LoadSkin',oAction)
         Globals.oTheScreen.LoadSkinDescription()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadSounds(self,oAction):
+    def ExecuteActionLoadSounds(self,oAction:cAction) -> eReturnCode:
         """
         loadsounds:
             Loads the configured sounds
@@ -108,9 +110,9 @@ class cEventActionsInternal(cEventActionBase):
         self.oEventDispatcher.LogAction(u'LoadSounds',oAction)
         Globals.oSound.Init()
         Globals.oSound.LoadSoundsDescription()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionCreatePages(self,oAction):
+    def ExecuteActionCreatePages(self,oAction:cAction) -> eReturnCode:
         """
         createpages:
             create the pages, as configured in the settings
@@ -119,9 +121,9 @@ class cEventActionsInternal(cEventActionBase):
         """
         self.oEventDispatcher.LogAction(u'CreatePages',oAction)
         Globals.oTheScreen.oScreenPages.CreatePages(oAction.dActionPars.get("pagename",""))
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadDefinition(self,oAction):
+    def ExecuteActionLoadDefinition(self,oAction:cAction) -> eReturnCode:
         """
         loaddefinition:
             Loads the definition itself
@@ -130,9 +132,9 @@ class cEventActionsInternal(cEventActionBase):
         """
         self.oEventDispatcher.LogAction(u'LoadDefinition',oAction)
         Globals.oActions.LoadActionsAppStart()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionGetUsedDefinitions(self,oAction):
+    def ExecuteActionGetUsedDefinitions(self,oAction:cAction) -> eReturnCode:
         """
         getuseddefinitions:
             Collects all used definition in the main definition
@@ -142,35 +144,32 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'GetUsedDefinitions',oAction)
         Globals.oDefinitions.GetUsedDefinitions()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadLanguages(self,oAction):
+    def ExecuteActionLoadLanguages(self,oAction:cAction) -> eReturnCode:
 
         """
         loadlanguages:
             Loads the core languages, which are there even without the online resources or a specific language file
             Parameter:
             languagefilename: if give a specific language file will be loaded, otherwise the core languares are loaded
-            context: a context for the language
             definition: the definition name for the definition vars
         """
         self.oEventDispatcher.LogAction(u'LoadLanguages',oAction)
-        uLanguageFileName  = oAction.dActionPars.get("languagefilename","")
-        uContext           = oAction.dActionPars.get("context","")
-        uDefinitionAlias   = oAction.dActionPars.get("definitionalias","")
-        uDefinition        = oAction.dActionPars.get("definition","")
+        uLanguageFileName:str  = oAction.dActionPars.get("languagefilename","")
+        uDefinitionAlias:str   = oAction.dActionPars.get("definitionalias","")
+        uDefinition:str        = oAction.dActionPars.get("definition","")
 
         if uDefinitionAlias:
-            uOrgDefinitionContext=Globals.uDefinitionContext
+            uOrgDefinitionContext:str = Globals.uDefinitionContext
             SetDefinitionContext(uDefinitionAlias,uDefinition)
-            Globals.oTheScreen.LoadLanguage(uLanguageFileName=uLanguageFileName,uContext=uContext)
+            Globals.oTheScreen.LoadLanguage(uLanguageFileName=uLanguageFileName)
             SetDefinitionContext(uOrgDefinitionContext)
         else:
-            Globals.oTheScreen.LoadLanguage(uLanguageFileName=uLanguageFileName,uContext=uContext)
+            Globals.oTheScreen.LoadLanguage(uLanguageFileName=uLanguageFileName)
+        return eReturnCode.Nothing
 
-        return -2
-
-    def ExecuteActionDownLoadDefinition(self,oAction):
+    def ExecuteActionDownLoadDefinition(self,oAction:cAction) -> eReturnCode:
 
         """
         downloaddefinition:
@@ -181,9 +180,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'DownLoadDefinition',oAction)
         Globals.oApp.DownloadDefinition(uDefinitionName=oAction.dActionPars.get("definitionname",""))
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionRepositoryUpdate(self,oAction):
+    def ExecuteActionRepositoryUpdate(self,oAction:cAction) -> eReturnCode:
 
         """
         repositoryupdate:
@@ -194,9 +193,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'RepositoryUpdate',oAction)
         Globals.oApp.RepositoryUpdate()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionRestartAfterRepositoryUpdate(self,oAction):
+    def ExecuteActionRestartAfterRepositoryUpdate(self,oAction:cAction) -> eReturnCode:
         """
         restartafterdreposityupdate:
             Restarts Orca, after a the repository have been updated
@@ -205,9 +204,9 @@ class cEventActionsInternal(cEventActionBase):
         """
         self.oEventDispatcher.LogAction(u'RestartAfterRepositoryUpdate',oAction)
         Globals.oApp.RestartAfterRepositoryUpdate()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionRestartAfterDefinitionDownload(self,oAction):
+    def ExecuteActionRestartAfterDefinitionDownload(self,oAction:cAction) -> eReturnCode:
         """
         restartafterdefinitiondownload:
             Restarts Orca, after a new definition have been downloaded
@@ -217,9 +216,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'RestartAfterDefinitionDownload',oAction)
         Globals.oApp.RestartAfterDefinitionLoad()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionResumeInterfaces(self,oAction):
+    def ExecuteActionResumeInterfaces(self,oAction:cAction) -> eReturnCode:
 
         """
         resumeinterfaces:
@@ -230,10 +229,10 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'ResumeInterfaces',oAction)
         Globals.oInterFaces.OnResume()
-        return -2
+        return eReturnCode.Nothing
 
 
-    def ExecuteActionSleepInterfaces(self,oAction):
+    def ExecuteActionSleepInterfaces(self,oAction:cAction) -> eReturnCode:
         """
         sleepinterfaces:
             Sleeps the Interfaces
@@ -242,9 +241,9 @@ class cEventActionsInternal(cEventActionBase):
         """
         self.oEventDispatcher.LogAction(u'SleepInterfaces',oAction)
         Globals.oInterFaces.OnPause()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionSleepScripts(self,oAction):
+    def ExecuteActionSleepScripts(self,oAction:cAction) -> eReturnCode:
 
         """
         sleepscripts:
@@ -255,9 +254,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'SleepScripts',oAction)
         Globals.oScripts.OnPause()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionResumeScripts(self,oAction):
+    def ExecuteActionResumeScripts(self,oAction:cAction) -> eReturnCode:
 
         """
         resumescripts:
@@ -268,8 +267,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'ResumeScripts',oAction)
         Globals.oScripts.OnResume()
-        return -2
-    def ExecuteActionLoadDefinitionLanguages(self,oAction):
+        return eReturnCode.Nothing
+
+    def ExecuteActionLoadDefinitionLanguages(self,oAction:cAction) -> eReturnCode:
 
         """
         loaddefinitionlanguages:
@@ -280,9 +280,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'LoadDefinitionLanguages',oAction)
         Globals.oTheScreen.LoadLanguages_ForDefinition()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadDefinitionSettings(self,oAction):
+    def ExecuteActionLoadDefinitionSettings(self,oAction:cAction) -> eReturnCode:
 
         """
         loaddefinitionSettings:
@@ -291,12 +291,12 @@ class cEventActionsInternal(cEventActionBase):
             definitionname: name of definition, who's settings should be loaded. If not given, then all definition settings will be loaded
         """
         self.oEventDispatcher.LogAction(u'LoadDefinitionSettings',oAction)
-        uDefinitionName  = oAction.dActionPars.get("definitionname","")
+        uDefinitionName:str  = oAction.dActionPars.get("definitionname","")
 
         Globals.oTheScreen.LoadSettings_ForDefinition(uDefinitionName)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadDefinitionFonts(self,oAction):
+    def ExecuteActionLoadDefinitionFonts(self,oAction:cAction) -> eReturnCode:
 
         """
         loaddefinitionfonts:
@@ -305,11 +305,11 @@ class cEventActionsInternal(cEventActionBase):
             definitionname: name of definition, who's fonts should be loaded. If not given, then all definition fonts will be loaded, if 'ORCA', then the Orca application fonts will be loaded
         """
         self.oEventDispatcher.LogAction(u'LoadDefinitionFonts',oAction)
-        uDefinitionName  = oAction.dActionPars.get("definitionname","")
+        uDefinitionName:str  = oAction.dActionPars.get("definitionname","")
         Globals.oTheScreen.LoadFonts_ForDefinition(uDefinitionName)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadDefinitionActions(self,oAction):
+    def ExecuteActionLoadDefinitionActions(self,oAction:cAction) -> eReturnCode:
         """
         loaddefinitionactions:
             Loads the actions of all definitions or from a single definition
@@ -318,11 +318,11 @@ class cEventActionsInternal(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'LoadDefinitionActions',oAction)
-        uDefinitionName  = oAction.dActionPars.get("definitionname","")
+        uDefinitionName:str  = oAction.dActionPars.get("definitionname","")
         Globals.oTheScreen.LoadActions_ForDefinition(uDefinitionName)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadDefinitionGestures(self,oAction):
+    def ExecuteActionLoadDefinitionGestures(self,oAction:cAction) -> eReturnCode:
         """
         loaddefinitiongestures:
             Loads the gestures of all definitions or from a single definition
@@ -330,11 +330,11 @@ class cEventActionsInternal(cEventActionBase):
             definitionname: name of definition, who's gestures should be loaded. If not given, then all definition gestures will be loaded
         """
         self.oEventDispatcher.LogAction(u'LoadDefinitionGestures',oAction)
-        uDefinitionName  = oAction.dActionPars.get("definitionname","")
+        uDefinitionName:str  = oAction.dActionPars.get("definitionname","")
         Globals.oTheScreen.LoadGestures_ForDefinition(uDefinitionName)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionInitInterfaceSettings(self,oAction):
+    def ExecuteActionInitInterfaceSettings(self,oAction:cAction) -> eReturnCode:
         """
         initinterfacesettings:
             Init the interface settings of all definitions or from a single definition
@@ -342,11 +342,11 @@ class cEventActionsInternal(cEventActionBase):
             definitionname: name of definition, who's interface settings should be initialized. If not given, then all definition interface settings will be initialized
         """
         self.oEventDispatcher.LogAction(u'InitInterfaceSettings',oAction)
-        uDefinitionName  = oAction.dActionPars.get("definitionname","")
+        uDefinitionName:str  = oAction.dActionPars.get("definitionname","")
         Globals.oTheScreen.InitInterFaceSettings_ForDefinition(uDefinitionName)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionRegisterFonts(self,oAction):
+    def ExecuteActionRegisterFonts(self,oAction:cAction) -> eReturnCode:
         """
         registerfonts:
             Register all used fonts
@@ -355,11 +355,11 @@ class cEventActionsInternal(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'RegisterFonts',oAction)
-        uFontName  = oAction.dActionPars.get("fontname","")
+        uFontName:str  = oAction.dActionPars.get("fontname","")
         Globals.oTheScreen.RegisterFonts(uFontName)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionRegisterInterfaces(self,oAction):
+    def ExecuteActionRegisterInterfaces(self,oAction:cAction) -> eReturnCode:
         """
         registerinterfaces:
             Register all used interfaces
@@ -368,12 +368,12 @@ class cEventActionsInternal(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'RegisterInterfaces',oAction)
-        uInterfaceName  = oAction.dActionPars.get("interfacename","")
+        uInterfaceName:str  = oAction.dActionPars.get("interfacename","")
         self.oEventDispatcher.LogAction(u'RegisterInterfaces',oAction)
         Globals.oTheScreen.RegisterInterFaces(uInterfaceName)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionParseDefinitionXML(self,oAction):
+    def ExecuteActionParseDefinitionXML(self,oAction:cAction) -> eReturnCode:
         """
         parsedefinitionxml:
             Parses a definition xml file
@@ -382,11 +382,11 @@ class cEventActionsInternal(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'ParseDefinitionXML',oAction)
-        uDefinitionName  = oAction.dActionPars.get("definitionname","")
+        uDefinitionName:str  = oAction.dActionPars.get("definitionname","")
         Globals.oTheScreen.ParseDefinitionXmlFile(uDefinitionName)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadRepositoryContent(self,oAction):
+    def ExecuteActionLoadRepositoryContent(self,oAction:cAction) -> eReturnCode:
         """
         loadrepositorycontent:
             Loads the content of a repository
@@ -396,9 +396,9 @@ class cEventActionsInternal(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'LoadRepositoryContent',oAction)
         Globals.oDownLoadSettings.LoadRepositoryDirectory(bDoNotExecute=False)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionLoadResource(self,oAction):
+    def ExecuteActionLoadResource(self,oAction:cAction) -> eReturnCode:
         """
         loadresource:
             Loads a resource from an online repository
@@ -407,13 +407,12 @@ class cEventActionsInternal(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'LoadResource',oAction)
-        uResourceReference  = oAction.dActionPars.get("resourcereference","")
-        self.oLoadOnlineResource=cLoadOnlineResource()
+        uResourceReference:str  = oAction.dActionPars.get("resourcereference","")
+        self.oLoadOnlineResource=cLoadOnlineResource(oRepository=oRepository)
         self.oLoadOnlineResource.LoadSingleFile(uResourceReference,self.oEventDispatcher.aProgressBars[-1])
-        return -2
+        return eReturnCode.Nothing
 
-
-    def ExecuteActionExecuteFTPCommand(self,oAction):
+    def ExecuteActionExecuteFTPCommand(self,oAction:cAction) -> eReturnCode:
         """
         executeftpcommand:
             Executes various FTP commands (connect, disconnect, uploadfile)
@@ -421,18 +420,18 @@ class cEventActionsInternal(cEventActionBase):
             None
         """
 
-        bRet = None
+        bRet:bool = False
         self.oEventDispatcher.LogAction(u'ExecuteFTPCommand',oAction)
 
-        uCommand           = ReplaceVars(oAction.dActionPars.get("command",         ""))
-        uHost              = ReplaceVars(oAction.dActionPars.get("host",            ""))
-        uUsername          = ReplaceVars(oAction.dActionPars.get("user",            ""))
-        uPassword          = ReplaceVars(oAction.dActionPars.get("password",        ""))
-        uSSL               = ReplaceVars(oAction.dActionPars.get("ssl",             ""))
+        uCommand:str           = ReplaceVars(oAction.dActionPars.get("command",         ""))
+        uHost:str              = ReplaceVars(oAction.dActionPars.get("host",            ""))
+        uUsername:str          = ReplaceVars(oAction.dActionPars.get("user",            ""))
+        uPassword:str          = ReplaceVars(oAction.dActionPars.get("password",        ""))
+        uSSL:str               = ReplaceVars(oAction.dActionPars.get("ssl",             ""))
 
-        oLocalFile         = cFileName('').ImportFullPath(ReplaceVars(oAction.dActionPars.get("localfile",       "")))
-        oLocalBaseFolder   = cPath(ReplaceVars(oAction.dActionPars.get("localbasefolder", "")))
-        oRemoteBaseFolder  = cPath(ReplaceVars(oAction.dActionPars.get("remotebasefolder","")))
+        oLocalFile:cFileName     = cFileName('').ImportFullPath(ReplaceVars(oAction.dActionPars.get("localfile",       "")))
+        oLocalBaseFolder:cPath   = cPath(ReplaceVars(oAction.dActionPars.get("localbasefolder", "")))
+        oRemoteBaseFolder:cPath  = cPath(ReplaceVars(oAction.dActionPars.get("remotebasefolder","")))
 
         if Globals.oFTP is None:
             Globals.oFTP = cFTP(ToBool(uSSL))
@@ -446,11 +445,11 @@ class cEventActionsInternal(cEventActionBase):
         elif uCommand==u'uploadfile':
             bRet = Globals.oFTP.UploadLocalFile(oFile=oLocalFile, oBaseLocalDir=oLocalBaseFolder, oBaseRemoteDir=oRemoteBaseFolder)
         if bRet:
-            return 0
+            return eReturnCode.Success
         else:
-            return 1
+            return eReturnCode.Error
 
-    def ExecuteActionCheckPermissions(self,oAction):
+    def ExecuteActionCheckPermissions(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -470,9 +469,9 @@ class cEventActionsInternal(cEventActionBase):
         """
         self.oEventDispatcher.LogAction(u'CheckForPermissions',oAction)
         Globals.oCheckPermissions.Wait()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionCheckOnSleep(self,oAction):
+    def ExecuteActionCheckOnSleep(self,oAction:cAction) -> eReturnCode:
         """
         CheckOnSleep
             Verifies, if we are still on sleep (so Android/Kivy missed to send the resume command
@@ -483,9 +482,9 @@ class cEventActionsInternal(cEventActionBase):
         if Globals.bOnSleep:
             self.oEventDispatcher.LogAction(u'CheckOnSleep, resume now', oAction)
             Globals.oApp.on_resume()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionResumeOnSleep(self,oAction):
+    def ExecuteActionResumeOnSleep(self,oAction:cAction) -> eReturnCode:
         """
         ResumeFromSleep
             Resumes from sleep, if manual triggered
@@ -496,4 +495,4 @@ class cEventActionsInternal(cEventActionBase):
         if Globals.bOnSleep:
             self.oEventDispatcher.LogAction(u'Resume from Sleep, resume now', oAction)
             Globals.oApp.on_resume()
-        return -2
+        return eReturnCode.Nothing

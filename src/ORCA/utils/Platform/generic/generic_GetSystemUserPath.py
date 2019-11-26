@@ -22,7 +22,7 @@
 import os.path as path
 from ORCA.utils.Path         import cPath
 
-def GetSystemUserPath():
+def GetSystemUserPath() -> cPath:
     """
     Returns the Operation System User Path
     """

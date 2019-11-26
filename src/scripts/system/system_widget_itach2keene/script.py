@@ -19,39 +19,38 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing                                 import Union
+from typing                                 import List
+from typing                                 import Dict
+from typing                                 import Tuple
 
 
+from xml.etree.ElementTree                  import ElementTree
+from xml.etree.ElementTree                  import tostring
+from xml.etree.ElementTree                  import ParseError
+from xml.etree.ElementTree                  import Element
+from xml.etree.ElementTree                  import XMLParser
 
+from ORCA.utils.XML                         import CommentedTreeBuilder
 
-from xml.etree.ElementTree  import ElementTree,tostring, ParseError,Comment
+from kivy.uix.boxlayout                     import BoxLayout
+from kivy.uix.button                        import Button
+from kivy.uix.label                         import Label
+from kivy.uix.textinput                     import TextInput
+from kivy.uix.popup                         import Popup
+from kivy.uix.screenmanager                 import FadeTransition
+from kivy.logger                            import Logger
+from kivy.uix.widget                        import Widget
 
-
-# XMLTreeBuilder has been renamed TreeBuilder, and the API has undergone several changes.
-
-from kivy.uix.boxlayout     import BoxLayout
-from kivy.uix.button        import Button
-from kivy.uix.label         import Label
-from kivy.uix.textinput     import TextInput
-from kivy.uix.popup         import Popup
-from kivy.uix.screenmanager import FadeTransition
-
-from ORCA.Compat            import PY2
-from ORCA.ui.BasePopup      import SettingSpacer
-from ORCA.vars.Replace      import ReplaceVars
-from ORCA.widgets.core.FileBrowser   import FileBrowser
-from ORCA.utils.RemoveNoClassArgs    import RemoveNoClassArgs
+from ORCA.ui.BasePopup                      import SettingSpacer
+from ORCA.vars.Replace                      import ReplaceVars
+from ORCA.widgets.core.FileBrowser          import FileBrowser
+from ORCA.utils.RemoveNoClassArgs           import RemoveNoClassArgs
 from ORCA.scripttemplates.Template_System   import cSystemTemplate
-
+from ORCA.widgets.Base                      import cWidgetBase
+from ORCA.ScreenPage                        import cScreenPage
 
 import ORCA.Globals as Globals
-
-if PY2:
-    from xml.etree.ElementTree import XMLTreeBuilder
-else:
-    from xml.etree.ElementTree import TreeBuilder as XMLTreeBuilder
-
-from ORCA.widgets.Base                  import cWidgetBase
-
 
 '''
 <root>
@@ -61,8 +60,8 @@ from ORCA.widgets.Base                  import cWidgetBase
       <description language='English'>Additional Widget to convert IR Files from iTach format to Kira Keene format</description>
       <description language='German'>Zusätzliches Widgets um IR Dateien vom iTach Format zum Kira Keene Format zu konvertieren</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -72,66 +71,52 @@ from ORCA.widgets.Base                  import cWidgetBase
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/system/system_widget_itach2keene/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
 </root>
 '''
 
-
-class CommentedTreeBuilder (XMLTreeBuilder ):
-    def __init__ ( self, html = 0, target = None ):
-        super(CommentedTreeBuilder, self).__init__(html, target)
-        #XMLTreeBuilder.__init__( self, html, target )
-        self._parser.CommentHandler = self.handle_comment
-
-    def handle_comment ( self, data ):
-        self._target.start( Comment, {} )
-        self._target.data( data )
-        self._target.end( Comment )
-
-def ToHex(iNumber):
-    sTmp="0000"+hex(iNumber)
+def ToHex(iNumber) -> str:
+    sTmp:str="0000"+hex(iNumber)
     sTmp=sTmp.replace('x', '0')
     sTmp=sTmp[-4:]
     return sTmp
 
-def GlobalCacheToCCF(sGCString):
+def GlobalCacheToCCF(uGCString:str) -> Tuple[str,int]:
 
-    strArray        = []
-    sDelimiter      = ','
-    sFinalString    = "0000 "    #0000 denotes CCF type
-    iFreqNum        = 0
-    iFreq           = 0
-    iPairData       = 0
-    sTmpString      = ""
+    aArray:List
+    uDelimiter:str      = ','
+    uFinalString        = u'0000 '    #0000 denotes CCF type
+    iFreqNum:int
+    iFreq:int
+    iPairData:int
+    uTmpString:str
+    iTransCount:int
+    uTransCount:str
+    uRepeatCount:str   = u'0000'
 
-    iTransCount     = 0
-    sTransCount     = ""
-    sRepeatCount    = "0000"
+    if uGCString=='':
+        return uGCString,1
+    if uGCString[0]=='{':
+        return uGCString,1
 
-    if sGCString=='':
-        return sGCString,1
-    if sGCString[0]=='{':
-        return sGCString,1
+    aArray = uGCString.split(uDelimiter,1024)
 
-    strArray = sGCString.split(sDelimiter,1024)
-
-    if sGCString=='':
+    if uGCString=='':
         return '',0
         #("Error: Please enter a valid " + GC2CCF.Properties.Resources.Company + " sendir command.");
 
-    if len(strArray) < 6:
+    if len(aArray) < 6:
         return '',0
         #return ("Error: Please enter a valid " + GC2CCF.Properties.Resources.Company + " sendir command.");
 
-    if strArray[3]=="":
+    if aArray[3]=="":
         return '',0
         #return ("Error: Error parsing data. Please try again.");
 
-    iFreqNum = int(strArray[3])
-    iRepeatCount=int(strArray[4])
+    iFreqNum = int(aArray[3])
+    iRepeatCount=int(aArray[4])
     #if iRepeatCount>0:
     #    sRepeatCount=ToHex(iRepeatCount)
 
@@ -139,48 +124,50 @@ def GlobalCacheToCCF(sGCString):
         return '',0
         #return ("Error: Error parsing data. Please try again.");
 
-    iFreq = (41450 / (iFreqNum / 100))
+    iFreq = int(41450 / (iFreqNum / 100))
 
-    #MessageBox.Show("iFreqNum = " + iFreqNum.ToString() + " iFreq = " + iFreq.ToString());
+    uTmpString  = ToHex(iFreq)
+    iTransCount = int((len(aArray) - 6) / 2)
 
-    sTmpString  = ToHex(iFreq)
-    iTransCount = ((len(strArray) - 6) / 2)
+    uTransCount = ToHex(iTransCount)
 
-    sTransCount = ToHex(iTransCount)
+    uFinalString = uFinalString + uTmpString + " " + uRepeatCount + " " + uTransCount
 
-    sFinalString = sFinalString + sTmpString + " " + sRepeatCount + " " + sTransCount
-
-    i=6
-    iEnd=len(strArray)
+    i:int    = 6
+    iEnd:int = len(aArray)
     while i<iEnd:
-        if strArray[i]=='':
+        if aArray[i]=='':
             return '',0
             #return ("Error: Error parsing data. Please try again.");
-        iPairData = int(strArray[i])
-        sTmpString = ToHex(iPairData)
-        sFinalString = sFinalString + " " + sTmpString
+        iPairData = int(aArray[i])
+        uTmpString = ToHex(iPairData)
+        uFinalString = uFinalString + " " + uTmpString
         i=i+1
-    return sFinalString,iRepeatCount
+    return uFinalString,iRepeatCount
 
-def CCfToKeene(sCCFString,iRepeatCount):
-    iX          = 0
-    iy          = 0
-    sTmpStr     = ''
-    iFreq       = 0
-    iPair_Count = 0
-    iLead_in    = 0
-    iMyInt      = []
-    iTint       = 0
-    aBurst_Time = []
-    iCycle_time = 0
+def CCfToKeene(uCCFString:str,iRepeatCount:int):
+    iX:int          = 0
+    iy:int          = 0
+    uTmpStr:str
+    iFreq:int
+    iPair_Count:int
+    iLead_in:int
+    aMyInt:List     = []
+    iTint:int
+    aBurst_Time:List = []
+    iCycle_time:int
+    uData:str
+    iCodeLength:int
+    bError:bool
+    uRet:str
 
-    if sCCFString=='':
-        return sCCFString
-    if sCCFString[0]=='{':
-        return sCCFString
+    if uCCFString=='':
+        return uCCFString
+    if uCCFString[0]=='{':
+        return uCCFString
 
-    sData       = sCCFString.strip()
-    iCodeLength = len(sData)
+    uData       = uCCFString.strip()
+    iCodeLength = len(uData)
     bError      = True
     try:
 
@@ -190,12 +177,11 @@ def CCfToKeene(sCCFString,iRepeatCount):
 
         iX=0
         while iX<iCodeLength:
-            sTmpStr = sData[iX: iX + 4]
-            aBurst_Time[iy]=int(sTmpStr,16)
+            uTmpStr = uData[iX: iX + 4]
+            aBurst_Time[iy]=int(uTmpStr,16)
             iy=iy+1
             iX=iX+5
 
-        iLast_code = iy / 2
         iFreq = int (4145 / aBurst_Time[1])
 
         iPair_Count = aBurst_Time[2]
@@ -207,87 +193,92 @@ def CCfToKeene(sCCFString,iRepeatCount):
 
         iX=0
         while iX<iy:
-            iMyInt.append(0)
+            aMyInt.append(0)
             iX=iX+1
 
-        iMyInt[0]       = int(iFreq * 256 + iPair_Count)
-        iCycle_time     = 1000 / iFreq
+        aMyInt[0]       = int(iFreq * 256 + iPair_Count)
+        iCycle_time     = int(1000 / iFreq)
         iLead_in        = aBurst_Time[4] * iCycle_time
-        iMyInt[1]       = iLead_in
-        iMyInt[2]       = aBurst_Time[5] * iCycle_time # lead space
+        aMyInt[1]       = iLead_in
+        aMyInt[2]       = aBurst_Time[5] * iCycle_time # lead space
         iPair_Count     = iPair_Count - 1  # only loop data pairs
         iX              = 0
         iEnd            = iPair_Count * 2
 
         while iX<iEnd:
             iTint = int(aBurst_Time[iX + 6] * iCycle_time)
-            iMyInt[iX + 3] = iTint
+            aMyInt[iX + 3] = iTint
             iX=iX+1
 
-        iMyInt[iX + 2] = 8192   # over write the lead out space with 2000 X is one over when exits from for loop
-        sData = ""
+        aMyInt[iX + 2] = 8192   # over write the lead out space with 2000 X is one over when exits from for loop
+        uData = ""
 
         iX              = 0
         iEnd            = (iPair_Count * 2) + 3
         while iX<iEnd:
-            sData = sData + ToHex(iMyInt[iX]) + " "
+            uData = uData + ToHex(aMyInt[iX]) + " "
             iX=iX+1
         bError = False
     except Exception as e:
-        sMsg='CCfToKeene:Can''t Convert:'+str(e)
-        print (sMsg)
-        print (sCCFString)
+        uMsg:str='CCfToKeene:Can''t Convert:'+str(e)
+        Logger.error (uMsg)
+        Logger.error (uCCFString)
 
     if bError:
-        return ""
+        return u""
     else:
-        sRet="K "+ sData.strip().upper()
+        uRet="K "+ uData.strip().upper()
         if iRepeatCount>1:
-            sRet=sRet+' 4000 '+str(iRepeatCount)
-        return sRet
+            uRet=uRet+' 4000 '+str(iRepeatCount)
+        return uRet
 
 
-def GlobalCacheToKeene(sGCString):
-    sTmp,iRepeatCount=GlobalCacheToCCF(sGCString)
-    if sTmp=='' or iRepeatCount==0:
-        print ("wrong string:"+sGCString)
-    return CCfToKeene(sTmp,iRepeatCount)
+def GlobalCacheToKeene(uGCString:str) -> str:
+    uTmp:str
+    iRepeatCount:int
+    uTmp,iRepeatCount=GlobalCacheToCCF(uGCString)
+    if uTmp=='' or iRepeatCount==0:
+        Logger.error ("wrong string:"+uGCString)
+    return CCfToKeene(uTmp,iRepeatCount)
 
 class cITachToKeene(BoxLayout):
 
     def __init__(self, **kwargs):
         kwargs['orientation']='vertical'
         super(cITachToKeene, self).__init__(**RemoveNoClassArgs(kwargs,BoxLayout))
-        self.uCodesetFileName    = ''
-
-        self.oLayoutHeaders     = BoxLayout(size_hint_y= None , height= 30)
-        self.oLayoutButtons     = BoxLayout(size_hint_y= None , height= 30)
-        self.oLayoutPanels      = BoxLayout()
+        self.uCodesetFileName:str           = ''
+        self.oLayoutHeaders:BoxLayout       = BoxLayout(size_hint_y= None , height= 30)
+        self.oLayoutButtons:BoxLayout       = BoxLayout(size_hint_y= None , height= 30)
+        self.oLayoutPanels:BoxLayout        = BoxLayout()
         self.add_widget(self.oLayoutHeaders)
         self.add_widget(SettingSpacer())
         self.add_widget(self.oLayoutPanels)
         self.add_widget(SettingSpacer())
         self.add_widget(self.oLayoutButtons)
 
-        self.oTextInput=TextInput()
-        self.oTextInput2=TextInput()
+        self.oTextInput:TextInput           = TextInput()
+        self.oTextInput2:TextInput          = TextInput()
         self.oLayoutPanels.add_widget(self.oTextInput)
         self.oLayoutPanels.add_widget(self.oTextInput2)
 
-        self.oButtonLoad=Button(text = ReplaceVars('$lvar(563)'))
-        self.oButtonSave=Button(text = ReplaceVars('$lvar(5025)'))
+        self.oButtonLoad:Button             = Button(text = ReplaceVars('$lvar(563)'))
+        self.oButtonSave:Button             = Button(text = ReplaceVars('$lvar(5025)'))
         self.oButtonLoad.bind(on_release = self.show_load)
         self.oButtonSave.bind(on_release = self.show_save)
         self.oLayoutButtons.add_widget(self.oButtonLoad)
         self.oLayoutButtons.add_widget(self.oButtonSave)
 
-        self.oLabelITach=Label(text = "ITach", halign='center')
-        self.oLabelKeene=Label(text = "Keene Kira", halign='center')
+        self.oLabelITach:Label              = Label(text = "ITach", halign='center')
+        self.oLabelKeene:Label              = Label(text = "Keene Kira", halign='center')
         self.oLayoutHeaders.add_widget(self.oLabelITach)
         self.oLayoutHeaders.add_widget(self.oLabelKeene)
 
+        self.oContent:Union[FileBrowser,None] = None
+        self._popup:Union[Popup,None]         = None
+        self.oXMLCodeset:Union[Element,None]  = None
 
-    def show_load(self,*largs):
+    # noinspection PyUnusedLocal
+    def show_load(self,*largs) -> None:
 
         alargs= {'select_string': ReplaceVars('$lvar(563)'),
                  'cancel_string': ReplaceVars('$lvar(5009)'),
@@ -314,70 +305,88 @@ class cITachToKeene(BoxLayout):
         self._popup = Popup(title=ReplaceVars("$lvar(5027)"), content=self.oContent, size_hint=(1, 1))
         self._popup.open()
 
-    def MyFilter(self,uFolder,uFile):
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def MyFilter(self,uFolder:str,uFile:str) -> bool:
         if "CODESET_iTach" in uFile:
             return True
         return False
 
-
-    def dismiss_popup(self,*largs):
+    # noinspection PyUnusedLocal
+    def dismiss_popup(self,*largs) -> None:
         self._popup.dismiss()
 
-    def load(self,instance):
+    def load(self,oFileBrowser:FileBrowser) -> None:
 
-        if len(instance.selection)!=0:
-            self.uCodesetFileName=instance.selection[0]
+        oCode:Element
+        oXMLRoot:Element
+        uCmd:str
+
+        if len(oFileBrowser.selection)!=0:
+            self.uCodesetFileName=oFileBrowser.selection[0]
 
         try:
             self.oXMLCodeset = ElementTree()
-            self.oXMLCodeset.parse(self.uCodesetFileName, CommentedTreeBuilder())
-
+            oParser          = XMLParser(target=CommentedTreeBuilder())
+            self.oXMLCodeset.parse(source=self.uCodesetFileName,parser=oParser)
             if self.oXMLCodeset is not None:
-                self.oXMLRoot = self.oXMLCodeset.getroot()
-                self.oTextInput.text=tostring(self.oXMLRoot)
-                for oCode in self.oXMLRoot:
-                    sCmd=oCode.get('cmd')
-                    if sCmd is not None:
-                        oCode.set('cmd',GlobalCacheToKeene(sCmd))
-                self.AdjustRepManagerITachToKeene(self.oXMLRoot)
-                self.oTextInput2.text=tostring(self.oXMLRoot)
-        except ParseError as sErrMsg:
-            sMsg='Error '+str(sErrMsg)
-            print (sMsg)
+                oXMLRoot = self.oXMLCodeset.getroot()
+                self.oTextInput.text=tostring(oXMLRoot)
+                for oCode in oXMLRoot:
+                    uCmd=oCode.get('cmd')
+                    if uCmd is not None:
+                        oCode.set('cmd',GlobalCacheToKeene(uCmd))
+                self.AdjustRepManagerITachToKeene(oXMLRoot)
+                self.oTextInput2.text=tostring(oXMLRoot)
+        except ParseError as uErrMsg:
+            uMsg='Parse Error '+str(uErrMsg)
+            Logger.error (uMsg)
         except Exception as e:
-            sMsg='Error '+str(e)
-            print (sMsg)
+            uMsg='General Error '+str(e)
+            Logger.error (uMsg)
 
         self.dismiss_popup()
 
-    def AdjustRepManagerITachToKeene(self,oXMLRoot):
+    # noinspection PyMethodMayBeStatic
+    def AdjustRepManagerITachToKeene(self,oXMLRoot:Element) -> None:
+        oXMLRepMgr:Element
+        oXMLRepMgrEntry:Element
+        aXMLRepMgrDescriptions:List[Element]
+        oDes:Element
+        oXMLRepMgrName:Element
+        aXMLRepMgrDependencies:List[Element]
+        oDEDep:Element
+        oName:Element
+        oXMLRepMgSources:List[Element]
+        oXMLRepMgSource:Element
+
         oXMLRepMgr=oXMLRoot.find("repositorymanager")
         if oXMLRepMgr is not None:
             oXMLRepMgrEntry=oXMLRepMgr.find("entry")
             if oXMLRepMgrEntry is not None:
-                oXMLRepMgrDescriptions=oXMLRepMgrEntry.findall("description")
-                if oXMLRepMgrDescriptions is not None:
-                    for oDes in oXMLRepMgrDescriptions:
+                aXMLRepMgrDescriptions=oXMLRepMgrEntry.findall("description")
+                if aXMLRepMgrDescriptions is not None:
+                    for oDes in aXMLRepMgrDescriptions:
                         oDes.text=oDes.text.replace("iTach IR","Keene Kira IR")
                 oXMLRepMgrName=oXMLRepMgrEntry.find("name")
                 if oXMLRepMgrName is not None:
                     oXMLRepMgrName.text=oXMLRepMgrName.text.replace("iTach","Keene Kira")
-                oXMLRepMgrDependencies=oXMLRepMgrEntry.findall("dependencies")
-                if oXMLRepMgrDependencies is not None:
-                    for oDep in oXMLRepMgrDependencies:
+                aXMLRepMgrDependencies=oXMLRepMgrEntry.findall("dependencies")
+                if aXMLRepMgrDependencies is not None:
+                    for oDep in aXMLRepMgrDependencies:
                         oDEDep=oDep.find("dependency")
                         if oDEDep is not None:
                             oName=oDEDep.find("name")
                             if oName is not None:
                                 oName.text=oName.text.replace("iTach IR Control","Keene Kira IR Control")
-                oXMLRepMgSources=oXMLRepMgrEntry.findall("sources")
-                if oXMLRepMgSources is not None:
-                    oXMLRepMgSource=oXMLRepMgSources.find("source")
-                    if oXMLRepMgSource is not None:
+                aXMLRepMgSources=oXMLRepMgrEntry.findall("sources")
+                if aXMLRepMgSources is not None:
+                    for oXMLRepMgSource in aXMLRepMgSources:
                         for oSource in oXMLRepMgSource:
                             oSource.text=oSource.text.replace("_iTach_","_Keene_Kira_")
 
-    def AdjustRepManagerITachToCCF(self,oXMLRoot):
+    # noinspection PyMethodMayBeStatic
+    def AdjustRepManagerITachToCCF(self,oXMLRoot:Element) -> None:
+        oXMLRepMgr:Element
         oXMLRepMgr=oXMLRoot.find("repositorymanager")
         if oXMLRepMgr is not None:
             oXMLRepMgrEntry=oXMLRepMgr.find("entry")
@@ -404,12 +413,12 @@ class cITachToKeene(BoxLayout):
                         for oSource in oXMLRepMgSource:
                             oSource.text=oSource.text.replace("_iTach_","_infrared_ccf_")
 
-
-    def show_save(self,*largs):
+    # noinspection PyUnusedLocal
+    def show_save(self,*largs) -> None:
         if self.oTextInput2.text!="":
-            sOutput=self.uCodesetFileName+"3"
-            sOutput=sOutput.replace("_iTach_","_Keene_Kira_")
-            self.oXMLCodeset.write(sOutput, encoding="UTF-8",xml_declaration='<?xml version="1.0" encoding="UTF-8"?>')
+            uOutput:str=self.uCodesetFileName+"3"
+            uOutput=uOutput.replace("_iTach_","_Keene_Kira_")
+            self.oXMLCodeset.write(uOutput, encoding="UTF-8",xml_declaration='<?xml version="1.0" encoding="UTF-8"?>')
         self.oTextInput.text=""
         self.oTextInput2.text=""
 
@@ -446,11 +455,11 @@ class cWidgetITach2Keene(cWidgetBase):
     def __init__(self,**kwargs):
         super(cWidgetITach2Keene, self).__init__(**kwargs)
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
         if self.CreateBase(Parent=oParent,Class=cITachToKeene):
             self.oParent.add_widget(self.oObject)
@@ -487,14 +496,16 @@ class cScript(cSystemTemplate):
         self.uIniFileLocation   = u'none'
 
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> None:
         Globals.oNotifications.RegisterNotification("UNKNOWNWIDGET",fNotifyFunction=self.AddWidgetFromXmlNode,uDescription="Script Widget iTach2Keene")
 
-    def AddWidgetFromXmlNode(self,*args,**kwargs):
-        oScreenPage = kwargs.get("SCREENPAGE")
-        oXMLNode    = kwargs.get("XMLNODE")
-        uAnchor     = kwargs.get("ANCHOR")
-        oWidget     = kwargs.get("WIDGET")
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def AddWidgetFromXmlNode(self,*args,**kwargs) -> Union[Dict,None]:
+        oScreenPage:cScreenPage = kwargs.get("SCREENPAGE")
+        oXMLNode:Element        = kwargs.get("XMLNODE")
+        uAnchor:str             = kwargs.get("ANCHOR")
+        oWidget:cWidgetBase     = kwargs.get("WIDGET")
+
 
         if uAnchor is None or oScreenPage is None or oXMLNode is None or oWidget is None:
             return None
@@ -502,6 +513,6 @@ class cScript(cSystemTemplate):
         if oWidget.uTypeString != "ITACH2KEENE":
             return None
 
-        Ret = oScreenPage._AddWidgetFromXmlNode_Class(oXMLNode=oXMLNode,  uAnchor=uAnchor,oClass=cWidgetITach2Keene)
+        Ret = oScreenPage.AddWidgetFromXmlNode_Class(oXMLNode=oXMLNode,  uAnchor=uAnchor,oClass=cWidgetITach2Keene)
         return {"ret":Ret}
 

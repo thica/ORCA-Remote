@@ -20,8 +20,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
-from kivy.logger                    import Logger
+from typing import Dict
 from ORCA.scripttemplates.Template_Keyhandler import cKeyhandlerTemplate
 
 import ORCA.Globals as Globals
@@ -35,8 +34,8 @@ import ORCA.Globals as Globals
       <description language='English'>Script to adding debugging fuctions on specific keys</description>
       <description language='German'>Script um debugging Funktionen auf einzelne Tasten zu legen</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -46,7 +45,6 @@ import ORCA.Globals as Globals
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/keyhandler/keyhandler_debug/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -80,17 +78,20 @@ class cScript(cKeyhandlerTemplate):
         self.uSortOrder         = u'last'
         self.uIniFileLocation   = u'none'
 
-    def HandleKey(self,**kwargs):
+    def HandleKey(self,**kwargs) -> Dict:
         cKeyhandlerTemplate.HandleKey(self, **kwargs)
 
-        uKey   = kwargs.get("key",0)
-        window = kwargs.get("window",None)
+        uKey:str   = kwargs.get("key",0)
+        window     = kwargs.get("window",None)
 
         # On Windows: We emulate sleep and wake by F2 and F3
         if uKey ==  "F2":
             Globals.oApp.on_pause()
         elif uKey ==  "F3":
             Globals.oApp.on_resume()
+        elif uKey ==  "F4":
+            Globals.bShowBorders=not Globals.bShowBorders
+            Globals.oTheScreen.AddActionToQueue([{'string': 'updatewidget *@*'}])
         elif uKey == "F12" and window is not None:  # F12
             window.screenshot()
         elif uKey == "F11" and window is not None:  # F11

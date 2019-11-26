@@ -10,6 +10,7 @@
         <action name="Create Name for Start Page part 2"                         string="modifyvar" varname="ACTIVITY_STARTPAGE" operator="fromvar"  />
         <action name="Show Main Activity Page"                                   string="showpage $var(ACTIVITY_STARTPAGE)" />
         <action name="if not allready on"                                        string="if $var(TMP_POWERSTATUS)!=ON"/>
+            <action name="Block the gui"                                         string="blockgui 1"/>
             <action name="Dim Screen"                                            string="loadelement" filename="$var(STANDARDELEMENTSPATH)/block_dimmer.xml" pagename="$var(ACTIVITY_STARTPAGE)" />
             <action name="Switch off all unused devices"                         string="call FKT SwitchOffUnusedActivityGroupDevices" />
             <action name="Pull Function name #1"                                 string="setvar ACTIVITY_PREPOWERONACTION=ACTIVITY_PREPOWERONACTION[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
@@ -23,6 +24,7 @@
             <action name="Loop through all Activities to set Powerstatus to off" string="forin" varname="ACTIVITY_POWERSTATUS[$var(ACTIVITY_GROUP)][]"  level="2" actionname="FKT SwitchAllOffActivityGroup_SetActivityStatusOff"/>
             <action name="Set Powerstatus Activity to on"                        string="setvar ACTIVITY_POWERSTATUS[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]=ON" />
             <action name="Undim screen"                                          string="setwidgetattribute" widgetname="Dimmer Element@$var(ACTIVITY_STARTPAGE)" attributename="remove" />
+            <action name="UnBlock the gui"                                       string="blockgui 0"/>
         <action name=""                                                          string="endif" />
     </action>
 
@@ -75,7 +77,7 @@
           <action name="we have sendcommand so parse the command"                                                                  string="if $var(findresult)=0" />
              <action name="parse the coommand part 1"                                                                              string="setvar tmp_sendcommand=$var(inputaction)" />
              <action name="parse the coommand part 2 "                                                                             string="modifyvar" varname="tmp_sendcommand" operator="getpart" parameter1="12" parameter2="" />
-             <action name="Select input by send command"                                                                           string="sendcommand" commandname="$var(tmp_sendcommand)" interface="$var(DEVICEMAININTERFACE)" configname="$var(DEVICEMAINCONFIGNAME)"/>
+             <action name="Select input by send command"                                                                           string="sendcommand $var(tmp_sendcommand)" interface="$var(DEVICEMAININTERFACE)" configname="$var(DEVICEMAINCONFIGNAME)"/>
           <action name="endif"                                                                                                     string="endif"/>
           <action name="if we will not use sendcommand"                                                                            string="if $var(findresult)=-1" />
              <action name="Standard Command "                                                                                      string="modifyvar" varname="$var(inputaction)" operator="find" parameter1="Send " parameter2="findresult" />

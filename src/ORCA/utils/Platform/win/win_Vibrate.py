@@ -19,5 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-def Vibrate(fDuration=0.05):
+
+# noinspection PyUnusedLocal
+def Vibrate(fDuration:float=0.05) -> bool:
     return False

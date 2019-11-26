@@ -19,14 +19,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                         import Union
+from typing                         import cast
+from xml.etree.ElementTree          import Element
+from ORCA.widgets.core.TouchButton  import cTouchButton
 
-from ORCA.widgets.Base              import oWidgetType
+from ORCA.widgets.helper.WidgetType import eWidgetType
 from ORCA.widgets.Button            import cWidgetButton
 from ORCA.utils.XML                 import GetXMLTextAttribute
 from ORCA.vars.Access               import SetVar
 from ORCA.vars.Access               import GetVar
 from ORCA.vars.Actions              import Var_Invert
 from ORCA.utils.FileName            import cFileName
+import ORCA.Globals as Globals
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
+
 
 __all__ = ['cWidgetSwitch']
 
@@ -51,6 +64,9 @@ class cWidgetSwitch(cWidgetButton):
     |-
     |destvar
     |The destination variable , which will be switched on state change. Will be set to "0" or "1"
+    |-
+    |group
+    |You can group switches into a group, so that only one switch in a group will be active. Here can can provide a name to a switch, which belongs top a group. You can use the allbuttonsoff widget action to set all switches in a group to off
     |}</div>
 
     Below you see an example for a switch widget
@@ -62,31 +78,34 @@ class cWidgetSwitch(cWidgetButton):
 
     def __init__(self,**kwargs):
         super(cWidgetSwitch, self).__init__(**kwargs)
-        self.oFnButtonPictureNormalOrg  = cFileName(u'')
-        self.oFnButtonPicturePressedOrg = cFileName(u'')
-        self.uDestVar                   = u''
-        self.uGroup                     = u''
+        self.oFnButtonPictureNormalOrg:cFileName  = cFileName(u'')
+        self.oFnButtonPicturePressedOrg:cFileName = cFileName(u'')
+        self.uDestVar:str                         = u''
+        self.uGroup:str                           = u''
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        bRet=super(cWidgetSwitch, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
-        self.uDestVar          = GetXMLTextAttribute(oXMLNode,u'destvar',    False,self.uName+'_switchstate')
-        self.uGroup            = GetXMLTextAttribute(oXMLNode,u'group',      False,'')
+        bRet:bool = super(cWidgetSwitch, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
+        self.uDestVar                         = GetXMLTextAttribute(oXMLNode,u'destvar',    False,self.uName+'_switchstate')
+        self.uGroup                           = GetXMLTextAttribute(oXMLNode,u'group',      False,'')
         self.oFnButtonPictureNormalOrg        = cFileName(self.oFnButtonPictureNormal)
         self.oFnButtonPicturePressedOrg       = cFileName(self.oFnButtonPicturePressed)
         if GetVar(uVarName = self.uDestVar)=='1':
             self.oFnButtonPictureNormal,self.oFnButtonPicturePressed=self.oFnButtonPicturePressed,self.oFnButtonPictureNormal
         return bRet
 
-    def On_Button_Up(self,instance):
+    def On_Button_Up(self,instance:cTouchButton) -> None:
+        if Globals.oTheScreen.GuiIsBlocked():
+            return
+
         self.Invert(instance)
         self.GroupSwitch()
         super(cWidgetSwitch, self).On_Button_Up(instance)
 
-    def On_Button_Down(self,instance):
+    def On_Button_Down(self,instance:cTouchButton) -> None:
         pass
 
-    def Invert(self,instance):
+    def Invert(self,instance:cTouchButton) -> None:
         """ Inverts the button state """
         if self.uGroup=='':
             self.InvertSwitch(instance)
@@ -95,7 +114,8 @@ class cWidgetSwitch(cWidgetButton):
             return
         self.InvertSwitch(instance)
 
-    def InvertSwitch(self,instance):
+    # noinspection PyUnusedLocal
+    def InvertSwitch(self,instance:Union[cTouchButton,None]) -> None:
         """ Inverts and button and the var """
         if GetVar(uVarName = self.uDestVar)=='1':
             SetVar(uVarName = self.uDestVar, oVarValue = '0')
@@ -106,13 +126,14 @@ class cWidgetSwitch(cWidgetButton):
             self.SetPictureNormal( self.oFnButtonPicturePressedOrg.string,True)
             self.SetPicturePressed( self.oFnButtonPictureNormalOrg.string)
 
-    def GroupSwitch(self):
+    def GroupSwitch(self) -> None:
         """ Switches the button as part of a button group """
         if self.uGroup!='':
             if GetVar(uVarName = self.uDestVar)=='1':
                 for oWidget in self.oParentScreenPage.aWidgets:
-                    if oWidget.iWidgetType==oWidgetType.Switch:
+                    if oWidget.eWidgetType==eWidgetType.Switch:
                         if not oWidget== self:
+                            oWidget=cast(cWidgetSwitch,oWidget)
                             if oWidget.uGroup==self.uGroup:
                                 SetVar(uVarName = oWidget.uDestVar, oVarValue = '1')
                                 oWidget.InvertSwitch(None)
@@ -132,8 +153,10 @@ class cWidgetSwitch(cWidgetButton):
         """ Sets all button / switches to off """
         if self.uGroup!='':
             for oWidget in self.oParentScreenPage.aWidgets:
-                if oWidget.iWidgetType==oWidgetType.Switch:
+                if oWidget.eWidgetType==eWidgetType.Switch:
+                    # noinspection PyUnresolvedReferences
                     if oWidget.uGroup==self.uGroup:
+                        oWidget=cast(cWidgetSwitch,oWidget)
                         SetVar(uVarName = oWidget.uDestVar, oVarValue = '1')
                         oWidget.InvertSwitch(None)
 

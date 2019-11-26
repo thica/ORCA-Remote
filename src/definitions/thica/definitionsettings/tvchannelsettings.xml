@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings>
     <!--  TV Channels settings-->
+    <!--
     <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[1]"  default="1"  rem="ARD"/>
     <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[1]"     default="$var(RESOURCEPATH)/tvlogos/das erste.png" />
     <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[2]"  default="2"  rem="ZDF"/>
@@ -55,12 +56,7 @@
     <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[26]"    default="$var(RESOURCEPATH)/tvlogos/pearl.tv.png" />
     <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[27]" default="37" rem="EinsFestival"/>
     <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[27]"    default="$var(RESOURCEPATH)/tvlogos/einsfestival.png" />
-    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[28]" default="47" rem="ZDF Neo"/>
-    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[28]"    default="$var(RESOURCEPATH)/tvlogos/zdf_neo.png" />
-    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[29]" default="48" rem="ZDF Kultur"/>
-    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[29]"    default="$var(RESOURCEPATH)/tvlogos/zdf.kultur.png" />
-    <default var="$dvar(definition_alias_tvfavorites_shared)_tvchannel[30]" default="68" rem="N24"/>
-    <default var="$dvar(definition_alias_tvfavorites_shared)_tvlogo[30]"    default="$var(RESOURCEPATH)/tvlogos/n24.png" />
+    -->
 
 </settings>
 

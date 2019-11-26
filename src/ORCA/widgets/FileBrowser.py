@@ -19,9 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from kivy.uix.screenmanager import FadeTransition
-from kivy.logger            import Logger
-
+from typing                             import List
+from xml.etree.ElementTree              import Element
+from kivy.uix.screenmanager             import FadeTransition
+from kivy.logger                        import Logger
+from kivy.uix.widget                    import Widget
 from ORCA.widgets.core.FileBrowser      import FileBrowser
 from ORCA.widgets.Base                  import cWidgetBase
 from ORCA.vars.Replace                  import ReplaceVars
@@ -32,8 +34,16 @@ from ORCA.utils.XML                     import GetXMLTextAttribute
 from ORCA.utils.LogError                import LogError
 from ORCA.ui.ShowErrorPopUp             import ShowErrorPopUp
 from ORCA.utils.Path                    import cPath
-
+from ORCA.Action                        import cAction
 import ORCA.Globals as Globals
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
+
 
 __all__ = ['cWidgetFileBrowser']
 
@@ -76,18 +86,18 @@ class cWidgetFileBrowser(cWidgetBase):
 
     def __init__(self, **kwargs):
         super(cWidgetFileBrowser, self).__init__(**kwargs)
-        self.oPathStart = cPath()
-        self.uActionNameCancel = ""
-        self.bDirSelect = False
+        self.oPathStart:cPath       = cPath()
+        self.uActionNameCancel:str  = ""
+        self.bDirSelect:bool        = False
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         self.oPathStart             = cPath(GetVar(uVarName = "filebrowserfile"))
         self.uActionNameCancel      = GetXMLTextAttribute(oXMLNode,u'actioncancel',False,u'')
         self.bDirSelect             = GetXMLBoolAttribute(oXMLNode,u'dirselect',False,False)
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
         self.AddArg('select_string',    ReplaceVars('$lvar(563)'))
         self.AddArg('cancel_string',    ReplaceVars('$lvar(5009)'))
@@ -114,7 +124,7 @@ class cWidgetFileBrowser(cWidgetBase):
         return False
 
 
-    def On_Success(self, instance):
+    def On_Success(self, instance:FileBrowser) -> None:
         """ called , when a user makes a selection """
         if len(instance.selection)!=0:
             oItem = cPath(instance.selection[0])
@@ -125,14 +135,14 @@ class cWidgetFileBrowser(cWidgetBase):
             self.On_Button_Up(instance)
             return
 
-    def On_Canceled(self, instance):
+    # noinspection PyUnusedLocal
+    def On_Canceled(self, instance:FileBrowser) -> None:
         """ called, when the user cancelles """
         if self.uActionNameCancel!=u'':
-            aActions=Globals.oActions.GetActionList(uActionName = self.uActionNameCancel, bNoCopy = False)
+            aActions:List[cAction] = Globals.oActions.GetActionList(uActionName = self.uActionNameCancel, bNoCopy = False)
             if aActions:
                 Globals.oEvents.ExecuteActions( aActions=aActions,oParentWidget=self)
                 Logger.debug (u'TheScreen: Single Tap Action queued for Object %s [%s]' %(self.uName,self.uActionNameCancel))
             else:
-                uMsg=LogError(u'TheScreen: Action Not Found:' + self.uActionNameCancel)
-                ShowErrorPopUp(uTitle='Fatal Error', uMessage=uMsg, bAbort=True)
+                ShowErrorPopUp(uTitle='Fatal Error', uMessage=LogError(uMsg=u'TheScreen: Action Not Found:' + self.uActionNameCancel), bAbort=True)
 

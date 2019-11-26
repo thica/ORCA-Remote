@@ -23,8 +23,6 @@ import ORCA.Globals as Globals
 from ORCA.utils.Path         import cPath
 
 
-def GetUserDataPath():
+def GetUserDataPath() -> cPath:
     """ Gets the path to the user folder """
-
-    oPathRoot = cPath(Globals.oApp.user_data_dir)
-    return oPathRoot
+    return cPath(Globals.oApp.user_data_dir)

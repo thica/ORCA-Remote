@@ -6,7 +6,7 @@ RGB conversion tool written in Python for Philips Hue.
 In [1]: from rgb_xy import Converter
 
 In [2]: converter = Converter()
-		
+
 In [3]: converter.hex_to_xy('bada55')
 Out[3]: [0.3991853917195425, 0.498424689144739]
 

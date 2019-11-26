@@ -16,8 +16,8 @@
       <action name="on first start" string="if $var(STARTCOUNT)==1"/>"
 
         <action name="Update Splash"     string="showsplashtext"  maintext="Enigma" subtext='$lvar(enigma2_10006)'/>
-        <action name="Load Settings from Enigma by sending something (thica)" string="sendcommand" commandname="getvolume" retvar="dummy" interface="$var($dvar(definition_alias_mediaplayer_enigma2)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_enigma2)_CONFIGNAME_MAIN)"  />
-        <action name='Assign the channels from enigma (forced)' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_enigma2)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_enigma2)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_shared)","force":"1"}' />
+        <action name="Load Settings from Enigma by sending something (thica)" string="sendcommand getvolume" retvar="dummy" interface="$var($dvar(definition_alias_mediaplayer_enigma2)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_enigma2)_CONFIGNAME_MAIN)"  />
+        <action name='Assign the channels from enigma (forced)' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_enigma2)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_enigma2)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_shared)","force":"1","logopackfoldername":"$var($dvar(definition_alias_tvfavorites_shared)_logopackfoldername)"}' />
       <action name="endif first start" string="endif" />
 
 

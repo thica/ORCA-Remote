@@ -12,269 +12,269 @@
 
   <action name="Update Page Clocks" string="updatewidget {pageclocks}" />
   <action name="Update Page Dates"  string="updatewidget {pagedates}" />
-  <action name="Send Power Toggle" string="sendcommand" commandname="power_toggle" />
-  <action name="Send Power On" string="sendcommand" commandname="power_on" />
-  <action name="Send Power Off" string="sendcommand" commandname="power_off" />
-  <action name="Send OK" string="sendcommand" commandname="ok" />
-  <action name="Send Up" string="sendcommand" commandname="up" />
-  <action name="Send Down" string="sendcommand" commandname="down" />
-  <action name="Send Left" string="sendcommand" commandname="left" />
-  <action name="Send Right" string="sendcommand" commandname="right" />
-  <action name="Send Page Up" string="sendcommand" commandname="page_up" />
-  <action name="Send Page Down" string="sendcommand" commandname="page_down" />
-  <action name="Send Page First" string="sendcommand" commandname="page_first" />
-  <action name="Send Page Last" string="sendcommand" commandname="page_last" />
+  <action name="Send Power Toggle" string="sendcommand power_toggle" />
+  <action name="Send Power On" string="sendcommand power_on" />
+  <action name="Send Power Off" string="sendcommand power_off" />
+  <action name="Send OK" string="sendcommand ok" />
+  <action name="Send Up" string="sendcommand up" />
+  <action name="Send Down" string="sendcommand down" />
+  <action name="Send Left" string="sendcommand left" />
+  <action name="Send Right" string="sendcommand right" />
+  <action name="Send Page Up" string="sendcommand page_up" />
+  <action name="Send Page Down" string="sendcommand page_down" />
+  <action name="Send Page First" string="sendcommand page_first" />
+  <action name="Send Page Last" string="sendcommand page_last" />
 
-  <action name="Send Channel Up" string="sendcommand" commandname="channel_up" />
-  <action name="Send Channel Down" string="sendcommand" commandname="channel_down" />
-  <action name="Send Channel Select" string="sendcommand" commandname="channel_select" />
-  <action name="Send Menu" string="sendcommand" commandname="menu" />
-  <action name="Send DVDMenu" string="sendcommand" commandname="dvdmenu" />
-  <action name="Send Menu2" string="sendcommand" commandname="menu2" />
-  <action name="Send Home" string="sendcommand" commandname="home" />
-  <action name="Send Option" string="sendcommand" commandname="option" />
-  <action name="Send Exit" string="sendcommand" commandname="exit" />
-  <action name="Send Return" string="sendcommand" commandname="return" />
-  <action name="Send EPG" string="sendcommand" commandname="epg" />
-  <action name="Send HBBTV" string="sendcommand" commandname="hbbtv" />
-  <action name="Send Guide" string="sendcommand" commandname="guide" />
-  <action name="Send OSD" string="sendcommand" commandname="osd" />
-  <action name="Send Info" string="sendcommand" commandname="info" />
-  <action name="Send Stop" string="sendcommand" commandname="stop" />
-  <action name="Send Skip Back" string="sendcommand" commandname="skip_back" />
-  <action name="Send Skip Forward" string="sendcommand" commandname="skip_forward" />
-  <action name="Send Play" string="sendcommand" commandname="play" />
-  <action name="Send Record" string="sendcommand" commandname="record" />
-  <action name="Send Stop Record" string="sendcommand" commandname="stop record" />
-  <action name="Send Fast Rewind" string="sendcommand" commandname="fast_rewind" />
-  <action name="Send Fast Forward" string="sendcommand" commandname="fast_forward" />
-  <action name="Send Pause" string="sendcommand" commandname="pause" />
-  <action name="Send Pause Toggle" string="sendcommand" commandname="pause_toggle" />
-  <action name="Send Shuffle On" string="sendcommand" commandname="shuffle_on" />
-  <action name="Send Shuffle Off" string="sendcommand" commandname="shuffle_off" />
-  <action name="Send Shuffle Toggle" string="sendcommand" commandname="shuffle_toggle" />
-  <action name="Send Repeat On" string="sendcommand" commandname="repeat_on" />
-  <action name="Send Repeat Off" string="sendcommand" commandname="repeat_off" />
-  <action name="Send Repeat Toggle" string="sendcommand" commandname="repeat_toggle" />
-  <action name="Send Eject" string="sendcommand" commandname="eject" />
-  <action name="Send Close CD" string="sendcommand" commandname="clsoecd" />
+  <action name="Send Channel Up" string="sendcommand channel_up" />
+  <action name="Send Channel Down" string="sendcommand channel_down" />
+  <action name="Send Channel Select" string="sendcommand channel_select" />
+  <action name="Send Menu" string="sendcommand menu" />
+  <action name="Send DVDMenu" string="sendcommand dvdmenu" />
+  <action name="Send Menu2" string="sendcommand menu2" />
+  <action name="Send Home" string="sendcommand home" />
+  <action name="Send Option" string="sendcommand option" />
+  <action name="Send Exit" string="sendcommand exit" />
+  <action name="Send Return" string="sendcommand return" />
+  <action name="Send EPG" string="sendcommand epg" />
+  <action name="Send HBBTV" string="sendcommand hbbtv" />
+  <action name="Send Guide" string="sendcommand guide" />
+  <action name="Send OSD" string="sendcommand osd" />
+  <action name="Send Info" string="sendcommand info" />
+  <action name="Send Stop" string="sendcommand stop" />
+  <action name="Send Skip Back" string="sendcommand skip_back" />
+  <action name="Send Skip Forward" string="sendcommand skip_forward" />
+  <action name="Send Play" string="sendcommand play" />
+  <action name="Send Record" string="sendcommand record" />
+  <action name="Send Stop Record" string="sendcommand stop record" />
+  <action name="Send Fast Rewind" string="sendcommand fast_rewind" />
+  <action name="Send Fast Forward" string="sendcommand fast_forward" />
+  <action name="Send Pause" string="sendcommand pause" />
+  <action name="Send Pause Toggle" string="sendcommand pause_toggle" />
+  <action name="Send Shuffle On" string="sendcommand shuffle_on" />
+  <action name="Send Shuffle Off" string="sendcommand shuffle_off" />
+  <action name="Send Shuffle Toggle" string="sendcommand shuffle_toggle" />
+  <action name="Send Repeat On" string="sendcommand repeat_on" />
+  <action name="Send Repeat Off" string="sendcommand repeat_off" />
+  <action name="Send Repeat Toggle" string="sendcommand repeat_toggle" />
+  <action name="Send Eject" string="sendcommand eject" />
+  <action name="Send Close CD" string="sendcommand clsoecd" />
 
-  <action name="Send Teletext Toggle" string="sendcommand" commandname="teletext_toggle" />
-  <action name="Send Teletext On" string="sendcommand" commandname="teletext_on" />
-  <action name="Send Teletext Off" string="sendcommand" commandname="teletext_off" />
-  <action name="Send Teletext Hold" string="sendcommand" commandname="teletext_hold" />
-  <action name="Send Teletext Index" string="sendcommand" commandname="teletext_index" />
-  <action name="Send Teletext Favorites" string="sendcommand" commandname="teletext_favorites" />
-  <action name="Send Clock Toggle" string="sendcommand" commandname="clock_toggle" />
-  <action name="Send Clock On" string="sendcommand" commandname="clock_on" />
-  <action name="Send Clock Off" string="sendcommand" commandname="clock_off" />
+  <action name="Send Teletext Toggle" string="sendcommand teletext_toggle" />
+  <action name="Send Teletext On" string="sendcommand teletext_on" />
+  <action name="Send Teletext Off" string="sendcommand teletext_off" />
+  <action name="Send Teletext Hold" string="sendcommand teletext_hold" />
+  <action name="Send Teletext Index" string="sendcommand teletext_index" />
+  <action name="Send Teletext Favorites" string="sendcommand teletext_favorites" />
+  <action name="Send Clock Toggle" string="sendcommand clock_toggle" />
+  <action name="Send Clock On" string="sendcommand clock_on" />
+  <action name="Send Clock Off" string="sendcommand clock_off" />
 
-  <action name="Send Aspect" string="sendcommand" commandname="aspect" />
-  <action name="Send Zoom" string="sendcommand" commandname="zoom" />
-  <action name="Send Angle" string="sendcommand" commandname="angle" />
+  <action name="Send Aspect" string="sendcommand aspect" />
+  <action name="Send Zoom" string="sendcommand zoom" />
+  <action name="Send Angle" string="sendcommand angle" />
 
-  <action name="Send 3D"         string="sendcommand" commandname="3d" />
-  <action name="Send 3D Toggle"  string="sendcommand" commandname="3dtoggle" />
-  <action name="Send 3D Select"  string="sendcommand" commandname="3dselect" />
-  <action name="Send 3D On"  string="sendcommand" commandname="3don" />
-  <action name="Send 3D Off"  string="sendcommand" commandname="3doff" />
-  <action name="Send 3D SBS"  string="sendcommand" commandname="3dsbs" />
-  <action name="Send 3D OU"  string="sendcommand" commandname="3dou" />
-  <action name="Send 3D Auto"  string="sendcommand" commandname="3dauto" />
-
-
-  <action name="Send Resolution" string="sendcommand" commandname="resolution" />
-  <action name="Send AV Effect"  string="sendcommand" commandname="av_effect" />
-  <action name="Send Favorites" string="sendcommand" commandname="favorites" />
-  <action name="Send Favorite 0" string="sendcommand" commandname="favorite 0" />
-  <action name="Send Favorite 1" string="sendcommand" commandname="favorite 1" />
-  <action name="Send Favorite 2" string="sendcommand" commandname="favorite 2" />
-  <action name="Send Favorite 3" string="sendcommand" commandname="favorite 3" />
-  <action name="Send Favorite 4" string="sendcommand" commandname="favorite 4" />
-  <action name="Send Favorite 5" string="sendcommand" commandname="favorite 5" />
-  <action name="Send Favorite 6" string="sendcommand" commandname="favorite 6" />
-  <action name="Send Favorite 7" string="sendcommand" commandname="favorite 7" />
-  <action name="Send Favorite 8" string="sendcommand" commandname="favorite 8" />
-  <action name="Send Favorite 9" string="sendcommand" commandname="favorite 9" />
-  <action name="Send Favorite PGUP" string="sendcommand" commandname="favorite pgup" />
-  <action name="Send Favorite PGDN" string="sendcommand" commandname="favorite pgdn" />
-  <action name="Send Favorite Next" string="sendcommand" commandname="favorite next" />
-  <action name="Send Favorite Prev" string="sendcommand" commandname="favorite prev" />
-
-  <action name="Send AVMode" string="sendcommand" commandname="avmode" />
-  <action name="Send Audiochannel Select" string="sendcommand" commandname="audiochannel_select" />
-  <action name="Send Audiochannel Next" string="sendcommand" commandname="audiochannel_next" />
-  <action name="Send Audiochannel Prev" string="sendcommand" commandname="audiochannel_prev" />
-  <action name="Send Previous TV Channel" string="sendcommand" commandname="previous_tv_channel" />
-  <action name="Send Recordings" string="sendcommand" commandname="recordings" />
-  <action name="Send PVR" string="sendcommand" commandname="pvr" />
-  <action name="Send Button Red" string="sendcommand" commandname="button_red" />
-  <action name="Send Button Green" string="sendcommand" commandname="button_green" />
-  <action name="Send Button Yellow" string="sendcommand" commandname="button_yellow" />
-  <action name="Send Button Blue" string="sendcommand" commandname="button_blue" />
-  <action name="Send PIP On" string="sendcommand" commandname="pip_on" />
-  <action name="Send PIP Off" string="sendcommand" commandname="pip_off" />
-  <action name="Send PIP Mosaic" string="sendcommand" commandname="pip_mosaic" />
-  <action name="Send PIP Toggle" string="sendcommand" commandname="pip_toggle" />
-  <action name="Send PIP Swap" string="sendcommand" commandname="pip_swap" />
-  <action name="Send PIP Select" string="sendcommand" commandname="pip_select" />
-  <action name="Send Sleep" string="sendcommand" commandname="sleep" />
-  <action name="Send Show Search" string="sendcommand" commandname="showsearch" />
-  <action name="Send Volume Up" string="sendcommand" commandname="volume_up" taptype="single"/>
-  <action name="Send Volume Down" string="sendcommand" commandname="volume_down"  taptype="single"/>
-  <action name="Send Volume Up Accelerated" string="sendcommand" commandname="volume_up_accelerated"  taptype="double"/>
-  <action name="Send Volume Down Accelerated" string="sendcommand" commandname="volume_down_accelerated"  taptype="double"/>
-  <action name="Send Volume Up Center" string="sendcommand" commandname="volume_up_center" />
-  <action name="Send Volume Down Center" string="sendcommand" commandname="volume_down_center" />
-  <action name="Send Volume Up Subwoofer" string="sendcommand" commandname="volume_up_subwoofer" />
-  <action name="Send Volume Down Subwoofer" string="sendcommand" commandname="volume_down_subwoofer" />
-  <action name="Send Volume Up Front Left" string="sendcommand" commandname="volume_up_front_left" />
-  <action name="Send Volume Down Front Left" string="sendcommand" commandname="volume_down_front_left" />
-  <action name="Send Volume Up Front Right" string="sendcommand" commandname="volume_up_front_right" />
-  <action name="Send Volume Down Front Right" string="sendcommand" commandname="volume_down_front_right" />
-  <action name="Send Volume Up Rear Left" string="sendcommand" commandname="volume_up_rear_left" />
-  <action name="Send Volume Down Rear Left" string="sendcommand" commandname="volume_down_rear_left" />
-  <action name="Send Volume Up Rear Right" string="sendcommand" commandname="volume_up_rear_right" />
-  <action name="Send Volume Down Rear Right" string="sendcommand" commandname="volume_down_rear_right" />
-  <action name="Send Volume Up Surround Left" string="sendcommand" commandname="volume_up_surround_left" />
-  <action name="Send Volume Down Surround Left" string="sendcommand" commandname="volume_down_surround_left" />
-  <action name="Send Volume Up Surround Right" string="sendcommand" commandname="volume_up_surround_right" />
-  <action name="Send Volume Down Surround Right" string="sendcommand" commandname="volume_down_surround_right" />
-  <action name="Send Mute Toggle" string="sendcommand" commandname="mute_toggle" />
-  <action name="Send Mute On" string="sendcommand" commandname="mute_on" />
-  <action name="Send Mute Off" string="sendcommand" commandname="mute_off" />
-  <action name="Send Tuning Up" string="sendcommand" commandname="tuning_up" />
-  <action name="Send Tuning Down" string="sendcommand" commandname="tuning_down" />
-  <action name="Send Tuning Stop" string="sendcommand" commandname="tuning_stop" />
-  <action name="Send Subtitles Toggle" string="sendcommand" commandname="subtitles_toggle" />
-  <action name="Send Subtitles On" string="sendcommand" commandname="subtitles_on" />
-  <action name="Send Subtitles Off" string="sendcommand" commandname="subtitles_off" />
-  <action name="Send Next Subtitle" string="sendcommand" commandname="subtitles_next" />
-  <action name="Send Previous Subtitle" string="sendcommand" commandname="subtitles_prev" />
-  <action name="Send Escape" string="sendcommand" commandname="esc" />
-  <action name="Send Mark Watched" string="sendcommand" commandname="mark_watched" />
-  <action name="Send Previous Chapter" string="sendcommand" commandname="previous_chapter" />
-  <action name="Send Next Chapter" string="sendcommand" commandname="next_chapter" />
-  <action name="Send Left Mouse Click" string="sendcommand" commandname="left_mouse_click" />
-  <action name="Send Right Mouse Click" string="sendcommand" commandname="right_mouse_click" />
-  <action name="Send Restart" string="sendcommand" commandname="restart" />
-  <action name="Send Reboot" string="sendcommand" commandname="reboot" />
-  <action name="Send Shutdown" string="sendcommand" commandname="shutdown" />
-  <action name="Send Hibernate" string="sendcommand" commandname="hibernate" />
-  <action name="Send Suspend" string="sendcommand" commandname="suspend" />
-
-  <action name="Send Help" string="sendcommand" commandname="help" />
-  <action name="Send Setup" string="sendcommand" commandname="setup" />
-  <action name="Send User" string="sendcommand" commandname="user" />
-  <action name="Send Context" string="sendcommand" commandname="context" />
-  <action name="Send Timer" string="sendcommand" commandname="timer" />
+  <action name="Send 3D"         string="sendcommand 3d" />
+  <action name="Send 3D Toggle"  string="sendcommand 3dtoggle" />
+  <action name="Send 3D Select"  string="sendcommand 3dselect" />
+  <action name="Send 3D On"  string="sendcommand 3don" />
+  <action name="Send 3D Off"  string="sendcommand 3doff" />
+  <action name="Send 3D SBS"  string="sendcommand 3dsbs" />
+  <action name="Send 3D OU"  string="sendcommand 3dou" />
+  <action name="Send 3D Auto"  string="sendcommand 3dauto" />
 
 
-  <action name="Send Close Application" string="sendcommand" commandname="closeapp" />
-  <action name="Send Start Application" string="sendcommand" commandname="startapp" />
-  <action name="Send Key 1" string="sendcommand" commandname="key_1" />
-  <action name="Send Key 2" string="sendcommand" commandname="key_2" />
-  <action name="Send Key 3" string="sendcommand" commandname="key_3" />
-  <action name="Send Key 4" string="sendcommand" commandname="key_4" />
-  <action name="Send Key 5" string="sendcommand" commandname="key_5" />
-  <action name="Send Key 6" string="sendcommand" commandname="key_6" />
-  <action name="Send Key 7" string="sendcommand" commandname="key_7" />
-  <action name="Send Key 8" string="sendcommand" commandname="key_8" />
-  <action name="Send Key 9" string="sendcommand" commandname="key_9" />
-  <action name="Send Key 0" string="sendcommand" commandname="key_0" />
-  <action name="Send Key -" string="sendcommand" commandname="key_-" />
-  <action name="Send Key +" string="sendcommand" commandname="key_+" />
-  <action name="Send Key =" string="sendcommand" commandname="key_=" />
-  <action name="Send Key ." string="sendcommand" commandname="key_." />
-  <action name="Send Key &#60;" string="sendcommand" commandname="key_&#60;" />
-  <action name="Send Key &#62;" string="sendcommand" commandname="key_&#62;" />
+  <action name="Send Resolution" string="sendcommand resolution" />
+  <action name="Send AV Effect"  string="sendcommand av_effect" />
+  <action name="Send Favorites" string="sendcommand favorites" />
+  <action name="Send Favorite 0" string="sendcommand favorite 0" />
+  <action name="Send Favorite 1" string="sendcommand favorite 1" />
+  <action name="Send Favorite 2" string="sendcommand favorite 2" />
+  <action name="Send Favorite 3" string="sendcommand favorite 3" />
+  <action name="Send Favorite 4" string="sendcommand favorite 4" />
+  <action name="Send Favorite 5" string="sendcommand favorite 5" />
+  <action name="Send Favorite 6" string="sendcommand favorite 6" />
+  <action name="Send Favorite 7" string="sendcommand favorite 7" />
+  <action name="Send Favorite 8" string="sendcommand favorite 8" />
+  <action name="Send Favorite 9" string="sendcommand favorite 9" />
+  <action name="Send Favorite PGUP" string="sendcommand favorite pgup" />
+  <action name="Send Favorite PGDN" string="sendcommand favorite pgdn" />
+  <action name="Send Favorite Next" string="sendcommand favorite next" />
+  <action name="Send Favorite Prev" string="sendcommand favorite prev" />
 
-  <action name="Send Key F1" string="sendcommand" commandname="key_f1" />
-  <action name="Send Key F2" string="sendcommand" commandname="key_f2" />
-  <action name="Send Key F3" string="sendcommand" commandname="key_f3" />
-  <action name="Send Key F4" string="sendcommand" commandname="key_f4" />
-  <action name="Send Key F5" string="sendcommand" commandname="key_f5" />
-  <action name="Send Key F6" string="sendcommand" commandname="key_f6" />
-  <action name="Send Key F7" string="sendcommand" commandname="key_f7" />
-  <action name="Send Key F8" string="sendcommand" commandname="key_f8" />
-  <action name="Send Key F9" string="sendcommand" commandname="key_f9" />
-  <action name="Send Key F0" string="sendcommand" commandname="key_f0" />
+  <action name="Send AVMode" string="sendcommand avmode" />
+  <action name="Send Audiochannel Select" string="sendcommand audiochannel_select" />
+  <action name="Send Audiochannel Next" string="sendcommand audiochannel_next" />
+  <action name="Send Audiochannel Prev" string="sendcommand audiochannel_prev" />
+  <action name="Send Previous TV Channel" string="sendcommand previous_tv_channel" />
+  <action name="Send Recordings" string="sendcommand recordings" />
+  <action name="Send PVR" string="sendcommand pvr" />
+  <action name="Send Button Red" string="sendcommand button_red" />
+  <action name="Send Button Green" string="sendcommand button_green" />
+  <action name="Send Button Yellow" string="sendcommand button_yellow" />
+  <action name="Send Button Blue" string="sendcommand button_blue" />
+  <action name="Send PIP On" string="sendcommand pip_on" />
+  <action name="Send PIP Off" string="sendcommand pip_off" />
+  <action name="Send PIP Mosaic" string="sendcommand pip_mosaic" />
+  <action name="Send PIP Toggle" string="sendcommand pip_toggle" />
+  <action name="Send PIP Swap" string="sendcommand pip_swap" />
+  <action name="Send PIP Select" string="sendcommand pip_select" />
+  <action name="Send Sleep" string="sendcommand sleep" />
+  <action name="Send Show Search" string="sendcommand showsearch" />
+  <action name="Send Volume Up" string="sendcommand volume_up" taptype="single"/>
+  <action name="Send Volume Down" string="sendcommand volume_down"  taptype="single"/>
+  <action name="Send Volume Up Accelerated" string="sendcommand volume_up_accelerated"  taptype="double"/>
+  <action name="Send Volume Down Accelerated" string="sendcommand volume_down_accelerated"  taptype="double"/>
+  <action name="Send Volume Up Center" string="sendcommand volume_up_center" />
+  <action name="Send Volume Down Center" string="sendcommand volume_down_center" />
+  <action name="Send Volume Up Subwoofer" string="sendcommand volume_up_subwoofer" />
+  <action name="Send Volume Down Subwoofer" string="sendcommand volume_down_subwoofer" />
+  <action name="Send Volume Up Front Left" string="sendcommand volume_up_front_left" />
+  <action name="Send Volume Down Front Left" string="sendcommand volume_down_front_left" />
+  <action name="Send Volume Up Front Right" string="sendcommand volume_up_front_right" />
+  <action name="Send Volume Down Front Right" string="sendcommand volume_down_front_right" />
+  <action name="Send Volume Up Rear Left" string="sendcommand volume_up_rear_left" />
+  <action name="Send Volume Down Rear Left" string="sendcommand volume_down_rear_left" />
+  <action name="Send Volume Up Rear Right" string="sendcommand volume_up_rear_right" />
+  <action name="Send Volume Down Rear Right" string="sendcommand volume_down_rear_right" />
+  <action name="Send Volume Up Surround Left" string="sendcommand volume_up_surround_left" />
+  <action name="Send Volume Down Surround Left" string="sendcommand volume_down_surround_left" />
+  <action name="Send Volume Up Surround Right" string="sendcommand volume_up_surround_right" />
+  <action name="Send Volume Down Surround Right" string="sendcommand volume_down_surround_right" />
+  <action name="Send Mute Toggle" string="sendcommand mute_toggle" />
+  <action name="Send Mute On" string="sendcommand mute_on" />
+  <action name="Send Mute Off" string="sendcommand mute_off" />
+  <action name="Send Tuning Up" string="sendcommand tuning_up" />
+  <action name="Send Tuning Down" string="sendcommand tuning_down" />
+  <action name="Send Tuning Stop" string="sendcommand tuning_stop" />
+  <action name="Send Subtitles Toggle" string="sendcommand subtitles_toggle" />
+  <action name="Send Subtitles On" string="sendcommand subtitles_on" />
+  <action name="Send Subtitles Off" string="sendcommand subtitles_off" />
+  <action name="Send Next Subtitle" string="sendcommand subtitles_next" />
+  <action name="Send Previous Subtitle" string="sendcommand subtitles_prev" />
+  <action name="Send Escape" string="sendcommand esc" />
+  <action name="Send Mark Watched" string="sendcommand mark_watched" />
+  <action name="Send Previous Chapter" string="sendcommand previous_chapter" />
+  <action name="Send Next Chapter" string="sendcommand next_chapter" />
+  <action name="Send Left Mouse Click" string="sendcommand left_mouse_click" />
+  <action name="Send Right Mouse Click" string="sendcommand right_mouse_click" />
+  <action name="Send Restart" string="sendcommand restart" />
+  <action name="Send Reboot" string="sendcommand reboot" />
+  <action name="Send Shutdown" string="sendcommand shutdown" />
+  <action name="Send Hibernate" string="sendcommand hibernate" />
+  <action name="Send Suspend" string="sendcommand suspend" />
 
-  <action name="Send Key Tab" string="sendcommand" commandname="key_tab" />
-  <action name="Send SDCard" string="sendcommand" commandname="sdcard" />
-  <action name="Send Freeze" string="sendcommand" commandname="freeze" />
-  <action name="Send CEC Link" string="sendcommand" commandname="cec_link" />
+  <action name="Send Help" string="sendcommand help" />
+  <action name="Send Setup" string="sendcommand setup" />
+  <action name="Send User" string="sendcommand user" />
+  <action name="Send Context" string="sendcommand context" />
+  <action name="Send Timer" string="sendcommand timer" />
 
-  <action name="Send Source" string="sendcommand" commandname="source" />
-  <action name="Send Next Source" string="sendcommand" commandname="next_source" />
-  <action name="Send Previous Source" string="sendcommand" commandname="previous_source" />
-  <action name="Send Source iPod" string="sendcommand" commandname="source ipod" />
-  <action name="Send Source Tuner" string="sendcommand" commandname="source tuner" />
-  <action name="Send Source DVD" string="sendcommand" commandname="source dvd" />
-  <action name="Send Source TV/Cbl" string="sendcommand" commandname="source tv/cbl" />
-  <action name="Send Source TV/Ant" string="sendcommand" commandname="source tv/ant" />
-  <action name="Send Source TV/Sat" string="sendcommand" commandname="source tv/sat" />
-  <action name="Send Source TV/IP" string="sendcommand" commandname="source tv/ip" />
-  <action name="Send Source TV/Web" string="sendcommand" commandname="source tv/web" />
-  <action name="Send Source TV" string="sendcommand" commandname="source tv" />
-  <action name="Send Source VCR" string="sendcommand" commandname="source vcr" />
-  <action name="Send Source Radio" string="sendcommand" commandname="source radio" />
-  <action name="Send Source Radio FM" string="sendcommand" commandname="source radio fm" />
-  <action name="Send Source Radio AM" string="sendcommand" commandname="source radio am" />
-  <action name="Send Source BlueRay" string="sendcommand" commandname="source blueray" />
-  <action name="Send Source Console" string="sendcommand" commandname="source console" />
-  <action name="Send Source PC" string="sendcommand" commandname="source pc" />
-  <action name="Send Source Camcorder" string="sendcommand" commandname="source camcoder" />
-  <action name="Send Source HDMI 1" string="sendcommand" commandname="source hdmi 1" />
-  <action name="Send Source HDMI 2" string="sendcommand" commandname="source hdmi 2" />
-  <action name="Send Source HDMI 3" string="sendcommand" commandname="source hdmi 3" />
-  <action name="Send Source HDMI 4" string="sendcommand" commandname="source hdmi 4" />
-  <action name="Send Source Aux 1" string="sendcommand" commandname="source aux 1" />
-  <action name="Send Source Aux 2" string="sendcommand" commandname="source aux 2" />
-  <action name="Send Source Aux 3" string="sendcommand" commandname="source aux 3" />
-  <action name="Send Source Aux 4" string="sendcommand" commandname="source aux 4" />
-  <action name="Send Source CD" string="sendcommand" commandname="source cd" />
-  <action name="Send Source DAB" string="sendcommand" commandname="source dab" />
-  <action name="Send Source MD"  string="sendcommand" commandname="source md" />
-  <action name="Send Source Tape" string="sendcommand" commandname="source tape" />
-  <action name="Send Source USB" string="sendcommand" commandname="source usb" />
-  <action name="Send Source NET" string="sendcommand" commandname="source net" />
-  <action name="Send Source Component" string="sendcommand" commandname="source component" />
-  <action name="Send Source Music" string="sendcommand" commandname="source music" />
 
-  <action name="Send Effect 1" string="sendcommand" commandname="effect 1" />
-  <action name="Send Effect 2" string="sendcommand" commandname="effect 2" />
-  <action name="Send Effect 3" string="sendcommand" commandname="effect 3" />
-  <action name="Send Effect 4" string="sendcommand" commandname="effect 4" />
-  <action name="Send Effect 5" string="sendcommand" commandname="effect 5" />
-  <action name="Send Effect 6" string="sendcommand" commandname="effect 6" />
-  <action name="Send Effect 7" string="sendcommand" commandname="effect 7" />
-  <action name="Send Effect 8" string="sendcommand" commandname="effect 8" />
-  <action name="Send Effect 9" string="sendcommand" commandname="effect 9" />
-  <action name="Send Effect 10" string="sendcommand" commandname="effect 10" />
-  <action name="Send Effect 11" string="sendcommand" commandname="effect 11" />
-  <action name="Send Effect 12" string="sendcommand" commandname="effect 12" />
+  <action name="Send Close Application" string="sendcommand closeapp" />
+  <action name="Send Start Application" string="sendcommand startapp" />
+  <action name="Send Key 1" string="sendcommand key_1" />
+  <action name="Send Key 2" string="sendcommand key_2" />
+  <action name="Send Key 3" string="sendcommand key_3" />
+  <action name="Send Key 4" string="sendcommand key_4" />
+  <action name="Send Key 5" string="sendcommand key_5" />
+  <action name="Send Key 6" string="sendcommand key_6" />
+  <action name="Send Key 7" string="sendcommand key_7" />
+  <action name="Send Key 8" string="sendcommand key_8" />
+  <action name="Send Key 9" string="sendcommand key_9" />
+  <action name="Send Key 0" string="sendcommand key_0" />
+  <action name="Send Key -" string="sendcommand key_-" />
+  <action name="Send Key +" string="sendcommand key_+" />
+  <action name="Send Key =" string="sendcommand key_=" />
+  <action name="Send Key ." string="sendcommand key_." />
+  <action name="Send Key &#60;" string="sendcommand key_&#60;" />
+  <action name="Send Key &#62;" string="sendcommand key_&#62;" />
 
-  <action name="Send String" string="sendcommand" commandname="send_string" />
-  <action name="Send Search" string="sendcommand" commandname="search" />
+  <action name="Send Key F1" string="sendcommand key_f1" />
+  <action name="Send Key F2" string="sendcommand key_f2" />
+  <action name="Send Key F3" string="sendcommand key_f3" />
+  <action name="Send Key F4" string="sendcommand key_f4" />
+  <action name="Send Key F5" string="sendcommand key_f5" />
+  <action name="Send Key F6" string="sendcommand key_f6" />
+  <action name="Send Key F7" string="sendcommand key_f7" />
+  <action name="Send Key F8" string="sendcommand key_f8" />
+  <action name="Send Key F9" string="sendcommand key_f9" />
+  <action name="Send Key F0" string="sendcommand key_f0" />
 
-  <action name="Send Set Volume" string="sendcommand" commandname="setvolume" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
-  <action name="Send Get Volume" string="sendcommand" commandname="getvolume" retvar="$var(CURRENTVOLUMEMAIN)"/>
+  <action name="Send Key Tab" string="sendcommand key_tab" />
+  <action name="Send SDCard" string="sendcommand sdcard" />
+  <action name="Send Freeze" string="sendcommand freeze" />
+  <action name="Send CEC Link" string="sendcommand cec_link" />
 
-  <action name="Send Get Power Status" string="sendcommand" commandname="getpowerstatus" retvar="$var(powerstatus)"/>
+  <action name="Send Source" string="sendcommand source" />
+  <action name="Send Next Source" string="sendcommand next_source" />
+  <action name="Send Previous Source" string="sendcommand previous_source" />
+  <action name="Send Source iPod" string="sendcommand source ipod" />
+  <action name="Send Source Tuner" string="sendcommand source tuner" />
+  <action name="Send Source DVD" string="sendcommand source dvd" />
+  <action name="Send Source TV/Cbl" string="sendcommand source tv/cbl" />
+  <action name="Send Source TV/Ant" string="sendcommand source tv/ant" />
+  <action name="Send Source TV/Sat" string="sendcommand source tv/sat" />
+  <action name="Send Source TV/IP" string="sendcommand source tv/ip" />
+  <action name="Send Source TV/Web" string="sendcommand source tv/web" />
+  <action name="Send Source TV" string="sendcommand source tv" />
+  <action name="Send Source VCR" string="sendcommand source vcr" />
+  <action name="Send Source Radio" string="sendcommand source radio" />
+  <action name="Send Source Radio FM" string="sendcommand source radio fm" />
+  <action name="Send Source Radio AM" string="sendcommand source radio am" />
+  <action name="Send Source BlueRay" string="sendcommand source blueray" />
+  <action name="Send Source Console" string="sendcommand source console" />
+  <action name="Send Source PC" string="sendcommand source pc" />
+  <action name="Send Source Camcorder" string="sendcommand source camcoder" />
+  <action name="Send Source HDMI 1" string="sendcommand source hdmi 1" />
+  <action name="Send Source HDMI 2" string="sendcommand source hdmi 2" />
+  <action name="Send Source HDMI 3" string="sendcommand source hdmi 3" />
+  <action name="Send Source HDMI 4" string="sendcommand source hdmi 4" />
+  <action name="Send Source Aux 1" string="sendcommand source aux 1" />
+  <action name="Send Source Aux 2" string="sendcommand source aux 2" />
+  <action name="Send Source Aux 3" string="sendcommand source aux 3" />
+  <action name="Send Source Aux 4" string="sendcommand source aux 4" />
+  <action name="Send Source CD" string="sendcommand source cd" />
+  <action name="Send Source DAB" string="sendcommand source dab" />
+  <action name="Send Source MD"  string="sendcommand source md" />
+  <action name="Send Source Tape" string="sendcommand source tape" />
+  <action name="Send Source USB" string="sendcommand source usb" />
+  <action name="Send Source NET" string="sendcommand source net" />
+  <action name="Send Source Component" string="sendcommand source component" />
+  <action name="Send Source Music" string="sendcommand source music" />
 
-  <action name="Send Set Volume Sub" string="sendcommand" commandname="setvolumesub" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
-  <action name="Send Get Volume Sub" string="sendcommand" commandname="getvolumesub" retvar="$var(CURRENTVOLUMESUB)"/>
+  <action name="Send Effect 1" string="sendcommand effect 1" />
+  <action name="Send Effect 2" string="sendcommand effect 2" />
+  <action name="Send Effect 3" string="sendcommand effect 3" />
+  <action name="Send Effect 4" string="sendcommand effect 4" />
+  <action name="Send Effect 5" string="sendcommand effect 5" />
+  <action name="Send Effect 6" string="sendcommand effect 6" />
+  <action name="Send Effect 7" string="sendcommand effect 7" />
+  <action name="Send Effect 8" string="sendcommand effect 8" />
+  <action name="Send Effect 9" string="sendcommand effect 9" />
+  <action name="Send Effect 10" string="sendcommand effect 10" />
+  <action name="Send Effect 11" string="sendcommand effect 11" />
+  <action name="Send Effect 12" string="sendcommand effect 12" />
 
-  <action name="Send Set Volume Center" string="sendcommand" commandname="setvolumecenter" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
-  <action name="Send Get Volume Center" string="sendcommand" commandname="getvolumecenter" retvar="$var(CURRENTVOLUMECENTER)"/>
+  <action name="Send String" string="sendcommand send_string" />
+  <action name="Send Search" string="sendcommand search" />
 
-  <action name="Send Get Volume Front" string="sendcommand" commandname="getvolumefront" retvar="$var(CURRENTVOLUMEFRONT)"/>
-  <action name="Send Get Volume Rear" string="sendcommand" commandname="getvolumerear" retvar="$var(CURRENTVOLUMEREAR)"/>
+  <action name="Send Set Volume" string="sendcommand setvolume" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
+  <action name="Send Get Volume" string="sendcommand getvolume" retvar="$var(CURRENTVOLUMEMAIN)"/>
 
-  <action name="Send Set Volume Surround" string="sendcommand" commandname="setvolumeSurround" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
-  <action name="Send Get Volume Surround" string="sendcommand" commandname="getvolumesurround" retvar="$var(CURRENTVOLUMESURROUND)"/>
-  <action name="Send Ping" string="sendcommand" commandname="ping" />
+  <action name="Send Get Power Status" string="sendcommand getpowerstatus" retvar="$var(powerstatus)"/>
+
+  <action name="Send Set Volume Sub" string="sendcommand setvolumesub" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
+  <action name="Send Get Volume Sub" string="sendcommand getvolumesub" retvar="$var(CURRENTVOLUMESUB)"/>
+
+  <action name="Send Set Volume Center" string="sendcommand setvolumecenter" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
+  <action name="Send Get Volume Center" string="sendcommand getvolumecenter" retvar="$var(CURRENTVOLUMECENTER)"/>
+
+  <action name="Send Get Volume Front" string="sendcommand getvolumefront" retvar="$var(CURRENTVOLUMEFRONT)"/>
+  <action name="Send Get Volume Rear" string="sendcommand getvolumerear" retvar="$var(CURRENTVOLUMEREAR)"/>
+
+  <action name="Send Set Volume Surround" string="sendcommand setvolumeSurround" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
+  <action name="Send Get Volume Surround" string="sendcommand getvolumesurround" retvar="$var(CURRENTVOLUMESURROUND)"/>
+  <action name="Send Ping" string="sendcommand ping" />
 
   <action name="gotostartpage" string="showpage $var(FIRSTPAGE)" />
   <action name="gotofirstpage" string="showpage $var(FIRSTPAGE)" />
@@ -394,18 +394,18 @@
         <action name="Direct Discover" string="discover" interface="$par(DISCOVERINTERFACE)" configname="$par(DISCOVERCONFIG)"/>
         <action name="Save errorcode" string="setvar lasterror=$var(LASTERRORCODE)" />
         <action name="Close message" string="showquestion" close="1"/>
-        <action name="Show message on Failure" string="showquestion" title="$lvar(595)" message="$lvar(451) $par(DISCOVERDETAILS)" actionyes="dummy" condition="$var(lasterror)!=0"/>
-        <action name="if we have not discovered anything by now, set return var" string="setvar DISCOVERFAILED=TRUE" condition="$var(lasterror)!=0"/>
+        <action name="Show message on Failure" string="showquestion" title="$lvar(595)" message="$lvar(451) $par(DISCOVERDETAILS)" actionyes="dummy" condition="$var(lasterror)!=$var(RETCODE_SUCCESS)"/>
+        <action name="if we have not discovered anything by now, set return var" string="setvar DISCOVERFAILED=TRUE" condition="$var(lasterror)!=$var(RETCODE_SUCCESS)"/>
       <action name="" string ="endif" />
     </action>
 
     <action name="CreateZipFilesForRepository">
-      <action name="SET" string="setvar LASTERRORCODE=0" />
-      <action name="SET" string="setvar RESULTERRORCODE=0" />
+      <action name="SET" string="setvar LASTERRORCODE=$var(RETCODE_SUCCESS)" />
+      <action name="SET" string="setvar RESULTERRORCODE=$var(RETCODE_SUCCESS)" />
       <action name="SET" string="setvar TMPPOS=0" />
       <action name="Show the Progressbar"  string="showprogressbar" title="$lvar(5041)" message="$lvar(5041)" max="$var(REPMAN_ZIPCNTFILES)" />
-      <action name="SET" string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
-      <action name="if not failed"   string="if $var(LASTERRORCODE)==0" />
+      <action name="SET" string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=$var(RETCODE_SUCCESS)"/>
+      <action name="if not failed"   string="if $var(LASTERRORCODE)==$var(RETCODE_SUCCESS)" />
         <action name="SET" string="setvar TMPBREAKLOOP=0" />
         <action name="loop through all files" string="forin"  varname="REPMAN_ZIPSOURCEFILENAMES[]" level="1" actionname="CreateZipFilesForRepository_Sub" breakvar="TMPBREAKLOOP" />
         <action name="SET" string="setvar RESULTERRORCODE=$var(LASTERRORCODE)" />
@@ -432,7 +432,7 @@
         <action name="EndIf we Zip a Path"         string="endif"   />
         <action name="ZIP File" string='modifyfile' operator='zipfile'  filename="$par(forin_value)" dstfilename="$var(dstfilename)" removepath="$var(removepath)" condition="$var(ziptype)==file" />
 
-        <action name="Break loop on Error"         string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
+        <action name="Break loop on Error"         string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=$var(RETCODE_SUCCESS)"/>
     </action>
 
     <action name="ShowSecondCaption" string="updatewidget" widgetname="*" option="second" />

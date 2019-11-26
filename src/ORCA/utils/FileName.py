@@ -17,6 +17,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import annotations
+from typing import Union
 
 import os
 import logging
@@ -26,7 +28,6 @@ from os                     import rename
 from shutil                 import copyfile
 
 from copy import copy
-from kivy.compat            import string_types
 from kivy.logger            import Logger
 from ORCA.utils.LogError    import LogError
 from ORCA.vars.Replace      import ReplaceVars
@@ -42,11 +43,12 @@ uSeparator = os.sep
 __all__ = ["cFileName"]
 
 
-class cFileName(object):
-    def __init__(self,uFile = u''):
+class cFileName:
+    def __init__(self,uFile: Union[str,cPath,cFileName] = u''):
 
-        self.oPath      = cPath()
-        if isinstance(uFile, string_types):
+        self.oPath: cPath  = cPath()
+        self.uRaw: str
+        if isinstance(uFile, str):
             self.uRaw       = uFile
         elif isinstance(uFile, cPath):
             self.oPath  = uFile
@@ -55,27 +57,26 @@ class cFileName(object):
             self.oPath  = uFile.oPath
             self.uRaw = uFile.uRaw
         else:
-            LogError("cFileName, illegal constructor:"+str(type(uFile)))
-        self.uFinal     = u''
-        self.bDirty     = True
+            LogError(uMsg="cFileName, illegal constructor:"+str(type(uFile)))
+        self.uFinal: str      = u''
+        self.bDirty: bool     = True
 
         if Logger.level==logging.DEBUG:
             if self.uRaw:
                 for uChar in u"/\\:":
                     if uChar in self.uRaw:
-                        LogError(uMsg="do not pass full strings to a filename (use import):"+uFile, bTrackStack=True)
+                        LogError(uMsg="do not pass full strings to a filename (use import):"+str(uFile), bTrackStack=True)
 
-
-    def __str__(self):
+    def __str__(self) ->str:
         if not self.bDirty:
             return self.uFinal
         else:
             self._CreateFinal()
             return self.uFinal
 
-    def __add__(self, uFile):
-        if isinstance(uFile, string_types):
-            oRet         = copy(self)
+    def __add__(self, uFile: str) ->cFileName:
+        if isinstance(uFile, str):
+            oRet: cFileName = copy(self)
             oRet.uRaw    += uFile
             oRet.bDirty  = True
 
@@ -84,26 +85,24 @@ class cFileName(object):
                     if uChar in self.uRaw:
                         LogError(uMsg="do not pass full strings to a filename (use import)", bTrackStack=True)
 
-
             return oRet
         else:
-            LogError("cFileName, illegal add:"+type(uFile))
+            LogError(uMsg="cFileName, illegal add:"+str(type(uFile)))
 
         return self
 
-    def __radd__(self, oOther):
-        if isinstance(oOther, string_types):
+    def __radd__(self, oOther: str) ->str:
+        if isinstance(oOther, str):
             return oOther+self.string
         else:
             return oOther
 
     @property
-    def basename(self):
+    def basename(self) ->str:
         return self.uRaw
 
-
     @property
-    def string(self):
+    def string(self) ->str:
         if not self.bDirty:
             return self.uFinal
         else:
@@ -111,41 +110,38 @@ class cFileName(object):
             return self.uFinal
 
     @property
-    def unixstring(self):
+    def unixstring(self) ->str:
         return AdjustPathToUnix(self.string)
 
     @property
-    def urlstring(self):
+    def urlstring(self) ->str:
         return AdjustPathToUnix(self.string).replace(":/", "://")
 
-    def _CreateFinal(self):
+    def _CreateFinal(self) ->None:
         self.bDirty = False
         if self.uRaw:
             self.uFinal = CleanUp(ReplaceVars(self.oPath.uRaw)+ ReplaceVars(self.uRaw))
         else:
             self.uFinal=u''
 
-    def Clear(self):
+    def Clear(self) ->cFileName:
         self.oPath.uRaw = u''
         self.uRaw       = u''
         self.bDirty     = True
         return self
 
-    def Exists(self):
+    def Exists(self) ->bool:
         """
         Checks, if a file exists
-
-        :rtype: bool
         :return: Returns True if the the given filename exists
         """
         return isfile(self.string)
 
 
-    def Copy(self,oNewFile):
+    def Copy(self,oNewFile: Union[cFileName,cPath]) ->bool:
         """
         Copies a file
 
-        :rtype: bool
         :param cFileName/cPath oNewFile: Destination file name or destination path
         :return: True, if successful
         """
@@ -158,10 +154,10 @@ class cFileName(object):
                 copyfile(self.string, oNewFileTmp.string)
             return True
         except Exception as e:
-            LogError (u'can\'t copy file [%s] to [%s]' % (self.string,oNewFile.string),e)
+            LogError (uMsg=u'can\'t copy file [%s] to [%s]' % (self.string,oNewFile.string),oException=e)
             return False
 
-    def ImportFullPath(self,uFnFullName):
+    def ImportFullPath(self,uFnFullName: str) ->cFileName:
         if uFnFullName.startswith("$var("):
             if uFnFullName.endswith(")"):
                 if not uSeparator in uFnFullName:
@@ -173,11 +169,9 @@ class cFileName(object):
         self.bDirty = True
         return self
 
-    def Delete(self):
+    def Delete(self) ->bool:
         """
         Deletes a files
-
-        :rtype: bool
         :return: True, if successful
         """
 
@@ -189,11 +183,10 @@ class cFileName(object):
             Logger.warning (uMsg)
             return False
 
-    def Rename(self,oNewFileName):
+    def Rename(self,oNewFileName: cFileName) ->bool:
         """
         Renames a File
 
-        :rtype: bool
         :param cFileName oNewFileName: New file name
         :return: True, if successful
         """
@@ -205,28 +198,26 @@ class cFileName(object):
                     return True
             return False
         except Exception as e:
-            LogError (u'can\'t rename file [%s] to [%s]' % (self.string,oNewFileName.string),e)
+            LogError (uMsg=u'can\'t rename file [%s] to [%s]' % (self.string,oNewFileName.string),oException=e)
             return False
 
-    def IsEmpty(self):
+    def IsEmpty(self) ->bool:
         """
         Returns, if the FileName object is empty
-        :rtype: bool
         :return: True / False
         """
         return self.uRaw==u''
 
-    def Size(self):
+    def Size(self) ->int:
         """
         Returns the size of a files
-        :rtype: int
         :return: File size of -1 on error
         """
 
         try:
             return os.path.getsize(self.string)
         except Exception as e:
-            LogError (u'can\'t get filesize [%s]' % self.string, e)
+            LogError (uMsg=u'can\'t get filesize [%s]' % self.string, oException=e)
             return -1
 
 

@@ -22,7 +22,7 @@
 from os.path                    import normpath
 from ORCA.utils.TypeConvert     import ToUnicode
 
-def ToPath(uPath):
+def ToPath(uPath:str) -> str:
     """ converts a path to a valid os specific path string (unix style vewrsion)"""
     if uPath:
         #Normpath does not convert from backslash to slash on non win environment

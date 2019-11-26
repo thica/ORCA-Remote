@@ -13,6 +13,8 @@
   <string id="tvtemplate_10508">The bouquet to show at startup (1-3)</string>
   <string id="tvtemplate_10509">Bouquet Name</string>
   <string id="tvtemplate_10510">Name of the bouquet</string>
+  <string id="tvtemplate_10511">TV Logos</string>
+  <string id="tvtemplate_10512">Name TV Logo Pack (Empty = First found pack)</string>
 
 
 </strings>

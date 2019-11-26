@@ -19,5 +19,5 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-def SystemIsOnline():
+def SystemIsOnline() -> bool:
     return True

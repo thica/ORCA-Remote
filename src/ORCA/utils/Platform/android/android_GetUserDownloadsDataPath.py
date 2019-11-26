@@ -25,16 +25,16 @@ from jnius                   import autoclass
 from ORCA.utils.Path         import cPath
 
 
-def GetUserDownloadsDataPath():
+def GetUserDownloadsDataPath() -> cPath:
     """ returns the path to the download folder """
-    uRetPath=u"/"
+    uRetPath:str = u"/"
     try:
         Environment = autoclass('android.os.Environment')
         uRetPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
-        Logger.debug("Android Download Folder = "+uRetPath)
+        Logger.debug("Android Download Folder = " +uRetPath)
     except Exception as e:
         Logger.error("GetUserDownloadsDataPath for Android failed:"+str(e))
-    oRetPath = cPath(uRetPath)
+    oRetPath:cPath = cPath(uRetPath)
 
     if not oRetPath.IsDir():
         Logger.error("Downloadpath not valid:" + oRetPath.string)

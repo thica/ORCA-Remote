@@ -19,6 +19,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__                        import annotations #todo: remove in Python 4.0
+
+
 '''
 WikiDoc:Doc
 WikiDoc:Context:Widgets
@@ -37,11 +40,20 @@ WikiDoc:End
 '''
 
 
+from typing                            import Tuple
+from typing                            import Union
+from typing                            import Dict
+from typing                            import List
+from typing                            import Callable
+from typing                            import Any
+
+from xml.etree.ElementTree             import Element
+
 from kivy.logger                       import Logger
 from kivy.utils                        import get_color_from_hex
-from kivy.graphics                     import Color
 from kivy.metrics                      import dp,sp
 from kivy.uix.layout                   import Layout
+from kivy.uix.widget                   import Widget
 
 from ORCA.utils.CheckCondition         import CheckCondition
 from ORCA.utils.LogError               import LogError
@@ -53,73 +65,34 @@ from ORCA.utils.XML                    import GetXMLTextAttribute
 from ORCA.utils.XML                    import SplitMax
 from ORCA.vars.Replace                 import ReplaceVars
 from ORCA.widgets.core.Border          import cBorder
+from ORCA.widgets.helper.WidgetType    import eWidgetType
+from ORCA.widgets.helper.WidgetType    import dWidgetTypeToId
+from ORCA.widgets.helper.HexColor      import GetColorFromHex
+from ORCA.widgets.helper.HexColor      import GetHexFromColor
+from ORCA.widgets.helper.HexColor      import aColorUndefined
+from ORCA.widgets.helper.HexColor      import uColorUndefined
 
 import ORCA.Globals as Globals
 
-__all__ = ['cWidgetBase','GetColorFromHex','GetHexFromColor','oWidgetType']
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.definition.Definition import cDefinition
+    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.widgets.Anchor        import cWidgetAnchor
+    from ORCA.Action                import cAction
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
+    cDefinition   = TypeVar("cDefinition")
+    cWidgetAnchor = TypeVar("cWidgetAnchor")
+    cAction       = TypeVar("cAction")
 
-oLastWidget=None
-oLastWidgetSave=None
+__all__ = ['cWidgetBase']
 
-def GetColorFromHex(uColor):
-    """
-    Helper function to get a rgba tuple from a hex string
-    :rtype: tuple
-    :param string uColor: HEX representation of a color eg:#00FF0040
-    :return: A tuple in the format (r,g,b,a), wher all values are floats between 0 and 1, (return 0,1,0,1 in case of an error)
-    """
+oLastWidget:Union[cWidgetBase,None]     = None
+oLastWidgetSave:Union[cWidgetBase,None] = None
 
-    try:
-        return get_color_from_hex(ReplaceVars(uColor.lower()))
-    except Exception as e:
-        return Color(0, 1, 0, 1)
-
-
-uColorUndefined = "#00000001"
-tColorUndefined = GetColorFromHex(uColorUndefined)
-
-class cWidgetType (object):
-    """
-    Helper Class to enumerate through widget names
-    """
-    def __init__(self):
-        self.WidgetTypeToId = {}
-
-        Elements = ["NoWidget"       ,
-                    "BackGround"     ,
-                    "TextField"      ,
-                    "Button"         ,
-                    "Picture"        ,
-                    "Anchor"         ,
-                    "TextInput"      ,
-                    "Knob"           ,
-                    "FileViewer"     ,
-                    "Slider"         ,
-                    "Rectangle"      ,
-                    "Circle"         ,
-                    "Video"          ,
-                    "DropDown"       ,
-                    "ColorPicker"    ,
-                    "Settings"       ,
-                    "Switch"         ,
-                    "SkipWidget"     ,
-                    "FileBrowser"    ,
-                    "xITach2Keene"
-                   ]
-
-        for iValue, uName in enumerate(Elements):
-            setattr(self,uName,iValue)
-            self.WidgetTypeToId[uName.upper()] = iValue
-
-
-def GetHexFromColor(aColor):
-    try:
-        return ''.join('{:02x}'.format(x*255) for x in aColor)
-    except Exception as e:
-        return "00000000"
-
-
-class cWidgetBase(object):
+class cWidgetBase:
     # Base Class for all ORCA widgets
     # we do not derivite from kivy classes by purpose
     # Kivy classes are objects within the Orca classes
@@ -225,79 +198,89 @@ class cWidgetBase(object):
         if self.bHasText is None:
             self.bHasText=False
 
-        self.aWidgetActions      = []
-        self.bBold               = False
-        self.bEnabled            = True
-        self.bItalic             = False
-        self.bIcon               = False
-        self.bNoTextSize         = False
-        self.dActionPars         = {} # Actionpars will be passed to Actions within command set, existing pars will be replaced!
-        self.dKwArgs             = {}
-        self.fOrgOpacity         = 1.0
-        self.fScale              = 1.0
-        self.fRationX            = 1.0
-        self.fRationY            = 1.0
-        self.iAnchorHeight       = 0
-        self.iAnchorPosX         = 0
-        self.iAnchorPosY         = 0
-        self.iAnchorWidth        = 0
-        self.iFontSize           = 30
-        self.iGapX               = 0
-        self.iGapY               = 0
-        self.iIconFontSize       = 50
-        self.iFontSizeInit       = 30
-        self.iHeight             = 10
-        self.iHeightInit         = 10
-        self.iPosX               = 0
-        self.iPosXInit           = 0
-        self.iPosY               = 0
-        self.iPosYInit           = 0
-        self.iWidgetType         = oWidgetType.NoWidget
-        self.iWidth              = 10
-        self.iWidthInit          = 10
-        self.oBorder             = None
-        self.oDef                = None
-        self.oObject             = None         # oOBject is the kivy Widget
-        self.oParent             = None
-        self.oParentScreenPage   = None
-        self.oTmpAnchor          = None
-        self.tBackGroundColor    = ()
-        self.tTextColor          = GetColorFromHex('#FFFFFFFF')
-        self.uActionName         = u''
-        self.uActionNameDoubleTap= u''
-        self.uActionNameDownOnly = u''
-        self.uActionNameLongTap  = u''
-        self.uActionNameUpOnly   = u''
-        self.uAnchorName         = u''
-        self.uBackGroundColor    = u''
-        self.uCaption            = u''
-        self.uConfigName         = u''
-        self.uDefinitionContext  = u''
-        self.uFontIndex          = u'Sans'
-        self.uhTextAlign         = u'center'
-        self.uInterFace          = u''
-        self.uTypeString         = u''
-        self.uName               = u'noname'
-        self.uOrgCaption         = u''
-        self.uOrgSecondCaption   = u''
-        self.uOrgFontIndex       = self.uFontIndex
-        self.uPageName           = 0
-        self.uSecondCaption      = u''
-        self.uTapType            = u''
-        self.uvTextAlign         = u'top'
+        self.aWidgetActions:List[Dict]                  = []
+        self.bBold:bool                                 = False
+        self.bEnabled:bool                              = True
+        self.bItalic:bool                               = False
+        self.bIcon:bool                                 = False
+        self.bNoTextSize:bool                           = False
+        self.dActionPars:Dict[str,str]                  = {} # Actionpars will be passed to Actions within command set, existing pars will be replaced!
+        self.dKwArgs:Dict                               = {}
+        self.fOrgOpacity:float                          = 1.0
+        self.fScale:float                               = 1.0
+        self.fRationX:float                             = 1.0
+        self.fRationY:float                             = 1.0
+        self.iAnchorHeight:int                          = 0
+        self.iAnchorPosX:int                            = 0
+        self.iAnchorPosY:int                            = 0
+        self.iAnchorWidth:int                           = 0
+        self.iFontSize:int                              = 30
+        self.iGapX:int                                  = 0
+        self.iGapY:int                                  = 0
+        self.iIconFontSize:int                          = 50
+        self.iFontSizeInit:int                          = 30
+        self.iHeight:int                                = 10
+        self.iHeightInit:int                            = 10
+        self.iPosX:int                                  = 0
+        self.iPosXInit:int                              = 0
+        self.iPosY:int                                  = 0
+        self.iPosYInit:int                              = 0
+        self.eWidgetType:eWidgetType                    = eWidgetType.NoWidget
+        self.iWidth:int                                 = 10
+        self.iWidthInit:int                             = 10
+        self.oBorder:Union[cBorder,None]                = None
+        self.oDef:Union[cDefinition,None]               = None
+        self.oObject:Union[Widget,None]                 = None         # oObject is the kivy Widget
+        self.oParent:Union[Widget,None]                 = None
+        self.oParentScreenPage:Union[cScreenPage,None]  = None
+        self.oTmpAnchor:Union[cWidgetAnchor,None]       = None
+        self.aBackGroundColor:List[float]               = aColorUndefined
+        self.aTextColor:List[float]                     = GetColorFromHex('#FFFFFFFF')
+        self.uActionName:str                            = u''
+        self.uActionNameDoubleTap:str                   = u''
+        self.uActionNameDownOnly:str                    = u''
+        self.uActionNameLongTap:str                     = u''
+        self.uActionNameUpOnly:str                      = u''
+        self.uAnchorName:str                            = u''
+        self.uBackGroundColor:str                       = u''
+        self.uCaption:str                               = u''
+        self.uConfigName:str                            = u''
+        self.uDefinitionContext:str                     = u''
+        self.uFontIndex:str                             = u'Sans'
+        self.uhTextAlign:str                            = u'center'
+        self.uInterFace:str                             = u''
+        self.uContainer:str                             = u''
+        self.uTypeString:str                            = u''
+        self.uName:str                                  = u'noname'
+        self.uOrgCaption:str                            = u''
+        self.uOrgSecondCaption:str                      = u''
+        self.uOrgFontIndex:str                          = self.uFontIndex
+        self.uPageName:str                              = u''
+        self.uSecondCaption:str                         = u''
+        self.uTapType:str                               = u''
+        self.uvTextAlign:str                            = u'top'
+        self.dObject_kwargs:Dict                        = {} # The kwargs used to create the kivy object
 
     # noinspection PyUnresolvedReferences
-    def ParseXMLBaseNode (self,oXMLNode,oParentScreenPage, uAnchor):
+    def ParseXMLBaseNode (self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+
+        uDefinitionContext:str
+        uAlias:str
+        oDef:Union[cDefinition,None]
+        iAnchorWidth:int
+        iAnchorHeight:int
+        bApplyWidth:bool
+        fVar:float
+
 
         try:
-
             global oLastWidget
 
             self.GetWidgetTypeFromXmlNode(oXMLNode)
 
-            uDefinitionContext = GetXMLTextAttribute  (oXMLNode,u'definitioncontext',  False, Globals.uDefinitionContext)
-            uAlias = oXMLNode.get('definitionalias')
-            oDef = None
+            uDefinitionContext  = GetXMLTextAttribute  (oXMLNode,u'definitioncontext',  False, Globals.uDefinitionContext)
+            uAlias              = oXMLNode.get('definitionalias')
+            oDef                = None
             if uAlias is not None:
                 oDef = Globals.oDefinitions.dDefinitionList_Dict[uAlias]
 
@@ -334,76 +317,26 @@ class cWidgetBase(object):
                 else:
                     self.oTmpAnchor=None
 
-
             # We parse for Text and change later to integer
-            self.iWidth = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'width', False, u''))
-            self.iHeight = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'height', False, u''))
+            uWidth  = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'width', False, u''))
+            uHeight = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'height', False, u''))
 
-            iAnchorWidth        = self.iAnchorWidth
-            iAnchorHeight       = self.iAnchorHeight
+            iAnchorWidth  = self.iAnchorWidth
+            iAnchorHeight = self.iAnchorHeight
 
-            bApplyWidth=False
-
-            if self.iWidth==u'':
-                self.iWidth=iAnchorWidth
-            elif self.iWidth.startswith('of:height:self'):
-                bApplyWidth=True
-            elif self.iWidth.startswith('of:toleft'):
-                bApplyWidth=True
-            elif self.iWidth.startswith('of:'):
-                self.iWidth=self._ParseDimPosValue(self.iWidth)
-            elif self.iWidth[0]==u'%':
-                fPercentage=float(self.iWidth[1:])
-                self.iWidth=((fPercentage/100)*iAnchorWidth)
-            elif self.iWidth[0]==u'd':
-                # we define: First Value is dp value,
-                # second value is absolute value (unscaled)
-                # eg d20:50 would result either d20 or 50, whatever is larger
-                tTmp=SplitMax(self.iWidth[1:])
-                if tTmp[1]==0:
-                    uVar=dp(tTmp[0])
-                else:
-                    uVar=max(dp(tTmp[0]),tTmp[1])
-
-                self.iWidth=uVar
-            else:
-                #Logger.warning("Depriciated absolute width used:"+self.uName+ " from:"+self.uPageName)
-                self.iWidth=int(self.iWidth)
-
-            if self.iHeight==u'':
-                self.iHeight=iAnchorHeight
-            elif self.iHeight[0]==u'%':
-                fPercentage=float(self.iHeight[1:])
-                self.iHeight=((fPercentage/100)*iAnchorHeight)
-            elif self.iHeight.startswith('of:'):
-                if not bApplyWidth:
-                    self.iHeight=self._ParseDimPosValue(self.iHeight)
-                else:
-                    self.iHeight=self._ParseDimPosValue(self.iHeight)
-            elif self.iHeight[0]==u'd':
-                # we define: First Value is dp value,
-                # second value is absolute value (unscaled)
-                tTmp=SplitMax(self.iHeight[1:])
-                if tTmp[1]==0:
-                    uVar=dp(tTmp[0])
-                else:
-                    uVar=max(dp(tTmp[0]),tTmp[1])
-
-                self.iHeight=uVar
-            else:
-                #Logger.warning("Depriciated absolute height used:"+self.uName+ " from:"+self.uPageName)
-                self.iHeight=int(self.iHeight)
-
+            self.iWidth,bApplyWidth = self.CalculateWidth(uWidth,iAnchorWidth)
+            self.iHeight            = self.CalculateHeight(uHeight,iAnchorHeight)
             if bApplyWidth:
-                self.iWidth=self._ParseDimPosValue(self.iWidth)
+                self.iWidth = self._ParseDimPosValue(uWidth)
 
             #We parse for Text and change later to integer
             self.iPosX                = ReplaceVars(GetXMLTextAttribute  (oXMLNode,u'posx',   False, u'left'))
             self.iPosY                = ReplaceVars(GetXMLTextAttribute  (oXMLNode,u'posy',   False, u'top'))
             self.bEnabled             = GetXMLBoolAttribute (oXMLNode,u'enabled', False,True)
             self.uCaption             = u''
+            self.uContainer           = GetXMLTextAttribute(oXMLNode, u'container', False, u'')
             self.uBackGroundColor     = GetXMLTextAttribute(oXMLNode,u'backgroundcolor',False,u'#00000000')
-            self.tBackGroundColor     = GetColorFromHex(ReplaceVars(self.uBackGroundColor))
+            self.aBackGroundColor     = GetColorFromHex(ReplaceVars(self.uBackGroundColor))
             self.uActionName          = GetXMLTextAttribute(oXMLNode,u'action',False,u'')
             self.uActionNameDoubleTap = GetXMLTextAttribute(oXMLNode,u'actiondoubletap',False,u'')
             self.uActionNameLongTap   = GetXMLTextAttribute(oXMLNode,u'actionlongtap',False,u'')
@@ -411,7 +344,7 @@ class cWidgetBase(object):
             self.uActionNameUpOnly    = GetXMLTextAttribute(oXMLNode,u'actionuponly',False,u'')
             self.uInterFace           = GetXMLTextAttribute(oXMLNode,u'interface',False,u'')
             self.uConfigName          = GetXMLTextAttribute(oXMLNode,u'configname',False,u'')
-            uActionPars               = GetXMLTextAttribute(oXMLNode,u'actionpars',False,u'{}')
+            uActionPars:str           = GetXMLTextAttribute(oXMLNode,u'actionpars',False,u'{}')
             if uActionPars.startswith("$var("):
                 uActionPars=ReplaceVars(uActionPars)
 
@@ -425,32 +358,9 @@ class cWidgetBase(object):
             if not self.uInterFace==u'':
                 Globals.oInterFaces.dUsedInterfaces[self.uInterFace]=True
 
-            fPercentage=-1.0
-            if not self.iPosY==u'':
-                if self.iPosY==u'bottom':
-                    fPercentage=100.0
-                elif self.iPosY.startswith('of:'):
-                    self.iPosY=self._ParseDimPosValue(self.iPosY)
-                elif self.iPosY==u'top':
-                    fPercentage=0.0
-                elif self.iPosY==u'middle':
-                    fPercentage=50.0
-                elif self.iPosY.isdigit():
-                    Logger.warning("Depriciated absolute PosY used:"+self.uName+ " from:"+self.uPageName)
-                    self.iPosY=(int(self.iPosY)+self.iAnchorPosY)
-                elif self.iPosY[0]==u'%':
-                    fPercentage=float(self.iPosY[1:])
-                elif self.iPosY[0]==u'd':
-                    self.iPosY=dp(float(self.iPosY[1:]))+self.iAnchorPosY
-                    self.iPosY=Globals.iAppHeight-self.iHeight-self.iPosY
-                elif self.iPosY[0]==u's':
-                    self.iPosY=sp(float(self.iPosY[1:]))+self.iAnchorPosY
-                    self.iPosY=Globals.iAppHeight-self.iHeight-self.iPosY
-                else:
-                    LogError(u'WidgetBase: Fatal Error:Wrong ypos:'+self.uName)
-                    self.iPosY=0
-                if not fPercentage==-1.0:
-                    self.iPosY=self.iAnchorPosY+((fPercentage/100)*self.iAnchorHeight)-(self.iHeight*(fPercentage/100))
+            uPosY = ReplaceVars(GetXMLTextAttribute  (oXMLNode,u'posy',   False, u'top'))
+            self.iPosY=self.CalculatePosY(uPosY)
+
 
             fPercentage=-1.0
             if not self.iPosX==u'':
@@ -463,7 +373,7 @@ class cWidgetBase(object):
                 elif self.iPosX==u'center':
                     fPercentage=50.0
                 elif self.iPosX.isdigit():
-                    Logger.warning("Depriciated absolute PosX used:"+self.uName+ " from:"+self.uPageName)
+                    Logger.warning("Depreciated absolute PosX used:"+self.uName+ " from:"+self.uPageName)
                     self.iPosX=(int(self.iPosX))+self.iAnchorPosX
                 elif self.iPosX[0]==u'%':
                     fPercentage=float(self.iPosX[1:])
@@ -472,7 +382,7 @@ class cWidgetBase(object):
                 elif self.iPosX[0]==u's':
                     self.iPosX=sp(float(self.iPosX[1:]))+self.iAnchorPosX
                 else:
-                    LogError(u'WidgetBase: Fatal Error:Wrong xpos:'+self.uName+ " "+str(self.iPosX))
+                    LogError(uMsg=u'WidgetBase: Fatal Error:Wrong xpos:'+self.uName+ " "+str(self.iPosX))
                     self.iPosX=0
 
                 if not fPercentage==-1.0:
@@ -486,69 +396,69 @@ class cWidgetBase(object):
                 self.uFontIndex         =   GetXMLTextAttribute (oXMLNode,u'fontid',        False,oDef.uDefaultFont)
                 self.uOrgFontIndex      =   self.uFontIndex
 
-                sFontSize               =   GetXMLTextAttribute (oXMLNode,u'fontsize',      False,'0')
-                sIconFontSize           =   GetXMLTextAttribute (oXMLNode, u'iconfontsize', False, sFontSize)
-                self.tTextColor         =   GetColorFromHex(GetXMLTextAttribute (oXMLNode,u'textcolor',False,uColorUndefined))
+                uFontSize:str           =   GetXMLTextAttribute (oXMLNode,u'fontsize',      False,'0')
+                uIconFontSize:str       =   GetXMLTextAttribute (oXMLNode, u'iconfontsize', False, uFontSize)
+                self.aTextColor         =   GetColorFromHex(GetXMLTextAttribute (oXMLNode,u'textcolor',False,uColorUndefined))
                 self.SetCaption(GetXMLTextAttribute(oXMLNode,u'caption',False,u''))
                 self.uOrgSecondCaption  =   GetXMLTextAttribute(oXMLNode,u'secondcaption',False,u'')
 
                 Globals.oTheScreen.oFonts.dUsedFonts[self.uFontIndex]=True
 
-                if self.tTextColor == tColorUndefined:
-                    if self.iWidgetType == oWidgetType.Button or self.iWidgetType == oWidgetType.DropDown or self.iWidgetType == oWidgetType.Switch:
-                        self.tTextColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('fontcolor button')
-                    elif self.iWidgetType == oWidgetType.TextField or self.iWidgetType == oWidgetType.TextInput or self.iWidgetType == oWidgetType.Slider:
-                        self.tTextColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('fontcolor text')
-                    elif self.iWidgetType == oWidgetType.FileViewer or self.iWidgetType == oWidgetType.Settings:
-                        self.tTextColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('fontcolor file')
-                    elif self.iWidgetType == oWidgetType.BackGround:
-                        self.tTextColor = GetColorFromHex(u'#FFFFFFFF')
-                    if self.tTextColor == tColorUndefined:
-                        self.tTextColor = GetColorFromHex(u'#FFFFFFFF')
+                if self.aTextColor == aColorUndefined:
+                    if self.eWidgetType == eWidgetType.Button or self.eWidgetType == eWidgetType.DropDown or self.eWidgetType == eWidgetType.Switch:
+                        self.aTextColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('fontcolor button')
+                    elif self.eWidgetType == eWidgetType.TextField or self.eWidgetType == eWidgetType.TextInput or self.eWidgetType == eWidgetType.Slider:
+                        self.aTextColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('fontcolor text')
+                    elif self.eWidgetType == eWidgetType.FileViewer or self.eWidgetType == eWidgetType.Settings:
+                        self.aTextColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('fontcolor file')
+                    elif self.eWidgetType == eWidgetType.BackGround:
+                        self.aTextColor = GetColorFromHex(u'#FFFFFFFF')
+                    if self.aTextColor == aColorUndefined:
+                        self.aTextColor = GetColorFromHex(u'#FFFFFFFF')
 
-                if sFontSize == "0":
-                    if self.iWidgetType == oWidgetType.Button or self.iWidgetType == oWidgetType.DropDown or self.iWidgetType == oWidgetType.Switch:
-                        sFontSize = str(oDef.iFontSize_Button)
-                    elif self.iWidgetType == oWidgetType.TextField or self.iWidgetType == oWidgetType.TextInput or self.iWidgetType == oWidgetType.Slider:
-                        sFontSize = str(oDef.iFontSize_Text)
-                    elif self.iWidgetType == oWidgetType.FileViewer or self.iWidgetType == oWidgetType.Settings:
-                        sFontSize = str(oDef.iFontSize_File)
+                if uFontSize == "0":
+                    if self.eWidgetType == eWidgetType.Button or self.eWidgetType == eWidgetType.DropDown or self.eWidgetType == eWidgetType.Switch:
+                        uFontSize = str(oDef.iFontSize_Button)
+                    elif self.eWidgetType == eWidgetType.TextField or self.eWidgetType == eWidgetType.TextInput or self.eWidgetType == eWidgetType.Slider:
+                        uFontSize = str(oDef.iFontSize_Text)
+                    elif self.eWidgetType == eWidgetType.FileViewer or self.eWidgetType == eWidgetType.Settings:
+                        uFontSize = str(oDef.iFontSize_File)
 
-                if sIconFontSize == "0":
-                    if self.iWidgetType == oWidgetType.Button or self.iWidgetType == oWidgetType.DropDown or self.iWidgetType == oWidgetType.Switch:
-                        sIconFontSize = str(oDef.iFontSize_Button)
-                    elif self.iWidgetType == oWidgetType.TextField or self.iWidgetType == oWidgetType.TextInput or self.iWidgetType == oWidgetType.Slider:
-                        sIconFontSize = str(oDef.iFontSize_Text)
-                    elif self.iWidgetType == oWidgetType.FileViewer or self.iWidgetType == oWidgetType.Settings:
-                        sIconFontSize = str(oDef.iFontSize_File)
+                if uIconFontSize == "0":
+                    if self.eWidgetType == eWidgetType.Button or self.eWidgetType == eWidgetType.DropDown or self.eWidgetType == eWidgetType.Switch:
+                        uIconFontSize = str(oDef.iFontSize_Button)
+                    elif self.eWidgetType == eWidgetType.TextField or self.eWidgetType == eWidgetType.TextInput or self.eWidgetType == eWidgetType.Slider:
+                        uIconFontSize = str(oDef.iFontSize_Text)
+                    elif self.eWidgetType == eWidgetType.FileViewer or self.eWidgetType == eWidgetType.Settings:
+                        uIconFontSize = str(oDef.iFontSize_File)
 
 
                 # todo: check where to scale fonts
-                if sFontSize[0] == u'd':
-                    self.iFontSize = dp(sFontSize[1:])   *self.fRationX
-                elif sFontSize[0] == u's':
-                    self.iFontSize = sp(sFontSize[1:])  *self.fRationX
-                elif sFontSize.startswith(u'%h'):
-                    self.iFontSize = ((int(sFontSize[2:])*self.iHeight)/100) # *self.fRationY
-                elif sFontSize.startswith(u'%w'):
-                    self.iFontSize = ((int(sFontSize[2:])*self.iWidth)/100) # *self.fRationX
+                if uFontSize[0] == u'd':
+                    self.iFontSize = dp(uFontSize[1:])   *self.fRationX
+                elif uFontSize[0] == u's':
+                    self.iFontSize = sp(uFontSize[1:])  *self.fRationX
+                elif uFontSize.startswith(u'%h'):
+                    self.iFontSize = ((int(uFontSize[2:])*self.iHeight)/100) # *self.fRationY
+                elif uFontSize.startswith(u'%w'):
+                    self.iFontSize = ((int(uFontSize[2:])*self.iWidth)/100) # *self.fRationX
                 else:
-                    self.iFontSize = ToInt(sFontSize)
+                    self.iFontSize = ToInt(uFontSize)
                     if self.iFontSize != 0:
-                        Logger.warning("Depriciated absolute fontsize used:"+self.uName+ " from:"+self.uPageName)
+                        Logger.warning("Depreciated absolute fontsize used:"+self.uName+ " from:"+self.uPageName)
 
-                if sIconFontSize[0] == u'd':
-                    self.iIconFontSize = dp(sIconFontSize[1:])   *self.fRationX
-                elif sIconFontSize[0] == u's':
-                    self.iIconFontSize = sp(sIconFontSize[1:])  *self.fRationX
-                elif sIconFontSize.startswith(u'%h'):
-                    self.iIconFontSize = ((int(sIconFontSize[2:])*self.iHeight)/100) # *self.fRationY
-                elif sIconFontSize.startswith(u'%w'):
-                    self.iIconFontSize = ((int(sIconFontSize[2:])*self.iWidth)/100) # *self.fRationX
+                if uIconFontSize[0] == u'd':
+                    self.iIconFontSize = dp(uIconFontSize[1:])   *self.fRationX
+                elif uIconFontSize[0] == u's':
+                    self.iIconFontSize = sp(uIconFontSize[1:])  *self.fRationX
+                elif uIconFontSize.startswith(u'%h'):
+                    self.iIconFontSize = ((int(uIconFontSize[2:])*self.iHeight)/100) # *self.fRationY
+                elif uIconFontSize.startswith(u'%w'):
+                    self.iIconFontSize = ((int(uIconFontSize[2:])*self.iWidth)/100) # *self.fRationX
                 else:
-                    self.iIconFontSize = ToInt(sIconFontSize)
+                    self.iIconFontSize = ToInt(uIconFontSize)
                     if self.iIconFontSize != 0:
-                        Logger.warning("Depriciated absolute fontsize used:"+self.uName+ " from:"+self.uPageName)
+                        Logger.warning("Depreciated absolute fontsize used:"+self.uName+ " from:"+self.uPageName)
 
             if not hasattr(self,'bIsDropButton'):
                 oLastWidget = self
@@ -560,12 +470,97 @@ class cWidgetBase(object):
             self.iFontSizeInit  = self.iFontSize
             return True
         except Exception as e:
-            LogError(u'Error parsing widget from element:['+self.uName+"",e)
+            LogError(uMsg=u'Error parsing widget from element:['+self.uName+"",oException=e)
             return False
 
-    def _ParseDimPosValue(self,uValue):
-        tSplit=uValue.split(":")
-        fRetVal=0
+    def CalculatePosY(self,uPosY:str) -> int:
+        fPercentage:float = -1.0
+        iPosY:int = 0
+
+        if not uPosY == u'':
+            if uPosY == u'bottom':
+                fPercentage = 100.0
+            elif uPosY.startswith('of:'):
+                iPosY = self._ParseDimPosValue(uPosY)
+            elif uPosY == u'top':
+                fPercentage = 0.0
+            elif uPosY == u'middle':
+                fPercentage = 50.0
+            elif uPosY.isdigit():
+                Logger.warning("Depreciated absolute PosY used:" + self.uName + " from:" + self.uPageName)
+                iPosY = (int(self.iPosY) + self.iAnchorPosY)
+            elif uPosY[0] == u'%':
+                fPercentage = float(self.iPosY[1:])
+            elif uPosY[0] == u'd':
+                # iPosY = dp(float(self.iPosY[1:])) + self.iAnchorPosY
+                iPosY = Globals.iAppHeight - self.iHeight - self.iPosY
+            elif uPosY[0] == u's':
+                # iPosY = sp(float(self.iPosY[1:])) + self.iAnchorPosY
+                iPosY = Globals.iAppHeight - self.iHeight - self.iPosY
+            else:
+                LogError(uMsg=u'WidgetBase: Fatal Error:Wrong ypos:' + self.uName)
+                iPosY = 0
+            if not fPercentage == -1.0:
+                iPosY = int(self.iAnchorPosY + ((fPercentage / 100) * self.iAnchorHeight) - (self.iHeight * (fPercentage / 100)))
+            return iPosY
+
+    def CalculateWidth(self,uWidth:str,iAnchorWidth:int) -> Tuple[int,bool]:
+
+        bApplyWidth = False
+        iWidth:int = 0
+
+        if uWidth == u'':
+            return iAnchorWidth,bApplyWidth
+        elif uWidth.startswith('of:height:self'):
+            bApplyWidth = True
+        elif uWidth.startswith('of:toleft'):
+            bApplyWidth = True
+        elif uWidth.startswith('of:'):
+            iWidth = self._ParseDimPosValue(uWidth)
+        elif uWidth[0] == u'%':
+            fPercentage: float = float(uWidth[1:])
+            iWidth = int((fPercentage / 100) * iAnchorWidth)
+        elif uWidth[0] == u'd':
+            # we define: First Value is dp value,
+            # second value is absolute value (unscaled)
+            # eg d20:50 would result either d20 or 50, whatever is larger
+            tTmp: Tuple[float, float] = SplitMax(uWidth[1:])
+            if tTmp[1] == 0:
+                fVar = dp(tTmp[0])
+            else:
+                fVar = max(dp(tTmp[0]), tTmp[1])
+            iWidth = int(fVar)
+        else:
+            # Logger.warning("Depreciated absolute width used:"+self.uName+ " from:"+self.uPageName+":["+uWidth+"]")
+            iWidth = int(uWidth)
+        return iWidth, bApplyWidth
+
+    def CalculateHeight(self,uHeight:str,iAnchorHeight:int) -> int:
+        fPercentage:float
+        if uHeight == u'':
+            return iAnchorHeight
+        elif uHeight[0] == u'%':
+            fPercentage = float(uHeight[1:])
+            return int((fPercentage / 100) * iAnchorHeight)
+        elif uHeight.startswith('of:'):
+            return int(self._ParseDimPosValue(uHeight))
+        elif uHeight[0] == u'd':
+            # we define: First Value is dp value,
+            # second value is absolute value (unscaled)
+            tTmp: Tuple[float, float] = SplitMax(uHeight[1:])
+            if tTmp[1] == 0:
+                fVar = dp(tTmp[0])
+            else:
+                fVar = max(dp(tTmp[0]), tTmp[1])
+
+            return int(fVar)
+        else:
+            Logger.warning("Depreciated absolute height used:"+self.uName+ " from:"+self.uPageName)
+            return int(uHeight)
+
+    def _ParseDimPosValue(self,uValue:str) -> int:
+        tSplit:List[str]=uValue.split(":")
+        fRetVal:float=0
 
         'of:width:[last/self/widgetname:calc]'
         'of:height:[last/self/widgetname:calc]'
@@ -583,7 +578,6 @@ class cWidgetBase(object):
         if len(tSplit)>2:
             uDim    = tSplit[1]
             tFrom   = tSplit[2]
-            oWidget = oLastWidget
             if tFrom == 'last':
                 tFrom = oLastWidget
             elif tFrom == 'self':
@@ -618,9 +612,9 @@ class cWidgetBase(object):
                     fRetVal = tFrom.iPosX+tFrom.iWidth -self.iWidth
 
                 else:
-                    LogError(u'Unknown Reference:'+uDim)
+                    LogError(uMsg=u'Unknown Reference:'+uDim)
             else:
-                LogError(u'Unknown Widget:'+self.oParentScreenPage+":"+tSplit[2])
+                LogError(uMsg=u'Unknown Widget:'+self.oParentScreenPage+":"+tSplit[2])
 
         if len(tSplit) > 3:
             uOperator = tSplit[3]
@@ -631,33 +625,29 @@ class cWidgetBase(object):
                     fRetVal = fRetVal/float(uOperator[1:])
 
                 else:
-                    LogError(u'Unknown Operator:'+uOperator)
-        return fRetVal
+                    LogError(uMsg=u'Unknown Operator:'+uOperator)
+        return ToInt(fRetVal)
 
-    def CreateBase(self,Parent,Class):
+    def CreateBase(self,Parent:Widget,Class:Union[Callable,str]) -> bool:
 
         try:
+
             self.oParent        = Parent
-            self.iPosX          = self.iPosXInit/self.oDef.fRationX
-            self.iPosY          = self.iPosYInit/self.oDef.fRationY
-            self.iWidth         = self.iWidthInit/self.oDef.fRationX
-            self.iHeight        = self.iHeightInit/self.oDef.fRationY
+            self.iPosX          = int(self.iPosXInit/self.oDef.fRationX)
+            self.iPosY          = int(self.iPosYInit/self.oDef.fRationY)
+            self.iWidth         = int(self.iWidthInit/self.oDef.fRationX)
+            self.iHeight        = int(self.iHeightInit/self.oDef.fRationY)
 
             self.CalcFontSize()
 
-            if self.iWidgetType==oWidgetType.BackGround:
-                self.iGapX   = 0
-                self.iGapY   = 0
-                self.iHeight = Globals.iAppHeight
-                self.iWidth  = Globals.iAppWidth
-
-            iKivyPosX = self.iPosX+self.iGapX
-            iKivyPosY = Globals.iAppHeight-self.iHeight-self.iPosY-self.iGapY
+            iKivyPosX:int = self.iPosX+self.iGapX
+            # iKivyPosY:int = Globals.iAppHeight-self.iHeight-self.iPosY-self.iGapY
+            iKivyPosY:int = Parent.height -self.iHeight-self.iPosY-self.iGapY
 
             self.AddArg('pos',(iKivyPosX,iKivyPosY ))
             self.AddArg('size',(self.iWidth,self.iHeight))
-            if not self.tBackGroundColor==[0.0,0.0,0.0,0.0]:
-                self.AddArg('background_color',self.tBackGroundColor)
+            if not self.aBackGroundColor==[0.0,0.0,0.0,0.0]:
+                self.AddArg('background_color',self.aBackGroundColor)
             if not self.bEnabled:
                 self.AddArg('opacity',0)
 
@@ -668,8 +658,8 @@ class cWidgetBase(object):
                 self.AddArg('bold',                 self.bBold)
                 if not self.bNoTextSize:
                     self.AddArg('text_size',        (self.iWidth,self.iHeight))
-                self.AddArg('color',                self.tTextColor)
-                self.AddArg('foreground_color',     self.tTextColor)
+                self.AddArg('color',                self.aTextColor)
+                self.AddArg('foreground_color',     self.aTextColor)
                 self.AddArg('font_name',            self.uFontIndex)
                 self.AddArg('text'     ,            self.uCaption)
                 self.SetCaption(self.uCaption)
@@ -683,38 +673,47 @@ class cWidgetBase(object):
                 if not self.uFontIndex in Globals.oTheScreen.oFonts.dUsedFonts:
                     oFont=Globals.oTheScreen.oFonts.dFonts[self.uFontIndex]
                     oFont.Register()
-                    Globals.oTheScreen.oFonts.dUsedFonts[self.uFontIndex]=oFont
+                    Globals.oTheScreen.oFonts.dUsedFonts[self.uFontIndex]=True
+
 
             if not Class=='':
                 if Class.__name__.startswith("c"):
                     # Just add to ORCA classes, passing custom parameter to Kivy classes crashes on Python 3
                     self.dKwArgs['ORCAWIDGET']=self
-
                 self.oObject = Class(**self.dKwArgs)
                 self.oObject.oOrcaWidget = self
-                if Globals.oParameter.bShowBorders:
-                    if (not isinstance(self.oObject, Layout)) and (not self.iWidgetType == oWidgetType.Knob) and (not self.iWidgetType == oWidgetType.FileViewer):
-                        self.oBorder = cBorder(**self.dKwArgs)
-                        self.oObject.add_widget(self.oBorder)
+                self.FlipBorder()
 
             return True
         except Exception as e:
-            LogError(u'Can''t create widget:'+self.uName,e)
+            LogError(uMsg=u'Can''t create widget:'+self.uName,oException=e)
             return False
 
-    def CalcFontSize(self):
+    def FlipBorder(self) -> None:
+        if self.oObject is not None:
+            if Globals.bShowBorders:
+                if self.oBorder is None:
+                    if (not isinstance(self.oObject, Layout)) and (not self.eWidgetType == eWidgetType.FileViewer):
+                        self.oBorder = cBorder(**self.dKwArgs)
+                        self.oObject.add_widget(self.oBorder)
+            else:
+                if self.oBorder is not None:
+                    self.oObject.remove_widget(self.oBorder)
+                    self.oBorder = None
+
+    def CalcFontSize(self) -> None:
         if self.bIcon:
             self.iFontSize = int(self.iIconFontSize * self.fScale) / self.oDef.fRationX
         else:
             self.iFontSize = self.iFontSizeInit / self.oDef.fRationX
 
-    def GetWidgetTypeFromXmlNode(self,oXMLNode):
+    def GetWidgetTypeFromXmlNode(self,oXMLNode:Element) -> None:
         self.uTypeString = GetXMLTextAttribute (oXMLNode,u'type',True,u'')
-        self.iWidgetType = oWidgetType.WidgetTypeToId.get(self.uTypeString,-1)
-        if not CheckCondition(oXMLNode):
-            self.iWidgetType = oWidgetType.SkipWidget
+        self.eWidgetType = dWidgetTypeToId.get(self.uTypeString,eWidgetType.ERROR)
+        if not CheckCondition(oPar=oXMLNode):
+            self.eWidgetType = eWidgetType.SkipWidget
 
-    def EnableWidget(self, bEnable):
+    def EnableWidget(self, bEnable:bool) -> bool:
         if bEnable:
             if self.oObject:
                 self.oObject.opacity = self.fOrgOpacity
@@ -727,30 +726,34 @@ class cWidgetBase(object):
 
         return True
 
-    def UpdateWidget(self):
+    def UpdateWidget(self) -> bool:
+        self.FlipBorder()
         return self.SetCaption(self.uOrgCaption)
 
-    def UpdateWidgetSecondCaption(self):
+    def UpdateWidgetSecondCaption(self) -> bool:
         return self.SetSecondCaption()
 
-    def SetFocus(self):
+    def SetFocus(self) -> bool:
         if self.oObject:
             self.oObject.focus = True
         return True
 
-    def SetTransparancy(self,fTransparancy):
+    def SetTransparancy(self,fTransparancy:float) -> bool:
         if self.oObject:
             self.oObject.opacity = fTransparancy/100
+        else:
+            return False
         self.fOrgOpacity = fTransparancy
+        return True
 
-    def SetWidgetColor(self,sBackgroundColor):
+    def SetWidgetColor(self,sBackgroundColor:str) -> None:
         sColor = ReplaceVars(sBackgroundColor)
         self.uBackGroundColor = sColor
-        self.tBackGroundColor = GetColorFromHex(sColor)
+        self.aBackGroundColor = GetColorFromHex(sColor)
         if self.oObject:
-            self.oObject.background_color = self.tBackGroundColor
+            self.oObject.background_color = self.aBackGroundColor
 
-    def SetCaption(self,uCaption):
+    def SetCaption(self,uCaption:str) -> bool:
 
         if self.uOrgCaption == u'' and uCaption!=u'':
             self.uOrgCaption = uCaption
@@ -758,7 +761,7 @@ class cWidgetBase(object):
         if not u'$var(' in self.uOrgCaption:
             if not u'$lvar(' in self.uOrgCaption:
                 if not self.uOrgCaption.startswith("icon:"):
-                    if not ":::" in self.uOrgCaption and self.iWidgetType==oWidgetType.DropDown:
+                    if not ":::" in self.uOrgCaption and self.eWidgetType==eWidgetType.DropDown:
                         self.uOrgCaption = uCaption
 
         uTmp=ReplaceVars(uCaption)
@@ -780,16 +783,16 @@ class cWidgetBase(object):
             self.oObject.font_size = self.iFontSize
         return True
 
-    def SetSecondCaption(self):
+    def SetSecondCaption(self) -> bool:
 
-        uTmp=ReplaceVars(self.uOrgSecondCaption)
+        uTmp:str = ReplaceVars(self.uOrgSecondCaption)
         if uTmp.startswith(u'$var(') or uTmp.startswith(u'$lvar('):
             self.uSecondCaption = u''
         else:
             self.uSecondCaption = uTmp
 
         if self.uSecondCaption==u'':
-            return
+            return True
 
         self.bIcon = False
         self.uCaption = self.uSecondCaption
@@ -807,18 +810,17 @@ class cWidgetBase(object):
 
         return True
 
-    def HandleIcon(self, oWidget = None):
+    def HandleIcon(self, oWidget:Union[cWidgetBase,None] = None) -> None:
 
         if oWidget is None:
             oWidget = self
 
-        uColor = ''
         uIcon  = oWidget.uCaption[5:]
         iPos   = uIcon.find(' color:')
         if iPos > 0:
             uColor = uIcon[iPos + 7:]
             uIcon = uIcon[:iPos]
-            oWidget.tTextColor = GetColorFromHex(uColor)
+            oWidget.aTextColor = GetColorFromHex(uColor)
 
         dIcon = Globals.dIcons.get(uIcon)
         if dIcon:
@@ -828,10 +830,10 @@ class cWidgetBase(object):
                 self.bIcon = True
             oWidget.fScale = dIcon["scale"]
 
-    def AddArg(self,sKey,oValue):
-        self.dKwArgs[sKey] = oValue
+    def AddArg(self,uKey:str,oValue:Any) -> None:
+        self.dKwArgs[uKey] = oValue
 
-    def SetWidgetFontStyle(self,bBold,bItalic,sColor):
+    def SetWidgetFontStyle(self,bBold:Union[bool,None],bItalic:Union[bool,None],uColor:Union[str,None]) -> bool:
         if bBold is not None:
             self.bBold = bBold
             if self.oObject:
@@ -840,14 +842,14 @@ class cWidgetBase(object):
             self.bItalic = bItalic
             if self.oObject:
                 self.oObject.italic = self.bItalic
-        if sColor is not None:
-            self.tTextColor = GetColorFromHex(sColor)
+        if uColor is not None:
+            self.aTextColor = GetColorFromHex(uColor)
             if self.oObject:
-                self.oObject.color = self.tTextColor
+                self.oObject.color = self.aTextColor
         return True
 
-    def GetWidgetFontStyle(self,uType):
-        uRet = "error"
+    def GetWidgetFontStyle(self,uType:str) -> str:
+        uRet:str = "error"
         try:
             if uType=="bold":
                 uRet="0"
@@ -858,14 +860,13 @@ class cWidgetBase(object):
                 if self.bItalic:
                     uRet="1"
             elif uType=="textcolor":
-                #todo:create function GetHexFromColor
-                uRet=str(self.tTextColor)
+                uRet=GetHexFromColor(self.aTextColor)
         except Exception:
             pass
         return uRet
 
 
-    def On_Button_Up(self,instance):
+    def On_Button_Up(self,instance:Widget) -> None:
 
         if self.bEnabled:
             if hasattr(instance,'uTapType'):
@@ -878,7 +879,7 @@ class cWidgetBase(object):
             self.OnButtonClicked()
             return
 
-    def On_Button_Down(self,instance):
+    def On_Button_Down(self,instance:Widget) -> None:
 
         if self.bEnabled:
             Globals.oSound.PlaySound(u'click')
@@ -893,14 +894,17 @@ class cWidgetBase(object):
             self.OnButtonClicked()
             return
 
-    def OnButtonClicked(self):
+    def OnButtonClicked(self) -> None:
 
-        uActionName          = ReplaceVars(self.uActionName)
-        uActionNameDoubleTap = ReplaceVars(self.uActionNameDoubleTap)
-        uActionNameUp        = ReplaceVars(self.uActionNameUpOnly)
-        uActionNameDown      = ReplaceVars(self.uActionNameDownOnly)
-        uActionNameLongTap   = ReplaceVars(self.uActionNameLongTap)
-        aUseActionName       = []
+        if Globals.oTheScreen.GuiIsBlocked():
+            return
+
+        uActionName:str          = ReplaceVars(self.uActionName)
+        uActionNameDoubleTap:str = ReplaceVars(self.uActionNameDoubleTap)
+        uActionNameUp:str        = ReplaceVars(self.uActionNameUpOnly)
+        uActionNameDown:str      = ReplaceVars(self.uActionNameDownOnly)
+        uActionNameLongTap:str   = ReplaceVars(self.uActionNameLongTap)
+        aUseActionName:List[str] = []
 
         if uActionNameDoubleTap != u'' and self.uTapType == u'double_up':
             aUseActionName.append(uActionNameDoubleTap)
@@ -918,7 +922,7 @@ class cWidgetBase(object):
         # this a response optimisation, If we do have just one standard action
         # the we convert it to a down only action
 
-        if self.iWidgetType == oWidgetType.Button or self.iWidgetType == oWidgetType.Picture:
+        if self.eWidgetType == eWidgetType.Button or self.eWidgetType == eWidgetType.Picture:
             if self.uTapType == u"down":
                 if self.uActionName != u"":
                     if self.uActionNameDoubleTap == u"":
@@ -940,9 +944,9 @@ class cWidgetBase(object):
             aUseActionName.append(uActionName)
             aUseActionName.append(uActionName)
 
-        aActions=[]
+        aActions:List[cAction]=[]
         for uUseActionName in aUseActionName:
-            aActionsTest=Globals.oActions.GetActionList(uActionName = uUseActionName, bNoCopy = True)
+            aActionsTest:List[cAction] = Globals.oActions.GetActionList(uActionName = uUseActionName, bNoCopy = True)
             if aActionsTest:
                 Globals.oEvents.AddToSimpleActionList(aActions,[{'string':'call'}])
                 aActions[-1].dActionPars=self.dActionPars
@@ -955,24 +959,34 @@ class cWidgetBase(object):
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=self)
         return
 
-    def On_Gesture(self,instance):
+    def On_Gesture(self,instance:Widget) -> None:
+
+        if Globals.oTheScreen.GuiIsBlocked():
+            return
+
         if self.bEnabled:
             if hasattr(instance,'aActions'):
                 self.aWidgetActions=instance.aActions
                 if self.aWidgetActions is not None:
                     Globals.oEvents.ExecuteActions( aActions=self.aWidgetActions,oParentWidget=self)
 
-    def SaveLastWidgetPos(self):
+    # noinspection PyMethodMayBeStatic
+    def SaveLastWidgetPos(self) -> None:
         global oLastWidget,oLastWidgetSave
         oLastWidgetSave=oLastWidget
-    def RestoreLastWidgetPos(self):
+
+    # noinspection PyMethodMayBeStatic
+    def RestoreLastWidgetPos(self) -> None:
         global oLastWidget,oLastWidgetSave
         oLastWidget=oLastWidgetSave
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ Dummy, needs to be overridden and not called """
         Logger.error(u'WidgetBase: Create called on base, not allowed [%s]' % self.uName)
-        pass
+        return False
 
-oWidgetType         = cWidgetType()
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+        """ Dummy, needs to be overridden and not called """
+        Logger.error(u'WidgetBase: Create called on base, not allowed [%s]' % self.uName)
+        return False
 

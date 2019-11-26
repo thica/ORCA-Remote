@@ -18,12 +18,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import List
+from typing import Dict
+from typing import Union
+from typing import Callable
+from typing import Tuple
+from typing import Any
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.definition.Definition import cDefinition
+else:
+    from typing import TypeVar
+    cDefinition = TypeVar("cDefinition")
 
 from copy                            import copy
 from xml.dom                         import minidom
 from xml.etree                       import ElementInclude
 from xml.etree.ElementTree           import fromstring
 from xml.etree.ElementTree           import tostring
+from xml.etree.ElementTree           import Element
+from xml.etree.ElementTree           import TreeBuilder
+from xml.etree.ElementTree           import Comment
 
 from kivy.logger                     import Logger
 
@@ -43,6 +59,7 @@ from ORCA.utils.TypeConvert          import ToUnicode
 from ORCA.vars.Replace               import ReplaceDefVars
 from ORCA.vars.Replace               import ReplaceVars
 from ORCA.utils.FileName             import cFileName
+from ORCA.utils.Path                 import cPath
 
 import ORCA.Globals as Globals
 
@@ -68,10 +85,37 @@ __all__ = ['XMLPrettify',
            'GetXMLBoolAttribute',
            'GetXMLBoolAttributeVar',
            'LoadXMLFile',
-           'SplitMax'
+           'SplitMax',
+           'CommentedTreeBuilder'
           ]
 
-def LoadXMLFile(oFile):
+
+'''
+class CommentedTreeBuilder (XMLTreeBuilder ):
+    def __init__ ( self, html = 0, target = None):
+        super(CommentedTreeBuilder, self).__init__(html)
+        #XMLTreeBuilder.__init__( self, html, target )
+        self._parser.CommentHandler = self.handle_comment
+
+    def handle_comment ( self, data ):
+        self._target.start( Comment, {} )
+        self._target.data( data )
+        self._target.end( Comment )
+'''
+'''
+class CommentedTreeBuilder (XMLTreeBuilder ):
+    def __init__(self, **kwargs):
+        kwargs["insert_comments"] = True
+        super().__init__(**kwargs)
+'''
+
+class CommentedTreeBuilder(TreeBuilder):
+    def comment(self, data) -> None:
+        self.start(Comment, {})
+        self.data(data)
+        self.end(Comment)
+
+def LoadXMLFile(oFile:cFileName)-> Element:
     """
     Loads a simple XML file to an Elementree Node without any manipulating
 
@@ -80,80 +124,80 @@ def LoadXMLFile(oFile):
     :return: Element tree element
     """
 
-    uRaw=CachedFile(oFile)
+    uRaw=CachedFile(oFileName=oFile)
     return fromstring(uRaw)
 
-def XMLPrettify(oElem):
+def XMLPrettify(oElem:Element)-> str:
     """
     Return a pretty-printed XML string for the Element
 
-    :rtype: string
     :param  xml.etree.ElementTree.Element oElem: Element to prettyfy
     :return: A string representation of the elementree node
     """
 
+    iNum:int
     uRough_string = tostring(oElem, 'utf-8')
     uReparsed = minidom.parseString(uRough_string)
     uFinal=uReparsed.toprettyxml(indent="    ")
     uFinal=uFinal.replace(">\n",">")
     uFinal=uFinal.replace("\n\n","")
-    uFinal=uFinal.replace("\n \n","\n")
-    uFinal=uFinal.replace("\n  \n","\n")
-    uFinal=uFinal.replace("\n   \n","\n")
-    uFinal=uFinal.replace("\n    \n","\n")
-    uFinal=uFinal.replace("\n     \n","\n")
-    uFinal=uFinal.replace("\n      \n","\n")
-    uFinal=uFinal.replace("\n       \n","\n")
-    uFinal=uFinal.replace("\n        \n","\n")
-    uFinal=uFinal.replace("\n         \n","\n")
+    for iNum in range(10):
+        uFinal = uFinal.replace("\n"+" "*iNum+"\n", "\n")
     return uFinal
 
-def orca_et_loader(uFile, parse, encoding=None,oReplacementVars=cDefinitionVars()):
+# noinspection PyDefaultArgument,PyUnusedLocal
+def orca_et_loader(uFile:str, uParse:str, uEncoding:str="xml",oReplacementVars:cDefinitionVars=cDefinitionVars()) -> Union[List[str],Element,None]:
     """Custom Loader for ElementTree Include to add definition path to includes
         and to make make bulk include using placeholder possible
     """
     if uFile.endswith('*'):
-        uRet=[]
-        oFn        = cFileName("").ImportFullPath(uFile)
-        oDir       = oFn.oPath
-        uPattern   = (oFn.string)[len(oDir.string):]
-        uPattern   = uPattern[1:-1]
-        aFiles     = oDir.GetFileList()
+        aRet:List[str]   = []
+        oFn:cFileName    = cFileName("").ImportFullPath(uFile)
+        oDir:cPath       = oFn.oPath
+        uPattern:str     = oFn.string[len(oDir.string):]
+        uPattern         = uPattern[1:-1]
+        aFiles:List[str] = oDir.GetFileList()
+
         for uFile in aFiles:
             if uFile.startswith(uPattern):
-                oFnLoad = cFileName(oDir) + uFile
-                oFnLoadFileRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get(oFnLoad.string)
+                oFnLoad:cFileName      = cFileName(oDir) + uFile
+                oFnLoadFileRedirect:Union[cFileName,None]  = Globals.oTheScreen.oSkin.dSkinRedirects.get(oFnLoad.string)
                 if oFnLoadFileRedirect is not None:
                     oFnLoad = oFnLoadFileRedirect
                 Logger.debug (u'XML: Bulk-Loading XML Include:' + oFnLoad)
                 #uRaw= ElementInclude.default_loader(uLoadFile, "text", encoding)
-                uRaw  = CachedFile(oFnLoad)
-                uRaw2 = ReplaceDefVars(uRaw,oReplacementVars)
-                uRet.append(fromstring(uRaw2))
-        if len(uRet)==0:
+                uRaw:str  = CachedFile(oFileName=oFnLoad)
+                uRaw2:str = ReplaceDefVars(uRaw,oReplacementVars)
+                aRet.append(fromstring(uRaw2))
+        if len(aRet)==0:
             return None
         else:
-            return uRet
+            return aRet
     else:
-        oFn = cFileName("").ImportFullPath(uFile)
+        oFn:cFileName = cFileName("").ImportFullPath(uFile)
         if oFn.Exists():
             Logger.debug (u'XML: Loading XML Include:'+oFn.string)
             #uRaw= ElementInclude.default_loader(uFile2, "text", encoding)
-            uRaw  = CachedFile(oFn)
-            uRaw2 = ReplaceDefVars(uRaw,oReplacementVars)
-            bRet  = fromstring(uRaw2)
+            uRaw:str  = CachedFile(oFileName=oFn)
+            uRaw2:str = ReplaceDefVars(uRaw,oReplacementVars)
+            oRet  = fromstring(uRaw2)
         else:
             Logger.debug (u'XML: Skipping XML Include (File not found):'+oFn.string)
-            bRet=None
-        return bRet
+            oRet=None
+        return oRet
 
-def Orca_FromString(sET_Data, oDef, sFileName="Unknown"):
-    """  reads xml from a string and sets the definition context vars """
+def Orca_FromString(uET_Data:str, oDef:cDefinition, uFileName:str="Unknown") -> Union[Element,None]:
+    """  reads xml from a string and sets the definition context vars
+    :param str uET_Data: The string representinga xml
+    :param cDefinition oDef: The definition, wehere the xml belomgs to
+    :param uFileName: The original filename (for debugging support)
+    :return:
+    """
     try:
         if oDef is None:
-            return fromstring(sET_Data)
+            return fromstring(uET_Data)
         else:
-            oET_Root = fromstring(ReplaceDefVars(sET_Data,oDef.oDefinitionVars))
+            oET_Root:Element = fromstring(ReplaceDefVars(uET_Data,oDef.oDefinitionVars))
 
         oET_Root.set('definitioncontext',oDef.uName)
         oET_Root.set('definitionalias', oDef.uAlias)
@@ -163,45 +207,46 @@ def Orca_FromString(sET_Data, oDef, sFileName="Unknown"):
             e.set('definitioncontext',oDef.uName)
             e.set('definitionalias',oDef.uAlias)
             e.set('replacementvars',oDef.oDefinitionVars)
-            e.set('linefilename',sFileName)
+            e.set('linefilename',uFileName)
         return oET_Root
     except Exception as e:
-        LogError('FromString:Invalid XML:'+sFileName,e)
-        LogError(ReplaceDefVars(sET_Data,oDef.oDefinitionVars))
+        LogError(uMsg='FromString:Invalid XML:'+uFileName,oException=e)
+        LogError(uMsg=ReplaceDefVars(uET_Data,oDef.oDefinitionVars))
     return None
 
-def Orca_include(elem, loader,uFileName = "Unknown Filename"):
+def Orca_include(oElem, pLoader: Callable,uFileName:str = "Unknown Filename")-> None:
     """  heavyly customized loader for includes in xml files"""
-    uAlias = elem.get('definitionalias')
+    uAlias = oElem.get('definitionalias')
     oDef = None
     if uAlias is not None:
         oDef = Globals.oDefinitions.dDefinitionList_Dict[uAlias]
 
-    Orca_includesub(elem, loader,Globals.uDefinitionContext,oDef,uFileName)
+    Orca_includesub(oElem, pLoader,Globals.uDefinitionContext,oDef,uFileName)
     RestoreDefinitionContext()
 
-def Orca_includesub(elem, loader,uOrgDefinitionContext, oDef, uFileName="Unknown Filename"):
+def Orca_includesub(oElem:Element, pLoader: Callable,uOrgDefinitionContext: str, oDef:cDefinition, uFileName:str="Unknown Filename") -> Element:
     """ sub function for the include loader """
     global bBlockInclude
 
-    elemens=[]
-    oReplacementVars=cDefinitionVars()
-    aSaveReplacementVars = []
-    for e in elem:
-        elemens.append(e)
+    aElemens:List[Element]                = []
+    oReplacementVars:cDefinitionVars      = cDefinitionVars()
+    oSaveReplacementVars:cDefinitionVars  = cDefinitionVars()
+
+    for e in oElem:
+        aElemens.append(e)
 
     if oDef:
         oReplacementVars=oDef.oDefinitionVars
 
-    i=0
-    for e in elemens:
+    i:int = 0
+    for e in aElemens:
         e.set('definitioncontext',uOrgDefinitionContext)
         if oDef:
             e.set('definitionalias',oDef.uAlias)
         e.set('linefilename',uFileName)
 
         if e.tag=='startskip':
-            if CheckCondition(e):
+            if CheckCondition(oPar=e):
                 bBlockInclude = True
 
         if e.tag=='stopskip':
@@ -209,15 +254,15 @@ def Orca_includesub(elem, loader,uOrgDefinitionContext, oDef, uFileName="Unknown
 
         if e.tag == ElementInclude.XINCLUDE_INCLUDE:
 
-            if CheckCondition(e) and not bBlockInclude:
+            if CheckCondition(oPar=e) and not bBlockInclude:
 
                 # process xinclude directive
-                href = e.get("href")
-                parse = e.get("parse", "xml")
-                if parse == "xml":
+                uHref:str  = e.get("href")
+                uParse:str = e.get("parse", "xml")
+                if uParse == "xml":
                     uNewDefinitionContext = u''
-                    if "DEFINITIONPATH[" in href:
-                        uNewDefinitionContext,href=GetSetDefinitionName( href)
+                    if "DEFINITIONPATH[" in uHref:
+                        uNewDefinitionContext,uHref=GetSetDefinitionName(uHref)
 
                     oTmpReplacementVars=e.get("definitionvars")
                     if oTmpReplacementVars is None:
@@ -235,79 +280,65 @@ def Orca_includesub(elem, loader,uOrgDefinitionContext, oDef, uFileName="Unknown
                     if oTmpReplacementVars is not None:
                         oTmpReplacementVars=oTmpReplacementVars.copy()
                         #oTmpReplacementVars=ToDic(oTmpReplacementVars)
-                        aSaveReplacementVars=oReplacementVars
+                        oSaveReplacementVars=oReplacementVars
                         oReplacementVars=oTmpReplacementVars
                         oReplacementVars.update(aIncludeReplacementVars)
                         if oDef:
                             oDef.oDefinitionVars=oTmpReplacementVars
 
-                    oFnHRefRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get(cFileName(u'').ImportFullPath(ReplaceVars(href)))
+                    oFnHRefRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get(cFileName(u'').ImportFullPath(ReplaceVars(uHref)).string)
                     if oFnHRefRedirect is not None:
-                        oFnHRef = oFnHRefRedirect.string
-                    oFnHRef=cFileName(u'').ImportFullPath(ReplaceVars(href))
-                    nodes = loader(oFnHRef.string, parse,None,oReplacementVars)
+                        oFnHRef = oFnHRefRedirect
+                    else:
+                        oFnHRef=cFileName(u'').ImportFullPath(ReplaceVars(uHref))
+                    oNodes:Element = pLoader(oFnHRef.string, uParse,None,oReplacementVars)
 
-                    if nodes is not None:
+                    if oNodes is not None:
                         if  uNewDefinitionContext==u'':
-                            nodes = Orca_includesub(nodes, loader,uOrgDefinitionContext,oDef,oFnHRef.string)
+                            oNodes = Orca_includesub(oNodes, pLoader,uOrgDefinitionContext,oDef,oFnHRef.string)
                         else:
-                            nodes = Orca_includesub(nodes, loader,uNewDefinitionContext,oDef,oFnHRef.string)
+                            oNodes = Orca_includesub(oNodes, pLoader,uNewDefinitionContext,oDef,oFnHRef.string)
 
                     if oTmpReplacementVars is not None:
-                        oReplacementVars=aSaveReplacementVars
+                        oReplacementVars=oSaveReplacementVars
                         if oDef:
-                            oDef.oDefinitionVars=aSaveReplacementVars
+                            oDef.oDefinitionVars=oSaveReplacementVars
 
                     if uNewDefinitionContext!=u'':
                         SetDefinitionContext(uOrgDefinitionContext)
 
-                    if isinstance(nodes,list):
-                        bFirst=True
-                        for node in nodes:
-                            node = copy(node)
+                    if isinstance(oNodes,list):
+                        bFirst:bool = True
+                        for oNode in oNodes:
+                            oNode = copy(oNode)
                             if e.tail:
-                                node.tail = (node.tail or "") + e.tail
+                                oNode.tail = (oNode.tail or "") + e.tail
                             if bFirst:
-                                elem[i] = node
+                                oElem[i] = oNode
                                 bFirst=False
                             else:
-                                elem.insert(i,node)
+                                oElem.insert(i,oNode)
                                 i = i + 1
-                    elif nodes is None:
-                        del elem[i]
+                    elif oNodes is None:
+                        del oElem[i]
                         i=i-1
                     else:
-                        nodes = copy(nodes)
+                        oNodes = copy(oNodes)
                         if e.tail:
-                            nodes.tail = (nodes.tail or "") + e.tail
-                        elem[i] = nodes
+                            oNodes.tail = (oNodes.tail or "") + e.tail
+                        oElem[i] = oNodes
         else:
-            Orca_includesub(e, loader,uOrgDefinitionContext,oDef,uFileName)
+            Orca_includesub(e, pLoader,uOrgDefinitionContext,oDef,uFileName)
         i = i + 1
-    return elem
+    return oElem
 
-def GetXMLTextValueTest(oXMLNode,uTag,bMandantory,uDefault):
-    """ Returns a string from a xml value """
-    try:
-        if uTag:
-            uRet = ToUnicode(oXMLNode.find(uTag).text)
-        else:
-            uRet = ToUnicode(oXMLNode.text)
-        if uRet==u"None":
-            uRet=u''
-        return uRet
-
-    except Exception as e:
-        if bMandantory:
-            uMsg=LogError(u'XML Error: Attribut [' + uTag + '] missing:'+tostring(oXMLNode))
-            ShowErrorPopUp(uMessage=uMsg,bAbort=True)
-        return uDefault
-
-def GetXMLTextValue(oXMLNode,uTag,bMandantory,uDefault):
+def GetXMLTextValue(oXMLNode:Element,uTag:str,bMandantory:bool,vDefault:Any) -> str:
     """ Returns a string from a xml value """
 
     if oXMLNode is None:
-        return uDefault
+        return vDefault
+
+    oObj: Element
 
     if uTag:
         oObj=oXMLNode.find(uTag)
@@ -315,83 +346,81 @@ def GetXMLTextValue(oXMLNode,uTag,bMandantory,uDefault):
         oObj=oXMLNode
     if oObj is None:
         if bMandantory:
-            uMsg=LogError(u'XML Error: Attribut [' + uTag + '] missing:'+tostring(oXMLNode))
-            ShowErrorPopUp(uMessage=uMsg,bAbort=True)
-        return uDefault
+            ShowErrorPopUp(uMessage=LogError(uMsg=u'XML Error: Attribut [' + uTag + '] missing:'+tostring(oXMLNode)),bAbort=True)
+        return vDefault
     uTmp=oObj.text
     if uTmp is None:
         uTmp=u''
-    return ToUnicode(uTmp)
+    return uTmp
 
-def GetXMLIntValue(oXMLNode,uTag,bMandantory,iDefault):
+def GetXMLIntValue(oXMLNode:Element,uTag:str,bMandantory:bool,iDefault:int) -> int:
     """ Returns an integer from a xml value """
     return ToInt(GetXMLTextValue(oXMLNode,uTag,bMandantory,iDefault))
 
-def GetXMLFloatValue(oXMLNode,uTag,bMandantory,fDefault):
+def GetXMLFloatValue(oXMLNode:Element,uTag:str,bMandantory:bool,fDefault:float) -> float:
     """ Returns a float from a xml value """
     return ToInt(GetXMLTextValue(oXMLNode,uTag,bMandantory,fDefault))
 
-def GetXMLIntValueVar(oXMLNode,uTag,bMandantory,iDefault):
+def GetXMLIntValueVar(oXMLNode:Element,uTag:str,bMandantory:bool,iDefault:int) -> int:
     """ Returns an int from a xml value (given as var)"""
-    return ToFloat(ReplaceVars(GetXMLTextValue(oXMLNode,uTag,bMandantory,ToUnicode(iDefault))))
+    return ToInt(ReplaceVars(GetXMLTextValue(oXMLNode,uTag,bMandantory,ToUnicode(iDefault))))
 
-def GetXMLBoolValue(oXMLNode,uTag,bMandantory,bDefault):
+def GetXMLBoolValue(oXMLNode:Element,uTag:str,bMandantory:bool,bDefault:bool) -> bool:
     """ Returns a bool from a xml value """
     return ToBool(GetXMLTextValue(oXMLNode,uTag,bMandantory,bDefault))
 
-def GetXMLBoolValueVar(oXMLNode,uTag,bMandantory,bDefault):
+def GetXMLBoolValueVar(oXMLNode:Element,uTag:str,bMandantory:bool,bDefault:bool) -> bool:
     """ Returns a bool from a xml value (given as var)"""
     return ToBool(ReplaceVars(GetXMLTextValue(oXMLNode,uTag,bMandantory,ToUnicode(bDefault))))
 
-def GetXMLTextAttribute(oXMLNode,uTag,bMandantory,uDefault):
+def GetXMLTextAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,vDefault:Any) -> str:
     """ Returns a string from a xml attribute"""
     if oXMLNode is None:
-        return uDefault
-    oObj=oXMLNode.get(uTag)
+        return vDefault
+    oObj:str=oXMLNode.get(uTag)
     if oObj is None:
         if bMandantory:
-            uMsg=LogError(u'XML Error: Attribut [' + uTag + '] missing')
-            ShowErrorPopUp(uMessage=uMsg,bAbort=True)
-        return uDefault
-    oObj=ToUnicode(oObj)
+            ShowErrorPopUp(uMessage=LogError(uMsg=u'XML Error: Attribut [' + uTag + '] missing'),bAbort=True)
+        return vDefault
+    # oObj=ToUnicode(oObj)
     return oObj
 
-def GetXMLTextAttributeVar(oXMLNode,uTag,bMandantory,uDefault):
+def GetXMLTextAttributeVar(oXMLNode:Element,uTag:str,bMandantory:bool,uDefault:str) -> str:
     """ Returns a string from a xml attribute (given as var)"""
     return ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,uDefault))
 
-def GetXMLDicAttribute(oXMLNode,uTag,bMandantory,aDefault):
+def GetXMLDicAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,dDefault:Dict) -> Dict:
     """ Returns a dict from a xml attribute """
-    return ToDic(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,aDefault))
+    return ToDic(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,dDefault))
 
 #def GetXMLDicAttributeVar(oXMLNode,uTag,bMandantory,aDefault):
 #    return ToDic(ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,aDefault)))
 
-def GetXMLIntAttribute(oXMLNode,uTag,bMandantory,iDefault):
+def GetXMLIntAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,iDefault:int) -> int:
     """ Returns an integer from a xml attribute """
     return ToInt(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,iDefault))
 
-def GetXMLIntAttributeVar(oXMLNode,uTag,bMandantory,iDefault):
+def GetXMLIntAttributeVar(oXMLNode:Element,uTag:str,bMandantory:bool,iDefault:int) -> int:
     """ Returns an integer from a xml attribute (given as var)"""
     return ToInt(ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,ToUnicode(iDefault))))
 
-def GetXMLFloatAttribute(oXMLNode,uTag,bMandantory,fDefault):
+def GetXMLFloatAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,fDefault:float) -> float:
     """ Returns an float from a xml attribute """
     return ToFloat(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,fDefault))
 
-def GetXMLFloatAttributeVar(oXMLNode,uTag,bMandantory,fDefault):
+def GetXMLFloatAttributeVar(oXMLNode:Element,uTag:str,bMandantory:bool,fDefault:float) -> float:
     """ Returns an float from a xml attribute (given as var)"""
     return ToFloat(ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,ToUnicode(fDefault))))
 
-def GetXMLBoolAttribute(oXMLNode,uTag,bMandantory,bDefault):
+def GetXMLBoolAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,bDefault:bool) -> bool:
     """ Returns an bool from a xml attribute """
     return ToBool(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,bDefault))
 
-def GetXMLBoolAttributeVar(oXMLNode,uTag,bMandantory,bDefault):
+def GetXMLBoolAttributeVar(oXMLNode:Element,uTag:str,bMandantory:bool,bDefault:bool) -> bool:
     """ Returns an bool from a xml attribute (given as var) """
     return ToBool(ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,ToUnicode(bDefault))))
 
-def SplitMax(uPar):
+def SplitMax(uPar:str) -> Tuple[float,float]:
     """splits an xml value in the format aa:bb into a tuple
        returns a tuple for aa as well """
 
@@ -399,7 +428,4 @@ def SplitMax(uPar):
     if len(tRet)>1:
         return float(tRet[0]), float(tRet[1])
     else:
-        return(float(uPar),0)
-
-
-
+        return float(uPar),0.0

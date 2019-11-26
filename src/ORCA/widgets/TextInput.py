@@ -18,17 +18,25 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
-
+from typing                         import Union
+from xml.etree.ElementTree          import Element
+from kivy.uix.widget                import Widget
+from kivy.uix.label                 import Label
 from ORCA.ui.InputKeyboard          import ShowKeyBoard
 from ORCA.vars.Access import GetVar
 from ORCA.utils.XML                 import GetXMLTextAttribute
-
+import ORCA.Globals as Globals
 from ORCA.widgets.TextField         import cWidgetTextField
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
 __all__ = ['cWidgetTextInput']
 
 
+# noinspection PyUnusedLocal
 class cWidgetTextInput(cWidgetTextField):
     """
     WikiDoc:Doc
@@ -65,39 +73,41 @@ class cWidgetTextInput(cWidgetTextField):
 
     def __init__(self,**kwargs):
         super(cWidgetTextInput, self).__init__(hastext=True)
-        self.uDestVar=u''
-        self.oInputKeyboard= None
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+        self.uDestVar:str       = u''
+        self.oInputKeyboard = None
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        bRet=super(cWidgetTextInput, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
-        self.uDestVar               = GetXMLTextAttribute(oXMLNode,u'destvar', False,u'inputstring')
-        uTmp=GetVar(uVarName = self.uDestVar)
+        bRet:bool = super(cWidgetTextInput, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
+        self.uDestVar = GetXMLTextAttribute(oXMLNode,u'destvar', False,u'inputstring')
+        uTmp:str = GetVar(uVarName = self.uDestVar)
         if uTmp:
             self.uCaption=uTmp
         return bRet
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
         if super(cWidgetTextInput, self).Create(oParent):
             self.oObject.unbind(on_q_release    = self.On_Button_Up)
             self.oObject.bind(on_q_release    = self.On_Button_Up1)
             return True
         return False
-    def On_Button_Up1(self,instance):
+    def On_Button_Up1(self,instance:Label) -> None:
         """ Shows the keyboard, when the textfield has been clicked """
-        self.oInputKeyboard=ShowKeyBoard(self.uDestVar,self.On_Enter)
-    def On_Focus(self,instance, value):
-        """ Shows the keyboard, when the textfield got the focus """
-        if self.oObject:
+        if not Globals.oTheScreen.GuiIsBlocked():
             self.oInputKeyboard=ShowKeyBoard(self.uDestVar,self.On_Enter)
-    def On_Enter(self,uText):
+    def On_Focus(self,instance:Union[Label,None], value) -> None:
+        """ Shows the keyboard, when the textfield got the focus """
+        if not Globals.oTheScreen.GuiIsBlocked():
+            if self.oObject:
+                self.oInputKeyboard=ShowKeyBoard(self.uDestVar,self.On_Enter)
+    def On_Enter(self,uText:str) -> None:
         """ Accepts the user input """
         self.oObject.text=uText
         self.On_Button_Up(self.oObject)
 
-    def SetFocus(self):
+    def SetFocus(self) -> bool:
         """ Sets the focus """
-        self.On_Focus(self, True)
+        self.On_Focus(None, True)
         return True
 
 

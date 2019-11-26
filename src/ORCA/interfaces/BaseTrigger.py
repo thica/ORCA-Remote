@@ -21,17 +21,17 @@
 __all__ = ['cBaseTrigger']
 
 
-class cBaseTrigger(object):
+class cBaseTrigger:
     """ a trigger representation """
     def __init__(self):
-        self.uTriggerAction  = u''
-        self.uTriggerName    = u''
-        self.uGetVar         = u''
-        self.uRetVar         = u''
+        self.uTriggerAction:str             = u''
+        self.uTriggerName:str               = u''
+        self.uGetVar:str                    = u''
+        self.uRetVar:str                    = u''
 
-        self.uGlobalDestVar             = u''
-        self.uLocalDestVar              = u''
+        self.uGlobalDestVar:str             = u''
+        self.uLocalDestVar:str              = u''
 
         # just to have them defined, no usage
-        self.uCmd                       = u''
+        self.uCmd:str                       = u''
 

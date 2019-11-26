@@ -19,15 +19,9 @@
 """
 
 
-from kivy.compat            import PY2,string_types
-
-__all__ = ['GetBuiltIns','string_types','PY2']
+__all__ = ['GetBuiltIns']
 
 def GetBuiltIns():
-    """ Returns the builtins for Python2 and Python3 """
-    if PY2:
-        import __builtin__
-    else:
-        import builtins as __builtin__
-
+    """ Returns the builtins for Python3 """
+    import builtins as __builtin__
     return __builtin__

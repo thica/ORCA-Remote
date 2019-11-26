@@ -19,12 +19,18 @@
     <action name="Init Status" string="setvar Status_Second_Caption_Page_Device_$dvar(definition_alias_mediaplayer_template)=0" />
   </pagestartaction>
 
+
   <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)" >
-    <action name="Call seperate function for pagestart" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+    <action name="Call separate function for pagestart" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)" />
   </pagestartaction>
 
   <pagestopaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)" >
-    <action name="Call seperate stop actions" string="call PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+    <action name="Call separate stop actions" string="call PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)" />
   </pagestopaction>
+
+   <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Button_Popup" >
+    <action name="Call separate function for pagestart" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)_Button_Popup" />
+  </pagestartaction>
+
 
 </includes>

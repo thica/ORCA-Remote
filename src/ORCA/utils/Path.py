@@ -21,7 +21,6 @@
 import os
 import logging
 
-from kivy.compat            import string_types
 from kivy.logger            import Logger
 
 from os                     import listdir
@@ -64,12 +63,12 @@ def AdjustPathToUnix(uPath):
     return uPath
 
 
-class cPath(object):
+class cPath:
     def __init__(self, uPath=u''):
         """
         :param unicode|cPath uPath:
         """
-        if isinstance(uPath, string_types):
+        if isinstance(uPath, str):
             self.uRaw       = uPath
         elif isinstance(uPath, cPath):
             self.uRaw = uPath.uRaw
@@ -84,7 +83,7 @@ class cPath(object):
 
     def __add__(self, uPath):
         oRet = copy(self)
-        if isinstance(uPath, string_types):
+        if isinstance(uPath, str):
             oRet.uRaw       += uPath
         elif isinstance(uPath, cPath):
             oRet.uRaw += uPath.uRaw
@@ -92,7 +91,7 @@ class cPath(object):
         return oRet
 
     def __radd__(self, oOther):
-        if isinstance(oOther, string_types):
+        if isinstance(oOther, str):
             return oOther+self.string
         else:
             LogError(uMsg="You can only add strings to a path:" + oOther.string,bTrackStack=True)
@@ -138,8 +137,9 @@ class cPath(object):
                 return False
             return True
         except Exception as e:
+            # noinspection PyUnresolvedReferences
             if not e.errno == 17:
-                Logger.warning('Could not create folder: %s  reason: %s' % (uPath, e.strerror))
+                Logger.warning('Could not create folder: %s  reason: %s' % (uPath, str(e)))
             return False
 
     def GetFolderList(self,bFullPath=False):
@@ -193,7 +193,7 @@ class cPath(object):
                         oDirList.extend((cPath(uRootDir) + oItem).GetFileList( bSubDirs, bFullPath))
         except Exception as e:
             uMsg = u'can\'t get File list:' + ToUnicode(str(e)) + " :" + uRootDir
-            Logger.warning(uMsg)
+            Logger.debug(uMsg)
 
         return oDirList
 
@@ -270,8 +270,41 @@ class cPath(object):
 
             return True
         except Exception as e:
-            LogError (u'can\'t copy folder [%s] to [%s]' % (self.string,oDest.string),e)
+            LogError (uMsg=u'can\'t copy folder [%s] to [%s]' % (self.string,oDest.string),oException=e)
             return False
+
+    def GetBaseFolder(self) -> str:
+        """
+        Returns the name of the last/base folder
+
+        :return: the base folder name (eg: GetBaseFolder("c:/foo/bar") returns bar)
+        """
+
+        uTmp:str = self.string
+        uRet:str
+        if "/" in uTmp:
+            uRet = uTmp[uTmp.rfind("/",0,-1)+1:]
+        else:
+            uRet = uTmp[uTmp.rfind("\\",0,-1)+1:]
+        return uRet
+
+
+    def GetParentFolder(self, bFullPath:bool=True) -> str:
+        """
+        Returns the parent folder name,
+
+        :param bool bFullPath: True/False to return the full path or just the folder name
+        :return: the base folder name (eg: GetParentFolder("c:/foo/bar",True) returns c:/foo)
+        """
+
+        uTmp:str            = self.string
+        uBaseFolder:str     = self.GetBaseFolder()
+        uParentFolder:str   = uTmp[0:-len(uBaseFolder)-1]
+
+        if bFullPath:
+            return uParentFolder
+        else:
+            return cPath(uParentFolder).GetBaseFolder()
 
     @classmethod
     def CheckIsDir(cls,uCheckName):
@@ -349,8 +382,7 @@ class cPath(object):
                     return True
             return False
         except Exception as e:
-            uMsg=u'can\'t rename folder [%s] to [%s]: %s  ' % (self.string,oNewPath.string,ToUnicode(e))
-            LogError (u'can\'t rename folder [%s] to [%s]' % (self.string,oNewPath.string),e)
+            LogError (uMsg=u'can\'t rename folder [%s] to [%s]' % (self.string,oNewPath.string),oException=e)
             return False
 
     def IsEmpty(self):

@@ -18,6 +18,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                         import Union
+from typing                         import List
+
+
+from xml.etree.ElementTree          import Element
 from collections                    import deque
 from kivy.logger                    import  Logger
 from ORCA.ScreenPage                import cScreenPage
@@ -28,48 +33,67 @@ from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
 
 import ORCA.Globals as Globals
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.Action     import cAction
+else:
+    from typing import TypeVar
+    cAction     = TypeVar("cAction")
+
+class cPageHistory:
+    def __init__(self, uCalledByPageName,uPageName):
+        self.uCalledByPageName  = uCalledByPageName
+        self.uPageName          = uPageName
+
 class cScreenPages(dict):
     """ Class which holds all Screen Pages """
     def __init__(self):
         dict.__init__(self)
-        self.aPageQueue=deque(maxlen=10)
+        self.aPageHistory:deque[cPageHistory] = deque(maxlen=30)
 
-    def DeInit(self):
+    def DeInit(self) -> None:
         self.clear()
-        self.aPageQueue.clear()
+        self.aPageHistory.clear()
 
-    def AddPageFromXmlNode(self,oXMLPage):
+    def AddPageFromXmlNode(self,oXMLPage:Element) -> None:
         """ Creates the Page Object, Parses the content and add it to the page list """
-        oTmpScreenPage     = cScreenPage()
+        oTmpScreenPage:cScreenPage = cScreenPage()
         oTmpScreenPage.InitPageFromXmlNode(oXMLNode=oXMLPage)
         if not oTmpScreenPage.uPageName in self:
             self[oTmpScreenPage.uPageName]=oTmpScreenPage
             oTmpScreenPage.AddPageElementsFromXmlNode(oXMLNode=oXMLPage)
 
-    def GetLastPage(self):
+    def GetLastPage(self) -> Union[cScreenPage,None]:
         """ returns the last (not current) page """
-        if len(self.aPageQueue)>1:
-            return self.aPageQueue[-2]
-        return None
+        return self.get(GetVar("LASTPAGE"))
 
-    def GetCurrentPage(self):
+    def GetCurrentPage(self) -> Union[cScreenPage,None]:
         """ returns the  current) page """
-        if len(self.aPageQueue):
-            return self.aPageQueue[-1]
-        return None
+        return self.get(GetVar("CURRENTPAGE"))
 
-    def AppendToPageQueue(self,oPage):
+    def AppendToPageQueue(self,oPage:cScreenPage) -> None:
         """  Appends a Page to the list of last shown pages"""
         if GetVar(uVarName = u'FIRSTPAGE') == u'':
             SetVar(uVarName = u'FIRSTPAGE', oVarValue = oPage.uPageName)
         SetVar(uVarName = u'CURRENTPAGE', oVarValue = oPage.uPageName)
 
-        self.aPageQueue.append(oPage)
-        if len(self.aPageQueue)>1:
-            SetVar(uVarName = u'LASTPAGE', oVarValue = self.aPageQueue[-2].uPageName)
+        if len(self.aPageHistory)>2:
+            if oPage.uPageName == self.aPageHistory[-1].uCalledByPageName:
+                # SetVar(uVarName=u'LASTPAGE', oVarValue=self.aPageHistory[-1].uCalledByPageName)
+                SetVar(uVarName=u'LASTPAGE', oVarValue=self.aPageHistory[-2].uCalledByPageName)
+                self.aPageHistory.pop()
+                return
 
-    def CreatePages(self,uPageName):
+        self.aPageHistory.append(cPageHistory(uCalledByPageName=oPage.uCalledByPageName,uPageName=oPage.uPageName))
+        if len(self.aPageHistory)>1:
+            SetVar(uVarName = u'LASTPAGE', oVarValue = self.aPageHistory[-2].uPageName)
+
+
+
+    def CreatePages(self,uPageName:str) -> None:
         """ Create all pages of all defitions or start the timer to create the next page """
+
+        aActions:List[cAction]
 
         #either we create all of them immediatly, or scheduled, or on requests if interval = 0
         if Globals.bInitPagesAtStart or uPageName!="":
@@ -98,23 +122,24 @@ class cScreenPages(dict):
                 aActions=Globals.oEvents.CreateSimpleActionList([{'name':'Add timer for delayed/scheduled page creations','string':'definetimer','timername':'scheduled page creation','interval':str(Globals.fDelayedPageInitInterval),'switch':'on','actionname':'createnextpage'}])
                 Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
-    def CreatePage(self,uPageName):
+    def CreatePage(self,uPageName:str) -> None:
         """ Will be used by EventDispatcher in case pages will not be created at startup """
 
         if uPageName==u'':
             Globals.oTheScreen.oCurrentPage.Create()
             return
-        oPage=self.get(uPageName)
+        oPage:cScreenPage = self.get(uPageName)
         if oPage:
             oPage.Create()
             return
-        uMsg=LogError(u'TheScreen: Fatal Error:Page does not exist:'+uPageName)
-        ShowErrorPopUp(uTitle="Fatal Error",uMessage=uMsg,bAbort=True)
+        ShowErrorPopUp(uTitle="Create Page: Fatal Error",uMessage=LogError(uMsg=u'TheScreen: Fatal Error:Page does not exist:'+uPageName),bAbort=True)
 
-    def CreateNextPage(self):
+    def CreateNextPage(self) -> bool:
         """ will be used for late schedule init
             Create the next page, which has not been init by now
             return true , if a page has been initialized, false if nothing left """
+
+        uPageName: str
 
         for uPageName in self:
             oPage=self[uPageName]

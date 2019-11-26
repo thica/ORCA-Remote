@@ -30,6 +30,7 @@ from kivy.properties                    import Property
 from kivy.properties                    import BoundedNumericProperty
 from kivy.properties                    import NumericProperty
 from kivy.properties                    import AliasProperty
+# noinspection PyProtectedMember
 from kivy.properties                    import dpi2px
 from kivy.graphics.opengl               import GL_MAX_TEXTURE_SIZE
 
@@ -50,6 +51,8 @@ Builder.load_string('''
         height: self.minimum_height
 ''')
 
+
+# noinspection PyUnusedLocal
 class cScrollableLabelLarge(Widget):
     """ Main Widget to display a large text
        By default, x and y scrolling is enabled
@@ -115,6 +118,7 @@ class cScrollableLabelLarge(Widget):
     font_size  = AliasProperty(_get_font_size, _set_font_size)
 
 
+# noinspection PyUnusedLocal
 class cLineLayoutBase(BoxLayout):
     """ embedded class to present a single line of text """
     text = StringProperty("")
@@ -136,6 +140,8 @@ class cLineLayoutBase(BoxLayout):
         """ sets the font size """
         self.oLabel.font_size=value
 
+
+# noinspection PyProtectedMember,PyUnusedLocal
 class cScrollableLabelLargeInner(RecycleView):
     """ The "real' scrollable label (without background) """
 
@@ -326,6 +332,7 @@ class cScrollableLabelLargeInner(RecycleView):
 
         return uText
 
+    # noinspection PyMethodMayBeStatic
     def AddMarkUp(self,uText,uMarkUp,uValue=None):
         if uValue is None:
             return "[{1}]{0}[/{1}]".format(uText,uMarkUp)

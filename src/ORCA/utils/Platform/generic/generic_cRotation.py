@@ -21,25 +21,25 @@
 import kivy.core.window
 import ORCA.Globals as Globals
 
-class cRotation(object):
+class cRotation:
     """ Rotation object for Windows based OS"""
     def __init__(self):
         self.bLocked=False
-    def set_landscape(self):
+    def set_landscape(self) -> None:
         """ sets landscape (changes x/y values) """
         if Globals.iAppWidth<Globals.iAppHeight:
             self.DoRotate()
-    def DoRotate(self):
+    def DoRotate(self) -> None:
         """ rotates to the required rotation """
         if not self.bLocked:
             Globals.iAppWidth,Globals.iAppHeight = Globals.iAppHeight, Globals.iAppWidth,
             kivy.core.window.Window.size=(Globals.iAppWidth,Globals.iAppHeight)
             for oDef in Globals.oDefinitions:
                 oDef.fRationX,oDef.fRationY = oDef.fRationY,oDef.fRationX
-    def set_portrait(self):
+    def set_portrait(self) -> None:
         """ sets portrait (changes x/y values) """
         if Globals.iAppWidth>Globals.iAppHeight:
             self.DoRotate()
-    def lock(self):
+    def lock(self) -> None:
         """ dummy """
         self.bLocked=True

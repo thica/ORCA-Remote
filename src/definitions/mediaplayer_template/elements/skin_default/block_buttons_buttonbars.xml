@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <elements xmlns:xi="http://www.w3.org/2001/XInclude">
-  <element name='Pseudo Anchor Media-Template Buttonbar' type='ANCHOR' posx='left' posy='bottom'  height='0'  />
+  <element name='Pseudo Anchor Media-Template Buttonbar' type='ANCHOR' posx='left' posy='bottom'  height='%0'  />
   <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_buttonbars_add1.xml"  parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1])==1"   />
   <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_buttonbars_add2.xml"  parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2])==1"   />
   <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_buttonbars_add3.xml"  parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[3])==1"   />

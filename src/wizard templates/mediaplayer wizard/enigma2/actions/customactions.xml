@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
-
     <action name="Send Start Kodi $dvar(definition_alias_mediaplayer_template)">
        <action name="" string="setvar" varname="startapp" varvalue="kodi" />
-       <action name="" string="sendcommand" commandname="startapp" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_ROOT)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_ROOT)" />
+       <action name="" string="sendcommand startapp" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_ROOT)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_ROOT)" />
    </action>
 
     <action name="FKT SwitchOn $dvar(definition_alias_mediaplayer_template)">
         <!-- Original wakeup will be called first by default, so we just add the second stuff-->
         <!-- disabled as it slows down power on if we use WOL -->
-        <action1 name="Call Web PowerOn (even if fails)" string="sendcommand" commandname="power_on"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var(POWERSTATUS_$dvar(definition_alias_mediaplayer_template))==OFF"   />
+        <action1 name="Call Web PowerOn (even if fails)" string="sendcommand power_on"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var(POWERSTATUS_$dvar(definition_alias_mediaplayer_template))==OFF"   />
     </action>
 
     <action name="FKT SwitchOn $dvar(definition_alias_mediaplayer_template) Force">
         <!-- Original wakeup will be called first by default, so we just add the second stuff-->
         <!-- disabled as it slows down power on if we use WOL -->
-        <action1 name="Call Web PowerOn (even if fails)" string="sendcommand" commandname="power_on"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)"  configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+        <action1 name="Call Web PowerOn (even if fails)" string="sendcommand power_on"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)"  configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
     </action>
 
     <action name="FKT WaitForReady_$dvar(definition_alias_mediaplayer_template)">
@@ -29,27 +28,58 @@
 
     <action name="$dvar(definition_alias_mediaplayer_template)_updatebouquet" >
           <action name="show hourglass" string="showpage Page_Wait" effect="no" />
-          <action name='Assign the channels from enigma' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_template)","force":"0"}' />
+          <action name='Assign the channels from enigma' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_template)","force":"0","logopackfoldername":"$var($dvar(definition_alias_tvfavorites_template)_logopackfoldername)"}' />
           <action name="Return to last page" string="call gotolastpage" />
           <action name="Load TV Pictures" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var($dvar(definition_alias_tvfavorites_template)_bouquet)" />
           <action name="Check if widget exists on current page" string="getwidgetattribute" widgetname="DropDown_Bouquets" attributename="exists" retvar="TMPWIDGETEXISTS" />
           <action name="update the bouquet drop down" string="updatewidget DropDown_Bouquets" condition="$var(TMPWIDGETEXISTS)=1" />
     </action>
 
-
       <action name="$dvar(definition_alias_mediaplayer_template)_updatebouquet_force" >
           <action name="show hourglass" string="showpage Page_Wait" effect="no" />
-          <action name='Assign the channels from enigma' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_template)","force":"1"}' />
+          <action name='Assign the channels from enigma' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_template)","force":"1","logopackfoldername":"$var($dvar(definition_alias_tvfavorites_template)_logopackfoldername)"}' />
           <action name="Return to last page" string="call gotolastpage" />
           <action name="Load TV Pictures" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var($dvar(definition_alias_tvfavorites_template)_bouquet)" />
           <action name="Check if widget exists on current page" string="getwidgetattribute" widgetname="DropDown_Bouquets" attributename="exists" retvar="TMPWIDGETEXISTS" />
           <action name="update the bouquet drop down" string="updatewidget DropDown_Bouquets" condition="$var(TMPWIDGETEXISTS)=1" />
+          <action name="Apply Language to all widgets"            string="updatewidget" widgetname="*@*"/>
     </action>
 
 
       <action name="Set SetupTrigger $dvar(definition_alias_mediaplayer_template)">
       <!-- The a trigger to reload the bouquet if the reload button is pressed in the definition setings -->
        <action name="If we pressed the button in the definition settings" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_reloadbouquet" linktype="call" actionname="$dvar(definition_alias_mediaplayer_template)_updatebouquet_force" />
+    </action>
+
+    <action name="Fkt_ShowEnigmaRecordings" >
+        <action name="show recordings" string="showpage Page_Recordings_$dvar(definition_alias_mediaplayer_template)_Popup" enforce="ENFORCESTARTACTIONS" effect="no" />
+    </action>
+
+    <action name="PageStart Recordings_$dvar(definition_alias_mediaplayer_template)_Popup">
+      <action name="Get Movie List from recordings" string="sendcommand getmovielist"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  commandparameter='{"retvar":"$dvar(definition_alias_mediaplayer_template)_enigmamovie"}'/>
+      <action1 name='Parse Result into Vars' string="runscript" scriptname="helper_enigma" commandparameter='{"cmd_type":"parse_movielist","resultvar":"RESULT","retvar":"$dvar(definition_alias_mediaplayer_template)_enigmamovie","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"}'  condition="$var(RESULT)!="/>
+      <action name="Update MovieList" string="updatewidget $dvar(definition_alias_mediaplayer_template)_MovieList" />
+    </action>
+
+    <action name="FKT_Enigma_PlayRecordings">
+        <action name="Create Var Reference part1" string="setvar MOVIEREFERENCE=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_url_reference[$par(CONTAINERVARINDEX)])"  />
+        <action name="Create Var Reference part2" string="modifyvar" varname="MOVIEREFERENCE" operator="fromvar"  />
+        <action name="Play Recording" string="sendcommand playrecording" commandparameter='{"moviefilename":"$var(MOVIEREFERENCE)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)"   configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
+    </action>
+
+    <action name="FKT_Enigma_DeleteMovie">
+        <action name="Create Var Reference part1" string="setvar MOVIEREFERENCE=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_url_reference[$par(CONTAINERVARINDEX)])"  />
+        <action name="Create Var Reference part2" string="modifyvar" varname="MOVIEREFERENCE" operator="fromvar"  />
+        <action name="Create Var Title part1" string="setvar MOVIETITLE=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_title[$par(CONTAINERVARINDEX)])"  />
+        <action name="Create Var Title part2" string="modifyvar" varname="MOVIETITLE" operator="fromvar"  />
+        <action name="Create Var FileName part1" string="setvar MOVIEFILENAME=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_url_filename[$par(CONTAINERVARINDEX)])"  />
+        <action name="Create Var FileName part2" string="modifyvar" varname="MOVIEREFERENCE" operator="fromvar"  />
+        <action name="askonexit" string="showquestion" title="Delete Movie" message="Do you want to delete movie $var(MOVIETITLE)?" actionyes="FKT_Enigma_DeleteMovieDo" actionno="dummy"/>
+    </action>
+
+    <action name="FKT_Enigma_DeleteMovieDo">
+        <action name="Delete Recording" string="sendcommand deletemovie" commandparameter='{"moviereference":"$var(MOVIEREFERENCE)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)"   configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
+        <action name="Update ScrollView" string="call PageStart Recordings_$dvar(definition_alias_mediaplayer_template)_Popup" />
     </action>
 
 </includes>

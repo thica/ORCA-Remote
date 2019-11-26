@@ -19,7 +19,7 @@
         <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10012)' htextalign='center' vtextalign='top' />
         <element name="ButtonTriState"  type="BUTTON"    posy="%60"             height="of:width:self:*0.25" fontsize='%h50'  caption='$var(STATUSBUTTONTRISTATE)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" action="ToggleButtonTriState"/>
         <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10013)' htextalign='center' vtextalign='top' />
-        <element name="Dropdown"        type="DROPDOWN"  posy="of:bottom:last"  height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10016)'  captions='Option 1,Option 2,Option 3,Option 4' actions='ShowMessage_Option1,ShowMessage_Option2,ShowMessage_Option3,ShowMessage_Option4' htextalign='center' vtextalign='middle' picturenormal="button wide*" framecolor='$var(dimmed)' framewidth='500'/>
+        <element name="Dropdown"        type="DROPDOWN"  posy="of:bottom:last"  height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10016)'  captions='Option 1,Option 2,Option 3,Option 4' actions='ShowMessage_Option1,ShowMessage_Option2,ShowMessage_Option3,ShowMessage_Option4' htextalign='center' vtextalign='middle' picturenormal="button wide*" framecolor='$var(dimmed)' framewidth='%10'/>
         <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10016)' htextalign='center' vtextalign='middle' />
       </element>
 

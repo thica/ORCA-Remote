@@ -18,8 +18,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import annotations
+from typing                                 import Dict
+from typing                                 import TYPE_CHECKING
 
 import sys
+import argparse
 import ORCA.Globals as Globals
 
 sys.path.append(Globals.oScripts.dScriptPathList[u"tool_wikidoc"].string)
@@ -31,7 +35,15 @@ from ORCA.scripttemplates.Template_Tools    import cToolsTemplate
 from ORCA.Parameter                         import cParameter
 from ORCA.Parameter                         import cParserAction
 from ORCA.vars.Helpers                      import GetEnvVar
-from WikiDoc                                import cWikiDoc
+
+
+if TYPE_CHECKING:
+    from scripts.tools.tool_wikidoc.WikiDoc import cWikiDoc
+else:
+    # noinspection PyUnresolvedReferences
+    from WikiDoc                            import cWikiDoc
+
+
 
 '''
 <root>
@@ -41,8 +53,8 @@ from WikiDoc                                import cWikiDoc
       <description language='English'>Tool to create the ORCA Wikipedia (internal tool)</description>
       <description language='German'>Tool um das ORCA Wikipedia zu schreiben (internes Tool)</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -52,7 +64,6 @@ from WikiDoc                                import cWikiDoc
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/tools/tool_wikidoc/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -80,7 +91,7 @@ class cScript(cToolsTemplate):
     """
 
     class cScriptSettings(cBaseScriptSettings):
-        def __init__(self,oScript):
+        def __init__(self,oScript:cScript):
             """
             :param oScript: cScript
             """
@@ -93,13 +104,13 @@ class cScript(cToolsTemplate):
             self.aIniSettings.uWikiTargetFolder   = oScript.oEnvParameter.uWikiTargetFolder
             self.aIniSettings.uWikiApp            = oScript.oEnvParameter.uWikiApp
 
-        def WriteConfigToIniFile(self):
+        def WriteConfigToIniFile(self) -> None:
             # this avoids, that the Ini file will be changed from given command line / environment settings
             # nevertheless, once changes have been writen to the ini file, they will be used , regardless of any env / commandline parameter
             pass
 
     class cScriptParameter(cParameter):
-        def AddParameter(self,oParser):
+        def AddParameter(self,oParser:argparse.ArgumentParser):
             oParser.add_argument('--wikiserver',        default=GetEnvVar('ORCAWIKISERVER', 'www.orca-remote.org'),         action=cParserAction, oParameter=self, dest="uWikiServer",      help='Set the WWW server address for the ORCA Wikipedia (can be passed as ORCAWIKISERVER environment var)')
             oParser.add_argument('--wikipath',          default=GetEnvVar('ORCAWIKIPATH', '/mediawiki/'),                   action=cParserAction, oParameter=self, dest="uWikiPath",        help='Set the WWW server path for the ORCA Wikipedia (can be passed as ORCAWIKIPATH environment var)')
             oParser.add_argument('--wikiuser',          default=GetEnvVar('ORCAWIKIUSER'),                                  action=cParserAction, oParameter=self, dest="uWikiUser",        help='Set the initialisation username for the ORCA Wikipedia (can be passed as ORCAWIKIUSER environment var)')
@@ -113,9 +124,9 @@ class cScript(cToolsTemplate):
         self.uSortOrder      = u'auto'
         self.uSettingSection = u'tools'
         self.uSettingTitle   = u"WikiDoc"
-        self.oEnvParameter   = self.cScriptParameter()
+        self.oEnvParameter:cParameter   = self.cScriptParameter()
 
-    def Init(self,uObjectName,uScriptFile=u''):
+    def Init(self,uObjectName:str,uScriptFile:str=u'') -> Dict:
         """
         Init function for the script
 
@@ -127,13 +138,15 @@ class cScript(cToolsTemplate):
         self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        return {}
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> None:
         cToolsTemplate.RunScript(self,*args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.WikiDoc(self, *args, **kwargs)
 
-    def WikiDoc(self, *args, **kwargs):
+    # noinspection PyUnusedLocal
+    def WikiDoc(self, *args, **kwargs) -> None:
         oSetting                    = self.GetSettingObjectForConfigName(self.uConfigName)
         dArgs                       = {"Host":              kwargs.get("Host",              oSetting.aIniSettings.uHost),
                                        "WikiPath":          kwargs.get("WikiPath",          oSetting.aIniSettings.uWikiPath),
@@ -146,19 +159,19 @@ class cScript(cToolsTemplate):
         oWikiDoc.Run()
         Logger.debug(u'Wikidoc Finished')
 
-    def Register(self, *args, **kwargs):
+    def Register(self, *args, **kwargs) -> None:
         cToolsTemplate.Register(self,*args, **kwargs)
         Globals.oNotifications.RegisterNotification("STARTSCRIPTWIKIDOC", fNotifyFunction=self.WikiDoc,   uDescription="Script WikiDoc")
 
-        oScriptSettingPlugin               = cScriptSettingPlugin()
-        oScriptSettingPlugin.uScriptName   = self.uObjectName
-        oScriptSettingPlugin.uSettingName  = "ORCA"
-        oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
-        oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_WIKIDOC_4)"
-        oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_WIKIDOC_1)","desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_WIKIDOC_3)","id":"button_notification_STARTSCRIPTWIKIDOC"}]}']
+        oScriptSettingPlugin:cScriptSettingPlugin = cScriptSettingPlugin()
+        oScriptSettingPlugin.uScriptName          = self.uObjectName
+        oScriptSettingPlugin.uSettingName           = "ORCA"
+        oScriptSettingPlugin.uSettingPage           = "$lvar(572)"
+        oScriptSettingPlugin.uSettingTitle          = "$lvar(SCRIPT_TOOLS_WIKIDOC_4)"
+        oScriptSettingPlugin.aSettingJson            = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_WIKIDOC_1)","desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_WIKIDOC_3)","id":"button_notification_STARTSCRIPTWIKIDOC"}]}']
         Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
-    def GetConfigJSON(self):
+    def GetConfigJSON(self) -> Dict:
         return {"WikiPath":         {"type": "string", "active": "enabled", "order": 16, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_5)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_6)","key": "WikiPath", "default":self.oEnvParameter.uWikiPath, "section": "$var(ObjectConfigSection)"},
                 "WikiTargetFolder": {"type": "string", "active": "enabled", "order": 17, "title": "$lvar(SCRIPT_TOOLS_WIKIDOC_7)", "desc": "$lvar(SCRIPT_TOOLS_WIKIDOC_8)", "key": "WikiTargetFolder", "default": Globals.oPathTmp.string, "section": "$var(ObjectConfigSection)"}
                 }

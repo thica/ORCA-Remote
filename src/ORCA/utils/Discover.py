@@ -18,6 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import List
+
 from kivy.uix.popup         import Popup
 from kivy.uix.gridlayout    import GridLayout
 from kivy.uix.stacklayout   import StackLayout
@@ -39,24 +41,23 @@ class cDiscover_List(cBasePopup):
     """ creates a list of all discover results from all scripts """
 
     def __init__(self):
-        self.oScrollContent = None
-        super(cDiscover_List, self).__init__()
+        self.oScrollContent: StackLayout = StackLayout(size_hint=(None, None))
+        super().__init__()
     def ShowList(self):
         """ Shows the discover results """
         # create the popup
-        oContent         = GridLayout(cols=1, spacing='5dp')
-        oScrollview      = ScrollView( do_scroll_x=False)
-        self.oScrollContent   = StackLayout(size_hint=(None, None))
+        oContent: GridLayout         = GridLayout(cols=1, spacing='5dp')
+        oScrollview: ScrollView      = ScrollView( do_scroll_x=False)
         self.oPopup   = oPopup = Popup(content=oContent, title=ReplaceVars('$lvar(5028)'), size_hint=(0.9, 0.9),  auto_dismiss=False)
 
         #we need to open the popup first to get the metrics
         oPopup.open()
         #Add some space on top
         oContent.add_widget(Widget(size_hint_y=None, height=dp(2)))
-        aDiscoverScripts=Globals.oScripts.GetScriptListForScriptType("DEVICE_DISCOVER")
-        aScrollContent=[]
+        aDiscoverScripts: List = Globals.oScripts.GetScriptListForScriptType("DEVICE_DISCOVER")
+        aScrollContent: List = []
         for uDiscoverScriptName in aDiscoverScripts:
-            oScrollContentSingle   = GridLayout(size_hint=(None, None),size=(oPopup.width, dp(10)))
+            oScrollContentSingle: GridLayout = GridLayout(size_hint=(None, None),size=(oPopup.width, dp(10)))
             aScrollContent.append(oScrollContentSingle)
             oScrollContentSingle.bind(minimum_height=oScrollContentSingle.setter('height'))
             Globals.oScripts.RunScript(uDiscoverScriptName,**{'createlist':1,'oGrid':oScrollContentSingle})
@@ -69,23 +70,25 @@ class cDiscover_List(cBasePopup):
         oContent.add_widget(oScrollview)
         oContent.add_widget(SettingSpacer())
 
-        oBtn = Button(text=ReplaceVars('$lvar(5000)'), size=(oPopup.width, dp(50)),size_hint=(1, None))
+        oBtn: Button = Button(text=ReplaceVars('$lvar(5000)'), size=(oPopup.width, dp(50)),size_hint=(1, None))
         oBtn.bind(on_release=self.On_Cancel)
         oContent.add_widget(oBtn)
 
         #resize the Scrollcontent to fit to all Childs. Needs to be done, after the popup has been shown
         Clock.schedule_once(self.SetScrollSize, 0)
 
+    # noinspection PyUnusedLocal
     def SetScrollSize(self, *args):
         """  Sets the size of the scoll window of the results """
-        iHeight=0
+        iHeight: int = 0
         for oChild in self.oScrollContent.children:
             if hasattr(oChild,"minimum_height"):
-                iHeight=iHeight+oChild.minimum_height
+                iHeight = iHeight+oChild.minimum_height
             else:
-                iHeight=iHeight+oChild.height
+                iHeight = iHeight+oChild.height
         self.oScrollContent.size=(self.oPopup.width,iHeight)
 
+    # noinspection PyUnusedLocal
     def On_Cancel(self,instance):
         """ call handler for abort """
         cBasePopup.ClosePopup(self)

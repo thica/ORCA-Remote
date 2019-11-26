@@ -17,8 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-from threading                             import Lock
+from threading  import Lock
+from datetime   import datetime
 
-bOnPause     = False        # Flag to be used, if we wait.  Stops the Queue
-oWaitLock    = Lock()       # Object used by Wait Function
-fWaitEndTime = 0.0          # End time for current waits of interfaces. Waits are used by interfaces to expect results of commands sent to their devices
+bOnPause:bool     = False        # Flag to be used, if we wait.  Stops the Queue
+oWaitLock:Lock    = Lock()       # Object used by Wait Function
+oWaitEndTime:datetime = datetime(1900,1,1,0,0,0,0)
+oWaitZeroTime:datetime = oWaitEndTime

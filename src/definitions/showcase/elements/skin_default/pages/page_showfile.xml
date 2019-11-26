@@ -17,7 +17,7 @@
 
       <element name='Anchor Left 1' posx="%95" type='ANCHOR' posy='%95' width='%60' height="%85" >
           <element name='Frame top' type='ANCHOR' posy='top' height="%45" >
-              <element name="Definition File2" type="FILEVIEWER"  filename="$var(DEFINITIONPATH)/block_buttons_main_menu.xml" htextalign="left" vtextalign="top" backgroundcolor='#FFFFFFFF' fontsize='%w4' />
+              <element name="Definition File2" type="FILEVIEWER"  filename="$var(DEFINITIONPATH)/definition.ini" htextalign="left" vtextalign="top" backgroundcolor='#FFFFFFFF' fontsize='%w4' />
           </element>
           <element name='Frame bottom' type='ANCHOR' posy='bottom' height="%45" width="%92">
               <element name="Definition File3" type="FILEVIEWER"  filename="$var(DEFINITIONPATH)/definition.xml" htextalign="left" vtextalign="top" backgroundcolor='#FFFFFFFF' fontsize='%w4' />

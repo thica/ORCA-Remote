@@ -24,12 +24,7 @@ import logging
 import time
 
 from kivy.logger  import Logger
-from kivy.compat  import PY2
-
 from ORCA.scripttemplates.Template_System import cSystemTemplate
-
-from ORCA.vars.Replace import ToUnicode
-
 
 '''
 <root>
@@ -39,8 +34,8 @@ from ORCA.vars.Replace import ToUnicode
       <description language='English'>Script to add timestamps to the logfile</description>
       <description language='German'>Script um einen Zeitstempel zum Logfile hinzuzufügen</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -50,14 +45,13 @@ from ORCA.vars.Replace import ToUnicode
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/system/system_debuglogger/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
 </root>
 '''
 
-class LoggerPatch(object):
+class LoggerPatch:
     """ Patches the logger to add timestamp """
     def __init__(self):
 
@@ -73,32 +67,23 @@ class LoggerPatch(object):
         oHandler.emit=self.emit
 
 
-    def emit(self,record):
+    def emit(self,record) -> None:
         """ we do not use the formatter by purpose as it runs on failure
         if the message string contains format characters   """
 
         try:
             ct = self.oFormatter.converter(record.created)
-            t = time.strftime("%Y-%m-%d %H|%M|%S", ct)
-            s = u"%s.%03d: " % (t, record.msecs)
-            msg = record.msg
+            t:str       = time.strftime("%Y-%m-%d %H|%M|%S", ct)
+            s:str       = u"%s.%03d: " % (t, record.msecs)
+            msg:str     = record.msg
             if len(msg)>500:
                 if not "Traceback (most recent call last)" in msg:
-                    msg=msg[:500]+u"..."
+                    record.msg=msg[:500]+u"..."
 
-            if PY2:
-                try:
-                    record.msg = s + msg
-                except Exception as e:
-                    uS2 = ToUnicode(record.msg)
-                    record.msg = s + uS2
-
-            # we face some unicode error on PY3 with android and crystax
-            if not PY2:
-                # record.msg = s+str(record.msg.encode('ascii', 'ignore'))
-                record.msg = s + record.msg
+            # record.msg = s+str(record.msg.encode('ascii', 'ignore'))
+            record.msg = s + record.msg
             self.emit_org(record)
-        except Exception as e:
+        except Exception:
             pass
 
 
@@ -130,7 +115,7 @@ class cScript(cSystemTemplate):
         self.oLoggerPatch       = None
         self.uIniFileLocation   = 'none'
 
-    def Register(self,*args,**kwargs):
+    def Register(self,*args,**kwargs) -> None:
         if Logger.level == logging.DEBUG:
             self.oLoggerPatch = LoggerPatch()
 

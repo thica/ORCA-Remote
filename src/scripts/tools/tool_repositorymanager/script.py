@@ -20,9 +20,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__                             import annotations
+from typing                                 import Dict
+from typing                                 import TYPE_CHECKING
+
+
 import sys
 import ORCA.Globals as Globals
-
+import argparse
 sys.path.append(Globals.oScripts.dScriptPathList[u"tool_repositorymanager"].string)
 
 from ORCA.scripts.Scripts                   import cScriptSettingPlugin
@@ -34,8 +39,16 @@ from ORCA.utils.TypeConvert                 import ToBool
 from ORCA.Parameter                         import cParameter
 from ORCA.Parameter                         import cParserAction
 from ORCA.vars.Helpers                      import GetEnvVar
-from RepManager                             import RepositoryManager
-from RepManager                             import CreateRepVarArray
+
+if TYPE_CHECKING:
+    from scripts.tools.tool_repositorymanager.RepManager import RepositoryManager
+    from scripts.tools.tool_repositorymanager.RepManager import CreateRepVarArray
+else:
+    # noinspection PyUnresolvedReferences
+    from RepManager                             import RepositoryManager
+    # noinspection PyUnresolvedReferences
+    from RepManager                             import CreateRepVarArray
+
 
 '''
 <root>
@@ -45,8 +58,8 @@ from RepManager                             import CreateRepVarArray
       <description language='English'>Tool to write the repository (internal tool)</description>
       <description language='German'>Tool um ein repository zu schreiben (internes Tool)</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -56,7 +69,6 @@ from RepManager                             import CreateRepVarArray
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/tools/tool_repositorymanager/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -64,7 +76,7 @@ from RepManager                             import CreateRepVarArray
 '''
 
 
-
+# noinspection PyUnusedLocal
 class cScript(cToolsTemplate):
     """
     WikiDoc:Doc
@@ -84,7 +96,7 @@ class cScript(cToolsTemplate):
     """
 
     class cScriptSettings(cBaseScriptSettings):
-        def __init__(self,oScript):
+        def __init__(self,oScript:cScript):
             cBaseScriptSettings.__init__(self,oScript)
             self.aIniSettings.uHost           = oScript.oEnvParameter.uFTPServer
             self.aIniSettings.uUser           = oScript.oEnvParameter.uFTPUser
@@ -94,16 +106,16 @@ class cScript(cToolsTemplate):
             self.aIniSettings.uWWWServerPath  = oScript.oEnvParameter.uWWWServerPath
             self.aIniSettings.bFTPSSL         = ToBool(oScript.oEnvParameter.uFTPSSL)
 
-            uVersion = str(Globals.iVersion)
+            uVersion:str = str(Globals.iVersion)
             self.aIniSettings.uWWWServerPath  = self.aIniSettings.uWWWServerPath.replace(uVersion,"$var(REPVERSION)")
             self.aIniSettings.uFTPPath        = self.aIniSettings.uFTPPath.replace(uVersion,"$var(REPVERSION)")
-        def WriteConfigToIniFile(self):
+        def WriteConfigToIniFile(self) -> None:
             # this avoids, that the Ini file will be changed from given command line / environment settings
             # nevertheless, once changes have been writen to the ini file, they will be used , regardless of any env / commandline parameter
             pass
 
     class cScriptParameter(cParameter):
-        def AddParameter(self,oParser):
+        def AddParameter(self,oParser:argparse.ArgumentParser) -> None:
             oParser.add_argument('--ftpserver',         default=GetEnvVar('ORCAFTPSERVER'),                              action=cParserAction, oParameter=self, dest="uFTPServer",      help='Set the FTP Server address for the repository manager (can be passed as ORCAFTPSERVER environment var)')
             oParser.add_argument('--ftpserverpath',     default=GetEnvVar('ORCAFTPSERVERPATH'),                          action=cParserAction, oParameter=self, dest="uFTPServerPath",  help='Set the FTP Server path for the repository manager (can be passed as ORCAFTPSERVERPATH environment var)')
             oParser.add_argument('--ftpuser',           default=GetEnvVar('ORCAFTPUSER'),                                action=cParserAction, oParameter=self, dest="uFTPUser",        help='Set the username for the FTP Server for the repository manager (can be passed as ORCAFTPUSER environment var)')
@@ -120,26 +132,27 @@ class cScript(cToolsTemplate):
         self.uSettingTitle    = u"Repository Manager"
         self.oEnvParameter    = self.cScriptParameter()
 
-    def Init(self,uObjectName,uScriptFile=u''):
+    def Init(self,uObjectName:str,uScriptFile:str=u'') -> Dict:
         """
         Init function for the script
 
-        :param string uObjectName: The name of the script (to be passed to all scripts)
-        :param uScriptFile: The file of the script (to be passed to all scripts)
+        :param str uObjectName: The name of the script (to be passed to all scripts)
+        :param str uScriptFile: The file of the script (to be passed to all scripts)
         """
 
         cToolsTemplate.Init(self, uObjectName, uScriptFile)
         self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        return {}
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> None:
         cToolsTemplate.RunScript(self,*args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.StartRepositoryManager(self, *args, **kwargs)
 
-    def StartRepositoryManager(self, *args, **kwargs):
-        oSetting                = self.GetSettingObjectForConfigName(self.uConfigName)
+    def StartRepositoryManager(self, *args, **kwargs) -> None:
+        oSetting:cBaseScriptSettings  = self.GetSettingObjectForConfigName(self.uConfigName)
         SetVar(uVarName=u'REPOSITORYWWWPATH',  oVarValue=oSetting.aIniSettings.uWWWServerPath)
         SetVar(uVarName=u"REPMAN_FTPSERVER",   oVarValue=oSetting.aIniSettings.uHost)
         SetVar(uVarName=u"REPMAN_FTPPATH",     oVarValue=oSetting.aIniSettings.uFTPPath)
@@ -153,16 +166,17 @@ class cScript(cToolsTemplate):
 
         RepositoryManager(oPathRepSource = oSetting.aIniSettings.oPathRepSource)
 
-    def CreateRepositoryVarArray(self,  *args, **kwargs):
+    # noinspection PyMethodMayBeStatic
+    def CreateRepositoryVarArray(self,  *args, **kwargs) -> None:
         uBaseLocalDir  = ReplaceVars(kwargs.get("baselocaldir",(Globals.oPathTmp + "RepManager").string))
         CreateRepVarArray(uBaseLocalDir)
 
-    def Register(self, *args, **kwargs):
+    def Register(self, *args, **kwargs) -> Dict:
         cToolsTemplate.Register(self,*args, **kwargs)
         Globals.oNotifications.RegisterNotification("STARTSCRIPTREPOSITORYMANAGER", fNotifyFunction=self.StartRepositoryManager,   uDescription="Script Repository Manager")
         Globals.oNotifications.RegisterNotification("CREATEREPOSITORYVARARRAY",     fNotifyFunction=self.CreateRepositoryVarArray, uDescription="Script Repository Manager")
 
-        oScriptSettingPlugin = cScriptSettingPlugin()
+        oScriptSettingPlugin:cScriptSettingPlugin = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "TOOLS"
         oScriptSettingPlugin.uSettingPage  = "$lvar(699)"
@@ -170,8 +184,9 @@ class cScript(cToolsTemplate):
         oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_REPMANAGER_1)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_REPMANAGER_3)","id":"button_notification_STARTSCRIPTREPOSITORYMANAGER"}]}']
         Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
         self.LoadActions()
+        return {}
 
-    def GetConfigJSON(self):
+    def GetConfigJSON(self) -> Dict:
         return {"FTPPath":       {"type": "varstring", "active":"enabled", "order":16, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_5)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_6)", "key": "FTPPath",       "default": self.oEnvParameter.uFTPServerPath,            "section": "$var(ObjectConfigSection)"},
                 "FTPSSL":        {"type": "bool",      "active":"enabled", "order":17, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_7)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_8)", "key": "FTPSSL",        "default": ToBool(self.oEnvParameter.uFTPSSL),           "section": "$var(ObjectConfigSection)"},
                 "PathRepSource": {"type": "path",      "active":"enabled", "order":18, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"},

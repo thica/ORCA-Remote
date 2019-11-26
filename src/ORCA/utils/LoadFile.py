@@ -19,7 +19,6 @@
 """
 
 from kivy.logger            import Logger
-from ORCA.Compat            import PY2, string_types
 from ORCA.utils.FileName    import cFileName
 
 import codecs
@@ -34,34 +33,30 @@ def LoadFile(oFileName):
     :return: The File Content as string
     """
 
-    if isinstance(oFileName,string_types):
+    if isinstance(oFileName,str):
         Logger.warning("Please pass a cFileName to LoadFile:"+oFileName)
         oFileName=cFileName('').ImportFullPath(oFileName)
 
 
     try:
-        if PY2:
-            f = open(oFileName.string, 'r')
+        f = None
+        try:
+            #should work for all xml files
+            f= codecs.open(oFileName.string, 'r', encoding='utf-8')
             read_data = f.read()
-        else:
-            f = None
+        except Exception:
+            if f is not None:
+                f.close()
+            # should work for common other files
             try:
-                #should work for all xml files
-                f= codecs.open(oFileName.string, 'r', encoding='utf-8')
+                f = codecs.open(oFileName.string, 'r', encoding='latin1')
                 read_data = f.read()
-            except Exception as e:
+            except Exception:
+                #fallback
                 if f is not None:
                     f.close()
-                # should work for common other files
-                try:
-                    f = codecs.open(oFileName.string, 'r', encoding='latin1')
-                    read_data = f.read()
-                except Exception as e:
-                    #fallback
-                    if f is not None:
-                        f.close()
-                    f = codecs.open(oFileName.string, 'r', encoding='utf-8', errors='ignore')
-                    read_data = f.read()
+                f = codecs.open(oFileName.string, 'r', encoding='utf-8', errors='ignore')
+                read_data = f.read()
         f.close()
         return read_data
     except Exception as e:

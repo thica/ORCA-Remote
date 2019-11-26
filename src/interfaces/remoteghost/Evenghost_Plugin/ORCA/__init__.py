@@ -19,6 +19,7 @@
 
 # Parts of the code are based on eventghost plugins code
 
+# noinspection PyUnresolvedReferences
 import eg
 
 eg.RegisterPlugin(
@@ -41,6 +42,7 @@ eg.RegisterPlugin(
     ),
 )
 
+# noinspection PyUnresolvedReferences
 import wx
 import asynchat
 import asyncore
@@ -62,6 +64,7 @@ DEBUG = False
 if DEBUG:
     log = eg.Print
 else:
+    # noinspection PyUnusedLocal
     def log(dummyMesg):
         pass
 
@@ -69,6 +72,7 @@ else:
 class ServerHandler(asynchat.async_chat):
     """Telnet engine class. Implements command line user interface."""
 
+    # noinspection PyUnusedLocal
     def __init__(self, sock, addr, plugin, server):
         log("Server Handler inited")
         self.plugin = plugin
@@ -102,7 +106,7 @@ class ServerHandler(asynchat.async_chat):
 
     if DEBUG:
         def push(self, data):
-            log(">>", repr(data))
+            log(">>" + repr(data))
             asynchat.async_chat.push(self, data)
 
 
@@ -184,6 +188,7 @@ class ServerHandler(asynchat.async_chat):
         self.respond_error()
         print (u'ORCA:Received invalid statement:'+line)
 
+    # noinspection PyUnusedLocal
     def ProcessMsg(self, sMsg, icon):
         self.respond(sMsg)
 
@@ -219,10 +224,10 @@ class ServerHandler(asynchat.async_chat):
         filterClassesNodes=(eg.FolderItem, eg.MacroItem)
         filterClassesTargets=(eg.MacroItem,eg.ActionItem)
 
-        def filterFuncNodes(obj):
-            return isinstance(obj, filterClassesNodes)
-        def filterFuncTargets(obj):
-            return isinstance(obj, filterClassesTargets)
+        def filterFuncNodes(oObj):
+            return isinstance(oObj, filterClassesNodes)
+        def filterFuncTargets(oObj):
+            return isinstance(oObj, filterClassesTargets)
 
         if oRoot is None:
             srcTree = eg.document.frame.treeCtrl
@@ -236,7 +241,7 @@ class ServerHandler(asynchat.async_chat):
             #print "ORCA:6:",child.GetLabel()
 
             if filterFuncTargets(child):
-                sLabel=sQlName=child.GetLabel()
+                sLabel=child.GetLabel()
                 if sContext=='':
                     sQlName=sLabel
                 else:
@@ -298,11 +303,7 @@ class NetworkReceiver(eg.PluginBase):
         self.port = port
         self.info.eventPrefix = prefix
         self.logWrapper = LogWrapper(self)
-        try:
-            self.server = Server(self.port, self)
-        except socket.error as exc:
-            raise self.Exception(exc[1])
-
+        self.server = Server(self.port, self)
 
     def __stop__(self):
         if self.server:
@@ -332,6 +333,7 @@ class NetworkReceiver(eg.PluginBase):
 
 class LogWrapper:
 
+    # noinspection PyUnusedLocal
     def __init__(self, oPlugin):
         self.aLogListener = []
 
@@ -342,6 +344,7 @@ class LogWrapper:
         if oListener not in self.aLogListener:
             self.aLogListener.append(oListener)
 
+    # noinspection PyUnusedLocal
     def WriteLine(self, sLine, oIcon, wRef, when, indent):
         for oListener in self.aLogListener:
             if not sLine.startswith("ORCA:"):

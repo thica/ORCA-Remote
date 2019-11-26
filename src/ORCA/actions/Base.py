@@ -20,8 +20,16 @@
 
 __all__ = ['cEventActionBase']
 
-class cEventActionBase(object):
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.Events import cEvents
+else:
+    from typing import TypeVar
+    cEvents = TypeVar("cEvents")
+
+
+class cEventActionBase:
     """ All Actions for the event dispatcher """
-    def __init__(self, oEventDispatcher):
-        self.oEventDispatcher  = oEventDispatcher
+    def __init__(self, oEventDispatcher:cEvents):
+        self.oEventDispatcher:cEvents  = oEventDispatcher
 

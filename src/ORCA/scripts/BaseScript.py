@@ -19,6 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__ import annotations
+from typing     import Union
+from typing     import Dict
+from xml.etree.ElementTree            import Element
+
 from kivy.logger                      import Logger
 
 from ORCA.BaseObject                  import cBaseObject
@@ -33,12 +38,12 @@ import ORCA.Globals as Globals
 
 class cScriptResultParser(cResultParser):
     """ Resultparser object for Scripts  """
-    def __init__(self,oScript):
-        super(cScriptResultParser, self).__init__()
-        self.oScript        = oScript
-        self.uObjectName    = oScript.uObjectName
-        self.uDebugContext  = "Script: % s :" % self.uObjectName
-        self.uContext       = self.uObjectName
+    def __init__(self,oScript:cBaseScript):
+        super().__init__()
+        self.oScript:cBaseScript  = oScript
+        self.uObjectName:str      = oScript.uObjectName
+        self.uDebugContext        = "Script: % s :" % self.uObjectName
+        self.uContext             = self.uObjectName
 
 class cBaseScript(cBaseObject):
     """ basic script class to inherit all scripts from """
@@ -62,52 +67,51 @@ class cBaseScript(cBaseObject):
 
         """
 
-        super(cBaseScript,self).__init__()
+        super().__init__()
 
-        self.oFnConfig              = None
-        self.oFnObject              = None
-        self.oObjectConfig          = None
-        self.uConfigName            = "SCRIPTDEFAULT"
-        self.uSection               = u''
-        self.oFnAction              = None
-        self.uObjectType            = "script"
+        # self.oFnConfig                            = None
+        self.uConfigName                            = "SCRIPTDEFAULT"
+        self.uObjectType                            = "script"
+        self.uIniFileLocation                       = "global"
 
-        self.uSortOrder             = u'auto'
-        self.uSubType               = u'Generic'
-        self.uType                  = u'Generic'
-        self.uIniFileLocation       = "global"
-        self.oResultParser          = None
+        self.uSection:str                           = u''
+        self.oFnAction:Union[cFileName,None]        = None
+        self.uSortOrder:str                         = u'auto'
+        self.uSubType:str                           = u'Generic'
+        self.uType:str                              = u'Generic'
+        self.oResultParser:cScriptResultParser      = cScriptResultParser(self)
 
-    def Init(self,uObjectName,oFnObject=None):
+    def Init(self,uObjectName:str,oFnObject:Union[cFileName,None]=None) -> None:
         """ Initializes the script """
-        super(cBaseScript, self).Init(uObjectName,oFnObject)
-
-        self.oResultParser        = cScriptResultParser(self)
+        super().Init(uObjectName,oFnObject)
         self.oFnAction            = cFileName(self.oPathMyCode+"actions")+"customactions.xml"
         self.oObjectConfig        = cScriptConfig(self)
         self.oObjectConfig.Init()
 
-    def RunScript(self, *args, **kwargs):
-        """ Dummy """
-        pass
 
-    def ShowSettings(self):
+    def RunScript(self, *args, **kwargs) -> Union[Dict,None]:
+        """ Dummy """
+        return {}
+
+
+    # noinspection PyMethodMayBeStatic
+    def ShowSettings(self) -> None:
         """  shows the settings dialog """
         Globals.oTheScreen.AddActionToQueue([{'string':'updatewidget','widgetname':'Scriptsettings'}])
 
-    def LoadActions(self):
+    def LoadActions(self) -> None:
         """ parses the definition specific actions """
         Logger.info (u'Loading Actions for script:'+self.uObjectName)
         if self.oFnAction.Exists():
-            sET_Data = CachedFile(self.oFnAction)
-            oET_Root = Orca_FromString(sET_Data, None, self.oFnAction.string)
+            uET_Data = CachedFile(oFileName=self.oFnAction)
+            oET_Root:Element = Orca_FromString(uET_Data, None, self.oFnAction.string)
             Globals.oActions.LoadActionsSub(oET_Root,u'actions',         u'action',          Globals.oActions.dActionsCommands,  self.oFnAction.string)
 
-    def GetNewSettingObject(self):
+    def GetNewSettingObject(self) -> cBaseScriptSettings:
         return self.cScriptSettings(self)
 
     @classmethod
-    def GetConfigJSONforParameters(cls,dDefaults):
+    def GetConfigJSONforParameters(cls,dDefaults) -> Dict[str,Dict]:
         """ Base class """
         return {}
 

@@ -24,20 +24,20 @@ from kivy.logger            import Logger
 # noinspection PyUnresolvedReferences
 from jnius                  import autoclass
 
-def GetLocale():
+def GetLocale() -> str:
     """ gets the locale / language from the system """
-    uCurrent = 'English'
-    ourlocale = "en"
+    uCurrent:str = 'English'
+    uOurlocale:str = "en"
 
     try:
         Logger.debug("Attempting to get default locale from Java...")
         JavaUtilLocale = autoclass('java.util.Locale')
         jlocale = JavaUtilLocale
-        ourlocale = jlocale.getDefault().getLanguage()
+        uOurlocale = jlocale.getDefault().getLanguage()
     except Exception:
         Logger.debug("Unable to get locale from Java...")
-    Logger.debug("Javalocale:"+str(ourlocale))
+    Logger.debug("Javalocale:"+uOurlocale)
 
-    if ourlocale == "de":
+    if uOurlocale == "de":
         uCurrent="German"
     return uCurrent

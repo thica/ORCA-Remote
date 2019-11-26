@@ -20,12 +20,15 @@
 
 from ORCA.vars.Replace          import ReplaceVars
 from ORCA.actions.Base          import cEventActionBase
+from ORCA.Action                import cAction
+from ORCA.actions.ReturnCode    import eReturnCode
+
 import ORCA.Globals as Globals
 __all__ = ['cEventActionsGuiStatusPictures']
 
 class cEventActionsGuiStatusPictures(cEventActionBase):
     """ Actions for showing gui flags (busy, interface active, ...) """
-    def ExecuteActionSetTransmitterPicture(self,oAction):
+    def ExecuteActionSetTransmitterPicture(self,oAction:cAction) -> eReturnCode:
 
         """
         WikiDoc:Doc
@@ -52,15 +55,15 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        uPictureName       = ReplaceVars(oAction.dActionPars.get("picturename",""))
+        uPictureName:str       = ReplaceVars(oAction.dActionPars.get("picturename",""))
         self.oEventDispatcher.LogAction(u'SetTransmitterPicture',oAction)
         if oAction.oParentWidget is not None:
             oAction.oParentWidget.oParentScreenPage.SetTransmitterPicture(uTransmitterPictureName=uPictureName)
         else:
             Globals.oTheScreen.uDefaultTransmitterPictureName= uPictureName
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionSetWaitPicture(self,oAction):
+    def ExecuteActionSetWaitPicture(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -87,16 +90,15 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        uPictureName       = ReplaceVars(oAction.dActionPars.get("picturename",""))
+        uPictureName:str       = ReplaceVars(oAction.dActionPars.get("picturename",""))
         self.oEventDispatcher.LogAction(u'SetWaitPicture',oAction)
         if oAction.oParentWidget is not None:
             oAction.oParentWidget.oParentScreenPage.SetWaitPicture(uWaitPictureName=uPictureName)
         else:
             Globals.oTheScreen.uDefaultWaitPictureName= uPictureName
-        return -2
+        return eReturnCode.Nothing
 
-
-    def ExecuteActionEnableTransmitterPicture(self,oAction):
+    def ExecuteActionEnableTransmitterPicture(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -125,9 +127,9 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit is not None:
                 Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit.EnableWidget(True)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionDisableTransmitterPicture(self,oAction):
+    def ExecuteActionDisableTransmitterPicture(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -156,9 +158,9 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit is not None:
                 Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit.EnableWidget(False)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionEnableWaitPicture(self,oAction):
+    def ExecuteActionEnableWaitPicture(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -187,9 +189,9 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureWait is not None:
                 Globals.oTheScreen.oCurrentPage.oWidgetPictureWait.EnableWidget(True)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionDisableWaitPicture(self,oAction):
+    def ExecuteActionDisableWaitPicture(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -218,5 +220,5 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureWait is not None:
                 Globals.oTheScreen.oCurrentPage.oWidgetPictureWait.EnableWidget(False)
-        return -2
+        return eReturnCode.Nothing
 

@@ -18,6 +18,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                         import Dict
+from typing                         import Any
+
+from xml.etree.ElementTree          import Element
 from kivy.logger                    import Logger
 from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
 from ORCA.utils.FileName            import cFileName
@@ -25,25 +29,39 @@ from ORCA.utils.LogError            import LogError
 from ORCA.utils.XML                 import GetXMLTextAttribute
 from ORCA.utils.XML                 import GetXMLTextValue
 from ORCA.utils.XML                 import LoadXMLFile
-from ORCA.utils.Atlas                      import CreateAtlas
+from ORCA.utils.Atlas               import CreateAtlas
+from ORCA.utils.Path                import cPath
 from ORCA.vars.Replace              import ReplaceVars
-from ORCA.vars.Access import SetVar
-from ORCA.widgets.Base              import GetColorFromHex
+from ORCA.vars.Access               import SetVar
+from ORCA.widgets.helper.HexColor   import GetColorFromHex
 
 import ORCA.Globals as Globals
 
 __all__ = ['cSkin']
 
-class cSkin(object):
+class cSkin:
     """ Represents the Skin """
     def __init__(self):
-        self.dSkinAttributes        = {}
-        self.dSkinPics              = {}
-        self.dSkinRedirects         = {}
+        self.dSkinAttributes:Dict[str,Any]            = {}
+        self.dSkinPics:Dict[str,cFileName]            = {}
+        self.dSkinRedirects:Dict[str,cFileName]       = {}
 
     def LoadSkinDescription(self):
         """ Loads the a skin description """
         #AddGlobalVars:we do it here again: Todo: check if it either can be split or out somewhere else
+
+        oET_Root:Element
+        oXMLPics:Element
+        oXMLColors:Element
+        oXMLAtts:Element
+        oXMLRedirects:Element
+        oXMLAtt:Element
+        uPicName:str
+        uColorName:str
+        uColor:str
+        uAttName:str
+        uAtt:str
+
         Globals.oTheScreen.AddGlobalVars()
 
         try:
@@ -68,16 +86,16 @@ class cSkin(object):
                 oXMLRedirects = oET_Root.find('redirects')
                 if oXMLRedirects is not None:
                     for oXMLRedirect in oXMLRedirects.findall('redirect'):
-                        oFrom   = cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLRedirect,u'from',True,u''))
-                        oTo     = cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLRedirect,u'to',True,u''))
+                        oFrom:cFileName   = cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLRedirect,u'from',True,u''))
+                        oTo:cFileName     = cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLRedirect,u'to',True,u''))
                         self.dSkinRedirects[oFrom.string]=oTo
 
                 Logger.debug (u'TheScreen: Loading Skin Description (attributes)')
                 oXMLAtts = oET_Root.find('attributes')
                 if oXMLAtts is not None:
                     for oXMLAtt in oXMLAtts.findall('attribute'):
-                        uAttName  = GetXMLTextAttribute(oXMLAtt,u'name',False,u'')
-                        uAtt      = ReplaceVars(GetXMLTextAttribute(oXMLAtt,u'att',False,u''))
+                        uAttName = GetXMLTextAttribute(oXMLAtt,u'name',False,u'')
+                        uAtt     = ReplaceVars(GetXMLTextAttribute(oXMLAtt,u'att',False,u''))
                         self.dSkinAttributes[uAttName]=uAtt
                         SetVar(uVarName = uAttName, oVarValue = uAtt)
 
@@ -91,7 +109,7 @@ class cSkin(object):
                     SetVar(uVarName = u'SKIN_FONTCOLOR_FILE', oVarValue = self.dSkinAttributes['fontcolor file'])
                     self.dSkinAttributes['fontcolor file']          =  GetColorFromHex(self.dSkinAttributes['fontcolor file'])
 
-            oPathSkinAtlas=Globals.oPathSkin + 'atlas'
+            oPathSkinAtlas:cPath = Globals.oPathSkin + 'atlas'
             oPathSkinAtlas.Create()
             Globals.oFnAtlasSkin = cFileName(oPathSkinAtlas) + "skin.atlas"
             CreateAtlas(Globals.oPathSkin+"pics", Globals.oFnAtlasSkin, u'Create Skin Atlas Files')
@@ -101,6 +119,5 @@ class cSkin(object):
             Globals.oTheScreen.oFonts.ParseIconsFromXMLNode(oET_Root)
 
         except Exception as e:
-            uMsg=LogError(u'TheScreen:  __LoadSkinDescription: can\'t load SkinDescription',e)
-            ShowErrorPopUp(uMessage=uMsg)
+            ShowErrorPopUp(uMessage=LogError(uMsg=u'TheScreen:  __LoadSkinDescription: can\'t load SkinDescription',oException=e))
 

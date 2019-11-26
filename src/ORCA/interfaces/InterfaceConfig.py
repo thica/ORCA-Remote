@@ -18,16 +18,32 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import List
+from typing import Dict
+from typing import Union
+
+from kivy.config                        import ConfigParser as KivyConfigParser
 from ORCA.BaseConfig                    import cBaseConfig
 import ORCA.Globals as Globals
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.interfaces.BaseInterface import cBaseInterFace
+    from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
+    from ORCA.scripts.BaseScript import cBaseScript
+else:
+    from typing import TypeVar
+    cBaseInterFace = TypeVar("cBaseInterFace")
+    cBaseInterFaceSettings = TypeVar("cBaseInterFaceSettings")
+    cBaseScript = TypeVar("cBaseScript")
 
 
 class cInterFaceConfig(cBaseConfig):
     """ Class to manage the initialisation/configuration and access toe the settings of an Interface settings objects
-
+g
     """
 
-    def __init__(self, oInterFace):
+    def __init__(self, oInterFace:cBaseInterFace):
 
         super(cInterFaceConfig,self).__init__(oInterFace)
 
@@ -51,26 +67,27 @@ class cInterFaceConfig(cBaseConfig):
                                               }
 
 
-        self.aDiscoverScriptList            = None
-        self.dGenericDiscoverSettings     = { "DiscoverScriptName":          {"active": "hidden",   "order": 100,  "scriptsection": "$lvar(539)", "type": "scrolloptions",  "title": "$lvar(6035)", "desc": "$lvar(6036)", "section": "$var(ObjectConfigSection)", "key": "DiscoverScriptName",          "default": "", "options":["$var(DISCOVERSCRIPTLIST)"]},
-                                              "SaveDiscoveredIP":            {"active": "hidden",   "order": 101,  "scriptsection": "$lvar(539)", "type": "bool",           "title": "$lvar(6031)", "desc": "$lvar(6032)", "section": "$var(ObjectConfigSection)", "key": "SaveDiscoveredIP",            "default": "1"},
-                                              "OldDiscoveredIP":             {"active": "hidden",   "order": 102,  "scriptsection": "$lvar(539)", "type": "string",         "title": "$lvar(6021)", "desc": "$lvar(6022)", "section": "$var(ObjectConfigSection)", "key": "OldDiscoveredIP",             "default": ""},
-                                              "CheckDiscoverButton":         {"active": "disabled", "order": 103,  "scriptsection": "$lvar(539)", "type": "buttons",        "title": "Check Discover", "desc": "$lvar(6034)", "section": "$var(ObjectConfigSection)", "key": "CheckDiscover", "buttons": [{"title": "Check Discover", "id": "button_checkdiscover"}]},
+        self.aDiscoverScriptList:Union[List[str],None]        = None
+        self.dGenericDiscoverSettings:Dict[str,Dict]  = \
+                                              { "DiscoverScriptName":          {"active": "hidden",   "order": 100,  "scriptsection": "$lvar(539)", "type": "scrolloptions",  "title": "$lvar(6035)", "desc": "$lvar(6036)", "section": "$var(ObjectConfigSection)", "key": "DiscoverScriptName",          "default": "", "options":["$var(DISCOVERSCRIPTLIST)"]},
+                                                "SaveDiscoveredIP":            {"active": "hidden",   "order": 101,  "scriptsection": "$lvar(539)", "type": "bool",           "title": "$lvar(6031)", "desc": "$lvar(6032)", "section": "$var(ObjectConfigSection)", "key": "SaveDiscoveredIP",            "default": "1"},
+                                                "OldDiscoveredIP":             {"active": "hidden",   "order": 102,  "scriptsection": "$lvar(539)", "type": "string",         "title": "$lvar(6021)", "desc": "$lvar(6022)", "section": "$var(ObjectConfigSection)", "key": "OldDiscoveredIP",             "default": ""},
+                                                "CheckDiscoverButton":         {"active": "disabled", "order": 103,  "scriptsection": "$lvar(539)", "type": "buttons",        "title": "Check Discover", "desc": "$lvar(6034)", "section": "$var(ObjectConfigSection)", "key": "CheckDiscover", "buttons": [{"title": "Check Discover", "id": "button_checkdiscover"}]},
                                               }
 
 
-    def On_ConfigChange(self, oSettings, oConfig, uSection, uKey, uValue):
+    def On_ConfigChange(self, oSettings:cBaseInterFaceSettings, oConfig:KivyConfigParser, uSection:str, uKey:str, uValue:str) -> None:
         """
         reacts, if user changes a setting
 
         :param setting oSettings: The kivy settings object
-        :param ConfigParser oConfig: The Kivy config parser
+        :param KivyConfigParser oConfig: The Kivy config parser
         :param string uSection: The section of the change
         :param string uKey: The key name
         :param string uValue: The value
         """
 
-        super(cInterFaceConfig,self).On_ConfigChange(oSettings, oConfig, uSection, uKey, uValue)
+        super().On_ConfigChange(oSettings, oConfig, uSection, uKey, uValue)
 
         if uKey == u'DiscoverSettings':
             Globals.oTheScreen.uConfigToConfig = uSection
@@ -80,43 +97,45 @@ class cInterFaceConfig(cBaseConfig):
             oSetting.aIniSettings[uKey] = uValue
             oSetting.ReadCodeset()
 
-    def GetSettingParFromVar(self, uLink):
+    def GetSettingParFromVar(self, uLink:str) -> str:
         """
         Returns a setting var of a an other interface or config
         The Interfca must allready be initalized
         syntax should be: linked:interfacename:configname:varname
 
-        :rtype: string
-        :param string uLink: The link: syntax should be: linked:interfacename:configname:varname
+        :rtype: str
+        :param str uLink: The link: syntax should be: linked:interfacename:configname:varname
         :return: The Value of the linked setting, empty string, if not found
         """
 
-        aLinks = uLink.split(':')
+        aLinks:List[str,str,str,str] = uLink.split(':')
         if len(aLinks) == 4:
             uInterFaceName  = aLinks[1]
             uConfigName     = aLinks[2]
             uSettingParName = aLinks[3]
             Globals.oInterFaces.LoadInterface(uInterFaceName)
-            oInterface = Globals.oInterFaces.GetInterface(uInterFaceName)
-            oSetting = oInterface.GetSettingObjectForConfigName(uConfigName=uConfigName)
+            oInterface:cBaseInterFace        = Globals.oInterFaces.GetInterface(uInterFaceName)
+            oSetting:cBaseInterFaceSettings  = oInterface.GetSettingObjectForConfigName(uConfigName=uConfigName)
             oSetting.Discover()
             return self.GetSettingParFromVar2(uObjectName=uInterFaceName, uConfigName=uConfigName, uSettingParName=uSettingParName)
         return ""
 
-    def CreateSettingJsonCombined(self, **kwargs):
+    def CreateSettingJsonCombined(self, **kwargs) -> Dict[str,Dict]:
         """
         Creates a json dict which holds all the setting definitions of
         the core interface plus the settings from the discover script (if requested)
 
-        :rtype: dict
-        :keyword name: oSetting: an IterFaceSettins Object, needs to be cBaseInterFaceSettings
+        :keyword name: oSetting: an IterFaceSettings Object, needs to be cBaseInterFaceSettings
         :keyword name: bIncludeDiscoverSettings: If we want to include the discover settings, needs to be bools
         :return: a dict of combined settings
         """
 
-        oSetting                  = kwargs.get("oSetting")
-        bIncludeDiscoverSettings  = kwargs.get("bIncludeDiscoverSettings",True)
-        dRet = super(cInterFaceConfig,self).CreateSettingJsonCombined(**kwargs)
+        oSetting:cBaseInterFaceSettings    = kwargs.get("oSetting")
+        bIncludeDiscoverSettings:bool      = kwargs.get("bIncludeDiscoverSettings",True)
+        dRet:Dict[str,Dict]                = super().CreateSettingJsonCombined(**kwargs)
+        iOrder:int
+        iMax:int
+        iLastOrder: int
 
         if 'DiscoverSettingButton' in dRet and bIncludeDiscoverSettings:
             dRet.update(self.dGenericDiscoverSettings)
@@ -124,11 +143,11 @@ class cInterFaceConfig(cBaseConfig):
                 self.aDiscoverScriptList = Globals.oScripts.GetScriptListForScriptType("DEVICE_DISCOVER")
             iLastOrder = 200
             for uDiscoverScriptName in self.aDiscoverScriptList:
-                oScript = Globals.oScripts.LoadScript(uDiscoverScriptName)
-                dScriptJSONSettings = oScript.cScript.GetConfigJSONforParameters(oSetting.aIniSettings)
+                oScript:cBaseScript = Globals.oScripts.LoadScript(uDiscoverScriptName)
+                dScriptJSONSettings:Dict[str,Dict] = oScript.GetClass("cScript").GetConfigJSONforParameters(oSetting.aIniSettings)
                 iMax = 0
                 for uKey in dScriptJSONSettings:
-                    uTempKey                         = uDiscoverScriptName + "_" + uKey
+                    uTempKey:str                     = uDiscoverScriptName + "_" + uKey
                     dRet[uTempKey]                   = dScriptJSONSettings[uKey]
                     dRet[uTempKey]['key']            = uDiscoverScriptName.upper() + "_" + dScriptJSONSettings[uKey]['key']
                     dRet[uTempKey]['scriptsection']  = uDiscoverScriptName

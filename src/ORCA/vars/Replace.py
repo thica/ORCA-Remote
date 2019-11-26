@@ -17,6 +17,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
+from typing import Dict
 import re
 
 from kivy.logger                import Logger
@@ -35,95 +37,91 @@ rPatternCVar    = r"\$cvar\(([\w\s\[\]\-\+_]+)\)"
 rPatternDefVar  = r"\$dvar\(([\w\s\[\]\-\+_]+)\)"
 
 
-def _VarDefReplace(oMatch):
+
+def _VarDefReplace(oMatch) -> str:
     """
     Internal Helper function used by the regex function to parse the definition variable name and returns its value
 
-    :param re.MatchObject oMatch: The regex match pattern
+    :param re.Match Object oMatch: The regex match pattern
     :return: The definiton var with the given var name
     """
 
-    # on Py27 elemtree cant deal with unicode
-    # so we need to have all on string
-    number = oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
-    uReturn = ORCA.vars.Globals.dDefVars.get(number)
+    uNumber:str = oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
+    uReturn:str = ORCA.vars.Globals.dDefVars.get(uNumber)
     if uReturn is None:
         uReturn = oMatch.string[oMatch.regs[0][0]:oMatch.regs[0][1]]
-        Logger.error(u'Vars: ReplaceDefVars: Var not found: [%s] in \n [%s]' % (number, ToUnicode(oMatch.string)))  # DumpDefinitionVars(this.dDefVars)
+        Logger.error(u'Vars: ReplaceDefVars: Var not found: [%s] in \n [%s]' % (uNumber, ToUnicode(oMatch.string)))  # DumpDefinitionVars(this.dDefVars)
 
     uReturn = str(uReturn)
     return uReturn
 
 
-def _VarReplace(oMatch):
+def _VarReplace(oMatch) -> str:
     """
     Internal Helper function used by the regex function to parse the user variable name and returns its value
 
-    :param re.MatchObject oMatch: The regex match pattern
+    :param re.Match Object oMatch: The regex match pattern
     :return: The user var with the given var name
     """
 
-    number = oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
-    uReturn = ORCA.vars.Globals.dUserVars.get(number)
+    uNumber:str = oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
+    uReturn:str = ORCA.vars.Globals.dUserVars.get(uNumber)
     if uReturn is None:
         uReturn = oMatch.string[oMatch.regs[0][0]:oMatch.regs[0][1]]
-        Logger.warning(u'Vars: ReplaceVars: Var not found:' + number)
+        Logger.warning(u'Vars: ReplaceVars: Var not found:' + uNumber)
     return uReturn
 
 
-def _LanguageVarReplace(oMatch):
+def _LanguageVarReplace(oMatch) -> str:
     """
     Internal Helper function used by the regex function to parse the language variable name and returns its value
 
-    :param re.MatchObject oMatch: The regex match pattern
+    :param re.Match Object oMatch: The regex match pattern
     :return: The language var with the given var name
     """
 
-    number = oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
-    return Globals.oLanguage.StringIDToString(number)
+    uNumber = oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
+    return Globals.oLanguage.StringIDToString(uNumber)
 
-def _ContextVarReplace(oMatch):
+def _ContextVarReplace(oMatch) -> str:
     """
     Internal Helper function used by the regex function to parse the variable name for a specific context and returns its value
 
-    :param re.MatchObject oMatch: The regex match pattern
+    :param re.Match Object oMatch: The regex match pattern
     :return: The user var with the given var name in the context
     """
-    number = oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
-    return ORCA.vars.Globals.dUserVars.get(ORCA.vars.Globals.uRepContext + number)
+    uNumber = oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
+    return ORCA.vars.Globals.dUserVars.get(ORCA.vars.Globals.uRepContext + uNumber)
 
 
-def ReplaceDefVars(uOrgIn, aArray):
+def ReplaceDefVars(uOrgIn:str, dArray:Dict[str,str]) -> str:
     """
     Replaces all occurences of $dvar(xxx) with the definition vars, with name xxx.
     Multiple var placeholder can be given in on string in any combination.
     Nested var placeholder "$dvar($dvar(xxx)) are not allowed.
     A warning will be given if the variable name xxx does not exist
 
-    :rtype: string
-    :param string uOrgIn: The string, where the variable placeholer should be replaced
-    :param dict aArray: A dict of definition vars, which should be used for the replacement
+    :param str uOrgIn: The string, where the variable placeholer should be replaced
+    :param dict dArray: A dict of definition vars, which should be used for the replacement
     :return: The string with replaced variables or the orginal string, if not variables are defined
     """
 
-    ORCA.vars.Globals.dDefVars = aArray
-    uTmp = re.sub(rPatternDefVar, _VarDefReplace, uOrgIn)
-    return uTmp
+    ORCA.vars.Globals.dDefVars = dArray
+    return re.sub(rPatternDefVar, _VarDefReplace, uOrgIn)
 
 
-def ReplaceVars(uOrgIn, uContext=u''):
+def ReplaceVars(uOrgIn:str, uContext:str=u'') -> str:
     """
     Replaces all occurences of $var(xxx) and $lvar(lll) with the uservars or language vars, with name xxx/lll.
     Multiple var placeholder can be given in on string in any combination.
     Nested var placeholder "$var($var(xxx)) are not allowed.
     A warning will be given if the variable name does not exist
 
-    :rtype: string
-    :param string uOrgIn: The string, where the variable placeholer should be replaced
-    :param string uContext: The context for the var, default empty. This should be the same context as given in SetVar
+    :param str uOrgIn: The string, where the variable placeholer should be replaced
+    :param str uContext: The context for the var, default empty. This should be the same context as given in SetVar
     :return: The string with replaced variables or the orginal string, if not variables are defined
     """
-    uTmp = ""
+    uTmp:str = ""
 
     if uOrgIn is None:
         return ""
@@ -137,9 +135,8 @@ def ReplaceVars(uOrgIn, uContext=u''):
 
     except Exception as e:
         if "$var(" in uOrgIn or "$lvar(" in uOrgIn:
-            LogError(u'Vars: ReplaceVars: Runtime Error:' + ToUnicode(uOrgIn) + u':', e)
+            LogError(uMsg=u'Vars: ReplaceVars: Runtime Error:' + ToUnicode(uOrgIn) + u':', oException=e)
         else:
             uTmp = uOrgIn
 
-    #uTmp=uTmp.replace('\\n','\n')
     return ToUnicode(uTmp)

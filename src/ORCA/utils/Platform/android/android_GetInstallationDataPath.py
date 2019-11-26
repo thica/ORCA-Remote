@@ -23,11 +23,11 @@ import os
 import sys
 from ORCA.utils.Path import cPath
 
-def GetInstallationDataPath():
+def GetInstallationDataPath() -> cPath:
     """ Gets the path to the folder where the installer places the ORCA files"""
 
-    sPathname = os.path.dirname(sys.argv[0])
-    uAppPath = os.path.abspath(sPathname)
-    oPathRoot=cPath(uAppPath)
+    uPathname:str   = os.path.dirname(sys.argv[0])
+    uAppPath:str    = os.path.abspath(uPathname)
+    oPathRoot:cPath = cPath(uAppPath)
 
     return oPathRoot

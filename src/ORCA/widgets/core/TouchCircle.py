@@ -19,7 +19,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+from typing                             import List
+from typing                             import Tuple
 from kivy.uix.widget                    import Widget
 from kivy.graphics                      import Color
 from kivy.graphics                      import Ellipse
@@ -30,32 +31,34 @@ __all__ = ['cTouchCircle']
 
 class cTouchCircle(cOrcaButtonBehaviour,Widget):
     def __init__(self,**kwargs):
-        self.tBackGroundColor=kwargs['background_color']
+        self.aBackGroundColor:List[float] = kwargs['background_color']
         Widget.__init__(self,**RemoveNoClassArgs(kwargs,Widget))
         cOrcaButtonBehaviour.__init__(self,**kwargs)
         # create the graphics
         with self.canvas:
-            Color(self.tBackGroundColor[0],self.tBackGroundColor[1], self.tBackGroundColor[2],self.tBackGroundColor[3])
+            Color(self.aBackGroundColor[0],self.aBackGroundColor[1], self.aBackGroundColor[2],self.aBackGroundColor[3])
             self.rect_bg = Ellipse( pos=self.pos, size=self.size, angle_end=kwargs['angle_end'], angle_start=kwargs['angle_start'], source=kwargs['source'])
 
         self.bind(pos=self.update_graphics_pos,size=self.update_graphics_size)
 
-    def update_graphics_pos(self, instance, value):
+    # noinspection PyUnusedLocal
+    def update_graphics_pos(self, instance:Widget, value:Tuple) -> None:
         self.rect_bg.pos = value
 
-    def update_graphics_size(self, instance, value):
+    # noinspection PyUnusedLocal
+    def update_graphics_size(self, instance:Widget, value:Tuple) -> None:
         self.rect_bg.size = value
 
-    def SetColor(self,tBackGroundColor):
-        self.tBackGroundColor=tBackGroundColor
+    def SetColor(self,aBackGroundColor:List[float]) -> None:
+        self.aBackGroundColor=aBackGroundColor
         with self.canvas:
             self.canvas.clear()
-            Color(self.tBackGroundColor[0],self.tBackGroundColor[1], self.tBackGroundColor[2],self.tBackGroundColor[3])
+            Color(self.aBackGroundColor[0],self.aBackGroundColor[1], self.aBackGroundColor[2],self.aBackGroundColor[3])
             self.rect_bg = Ellipse( pos=self.pos, size=self.size)
-    def ModifyAngle(self,**kwargs):
+    def ModifyAngle(self,**kwargs) -> None:
         with self.canvas:
             self.canvas.clear()
-            Color(self.tBackGroundColor[0],self.tBackGroundColor[1], self.tBackGroundColor[2],self.tBackGroundColor[3])
+            Color(self.aBackGroundColor[0],self.aBackGroundColor[1], self.aBackGroundColor[2],self.aBackGroundColor[3])
             self.rect_bg = Ellipse( pos=self.pos, size=self.size, angle_end=kwargs['angle_end'], angle_start=kwargs['angle_start'], source=kwargs['source'])
 
 

@@ -19,6 +19,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Dict
+from typing import Union
+
 from ORCA.scripts.BaseScript import cBaseScript
 import ORCA.Globals as Globals
 
@@ -26,22 +29,26 @@ class cKeyhandlerTemplate(cBaseScript):
     """ template class for discover scripts """
     def __init__(self):
         cBaseScript.__init__(self)
-        self.uType      = u'KEYHANDLER'
-        self.iHash      = 0
+        self.uType:str      = u'KEYHANDLER'
+        self.iHash:int      = 0
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> Union[Dict,None]:
         """ main entry point to run the script """
         if 'register' in args or kwargs.get("caller")=="appstart":
             return self.Register(*args,**kwargs)
         elif "unregister" in args:
             return self.UnRegister(*args,**kwargs)
-        return 0
+        return None
 
-    def Register(self,*args,**kwargs):
+    # noinspection PyUnusedLocal
+    def Register(self,*args,**kwargs) -> None:
         self.iHash=Globals.oNotifications.RegisterNotification(uNotification="on_key",fNotifyFunction=self.HandleKey,uDescription=self.uObjectName, aValueLinks=[{"in":"key","out":"key"}])
+        return None
 
-    def UnRegister(self,*args,**kwargs):
+    # noinspection PyUnusedLocal
+    def UnRegister(self,*args,**kwargs) -> None:
         Globals.oNotifications.UnRegisterNotification_ByHash(self.iHash)
+        return None
 
-    def HandleKey(self,**kwargs):
-        pass
+    def HandleKey(self,**kwargs) -> Dict[str,str]:
+        return {}

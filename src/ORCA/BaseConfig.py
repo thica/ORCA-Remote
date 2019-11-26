@@ -19,8 +19,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__                         import annotations #todo: remove in Python 4.0
+
+
+from typing                             import Union
+from typing                             import Dict
+from typing                             import List
+
 from copy                               import copy
 from kivy.config                        import ConfigParser as KivyConfigParser
+from kivy.uix.settings                  import Settings as KivySettings
 from ORCA.settings.setttingtypes.Public import RegisterSettingTypes
 from ORCA.ui.InputKeyboard              import ShowKeyBoard
 from ORCA.ui.RaiseQuestion              import ShowQuestionPopUp
@@ -33,28 +41,40 @@ from ORCA.utils.TypeConvert             import ToInt
 from ORCA.vars.Access                   import GetVar
 from ORCA.vars.Access                   import SetVar
 from ORCA.vars.Replace                  import ReplaceVars
+from ORCA.ui.InputKeyboard              import cInputKeyboard
 
 import ORCA.Globals as Globals
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.BaseObject   import cBaseObject
+    from ORCA.BaseSettings import cBaseSettings
+else:
+    from typing import TypeVar
+    cBaseObject     = TypeVar("cBaseObject")
+    cBaseSettings   = TypeVar("cBaseSettings")
+
 __all__ = ['cBaseConfig','SettingDictToString']
 
-class cBaseConfig(object):
+
+# noinspection PyProtectedMember
+class cBaseConfig:
     """ Base Class to manage the initialisation/configuration and access to the settings of an Interface or scripts settings objects
     """
 
-    def __init__(self, oObject):
-        self.oObject                        = oObject
-        self.oConfigParser                  = KivyConfigParser()
-        self.oFnConfig                      = None
-        self.uCurrentSection                = None
-        self.uDefaultConfigName             = u'DEFAULT'
-        self.oInputKeyboard                 = None
-        self.dDefaultSettings               = {}
-        self.dSettingsCombined              = {}
-        self.uType                          = ""
-        self.uWidgetName                    = ""
+    def __init__(self, oObject:cBaseObject):
+        self.oObject:cBaseObject                        = oObject
+        self.oConfigParser:KivyConfigParser             = KivyConfigParser()
+        self.oFnConfig:Union[cFileName,None]            = None
+        self.uCurrentSection:str                        = u''
+        self.uDefaultConfigName:str                     = u'DEFAULT'
+        self.oInputKeyboard:Union[cInputKeyboard,None]  = None
+        self.dDefaultSettings:Dict[str,Dict]            = {}
+        self.dSettingsCombined:Dict[str,Dict]           = {}
+        self.uType:str                                  = u''
+        self.uWidgetName:str                            = u''
 
-    def Init(self):
+    def Init(self) -> None:
 
         """ Init function, sets the configuration file name and add the default sections """
 
@@ -67,7 +87,7 @@ class cBaseConfig(object):
             self.oConfigParser.filename = self.oFnConfig.string
             self.CreateSection(uSectionName=self.uDefaultConfigName)
 
-    def LoadConfig(self):
+    def LoadConfig(self) -> None:
         """ Loads the config file (only once) """
 
         if self.oObject.oPathMyData is None:
@@ -83,10 +103,9 @@ class cBaseConfig(object):
                 if not self.oFnConfig.Exists():
                     self.oConfigParser.write()
         except Exception as e:
-            self.oObject.ShowError(u"can\'t load config file: %s" % self.oFnConfig.string, None, e)
+            self.oObject.ShowError(uMsg=u"can\'t load config file: %s" % self.oFnConfig.string,uParConfigName="",oException=e)
 
-
-    def CreateSection(self, uSectionName):
+    def CreateSection(self, uSectionName:str) -> None:
         """
         Adds a new section to the config parser
 
@@ -98,14 +117,13 @@ class cBaseConfig(object):
             self.oConfigParser.add_section(uSectionName)
             self.oConfigParser.write()
 
-    def GetSettingParFromIni(self, uSectionName, uVarName):
+    def GetSettingParFromIni(self, uSectionName:str, uVarName:str) -> str:
         """
         Returns a setting for the configuration ini file
         If the entry does not exist, it tries to puls the value from the  aIniSettings dict of already predifined settings
         If not exist there as well, an error will be logged
 
-        :rtype: string|None
-        :param string uSectionName: The name of the section
+        :param str uSectionName: The name of the section
         :param uVarName: The name of the parameter/setting in the section
         :return: The value of the setting, empty string if not found
          """
@@ -121,11 +139,11 @@ class cBaseConfig(object):
             self.oObject.ShowDebug(u'Returning setting: %s from %s:%s' % (uResult, uSectionName, uVarName))
         return uResult
 
-    def WriteDefinitionConfigPar(self, uSectionName, uVarName, uVarValue, bNowrite=False, bForce= False):
+    def WriteDefinitionConfigPar(self, uSectionName:str, uVarName:str, uVarValue:str, bNowrite:bool=False, bForce:bool= False) -> None:
         """ Writes a variable to the config file
-        :param string uSectionName: The name of the section
-        :param string uVarName: The name of the parameter/setting in the section
-        :param string uVarValue: The value for the setting
+        :param str uSectionName: The name of the section
+        :param str uVarName: The name of the parameter/setting in the section
+        :param str uVarValue: The value for the setting
         :param bool bNowrite: Flag, if we should not immidiatly write the the setting
         :param bool bForce: Flag to force write, even if parameter exists in config
         """
@@ -141,13 +159,13 @@ class cBaseConfig(object):
         if not bNowrite:
             self.oConfigParser.write()
 
-        for uSettingName in self.oObject.aSettings:
-            oSetting = self.oObject.aSettings[uSettingName]
+        for uSettingName in self.oObject.dSettings:
+            oSetting:cBaseSettings = self.oObject.dSettings[uSettingName]
             if oSetting.uConfigName == uSectionName:
                 oSetting.aIniSettings[uVarName] = uVarValue
                 break
 
-    def WriteDefinitionConfig(self, uSectionName, dSettings):
+    def WriteDefinitionConfig(self, uSectionName:str, dSettings:Dict[str,str]) -> None:
         """
         writes all vars given in a dictionary to the config file
 
@@ -159,7 +177,7 @@ class cBaseConfig(object):
             self.WriteDefinitionConfigPar(uSectionName=uSectionName, uVarName=uKey, uVarValue=dSettings[uKey], bNowrite=True)
         self.oConfigParser.write()
 
-    def ConfigureKivySettings(self, oKivySetting):
+    def ConfigureKivySettings(self, oKivySetting:KivySettings) -> KivySettings:
         """
         Create the JSON string for all sections and applies it to a kivy settings object
         Discover settings are excluded
@@ -168,7 +186,9 @@ class cBaseConfig(object):
         :return: The KivySetting object
         """
         RegisterSettingTypes(oKivySetting)
-        aSections = self.oConfigParser.sections()
+        aSections:List[str] = self.oConfigParser.sections()
+        oSetting: cBaseSettings
+
         if len(aSections)==0:
             self.CreateSection(uSectionName = self.uDefaultConfigName)
             aSections = self.oConfigParser.sections()
@@ -185,19 +205,17 @@ class cBaseConfig(object):
             # Read the ini file for this section
             oSetting.ReadConfigFromIniFile(uSection)
             # Create the setting string
-            dSettingsJSON = self.CreateSettingJsonCombined(oSetting=oSetting, bIncludeDiscoverSettings=False)
-
+            dSettingsJSON:Dict[str,Dict] = self.CreateSettingJsonCombined(oSetting=oSetting, bIncludeDiscoverSettings=False)
             uSettingsJSON = SettingDictToString(dSettingsJSON)
             uSettingsJSON = ReplaceVars(uSettingsJSON)
-            oSetting = None
 
             # if there is nothing to configure, then return
-            if uSettingsJSON == u'{}':
+            if uSettingsJSON == u'[]':
                 if self.uType == "interface":
                     Globals.oNotifications.SendNotification('closesetting_interface')
                 else:
                     Globals.oNotifications.SendNotification('closesetting_script')
-                return False
+                return oKivySetting
 
             # add the jSon to the Kivy Setting
             oKivySetting.add_json_panel(uSection, self.oConfigParser, data=uSettingsJSON)
@@ -206,13 +224,13 @@ class cBaseConfig(object):
         oKivySetting.bind(on_config_change=self.On_ConfigChange)
         return oKivySetting
 
-    def On_InputDel(self):
+    def On_InputDel(self) -> None:
         """ User pressed the del configuration button """
         self.oConfigParser.remove_section(self.uCurrentSection)
         self.oConfigParser.write()
         self.ShowSettings()
 
-    def On_InputRen(self, uInput):
+    def On_InputRen(self, uInput:str) -> None:
         """ User pressed the rename configuration button """
         if uInput == u'':
             return
@@ -223,7 +241,7 @@ class cBaseConfig(object):
         self.oConfigParser.write()
         self.ShowSettings()
 
-    def On_InputAdd(self, uInput):
+    def On_InputAdd(self, uInput:str) -> None:
         """
         User pressed the add configuration button
 
@@ -238,7 +256,7 @@ class cBaseConfig(object):
         self.oConfigParser.write()
         self.ShowSettings()
 
-    def On_ConfigChange(self, oSettings, oConfig, uSection, uKey, uValue):
+    def On_ConfigChange(self, oSettings:KivySettings, oConfig:KivyConfigParser, uSection:str, uKey:str, uValue:str):
         """ reacts, if user changes a setting """
         if uKey == u'configchangebuttons':
             self.uCurrentSection = uSection
@@ -263,16 +281,16 @@ class cBaseConfig(object):
                 else:
                     oSetting.aIniSettings[uKey] = uValue
 
-    def ShowSettings(self):
+    def ShowSettings(self) -> None:
         """ Shows the settings page """
         Globals.oTheScreen.AddActionToQueue([{'string': 'updatewidget', 'widgetname': self.uWidgetName}])
 
-    def GetSettingParFromVar2(self, uObjectName, uConfigName, uSettingParName):
+    # noinspection PyMethodMayBeStatic
+    def GetSettingParFromVar2(self, uObjectName:str, uConfigName:str, uSettingParName:str) -> str:
         """
         Gets a Value for a setting parameter from a setting or script
         The Orca vars for the parameter are automatically set in the c"Object"MonitoredSettings class
 
-        :rtype: string
         :param uObjectName: The name of script or interface to use
         :param uConfigName: The name of the Config
         :param uSettingParName: The name of the parameter
@@ -281,7 +299,7 @@ class cBaseConfig(object):
 
         return GetVar(uVarName="CONFIG_" + uSettingParName.upper(), uContext=uObjectName + u'/' + uConfigName)
 
-    def CreateSettingJsonCombined(self, **kwargs):
+    def CreateSettingJsonCombined(self, **kwargs) -> Dict[str,Dict]:
         """
         Creates a json dict which holds all the setting definitions of
         the core object
@@ -291,20 +309,20 @@ class cBaseConfig(object):
         :return: a dict of combined settings
         """
 
-        oSetting                  = kwargs.get("oSetting")
+        # oSetting:cBaseSettings   = kwargs.get("oSetting")
 
         if len(self.dSettingsCombined)!=0:
             return self.dSettingsCombined
-        dRet = {}
+        dRet:Dict[str,Dict] = {}
 
         for uKey in self.dDefaultSettings:
             if self.dDefaultSettings[uKey]["active"] != "disabled":
                 dRet[uKey] = self.dDefaultSettings[uKey]
 
-        dScriptJSON = self.oObject.GetConfigJSON()
+        dScriptJSON:Dict[str,Dict] = self.oObject.GetConfigJSON()
         for uKey in dScriptJSON:
-            dLine = dScriptJSON[uKey]
-            iOrder = dLine['order']
+            dLine:Dict = dScriptJSON[uKey]
+            iOrder:int = dLine['order']
             for uKey2 in dRet:
                 if dRet[uKey2]['order'] >= iOrder:
                     dRet[uKey2]['order'] += 1
@@ -313,26 +331,33 @@ class cBaseConfig(object):
         self.dSettingsCombined = dRet
         return dRet
 
-def SettingDictToString(dSettingList):
+def SettingDictToString(dSettingList:Dict[str,Dict]) -> str:
     """
     Converts a dict into a string suitable for the kivy settings object.
     Only enries which are enabled will be shown
 
-    :rtype: string
     :param dict dSettingList: a JSON dictionary al all settings
     :return: The kivy setting string
     """
 
-    aSubList = list(dSettingList.keys())
-    aSubList2 = sorted(aSubList, key=lambda entry: dSettingList[entry]['order'])
+    dLine:Dict
+    aSubList:List[str] = list(dSettingList.keys())
+    aSubList2:List[str] = sorted(aSubList, key=lambda entry: dSettingList[entry]['order'])
 
-    uResult = u"["
+    uResult:str = u"["
     for uKey in aSubList2:
         if dSettingList[uKey]['active'] == 'enabled':
             dLine = copy(dSettingList[uKey])
             dLine.pop("order", None)
             dLine.pop("active", None)
             dLine.pop("default", None)
+            if "scriptsection" in dLine:
+                dLine.pop("scriptsection", None)
             uResult += DictToUnicode(dLine) + ",\n"
-    uResult = uResult[:-2] + u"]"
+
+    if len(uResult)>2:
+        uResult = uResult[:-2] + u"]"
+    else:
+        uResult="[]"
     return uResult
+

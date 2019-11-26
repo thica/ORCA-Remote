@@ -19,24 +19,29 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import annotations
 
-from time import sleep
+from typing                                 import Dict
+from typing                                 import List
+from typing                                 import Union
+from typing                                 import Tuple
+from typing                                 import Callable
+
 import threading
 import socket
+
+from time                                   import sleep
+from xml.etree.ElementTree                  import Element
+
 from kivy.logger                            import Logger
 from kivy.network.urlrequest                import UrlRequest
-from kivy.compat                            import PY2
+from kivy.uix.button                        import Button
 from xml.etree.ElementTree                  import fromstring
 
-from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
-from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
+from ORCA.scripttemplates.Template_Discover_Scan import cDiscoverScriptTemplate_Scan
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
-from ORCA.utils.LogError                    import LogErrorSmall
-from ORCA.utils.TypeConvert                 import ToFloat
-from ORCA.utils.TypeConvert                 import ToBool
 from ORCA.vars.QueryDict                    import QueryDict
 from ORCA.utils.XML                         import GetXMLTextValue
-import ORCA.Globals as Globals
 
 
 '''
@@ -47,8 +52,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover Enigma Receiver via the webinterface</description>
       <description language='German'>Erkennt Enigma Reveiver mittels des Web Interfaces</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_enigma</local>
@@ -57,7 +62,6 @@ import ORCA.Globals as Globals
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/discover_enigma/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -65,7 +69,7 @@ import ORCA.Globals as Globals
 '''
 
 
-class cScript(cDiscoverScriptTemplate):
+class cScript(cDiscoverScriptTemplate_Scan):
     """
     WikiDoc:Doc
     WikiDoc:Context:Scripts
@@ -73,7 +77,7 @@ class cScript(cDiscoverScriptTemplate):
     WikiDoc:TOCTitle:Discover Enigma
     = Script Discover Enigma =
 
-    The Enigma discover script discovers Enigma2 Receiver which have the web interface running. The engima have to be powered on and not in deep standby. In fact it get through al IP's from the subnet (1 to 255)
+    The Enigma discover script discovers Enigma2 Receiver which have the web interface running. The enigma have to be powered on and not in deep standby. In fact it get through al IP's from the subnet (1 to 255)
     You can filter the discover result by passing the following parameters::
     <div style="overflow:auto; ">
     {| class="wikitable"
@@ -81,155 +85,105 @@ class cScript(cDiscoverScriptTemplate):
     ! align="left" | Description
     |-
     |timeout
-    |Specifies the timout for discover
+    |Specifies the timeout for discover
     |}</div>
 
-    The Enigma Discovery will not peform a pure IP6 discovery, but will return a valid IPv& address as well (if available)
+    The Enigma discovery will not perform a pure IP6 discovery, but will return a valid IPv6 address as well (if available)
 
     WikiDoc:End
     """
-    class cScriptSettings(cBaseScriptSettings):
-        def __init__(self,oScript):
-            cBaseScriptSettings.__init__(self,oScript)
-            self.aIniSettings.fTimeOut                     = 1.0
 
     def __init__(self):
-        cDiscoverScriptTemplate.__init__(self)
-        self.uSubType        = u'Enigma'
-        self.iPort           = 80
-        self.bStopWait       = False
-        self.aResults        = []
-        self.aThreads        = []
+        cDiscoverScriptTemplate_Scan.__init__(self)
+        self.uSubType:str                       = u'Enigma'
+        self.iPort:int                          = 80
+        self.bStopWait:bool                     = False
+        self.uNothingFoundMessage               = "Enigma-Discover: Could not find a Enigma Receiver on the network"
 
-    def Init(self,uObjectName,uScriptFile=u''):
-        """
-        Init function for the script
-
-        :param string uObjectName: The name of the script (to be passed to all scripts)
-        :param uScriptFile: The file of the script (to be passed to all scripts)
-        """
-        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
-        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-
-    def GetHeaderLabels(self):
+    def GetHeaderLabels(self) -> List[str]:
         return ['$lvar(5029)','$lvar(5035)','$lvar(6002)','$lvar(5031)']
 
-    def ListDiscover(self):
-        oSetting                = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
-        dArgs                   = {"onlyonce": 0}
-
-        self.Discover(**dArgs)
-
-        try:
-
-            for dResult in self.aResults:
-                aDevice                 = QueryDict()
-                aDevice.sFoundIP        = dResult["ip"]
-                aDevice.uFoundPort      = str(dResult["port"])
-                aDevice.uFoundModel     = dResult["model"]
-                aDevice.uFoundHostName  = dResult["hostname"]
-                Logger.info(u'Bingo: Discovered device %s:%s' % (aDevice.uFoundModel, aDevice.sFoundIP))
-                uTageLine = aDevice.sFoundIP + aDevice.uFoundModel
-                if self.aDevices.get(uTageLine) is None:
-                    self.aDevices[uTageLine] = aDevice
-                    self.AddLine([aDevice.sFoundIP, aDevice.uFoundHostName, aDevice.uFoundPort, aDevice.uFoundModel], aDevice)
-        except Exception as e:
-            LogErrorSmall(u'Error on Enigma discover',e)
-
-    def CreateDiscoverList_ShowDetails(self,instance):
-        uText=  u"$lvar(5029): %s \n" \
-                u"$lvar(5035): %s \n" \
-                u"$lvar(6002): %s \n"\
-                u"$lvar(5031): %s \n" % (instance.oDevice.sFoundIP,instance.oDevice.uFoundHostName,instance.oDevice.uFoundPort,instance.oDevice.uFoundModel)
+    def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
+        dDevice:QueryDict = oButton.dDevice
+        uText:str = u"$lvar(5029): %s \n" \
+                    u"$lvar(5035): %s \n" \
+                    u"$lvar(6002): %s \n"\
+                    u"$lvar(5031): %s \n" % (dDevice.uFoundIP,dDevice.uFoundHostName,dDevice.uFoundPort,dDevice.uFoundModel)
 
         ShowMessagePopUp(uMessage=uText)
 
-    def Discover(self,**kwargs):
+    # noinspection PyMethodMayBeStatic
+    def CreateReturnDict(self,dResult:Union[QueryDict,None]) -> Dict:
+        if dResult is not None:
+            uHost:str      = dResult["ip"]
+            iPort:int      = dResult["port"]
+            uModel:str     = dResult["model"]
+            uHostName:str  = dResult["hostname"]
+            uIPVersion:str = dResult["ipversion"]
+            return {'Host':uHost,'Port':iPort,'Model':uModel,'Hostname':uHostName,"IPVersion":uIPVersion ,'Exception':None}
+        return {'Host':'','Port':0,'Model':'','Hostname':'',"IPVersion":'' ,'Exception':None}
 
-        uConfigName             = kwargs.get('configname',self.uConfigName)
-        oSetting                = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        fTimeOut                = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
-        bOnlyOnce               = ToBool(kwargs.get('onlyonce', "1"))
+    # noinspection PyMethodMayBeStatic
+    def ParseResult(self,dResult:QueryDict) -> Tuple[str,QueryDict,List]:
+        dDevice:QueryDict       = QueryDict()
+        dDevice.uFoundIP        = dResult["ip"]
+        dDevice.uFoundPort      = str(dResult["port"])
+        dDevice.uFoundModel     = dResult["model"]
+        dDevice.uFoundHostName  = dResult["hostname"]
 
-        del self.aResults[:]
-        del self.aThreads[:]
+        uTageLine:str     = dDevice.uFoundIP + dDevice.uFoundModel
+        aLine:List        = [dDevice.uFoundIP, dDevice.uFoundHostName, dDevice.uFoundPort, dDevice.uFoundMode]
+        Logger.info(u'Bingo: Discovered Enigma device %s' % dDevice.uFoundIP)
+        return uTageLine,dDevice,aLine
 
-        uIPSubNet = Globals.uIPGateWayAssumedV4
-        uIPSubNet = uIPSubNet[:uIPSubNet.rfind(".")]+"."
-
-        for i in range(154,155):
-            uIP = uIPSubNet+str(i)
-            oThread = cThread_CheckIP(uIP=uIP,bOnlyOnce=bOnlyOnce,fTimeOut=fTimeOut, oCaller=self)
-            self.aThreads.append(oThread)
-            oThread.start()
-
-        for oT in self.aThreads:
-            oT.join()
-
-        if len(self.aResults):
-            uHost      = self.aResults[0]["ip"]
-            uPort      = self.aResults[0]["port"]
-            uModel     = self.aResults[0]["model"]
-            uHostName  = self.aResults[0]["hostname"]
-            uIPVersion = self.aResults[0]["ipversion"]
-            return {'Host':uHost,'Port':uPort,'Model':uModel,'Hostname':uHostName,"IPVersion":uIPVersion ,'Exception':None}
-
-        LogErrorSmall("Enigma-Discover: Could not find a Enigma Receiver on the network")
-        return {'Host':'','Port':'','Model':'','Hostname':'',"IPVersion":'' ,'Exception':None}
-
-    @classmethod
-    def GetConfigJSONforParameters(cls,dDefaults):
-        return {"TimeOut":{"type": "numericfloat", "order":0, "title": "$lvar(6019)", "desc": "$lvar(6020)","key": "timeout", "default":"1.0"}}
+    # noinspection PyMethodMayBeStatic
+    def GetThreadClass(self) -> Callable:
+        return cThread_CheckIP
 
 
+# noinspection PyUnusedLocal
 class cThread_CheckIP(threading.Thread):
-    oWaitLock = threading.Lock()
-
-    def __init__(self, uIP, bOnlyOnce,fTimeOut,oCaller):
+    def __init__(self, uIP:str, bOnlyOnce:bool,fTimeOut:float,oCaller:cScript):
         threading.Thread.__init__(self)
-        self.uIP        = uIP
-        self.bOnlyOnce  = bOnlyOnce
-        self.oCaller    = oCaller
-        self.fTimeOut   = fTimeOut
-        self.bStopWait  = False
-        self.oReq       = None
+        self.uIP:str                     = uIP
+        self.bOnlyOnce:bool              = bOnlyOnce
+        self.oCaller:cScript             = oCaller
+        self.fTimeOut:float              = fTimeOut
+        self.bStopWait:bool              = False
+        self.oReq:Union[UrlRequest,None] = None
 
-    def run(self):
-
-        bReturnNow = False
+    def run(self) -> None:
         if self.bOnlyOnce:
-            cThread_CheckIP.oWaitLock.acquire()
             if len(self.oCaller.aResults)>0:
-                bReturnNow=True
-            cThread_CheckIP.oWaitLock.release()
-        if bReturnNow:
-            return
+                return
         self.SendCommand()
 
-    def SendCommand(self):
+    def SendCommand(self) -> None:
+        dResult:QueryDict = QueryDict()
         self.bStopWait      = False
-        uUrlFull= "http://"+self.uIP+"/web/about"
+        uUrlFull:str = "http://"+self.uIP+"/web/about"
         try:
-            self.oReq = UrlRequest(uUrlFull,method="GET",timeout=self.fTimeOut,on_error=self.OnError,on_success=self.OnReceive)
+            self.oReq = UrlRequest(uUrlFull,method="GET",timeout=self.fTimeOut,on_error=self.OnResponse,on_success=self.OnResponse)
             self.NewWait(0.05)
             if self.oReq.resp_status is not None:
-                uResult = self.oReq.result
+                uResult:str = self.oReq.result
                 if "<e2abouts>" in uResult:
-                    if PY2:
-                        oXmlRoot = fromstring(uResult.encode('ascii', 'xmlcharrefreplace'))
-                    else:
-                        oXmlRoot = fromstring(uResult)
-                    oXmlAbout = oXmlRoot.find("e2about")
-                    uModel = GetXMLTextValue(oXmlAbout, "e2model", False, "Enigma")
-                    uFoundHostName = ""
+                    oXmlRoot:Element    = fromstring(uResult)
+                    oXmlAbout:Element   = oXmlRoot.find("e2about")
+                    uModel:str          = GetXMLTextValue(oXmlAbout, "e2model", False, "Enigma")
+                    uFoundHostName:str  = ""
                     try:
                         uFoundHostName = socket.gethostbyaddr(self.uIP)[0]
-                    except Exception as e:
-                        # Logger.error("Cant get Hostname:"+oRet.sFoundIP+" "+str(e))
+                    except Exception:
+                        # Logger.error("Cant get Hostname:"+oRet.uFoundIP+" "+str(e))
                         pass
 
-                    cThread_CheckIP.oWaitLock.acquire()
-                    self.oCaller.aResults.append({"ip":self.uIP,"port":80,"model":uModel,"ipversion":"IPv4","hostname":uFoundHostName})
+                    dResult.ip          = self.uIP
+                    dResult.port        = 80
+                    dResult.model       = uModel
+                    dResult.ipversion   = "IPv4"
+                    dResult.hostname    = uFoundHostName
+                    self.oCaller.aResults.append(dResult)
                     try:
                         uIP = ""
                         aIPs = socket.getaddrinfo(uFoundHostName,None)
@@ -238,31 +192,29 @@ class cThread_CheckIP(threading.Thread):
                             if ":" in uIP:
                                 break
                         if ":" in uIP:
-                            self.oCaller.aResults.append({"ip": uIP, "port": 80, "model": uModel, "ipversion": "IPv6","hostname":uFoundHostName})
-                    except Exception as e:
+                            dResult.ip          = uIP
+                            dResult.port        = 80
+                            dResult.model       = uModel
+                            dResult.ipversion   = "IPv6"
+                            dResult.hostname    = uFoundHostName
+                            self.oCaller.aResults.append(dResult)
+                    except Exception:
                         pass
 
-
-                    cThread_CheckIP.oWaitLock.release()
         except Exception as e:
-            self.oCaller.ShowError("Error on send:",e)
+            self.oCaller.ShowError(uMsg="Error on send:", oException=e)
         return
 
-    def NewWait(self,delay):
+    def NewWait(self,delay) -> None:
         while self.oReq.resp_status is None:
+            # noinspection PyProtectedMember
             self.oReq._dispatch_result(delay)
             sleep(delay)
             if self.bStopWait:
                 self.bStopWait=False
                 break
 
-    def OnError(self,request,error):
-        self.bStopWait      = True
-
-    def OnFailure(self,request,result):
-        self.bStopWait      = True
-
-    def OnReceive(self,oRequest,oResult):
-        self.bStopWait      = True
+    def OnResponse(self,request,error) -> None:
+        self.bStopWait = True
 
 

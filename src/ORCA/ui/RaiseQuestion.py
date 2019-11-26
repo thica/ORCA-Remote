@@ -19,6 +19,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                         import Union
+from typing                         import Callable
 from kivy.uix.widget                import Widget
 from kivy.uix.boxlayout             import BoxLayout
 from kivy.uix.popup                 import Popup
@@ -36,24 +38,22 @@ class cRaiseQuestion(cBasePopup):
     """ Shows a question popup """
     def __init__(self):
         super(cRaiseQuestion, self).__init__()
-        self.oPopup         = None
-        self.oBtnlayout     = None
-        self.oLabel         = None
-        self.oBtn1          = None
-        self.oBtn2          = None
-        self.oBtnDetails    = None
-        self.uMessage       = u''
-        self.fktYes         = None
-        self.fktNo          = None
-        self.uStringDetails = ''
+        self.oBtnlayout:Union[BoxLayout,None]           = None
+        self.oLabel:Union[cScrollableLabelLarge,None]   = None
+        self.oBtn1:Union[Button,None]                   = None
+        self.oBtn2:Union[Button,None]                   = None
+        self.oBtnDetails:Union[Button,None]             = None
+        self.uMessage:str                               = u''
+        self.fktYes:Union[Callable,None]                = None
+        self.fktNo:Union[Callable,None]                 = None
+        self.uStringDetails:str                         = ''
 
-    def RaiseQuestion(self,uTitle='',uMessage='',fktYes=None,fktNo=None,uStringYes='',uStringNo='',uStringDetails=''):
+    def RaiseQuestion(self,uTitle:str='',uMessage:str='',fktYes:Union[Callable,None]=None,fktNo:Union[Callable,None]=None,uStringYes:str='',uStringNo:str='',uStringDetails:str='') -> Popup:
         """ Shows the question """
-        oContent = BoxLayout(orientation='vertical', spacing='5dp')
-
-        self.uMessage=uMessage
-        self.oPopup =  Popup(title=ReplaceVars(uTitle),content=oContent, size=(Globals.iAppWidth*0.9,Globals.iAppHeight*0.9),size_hint=(None, None),auto_dismiss=False)
-        self.oLabel  = cScrollableLabelLarge(text=ReplaceVars(uMessage),size_hint=(1, None),size=(Globals.iAppWidth*0.86, Globals.iAppHeight*0.4),markup = True, noxscroll=True,)
+        oContent:BoxLayout  = BoxLayout(orientation='vertical', spacing='5dp')
+        self.uMessage       = uMessage
+        self.oPopup         = Popup(title=ReplaceVars(uTitle),content=oContent, size=(Globals.iAppWidth*0.9,Globals.iAppHeight*0.9),size_hint=(None, None),auto_dismiss=False)
+        self.oLabel         = cScrollableLabelLarge(text=ReplaceVars(uMessage),size_hint=(1, None),size=(Globals.iAppWidth*0.86, Globals.iAppHeight*0.4),markup = True, noxscroll=True,)
 
         oContent.add_widget(Widget())
         oContent.add_widget(self.oLabel)
@@ -85,28 +85,31 @@ class cRaiseQuestion(cBasePopup):
         self.oPopup.open()
         return self.oPopup
 
-    def fktDetails(self, *largs):
+    # noinspection PyUnusedLocal
+    def fktDetails(self, *largs) -> None:
         """ switch between details and core message """
         if self.oLabel.text==self.uMessage:
             self.oLabel.text=self.uStringDetails
         else:
             self.oLabel.text=self.uMessage
 
-    def fktYES(self, *largs):
+    # noinspection PyUnusedLocal
+    def fktYES(self, *largs) -> None:
         """ handles pressing the yes button """
         cBasePopup.ClosePopup(self)
         if self.fktYes:
             return self.fktYes()
         return None
 
-    def fktNO(self, *largs):
+    # noinspection PyUnusedLocal
+    def fktNO(self, *largs) -> None:
         """ handles pressing the no button """
         cBasePopup.ClosePopup(self)
         if self.fktNo:
             return self.fktNo()
         return None
 
-def ShowQuestionPopUp(uTitle='',uMessage='',fktYes=None,fktNo=None,uStringYes='',uStringNo='', uSound=u'question'):
+def ShowQuestionPopUp(uTitle:str='',uMessage:str='',fktYes:Union[Callable,None]=None,fktNo:Union[Callable,None]=None,uStringYes:str='',uStringNo:str='', uSound:str=u'question'):
     """ all in a function """
     Globals.oSound.PlaySound(uSound)
     oRaiseQuestion      = cRaiseQuestion()

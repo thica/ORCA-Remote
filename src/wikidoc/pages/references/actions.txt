@@ -147,10 +147,10 @@ Actions are either standard actions or custom actions. Standard actions are a se
    <action name="Set Focus" string="setfocus" />
    <action name="NoAction" string="noaction" />
    <action name="Update Page Clocks" string="updatewidget {pageclocks}" />
-   <action name="Send Power Toggle" string="sendcommand" commandname="power_toggle" />
-   <action name="Send Power On" string="sendcommand" commandname="power_on" />
-   <action name="Send Power Off" string="sendcommand" commandname="power_off" />
-   <action name="Send OK" string="sendcommand" commandname="ok" />
+   <action name="Send Power Toggle" string="sendcommand power_toggle" />
+   <action name="Send Power On" string="sendcommand power_on" />
+   <action name="Send Power Off" string="sendcommand power_off" />
+   <action name="Send OK" string="sendcommand ok" />
   </includes>
 </syntaxhighlight></div>
 
@@ -161,15 +161,15 @@ Custom actions are stored in the the customactions.xml file, which you can find 
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
     <action name="Send Start Kodi $dvar(definition_alias_enigma2)">
        <action name="" string="setvar" varname="startapp" varvalue="kodi" />
-       <action name="" string="sendcommand" commandname="startapp" interface="$var($dvar(definition_alias_enigma2)_INTERFACE_ROOT)" configname="$var($dvar(definition_devicename_enigma2)_CONFIGNAME_ROOT)" />
+       <action name="" string="sendcommand startapp" interface="$var($dvar(definition_alias_enigma2)_INTERFACE_ROOT)" configname="$var($dvar(definition_devicename_enigma2)_CONFIGNAME_ROOT)" />
    </action>
     <action name="FKT SwitchOn $dvar(definition_alias_enigma2)">
         <!-- Original wakeup will be valled first by default, so we just add the second stuff-->
-        <action name="Call Web PowerOn (even if fails)" string="sendcommand" commandname="power_on"  interface="$var($dvar(definition_alias_enigma2)_INTERFACE_MAIN)" configname="$var($dvar(definition_devicename_enigma2)_CONFIGNAME_MAIN)" condition="$var(POWERSTATUS_$dvar(definition_devicename_enigma2))==OFF"   />
+        <action name="Call Web PowerOn (even if fails)" string="sendcommand power_on"  interface="$var($dvar(definition_alias_enigma2)_INTERFACE_MAIN)" configname="$var($dvar(definition_devicename_enigma2)_CONFIGNAME_MAIN)" condition="$var(POWERSTATUS_$dvar(definition_devicename_enigma2))==OFF"   />
     </action>
     <action name="FKT SwitchOn $dvar(definition_alias_enigma2) Force">
         <!-- Original wakeup will be valled first by default, so we just add the second stuff-->
-        <action name="Call Web PowerOn (even if fails)" string="sendcommand" commandname="power_on"  interface="$var($dvar(definition_alias_enigma2)_INTERFACE_MAIN)"  configname="$var($dvar(definition_devicename_enigma2)_CONFIGNAME_MAIN)"/>
+        <action name="Call Web PowerOn (even if fails)" string="sendcommand power_on"  interface="$var($dvar(definition_alias_enigma2)_INTERFACE_MAIN)"  configname="$var($dvar(definition_devicename_enigma2)_CONFIGNAME_MAIN)"/>
     </action>
 </includes>
 
@@ -227,7 +227,7 @@ You can specify several parameter for actions:
 
 A simple action could contain just a single line:
 
-<nowiki><action name="Send Get Volume Sub" string="sendcommand" commandname="getvolumesub" retvar="$var(currentvolumesub)"/></nowiki>
+<nowiki><action name="Send Get Volume Sub" string="sendcommand getvolumesub" retvar="$var(currentvolumesub)"/></nowiki>
 
 For single line actions, the name parameter is mandantory, otherwise you cannot reference them.
 
@@ -238,7 +238,7 @@ Multiline actions are a set of actions. They are similar to macros. An example c
 <div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
 <action name="FKT SwitchOn $dvar(definition_alias_enigma2)">
     <!-- Original wakeup will be valled first by default, so we just add the second stuff-->
-    <action name="Call Web PowerOn (even if fails)" string="sendcommand" commandname="power_on"  interface="$var($dvar(definition_alias_enigma2)_INTERFACE_MAIN)" configname="$var($dvar(definition_devicename_enigma2)_CONFIGNAME_MAIN)" condition="$var(POWERSTATUS_$dvar(definition_devicename_enigma2))==OFF"   />
+    <action name="Call Web PowerOn (even if fails)" string="sendcommand power_on"  interface="$var($dvar(definition_alias_enigma2)_INTERFACE_MAIN)" configname="$var($dvar(definition_devicename_enigma2)_CONFIGNAME_MAIN)" condition="$var(POWERSTATUS_$dvar(definition_devicename_enigma2))==OFF"   />
 </action>
 </syntaxhighlight></div>
 

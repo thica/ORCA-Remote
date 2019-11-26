@@ -19,15 +19,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__             import annotations
 import os
+
+from typing                 import Union
+from typing                 import List
+from typing                 import Dict
 
 from xml.etree.ElementTree  import Element
 from xml.etree.ElementTree  import SubElement
 
 from kivy.logger            import Logger
-from kivy.network.urlrequest import UrlRequest
-from kivy.compat            import PY2
-
 
 from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
 from ORCA.utils.TypeConvert import ToUnicode
@@ -42,36 +44,36 @@ from ORCA.vars.Access       import SetVar
 from ORCA.vars.Actions      import Var_DelArray
 from ORCA.utils.XML         import XMLPrettify
 from ORCA.utils.Path        import cPath
-from ORCA.RepManagerEntry   import cRepManagerEntry
+from ORCA.download.RepManagerEntry import cRepManagerEntry
 
 import ORCA.Globals as Globals
 
-oRepositoryManager = None
+oRepositoryManager:Union[cRepositoryManager,None] = None
 
-def RepositoryManager(oPathRepSource):
-    """ starts RepositoryManager, we make it global to avoid wrong garbage collecteio """
+def RepositoryManager(oPathRepSource:cPath) -> None:
+    """ starts RepositoryManager, we make it global to avoid wrong garbage collection """
     global oRepositoryManager
     oRepositoryManager=cRepositoryManager(oPathRepSource)
     oRepositoryManager.CollectAndUpload()
 
-def CreateRepVarArray(uBaseLocalDir):
+def CreateRepVarArray(uBaseLocalDir:str) -> None:
     global oRepositoryManager
     if oRepositoryManager:
         oRepositoryManager.CreateRepVarArray(uBaseLocalDir)
 
-class cRepositoryManager(object):
+class cRepositoryManager:
     """ The Main repository manager class, which uploads all reps to the cloud """
-    def __init__(self,oPathRepSource):
+    def __init__(self,oPathRepSource) -> None:
         super(cRepositoryManager, self).__init__()
-        self.aFiles                           = []
-        self.oRepManagerEntries               = []
-        self.aZipFiles                        = []
-        self.oPathRepSource                   = oPathRepSource
+        self.aFiles:List[str]                           = []
+        self.aRepManagerEntries:List[cRepManagerEntry]  = []
+        self.aZipFiles:List[Dict]                       = []
+        self.oPathRepSource:cPath                       = oPathRepSource
 
-    def CollectAndUpload(self):
+    def CollectAndUpload(self) -> None:
         """ Collects all Reps and uploads them """
         try:
-            oPath= Globals.oPathTmp + "RepManager"
+            oPath:cPath = Globals.oPathTmp + "RepManager"
             oPath.Delete()
 
             self.GetOthers()
@@ -86,217 +88,210 @@ class cRepositoryManager(object):
             self.GetFonts()
             self.CreateRepository()
         except Exception as e:
-            uMsg=LogError('Critical failure on Repository Manager ...' ,e)
+            uMsg=LogError(uMsg='Critical failure on Repository Manager ...' ,oException=e)
             ShowErrorPopUp(uMessage=uMsg)
 
-    def GetOthers(self):
+    def GetOthers(self) -> None:
         """ Gets all others reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
+        del self.aRepManagerEntries[:]
         self.aFiles=(self.oPathRepSource + 'repositories/orca-remote/repositories/others').GetFileList(bSubDirs = False, bFullPath = True)
         for uFn in self.aFiles:
-            oRepManagerEntry=cRepManagerEntry(uFn)
+            oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(uFn)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
-                    self.oRepManagerEntries.append(oRepManagerEntry)
+                    self.aRepManagerEntries.append(oRepManagerEntry)
             else:
                 Logger.warning('Resource not ready for Repository Manager, skipped: '+uFn)
         self.SaveRepositoryXML('others','Various ORCA resources')
 
-    def GetFonts(self):
+    def GetFonts(self) -> None:
         """ Gets all others reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
-        aFontsFolders = Globals.oPathFonts.GetFolderList(bFullPath=True)
+        del self.aRepManagerEntries[:]
+        aFontsFolders:List[str] = Globals.oPathFonts.GetFolderList(bFullPath=True)
         for uFontFolder in aFontsFolders:
-            oFnFontDefinition = cFileName(cPath(uFontFolder)) + "fonts.xml"
-            oRepManagerEntry = cRepManagerEntry(oFnFontDefinition)
+            oFnFontDefinition:cFileName = cFileName(cPath(uFontFolder)) + "fonts.xml"
+            oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFnFontDefinition)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
-                    self.oRepManagerEntries.append(oRepManagerEntry)
+                    self.aRepManagerEntries.append(oRepManagerEntry)
             else:
                 Logger.warning('Font not ready for Repository Manager, skipped: '+oFnFontDefinition)
         self.SaveRepositoryXML('fonts','Font Resources')
 
-
-    #todo: change getCodesets, getskinns, getdefinitions, getinterfaces to uRepSourcePath
-
-    def GetCodesets(self):
+    def GetCodesets(self) -> None:
         """ Gets all codeset reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
+        del self.aRepManagerEntries[:]
         self.aFiles=Globals.oPathCodesets.GetFileList(bSubDirs = True, bFullPath = True)
         for uFn in self.aFiles:
             if uFn.lower().endswith('.xml'):
-                oRepManagerEntry=cRepManagerEntry(uFn)
+                oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(uFn)
                 if oRepManagerEntry.ParseFromXML():
                     if not oRepManagerEntry.oRepEntry.bSkip:
-                        self.oRepManagerEntries.append(oRepManagerEntry)
+                        self.aRepManagerEntries.append(oRepManagerEntry)
                 else:
                     Logger.warning('Codeset not ready for Repository Manager, skipped: '+uFn)
         self.SaveRepositoryXML('codesets','Orca Genuine Codesets')
 
-    def GetSounds(self):
+    def GetSounds(self) -> None:
         """ Gets all sounds reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
+        del self.aRepManagerEntries[:]
         for uSound in Globals.oSound.aSoundsList:
-            oFnSound=cFileName(Globals.oPathSoundsRoot + uSound) +"sounds.xml"
-            oRepManagerEntry=cRepManagerEntry(oFnSound)
+            oFnSound:cFileName = cFileName(Globals.oPathSoundsRoot + uSound) +"sounds.xml"
+            oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFnSound)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
-                    self.oRepManagerEntries.append(oRepManagerEntry)
+                    self.aRepManagerEntries.append(oRepManagerEntry)
             else:
                 Logger.warning('Soundset not ready for Repository Manager, skipped: '+oFnSound)
         self.SaveRepositoryXML('sounds','Orca Genuine Sounds')
 
-    def GetDefinitions(self):
+    def GetDefinitions(self) -> None:
         """ Gets all definition reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
+        del self.aRepManagerEntries[:]
         for uDefinitionName in Globals.aDefinitionList:
-            oFnFile=cFileName().ImportFullPath('%s/definitions/%s/definition.xml' % (Globals.oPathRoot.string, uDefinitionName))
-            oRepManagerEntry=cRepManagerEntry(oFnFile)
+            oFnFile:cFileName=cFileName().ImportFullPath('%s/definitions/%s/definition.xml' % (Globals.oPathRoot.string, uDefinitionName))
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFnFile)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
-                    self.oRepManagerEntries.append(oRepManagerEntry)
+                    self.aRepManagerEntries.append(oRepManagerEntry)
             else:
                 Logger.warning('Definition not ready for Repository Manager, skipped: '+oFnFile)
         self.SaveRepositoryXML('definitions','Orca Genuine Definitions')
 
-    def GetLanguages(self):
+    def GetLanguages(self) -> None:
         """ Gets all Language reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
+        del self.aRepManagerEntries[:]
         for uLanguage in Globals.aLanguageList:
-            oFn=cFileName().ImportFullPath('%s/languages/%s/strings.xml' % (Globals.oPathRoot.string, uLanguage))
-            oRepManagerEntry=cRepManagerEntry(oFn)
+            oFn:cFileName=cFileName().ImportFullPath('%s/languages/%s/strings.xml' % (Globals.oPathRoot.string, uLanguage))
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
-                    self.oRepManagerEntries.append(oRepManagerEntry)
+                    self.aRepManagerEntries.append(oRepManagerEntry)
             else:
                 Logger.warning('Language not ready for Repository Manager, skipped: '+oFn)
         self.SaveRepositoryXML('languages','Orca Genuine Language Files')
 
-    def GetInterfaces(self):
+    def GetInterfaces(self) -> None:
         """ Gets all interface reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
-        for uInterFaceName in Globals.oInterFaces.oInterfaceList:
-            oFn=cFileName().ImportFullPath('%s/interfaces/%s/interface.py' % (Globals.oPathRoot.string, uInterFaceName))
-            oRepManagerEntry=cRepManagerEntry(oFn)
+        del self.aRepManagerEntries[:]
+        for uInterFaceName in Globals.oInterFaces.aInterfaceList:
+            oFn:cFileName=cFileName().ImportFullPath('%s/interfaces/%s/interface.py' % (Globals.oPathRoot.string, uInterFaceName))
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
             if oRepManagerEntry.ParseFromSourceFile():
                 if not oRepManagerEntry.oRepEntry.bSkip:
-                    self.oRepManagerEntries.append(oRepManagerEntry)
+                    self.aRepManagerEntries.append(oRepManagerEntry)
             else:
                 Logger.warning('Interface not ready for Repository Manager, skipped: '+oFn)
         self.SaveRepositoryXML('interfaces','Orca Genuine Interfaces')
 
-    def GetScripts(self):
+    def GetScripts(self) -> None:
         """ Gets all scripts reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
+        del self.aRepManagerEntries[:]
         for uScriptName in Globals.oScripts.dScriptPathList:
-            oFn=cFileName(Globals.oScripts.dScriptPathList[uScriptName])+'script.py'
-            oRepManagerEntry=cRepManagerEntry(oFn)
+            oFn:cFileName=cFileName(Globals.oScripts.dScriptPathList[uScriptName])+'script.py'
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
             if oRepManagerEntry.ParseFromSourceFile():
                 if not oRepManagerEntry.oRepEntry.bSkip:
-                    self.oRepManagerEntries.append(oRepManagerEntry)
+                    self.aRepManagerEntries.append(oRepManagerEntry)
             else:
                 Logger.warning('Script not ready for Repository Manager, skipped: '+oFn)
         self.SaveRepositoryXML('scripts','Orca Genuine Scripts')
 
-    def GetSkins(self):
+    def GetSkins(self) -> None:
         """ Gets all skins reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
+        del self.aRepManagerEntries[:]
         for uSkinName in Globals.aSkinList:
-            oFn=cFileName().ImportFullPath('%s/skins/%s/skin.xml' % (Globals.oPathRoot.string, uSkinName))
-            oRepManagerEntry=cRepManagerEntry(oFn)
+            oFn:cFileName=cFileName().ImportFullPath('%s/skins/%s/skin.xml' % (Globals.oPathRoot.string, uSkinName))
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
-                    self.oRepManagerEntries.append(oRepManagerEntry)
+                    self.aRepManagerEntries.append(oRepManagerEntry)
             else:
                 Logger.warning('Skin not ready for Repository Manager, skipped: '+oFn)
         self.SaveRepositoryXML('skins','Orca Genuine Skins')
 
-    def GetWizardTemplates(self):
+    def GetWizardTemplates(self) -> None:
         """ Gets all wizard reps """
         del self.aFiles[:]
-        del self.oRepManagerEntries[:]
-        aDirs=(Globals.oPathRoot + u'wizard templates').GetFolderList()
+        del self.aRepManagerEntries[:]
+        aDirs:List[str]=(Globals.oPathRoot + u'wizard templates').GetFolderList()
         for uDirName in aDirs:
-            aDirsSub=(Globals.oPathRoot + (u'wizard templates/' + uDirName)).GetFolderList()
+            aDirsSub:List[str]=(Globals.oPathRoot + (u'wizard templates/' + uDirName)).GetFolderList()
             for uDirsSub in aDirsSub:
-                oFn=cFileName(Globals.oPathRoot + (u'wizard templates/' + uDirName + "/" + uDirsSub)) +  (uDirsSub + ".xml")
-                oRepManagerEntry=cRepManagerEntry(oFn)
+                oFn:cFileName=cFileName(Globals.oPathRoot + (u'wizard templates/' + uDirName + "/" + uDirsSub)) +  (uDirsSub + ".xml")
+                oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
                 if oRepManagerEntry.ParseFromXML():
                     if not oRepManagerEntry.oRepEntry.bSkip:
-                        self.oRepManagerEntries.append(oRepManagerEntry)
+                        self.aRepManagerEntries.append(oRepManagerEntry)
                 else:
                     Logger.warning('Wizard Template not ready for Repository Manager, skipped: '+oFn)
         self.SaveRepositoryXML('wizard templates','Wizard Templates')
 
-    def SaveRepositoryXML(self,uType,uDescription):
+    def SaveRepositoryXML(self,uType:str,uDescription:str) -> None:
         """ Saves the main repository directory xml """
-        oPath= Globals.oPathTmp + "RepManager"
+
+        oVal:Element
+        uContent:str
+
+        oPath:cPath= Globals.oPathTmp + "RepManager"
         oPath.Create()
         oPath=oPath+"repositories"
         oPath.Create()
         oPath=oPath+uType
         oPath.Create()
-        oFnXml=cFileName(oPath) +'repository.xml'
+        oFnXml:cFileName=cFileName(oPath) +'repository.xml'
 
-        oXMLRoot    = Element('repository')
-        oVal        = SubElement(oXMLRoot,'version')
-        oVal.text   = '1.00'
-        oVal        = SubElement(oXMLRoot,'type')
-        oVal.text   = uType
-        oVal        = SubElement(oXMLRoot,'description')
-        oVal.text   = uDescription
+        oXMLRoot:Element    = Element('repository')
+        oVal                = SubElement(oXMLRoot,'version')
+        oVal.text           = '1.00'
+        oVal                = SubElement(oXMLRoot,'type')
+        oVal.text           = uType
+        oVal                = SubElement(oXMLRoot,'description')
+        oVal.text           = uDescription
 
-        oXMLEntries = SubElement(oXMLRoot,'entries')
+        oXMLEntries:Element = SubElement(oXMLRoot,'entries')
 
-        for oEntry in self.oRepManagerEntries:
+        for oEntry in self.aRepManagerEntries:
             Logger.debug ('Saving Repository-Entry [%s]' % oEntry.oFnEntry.string)
 
             oEntry.oRepEntry.WriteToXMLNode(oXMLEntries)
             for oSource in oEntry.oRepEntry.aSources:
-                bZipParentDir= cPath.CheckIsDir(oSource.uLocal)
+                bZipParentDir:bool = cPath.CheckIsDir(oSource.uLocal)
                 # Create according Zip
                 if bZipParentDir:
-                    uUpper1=os.path.split(os.path.abspath(oSource.uSourceFile))[0]
-                    uUpper2=os.path.split(os.path.abspath(uUpper1))[0]
-                    uUpper=uUpper1[len(uUpper2)+1:]
-                    uUpper=os.path.basename(oSource.uLocal)
-                    uUpper=os.path.basename(oSource.uSourceFile)
-                    uFinalPath=uType
-                    oDest= cFileName().ImportFullPath('%s/RepManager/repositories/%s/%s' % (Globals.oPathTmp.string, uFinalPath, uUpper))
-                    uUpper1=os.path.split(os.path.abspath(oSource.uLocal))[0]
-                    uRoot = '%s/%s/' % (Globals.oPathRoot.string, uType)
-                    uRoot = AdjustPathToOs(ReplaceVars(uUpper1)+'/')
+                    uUpper:str          = os.path.basename(oSource.uSourceFile)
+                    uFinalPath:str      = uType
+                    oDest:cFileName     = cFileName().ImportFullPath('%s/RepManager/repositories/%s/%s' % (Globals.oPathTmp.string, uFinalPath, uUpper))
+                    uUpper1:str         = os.path.split(os.path.abspath(oSource.uLocal))[0]
+                    uRoot:str           = AdjustPathToOs(ReplaceVars(uUpper1)+'/')
                     self.aZipFiles.append({'filename':oSource.uLocal,'dstfilename':oDest.string, 'removepath':uRoot, 'skipfiles':ToUnicode(oEntry.oRepEntry.aSkipFileNames)})
                 else:
-                    uDest = AdjustPathToOs('%s/RepManager/repositories/%s/%s.zip' % (Globals.oPathTmp.string, uType, os.path.splitext(os.path.basename(oSource.uLocal))[0]))
-                    uRoot = AdjustPathToOs(Globals.oPathRoot.string + "/" + oSource.uTargetPath)
+                    uDest:str = AdjustPathToOs('%s/RepManager/repositories/%s/%s.zip' % (Globals.oPathTmp.string, uType, os.path.splitext(os.path.basename(oSource.uLocal))[0]))
+                    uRoot:str = AdjustPathToOs(Globals.oPathRoot.string + "/" + oSource.uTargetPath)
                     self.aZipFiles.append({'filename':oSource.uLocal,'dstfilename':uDest, 'removepath':uRoot})
 
-        oFSFile = open(oFnXml.string, 'w')
-        uContent=XMLPrettify(oXMLRoot)
-        uContent=ReplaceVars(uContent)
-        if PY2:
-            oFSFile.write(uContent.encode('utf8'))
-        else:
-            oFSFile.write(EscapeUnicode(uContent))
+        oFSFile     = open(oFnXml.string, 'w')
+        uContent    = XMLPrettify(oXMLRoot)
+        uContent    = ReplaceVars(uContent)
+        oFSFile.write(EscapeUnicode(uContent))
         oFSFile.close()
 
-    def CreateRepository(self):
+    def CreateRepository(self) -> None:
         self.CreateZipVarArray()
         SetVar(uVarName="REPMAN_BASELOCALDIR", oVarValue=(Globals.oPathTmp + "RepManager").string)
         Globals.oTheScreen.AddActionToQueue([{'string': 'call Create Repository'}])
         return
 
-    def CreateZipVarArray(self):
+    def CreateZipVarArray(self) -> None:
         SetVar(uVarName="REPMAN_ZIPCNTFILES",  oVarValue= str(len(self.aZipFiles)))
         Var_DelArray("REPMAN_ZIPSOUREFILENAMES[]")
         Var_DelArray("REPMAN_ZIPDESTFILENAMES[]")
@@ -304,13 +299,13 @@ class cRepositoryManager(object):
         Var_DelArray("REPMAN_ZIPSKIPFILES[]")
         Var_DelArray("REPMAN_ZIPTYPE[]")
 
-        i=0
+        i:int=0
         for dZipFile in self.aZipFiles:
-            uIndex = str(i) + "]"
+            uIndex:str = str(i) + "]"
             SetVar(uVarName="REPMAN_ZIPSOURCEFILENAMES[" + uIndex ,oVarValue=dZipFile['filename'])
             SetVar(uVarName="REPMAN_ZIPDESTFILENAMES[" + uIndex ,oVarValue=dZipFile['dstfilename'])
             SetVar(uVarName="REPMAN_ZIPREMOVEPATH[" + uIndex ,oVarValue=dZipFile['removepath'])
-            uSkipFiles = dZipFile.get('skipfiles',None)
+            uSkipFiles:str = dZipFile.get('skipfiles',None)
             if uSkipFiles is not None:
                 SetVar(uVarName="REPMAN_ZIPSKIPFILES[" + uIndex, oVarValue=dZipFile['skipfiles'])
                 SetVar(uVarName="REPMAN_ZIPTYPE[" + uIndex,oVarValue= "folder")
@@ -319,29 +314,15 @@ class cRepositoryManager(object):
 
             i=i+1
 
-    def CreateRepVarArray(self,uBaseLocalDir):
-        aLocalFiles = cPath(uBaseLocalDir).GetFileList(bSubDirs=True, bFullPath=True)
+    # noinspection PyMethodMayBeStatic
+    def CreateRepVarArray(self,uBaseLocalDir:str) -> None:
+        aLocalFiles:List[str] = cPath(uBaseLocalDir).GetFileList(bSubDirs=True, bFullPath=True)
         SetVar(uVarName="REPMAN_LOCALBASENAME", oVarValue=uBaseLocalDir)
         SetVar(uVarName="REPMAN_CNTFILES",      oVarValue= str(len(aLocalFiles)))
         Var_DelArray("REPMAN_LOCALFILENAMES[]")
 
-        i=0
+        i:int=0
         for uLocalFile in aLocalFiles:
-            uIndex = str(i) + "]"
+            uIndex:str = str(i) + "]"
             SetVar(uVarName="REPMAN_LOCALFILENAMES[" + uIndex ,oVarValue=uLocalFile)
             i=i+1
-
-
-def GetYoutubeRTSP(uID):
-    """ unused stuff """
-    video_id = "_iuukyjCz74"
-    gdata = "http://gdata.youtube.com/feeds/api/videos/"
-    oWeb         = UrlRequest(gdata+video_id,on_success=YTOnSuccess)
-    return oWeb
-
-def YTOnSuccess(request,result):
-    """ unused stuff """
-    u1="rtsp:"+result.split('rtsp:')[1].split('.3gp')[0] + ".3gp"
-    return u1
-
-

@@ -26,11 +26,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from kivy.logger import Logger
+from typing                                     import Dict
+from wakeonlan                                  import send_magic_packet
+from kivy.logger                                import Logger
+from ORCA.interfaces.BaseInterface              import cBaseInterFace
+from ORCA.interfaces.BaseInterfaceSettings      import cBaseInterFaceSettings
+from ORCA.Action                                import cAction
+from ORCA.actions.ReturnCode                    import eReturnCode
 
-from ORCA.interfaces.BaseInterface import cBaseInterFace
+import struct, socket
+import ORCA.Globals as Globals
 
-from wakeonlan import send_magic_packet
 
 '''
 <root>
@@ -40,8 +46,8 @@ from wakeonlan import send_magic_packet
       <description language='English'>Interface to send a WOL command to device</description>
       <description language='German'>Interface ein WOL Kommando an ein Gerät zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/wake_on_lan</local>
@@ -50,7 +56,6 @@ from wakeonlan import send_magic_packet
         </source>
       </sources>
       <skipfiles>
-        <file>wake_on_lan/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -61,22 +66,59 @@ class cInterface(cBaseInterFace):
 
     def __init__(self):
         cBaseInterFace.__init__(self)
-        self.aSettings   = {}
+        self.dSettings:Dict   = {}
 
-    def GetConfigJSON(self):
+    def GetConfigJSON(self) -> Dict:
         return {"MAC": {"active": "enabled", "order": 0, "type": "string", "title": "$lvar(IFACE_WOL_3)", "desc": "$lvar(IFACE_WOL_4)",  "section": "$var(ObjectConfigSection)","key": "MAC",  "default":"aa:bb:cc:dd:ee:ff"}
                 }
 
-    def DoAction(self,oAction):
+    def DoAction(self,oAction:cAction) -> eReturnCode:
         self.ShowDebug(u'Request Action Wakeup')
-        oSetting=self.GetSettingObjectForConfigName(oAction.dActionPars.get(u'configname',u''))
+        uConfigName:str = oAction.dActionPars.get(u'configname',u'')
+        oSetting:cBaseInterFaceSettings = self.GetSettingObjectForConfigName(uConfigName)
         if oAction.dActionPars.get("commandname")=="power_on":
-            return self.WakeOnLan(oSetting.aIniSettings.uMAC)
+            return self.WakeOnLan(oSetting.aIniSettings.uMAC, uConfigName)
         else:
             Logger.error("wake_lan interface only supports the power_on command")
-            return False
+            return eReturnCode.Error
 
-    def WakeOnLan(self,uMacAddress):
+    def WakeOnLan(self,uMacAddress,uConfigName:str) -> eReturnCode:
         self.ShowInfo(u'Sending Magic Package for '+uMacAddress)
-        send_magic_packet(uMacAddress)
-        return 1
+        uMacAddressNorm:str=self.NormalizeMac(uMacAddress,uConfigName)
+        send_magic_packet(uMacAddressNorm)
+        self.wake_on_lan(uMacAddressNorm)
+        return eReturnCode.Success
+
+    # noinspection PyMethodMayBeStatic
+    def NormalizeMac(self,uMacAddress:str,uConfigName:str) -> str:
+        # Check macaddress format and try to compensate
+        uRet:str = uMacAddress
+        if len(uRet) == 12:
+            pass
+        elif len(uRet) == 12 + 5:
+            sep = uRet[2]
+            uRet = uRet.replace(sep, '')
+        else:
+            self.ShowError("Wrong format for MAC Address:"+uMacAddress,uConfigName)
+        return uRet
+
+    # noinspection PyMethodMayBeStatic
+    def wake_on_lan(self,uMacAddress):
+        """ As usual, Microsoft is not able to code properly, so we need some more code to get it working on Windows """
+
+        i:int
+        # Pad the synchronization stream
+        byData = b'FFFFFFFFFFFF' + (uMacAddress * 20).encode()
+        bySend_data = b''
+
+        # Split up the hex values in pack
+        for i in range(0, len(byData), 2):
+            bySend_data += struct.pack('!B', int(byData[i: i + 2], 16))
+
+        # Broadcast it to the LAN
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        sock.sendto(bySend_data, ('255.255.255.255', 9))
+        sock.sendto(bySend_data, (Globals.uIPSubNetAssumedV4, 9)) # This should do it, the rest is fallbal
+        sock.sendto(bySend_data, ('255.255.255.255', 7))
+        sock.sendto(bySend_data, (Globals.uIPSubNetAssumedV4, 7))

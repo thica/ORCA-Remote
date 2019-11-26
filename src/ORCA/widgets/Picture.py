@@ -19,18 +19,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.widgets.Base              import cWidgetBase
-from ORCA.widgets.core.TouchImage   import cTouchImage
-from ORCA.utils.Atlas               import ToAtlas
-from ORCA.utils.XML                 import GetXMLTextAttribute
-from ORCA.utils.FileName            import cFileName
-from ORCA.utils.GetSetDefinitionName import GetSetDefinitionName
-from ORCA.utils.LogError            import LogError
-from ORCA.definition.DefinitionContext import SetDefinitionContext
-from ORCA.definition.DefinitionContext import RestoreDefinitionContext
-from ORCA.vars.Replace              import ReplaceVars
+from xml.etree.ElementTree              import Element
+from kivy.uix.widget                    import Widget
+from ORCA.widgets.Base                  import cWidgetBase
+from ORCA.widgets.core.TouchImage       import cTouchImage
+from ORCA.utils.Atlas                   import ToAtlas
+from ORCA.utils.XML                     import GetXMLTextAttribute
+from ORCA.utils.FileName                import cFileName
+from ORCA.utils.GetSetDefinitionName    import GetSetDefinitionName
+from ORCA.utils.LogError                import LogError
+from ORCA.definition.DefinitionContext  import SetDefinitionContext
+from ORCA.definition.DefinitionContext  import RestoreDefinitionContext
+from ORCA.vars.Replace                  import ReplaceVars
 
 import ORCA.Globals as Globals
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
 
 __all__ = ['cWidgetPicture']
 
@@ -67,29 +76,30 @@ class cWidgetPicture(cWidgetBase):
 
     def __init__(self,**kwargs):
         super(cWidgetPicture, self).__init__(**kwargs)
-        self.oFnPictureNormal               = cFileName('')
+        self.oFnPictureNormal:cFileName               = cFileName('')
         # we dont use a cFileName object by purpose, as we might need to handle vars and skin reference
-        self.uPictureNormalVar            = ""
+        self.uFnPictureNormalVar:str            = ""
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+
         """ Reads further Widget attributes from a xml node """
-        bRet= self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
+        bRet:bool = self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         self.SetPictureNormal (GetXMLTextAttribute(oXMLNode,u'picturenormal',    False,u''))
         return bRet
 
-    def SetPictureNormal(self,uPictureNormal,bClearCache=False):
+    def SetPictureNormal(self,uFnPictureNormal:str,bClearCache:bool=False) -> bool:
         """ sets the picture """
 
         try:
-            uNewDefinitionContext=u''
+            uNewDefinitionContext:str=u''
 
-            if "DEFINITIONPATH[" in uPictureNormal:
-                uNewDefinitionContext,uPictureNormal=GetSetDefinitionName(uPictureNormal)
+            if "DEFINITIONPATH[" in uFnPictureNormal:
+                uNewDefinitionContext,uFnPictureNormal=GetSetDefinitionName(uFnPictureNormal)
             elif Globals.uDefinitionContext!=self.uDefinitionContext:
                 uNewDefinitionContext = self.uDefinitionContext
                 SetDefinitionContext(uNewDefinitionContext)
-            self.uPictureNormalVar    = uPictureNormal
-            self.oFnPictureNormal     = self.oFnPictureNormal.Clear().ImportFullPath(ReplaceVars(uPictureNormal))
+            self.uFnPictureNormalVar    = uFnPictureNormal
+            self.oFnPictureNormal     = self.oFnPictureNormal.Clear().ImportFullPath(ReplaceVars(uFnPictureNormal))
 
             if self.oObject:
                 self.oObject.source   =  ToAtlas(self.oFnPictureNormal)
@@ -99,12 +109,12 @@ class cWidgetPicture(cWidgetBase):
             if uNewDefinitionContext != '':
                 RestoreDefinitionContext()
         except Exception as e:
-            LogError(u"Can't set picture:"+uPictureNormal, e)
+            LogError(uMsg=u"Can't set picture:"+uFnPictureNormal, oException=e)
             return False
 
         return True
 
-    def Create(self,oParent):
+    def Create(self, oParent: Widget) -> bool:
         """ creates the Widget """
         self.AddArg('allow_stretch',True)
         self.AddArg('keep_ratio',False)
@@ -119,6 +129,7 @@ class cWidgetPicture(cWidgetBase):
             return True
         return False
 
-    def UpdateWidget(self):
-        self.SetPictureNormal(self.uPictureNormalVar, bClearCache=True)
+    def UpdateWidget(self) -> None:
+        super().UpdateWidget()
+        self.SetPictureNormal(self.uFnPictureNormalVar, bClearCache=True)
         return

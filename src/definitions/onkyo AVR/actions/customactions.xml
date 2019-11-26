@@ -24,8 +24,8 @@
       <action name="Get the ID of the Service" string="modifyvar" operator="fromvar" varname="tmpvarname" />
       <action name="Show Player Page"  string="showpage Page_Device_$dvar(definition_alias_mediaplayer_template)_Net" effect="slide" direction="left" />
       <action name="Show PlayerPage NET"  string="showpage Page_Device_$dvar(definition_alias_mediaplayer_template)_Net" effect="slide" direction="left"/>
-      <action name="Select Input Net" string='sendcommand' commandname="main.input-selector" commandparameter='{"value":"2b"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-      <action name="And Call it" string='sendcommand' commandname="main.net-service" commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+      <action name="Select Input Net" string="sendcommand main.input-selector" commandparameter='{"value":"2b"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+      <action name="And Call it" string="sendcommand main.net-service" commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
       <action name="Confirm with OK" string='Send OK' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
       <action name="Update Receiver Info" string="call $dvar(definition_alias_mediaplayer_template) Update All Triggers" />
       <action1 name="Confirm with OK" string='Send OK' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
@@ -43,7 +43,7 @@
     <action name="If we found something" string="if" condition="tmp_presetindex!=" />
       <action name="Compile Var Name" string="setvar tmpvarname=$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Presets_id[$var(tmp_presetindex)]" />
       <action name="Get the ID of the Preset" string="modifyvar" operator="fromvar" varname="tmpvarname" />
-      <action name="And Call it" string='sendcommand' commandname="channel_select"  commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+      <action name="And Call it" string="sendcommand channel_select"  commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
       <action name="Update Receiver Info" string="call $dvar(definition_alias_mediaplayer_template) Update All Triggers" />
     <action name="endif" string="endif" />
   </action>
@@ -67,7 +67,7 @@
       <action name="Show PlayerPage USB"  string="showpage Page_Device_$dvar(definition_alias_mediaplayer_template)_Net" effect="slide" direction="left" condition="$var(tmpvarname)=2a"/>
       <action name="Show PlayerPage DLNA" string="showpage Page_Device_$dvar(definition_alias_mediaplayer_template)_Net" effect="slide" direction="left" condition="$var(tmpvarname)=27"/>
       <action name="Show PlayerPage NET"  string="showpage Page_Device_$dvar(definition_alias_mediaplayer_template)_Net" effect="slide" direction="left" condition="$var(tmpvarname)=2b"/>
-      <action name="And Call it" string='sendcommand' commandname="main.input-selector" commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+      <action name="And Call it" string="sendcommand main.input-selector" commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
       <action name="Update Receiver Info" string="call $dvar(definition_alias_mediaplayer_template) Update All Triggers" />
     <action name="endif" string="endif" />
   </action>
@@ -83,7 +83,7 @@
     <action name="If we found something"          string="if" condition="tmp_modeindex!=" />
       <action name="Compile Var Name"             string="setvar tmpvarname=$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_ListeningMode_key[$var(tmp_modeindex)]" />
       <action name="Get the ID of the Mode"       string="modifyvar" operator="fromvar" varname="tmpvarname" />
-      <action name="And Call it"                  string='sendcommand'         commandname="main.listening-mode" commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+      <action name="And Call it"                  string="sendcommand main.listening-mode" commandparameter='{"value":"$var(tmpvarname)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
       <action name="Update Receiver Info"         string="call $dvar(definition_alias_mediaplayer_template) Update All Triggers" />
     <action name="endif"                          string="endif" />
    </action>
@@ -117,15 +117,14 @@
   <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_template) Onkyo">
     <!-- Just for the main page, the standard pagestart option will be called by the media template -->
 
-    <action name="Init Receiver Commands" string="sendcommand" commandname="init" retvar="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
-    <action name="Show Warning if nothing found" string="showquestion" title="$lvar(5040): $dvar(definition_alias_onkyoavr)" message="$lvar(onkyoAVR_10009)" actionyes="dummy" condition="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model)=Unknown"/>
-
-    <action name="Set OnkyoAVR Power On Action" string="setwidgetattribute" widgetname="Button Power On" attributename="action" attributevalue="FKT SwitchOn $dvar(definition_alias_mediaplayer_template) Force" />
-    <action name="Set OnkyoAVR Power Off Action" string="setwidgetattribute" widgetname="Button Power Off" attributename="action" attributevalue="FKT SwitchOff $dvar(definition_alias_mediaplayer_template) Force" />
-
-    <action name="Send Default Picture Type to Link" string="sendcommand" commandname="main.net-usb-jacket-art.setlink" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var(DEVICEISONLINE)!=FALSE"/>
-    <action name="Send Get Audio" string="sendcommand" commandname="main.audio-infomation.query" retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var(DEVICEISONLINE)!=FALSE"/>
-    <action name="Send Get Video" string="sendcommand" commandname="main.video-infomation.query" retvar="$dvar(definition_alias_mediaplayer_template)_videoinfo" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var(DEVICEISONLINE)!=FALSE"/>
+    <action name="Init Receiver Commands"            string="sendcommand init"     retvar="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var(DEVICEISONLINE)!=FALSE" />
+    <action name="Show Warning if nothing found"     string="showquestion"         title="$lvar(5040): $dvar(definition_alias_onkyoavr)" message="$lvar(onkyoAVR_10009)" actionyes="dummy" condition="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model)=Onkyo"/>
+    <action name="Show Warning if nothing found"     string="showquestion"         title="$lvar(5040): $dvar(definition_alias_onkyoavr)" message="$lvar(onkyoAVR_10009)" actionyes="dummy" condition="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model)=Unknown"/>
+    <action name="Set OnkyoAVR Power On Action"      string="setwidgetattribute"   widgetname="Button Power On" attributename="action" attributevalue="FKT SwitchOn $dvar(definition_alias_mediaplayer_template) Force" />
+    <action name="Set OnkyoAVR Power Off Action"     string="setwidgetattribute"   widgetname="Button Power Off" attributename="action" attributevalue="FKT SwitchOff $dvar(definition_alias_mediaplayer_template) Force" />
+    <action name="Send Default Picture Type to Link" string="sendcommand main.net-usb-jacket-art.setlink" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var(DEVICEISONLINE)!=FALSE"/>
+    <action name="Send Get Audio"                    string="sendcommand main.audio-infomation.query" retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var(DEVICEISONLINE)!=FALSE"/>
+    <action name="Send Get Video"                    string="sendcommand main.video-infomation.query" retvar="$dvar(definition_alias_mediaplayer_template)_videoinfo" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var(DEVICEISONLINE)!=FALSE"/>
   </action>
 
 

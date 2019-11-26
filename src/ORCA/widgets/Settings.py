@@ -19,8 +19,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                         import Dict
+from typing                         import Union
+from kivy.uix.widget                import Widget
+from kivy.config                    import ConfigParser
+from xml.etree.ElementTree          import Element
 from random                         import random
 from functools                      import partial
+from kivy.uix.settings              import Settings
 from kivy.uix.settings              import SettingsWithSidebar
 from kivy.uix.settings              import SettingsWithSpinner
 from kivy.clock                     import Clock
@@ -33,12 +39,18 @@ from ORCA.vars.Replace              import ReplaceVars
 from ORCA.vars.Access               import SetVar
 from ORCA.vars.Actions              import Var_Invert
 from ORCA.widgets.FileViewer        import cWidgetFileViewer
-
+from ORCA.interfaces.BaseInterface  import cBaseInterFace
+from ORCA.scripts.BaseScript        import cBaseScript
 
 import ORCA.Globals as Globals
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
 
 __all__ = ['cWidgetSettings']
-
 
 
 class cWidgetSettings(cWidgetFileViewer):
@@ -77,29 +89,36 @@ class cWidgetSettings(cWidgetFileViewer):
 
     def __init__(self, **kwargs):
         super(cWidgetSettings, self).__init__(**kwargs)
-        self.uSettingsType      = u''
-        self.oXMLNode           = None
-        self.aSettingObjects    = {}
-        self.oReAssignObject    = None
+        self.uSettingsType:str                  = u''
+        self.oXMLNode:Union[Element,None]       = None
+        self.aSettingObjects:Dict[str,Settings] = {}
+        self.oReAssignObject                    = None
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         self.uSettingsType  = GetXMLTextAttribute(oXMLNode,u'settingstype', False,u'interface')
-        self.bHasText = False
-        self.oXMLNode=oXMLNode
+        self.bHasText       = False
+        self.oXMLNode       = oXMLNode
         bRet=super(cWidgetSettings, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
         if bRet:
-            bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
+            bRet = self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         return bRet
 
-    def Create(self,oParent):
+    def Create(self, oParent: Widget) -> bool:
 
+        self.oParent = oParent
         if self.uSettingsType == u'orca':
-            self.CreateReal(oParent)
+            return self.CreateReal(oParent)
         else:
             Clock.schedule_once(partial(self.CreateReal,oParent),0)
+            return True
 
-    def CreateReal(self,oParent,*largs):
-        uSettingsJSON=""
+    # noinspection PyUnusedLocal
+    def CreateReal(self,oParent:Widget,*largs) -> bool:
+        uSettingsJSON:str = ""
+        uConfigName:str
+        oInterFace:cBaseInterFace
+        oScript:cBaseScript
+
         try:
             if self.uSettingsType==u'powerstati':
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
@@ -164,7 +183,7 @@ class cWidgetSettings(cWidgetFileViewer):
             if self.uSettingsType=='definition':
 
                 if Globals.uDefinitionToConfigure=='':
-                    return
+                    return False
 
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
                     settings=self.oObject
@@ -182,15 +201,15 @@ class cWidgetSettings(cWidgetFileViewer):
                     return True
                 return False
         except Exception as e:
-            LogError("Fatal Error creating settings Panel",e)
+            LogError(uMsg="Fatal Error creating settings Panel",oException=e)
             Logger.error(uSettingsJSON)
         return False
 
-    def UpdateWidget(self):
+    def UpdateWidget(self) -> None:
 
         if self.oObject is None:
-            pass
-            # return
+            # pass
+            return
 
         if self.oParent is not None:
             if self.uSettingsType== 'definition':
@@ -214,16 +233,20 @@ class cWidgetSettings(cWidgetFileViewer):
 
         self.Create(self.oParent)
 
-    def On_SettingsClose(self,instance):
+    # noinspection PyUnusedLocal
+    def On_SettingsClose(self,instance:Settings) -> bool:
         """ Called, when the setting will be closed """
         Globals.oNotifications.SendNotification('closesetting_'+self.uSettingsType)
         return True
-    def On_SettingsDiscoverClose(self,instance):
+
+    # noinspection PyUnusedLocal
+    def On_SettingsDiscoverClose(self,instance:Settings) -> bool:
         """ Called, when the discover settings will be closed """
         Globals.oNotifications.SendNotification('closesetting_'+self.uSettingsType)
         return True
 
-    def On_Definition_ConfigChange(self, settings,config, section, key, value):
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def On_Definition_ConfigChange(self, settings:Settings,config:ConfigParser, section:str, key:str, value:str) -> None:
         """ Called, when a setting has been changed, will set the associated var as well """
         if key in Globals.oDefinitions.aDefinitionSettingVars:
             if value.startswith("button_"):
@@ -231,12 +254,16 @@ class cWidgetSettings(cWidgetFileViewer):
             else:
                 SetVar(uVarName=key, oVarValue=value)
 
-    def On_PowerStatus_ConfigChange(self, settings,config, section, key, value):
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def On_PowerStatus_ConfigChange(self, settings:Settings,config:ConfigParser, section:str, key:str, value:str) -> None:
         """ Called, when a powerstatus var has been changed, will invert the associated var as well """
         if key.startswith('powerstatus_'):
-            uVar=key[12:].upper()
-            Var_Invert(uVar)
-    def Scheduled_AssignExistingObject(self,*largs):
+            Var_Invert(key[12:].upper())
+
+    # noinspection PyUnusedLocal
+    def Scheduled_AssignExistingObject(self,*largs) -> None:
         self.oParent.add_widget(self.oReAssignObject)
-    def Schedule_AssignNewObject(self,*largs):
+
+    # noinspection PyUnusedLocal
+    def Schedule_AssignNewObject(self,*largs) -> None:
         self.CreateReal(self.oParent)

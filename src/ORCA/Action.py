@@ -17,64 +17,76 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import annotations
+from typing import Dict
+from typing import List
+from typing import Union
+from xml.etree.ElementTree import Element
 
 from copy                   import copy
-from kivy.compat            import string_types
 from kivy.logger            import Logger
-
 from ORCA.vars.Replace      import ReplaceVars
+from ORCA.utils.TypeConvert import ToDic
 from ORCA.utils.LogError    import LogError
 from ORCA.vars.Helpers      import CopyDict
 
+
 import ORCA.Globals as Globals
 
-__all__ = ['cAction','cActionType','GetActionID','CreateActionForSimpleActionList']
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.widgets.Base import cWidgetBase
+else:
+    from typing import TypeVar
+    cWidgetBase = TypeVar("cWidgetBase")
 
-dSplitActions = {   'if':           {'DstPars': ['condition'],          'SrcParsToken': ''},
-                    'showpage':     {'DstPars': ['pagename'],           'SrcParsToken': ''},
-                    'call':         {'DstPars': ['actionname'],         'SrcParsToken': ''},
-                    'setvar':       {'DstPars': ['varname','varvalue'], 'SrcParsToken': '='},
-                    'goto':         {'DstPars': ['label'],              'SrcParsToken': ''},
-                    'wait':         {'DstPars': ['time'],               'SrcParsToken': ''},
-                    'updatewidget': {'DstPars': ['widgetname'],         'SrcParsToken': ''},
-                    }
 
-def CreateActionForSimpleActionList(dAction):
+__all__ = ['cAction','GetActionID','CreateActionForSimpleActionList']
+
+dSplitActions:Dict[str,Dict] =     {'if':           {'DstPars': ['condition'],          'SrcParsToken': ''},
+                                    'showpage':     {'DstPars': ['pagename'],           'SrcParsToken': ''},
+                                    'call':         {'DstPars': ['actionname'],         'SrcParsToken': ''},
+                                    'setvar':       {'DstPars': ['varname','varvalue'], 'SrcParsToken': '='},
+                                    'goto':         {'DstPars': ['label'],              'SrcParsToken': ''},
+                                    'wait':         {'DstPars': ['time'],               'SrcParsToken': ''},
+                                    'updatewidget': {'DstPars': ['widgetname'],         'SrcParsToken': ''},
+                                    'blockgui':     {'DstPars': ['status'],             'SrcParsToken': ''},
+                                    'sendcommand':  {'DstPars': ['commandname'],        'SrcParsToken': ''},
+                                    }
+
+def CreateActionForSimpleActionList(dAction:Dict) -> cAction:
     """ Creates a single action for the actionlist """
     return cAction(pars=dAction)
 
-def GetActionID(uID):
+def GetActionID(uID:str) -> int:
     """ Returns the action to an ID """
     return Globals.oActions.oActionType.ActionToId.get(uID,Globals.oActions.oActionType.NoAction)
 
-class cActionType(object):
-    """ Representation of an action type object """
 
-    def __init__(self):
-        self.iValue = 0
-        self.ActionToId = {}
-
-    def RegisterAction(self,uActionName):
-        setattr(self, uActionName, self.iValue)
-        self.ActionToId[uActionName.lower()] = self.iValue
-        self.iValue+=1
-
-
-class cAction(object):
+class cAction:
     """ The Action Representation """
 
     def __init__(self,**kwargs):
-        self.bForce             = False
-        self.dActionPars        = {}
-        self.dCommandParameter  = {}  # just internal for interfaces
-        self.iActionId          = 0
-        self.oParentWidget      = None
-        self.uActionName        = u''
-        self.uActionString      = u''
-        self.uActionTapType     = u'both'  # could be both, single, double
-        self.uFileName          = u''
-        self.uRetVar            = u''
-        self.uFunctionContext   = u''
+        self.bForce:bool                        = False
+        self.dActionPars:Dict                   = {}
+        self.dCommandParameter:Dict             = {}  # just internal for interfaces
+        self.iActionId:int                      = 0
+        self.oParentWidget:Union[cWidgetBase,None]   = None
+        self.uActionName:str                    = u''
+        self.uActionString:str                  = u''
+        self.uActionTapType:str                 = u'both'  # could be both, single, double
+        self.uFileName:str                      = u''
+        self.uRetVar:str                        = u''
+        self.uCmd:str                           = u''
+        self.bWaitForResponse:bool              = False  # Used for Codeset Actions
+
+        # for resultparser
+        self.uParseResultOption:str             = u''
+        self.uParseResultTokenizeString:str     = u''
+        self.uGetVar:str                        = u''
+        self.uGlobalDestVar:str                 = u''
+        self.uLocalDestVar:str                  = u''
+        self.uFunctionContext:str
 
         if "actionname" in kwargs:
             self.iActionId             = GetActionID(kwargs["actionname"])
@@ -91,8 +103,8 @@ class cAction(object):
             self.ParseAction(oSource=kwargs["pars"],oParentWidget=self.oParentWidget)
 
 
-    def __copy__(self):
-        oRes=cAction()
+    def __copy__(self) -> cAction:
+        oRes:cAction            = cAction()
         oRes.__dict__           = self.__dict__.copy()
         # oRes.dActionPars        = dict(self.dActionPars)
         # oRes.dCommandParameter  = dict(self.dCommandParameter)
@@ -112,10 +124,10 @@ class cAction(object):
 
         return oRes
 
-    def ParseAction(self,oSource,oParentWidget=None):
+    def ParseAction(self,oSource:Union[str,Dict,Element],oParentWidget:Union[cWidgetBase,None]=None) -> None:
         try:
             ''' parses an action from a given element , could be a dict or a XML node'''
-            if isinstance(oSource, string_types):
+            if isinstance(oSource, str):
                 Logger.error("Invalid Action Parameter:"+oSource)
                 self.uActionString      =  'noaction'
                 self.iActionId          =  GetActionID(self.uActionString)
@@ -130,6 +142,8 @@ class cAction(object):
                 for uKey in self.dActionPars:
                     self.dActionPars[uKey]=self.dActionPars[uKey].replace("$par(","$var("+self.uFunctionContext+"_parameter_")
 
+            if "commandparameter" in self.dActionPars:
+                self.dActionPars["commandparameter"]= ToDic(self.dActionPars.get("commandparameter"))
 
             self.uActionString      =  self.dActionPars.get(u'string',u'noaction')
             self.SplitAction(self.uActionString)
@@ -142,12 +156,12 @@ class cAction(object):
             self.iActionId          =  GetActionID(self.uActionString)
             self.uActionTapType     =  self.dActionPars.get(u'taptype',u'both')
 
-            uConfigName = u''
-            uInterFace  = u''
+            # uConfigName:str = u''
+            uInterFace:str  = u''
 
             if self.oParentWidget:
                 uInterFace         =  self.dActionPars.get(u'interface',oParentWidget.oParentScreenPage.uDefaultInterface)
-                uConfigName        =  self.dActionPars.get(u'configname',oParentWidget.oParentScreenPage.iDefaultConfigName)
+                # uConfigName        =  self.dActionPars.get(u'configname',oParentWidget.oParentScreenPage.iDefaultConfigName)
 
             uInterFace         =  self.dActionPars.get(u'interface',uInterFace)
 
@@ -157,12 +171,18 @@ class cAction(object):
             self.uRetVar            =  self.dActionPars.get(u'retvar',u'')
             self.bForce             =  self.dActionPars.get(u'force',False)
         except Exception as e:
-            LogError("Cant parse Action" , e)
+            LogError(uMsg="Cant parse Action" , oException=e)
 
-    def SplitAction(self,uActionString):
+    def SplitAction(self,uActionString:str) -> None:
+
+        i:int
+        iPos:int
+        uString:str
+        uParameter:str
+        dSplitAction:Dict
+        aParameter:List
 
         try:
-            dRet = {}
             iPos = uActionString.find(" ")
             if iPos>0:
                 uString    = uActionString[:iPos]
@@ -178,17 +198,21 @@ class cAction(object):
                     self.uActionString = uString
                     self.dActionPars['string'] = uString
         except Exception as e:
-            LogError("Wrong Parameter for Action given:"+uActionString, e)
+            LogError(uMsg = "Wrong Parameter for Action given:"+uActionString, oException = e)
 
-    def Dump(self,iIndent):
+    def Dump(self,iIndent:int) -> None:
         """ Dumps a specific action """
 
-        uOut = " " * iIndent
+        uOut:str
+        uKey:str
+        uAttributName:str
+
+        uOut = u" " * iIndent
         if self.uActionName:
             uOut+= self.uActionName+": "
         for uAttributName in self.__dict__:
             oValue= self.__dict__[uAttributName]
-            if isinstance(oValue,string_types):
+            if isinstance(oValue,str):
                 if not "$var" in oValue:
                     uOut+="'%s'='%s' , " % (uAttributName,oValue)
                 else:

@@ -21,17 +21,15 @@
 import ast
 import json
 
-from collections            import OrderedDict
-from future.utils           import iteritems
+from typing import Dict
+from typing import List
+from typing import Union
 
-from ORCA.Compat            import PY2
-from ORCA.Compat            import string_types
+
+from collections            import OrderedDict
 from ORCA.utils.LogError    import LogError, LogErrorSmall
 
-if PY2:
-    from HTMLParser     import HTMLParser  # noinspection PyCompatibility
-else:
-    import html
+import html
 
 __all__ = ['ToBool',
            'ToDic',
@@ -53,26 +51,24 @@ __all__ = ['ToBool',
            'DictToUnicode'
           ]
 
-def ToHex(iInt,iLen=2):
+def ToHex(iInt:int,iLen:int=2)->str:
     """
     Converts as integer to a hex string
 
-    :rtype: basestring
     :param int iInt: Integer value to convert
     :param int iLen: Optional: output len, default = 2
     :return: The Hex String
     """
 
-    sTmp="0"*iLen+hex(iInt)
-    sTmp=sTmp.replace('x', '0')
-    sTmp=sTmp[iLen*-1:]
-    return sTmp
+    uTmp:str = "0"*iLen+hex(iInt)
+    uTmp     = uTmp.replace('x', '0')
+    uTmp     = uTmp[iLen*-1:]
+    return uTmp
 
-def ToBytes(uStr):
+def ToBytes(uStr:str) -> bytes:
     """
     Converts as string to bytes
 
-    :rtype: bytes
     :param str uStr: input string
     :return: The bytes string
     """
@@ -82,78 +78,63 @@ def ToBytes(uStr):
 
     bRet = uStr
     try:
-        if PY2:
-            bRet = bytes(uStr)
-        else:
-            # noinspection PyArgumentList
-            bRet = bytes(uStr, 'utf-8')
+        bRet = bytes(uStr, 'utf-8')
     except Exception as e:
-        LogError(u'ToBytes: Convert error, using fallback', e)
+        LogError(uMsg=u'ToBytes: Convert error, using fallback', oException=e)
 
     return bRet
 
-def ToHexFromString(uString):
+def ToHexFromString(uString:str) -> str:
     """
     Converts a string to a hex string
-
-    :rtype: string
     :param string uString: the string to convert to a hex string
     :return: A hex string representation of a string
     """
     return ":".join("{:02x}".format(ord(c)) for c in uString)
 
-def DictToUnicode(Obj):
+def DictToUnicode(vObj:Union[Dict,List,bool,str,None]) -> str:
     """
     Converts a dict to a string, without the u' prefix for unicode strings
-
-    :rtype: basestring
-    :param dict Obj:
     :return: The string represenation
     """
     try:
 
-        if isinstance(Obj, dict):
-            if len(Obj)==0:
+        if isinstance(vObj, dict):
+            if len(vObj)==0:
                 return "{}"
 
             uRet=u'{'
-            for key, value in iteritems(Obj):
+            for key, value in vObj.items():
                 uRet=uRet+DictToUnicode(key)+": "+DictToUnicode(value)+","
             return uRet[:-1]+u'}'
-        elif isinstance(Obj, list):
-            if len(Obj)>0:
+        elif isinstance(vObj, list):
+            if len(vObj)>0:
                 uRet = "["
-                for value in Obj:
+                for value in vObj:
                     uRet+=DictToUnicode(value)+","
                 uRet =  uRet[:-1] +"]"
                 return uRet
             return "[]"
-        elif isinstance(Obj, bool):
-            return ToUnicode(Obj).lower()
-        elif PY2 and isinstance(Obj, unicode):
-            return '"'+Obj+'"'
-        elif isinstance(Obj, str):
-            return '"'+ToUnicode(Obj)+'"'
-        elif Obj is None:
+        elif isinstance(vObj, bool):
+            return ToUnicode(vObj).lower()
+        elif isinstance(vObj, str):
+            return '"'+vObj+'"'
+        elif vObj is None:
             return '"none"'
         else:
-            return ToUnicode(Obj)
+            return ToUnicode(vObj)
     except Exception as e:
-        LogError(u'DictToUnicode: Dictionary Conver error, using fallback',e)
-        return ToUnicode(str(Obj))
+        LogError(uMsg=u'DictToUnicode: Dictionary Conver error, using fallback',oException=e)
+        return ToUnicode(str(vObj))
 
-def ToString(Obj):
+def ToString(uObj:str) -> bytes:
     """
     Converts an unicode string into a string
 
-    :rtype: string
-    :param string Obj:
+    :param string uObj:
     :return: The converted string (not unicode)
     """
-
-    if isinstance(Obj,str):
-        return Obj
-    return Obj.encode('ascii', 'xmlcharrefreplace')
+    return uObj.encode('ascii', 'xmlcharrefreplace')
 
 
 def ToUnicode(Obj):
@@ -168,54 +149,26 @@ def ToUnicode(Obj):
     if isinstance(Obj, dict):
         return DictToUnicode(Obj)
 
-    if PY2:
+    if isinstance(Obj, str):
+        return Obj
 
-        if isinstance(Obj, unicode):
-            return Obj
-
-        try:
-            if isinstance(Obj, str):
-                try:
-                    return Obj.decode('utf-8')
-                except Exception as e:
-                    return Obj.decode('utf-8','replace')
-            else:
-                return unicode(str(Obj))
-        except Exception as e:
-            LogError(u'Unicode Transfer Error',e)
-            print ('[',Obj,']')
-            print (type(Obj))
-            try:
-                for cChar in Obj[:50]:
-                    print (ord(cChar)),
-            except:
-                pass
+    try:
+        if isinstance(Obj, bytes):
+            return Obj.decode("utf-8")
+        else:
+            return str(Obj)
+    except Exception as e:
+        LogError(uMsg=u'Unicode Transfer Error',oException=e)
+        print ('[',Obj,']')
+        print (type(Obj))
+        if isinstance(Obj, str):
+            for cChar in Obj:
+                print (ord(cChar)),
             print ('')
 
-        return Obj
+    return Obj
 
-    else:
-
-        if isinstance(Obj, string_types):
-            return Obj
-
-        try:
-            if isinstance(Obj, bytes):
-                return Obj.decode("utf-8")
-            else:
-                return str(Obj)
-        except Exception as e:
-            LogError(u'Unicode Transfer Error',e)
-            print ('[',Obj,']')
-            print (type(Obj))
-            if isinstance(Obj, string_types):
-                for cChar in Obj:
-                    print (ord(cChar)),
-                print ('')
-
-        return Obj
-
-def ToOrderedDic(uString):
+def ToOrderedDic(uString:str) -> OrderedDict:
     """
     converts a (unicode) string into a ordered dict
 
@@ -236,13 +189,13 @@ def ToOrderedDic(uString):
                 uValue=uKeyValue[1].strip(' \n\"')
                 dDict[uName] = uValue
     except Exception as e:
-        LogError(u'ToOrderedDic: Dictionary Convert error',e)
-        LogError(uString)
+        LogError(uMsg=u'ToOrderedDic: Dictionary Convert error',oException=e)
+        LogError(uMsg=uString)
 
     return dDict
 
 
-def ToDic(uString):
+def ToDic(uString:str) -> Dict:
     """
     converts a (unicode) string into a dict
 
@@ -255,8 +208,6 @@ def ToDic(uString):
     if uString==u'':
         return {}
 
-    uRet = ''
-
     try:
         if uString.startswith(u'{'):
             try:
@@ -264,80 +215,71 @@ def ToDic(uString):
             except Exception:
                 pass
 
-        if not isinstance(uRet, dict):
-            try:
-                if "\\" in uString:
-                    uString2 = uString.replace("\\","***BaCkSlAsH***")
-                    uRet     = ast.literal_eval(uString2)
-                    DictUnescaceBackslash(uRet)
-                    return uRet
-                else:
-                    return ast.literal_eval(uString)
-            except Exception:
-                pass
+        try:
+            if "\\" in uString:
+                uString2 = uString.replace("\\","***BaCkSlAsH***")
+                dRet     = ast.literal_eval(uString2)
+                DictUnescaceBackslash(dRet)
+                return dRet
+            else:
+                return ast.literal_eval(uString)
+        except Exception:
+            pass
 
-        if not isinstance(uRet, dict):
-            uString = uString.replace("\'", "\"")
+        uString = uString.replace("\'", "\"")
 
         if uString.startswith(u'{'):
             try:
                 return json.loads(uString)
             except Exception:
                 pass
-        if not isinstance(uRet, dict):
-            try:
-                return ast.literal_eval(uString)
-            except Exception:
-                pass
 
-        if not isinstance(uRet, dict):
-            LogError(u'ToDic: can\'t convert string to dic:'+uString)
-        return uRet
+        try:
+            return ast.literal_eval(uString)
+        except Exception:
+            pass
+
+        LogError(uMsg=u'ToDic: can\'t convert string to dic:'+uString)
+        return {}
 
     except Exception as e:
-        LogErrorSmall(u'ToDic: Dictionary Convert error',e)
-        LogErrorSmall(uString)
-    return uString
+        LogErrorSmall(uMsg=u'ToDic: Dictionary Convert error',oException=e)
+        LogErrorSmall(uMsg=uString)
+    return {}
 
-def DictUnescaceBackslash(oDict):
+def DictUnescaceBackslash(oDict:Dict) -> None:
     """
     Unescapes previous escapes backslashes in dict strings
     :param dict oDict:
     """
 
     try:
-        for key, value in iteritems(oDict):
+        for key, value in oDict.items():
             if isinstance(value, dict):
                 DictUnescaceBackslash(value)
-            elif isinstance(value, string_types):
+            elif isinstance(value, str):
                 oDict[key]=oDict[key].replace("***BaCkSlAsH***","\\")
             elif isinstance(value, list):
                 for elem in value:
                     DictUnescaceBackslash(elem)
     except Exception as e:
-        LogError(u'DictUnescaceBackslash',e)
+        LogError(uMsg=u'DictUnescaceBackslash',oException=e)
 
 
-def ToList(uString):
+def ToList(uString:str) -> List:
     """
     converts a (unicode) string into a list
     Standard format should be "['par1','par2']"
 
-    :rtype: list
     :param string uString: A string representation of a list
     :return: The list
     """
-
 
     if isinstance(uString, list):
         return uString
 
     if uString=="" or uString=="[]" or uString=="u[]":
         return []
-
-    #if not uString.startswith("["):
-    #    return uString.split(",")
-
 
     try:
         return ast.literal_eval(uString)
@@ -357,12 +299,11 @@ def ToList(uString):
             return [uString]
 
     try:
-        uRet=ast.literal_eval(uString)
-        return uRet
+        return ast.literal_eval(uString)
 
     except Exception as e:
-        LogError(u'ToList: List Convert error',e)
-        LogError(uString)
+        LogError(uMsg=u'ToList: List Convert error',oException=e)
+        LogError(uMsg=uString)
         uRet= [uString]
     return uRet
 
@@ -392,10 +333,7 @@ def ToLong(uString):
     :return: The long integer value
     """
     try:
-        if PY2:
-            return long(uString)
-        else:
-            return int(uString)
+        return int(uString)
     except Exception:
         return 0
 
@@ -497,11 +435,7 @@ def UnEscapeUnicode(Obj):
     :return: Unescaped unicode value
     """
 
-    if PY2:
-        parser = HTMLParser()
-        return parser.unescape(Obj)
-    else:
-        return html.unescape(Obj)
+    return html.unescape(Obj)
 
 
 def EscapeUnicode(Obj):

@@ -28,6 +28,7 @@ class cDefinitionVars(OrderedDict):
         next two functions required to have a definitionvars object included as an element tree attribute """
     #def __contains__(self,key):
     #    return key in self
-    def encode(self,encoding, decode):
+    # noinspection PyUnusedLocal
+    def encode(self,encoding, decode) ->str:
         """ Dummy to return the number of definiton vars """
         return '%d Definitionvars' % (len(self))

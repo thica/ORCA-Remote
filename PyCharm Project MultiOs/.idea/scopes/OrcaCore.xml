@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="OrcaCore" pattern="!file:interfaces/android_adb/adb_helper.py&amp;&amp;!file[ORCA]:scripts/helper/helper_hue/hue-python-rgb-converter-master//*&amp;&amp;!file:scripts/tools/tool_irdbitach/IRDB.py&amp;&amp;!file[ORCA]:interfaces/elv_max/maxcube//*&amp;&amp;!file:ORCA/widgets/core/FileBrowser.py" />
+</component>

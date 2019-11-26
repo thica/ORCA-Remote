@@ -23,11 +23,13 @@ from os.path                 import expanduser
 from kivy.logger             import Logger
 from ORCA.utils.Path         import cPath
 
-def GetUserDownloadsDataPath():
+def GetUserDownloadsDataPath() -> cPath:
     """ returns the path to the download folder """
 
-    oPathUserPath = cPath(expanduser(u'~'))
-    oPathUserDownLoadTest = oPathUserPath + 'Desktop'
+    oPathUserPath:cPath         = cPath(expanduser(u'~'))
+    oPathUserDownLoadTest:cPath = oPathUserPath + 'Downloads'
+    oPathDownLoad: cPath
+
     if oPathUserDownLoadTest.IsDir():
         oPathDownLoad = oPathUserPath+"Downloads"
     else:

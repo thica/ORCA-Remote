@@ -18,10 +18,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from copy import copy
-
-from kivy.logger                import Logger
-from kivy.compat                import string_types
+from typing                         import Dict
+from typing                         import Union
+from copy                           import copy
+from kivy.logger                    import Logger
 
 from ORCA.actions.Base              import cEventActionBase
 from ORCA.utils.EventResultParser   import cEventScriptResultParser
@@ -32,6 +32,9 @@ from ORCA.utils.TypeConvert         import ToDic
 from ORCA.utils.TypeConvert         import ToUnicode
 from ORCA.vars.Replace              import ReplaceVars
 from ORCA.vars.Access               import SetVar
+from ORCA.Action                    import cAction
+from ORCA.interfaces.BaseInterface  import cBaseInterFace
+from ORCA.actions.ReturnCode        import eReturnCode
 
 import ORCA.Globals as Globals
 
@@ -42,10 +45,10 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
 
     def __init__(self, oEventDispatcher):
         # to pass sendcommand actionpars to codeset actionpars
-        self.dActionPars={}
+        self.dActionPars:Dict={}
         super(cEventActionsScriptsAndInterfaces, self).__init__(oEventDispatcher)
 
-    def ExecuteActionRegisterScriptGroup(self,oAction):
+    def ExecuteActionRegisterScriptGroup(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -70,12 +73,11 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'RegisterScriptGroup:',oAction)
-        uGroupName = oAction.dActionPars.get("groupname","")
+        uGroupName:str = oAction.dActionPars.get("groupname","")
         Globals.oScripts.RegisterScriptGroup(uGroupName)
-        return -2
+        return eReturnCode.Nothing
 
-
-    def ExecuteActionRunScript(self,oAction):
+    def ExecuteActionRunScript(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -118,24 +120,23 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'RunScript:',oAction)
 
-        uScriptName             = oAction.dActionPars.get("scriptname","")
-        dParameters             = ToDic(ReplaceVars(oAction.dActionPars.get("commandparameter","{}")))
+        uScriptName:str             = oAction.dActionPars.get("scriptname","")
+        dParameters:Dict            = ToDic(ReplaceVars(oAction.dActionPars.get("commandparameter","{}")))
         Globals.oEvents.CopyActionPars(dTarget=dParameters, dSource=oAction.dActionPars, uReplaceOption="donotreplacetarget", bIgnoreHiddenWords=True)
 
         if isinstance(dParameters,dict):
             dParameters["oAction"]  = oAction
             dParameters["caller"]   = "action"
 
-            uResponse = Globals.oScripts.RunScript(uScriptName,**dParameters)
-            if uResponse:
+            dResponse:Union[Dict,None] = Globals.oScripts.RunScript(uScriptName,**dParameters)
+            if dResponse:
                 oResultParser = cEventScriptResultParser(oAction)
-                oResultParser.ParseResult(uResponse, oAction.dActionPars)
+                oResultParser.ParseResult(ToUnicode(dResponse), ToUnicode(oAction.dActionPars))
         else:
             Logger.warning("Can't run script, parameter error:"+str(dParameters))
-        return -2
+        return eReturnCode.Nothing
 
-
-    def ExecuteActionAddTrigger(self,oAction):
+    def ExecuteActionAddTrigger(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -171,8 +172,11 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         WikiDoc:End
         """
 
-        uAction  = ReplaceVars(oAction.dActionPars.get("actionname",""))
-        uRetVar  = ReplaceVars(oAction.dActionPars.get("retvar",""))
+        uInterFace:str
+        uConfigName:str
+
+        uAction:str  = ReplaceVars(oAction.dActionPars.get("actionname",""))
+        uRetVar:str  = ReplaceVars(oAction.dActionPars.get("retvar",""))
         uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction)
 
         if uAction!=u'' or uRetVar!=u'':
@@ -180,17 +184,17 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         else:
             self.oEventDispatcher.LogAction(u'Del Trigger',oAction,u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
 
-        oInterface=Globals.oInterFaces.dInterfaces.get(uInterFace)
+        oInterface:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterFace)
         if oInterface:
             if not oInterface.bIsInit:
                 oInterface.Init(uInterFace)
             oInterface.AddTrigger(oAction)
-            return 0
+            return eReturnCode.Success
         else:
-            LogError(u'Action: Addtrigger: Interface not found:'+uInterFace)
-            return 1
+            LogError(uMsg=u'Action: Addtrigger: Interface not found:'+uInterFace)
+            return eReturnCode.Error
 
-    def ExecuteActionSendCommand(self,oAction):
+    def ExecuteActionSendCommand(self,oAction:cAction) -> eReturnCode:
 
         """
         WikiDoc:Doc
@@ -222,48 +226,49 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         |}</div>
         A short example:
         <div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
-        <action name="Send Set Volume Sub" string="sendcommand" commandname="setvolumesub" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
+        <action name="Send Set Volume Sub" string="sendcommand setvolumesub" commandparameter='{"volumetoset":"$var(volumetoset)"}'/>
         </syntaxhighlight></div>
         WikiDoc:End
         """
-        uInterFace=u''
-        uConfigName=u''
+        uInterFace:str  = u''
+        uConfigName:str = u''
 
-        oCommandParameter=oAction.dActionPars.get("commandparameter","{}")
-        if isinstance(oCommandParameter, string_types):
-            oAction.dCommandParameter  = ToDic(ReplaceVars(oCommandParameter))
-        if isinstance(oCommandParameter, dict):
-            oAction.dCommandParameter  = ToDic(ReplaceVars(DictToUnicode(oCommandParameter)))
+        vCommandParameter:Union[str,Dict] = oAction.dActionPars.get("commandparameter","{}")
+        if isinstance(vCommandParameter, str):
+            oAction.dCommandParameter  = ToDic(ReplaceVars(vCommandParameter))
+        if isinstance(vCommandParameter, dict):
+            oAction.dCommandParameter  = ToDic(ReplaceVars(DictToUnicode(vCommandParameter)))
 
-        uCommandName               = ReplaceVars(oAction.dActionPars.get("commandname",""))
+        uCommandName:str               = ReplaceVars(oAction.dActionPars.get("commandname",""))
 
         try:
             uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction)
 
-            oInterface=Globals.oInterFaces.dInterfaces.get(uInterFace)
+            oInterface:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterFace)
             if oInterface:
                 if not oInterface.bIsInit:
                     oInterface.Init(uInterFace)
-                oTmpAction = copy(oAction)
+                oTmpAction:cAction = copy(oAction)
                 oTmpAction.uActionString=ReplaceVars(oTmpAction.uActionString)
                 oTmpAction.dActionPars[u'configname']=uConfigName
                 Logger.debug (u'Action: Send Command: [%s] Interface: %s Config: %s' % (uCommandName, uInterFace,uConfigName))
-                iRet=oInterface.DoAction(oTmpAction)
-                SetVar(uVarName = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = ToUnicode(iRet))
-                return iRet
+                eRet:eReturnCode = oInterface.DoAction(oTmpAction)
+                SetVar(uVarName = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = ToUnicode(eRet))
+                return eRet
             else:
                 if uInterFace!="":
                     SetVar(uVarName = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = u'1')
-                    LogError(u'Action: Send Command failed #1: [%s] Interface: %s Config: %s : Interface not found!' % (uCommandName, uInterFace,uConfigName))
+                    LogError(uMsg=u'Action: Send Command failed #1: [%s] Interface: %s Config: %s : Interface not found!' % (uCommandName, uInterFace,uConfigName))
                 else:
-                    LogError(u'Action: Send Command failed #2: [%s]:  No Interface given!' % uCommandName)
-                return 1
+                    LogError(uMsg=u'Action: Send Command failed #2: [%s]:  No Interface given!' % uCommandName)
+                return eReturnCode.Error
         except Exception as e:
             SetVar(uVarName = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = u"1")
-            LogError(u'Action: Send Command failed #2: [%s] Interface: %s Config: %s' % (uCommandName, uInterFace,uConfigName),e)
-            return 1
+            LogError(uMsg=u'Action: Send Command failed #2: [%s] Interface: %s Config: %s' % (uCommandName, uInterFace,uConfigName),oException=e)
+            return eReturnCode.Error
 
-    def ExecuteActionDiscover(self,oAction):
+    # noinspection PyMethodMayBeStatic
+    def ExecuteActionDiscover(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -296,13 +301,14 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         </syntaxhighlight></div>
         WikiDoc:End
         """
-        uInterFace  = ReplaceVars(oAction.dActionPars.get(u'interface',''))
-        uConfigName = ReplaceVars(oAction.dActionPars.get(u'configname',''))
-        bGui        = ToBool(ReplaceVars(oAction.dActionPars.get(u'gui','0')))
+        uInterFace:str  = ReplaceVars(oAction.dActionPars.get(u'interface',''))
+        uConfigName:str = ReplaceVars(oAction.dActionPars.get(u'configname',''))
+        bGui:bool        = ToBool(ReplaceVars(oAction.dActionPars.get(u'gui','0')))
         Logger.debug(u'Action: discover: Interface: %s Config: %s' % (uInterFace, uConfigName))
         return Globals.oInterFaces.DiscoverAll(uInterFaceName = uInterFace, uConfigName = uConfigName, bGui = bGui)
 
-    def ExecuteActionCodeset(self,oAction):
+    # noinspection PyMethodMayBeStatic
+    def ExecuteActionCodeset(self,oAction:cAction) -> eReturnCode:
 
         """
         WikiDoc:Doc
@@ -327,13 +333,13 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         WikiDoc:End
         """
 
-        uInterFace  = u""
-        uConfigName = u""
+        uInterFace:str  = u""
+        uConfigName:str = u""
 
         try:
             uInterFace  = oAction.dActionPars.get(u'interface')
             uConfigName = oAction.dActionPars.get(u'configname')
-            oInterface=Globals.oInterFaces.dInterfaces.get(uInterFace)
+            oInterface:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterFace)
             if oInterface:
                 Logger.debug (u'Action: codeset: [%s] Interface: %s Config: %s' % (oAction.uActionName, uInterFace,uConfigName))
                 oSetting = oInterface.GetSettingObjectForConfigName(uConfigName)
@@ -342,11 +348,10 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
                 for uKey in oAction.dActionPars:
                     oSetting.SetContextVar("codesetvar_"+uKey,oAction.dActionPars[uKey])
 
-                iRet=oInterface.SendCommand(oAction,oSetting,oAction.uRetVar,bNoLogOut)
-                SetVar(uVarName = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = ToUnicode(iRet))
-                return iRet
+                eRet:eReturnCode = oInterface.SendCommand(oAction,oSetting,oAction.uRetVar,bNoLogOut)
+                SetVar(uVarName  = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = ToUnicode(eRet))
+                return eRet
         except Exception as e:
             SetVar(uVarName = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = u"1")
-            LogError(u'Action: codeset failed #2: [%s] Interface: %s Config: %s' % (oAction.uActionName, uInterFace,uConfigName),e)
-            return 1
-
+            LogError(uMsg=u'Action: codeset failed #2: [%s] Interface: %s Config: %s' % (oAction.uActionName, uInterFace,uConfigName),oException=e)
+            return eReturnCode.Error

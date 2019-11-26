@@ -20,16 +20,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__ import annotations
+
+from typing import Dict
+from typing import List
+from typing import Union
+from typing import Tuple
 
 import socket
 import select
 from kivy.logger                            import Logger
+from kivy.uix.button                        import Button
 
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
 from ORCA.utils.TypeConvert                 import ToFloat
 from ORCA.vars.QueryDict                    import QueryDict
+from ORCA.utils.FileName                    import cFileName
+from ORCA.utils.TypeConvert                 import ToUnicode
+
+import ORCA.Globals as Globals
+
 
 '''
 <root>
@@ -39,8 +51,8 @@ from ORCA.vars.QueryDict                    import QueryDict
       <description language='English'>Discover ELV MAX cubes</description>
       <description language='German'>Erkennt bwz. sucht ELV MAX Cubes</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_elvmax</local>
@@ -49,7 +61,6 @@ from ORCA.vars.QueryDict                    import QueryDict
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/discover/discover_elvmax/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -84,89 +95,92 @@ class cScript(cDiscoverScriptTemplate):
     """
 
     class cScriptSettings(cBaseScriptSettings):
-        def __init__(self,oScript):
+        def __init__(self,oScript:cScript):
             cBaseScriptSettings.__init__(self,oScript)
             self.aIniSettings.fTimeOut                     = 5.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
-        self.uSubType        = u'ELVMAX'
-        self.uSerial         = u''
-        self.aResults        = []
+        self.uSubType:str               = u'ELVMAX'
+        self.uSerial:str                = u''
+        self.aResults:List[QueryDict]   = []
 
-    def Init(self,uObjectName,uScriptFile=u''):
-        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
+    def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
+        cDiscoverScriptTemplate.Init(self, uObjectName, oFnScript)
         self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
-    def GetHeaderLabels(self):
+    def GetHeaderLabels(self) -> List[str]:
         return ['$lvar(5029)','$lvar(SCRIPT_DISC_ELVMAX_1)','$lvar(5035)']
 
     def ListDiscover(self):
 
-        dArgs = {}
+        dDevice: QueryDict
+        dArgs:Dict = {}
 
         self.Discover(**dArgs)
-        for aDevice in self.aResults:
-            self.AddLine([aDevice.sFoundIP,aDevice.uFoundSerial,aDevice.uFoundHostName],aDevice)
+        for dDevice in self.aResults:
+            self.AddLine([dDevice.sFoundIP,dDevice.uFoundSerial,dDevice.uFoundHostName],dDevice)
 
 
-    def CreateDiscoverList_ShowDetails(self,instance):
+    def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
+
+        dDevice:QueryDict = oButton.dDevice
+
         uText=  u"$lvar(5029): %s \n" \
                 u"$lvar(5035): %s \n" \
                 u"$lvar(1063): %s \n" \
-                u"$lvar(SCRIPT_DISC_ELVMAX_1): %s " % (instance.oDevice.sFoundIP,instance.oDevice.uFoundHostName,instance.oDevice.uFoundName,instance.oDevice.uFoundSerial)
+                u"$lvar(SCRIPT_DISC_ELVMAX_1): %s " % (dDevice.sFoundIP,dDevice.uFoundHostName,dDevice.uFoundName,dDevice.uFoundSerial)
 
         ShowMessagePopUp(uMessage=uText)
 
 
     @classmethod
-    def GetConfigJSONforParameters(cls,dDefaults):
+    def GetConfigJSONforParameters(cls,dDefaults:Dict) -> Dict[str,Dict]:
         return  {"Serial Number":   {"type": "string",       "order":0,  "title": "$lvar(SCRIPT_DISC_ELVMAX_1)", "desc": "$lvar(SCRIPT_DISC_ELVMAX_1)", "key": "serialnumber",    "default":"" }
                 }
 
     def Discover(self,**kwargs):
 
-        oSendSocket    = None
-        oReceiveSocket = None
-        iPort          = 23272
-        uSerial        = kwargs.get('serialnumber',"")
-        uConfigName    = kwargs.get('configname',self.uConfigName)
-        oSetting       = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        fTimeOut       = ToFloat(kwargs.get('timeout', oSetting.aIniSettings.fTimeOut))
+        oSendSocket:Union[socket.socket,None]    = None
+        oReceiveSocket:Union[socket.socket,None] = None
+        iPort:int                                = 23272
+        uSerial:str                              = kwargs.get('serialnumber',"")
+        uConfigName:str                          = kwargs.get('configname',self.uConfigName)
+        oSetting:cBaseScriptSettings             = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
+        fTimeOut:float                           = ToFloat(kwargs.get('timeout', oSetting.aIniSettings.fTimeOut))
         del self.aResults[:]
 
         Logger.debug (u'Try to discover ELV MAX device:  %s ' % uSerial)
 
         try:
-            oSendSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+            oSendSocket:socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
             oSendSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, True)
             oSendSocket.settimeout(10)
 
-            bData = bytearray("eQ3Max", "utf-8") + \
-                    bytearray("*\0",    "utf-8") + \
-                    bytearray('*' * 10, "utf-8") + \
-                    bytearray('I',      "utf-8")
+            byData:bytearray =  bytearray("eQ3Max", "utf-8") + \
+                                bytearray("*\0",    "utf-8") + \
+                                bytearray('*' * 10, "utf-8") + \
+                                bytearray('I',      "utf-8")
 
-            oSendSocket.sendto(bData,("255.255.255.255",iPort))
 
-            oReceiveSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            if Globals.uPlatform != 'win':
+                oSendSocket.sendto(byData,("255.255.255.255",iPort))
+            else:
+                oSendSocket.sendto(byData, (Globals.uIPSubNetAssumedV4, iPort))
+
+            oReceiveSocket:socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             oReceiveSocket.settimeout(fTimeOut)
             oReceiveSocket.bind(("0.0.0.0", iPort))
 
-            # sData, tSenderAddr = oReceiveSocket.recvfrom(50)
-            # oRet = self.GetDeviceDetails(sData, tSenderAddr)
-            # if uSerial == "" or oRet.uSerial == uSerial:
-            #     self.aResults.append(oRet)
-
             while True:
                 # we do not wait too long
-                ready = select.select([oReceiveSocket],[],[],fTimeOut)
-                if ready[0]:
+                aReady:Tuple = select.select([oReceiveSocket],[],[],fTimeOut)
+                if aReady[0]:
                     # Get a response
-                    sData, tSenderAddr = oReceiveSocket.recvfrom(50)
-                    oRet = self.GetDeviceDetails(sData, tSenderAddr)
-                    if uSerial=="" or oRet.uSerial == uSerial:
-                        self.aResults.append(oRet)
+                    byData, tSenderAddr = oReceiveSocket.recvfrom(50)
+                    dRet = self.GetDeviceDetails(byData, tSenderAddr)
+                    if uSerial=="" or dRet.uSerial == uSerial:
+                        self.aResults.append(dRet)
                 else:
                     break
 
@@ -178,7 +192,7 @@ class cScript(cDiscoverScriptTemplate):
             if len(self.aResults)>0:
                 return QueryDict([("Host", self.aResults[0].sFoundIP),("Hostname",self.aResults[0].uFoundHostName), ("Serial",self.aResults[0].uFoundSerial), ("Name",self.aResults[0].uFoundName)])
 
-        except Exception as e:
+        except Exception:
             pass
 
         if oSendSocket:
@@ -189,16 +203,17 @@ class cScript(cDiscoverScriptTemplate):
         Logger.warning(u'No ELV MAX Cube found %s' % uSerial)
         return QueryDict([("Host", ""), ("Hostname", ""), ("Serial", ""), ("Name", "")])
 
-    def GetDeviceDetails(self,sData,tSenderAddr):
+    # noinspection PyMethodMayBeStatic
+    def GetDeviceDetails(self,byData:bytes,tSenderAddr:Tuple) -> QueryDict:
 
-        oRet                     = QueryDict()
-        oRet.sFoundIP            = tSenderAddr[0]
-        oRet.sData               = sData
-        oRet.uFoundName          = sData[0:8].decode('utf-8')
-        oRet.uFoundSerial        = sData[8:18].decode('utf-8')
-        oRet.uFoundHostName      = socket.gethostbyaddr(oRet.sFoundIP)[0]
-        oRet.uIPVersion          = u"IPv4"
+        dRet:QueryDict           = QueryDict()
+        dRet.sFoundIP            = tSenderAddr[0]==10
+        dRet.uData               = ToUnicode(byData)
+        dRet.uFoundName          = byData[0:8].decode('utf-8')
+        dRet.uFoundSerial        = byData[8:18].decode('utf-8')
+        dRet.uFoundHostName      = socket.gethostbyaddr(dRet.sFoundIP)[0]
+        dRet.uIPVersion          = u"IPv4"
 
-        Logger.info(u'Bingo: Dicovered device %s:%s:%s at %s' % (oRet.uFoundName, oRet.uFoundHostName, oRet.uFoundSerial, oRet.sFoundIP))
+        Logger.info(u'Bingo: Dicovered device %s:%s:%s at %s' % (dRet.uFoundName, dRet.uFoundHostName, dRet.uFoundSerial, dRet.sFoundIP))
 
-        return oRet
+        return dRet

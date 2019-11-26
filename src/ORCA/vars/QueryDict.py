@@ -18,8 +18,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Any
+from typing import Dict
+
 from kivy.logger            import Logger
-from kivy.compat            import string_types
 from ORCA.utils.LogError    import LogError
 import ORCA.Globals as Globals
 
@@ -36,7 +38,7 @@ class QueryDict(dict):
             return self.__getitem__(attr)
         except KeyError:
             if attr!="__name__":
-                LogError(u'QueryDict: can''t find attribute:'+attr)
+                LogError(uMsg=u'QueryDict: can''t find attribute:'+attr)
             return u''
 
     def __setattr__(self, attr, value):
@@ -53,41 +55,42 @@ class cMonitoredSettings(QueryDict):
         super(cMonitoredSettings, self).__init__(**kwargs)
         self.oBaseSettings = oBaseSettings
 
-    def __NormalizeName(self,uName,value):
+    # noinspection PyMethodMayBeStatic
+    def __NormalizeName(self,uName:str,vValue:Any) ->str:
 
-        uPre = 'o'
+        uPre:str = 'o'
 
         if len(uName)>1:
             if uName[0].islower() and uName[1].isupper():
                 uPre = ''
 
         if uPre:
-            if isinstance(value,string_types):
+            if isinstance(vValue,str):
                 uPre = 'u'
-            elif type(value) is int:
+            elif type(vValue) is int:
                 uPre = 'i'
-            elif type(value) is float:
+            elif type(vValue) is float:
                 uPre = 'f'
-            elif type(value) is bool:
+            elif type(vValue) is bool:
                 uPre = 'b'
-            elif type(value) is list:
+            elif type(vValue) is list:
                 uPre = 'a'
-            elif isinstance(value,object):
+            elif isinstance(vValue,object):
                 uPre = 'o'
             else:
                 Logger.error("Unknown Type for cMonitoredSettings:"+uName)
 
         return str(uPre+uName)
 
-    def WriteVar(self,sName,oValue):
+    def WriteVar(self,uName:str,vValue:Any):
         # DUMMY
         pass
 
     def __setitem__(self, k, v):
 
-        sName = self.__NormalizeName(uName=k,value=v)
-        super(cMonitoredSettings, self).__setitem__(sName, v)
-        self.WriteVar(sName=sName, oValue=v)
+        uName:str = self.__NormalizeName(uName=k,vValue=v)
+        super(cMonitoredSettings, self).__setitem__(uName, v)
+        self.WriteVar(uName=uName, vValue=v)
         if Globals.bProtected:
             self.CheckSpelling() # todo: remove in release'
 
@@ -105,8 +108,8 @@ class cMonitoredSettings(QueryDict):
         self.CheckSpelling() # todo: remove in release'
     '''
 
-    def CheckSpelling(self):
-        dCheck={}
+    def CheckSpelling(self) -> None:
+        dCheck:Dict[str,str]={}
         #for key in self.iterkeys():
         for key in self:
             if key.upper() in dCheck:
@@ -121,7 +124,7 @@ class cMonitoredSettings(QueryDict):
                 return
             dCheck[key[1:].upper()]=key
 
-    def queryget(self,item):
+    def queryget(self,item) -> Any:
 
         ret = dict.get(self,item)
         if ret is not None: return ret

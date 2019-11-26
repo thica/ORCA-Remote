@@ -20,9 +20,17 @@
 
 from ORCA.BaseSettings                      import cBaseSettings
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.scripts.BaseScript import cBaseScript
+else:
+    from typing import TypeVar
+    cBaseScript=TypeVar("cBaseScript")
+
+
 class cBaseScriptSettings(cBaseSettings):
     """ A base class for the script settings """
-    def __init__(self, oScript):
+    def __init__(self, oScript:cBaseScript):
         # some default settings, which should be there even if not configured by the script
         # use the exact spelling as in the settings json
 

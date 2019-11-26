@@ -19,8 +19,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from xml.etree.ElementTree          import Element
 
 from kivy.logger                    import Logger
+from kivy.uix.widget                import Widget
 from ORCA.widgets.core.ScrollableLabelLarge   import cScrollableLabelLarge
 from ORCA.widgets.Base              import cWidgetBase
 from ORCA.utils.XML                 import GetXMLTextAttribute
@@ -28,6 +30,12 @@ from ORCA.utils.LoadFile            import LoadFile
 from ORCA.utils.FileName            import cFileName
 from ORCA.vars.Replace              import ReplaceVars
 
+from typing                         import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
 __all__ = ['cWidgetFileViewer']
 
 
@@ -65,10 +73,10 @@ class cWidgetFileViewer(cWidgetBase):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetFileViewer, self).__init__(hastext=True)
-        self.uFileName = "" #we don't  use cFileName by purpose to handle vars properly
+        super().__init__(hastext=True)
+        self.uFileName:str = "" #we don't  use cFileName by purpose to handle vars properly
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         self.uFileName  = GetXMLTextAttribute(oXMLNode,u'filename',    False,"")
         self.bNoTextSize = True
@@ -80,7 +88,7 @@ class cWidgetFileViewer(cWidgetBase):
         Logger.debug("Reading File:"+oFn)
         self.uCaption=LoadFile(oFn)
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
         if self.CreateBase(Parent=oParent,Class=cScrollableLabelLarge):
             self.oParent.add_widget(self.oObject)

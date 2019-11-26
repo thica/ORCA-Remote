@@ -19,9 +19,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+from xml.etree.ElementTree          import Element
+from kivy.uix.widget                import Widget
 from ORCA.widgets.Base              import cWidgetBase
-from ORCA.widgets.core.Border       import cBorder
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage = TypeVar("cScreenPage")
 
 import ORCA.Globals as Globals
 
@@ -59,22 +66,25 @@ class cWidgetAnchor(cWidgetBase):
 
     def __init__(self,**kwargs):
         super(cWidgetAnchor, self).__init__(**kwargs)
-        self.oBorder = None
+        # For the Border
+        self.AddArg('background_color', [1.0, 0.0, 1.0, 1.0])
+        self.AddArg('linewidth', "2")
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads from Xml """
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage, uAnchor)
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ Creates the Widget """
-        self.oObject        =   None
-        if Globals.oParameter.bShowBorders:
-            self.CreateBase(Parent=oParent,Class='')
-            self.AddArg('background_color',[1.0,0.0,1.0,1.0])
-            self.AddArg('linewidth',"2")
-            self.oBorder=cBorder(**self.dKwArgs)
-            self.oParent.add_widget(self.oBorder)
+        if Globals.bShowBorders:
+            self.CreateBase(Parent=oParent,Class="")
+            self.oObject = self.oParent
+            self.FlipBorder()
+            self.oObject = None
         return True
 
     def UpdateWidget(self):
+        self.oObject = self.oParent
+        self.FlipBorder()
+        self.oObject = None
         return True

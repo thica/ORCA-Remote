@@ -17,6 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing import List
+from typing import Dict
+from typing import Any
+from typing import Union
 
 import os
 import json
@@ -34,37 +38,34 @@ __all__ = ['Round',
            'Find_nth_Character']
 
 
-def Round(Value,iPos):
+def Round(fValue:Union[float,None],iPos:int) -> Union[float,int]:
     """
     Rounds a float value to the given pos. If the value is none, zero (0) will be returned.
     Example: Round(1.81,0) return 2. Round(1.81,1) returns 1.80
 
-    :rtype: float
-    :param float Value: The float value to round
+    :param float fValue: The float value to round
     :param int iPos: the round pos
     :return: Rounded Value
     """
 
-    if (Value is None) or (Value==0):
-        return 0
-    fRet=Value/abs(Value) * int(abs(Value) * 10**iPos + 0.5)/ 10**iPos
+    if (fValue is None) or (fValue==0.0):
+        return 0.0
+    fRet:float=fValue/abs(fValue) * int(abs(fValue) * 10**iPos + 0.5)/ 10**iPos
     if iPos==0:
-        # fRet=float(int(fRet))
         fRet = int(fRet)
 
     return fRet
 
 
-def GetVarList(uFilter=u''):
+def GetVarList(uFilter:str=u'') -> Dict[str,Any]:
     """
     Returns a dict of uservars
 
-    :rtype: dict
-    :param string uFilter: A filter to just return vars, which CONTAINS the filter string
+    :param str uFilter: A filter to just return vars, which CONTAINS the filter string
     :return: A dict which contains all user vars, which fits to uFilter or all, if uFilter is empty
     """
 
-    dRet={}
+    dRet:Dict[str,Any] = {}
     if uFilter==u'':
         for uVarIdx in ORCA.vars.Globals.dUserVars:
             dRet[uVarIdx]=ORCA.vars.Globals.dUserVars[uVarIdx]
@@ -75,38 +76,36 @@ def GetVarList(uFilter=u''):
     return dRet
 
 
-def UnSplit(lVars):
+def UnSplit(aVars:List) ->None:
     #Unsplits a Json splitted array
     i=0
-    while i < len(lVars):
-        if not lVars[i]=='':
-            if lVars[i][0:1]=='[':
-                if not i==len(lVars)-1:
-                    if lVars[i+1][-1]==']':
-                        lVars[i]+=','
-                        lVars[i]+=lVars[i+1]
-                        del lVars[i+1]
+    while i < len(aVars):
+        if not aVars[i]=='':
+            if aVars[i][0:1]=='[':
+                if not i==len(aVars)-1:
+                    if aVars[i+1][-1]==']':
+                        aVars[i]+=','
+                        aVars[i]+=aVars[i+1]
+                        del aVars[i+1]
         i+=1
 
 
-def GetEnvVar(uVarName,uDefault=""):
+def GetEnvVar(uVarName:str,uDefault:str="") -> str:
     """
     Returns the value of an environment var
 
-    :rtype: string
-    :param string uVarName: Name of the Environment variable to return
-    :param string uDefault: Optional: The default value, if no environment is given
+    :param str uVarName: Name of the Environment variable to return
+    :param str uDefault: Optional: The default value, if no environment is given
     :return: The value of the variable or an empty string if not found
     """
-    uRet=os.getenv(uVarName)
+    uRet:str=os.getenv(uVarName)
     if uRet is None:
         uRet=uDefault
     else:
         uRet= ReplaceVars(uRet)
     return uRet
 
-
-def Find_nth_Character(uStr1, uSubstr, iLevel):
+def Find_nth_Character(uStr1:str, uSubstr:str, iLevel:int) -> Union[int,None]:
     """
     Find the nTh position of a string with in string.
     Find_nth_Character(u"Test Test Test","Test",1) returns 0
@@ -115,12 +114,12 @@ def Find_nth_Character(uStr1, uSubstr, iLevel):
     Find_nth_Character(u"Test Test Test","Test",6) returns None
     Find_nth_Character(u"Test Test Test","Foo",3) returns None
 
-    :param uStr1: unicode: The string to search in
-    :param uSubstr: unicode: The string to search for
-    :param iLevel: int: The occurance of the substring (starting with 1)
-    :return: int: Position of the nTh occurance of the substring in string, or None if not found
+    :param str uStr1: The string to search in
+    :param str uSubstr: The string to search for
+    :param int iLevel: The occurance of the substring (starting with 1)
+    :return: Position of the nTh occurance of the substring in string, or None if not found
     """
-    iPos = -1
+    iPos:int = -1
     for x in range(iLevel):
         iPos = uStr1.find(uSubstr, iPos + 1)
         if iPos == -1:
@@ -128,10 +127,10 @@ def Find_nth_Character(uStr1, uSubstr, iLevel):
     return iPos
 
 
-def CopyDict(dSrc):
+def CopyDict(dSrc:Dict) -> Dict:
 
     try:
         return json.loads(json.dumps(dSrc))
-    except Exception as e:
-        Logger.warning("Can't copy dict the preffered way:"+str(dSrc))
+    except Exception:
+        Logger.warning("Can't copy dict the preferred way:"+str(dSrc))
         return deepcopy(dSrc)

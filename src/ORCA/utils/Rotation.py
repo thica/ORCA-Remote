@@ -24,7 +24,7 @@ from ORCA.utils.Platform    import OS_GetRotationObject
 
 __all__ = ['cRotation']
 
-class cRotation(object):
+class cRotation:
     """ Rotation abstraction layer """
     def __init__(self):
         Logger.debug (u'Loading Orientation Support' )

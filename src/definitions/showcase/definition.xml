@@ -47,8 +47,8 @@
       <description language='English'>Showcase definition to provide an overview of available screen elements</description>
       <description language='German'>Showcase Definition, um einen Überblick über die verfügbaren Bildschirmelemente zu geben</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/showcase</local>
@@ -68,7 +68,6 @@
 
       </dependencies>
       <skipfiles>
-        <file>$var(APPLICATIONPATH)/definitions/showcase/definition.ini</file>
         <file>$var(APPLICATIONPATH)/definitions/showcase/atlas*</file>
       </skipfiles>
 

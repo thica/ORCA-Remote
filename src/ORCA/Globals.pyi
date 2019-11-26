@@ -1,10 +1,15 @@
+from typing import Dict
+from typing import List
+from typing import Tuple
+from typing import Union
+
 from kivy.config import Config
 
 from ORCA.App                              import ORCA_App
 from ORCA.Actions                          import cActions
 from ORCA.definition.DefinitionPathes      import cDefinitionPathes
 from ORCA.definition.Definitions           import cDefinitions
-from ORCA.Downloads                        import cDownLoad_Settings
+from ORCA.download.DownLoadSettings        import cDownLoad_Settings
 from ORCA.Events                           import cEvents
 from ORCA.International                    import cLanguage
 from ORCA.Screen_Init                      import cTheScreenWithInit
@@ -19,13 +24,17 @@ from ORCA.utils.Path                       import cPath
 from ORCA.interfaces.Interfaces            import cInterFaces
 from ORCA.Parameter                        import cParameter
 from ORCA.Notifications                    import cNotifications
+from ORCA.utils.ModuleLoader               import cModuleLoader
+from ORCA.download.InstalledReps           import cInstalledReps
 
-aDefinitionList:            list
-aLanguageList:              list
-aRepNames:                  list
-aRepositories:              list
-aScriptList:                list
-aSkinList:                  list
+aDefinitionList:            List[str]
+aLanguageList:              List[str]
+aRepNames:                  List[Tuple]
+aRepositories:              List[str]
+aLogoPackFolderNames:       List[str]
+# aScriptList:                list
+aSkinList:                  List[str]
+aTVLogoList:                List[str]
 bClockWithSeconds:          bool
 bConfigCheckForNetwork:     bool
 bHasPermissions:            bool
@@ -37,11 +46,12 @@ bLongDay:                   bool
 bLongMonth:                 bool
 bOnSleep:                   bool
 bProtected:                 bool
+bShowBorders:               bool
 bVibrate:                   bool
 bWaitForRotation:           bool
-dDefinitionPathes:          dict
-dIcons:                     dict
-dInstalledReps:             dict
+dDefinitionPathes:          Dict[str,cDefinitionPathes]
+dIcons:                     Dict[str,Dict]
+dInstalledReps:             Dict[str,cInstalledReps]
 fContRepeatDelay:           float
 fDelayedPageInitInterval:   float
 fDoubleTapTime:             float
@@ -53,66 +63,69 @@ iAppWidth:                  int
 iCntRepositories:           int
 iLastInstalledVersion:      int
 iVersion:                   int
-oActions:                    cActions
-oApp:                        ORCA_App
+oActions:                    Union[cActions,None]
+oApp:                        Union[ORCA_App,None]
 oDefinitionConfigParser:     Config
-oDefinitionPathes:           cDefinitionPathes
-oDefinitions:                cDefinitions
-oDownLoadSettings:           cDownLoad_Settings
-oFnElementIncludeWrapper:    cFileName
-oEvents:                     cEvents
-oFTP:                        cFTP
-oFnAction:                   cFileName
-oFnActionEarlyAppStart:      cFileName
-oFnActionFreshInstall:       cFileName
-oFnAtlasSkin:                cFileName
-oFnCredits:                  cFileName
-oFnGestureLog:               cFileName
-oFnGestures:                 cFileName
-oFnGlobalFontDefinition:     cFileName
-oFnInterfaceLanguage:        cFileName
-oFnInterfaceLanguageFallBack:cFileName
-oFnLangInfo:                 cFileName
-oFnLicense:                  cFileName
-oFnLog:                      cFileName
-oFnScriptLanguageFallBack:   cFileName
-oFnScriptLanguageFile:       cFileName
-oFnSkinXml:                  cFileName
-oFnSoundsXml:                cFileName
-oInterFaces:                 cInterFaces
-oLanguage:                   cLanguage
-oNotifications:              cNotifications
+oDefinitionPathes:           Union[cDefinitionPathes,None]
+oDefinitions:                Union[cDefinitions,None]
+oDownLoadSettings:           Union[cDownLoad_Settings,None]
+oFnElementIncludeWrapper:    Union[cFileName,None]
+oEvents:                     Union[cEvents,None]
+oFTP:                        Union[cFTP,None]
+oFnAction:                   Union[cFileName,None]
+oFnActionEarlyAppStart:      Union[cFileName,None]
+oFnActionFreshInstall:       Union[cFileName,None]
+oFnAtlasSkin:                Union[cFileName,None]
+oFnCredits:                  Union[cFileName,None]
+oFnGestureLog:               Union[cFileName,None]
+oFnGestures:                 Union[cFileName,None]
+oFnGlobalFontDefinition:     Union[cFileName,None]
+oFnInterfaceLanguage:        Union[cFileName,None]
+oFnInterfaceLanguageFallBack:Union[cFileName,None]
+oFnLangInfo:                 Union[cFileName,None]
+oFnLicense:                  Union[cFileName,None]
+oFnLog:                      Union[cFileName,None]
+oFnScriptLanguageFallBack:   Union[cFileName,None]
+oFnScriptLanguageFile:       Union[cFileName,None]
+oFnSkinXml:                  Union[cFileName,None]
+oFnSoundsXml:                Union[cFileName,None]
+oInterFaces:                 Union[cInterFaces,None]
+oLanguage:                   Union[cLanguage,None]
+oModuleLoader:               Union[cModuleLoader,None]
+oNotifications:              Union[cNotifications,None]
 oOrcaConfigParser:           Config
-oParameter:                  cParameter
-oPathAction:                 cPath
-oPathApp:                    cPath
-oPathAppReal:                cPath
-oPathCodesets:               cPath
-oPathCookie:                 cPath
-oPathDefinitionRoot:         cPath
-oPathFonts:                  cPath
-oPathGestures:               cPath
-oPathGlobalSettingsScripts:  cPath
-oPathGlobalSettingsInterfaces: cPath
-oPathInterface:              cPath
-oPathLanguageRoot:           cPath
-oPathResources:              cPath
-oPathRoot:                   cPath
-oPathScripts:                cPath
-oPathSharedDocuments:        cPath
-oPathSkin:                   cPath
-oPathSounds:                 cPath
-oPathSoundsRoot:             cPath
-oPathStandardElements:       cPath
-oPathStandardPages:          cPath
-oPathTmp:                    cPath
-oPathUserDownload:           cPath
-oRotation:                   cRotation
-oScripts:                    cScripts
-oSound:                      cSound
-oTheScreen:                  cTheScreenWithInit
-oWaitForConnectivity:        cWaitForConnectivity
-oCheckPermissions:           cCheckPermissions
+oParameter:                  Union[cParameter,None]
+oPathAction:                 Union[cPath,None]
+oPathApp:                    Union[cPath,None]
+oPathAppReal:                Union[cPath,None]
+oPathCodesets:               Union[cPath,None]
+oPathCookie:                 Union[cPath,None]
+oPathDefinitionRoot:         Union[cPath,None]
+oPathFonts:                  Union[cPath,None]
+oPathGestures:               Union[cPath,None]
+oPathGlobalSettingsScripts:  Union[cPath,None]
+oPathGlobalSettingsInterfaces: Union[cPath,None]
+oPathInterface:              Union[cPath,None]
+oPathLanguageRoot:           Union[cPath,None]
+oPathResources:              Union[cPath,None]
+oPathRoot:                   Union[cPath,None]
+oPathScripts:                Union[cPath,None]
+oPathSharedDocuments:        Union[cPath,None]
+oPathSkin:                   Union[cPath,None]
+oPathSounds:                 Union[cPath,None]
+oPathSoundsRoot:             Union[cPath,None]
+oPathStandardElements:       Union[cPath,None]
+oPathStandardPages:          Union[cPath,None]
+oPathTmp:                    Union[cPath,None]
+oPathTVLogos:                Union[cPath,None]
+oPathUserDownload:           Union[cPath,None]
+oPathWizardTemplates:        Union[cPath,None]
+oRotation:                   Union[cRotation,None]
+oScripts:                    Union[cScripts,None]
+oSound:                      Union[cSound,None]
+oTheScreen:                  Union[cTheScreenWithInit,None]
+oWaitForConnectivity:        Union[cWaitForConnectivity,None]
+oCheckPermissions:           Union[cCheckPermissions,None]
 oWinOrcaSettings:            Config
 uAuthor:                     str
 uBranch:                     str
@@ -137,3 +150,5 @@ uSkinName:                   str
 uStretchMode:                str
 uSupport:                    str
 uVersion:                    str
+uScriptLanguageFallBackTail: str
+uScriptLanguageFileTail:     str

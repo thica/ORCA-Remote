@@ -17,19 +17,19 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__                 import annotations
 
 import time
+from typing                     import List
+from typing                     import Union
 from copy                       import copy
-
 from functools                  import partial
 from threading                  import Lock
-
 from kivy.logger                import Logger
 from kivy.clock                 import Clock
 
-
-from ORCA.ui.ShowErrorPopUp             import ShowErrorPopUp
-from ORCA.utils.LogError                import LogError
+from ORCA.ui.ShowErrorPopUp     import ShowErrorPopUp
+from ORCA.utils.LogError        import LogError
 
 from ORCA.utils.Sleep           import fSleep
 from ORCA.utils.TypeConvert     import ToFloat
@@ -39,18 +39,23 @@ from ORCA.Action                import GetActionID
 from ORCA.Action                import cAction
 from ORCA.vars.Access           import GetVar
 from ORCA.utils.CheckCondition  import CheckCondition
-from ORCA.utils.TypeConvert             import ToUnicode
-from ORCA.vars.Access                   import SetVar
-
+from ORCA.utils.TypeConvert     import ToUnicode
+from ORCA.vars.Access           import SetVar
+from ORCA.actions.ReturnCode    import eReturnCode
 
 from ORCA import Globals as Globals
 
-aActiveQueueStack   = []
-aInActiveQueueStack = []
-bStop               = False
-oQueueLock          = Lock()
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.widgets.Base import cWidgetBase
+else:
+    from typing import TypeVar
+    cWidgetBase     = TypeVar("cWidgetBase")
 
-
+aActiveQueueStack:List[cQueue]   = []
+aInActiveQueueStack:List[cQueue] = []
+bStop:bool                       = False
+oQueueLock                       = Lock()
 
 __all__ = ['cQueue',
            'GetActiveQueue',
@@ -62,12 +67,13 @@ __all__ = ['cQueue',
            'ResumeQueue'
            ]
 
-def GetNewQueue():
+def GetNewQueue() -> cQueue:
     """
     Returns a queue object, either a new one or a re-initialized used one
     :return: cQueue
     """
 
+    oQueue:cQueue
     oQueueLock.acquire()
     if len(aInActiveQueueStack) > 0:
         oQueue = aInActiveQueueStack.pop()
@@ -77,14 +83,14 @@ def GetNewQueue():
     oQueueLock.release()
     return oQueue
 
-def GetQueueLen():
+def GetQueueLen() -> int:
     """
     Returns the len of the current queue
     :return: int
     """
     return len(aActiveQueueStack)
 
-def GetActiveQueue():
+def GetActiveQueue() -> cQueue:
     """
     Returns the last (current) queue object
     :return: cQueue
@@ -92,9 +98,9 @@ def GetActiveQueue():
     if GetQueueLen()>0:
         return aActiveQueueStack[-1]
     else:
-        return GetNewQueue(uQueueName="unknown")
+        return GetNewQueue()
 
-def ClearQueue():
+def ClearQueue() -> None:
     """ terminates all queues """
     oQueueLock.acquire()
     for oQueue in reversed(aActiveQueueStack):
@@ -102,10 +108,10 @@ def ClearQueue():
     oQueueLock.release()
 
 
-def DumpQueue():
+def DumpQueue() -> None:
     """ dumps all queues """
     oQueueLock.acquire()
-    iStackNum=0
+    iStackNum:int=0
     for oStack in aActiveQueueStack:
         iStackNum+=1
         Logger.debug (u'Action: ========= Start Queue (' +str(iStackNum)+')  ==========')
@@ -114,23 +120,23 @@ def DumpQueue():
     oQueueLock.release()
 
 
-def StopQueue():
+def StopQueue() -> None:
     global bStop
     bStop = True
 
-def ResumeQueue():
+def ResumeQueue() -> None:
     global bStop
     bStop = False
 
-class cQueue(object):
+class cQueue:
     """ represents a single queue object """
     def __init__(self):
-        self.aActionQueue      = []
-        self.bForceState       = False
-        self.iActionQueuePos   = 0
-        self.bDoNow            = False
+        self.aActionQueue:List[cAction] = []
+        self.bForceState:bool           = False
+        self.iActionQueuePos:int        = 0
+        self.bDoNow:bool                = False
 
-    def Reset(self):
+    def Reset(self) -> None:
         """ Resets the Queue """
         self.iActionQueuePos   = 0
         del self.aActionQueue[:]
@@ -138,11 +144,14 @@ class cQueue(object):
         aActiveQueueStack.append(self)
         self.bDoNow            = False
 
-    def WorkOnQueue(self,bForce,*largs):
+    # noinspection PyUnusedLocal
+    def WorkOnQueue(self,bForce:bool,*largs) -> Union[eReturnCode,None]:
         """ runs the queue, until finished """
 
-        self.bForceState = bForce
-        iRet             = -2
+        oAction:cAction
+        self.bForceState            = bForce
+        eRet:eReturnCode            = eReturnCode.Nothing
+        eRetReal:eReturnCode
 
         # We need to ensure, that only actions in the last queue will be executed
         # All other Queues are still scheduled, so just skip them
@@ -156,22 +165,21 @@ class cQueue(object):
             Clock.schedule_once(partial(self.WorkOnQueue,bForce))
             return
 
-        fNextFrame=0.0
+        fNextFrame:float = 0.0
         #fNextFrame=0.0001
         fStart = time.time()
 
         while True:
             if self.iActionQueuePos < len(self.aActionQueue):
-
                 oAction=self.aActionQueue[self.iActionQueuePos]
                 Globals.oEvents.bDoNext = True
-                iRetReal= self.WorkOnQueueDoAction(oAction)
-                if iRetReal!=-2:
-                    iRet=iRetReal
+                eRetReal= self.WorkOnQueueDoAction(oAction)
+                if eRetReal!=eReturnCode.Nothing:
+                    eRet=eRetReal
                 self.iActionQueuePos=self.iActionQueuePos+1
                 if not self == aActiveQueueStack[-1]:
                     #Logger.debug ("Not own queue")
-                    return iRet
+                    return eRet
                 if oAction.iActionId==Globals.oActions.oActionType.Wait:
                     '''
                     fWait=ToFloat(ReplaceVars(oAction.dActionPars.get('time','1')))
@@ -203,9 +211,8 @@ class cQueue(object):
                     if not bStop:
                         if Globals.bOnSleep:
                             fNextFrame=0.5 # if we are on sleep , we switch to timed minimum queue activity
-                        fStart = time.time()
                         Clock.schedule_once(partial(self.WorkOnQueue,False),fNextFrame)
-                    return iRet
+                    return eRet
             else:
                 del self.aActionQueue[:]
                 self.iActionQueuePos=0
@@ -214,14 +221,17 @@ class cQueue(object):
                     if not self.bForceState:
                         if not bStop:
                             Clock.schedule_once(partial(GetActiveQueue().WorkOnQueue,bForce),fNextFrame)
-                return iRet
-        return iRet
+                return eRet
 
-    def AddActions(self,aActions, oParentWidget):
+    def AddActions(self,aActions:List[cAction], oParentWidget:cWidgetBase) -> None:
         """ This functions just adds the action commands to the queue """
 
-        for aTmpAction in aActions:
-            oAction = copy(aTmpAction)
+        oTmpAction:cAction
+        oAction:cAction
+        iActionId:int
+
+        for oTmpAction in aActions:
+            oAction = copy(oTmpAction)
             oAction.oParentWidget = oParentWidget
 
             iActionId=oAction.iActionId
@@ -242,7 +252,7 @@ class cQueue(object):
             self.__InsertToQueue(oAction)
 
             if iActionId == Globals.oActions.oActionType.ShowPage:
-                oTmpAction = copy(aTmpAction)
+                oTmpAction = copy(oTmpAction)
                 uPagenameToCall = oAction.dActionPars.get('pagename','')
                 if uPagenameToCall == "":
                     if oAction.oParentWidget is not None:
@@ -257,7 +267,7 @@ class cQueue(object):
             if iActionId == Globals.oActions.oActionType.SendCommand:
                 self.__InsertToQueue(cAction(actionname='disabletransmitterpicture'))
 
-    def __InsertToQueue(self,oAction):
+    def __InsertToQueue(self,oAction:cAction) -> None:
         """ insert an action to the latest queue """
         if not oAction.bForce:
             self.aActionQueue.append(oAction)
@@ -265,11 +275,11 @@ class cQueue(object):
             self.WorkOnQueueDoAction(oAction)
         return
 
-    def WorkOnQueueDoAction(self,oAction):
+    def WorkOnQueueDoAction(self,oAction:cAction) -> Union[eReturnCode,int]:
         """ Executes a single action in a queue (including condition verifying)"""
 
-        iRet=0
-        bCheckSuccess=CheckCondition(oAction)
+        eRet:eReturnCode = eReturnCode.Success
+        bCheckSuccess:bool = CheckCondition(oPar=oAction)
 
         if oAction.iActionId==Globals.oActions.oActionType.If:
             # we do the If statement only in case of the condition fails
@@ -280,26 +290,29 @@ class cQueue(object):
 
         if bCheckSuccess:
             #We set / replace Action Command Pars by Definition/Button pars
-            iRet=self.ExecuteAction(oAction)
-            if iRet != -2:
-                SetVar(uVarName = u'LASTERRORCODE', oVarValue = ToUnicode(iRet))
-                if iRet != 0:
-                    Logger.debug("Action returned LASTERRORCODE "+ ToUnicode(iRet))
-        return iRet
+            eRet=self.ExecuteAction(oAction)
+            if eRet!=eReturnCode.Nothing:
+                SetVar(uVarName = u'LASTERRORCODE', oVarValue = ToUnicode(eRet))
+                if eRet!=eReturnCode.Success:
+                    Logger.debug("Action returned LASTERRORCODE "+ ToUnicode(eRet))
+        return eRet
 
-
-    def ExecuteAction(self,oAction):
+    # noinspection PyMethodMayBeStatic
+    def ExecuteAction(self,oAction:cAction) -> Union[int,eReturnCode]:
         """ Executes a single action in a queue (excluding condition verifying)"""
+
+        eRet: Union[int, eReturnCode]
 
         try:
             oAction.uActionString=ReplaceVars(oAction.uActionString)
             oFunction=Globals.oEvents.dActionFunctions.get(oAction.iActionId)
             if oFunction:
-                return oFunction(oAction)
+                eRet = oFunction(oAction)
+                return eRet
             else:
                 ''' this enables to use standardactions / actions without call, but assigning parameters like interface and configname '''
 
-                aActions=Globals.oActions.GetActionList(uActionName = oAction.uActionString, bNoCopy = True)
+                aActions:List[cAction]=Globals.oActions.GetActionList(uActionName = oAction.uActionString, bNoCopy = True)
                 if aActions:
                     if len(aActions)>1:
                         Logger.error("you can''t use multiline actions as short cut, use call instead")
@@ -310,18 +323,22 @@ class cQueue(object):
                         Globals.oEvents.CopyActionPars(dTarget=oAction.dActionPars,dSource=aActions[0].dActionPars,uReplaceOption="donotreplacetarget")
                         if not oAction.uRetVar:
                             oAction.uRetVar=aActions[0].uRetVar
-                        return oFunction(oAction)
+                        eRet = oFunction(oAction)
+                        return eRet
                 Logger.error("ExecuteAction: Action not Found:"+oAction.uActionName+':'+oAction.uActionString)
-                return 0
+                # Globals.oActions.Dump("")
+                return eReturnCode.Error
         except Exception as e:
-            uMsg=LogError('Error executing Action:'+Globals.oEvents.CreateDebugLine(oAction=oAction, uTxt=''),e)
+            uMsg=LogError(uMsg='Error executing Action:'+Globals.oEvents.CreateDebugLine(oAction=oAction, uTxt=''),oException=e)
             ShowErrorPopUp(uMessage=uMsg)
-            return False
+            return eReturnCode.Error
 
-
-
-    def Dump(self):
+    def Dump(self) -> None:
         """ dumps the queue """
+
+        i:int
+        oAction:cAction
+
         Logger.debug (u'Action: ********* Start Dump  *********')
         Logger.debug (u'Action: QuePos: %d' % self.iActionQueuePos)
         for i,oAction in enumerate(self.aActionQueue):

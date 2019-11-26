@@ -18,17 +18,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from kivy.logger                import Logger
+from typing                         import List
+from typing                         import Dict
 
-from ORCA.actions.Base          import cEventActionBase
-from ORCA.utils.LogError        import LogError
-from ORCA.vars.Replace          import ReplaceVars
-from ORCA.vars.Access           import SetVar
-from ORCA.vars.Access           import GetVar
-from ORCA.utils.TypeConvert     import ToUnicode
-from ORCA.utils.TypeConvert     import UnEscapeUnicode
-from ORCA.utils.TypeConvert     import EscapeUnicode
-from ORCA.utils.TypeConvert     import ToBool
+from kivy.logger                    import Logger
+
+from ORCA.actions.Base              import cEventActionBase
+from ORCA.utils.LogError            import LogError
+from ORCA.vars.Replace              import ReplaceVars
+from ORCA.vars.Access               import SetVar
+from ORCA.vars.Access               import GetVar
+from ORCA.utils.TypeConvert         import ToUnicode
+from ORCA.utils.TypeConvert         import UnEscapeUnicode
+from ORCA.utils.TypeConvert         import EscapeUnicode
+from ORCA.utils.TypeConvert         import ToBool
+from ORCA.Action                    import cAction
+from ORCA.definition.Definition     import cDefinition
+from ORCA.interfaces.BaseInterface  import cBaseInterFace
+from ORCA.actions.ReturnCode        import eReturnCode
+
 import ORCA.Globals as Globals
 
 __all__ = ['cEventActionsSettings']
@@ -36,7 +44,7 @@ __all__ = ['cEventActionsSettings']
 class cEventActionsSettings(cEventActionBase):
     """ Actions for getting/writings settings """
 
-    def ExecuteActionRemoveDefinitionSetting(self,oAction):
+    def ExecuteActionRemoveDefinitionSetting(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -74,12 +82,12 @@ class cEventActionsSettings(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'RemoveDefinitionSetting',oAction)
-        uDefinitionName = ReplaceVars(oAction.dActionPars.get("definitionname",""))
-        uSettingVar     = ReplaceVars(oAction.dActionPars.get("settingname",""))
-        uSettingVarOrg  = oAction.dActionPars.get("settingname","")
-        bFound=False
+        uDefinitionName:str = ReplaceVars(oAction.dActionPars.get("definitionname",""))
+        uSettingVar:str     = ReplaceVars(oAction.dActionPars.get("settingname",""))
+        uSettingVarOrg :str = oAction.dActionPars.get("settingname","")
+        bFound:bool         = False
 
-        oDef=Globals.oDefinitions[uDefinitionName]
+        oDef:cDefinition = Globals.oDefinitions[uDefinitionName]
         if oDef:
             if uSettingVar==u'':
                 oDef.dDefinitionSettingsJSON.clear()
@@ -89,23 +97,26 @@ class cEventActionsSettings(cEventActionBase):
             else:
                 import json
                 for uVisSection in oDef.dDefinitionSettingsJSON:
-                    aDefinitionSettingsJSON = json.loads(ReplaceVars(oDef.dDefinitionSettingsJSON[uVisSection]))
-                    aDefinitionSettingsJSON2 = json.loads(ReplaceVars(oDef.dDefinitionSettingsJSON[uVisSection]))
-                    iStart=-1
-                    for aLine in aDefinitionSettingsJSON2:
+                    aDefinitionSettingsJSON:List[Dict]  = json.loads(ReplaceVars(oDef.dDefinitionSettingsJSON[uVisSection]))
+                    aDefinitionSettingsJSON2:List[Dict] = json.loads(ReplaceVars(oDef.dDefinitionSettingsJSON[uVisSection]))
+                    iStart:int = -1
+                    iEnd:int
+                    dLine:Dict
+                    dLine2: Dict
+                    for dLine in aDefinitionSettingsJSON2:
                         iStart+=1
-                        if aLine.get('key') is not None:
-                            if aLine.get('key')==uSettingVar or aLine.get('key')==uSettingVarOrg:
-                                aDefinitionSettingsJSON.remove(aLine)
+                        if dLine.get('key') is not None:
+                            if dLine.get('key')==uSettingVar or dLine.get('key')==uSettingVarOrg:
+                                aDefinitionSettingsJSON.remove(dLine)
                                 bFound=True
                                 break
                         else:
-                            if aLine.get('type')=='title':
-                                if aLine.get('title')==uSettingVar:
+                            if dLine.get('type')=='title':
+                                if dLine.get('title')==uSettingVar:
                                     bFound=True
                                     iEnd=iStart
-                                    for aLine2 in aDefinitionSettingsJSON2[iStart+1:]:
-                                        if aLine2.get('key') is not None:
+                                    for dLine2 in aDefinitionSettingsJSON2[iStart+1:]:
+                                        if dLine2.get('key') is not None:
                                             iEnd+=1
                                         else:
                                             break
@@ -114,15 +125,18 @@ class cEventActionsSettings(cEventActionBase):
                     oDef.dDefinitionSettingsJSON[uVisSection]=ToUnicode(json.dumps(aDefinitionSettingsJSON))
 
         else:
-            LogError(u'Action: RemoveDefinitionSetting: Wrong definition name:'+uDefinitionName )
+            LogError(uMsg=u'Action: RemoveDefinitionSetting: Wrong definition name:'+uDefinitionName )
             Globals.oDefinitions.DumpDefinitionList()
-            return 1
+            return eReturnCode.Error
         if not bFound:
-            LogError (u'Action: RemoveDefinitionSetting: Cannot remove setting (not found) : %s [%s] [%s]' % (uSettingVar,uSettingVarOrg,uDefinitionName))
-        return 0
+            LogError (uMsg=u'Action: RemoveDefinitionSetting: Cannot remove setting (not found) : %s [%s] [%s]' % (uSettingVar,uSettingVarOrg,uDefinitionName))
+            return eReturnCode.Error
+        return eReturnCode.Success
 
-    def RemoveSettingSection(self,uSettingVar,oDef):
-        uSettingVar2=ReplaceVars(uSettingVar)
+    # noinspection PyMethodMayBeStatic
+    def RemoveSettingSection(self,uSettingVar:str,oDef:cDefinition) -> bool:
+        uSettingVar2:str=ReplaceVars(uSettingVar)
+        uSection:str
         for uSection in oDef.dDefinitionSettingsJSON:
             if uSection==uSettingVar:
                 del oDef.dDefinitionSettingsJSON[uSection]
@@ -135,7 +149,7 @@ class cEventActionsSettings(cEventActionBase):
                 return True
         return False
 
-    def ExecuteActionSaveInterfaceSetting(self,oAction):
+    def ExecuteActionSaveInterfaceSetting(self,oAction:cAction) -> eReturnCode:
 
         """
         WikiDoc:Doc
@@ -175,23 +189,23 @@ class cEventActionsSettings(cEventActionBase):
         self.oEventDispatcher.LogAction(u'SaveInterfaceSetting',oAction)
         self.oEventDispatcher.aHiddenKeyWords.append('configname')
 
-        uInterfaceName       = ReplaceVars(oAction.dActionPars.get("interfacename",""))
-        uConfigName          = ReplaceVars(oAction.dActionPars.get("configname",""))
-        uVarName             = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uVarValue            = ReplaceVars(oAction.dActionPars.get("varvalue",""))
+        uInterfaceName:str       = ReplaceVars(oAction.dActionPars.get("interfacename",""))
+        uConfigName:str          = ReplaceVars(oAction.dActionPars.get("configname",""))
+        uVarName:str             = ReplaceVars(oAction.dActionPars.get("varname",""))
+        uVarValue:str            = ReplaceVars(oAction.dActionPars.get("varvalue",""))
 
-        oInterFace=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+        oInterFace:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
         if oInterFace is None:
             Globals.oInterFaces.LoadInterface(uInterfaceName)
             oInterFace=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
 
         if oInterFace is None:
-            LogError(u'Action: Save Interface Setting failed: Interface: %s  Interface not found!' % uInterfaceName)
-            return 1
+            LogError(uMsg=u'Action: Save Interface Setting failed: Interface: %s  Interface not found!' % uInterfaceName)
+            return eReturnCode.Error
         oInterFace.oObjectConfig.WriteDefinitionConfigPar(uSectionName=uConfigName, uVarName=uVarName, uVarValue=uVarValue, bForce=True)
-        return 0
+        return eReturnCode.Success
 
-    def ExecuteActionGetInterfaceSetting(self,oAction):
+    def ExecuteActionGetInterfaceSetting(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -228,25 +242,25 @@ class cEventActionsSettings(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'GetInterfaceSetting',oAction)
 
-        uInterfaceName       = ReplaceVars(oAction.dActionPars.get("interfacename",""))
-        uConfigName          = ReplaceVars(oAction.dActionPars.get("configname",""))
-        uVarName             = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uRetVar              = ReplaceVars(oAction.dActionPars.get("retvar",""))
+        uInterfaceName:str       = ReplaceVars(oAction.dActionPars.get("interfacename",""))
+        uConfigName:str          = ReplaceVars(oAction.dActionPars.get("configname",""))
+        uVarName:str             = ReplaceVars(oAction.dActionPars.get("varname",""))
+        uRetVar:str              = ReplaceVars(oAction.dActionPars.get("retvar",""))
 
-        oInterFace=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+        oInterFace:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
         if oInterFace is None:
             Globals.oInterFaces.LoadInterface(uInterfaceName)
             oInterFace=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
 
         if oInterFace is None:
-            LogError(u'Action: Get Interface Setting failed: Interface: %s  Interface not found!' % (uInterfaceName))
-            return 1
+            LogError(uMsg=u'Action: Get Interface Setting failed: Interface: %s  Interface not found!' % uInterfaceName)
+            return eReturnCode.Error
 
         SetVar(uVarName = uRetVar, oVarValue = oInterFace.oObjectConfig.GetSettingParFromIni(uConfigName,uVarName))
 
-        return 0
+        return eReturnCode.Success
 
-    def ExecuteActionGetSaveOrcaSetting(self,oAction):
+    def ExecuteActionGetSaveOrcaSetting(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -283,11 +297,12 @@ class cEventActionsSettings(cEventActionBase):
         """
 
         self.oEventDispatcher.LogAction(u'GetSaveOrcaSetting',oAction)
-        uConfigType          = ReplaceVars(oAction.dActionPars.get("configtype",""))
-        uVarName             = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uVarValue            = oAction.dActionPars.get("varvalue","")
-        uRetVar              = ReplaceVars(oAction.dActionPars.get("retvar",""))
-        bNoWrite             = ToBool(ReplaceVars(oAction.dActionPars.get("nowrite","")))
+        uConfigType:str          = ReplaceVars(oAction.dActionPars.get("configtype",""))
+        uVarName:str             = ReplaceVars(oAction.dActionPars.get("varname",""))
+        uVarValue:str            = oAction.dActionPars.get("varvalue","")
+        uRetVar:str              = ReplaceVars(oAction.dActionPars.get("retvar",""))
+        bNoWrite:bool            = ToBool(ReplaceVars(oAction.dActionPars.get("nowrite","")))
+        uSection:str
 
         if uVarValue!= u'':
             if not "$lvar(" in uVarValue:
@@ -315,7 +330,7 @@ class cEventActionsSettings(cEventActionBase):
                 if not bNoWrite:
                     Globals.oDefinitionConfigParser.write()
             SetVar(uVarName = uVarName, oVarValue = uVarValue)
-            return -2
+            return eReturnCode.Nothing
 
         # otherwise we want to read
         try:
@@ -326,7 +341,7 @@ class cEventActionsSettings(cEventActionBase):
                 uSection = uSection.replace(u' ', u'_')
                 try:
                     uVarValue = Globals.oDefinitionConfigParser.get(uSection, uVarName)
-                except Exception as e:
+                except Exception:
                     Logger.warning("getsaveorcasetting: not var to read: [%s] from [%s] into Var [%s], returning empty value" % (uVarName,uConfigType,uRetVar))
 
             #todo: temporary hack to bypass configparser unicode error
@@ -335,8 +350,8 @@ class cEventActionsSettings(cEventActionBase):
             SetVar(uVarName = uRetVar, oVarValue = uVarValue, uContext = uConfigType)
             Logger.debug("Pulled Config Var [%s]:[%s] from [%s] into Var [%s]" % (uVarName,uVarValue,uConfigType,uRetVar))
         except Exception as e:
-            LogError(u'Action: GetSaveOrcaSetting',e )
+            LogError(uMsg=u'Action: GetSaveOrcaSetting',oException=e )
             SetVar(uVarName = uRetVar, oVarValue = u'')
-        return -2
+        return eReturnCode.Nothing
 
 

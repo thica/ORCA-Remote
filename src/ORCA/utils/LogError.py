@@ -20,44 +20,37 @@
 """
 
 import traceback
-
+from typing import Any
 from kivy.logger            import Logger
-from ORCA.Compat            import PY2
 
 __all__ =['LogError','LogErrorSmall']
 
 
-def LogErrorSmall(uMsg, oException=None):
-    LogError(uMsg, oException, False)
+def LogErrorSmall(*,uMsg:str, oException:Any=None) ->str:
+    return LogError(uMsg=uMsg, oException=oException, bTrackStack=False)
 
-def LogError(uMsg, oException=None, bTrackStack = False):
+def LogError(*,uMsg:str, oException:Any=None, bTrackStack:bool = False)-> str:
 
     """ Logging an error with traceback """
 
-    uStackText = u''
     if uMsg is None:
         uMsg = ""
+
+    uStackText:str  = u''
+    uRet:str        = uMsg
+    uRet2:str
 
     if bTrackStack:
         if oException is not None:
             uStackText = traceback.format_exc()
         else:
             uStackText = ''.join(traceback.format_list(traceback.extract_stack())[:-2])
-        if PY2:
-            try:
-                uStackText=unicode(string=uStackText,errors='replace')
-            except Exception as e:
-                pass
 
-    if oException is None:
-        uRet=uMsg
-        uRet2=uMsg
-    else:
-        ErrText= str(oException)
-        uRet=uMsg+u' : '+ErrText
+    if oException is not None:
+        uRet=uMsg+u' : '+str(oException)
 
     if bTrackStack:
-        uRet2=uRet+ u"\n\n"+uStackText
+        uRet2 = uRet+ u"\n\n"+uStackText
     else:
         uRet2 = uRet
 

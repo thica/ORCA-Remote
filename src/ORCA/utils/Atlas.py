@@ -34,32 +34,31 @@ import ORCA.Globals as Globals
 
 __all__ = ['ToAtlas','CreateAtlas','ClearAtlas']
 
-def ToAtlas(oFileName):
+def ToAtlas(oFileName: cFileName) -> str:
     """
-    checks if a a picture is already availble in a atlas file
+    checks if a a picture is already available in a atlas file
 
-    :rtype: string
     :param cFileName oFileName:
     :return: Found FileName
     """
-    uRetFileName = oFileName.string
-    oFnSkinPic        = Globals.oTheScreen.oSkin.dSkinPics.get(uRetFileName)
+    uRetFileName: str       = oFileName.string
+    oFnSkinPic: cFileName   = Globals.oTheScreen.oSkin.dSkinPics.get(uRetFileName)
     if not oFnSkinPic is None:
-        uRetFileName=oFnSkinPic.string
+        uRetFileName = oFnSkinPic.string
 
     if Globals.bIgnoreAtlas:
         return uRetFileName
 
-    uKey=os.path.splitext(os.path.basename(uRetFileName))[0]
+    uKey: str = os.path.splitext(os.path.basename(uRetFileName))[0]
 
     if uRetFileName.startswith(Globals.oPathSkin.string):
-        oFn=Globals.oFnAtlasSkin
+        oFn: cFileName = Globals.oFnAtlasSkin
     elif uRetFileName.startswith(Globals.oDefinitionPathes.oPathDefinition.string):
-        oFn=Globals.oDefinitionPathes.oFnDefinitionAtlas
+        oFn: cFileName = Globals.oDefinitionPathes.oFnDefinitionAtlas
     else:
         return uRetFileName
 
-    oAtlas = Cache.get('kv.atlas', oFn.string)
+    oAtlas: Atlas = Cache.get('kv.atlas', oFn.string)
 
     if oAtlas:
         if not oAtlas.textures.get(uKey) is None:
@@ -67,7 +66,7 @@ def ToAtlas(oFileName):
 
     return uRetFileName
 
-def CreateAtlas(oPicPath,oAtlasFile,uDebugMsg):
+def CreateAtlas(oPicPath: cPath,oAtlasFile: cFileName,uDebugMsg: str) -> None:
     """
     creates an atlas file from all picture files in a folder
 
@@ -102,14 +101,14 @@ def CreateAtlas(oPicPath,oAtlasFile,uDebugMsg):
             except Exception:
                 pass
     except Exception as e:
-        LogError(u'Error creating Atlas File:',e)
+        LogError(uMsg=u'Error creating Atlas File:',oException=e)
 
-def ClearAtlas():
+def ClearAtlas() -> None:
     """ deletes all atlas files """
     #we clear all cache files for all definitions by purpose
     for uSkinName in Globals.aSkinList:
-        oPathAtlasSkin = Globals.oPathRoot + ('skins/' + uSkinName + u'/atlas')
+        oPathAtlasSkin: cPath = Globals.oPathRoot + ('skins/' + uSkinName + u'/atlas')
         oPathAtlasSkin.Clear()
     for uDefinitionName in Globals.aDefinitionList:
-        oPathDefinitionAtlas = Globals.oPathRoot + ('definitions/' + uDefinitionName + u'/atlas')
+        oPathDefinitionAtlas: cPath = Globals.oPathRoot + ('definitions/' + uDefinitionName + u'/atlas')
         oPathDefinitionAtlas.Clear()

@@ -6,8 +6,8 @@
         <description language='English'>LAN Control for Sharp Aquos TVs (US models) Experimental</description>
         <description language='German'>LAN Steuerung für Sharp Aquos TVs (US Modelle) Experimental</description>
         <author>Carsten Thielepape</author>
-        <version>3.70</version>
-        <minorcaversion>3.7.0</minorcaversion>
+        <version>4.6.0</version>
+        <minorcaversion>4.6.0</minorcaversion>
         <skip>1</skip>
         <sources>
           <source>

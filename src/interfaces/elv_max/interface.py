@@ -27,28 +27,44 @@
  https://github.com/hackercowboy/python-maxcube-api
 '''
 
+from typing                         import TYPE_CHECKING
+from typing                         import Union
+from typing                         import List
+from typing                         import Dict
+from typing                         import Callable
+from typing                         import Tuple
 
 import sys
-from kivy.clock             import Clock
-from kivy.logger            import Logger
+from kivy.logger                    import Logger
 
-from ORCA.interfaces.BaseInterface import cBaseInterFace
+from ORCA.interfaces.BaseInterface  import cBaseInterFace
 from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
-from ORCA.vars.Replace      import ReplaceVars
-from ORCA.utils.Path        import cPath
-from ORCA.vars.QueryDict    import QueryDict
-from ORCA.utils.TypeConvert import ToInt
-from ORCA.utils.TypeConvert import ToFloat
-from ORCA.utils.TypeConvert import ToDic
-from ORCA.utils.TypeConvert import ToList
-from ORCA.vars.Actions      import Var_DelArray
+from ORCA.vars.Replace              import ReplaceVars
+from ORCA.utils.Path                import cPath
+from ORCA.utils.FileName            import cFileName
+from ORCA.vars.QueryDict            import QueryDict
+from ORCA.utils.TypeConvert         import ToInt
+from ORCA.utils.TypeConvert         import ToFloat
+from ORCA.utils.TypeConvert         import ToDic
+from ORCA.utils.TypeConvert         import ToList
+from ORCA.vars.Actions              import Var_DelArray
+from ORCA.Action                    import cAction
+from ORCA.actions.ReturnCode        import eReturnCode
+
 import ORCA.Globals as Globals
 
-sys.path.append((cPath(Globals.oPathInterface + "/elv_max")).string)
-
-from maxcube.cube import MaxCube
-from maxcube.connection import MaxCubeConnection
-
+if TYPE_CHECKING:
+    from interfaces.elv_max.maxcube.cube        import MaxCube
+    from interfaces.elv_max.maxcube.connection  import MaxCubeConnection
+    from interfaces.elv_max.maxcube.room        import MaxRoom
+else:
+    sys.path.append((cPath(Globals.oPathInterface + "/elv_max")).string)
+    # noinspection PyUnresolvedReferences
+    from maxcube.cube import MaxCube
+    # noinspection PyUnresolvedReferences
+    from maxcube.connection import MaxCubeConnection
+    # noinspection PyUnresolvedReferences
+    from maxcube.room import MaxRoom
 '''
 <root>
   <repositorymanager>
@@ -57,8 +73,8 @@ from maxcube.connection import MaxCubeConnection
       <description language='English'>Interface control ELV MAX</description>
       <description language='German'>Interface um ALV MAX Geräte zu steuern</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/elv_max</local>
@@ -73,13 +89,14 @@ from maxcube.connection import MaxCubeConnection
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>elv_max/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
 </root>
 '''
 
+
+# noinspection PyMethodMayBeStatic,PyUnusedLocal
 class cInterface(cBaseInterFace):
 
     class cInterFaceSettings(cBaseInterFaceSettings):
@@ -93,10 +110,10 @@ class cInterface(cBaseInterFace):
             self.aIniSettings.iTimeToClose                = -1
             self.aIniSettings.uDiscoverScriptName         = u"discover_elvmax"
             self.aIniSettings.uDISCOVER_ELVMAX_serialnumber = ""
-            self.oDevice                                           = None
-            self.dDevices                                          = {}
+            self.oDevice:Union[MaxCube,None]                = None
 
-        def Disconnect(self):
+
+        def Disconnect(self) -> bool:
             if not self.bIsConnected:
                 return cBaseInterFaceSettings.Disconnect(self)
             try:
@@ -107,7 +124,7 @@ class cInterface(cBaseInterFace):
                 self.ShowError(u'Cannot diconnect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 return cBaseInterFaceSettings.Disconnect(self)
 
-        def Connect(self):
+        def Connect(self) -> bool:
 
             if not cBaseInterFaceSettings.Connect(self):
                 return False
@@ -136,17 +153,17 @@ class cInterface(cBaseInterFace):
 
     def __init__(self):
         cBaseInterFace.__init__(self)
-        self.aSettings                  = {}
-        self.oSetting                   = None
-        self.aDiscoverScriptsBlackList  = ["iTach (Global Cache)","Keene Kira","UPNP","Enigma","EISCP (Onkyo)"]
-        self.dInterfaceFunctions        = {}
+        self.dSettings:Dict                                 = {}
+        self.oSetting:Union[cBaseInterFaceSettings,None]    = None
+        self.aDiscoverScriptsBlackList:List[str]            = ["iTach (Global Cache)","Keene Kira","UPNP","Enigma","EISCP (Onkyo)"]
+        self.dInterfaceFunctions:Dict[str,Callable]         = {}
         self.RegisterInterfaceActions()
 
 
-    def Init(self,uObjectName,oFnObject=None):
+    def Init(self,uObjectName:str,oFnObject:Union[cFileName,None]=None) -> None:
         """ Initialisizes the Interface
 
-        :param string uObjectName: unicode : Name of the interface
+        :param str uObjectName: unicode : Name of the interface
         :param cFileName oFnObject: The Filename of the interface
         """
 
@@ -159,26 +176,26 @@ class cInterface(cBaseInterFace):
         self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
-    def DeInit(self, **kwargs):
+    def DeInit(self, **kwargs) -> None:
         cBaseInterFace.DeInit(self,**kwargs)
-        for aSetting in self.aSettings:
-            self.aSettings[aSetting].DeInit()
+        for uSettingName in self.dSettings:
+            self.dSettings[uSettingName].DeInit()
 
-    def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
+    def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
-        iTryCount=0
-        iRet=1
+        iTryCount:int     = 0
+        eRet:eReturnCode  = eReturnCode.Error
 
-        uRetVar = ReplaceVars(uRetVar)
+        uRetVar:str = ReplaceVars(uRetVar)
         oSetting.uRetVar=uRetVar
 
         if uRetVar!="":
             oAction.uGlobalDestVar=uRetVar
 
-        dCmd     = ToDic(oAction.uCmd)
-        uCmd     = dCmd["method"]
-        dParams  = dCmd["params"]
+        dCmd:Dict     = ToDic(oAction.uCmd)
+        uCmd:str      = dCmd["method"]
+        dParams:Dict  = dCmd["params"]
 
         while iTryCount<2:
             iTryCount+=1
@@ -186,24 +203,22 @@ class cInterface(cBaseInterFace):
             if oSetting.bIsConnected:
                 try:
                     self.ShowDebug("Sending elv max command: %s" % uCmd)
-                    oFunc = self.dInterfaceFunctions.get(uCmd)
-                    aResult = []
+                    oFunc:Callable  = self.dInterfaceFunctions.get(uCmd)
+                    aResult:List    = []
                     if oFunc is not None:
                         aResult = oFunc(oSetting=oSetting,oAction=oAction, dParams=dParams)
                     else:
                         self.ShowError("Function not implemented: %s" % uCmd)
 
-
                     for dLine in aResult:
-
-                        uGlobalDestVarSave      = oAction.uGlobalDestVar
-                        uLocalDestVarSave       = oAction.uLocalDestVar
+                        uGlobalDestVarSave:str      = oAction.uGlobalDestVar
+                        uLocalDestVarSave:str       = oAction.uLocalDestVar
 
                         if oAction.uGetVar.startswith('ORCAMULTI'):
-                            aTmpGlobalDestVar  = ToList(oAction.uGlobalDestVar)
-                            aTmpLocalDestVar = ToList(oAction.uLocalDestVar)
-                            oAction.uGlobalDestVar = "".join('"'+e+dLine.uVarSuffix+'",' for e in aTmpGlobalDestVar)[:-1]
-                            oAction.uLocalDestVar = "".join('"'+e+dLine.uVarSuffix+'",'  for e in aTmpLocalDestVar)[:-1]
+                            aTmpGlobalDestVar:List  = ToList(oAction.uGlobalDestVar)
+                            aTmpLocalDestVar:List   = ToList(oAction.uLocalDestVar)
+                            oAction.uGlobalDestVar  = "".join('"'+e+dLine.uVarSuffix+'",' for e in aTmpGlobalDestVar)[:-1]
+                            oAction.uLocalDestVar   = "".join('"'+e+dLine.uVarSuffix+'",'  for e in aTmpLocalDestVar)[:-1]
                         else:
                             oAction.uGlobalDestVar  = oAction.uGlobalDestVar + dLine.uVarSuffix
                             oAction.uLocalDestVar   = oAction.uLocalDestVar + dLine.uVarSuffix
@@ -212,40 +227,34 @@ class cInterface(cBaseInterFace):
                         oAction.uGlobalDestVar  = uGlobalDestVarSave
                         oAction.uLocalDestVar   = uLocalDestVarSave
 
+                    eRet = eReturnCode.Success
                     break
                 except Exception as e:
-                    self.ShowError(u'can\'t Send Message',oSetting.uConfigName,e)
-                    iRet=1
+                    self.ShowError(uMsg=u'can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
+                    eRet = eReturnCode.Error
             else:
                 oSetting.bIsConnected=False
 
-        self.iLastRet=iRet
+        self.CloseSettingConnection(oSetting=oSetting, bNoLogOut=bNoLogOut)
+        return eRet
 
-        if not bNoLogOut:
-            if oSetting.aIniSettings.iTimeToClose==0:
-                oSetting.Disconnect()
-            elif oSetting.aIniSettings.iTimeToClose!=-1:
-                Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
-        return iRet
-
-    def RegisterInterfaceActions(self):
+    def RegisterInterfaceActions(self) -> None:
         """
         Register all actions managed by the interface
         """
 
-        aFuncs=dir(self)
+        aFuncs:List=dir(self)
         for uFuncName in aFuncs:
             if uFuncName.startswith('ELV_'):
                 uName = uFuncName[4:]
                 self.dInterfaceFunctions[uName] = getattr(self, uFuncName)
 
-    def _GetRFAddress(self,oSetting,uRoom):
+    def _GetRFAddress(self,oSetting:cInterFaceSettings,uRoom:str) -> Union[Tuple,None]:
         """
         Finds the rf_address for a room
 
         :param cInterface.cInterFaceSettings oSetting: The setting object
-        :param string uRoom: the room name
+        :param str uRoom: the room name
         :return: The rf_address, or None if not found
         :rtype: collections.namedtuple
         """
@@ -257,14 +266,13 @@ class cInterface(cBaseInterFace):
         return None
 
 
-    def _GetRoomForRfAddress(self, uRfAddress,oSetting):
+    def _GetRoomForRfAddress(self, uRfAddress:str,oSetting:cInterFaceSettings) -> Union[MaxRoom,None]:
         """
         Internal Helper function to find the Room for a RF Address
 
-        :param string uRfAddress: The RF Address to look for
+        :param str uRfAddress: The RF Address to look for
         :param cInterface.cInterFaceSettings oSetting: The setting object
         :return: The room object or None if not found
-        :rtype: collections.namedtuple
         """
         for oRoom in oSetting.oDevice.rooms:
             if str(oRoom.rf_address)==uRfAddress:
@@ -274,8 +282,7 @@ class cInterface(cBaseInterFace):
                     return oRoom
         return None
 
-
-    def _CreateSimpleResult(self,uResult):
+    def _CreateSimpleResult(self,uResult:str) -> List[QueryDict]:
         """
         Helper Function to create a simple one line result
 
@@ -283,15 +290,14 @@ class cInterface(cBaseInterFace):
         :return: a dict key:result=Result
         :rtype: QueryDict
         """
-        aRet                    = []
-        dLine                   = QueryDict()
+        aRet:List               = []
+        dLine:QueryDict         = QueryDict()
         dLine.uVarSuffix        = ""
         dLine.dValue            = {"result": uResult}
         aRet.append(dLine)
         return aRet
 
-
-    def _ELV_getroomdevices(self,oSetting,oAction, dParams, bAddRoom): #check
+    def _ELV_getroomdevices(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict, bAddRoom:bool) -> List: #check
         """
         Internal Helper function to get a list of devices of a room
 
@@ -300,24 +306,25 @@ class cInterface(cBaseInterFace):
         :param dict dParams: The parameter, needs to include room
         :param boolean bAddRoom: Flag to include the room name as first element
         :return: list: A list of dicts: key:name=room name , rf_address= Rf Address of Room
-        :rtype: list
         """
 
-        aRet        = []
-        i           = 0
-        uRoom       = ReplaceVars(dParams["room"],self.uObjectName+u'/'+oSetting.uConfigName)
+        aRet:List        = []
+        i:int            = 0
+        uRoom:str        = ReplaceVars(dParams["room"],self.uObjectName+u'/'+oSetting.uConfigName)
 
-        aTmpDestVar = ToList(oAction.uGlobalDestVar)
+        aTmpDestVar:List = ToList(oAction.uGlobalDestVar)
         for uVarName in aTmpDestVar:
             Var_DelArray(uVarName=uVarName+u'[]')
+
+        oRoom:MaxRoom
+        dLine:QueryDict
 
         for oRoom in oSetting.oDevice.rooms:
             if oRoom.name == uRoom:
                 if bAddRoom:
                     dLine                       = QueryDict()
                     dLine.uVarSuffix            = "[" + str(i) + "]"
-                    dLine.dValue                = {}
-                    uRfAddress                  = str(oRoom.rf_address)
+                    uRfAddress:str              = str(oRoom.rf_address)
                     dLine.dValue                = {"name": oRoom.name, "rf_address": uRfAddress}
                     aRet.append(dLine)
                     i = i + 1
@@ -326,14 +333,13 @@ class cInterface(cBaseInterFace):
                     dLine                       = QueryDict()
                     dLine.uVarSuffix            = "[" + str(i) + "]"
                     uRfAddress                  = str(oDevice.rf_address)
-                    dLine.dValue                = {"name": oDevice.name,
-                                                   "rf_address": str(uRfAddress)}
+                    dLine.dValue                = {"name": oDevice.name,"rf_address": uRfAddress}
                     aRet.append(dLine)
                     i = i + 1
                 break
         return aRet
 
-    def _ELV_set_mode(self,oSetting,oAction, dParams, bMode):
+    def _ELV_set_mode(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict, bMode:bool) -> List[QueryDict]:
         """
         Internal Helper function to sets the mode of a room or device , depends on what is given in dParams
 
@@ -342,13 +348,15 @@ class cInterface(cBaseInterFace):
         :param dict dParams: The parameter, see calling function for valid options
         :param byte bMode: the mode
         :return: dict: key:result=Error or maxcube result
-        :rtype: QueryDict
         """
 
-        uRet         = "Error"
-        kwArgs       = {}
-        oRoom        = None
-        fTemperature = 0.0
+        uRet:str                    = "Error"
+        kwArgs:Dict                 = {}
+        oRoom:Union[MaxRoom,None]   = None
+        uRoom:str
+        fTemperature:float           = 0.0
+        fTemperature:str
+        uRF_Address:str
 
         try:
             uRF_Address = dParams.get("rf_address")
@@ -361,7 +369,7 @@ class cInterface(cBaseInterFace):
 
             if uRoom is None and uRF_Address is None:
                 self.ShowError("set_mode:Invalid Parameter, not a room or rf_address given")
-                return uRet
+                return self._CreateSimpleResult(uRet)
 
             if uRF_Address is None:
                 oRF_Address = self._GetRFAddress(oSetting,uRoom)
@@ -369,7 +377,6 @@ class cInterface(cBaseInterFace):
 
             if uRoom is None:
                 oRoom = self._GetRoomForRfAddress(uRF_Address, oSetting)
-
 
             uTemperature= dParams.get("temperature")
             if uTemperature is not None:
@@ -385,7 +392,7 @@ class cInterface(cBaseInterFace):
                 self.ShowError("set_mode:Invalid Parameter")
 
         except Exception as e:
-            self.ShowError("room_set_mode: Internal Error",oSetting.uConfigName,e)
+            self.ShowError(uMsg="room_set_mode: Internal Error",uParConfigName=oSetting.uConfigName,oException=e)
 
         return self._CreateSimpleResult(uRet)
 
@@ -393,14 +400,13 @@ class cInterface(cBaseInterFace):
 
     ''' ##################################################################################  '''
 
-    def ELV_clearcache(self,oSetting,oAction, dParams):
+    def ELV_clearcache(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Clears all caches, should be called after changes of mode and temperatures, performs a reconnect
         :param cInterface.cInterFaceSettings oSetting: The setting object
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter (unused)
         :return: dict: key:result=OK
-        :rtype: QueryDict
         """
 
 
@@ -411,7 +417,7 @@ class cInterface(cBaseInterFace):
 
         return self._CreateSimpleResult("OK")
 
-    def ELV_getrooms(self,oSetting,oAction, dParams): #check
+    def ELV_getrooms(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List:
         """
         Returns a list of rooms
 
@@ -419,14 +425,14 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter (unused)
         :return: list: A list of dicts: key:name=room name , rf_address= Rf Address of Room
-        :rtype: list
         """
 
-        aRet  = []
-        i     = 0
+        aRet:List  = []
+        i:int      = 0
+        oRoom:MaxRoom
 
         for oRoom in oSetting.oDevice.rooms:
-            dLine                           = QueryDict()
+            dLine:QueryDict                 = QueryDict()
             dLine.uVarSuffix                = "[" + str(i) + "]"
             dLine.dValue                    = {"name": oRoom.name, "rf_address": str(oRoom.rf_address)}
             aRet.append(dLine)
@@ -434,7 +440,7 @@ class cInterface(cBaseInterFace):
 
         return aRet
 
-    def ELV_getattribute(self,oSetting,oAction, dParams):
+    def ELV_getattribute(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Returns a attribut for a device or room
 
@@ -442,15 +448,16 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include rf_address and attributename
         :return: dict: key:result=Error or result=attributevalue, attributevalue=n/a if attribute not found
-        :rtype: QueryDict
         """
 
-        uRF_Address                         = ReplaceVars(dParams["rf_address"],self.uObjectName+u'/'+oSetting.uConfigName)
-        uAttribute                          = ReplaceVars(dParams["attributename"],self.uObjectName+u'/'+oSetting.uConfigName)
+        oDevice:MaxCube
+
+        uRF_Address:str                         = ReplaceVars(dParams["rf_address"],self.uObjectName+u'/'+oSetting.uConfigName)
+        uAttribute:str                          = ReplaceVars(dParams["attributename"],self.uObjectName+u'/'+oSetting.uConfigName)
 
         try:
             oDevice = oSetting.oDevice.device_by_rf(uRF_Address)
-            uRet = getattr(oDevice, uAttribute, "N/A")
+            uRet:str = getattr(oDevice, uAttribute, "N/A")
             if uRet is None:
                 uRet="N/A"
         except Exception as e:
@@ -461,7 +468,7 @@ class cInterface(cBaseInterFace):
 
         return self._CreateSimpleResult(uRet)
 
-    def ELV_getroomdevices(self,oSetting,oAction, dParams):
+    def ELV_getroomdevices(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Gets a list of room devices excluding the room name as first element
 
@@ -469,12 +476,11 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include room
         :return: dict: key:result=Error or _ELV_getroomdevices result
-        :rtype: QueryDict
         """
 
         return self._ELV_getroomdevices(oSetting=oSetting,oAction=oAction, dParams=dParams, bAddRoom=False)
 
-    def ELV_getroomdevicesex(self,oSetting,oAction, dParams):
+    def ELV_getroomdevicesex(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Gets a list of room devices including the room name as first element
 
@@ -482,11 +488,10 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include room
         :return: dict: key:result=Error or _ELV_getroomdevices result
-        :rtype: QueryDict
         """
         return self._ELV_getroomdevices(oSetting=oSetting,oAction=oAction, dParams=dParams, bAddRoom=True)
 
-    def ELV_room_set_mode_auto(self,oSetting,oAction, dParams):
+    def ELV_room_set_mode_auto(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Sets a room to mode auto
 
@@ -494,11 +499,10 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include room
         :return: dict: key:result=Error or maxcube result
-        :rtype: QueryDict
         """
         return self._ELV_set_mode(oSetting,oAction, dParams,oSetting.oDevice.ModeAuto)
 
-    def ELV_room_set_mode_boost(self,oSetting,oAction, dParams):
+    def ELV_room_set_mode_boost(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Sets a room to mode boost
 
@@ -506,12 +510,11 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include room
         :return: dict: key:result=Error or maxcude result
-        :rtype: QueryDict
         """
 
         return self._ELV_set_mode(oSetting,oAction, dParams,oSetting.oDevice.ModeBoost)
 
-    def ELV_room_set_mode_manual(self,oSetting,oAction, dParams):
+    def ELV_room_set_mode_manual(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Sets a room to mode manual
 
@@ -519,11 +522,10 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include room and the temperature in Celsius
         :return: dict: key:result=Error or maxcube result
-        :rtype: QueryDict
         """
         return self._ELV_set_mode(oSetting,oAction, dParams,oSetting.oDevice.ModeManual)
 
-    def ELV_room_set_mode_vacation(self,oSetting,oAction, dParams):
+    def ELV_room_set_mode_vacation(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Sets a room to mode auto
 
@@ -531,11 +533,10 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include room
         :return: dict: key:result=Error or maxcube result
-        :rtype: QueryDict
         """
         return self._ELV_set_mode(oSetting,oAction, dParams,oSetting.oDevice.ModeVacation)
 
-    def ELV_device_set_mode_auto(self, oSetting, oAction, dParams):
+    def ELV_device_set_mode_auto(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Sets a device to mode auto mode
 
@@ -543,11 +544,10 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include rf_address
         :return: dict: key:result=Error or maxcube result
-        :rtype: QueryDict
         """
         return self._ELV_set_mode(oSetting, oAction, dParams, oSetting.oDevice.ModeAuto)
 
-    def ELV_device_set_mode_boost(self, oSetting, oAction, dParams):
+    def ELV_device_set_mode_boost(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Sets a device to mode boost
 
@@ -555,11 +555,10 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include rf_address
         :return: dict: key:result=Error or maxcube result
-        :rtype: QueryDict
         """
         return self._ELV_set_mode(oSetting, oAction, dParams, oSetting.oDevice.ModeBoost)
 
-    def ELV_device_set_mode_manual(self,oSetting,oAction, dParams):
+    def ELV_device_set_mode_manual(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Sets a device to mode manual
 
@@ -567,11 +566,10 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include rf_address and the temperature in Celsius
         :return: dict: key:result=Error or maxcube result
-        :rtype: QueryDict
         """
         return self._ELV_set_mode(oSetting,oAction, dParams,oSetting.oDevice.ModeManual)
 
-    def ELV_device_set_mode_vacation(self,oSetting,oAction, dParams):
+    def ELV_device_set_mode_vacation(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List[QueryDict]:
         """
         Sets a device to mode manual
 
@@ -579,7 +577,5 @@ class cInterface(cBaseInterFace):
         :param cAction oAction: The action object (unused)
         :param dict dParams: The parameter, needs to include rf_address
         :return: dict: key:result=Error or maxcube result
-        :rtype: QueryDict
         """
         return self._ELV_set_mode(oSetting,oAction, dParams,oSetting.oDevice.ModeVacation)
-

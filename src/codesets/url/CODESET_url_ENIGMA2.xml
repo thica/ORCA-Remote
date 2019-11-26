@@ -7,8 +7,8 @@
       <description language='English'>ENIGMA2 Remote Control using the open webinterface</description>
       <description language='German'>ENIGMA2 Fernbedienung über das Open Web-Interface</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -50,6 +50,14 @@
      <action name='Parse Result into Vars' string="runscript" scriptname="helper_enigma" commandparameter='{"cmd_type":"parse_services","resultvar":"RESULT","retvar":"enigmachannel"}' condition="$var(RESULT)!="/>
   </action>
 
+  <action name="getmovielist" >
+     <action string="setvar RESULT=" />
+     <action string="codeset"  name="getmovielist_sub"       type="encode" waitforresponse='1' requesttype='GET' cmd='/web/movielist'            headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  getvar='dummy' parseoption='store' gdestvar='RESULT' />
+     <action name='Parse Result into Vars' string="runscript" scriptname="helper_enigma" commandparameter='{"cmd_type":"parse_movielist","resultvar":"RESULT","retvar":"$var(retvar)"}' condition="$var(RESULT)!="/>
+  </action>
+
+  <action string="codeset" name="deletemovie"  type="encode" waitforresponse='1' requesttype='GET' cmd='/web/moviedelete?sRef=$var(moviereference)'     headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
+  <action string="codeset" name="playrecording"    type="encode" waitforresponse='1' requesttype='GET' cmd=' /web/zap?sRef=$var(moviefilename)'     headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
 
   <action string="codeset" name='logon_unused'            type="encode" waitforresponse='1' requesttype='GET' cmd='/' headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
 

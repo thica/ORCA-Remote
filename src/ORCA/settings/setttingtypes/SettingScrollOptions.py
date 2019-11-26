@@ -18,6 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Union
+from typing import List
 
 from kivy.uix.scrollview                import ScrollView
 from kivy.uix.gridlayout                import GridLayout
@@ -27,19 +29,18 @@ from kivy.uix.textinput                 import TextInput
 from kivy.uix.widget                    import Widget
 from kivy.uix.settings                  import SettingOptions
 from kivy.metrics                       import dp
-from kivy.compat                        import string_types
 
 from ORCA.utils.Path                    import cPath
 from ORCA.vars.Replace                  import ReplaceVars
 from ORCA.vars.Actions import Var_GetArray
 from ORCA.widgets.core.MultiLineButton  import cMultiLineButton
 
-from ORCA.settings.setttingtypes.Base import GetActionList
-from ORCA.settings.setttingtypes.Base import GetGestureList
-from ORCA.settings.setttingtypes.Base import GetLanguageList
-from ORCA.settings.setttingtypes.Base import GetPageList
-from ORCA.settings.setttingtypes.Base import GetSendActionList
-from ORCA.settings.setttingtypes.Base import SettingSpacer
+from ORCA.settings.setttingtypes.Base   import GetActionList
+from ORCA.settings.setttingtypes.Base   import GetGestureList
+from ORCA.settings.setttingtypes.Base   import GetLanguageList
+from ORCA.settings.setttingtypes.Base   import GetPageList
+from ORCA.settings.setttingtypes.Base   import GetSendActionList
+from ORCA.settings.setttingtypes.Base   import SettingSpacer
 from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
 
 import ORCA.Globals as Globals
@@ -47,22 +48,22 @@ import ORCA.Globals as Globals
 __all__ = ['SettingScrollOptions',
            'ScrollOptionsPopUp']
 
-class ScrollOptionsPopUp(object):
+class ScrollOptionsPopUp:
     """ Core Scroll Popup """
     def __init__(self, **kwargs):
-        self.bNoValueChange   = False
-        self.bAllWaysOnChange = False
-        self.bAddInputField   = False
-        self.bIsLanguageInput = False
-        self.bStopVarTrigger  = False
-
-        self.oButtonCancel    = None
-        self.oTextInput       = None
-        self.oContent         = None
-        self.popup            = None
-        self.value            = kwargs.get('value','')
-        self.title            = kwargs.get('title','')
-        self.options          = kwargs.get('options','')
+        self.bNoValueChange:bool                        = False
+        self.bAllWaysOnChange:bool                      = False
+        self.bAddInputField:bool                        = False
+        self.bIsLanguageInput:bool                      = False
+        self.bStopVarTrigger:bool                       = False
+        self.bIsOpen:bool                               = False
+        self.oButtonCancel:Union[cMultiLineButton,None] = None
+        self.oTextInput:Union[TextInput,None]           = None
+        self.oContent:Union[GridLayout,None]            = None
+        self.popup:Union[Popup,None]                    = None
+        self.value:str                                  = kwargs.get('value','')
+        self.title:str                                  = kwargs.get('title','')
+        self.options:List[str]                          = kwargs.get('options','')
 
         if len(self.options)>0:
             if self.options[0]=="$LANGUAGELIST":
@@ -95,21 +96,25 @@ class ScrollOptionsPopUp(object):
             self.value=self.value[:-3]
 
         self.bStopVarTrigger = False
+        Globals.oNotifications.RegisterNotification("on_key",fNotifyFunction=self.ClosePopUpbyESC,uDescription= "Close Settings Popup",aValueLinks=[{"in":"key","out":"key"}])
 
     def CreatePopup(self, uValue, fktButttonSelect, fktTextInputSelect):
 
         """ create the popup """
-        self.oContent           = GridLayout(cols=1, spacing='5dp')
-        scrollview              = ScrollView( do_scroll_x=False, bar_width='10dp',scroll_type=['bars','content'] )
-        scrollcontent           = GridLayout(cols=1,  spacing='5dp', size_hint=(None, None))
-        scrollcontent.bind(minimum_height=scrollcontent.setter('height'))
+        self.oContent:GridLayout           = GridLayout(cols=1, spacing='5dp')
+        oScrollview:ScrollView             = ScrollView( do_scroll_x=False, bar_width='10dp',scroll_type=['bars','content'] )
+        oScrollcontent:GridLayout          = GridLayout(cols=1,  spacing='5dp', size_hint=(None, None))
+        oScrollcontent.bind(minimum_height = oScrollcontent.setter('height'))
         if Globals.uDeviceOrientation == u'landscape':
-            self.popup   = popup = Popup(content=self.oContent, title=self.title, size_hint=(0.5, 0.9),  auto_dismiss=False)
+            self.popup = Popup(content=self.oContent, title=self.title, size_hint=(0.5, 0.9),  auto_dismiss=False)
         else:
-            self.popup   = popup = Popup(content=self.oContent, title=self.title, size_hint=(0.9, 0.9),  auto_dismiss=False)
+            self.popup = Popup(content=self.oContent, title=self.title, size_hint=(0.9, 0.9),  auto_dismiss=False)
+
+        self.popup.bind(on_dismiss=self.OnClose)
+        self.popup.bind(on_open=self.OnOpen)
 
         #we need to open the popup first to get the metrics
-        popup.open()
+        self.popup.open()
         #Add some space on top
         self.oContent.add_widget(Widget(size_hint_y=None, height=dp(2)))
 
@@ -157,23 +162,41 @@ class ScrollOptionsPopUp(object):
                 aRet.sort()
                 self.options=aRet
 
-        #uid = str(self.uid)
         uid = "test"
         for option in self.options:
             state = 'down' if option == uValue else 'normal'
-            btn = ToggleButton(text=option, state=state, group=uid, size=(popup.width, self.oButtonHeigth), size_hint=(None, None),text_size=(popup.width, self.oButtonHeigth), valign="middle",halign="center")
+            btn = ToggleButton(text=option, state=state, group=uid, size=(self.popup.width, self.oButtonHeigth), size_hint=(None, None),text_size=(self.popup.width, self.oButtonHeigth), valign="middle",halign="center")
             btn.bind(on_release=fktButttonSelect)
-            scrollcontent.add_widget(btn)
+            oScrollcontent.add_widget(btn)
 
         # finally, add a cancel button to return on the previous panel
-        scrollview.add_widget(scrollcontent)
-        self.oContent.add_widget(scrollview)
+        oScrollview.add_widget(oScrollcontent)
+        self.oContent.add_widget(oScrollview)
         self.oContent.add_widget(SettingSpacer())
-        self.oButtonCancel = cMultiLineButton(text=ReplaceVars('$lvar(5009)'), size=(popup.width, dp(50)),size_hint=(0.9, None), halign='center', valign='middle')
-        self.oButtonCancel .bind(on_release=popup.dismiss)
+        self.oButtonCancel = cMultiLineButton(text=ReplaceVars('$lvar(5009)'), size=(self.popup.width, dp(50)),size_hint=(0.9, None), halign='center', valign='middle')
+        self.oButtonCancel .bind(on_release=self.popup.dismiss)
         self.oContent.add_widget(self.oButtonCancel)
 
-    def CleanUpLanguageVars(self, uValue):
+    # noinspection PyUnusedLocal
+    def OnClose(self,oPupup:Popup) -> bool:
+        self.bIsOpen = False
+        return False
+
+    # noinspection PyUnusedLocal
+    def OnOpen(self,oPupup:Popup) -> None:
+        self.bIsOpen = True
+        return None
+
+
+    def ClosePopUpbyESC(self,**kwargs):
+        if kwargs["key"]=="ESC":
+            if self.popup:
+                    if self.bIsOpen:
+                        self.popup.dismiss()
+                        return {}
+        return kwargs
+
+    def CleanUpLanguageVars(self, uValue:str) -> str:
         """ Hides the added Language string (only the $var will left) """
 
         if self.bIsLanguageInput:
@@ -191,7 +214,8 @@ class ScrollOptionsPopUp(object):
 
         return uValue
 
-    def UnhideLanguageVars(self, uValue):
+    # noinspection PyMethodMayBeStatic
+    def UnhideLanguageVars(self, uValue:str) -> str:
         """ Show text of language vars """
         if uValue.startswith(u'$lvar(') and uValue.endswith(u')') and not ":::" in uValue:
             return "%s [[%s]]" % (ReplaceVars(uValue),uValue[uValue.find("(")+1:-1])
@@ -205,11 +229,11 @@ class SettingScrollOptions(SettingOptions):
         super(SettingScrollOptions, self).__init__(**RemoveNoClassArgs(kwargs,SettingOptions))
         self.bInitComplete=True
 
-    def _create_popup(self, instance):
+    def _create_popup(self, instance) -> None:
         self.oScrollOptionsPopup.CreatePopup(self.value,self._set_option,self.OnTextInput)
         self.popup=self.oScrollOptionsPopup.popup
 
-    def on_value(self, instance, value):
+    def on_value(self, instance, value) -> None:
 
         if self.oScrollOptionsPopup.bStopVarTrigger:
             return
@@ -227,7 +251,7 @@ class SettingScrollOptions(SettingOptions):
 
         panel=self.panel
 
-        if not isinstance(value, string_types):
+        if not isinstance(value, str):
             value = str(value)
 
         #if self.oScrollOptionsPopup.bAllWaysOnChange and (self.oScrollOptionsPopup.value==value):

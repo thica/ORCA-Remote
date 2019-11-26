@@ -20,19 +20,27 @@
 """
 
 from colorsys                      import hsv_to_rgb
+from xml.etree.ElementTree         import Element
 
 from kivy.clock                    import Clock
-from kivy.graphics                 import Color
 from kivy.logger                   import Logger
 from kivy.uix.boxlayout            import BoxLayout
-
+from kivy.uix.widget               import Widget
 from ORCA.utils.TypeConvert        import ToFloat
 from ORCA.utils.XML                import GetXMLTextAttribute
 from ORCA.vars.Access              import GetVar
 from ORCA.vars.Access              import SetVar
 from ORCA.widgets.Base             import cWidgetBase
-from ORCA.widgets.Base             import GetColorFromHex
+from ORCA.widgets.helper.HexColor  import GetColorFromHex
 from ORCA.widgets.core.ColorPicker import cColorPicker
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
+
 
 __all__ = ['cWidgetColorPicker']
 
@@ -69,18 +77,18 @@ class cWidgetColorPicker(cWidgetBase):
 
     def __init__(self,**kwargs):
         super(cWidgetColorPicker, self).__init__(**kwargs)
-        self.fOldValue                  = 10000.23445
-        self.fValue                     = 0
-        self.oTrigger                   = Clock.create_trigger(self.On_Color_Wheel)
-        self.uDestVar                   = u''
-        self.oObjectColorPicker         = cColorPicker()
+        self.fOldValue:float                = 10000.23445
+        self.fValue:float                   = 0.0
+        self.oTrigger                       = Clock.create_trigger(self.On_Color_Wheel)
+        self.uDestVar:str                   = u''
+        self.oObjectColorPicker:cColorPicker= cColorPicker()
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        self.uDestVar                   = GetXMLTextAttribute(oXMLNode,u'destvar',    False,u'colorpicker')
+        self.uDestVar = GetXMLTextAttribute(oXMLNode,u'destvar',    False,u'colorpicker')
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
         if self.CreateBase(Parent=oParent,Class=BoxLayout):
             self.oParent.add_widget(self.oObject)
@@ -92,8 +100,18 @@ class cWidgetColorPicker(cWidgetBase):
             return True
         return False
 
-    def On_Color_Wheel(self, *largs):
-        """ updates the deasvars, of the colorpicker color has changed """
+    # noinspection PyUnusedLocal
+    def On_Color_Wheel(self, *largs) -> None:
+        """ updates the destvars, of the colorpicker color has changed """
+
+        h:float
+        s:float
+        v:float
+        r:float
+        b:float
+        g:float
+        a:float
+
         instance=self.oObjectColorPicker
         self.fValue = instance.hex_color
         if self.uDestVar:
@@ -128,35 +146,43 @@ class cWidgetColorPicker(cWidgetBase):
                 self.fOldValue = self.fValue
                 self.On_Button_Up(instance)
 
-    def UpdateWidget(self):
+    def UpdateWidget(self) -> None:
+
+        uH:str
+        uS:str
+        uV:str
+        uR:str
+        uG:str
+        uB:str
+
+        h:float
+        s:float
+        v:float
+        r:float
+        b:float
+        g:float
+        a:float = 1.0
 
         if not self.uDestVar==u'':
 
-            h=GetVar(uVarName = self.uDestVar+u'_h')
-            s=GetVar(uVarName = self.uDestVar+u'_s')
-            v=GetVar(uVarName = self.uDestVar+u'_v')
+            uH=GetVar(uVarName = self.uDestVar+u'_h')
+            uS=GetVar(uVarName = self.uDestVar+u'_s')
+            uV=GetVar(uVarName = self.uDestVar+u'_v')
 
-            r=''
-
-            if h!='':
-                h=ToFloat(h)/255
-                s=ToFloat(s)/255
-                v=ToFloat(v)/255
+            if uH!='':
+                h=ToFloat(uH)/255
+                s=ToFloat(uS)/255
+                v=ToFloat(uV)/255
                 r,g,b=hsv_to_rgb(h,s,v)
             else:
-                r=GetVar(uVarName = self.uDestVar+u'_r')
-                g=GetVar(uVarName = self.uDestVar+u'_g')
-                b=GetVar(uVarName = self.uDestVar+u'_b')
+                uR=GetVar(uVarName = self.uDestVar+u'_r')
+                uG=GetVar(uVarName = self.uDestVar+u'_g')
+                uB=GetVar(uVarName = self.uDestVar+u'_b')
 
-            if r=='':
-                oColor=GetColorFromHex(GetVar(uVarName = self.uDestVar))
-                if len(oColor)==0:
-                    oColor= Color(1, 1, 1, 1)
+                if uR=='':
+                    r,g,b,a = GetColorFromHex(GetVar(uVarName=self.uDestVar))
                 else:
-                    r,g,b,a=GetColorFromHex(GetVar(uVarName = self.uDestVar))
-
-            if r!='':
-                r = ToFloat(r) / 255
-                g = ToFloat(g) / 255
-                b = ToFloat(b) / 255
-                self.oObjectColorPicker.color=(r,g,b,1)
+                    r = ToFloat(uR) / 255
+                    g = ToFloat(uG) / 255
+                    b = ToFloat(uB) / 255
+            self.oObjectColorPicker.color=(r,g,b,a)

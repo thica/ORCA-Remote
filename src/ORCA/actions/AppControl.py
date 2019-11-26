@@ -17,26 +17,29 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing                 import List
 
 from kivy.logger            import Logger
 
+from ORCA.Action            import cAction
 from ORCA.actions.Base      import cEventActionBase
 from ORCA.EventTimer        import cCustomTimer
+from ORCA.Queue             import DumpQueue
 from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
+from ORCA.utils.FileName    import cFileName
 from ORCA.utils.LogError    import LogError
+from ORCA.utils.Path        import cPath
+from ORCA.utils.TypeConvert import ToBool
 from ORCA.utils.TypeConvert import ToFloat
+from ORCA.utils.TypeConvert import ToInt
+from ORCA.utils.TypeConvert import ToList
 from ORCA.utils.Zip         import cZipFile
 from ORCA.utils.Zip         import cZipPath
-from ORCA.utils.FileName    import cFileName
-from ORCA.utils.Path        import cPath
 from ORCA.vars.Access       import SetVar
 from ORCA.vars.Dump         import DumpDefinitionVars
 from ORCA.vars.Dump         import DumpVars
 from ORCA.vars.Replace      import ReplaceVars
-from ORCA.utils.TypeConvert import ToInt
-from ORCA.utils.TypeConvert import ToList
-from ORCA.Queue             import DumpQueue
-
+from ORCA.actions.ReturnCode import eReturnCode
 
 import ORCA.Globals as Globals
 
@@ -45,7 +48,8 @@ __all__ = ['cEventActionsAppControl']
 class cEventActionsAppControl(cEventActionBase):
     """ Actions for getting/writings settings """
 
-    def ExecuteActionDump(self,oAction):
+    # noinspection PyMethodMayBeStatic
+    def ExecuteActionDump(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -79,9 +83,9 @@ class cEventActionsAppControl(cEventActionBase):
         |}</div>
         WikiDoc:End
         """
-        uType           = ReplaceVars(oAction.dActionPars.get("type",""))
-        uFilter         = ReplaceVars(oAction.dActionPars.get("filter",""))
-        uDefinitionName = ReplaceVars(oAction.dActionPars.get("definitionname",""))
+        uType:str           = ReplaceVars(oAction.dActionPars.get("type",""))
+        uFilter:str         = ReplaceVars(oAction.dActionPars.get("filter",""))
+        uDefinitionName:str = ReplaceVars(oAction.dActionPars.get("definitionname",""))
 
         if uType=="pages":
             Globals.oTheScreen.DumpPages(uFilter)
@@ -101,9 +105,9 @@ class cEventActionsAppControl(cEventActionBase):
                     Logger.debug("Definition Name: %s / %s / %s" %(oDef.uName, oDef.uAlias, oDef.uDefPublicTitle))
                     DumpDefinitionVars(dArray = oDef.oDefinitionVars, uFilter = uFilter)
 
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionSetReturnCode(self,oAction):
+    def ExecuteActionSetReturnCode(self,oAction:cAction) -> int:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -125,10 +129,36 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:End
         """
         self.oEventDispatcher.LogAction(u'SetReturnCode',oAction)
-        uCode = oAction.dActionPars.get("code","0")
+        uCode:str = oAction.dActionPars.get("code","0")
         return ToInt(uCode)
 
-    def ExecuteActionNoAction(self,oAction):
+    def ExecuteActionBlockGui(self,oAction:cAction) -> eReturnCode:
+        """
+        WikiDoc:Doc
+        WikiDoc:Context:ActionsDetails
+        WikiDoc:Page:Actions-BlockGui
+        WikiDoc:TOCTitle:blockgui
+
+        = blockgui =
+        Blocks screen elements to react on touches. Helpful to ensure, that actions are finished and not interrupted by users touching screen elements
+        This action will not modify the error code
+
+        <div style="overflow:auto; ">
+        {| border=1 class="wikitable"
+        ! align="left" | string
+        |-
+        |blockgui
+        |-
+        |status
+        |0 or 1: 1=block the gui, 0 = unblock the gui
+        |}</div>
+        WikiDoc:End
+        """
+        self.oEventDispatcher.LogAction(u'BlockGui',oAction)
+        Globals.oTheScreen.BlockGui(ToBool(ReplaceVars(oAction.dActionPars.get("status", "0"))))
+        return eReturnCode.Nothing
+
+    def ExecuteActionNoAction(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -148,10 +178,10 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:End
         """
         self.oEventDispatcher.LogAction(u'NoAction',oAction)
-        return -2
+        return eReturnCode.Nothing
 
 
-    def ExecuteActionWaitForConnectivity(self,oAction):
+    def ExecuteActionWaitForConnectivity(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -172,9 +202,9 @@ class cEventActionsAppControl(cEventActionBase):
         self.oEventDispatcher.LogAction(u'WaitForConnectivity',oAction)
         if not Globals.oWaitForConnectivity.bIsWaiting:
             Globals.oWaitForConnectivity.Wait()
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionDefineTimer(self,oAction):
+    def ExecuteActionDefineTimer(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -205,35 +235,35 @@ class cEventActionsAppControl(cEventActionBase):
 
         self.oEventDispatcher.LogAction(u'DefineTimer',oAction)
 
-        uTimerName     = ReplaceVars(oAction.dActionPars.get("timername",""))
-        uInterval      = ReplaceVars(oAction.dActionPars.get("interval",""))
-        uSwitch        = ReplaceVars(oAction.dActionPars.get("switch",""))
-        uActionName    = ReplaceVars(oAction.dActionPars.get("actionname",""))
+        uTimerName:str     = ReplaceVars(oAction.dActionPars.get("timername",""))
+        uInterval:str      = ReplaceVars(oAction.dActionPars.get("interval",""))
+        uSwitch:str        = ReplaceVars(oAction.dActionPars.get("switch",""))
+        uActionName:str    = ReplaceVars(oAction.dActionPars.get("actionname",""))
 
         if uSwitch==u'on':
             if not self.oEventDispatcher.oAllTimer.HasTimer(uTimerName):
-                oCustomTimer=cCustomTimer( uTimerName, uActionName,ToFloat(uInterval))
+                oCustomTimer:cCustomTimer = cCustomTimer( uTimerName, uActionName,ToFloat(uInterval))
                 self.oEventDispatcher.oAllTimer.AddTimer(uTimerName,oCustomTimer)
                 oCustomTimer.StartTimer()
-                return 0
+                return eReturnCode.Success
             else:
                 Logger.warning (u'Action: DefineTimer, timer already exist:'+uTimerName)
-                return 1
+                return eReturnCode.Error
 
         if uSwitch==u'off':
             if self.oEventDispatcher.oAllTimer.HasTimer(uTimerName):
                 self.oEventDispatcher.oAllTimer.DeleteTimer(uTimerName)
-                return 0
+                return eReturnCode.Success
             else:
                 Logger.warning (u'Action: DefineTimer, timer does not exist:'+uTimerName)
-                return 1
+                return eReturnCode.Error
 
-        uMsg=u'Action: DefineTimer, you need to on/off the timer:'+uTimerName
+        uMsg:str = u'Action: DefineTimer, you need to on/off the timer:'+uTimerName
         Logger.warning (uMsg)
         ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
-        return 1
+        return eReturnCode.Error
 
-    def ExecuteActionPlaySound(self,oAction):
+    def ExecuteActionPlaySound(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -268,12 +298,12 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:End
         """
         self.oEventDispatcher.LogAction(u'PlaySound',oAction)
-        uSoundName     = ReplaceVars(oAction.dActionPars.get("soundname",""))
-        uVolume        = ReplaceVars(oAction.dActionPars.get("volume","100"))
+        uSoundName:str     = ReplaceVars(oAction.dActionPars.get("soundname",""))
+        uVolume:str        = ReplaceVars(oAction.dActionPars.get("volume","100"))
         Globals.oSound.PlaySound(uSoundName,uVolume)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionRedirect(self,oAction):
+    def ExecuteActionRedirect(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -296,14 +326,14 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:End
         """
 
-        oFrom   = cFileName("").ImportFullPath(oAction.dActionPars.get("from",""))
-        oTo     = cFileName("").ImportFullPath(oAction.dActionPars.get("to",""))
+        oFrom:cFileName   = cFileName("").ImportFullPath(oAction.dActionPars.get("from",""))
+        oTo:cFileName     = cFileName("").ImportFullPath(oAction.dActionPars.get("to",""))
 
         self.oEventDispatcher.LogAction(u'Redirect',oAction)
         Globals.oTheScreen.oSkin.dSkinRedirects[oFrom.string]=oTo
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionModifyFile(self,oAction):
+    def ExecuteActionModifyFile(self,oAction:cAction) -> eReturnCode:
 
         """
         WikiDoc:Doc
@@ -312,7 +342,7 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:TOCTitle:modifyfile
         = modifyfile =
         Provides some common file operations like copy, rename, delete. All Operations can only be performed on files within the definition folder, so all pathes must be relative to the definition root folder. For copyfolder the abspath argument gives you access as a source for folder outside the definition folder
-        This action will modify the error code (0=success, 1=failure)
+        This action will modify the error code (0=success, 1=failure), existfile will not modify the error coee
 
         <div style="overflow:auto; ">
         {| class="wikitable"
@@ -371,16 +401,18 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:End
         """
 
-        uFileName        = oAction.dActionPars.get("filename","")
-        uDestFileName    = oAction.dActionPars.get("dstfilename","")
-        uPath            = oAction.dActionPars.get("path","")
-        uDestPath        = oAction.dActionPars.get("dstpath","")
+        uFileName:str        = oAction.dActionPars.get("filename","")
+        uDestFileName:str    = oAction.dActionPars.get("dstfilename","")
+        uPath:str            = oAction.dActionPars.get("path","")
+        uDestPath:str        = oAction.dActionPars.get("dstpath","")
 
-        uDestVarName     = oAction.dActionPars.get("dstvarname","")
-        uOperator        = ReplaceVars(oAction.dActionPars.get("operator",""))
-        uAbsPath         = ReplaceVars(oAction.dActionPars.get("abspath",""))
-        uRemovePath      = ReplaceVars(oAction.dActionPars.get("removepath",""))
-        aSkipFiles       = ToList(ReplaceVars(oAction.dActionPars.get("skipfiles",'[]')))
+        uDestVarName:str     = oAction.dActionPars.get("dstvarname","")
+        uOperator:str        = ReplaceVars(oAction.dActionPars.get("operator",""))
+        uAbsPath:str         = ReplaceVars(oAction.dActionPars.get("abspath",""))
+        uRemovePath:str      = ReplaceVars(oAction.dActionPars.get("removepath",""))
+        aSkipFiles:List      = ToList(ReplaceVars(oAction.dActionPars.get("skipfiles",'[]')))
+        aSkipFiles.append("*.ini")
+        aSkipFiles.append("*.pyc")
 
         self.oEventDispatcher.LogAction(u'ModifyFile',oAction)
 
@@ -390,11 +422,11 @@ class cEventActionsAppControl(cEventActionBase):
             oFileName = cFileName(Globals.oDefinitionPathes.oPathDefinition)+uFileName
 
         if uPath.startswith('$var(DEFINITIONPATH'):
-            oPath = cPath(uPath)
+            oPath:cPath = cPath(uPath)
         else:
-            oPath = cPath(Globals.oDefinitionPathes.oPathDefinition)+uPath
+            oPath:cPath = cPath(Globals.oDefinitionPathes.oPathDefinition)+uPath
 
-        oAbsPath=cPath(uAbsPath)
+        oAbsPath:cPath = cPath(uAbsPath)
 
         if uDestFileName.startswith('$var(DEFINITIONPATH'):
             oDestFileName = cFileName().ImportFullPath(uDestFileName)
@@ -408,87 +440,87 @@ class cEventActionsAppControl(cEventActionBase):
 
         if ".." in oFileName.string:
             Logger.warning(u'Action: ModifyFile: File must be inside definition folder:'+oFileName.string)
-            return 1
+            return eReturnCode.Error
 
         if ".." in oDestFileName.string:
             Logger.warning(u'Action: ModifyFile: Destination File must be inside definition folder:'+oDestFileName.string)
-            return 1
+            return eReturnCode.Error
 
         if ".." in oPath.string:
             Logger.warning(u'Action: ModifyFile: Path must be inside definition folder:'+oPath.string)
-            return 1
+            return eReturnCode.Error
 
         if ".." in oDestPath.string:
             Logger.warning(u'Action: ModifyFile: Destination Path must be inside definition folder:'+oDestPath.string)
-            return 1
+            return eReturnCode.Error
 
         if uOperator==u'copyfile':
             if oFileName.Copy(oDestFileName):
-                return 0
+                return eReturnCode.Success
             else:
-                return 1
+                return eReturnCode.Error
         elif uOperator==u'renamefile':
             if oFileName.Rename(oDestFileName):
-                return 0
+                return eReturnCode.Success
             else:
-                return 1
+                return eReturnCode.Error
         elif uOperator==u'deletefile':
             if oFileName.Delete():
-                return 0
+                return eReturnCode.Success
             else:
-                return 1
+                return eReturnCode.Error
         elif uOperator==u'existfile':
             if oFileName.Exists():
                 SetVar(uVarName = uDestVarName, oVarValue = "TRUE")
             else:
                 SetVar(uVarName = uDestVarName, oVarValue = "FALSE")
-            return -2
+            return eReturnCode.Nothing
         elif uOperator==u'copyfolder':
             if oAbsPath.IsEmpty():
                 if oPath.Copy(oDestPath):
-                    return 0
+                    return eReturnCode.Success
                 else:
-                    return 1
+                    return eReturnCode.Error
             else:
                 if oAbsPath.Copy(oDestPath):
-                    return 0
+                    return eReturnCode.Success
                 else:
-                    return 1
+                    return eReturnCode.Error
         elif uOperator==u'renamefolder':
             if oPath.Rename(oDestPath):
-                return 0
+                return eReturnCode.Success
             else:
-                return 1
+                return eReturnCode.Error
         elif uOperator==u'deletefolder':
             if oPath.Delete():
-                return 0
+                return eReturnCode.Success
             else:
-                return 1
+                return eReturnCode.Error
         elif uOperator==u'createfolder':
             if oPath.Create():
-                return 0
+                return eReturnCode.Success
             else:
-                return 1
+                return eReturnCode.Error
         elif uOperator==u'existfolder':
             if oPath.Exists():
                 SetVar(uVarName = uDestVarName, oVarValue = "TRUE")
             else:
                 SetVar(uVarName = uDestVarName, oVarValue=  "FALSE")
-            return 0
+            return eReturnCode.Success
         elif uOperator==u'zipfolder':
-            oZipFolder    = cZipPath(ReplaceVars(oAction.dActionPars.get("path", "")))
-            oDestFileName = cFileName('').ImportFullPath(ReplaceVars(oAction.dActionPars.get("dstfilename", "")))
+            oZipFolder:cZipPath     = cZipPath(ReplaceVars(oAction.dActionPars.get("path", "")))
+            oDestFileName:cFileName = cFileName('').ImportFullPath(ReplaceVars(oAction.dActionPars.get("dstfilename", "")))
             if oZipFolder.ZipFolder(oFnZipDest=oDestFileName,uRemovePath=uRemovePath,aSkipFiles=aSkipFiles):
-                return 0
+                return eReturnCode.Success
             else:
-                return 1
+                return eReturnCode.Error
         elif uOperator==u'zipfile':
-            oZipFile    = cZipFile().ImportFullPath(ReplaceVars(oAction.dActionPars.get("filename", "")))
-            oDestFileName = cFileName('').ImportFullPath(ReplaceVars(oAction.dActionPars.get("dstfilename", "")))
+            oZipFile:cZipFile       = cZipFile().ImportFullPath(ReplaceVars(oAction.dActionPars.get("filename", "")))
+            oDestFileName:cFileName = cFileName('').ImportFullPath(ReplaceVars(oAction.dActionPars.get("dstfilename", "")))
             if oZipFile.ZipFile(oZipDest=oDestFileName,uRemovePath=uRemovePath):
-                return 0
+                return eReturnCode.Success
             else:
-                return 1
+                return eReturnCode.Error
         else:
-            LogError(u'Action: ModifyFile: Wrong modifier:'+uOperator )
-            return 1
+            LogError(uMsg=u'Action: ModifyFile: Wrong modifier:'+uOperator )
+            return eReturnCode.Error

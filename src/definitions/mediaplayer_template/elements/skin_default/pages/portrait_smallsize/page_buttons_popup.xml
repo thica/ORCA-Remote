@@ -27,7 +27,7 @@
         <element name='Anchor Cmd Buttons' type='ANCHOR' posy='bottom'  posx='center' width='of:height:self' height='%47'>
             <xi:include href="$var(DEFINITIONPATHSKINELEMENTS[cmdfavorites_template])/block_buttons_cmdstart.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE)==CMDBUTTONS" />
         </element>
-
+        <element name='Hide_Show_SecondCaption' type='SWITCH'  posx='of:left:Button Exit' posy='of:bottom:Button Exit' width='of:width:Button Exit' height='of:width:self' picturenormal='button square*' action='Switch Second Caption Page_Device_$dvar(definition_alias_mediaplayer_template)' destvar="Status_Second_Caption_Page_Device_$dvar(definition_alias_mediaplayer_template)" fontsize='%h30' iconfontsize='%h70' caption='icon:translate' />
       </element>
     </element>
   </elements>

@@ -19,6 +19,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import os
+from typing import List
+
 from kivy.logger             import Logger
 from ORCA.utils.Platform     import OS_GetUserDownloadsDataPath
 from ORCA.utils.Path         import cPath
@@ -27,25 +29,24 @@ from ORCA.utils.FileName     import cFileName
 
 import ORCA.Globals as Globals
 
-def Linux_GetDataDir():
+def Linux_GetDataDir() -> cPath:
     """
     tries to find an already installed data folder
     and sets a default, if none has been found
     """
 
-    uRootPath = u"/"
+    uRootPath:str       = u"/"
+    uSubDir:str         = u'OrcaRemote'
+    uUserDataDir:str    = OS_GetUserDownloadsDataPath()
     Logger.debug("Linux Root Folder = "+uRootPath)
 
-    uSubDir = u'OrcaRemote'
-
-    uUserDataDir = OS_GetUserDownloadsDataPath()
     try:
         uUserDataDir = Globals.oApp.user_data_dir
     except:
         pass
 
     # First try to Find existing Orca Data Dir
-    aTestDirs=[cPath(uUserDataDir)+uSubDir,cPath(OS_GetUserDownloadsDataPath())+uSubDir,cPath(uRootPath)+uSubDir,cPath(os.getcwd())]
+    aTestDirs:List[cPath]=[cPath(uUserDataDir)+uSubDir,cPath(OS_GetUserDownloadsDataPath())+uSubDir,cPath(uRootPath)+uSubDir,cPath(os.getcwd())]
     for oTestDir in aTestDirs:
         Logger.debug(u"Try to find Orca installations file at: " + oTestDir.string)
         if (cFileName(cPath(oTestDir)+'actions') + 'actions.xml').Exists():
@@ -71,7 +72,7 @@ def Linux_GetDataDir():
     #if we are here, we failed
     return cPath(OS_GetUserDownloadsDataPath()+uSubDir)
 
-def GetUserDataPath():
+def GetUserDataPath() -> cPath:
     """ Gets the path to the user folder """
 
     oPathRoot = Linux_GetDataDir()

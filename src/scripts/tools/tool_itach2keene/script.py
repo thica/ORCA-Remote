@@ -20,8 +20,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.scripts.Scripts import cScriptSettingPlugin
+from typing                                 import Dict
+from typing                                 import List
+
+from ORCA.scripts.Scripts                   import cScriptSettingPlugin
 from ORCA.scripttemplates.Template_Tools    import cToolsTemplate
+from ORCA.Action                            import cAction
+from ORCA.definition.Definition             import cDefinition
 import ORCA.Globals as Globals
 
 
@@ -33,8 +38,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to convert IR Files from iTach format to Kira Keene formats</description>
       <description language='German'>Tool um IR Dateien vom iTach Format zum Kira Keene Format zu konvertieren</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -50,13 +55,14 @@ import ORCA.Globals as Globals
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>scripts/tools/tool_itach2keene/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
 </root>
 '''
 
+
+# noinspection PyUnusedLocal
 class cScript(cToolsTemplate):
     """
     WikiDoc:Doc
@@ -82,15 +88,16 @@ class cScript(cToolsTemplate):
         self.uSettingSection = u'tools'
         self.uSettingTitle   = u"iTach2Keene"
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> None:
         cToolsTemplate.RunScript(self,*args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.ShowPageItach2Keene(self, *args, **kwargs)
 
-    def ShowPageItach2Keene(self, *args, **kwargs):
+    # noinspection PyMethodMayBeStatic
+    def ShowPageItach2Keene(self, *args, **kwargs) -> None:
         Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_ITach2Keene')
 
-    def Register(self, *args, **kwargs):
+    def Register(self, *args, **kwargs) -> Dict:
         cToolsTemplate.Register(self,*args, **kwargs)
         Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED", fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools iTach2Keene")
         Globals.oNotifications.RegisterNotification("STARTSCRIPTITACH2KEENE", fNotifyFunction=self.ShowPageItach2Keene, uDescription="Script Tools iTach2Keene")
@@ -104,12 +111,12 @@ class cScript(cToolsTemplate):
 
         ''' If we press ESC on the iTach2Keene page, goto to the settings page '''
 
-        oEvents = Globals.oEvents
-        aActions=oEvents.CreateSimpleActionList([{'name':'ESC Key Handler iTach2Keene','string':'registernotification','filterpagename':'Page_iTach2Keene','notification':'on_key_ESC','notifyaction':'gotosettingspage'}])
-        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        aActions:List[cAction]= Globals.oEvents.CreateSimpleActionList([{'name':'ESC Key Handler iTach2Keene','string':'registernotification','filterpagename':'Page_iTach2Keene','notification':'on_key_ESC','notifyaction':'gotosettingspage'}])
+        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        return {}
 
-    def LoadScriptPages(self,*args,**kwargs):
-        oDefinition = kwargs.get("definition")
+    def LoadScriptPages(self,*args,**kwargs) -> None:
+        oDefinition:cDefinition = kwargs.get("definition")
 
         if oDefinition.uName == Globals.uDefinitionName:
             if self.oFnXML.Exists():

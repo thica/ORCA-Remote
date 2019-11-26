@@ -25,7 +25,7 @@ import ORCA.utils.wait.Globals
 
 __all__ = ['IsWaiting']
 
-def IsWaiting():
+def IsWaiting() -> bool:
     """
     returns if we are in a interface wait state or app wait state
     """
@@ -36,12 +36,12 @@ def IsWaiting():
 
     ORCA.utils.wait.Globals.oWaitLock.acquire()
 
-    if ORCA.utils.wait.Globals.fWaitEndTime == 0:
+    if ORCA.utils.wait.Globals.oWaitEndTime == ORCA.utils.wait.Globals.oWaitZeroTime:
         ORCA.utils.wait.Globals.oWaitLock.release()
         return False
-    if datetime.now() > ORCA.utils.wait.Globals.fWaitEndTime:
+    if datetime.now() > ORCA.utils.wait.Globals.oWaitEndTime:
         Logger.warning("Interface waiting timed out!!")
-        ORCA.utils.wait.Globals.fWaitEndTime = 0
+        ORCA.utils.wait.Globals.oWaitEndTime = ORCA.utils.wait.Globals.oWaitZeroTime
         ORCA.utils.wait.Globals.oWaitLock.release()
         return False
     fSleep(0.01)

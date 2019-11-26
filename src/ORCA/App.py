@@ -21,16 +21,19 @@
 
 import logging
 import sys
+import os
 import math
 
 from kivy.app                              import App
 from kivy.clock                            import Clock
 from kivy.config                           import Config as kivyConfig
 from kivy.config                           import ConfigParser as OrcaConfigParser
+# noinspection PyProtectedMember
 from kivy.logger                           import FileHandler
 from kivy.logger                           import Logger
 from kivy.metrics                          import Metrics
 from kivy.uix.settings                     import SettingsWithSpinner
+from kivy.core.window                      import Window
 
 import ORCA.Globals as Globals
 
@@ -41,8 +44,8 @@ from ORCA.settings.AppSettings             import Build_Settings
 from ORCA.definition.DefinitionPathes      import cDefinitionPathes
 from ORCA.definition.Definitions           import cDefinitions
 from ORCA.definition.Definitions           import GetDefinitionFileNameByName
-from ORCA.Downloads                        import cDownLoad_Settings
-from ORCA.Downloads                        import cInstalledReps
+from ORCA.download.DownLoadSettings        import cDownLoad_Settings
+from ORCA.download.InstalledReps           import cInstalledReps
 from ORCA.Events                           import cEvents
 from ORCA.interfaces.Interfaces            import cInterFaces
 from ORCA.International                    import cLanguage
@@ -64,6 +67,7 @@ from ORCA.utils.ConfigHelpers              import Config_GetDefault_Path
 from ORCA.utils.FileName                   import cFileName
 from ORCA.utils.Path                       import cPath
 from ORCA.utils.LogError                   import LogError
+from ORCA.utils.ModuleLoader               import cModuleLoader
 from ORCA.utils.Network                    import GetLocalIPV4
 from ORCA.utils.Network                    import GetLocalIPV6
 from ORCA.utils.Network                    import GetMACAddress
@@ -101,11 +105,12 @@ class ORCA_App(App):
         App.__init__(self)
 
         # Don't Move or change
-        self.sVersion="4.5.0"
+        self.sVersion="4.6.2"
         self.sBranch="Dublin"
 
         #todo: Remove in release
-        # Logger.setLevel(logging.DEBUG)
+        #Logger.setLevel(logging.DEBUG)
+
 
         Globals.uVersion                                    = ToUnicode(self.sVersion)
         Globals.iVersion                                    = ToIntVersion(Globals.uVersion)      # string of App Version
@@ -128,6 +133,7 @@ class ORCA_App(App):
                                                                ('$lvar(688)', 'others')]
 
         Globals.oOrcaConfigParser                            = OrcaConfigParser()
+        Globals.oModuleLoader                                = cModuleLoader()
         Globals.oActions                                     = cActions()
         Globals.oCheckPermissions                            = cCheckPermissions()     # Object for checking, if we have permissions
         Globals.oDefinitions                                 = cDefinitions()           # Object which holds all loaded definitions
@@ -170,18 +176,21 @@ class ORCA_App(App):
         """
 
         try:
+            Window.borderless = True
             Globals.oCheckPermissions.Wait()
             kivyConfig.set('graphics', 'kivy_clock', 'interrupt')
+            kivyConfig.set('kivy','log_maxfiles','3')
             Globals.oTheScreen = cTheScreenWithInit()       # Create the Screen Object
             Globals.oEvents = cEvents()                     # Create the Scheduler
             Clock.schedule_once(self.Init_ReadConfig, 0)    # Trigger the scheduled init functions
             return Globals.oTheScreen.oRootSM               # And return the root object (black background at first instance)
         except Exception as e:
-            uMsg = LogError(u'Fatal Error running Orca', e)
+            uMsg = LogError(uMsg=u'build: Fatal Error running Orca', oException=e)
             print (uMsg)
             Logger.critical(uMsg)
-            ShowErrorPopUp(uTitle='Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='', uTextQuit=u'Quit')
+            ShowErrorPopUp(uTitle='build: Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='', uTextQuit=u'Quit')
 
+    # noinspection PyUnusedLocal
     def On_Size(self, win, size):
         """ Function called by the Framework, when the size or rotation has changed """
 
@@ -203,6 +212,7 @@ class ORCA_App(App):
         Globals.bWaitForRotation = False
         Globals.oTheScreen.AdjustRatiosAfterResize()
 
+    # noinspection PyUnusedLocal
     def Init_ReadConfig(self, *largs):
         """
         Called by the timer to continue initalisation after appstart
@@ -225,6 +235,7 @@ class ORCA_App(App):
         Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions, oParentWidget=None)
         return False
 
+    # noinspection PyMethodMayBeStatic
     def DownloadDefinition(self, uDefinitionName):
         """
                 Downloads a specific definition and restarts after
@@ -246,7 +257,7 @@ class ORCA_App(App):
         # if we get called after a repository update caused by  new version install (but not on the first install)
         # we restart to make the changes effective
         # todo: check if we just need to skip restart as we might have updated several definitions
-        if Globals.iVersion != Globals.iLastInstalledVersion:
+        if Globals.iVersion != Globals.iLastInstalledVersion and Globals.iLastInstalledVersion!=0:
             # self.ReStart()
             return True
 
@@ -263,6 +274,7 @@ class ORCA_App(App):
         StopWait()
         return True
 
+    # noinspection PyUnusedLocal
     def RestartAfterRepositoryUpdate(self, *largs):
         """
         Restarts ORCA, after a definition has been updated
@@ -286,7 +298,7 @@ class ORCA_App(App):
             self.ShowSettings()
             uMsg = ReplaceVars("$lvar(415)") % Globals.oPathRoot.string
             Logger.critical(uMsg)
-            ShowErrorPopUp(uTitle='Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='Continue',uTextQuit=u'Quit')
+            ShowErrorPopUp(uTitle='CheckForOrcaFiles: Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='Continue',uTextQuit=u'Quit')
             return False
         return True
 
@@ -312,6 +324,8 @@ class ORCA_App(App):
             Globals.uIPAddressV4, Globals.uIPGateWayAssumedV4, Globals.uIPSubNetAssumedV4 = GetLocalIPV4()
             Globals.uIPAddressV6, Globals.uIPGateWayAssumedV6 = GetLocalIPV6()
             Globals.uMACAddressColon, Globals.uMACAddressDash = GetMACAddress()
+            Globals.oPathApp = cPath(os.getcwd())
+
             if Globals.oParameter.oPathDebug.string:
                 Globals.oPathRoot     = Globals.oParameter.oPathDebug
                 Globals.oPathAppReal  = Globals.oParameter.oPathDebug
@@ -342,9 +356,9 @@ class ORCA_App(App):
             return True
 
         except Exception as e:
-            uMsg = LogError(u'App Init:Unexpected error:', e)
+            uMsg = LogError(uMsg=u'App Init:Unexpected error:', oException=e)
             Logger.critical(uMsg)
-            ShowErrorPopUp(uTitle='Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='', uTextQuit=u'Quit')
+            ShowErrorPopUp(uTitle='App Init:Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='', uTextQuit=u'Quit')
             self.bOnError = True
             return 0
 
@@ -359,7 +373,7 @@ class ORCA_App(App):
                 oPathLogfile.Create()
                 kivyConfig.set('kivy', 'log_dir', oPathLogfile.string)
                 kivyConfig.write()
-                uOrgLogFn=Logger.manager.loggerDict["kivy"].handlers[1].filename
+                # uOrgLogFn=Logger.manager.loggerDict["kivy"].handlers[1].filename
                 Logger.debug(u"Init: Replacing Logfile Location to :"+Globals.oParameter.oPathLog.string)
 
             Logger.level=Logger.level
@@ -392,7 +406,7 @@ class ORCA_App(App):
             Logger.debug(u'Init: Override Path:' + Globals.oPathRoot)
 
             self.InitRootDirs()
-            Globals.iLastInstalledVersion = Config_GetDefault_Int(oConfig, u'ORCA', 'lastinstalledversion', ToIntVersion(Globals.uVersion))
+            Globals.iLastInstalledVersion = Config_GetDefault_Int(oConfig, u'ORCA', 'lastinstalledversion', Globals.uVersion)
 
             Globals.bProtected = (Globals.oPathRoot + u'protected').Exists()
             if Globals.bProtected:
@@ -409,7 +423,7 @@ class ORCA_App(App):
                 uKey = u'installedrep%i_name' % i
                 oInstalledRep.uName = Config_GetDefault_Str(oConfig, u'ORCA', uKey, '')
                 uKey = u'installedrep%i_version' % i
-                oInstalledRep.iVersion = Config_GetDefault_Int(oConfig, u'ORCA', uKey, 0)
+                oInstalledRep.iVersion = Config_GetDefault_Int(oConfig, u'ORCA', uKey, "0")
 
                 if not oInstalledRep.uName == '':
                     uKey = '%s:%s' % (oInstalledRep.uType, oInstalledRep.uName)
@@ -441,6 +455,7 @@ class ORCA_App(App):
             Globals.uSkinName          = Config_GetDefault_Str(oConfig, u'ORCA', u'skin', u'ORCA_silver_hires')
             self.uSoundsName           = Config_GetDefault_Str(oConfig, u'ORCA', u'sounds', u'ORCA_default')
             Globals.uLanguage          = Config_GetDefault_Str(oConfig, u'ORCA', u'language', OS_GetLocale())
+            Globals.bShowBorders       = Config_GetDefault_Bool(oConfig, u'ORCA', u'showborders', u'0')
             Globals.uDefinitionContext = Globals.uDefinitionName
 
             if Globals.uDefinitionName == 'setup':
@@ -515,9 +530,10 @@ class ORCA_App(App):
         except Exception as e:
             uMsg = u'Global Init:Unexpected error reading settings:' + ToUnicode(e)
             Logger.critical(uMsg)
-            ShowErrorPopUp(uTitle='Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='', uTextQuit=u'Quit')
+            ShowErrorPopUp(uTitle='InitAndReadSettingsPanel: Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='', uTextQuit=u'Quit')
             return 0
 
+    # noinspection PyProtectedMember
     def InitOrientationVars(self):
         """
         Getting the orientation of the App and sets to system vars for it
@@ -580,10 +596,8 @@ class ORCA_App(App):
         oPathGlobalSettings                = Globals.oPathRoot + u'globalsettings'
         Globals.oPathGlobalSettingsScripts = oPathGlobalSettings + u'scripts'
         Globals.oPathGlobalSettingsInterfaces = oPathGlobalSettings + u'interfaces'
-
-        oPathWizardTemplates               = Globals.oPathRoot + u"wizard templates"
-
-
+        Globals.oPathTVLogos               = Globals.oPathResources + "tvlogos"
+        Globals.oPathWizardTemplates       = Globals.oPathRoot + u"wizard templates"
         Globals.oPathTmp.Create()
         Globals.oPathInterface.Create()
         Globals.oPathResources.Create()
@@ -595,7 +609,7 @@ class ORCA_App(App):
         Globals.oPathDefinitionRoot.Create()
         Globals.oPathSharedDocuments.Create()
         Globals.oPathLanguageRoot.Create()
-        oPathWizardTemplates.Create()
+        Globals.oPathWizardTemplates.Create()
         oPathGlobalSettings.Create()
         Globals.oPathGlobalSettingsScripts.Create()
         Globals.oPathGlobalSettingsInterfaces.Create()
@@ -643,6 +657,8 @@ class ORCA_App(App):
         Globals.dDefinitionPathes[Globals.uDefinitionName] = oDefinitionPathes
         SetDefinitionPathes(Globals.uDefinitionName)
 
+        Globals.aLogoPackFolderNames            = Globals.oPathTVLogos.GetFolderList(bFullPath=False)
+
         if Globals.oDefinitionPathes.oPathDefinition.Exists():
             Globals.oDefinitionPathes.oPathDefinitionAtlas.Create()
 
@@ -668,12 +684,14 @@ class ORCA_App(App):
         """
         OrcaConfigParser_On_Setting_Change(config=config,section=section,key=key,value=value)
 
+    # noinspection PyUnusedLocal
     def fdo_config_change_load_definition(self, *largs):
         """ loads a definition triggered by a configuration change """
         self._on_config_change_on_definitionlistchange()
         if not self.oWaitMessage is None:
             self.oWaitMessage.ClosePopup()
 
+    # noinspection PyMethodMayBeStatic
     def _on_config_change_on_definitionlistchange(self):
         # reloads the definition list and restarts the settings dialog
         Globals.aDefinitionList = (Globals.oPathRoot + 'definitions').GetFolderList()
@@ -712,6 +730,7 @@ class ORCA_App(App):
         StopWait()
         Clock.schedule_once(self.Init_ReadConfig, 0)
 
+    # noinspection PyMethodMayBeStatic
     def DeInit(self):
         """
         Call to stop Interfaces, Queues, Timer, Scripts
@@ -729,6 +748,7 @@ class ORCA_App(App):
 
         if Globals.oPathUserDownload:
             Globals.oFnLog.Copy(oNewFile=cFileName(Globals.oPathUserDownload) + 'orca.log')
+            # Globals.oFnLog.Delete()
         self.stop()
         sys.exit(0)
 
@@ -778,6 +798,7 @@ class ORCA_App(App):
     def _install_settings_keys(self, window):
         pass
 
+    # noinspection PyUnusedLocal
     def hook_keyboard(self, window, key, *largs):
         """
         handles the esc key to stop the app, and other keys
@@ -790,6 +811,8 @@ class ORCA_App(App):
         if dRet:
             key = dRet.get("key",key)
 
+        print ("Key:"+key)
+
         Globals.oNotifications.SendNotification("on_key_"+key)
 
         if not Globals.oTheScreen.oCurrentPage is None:
@@ -799,6 +822,7 @@ class ORCA_App(App):
                 self.StopApp()
         return False
 
+    # noinspection PyUnusedLocal
     def on_config_change_change_definition(self, *largs):
         """
         Called from the dialog, when the user confirms to change the definition

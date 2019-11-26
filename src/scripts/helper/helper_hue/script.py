@@ -20,7 +20,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import imp
+from typing                                 import Dict
+from typing                                 import Union
+from typing                                 import Tuple
 
 from ORCA.scripts.BaseScript                import cBaseScript
 from ORCA.utils.FileName                    import cFileName
@@ -29,6 +31,10 @@ from ORCA.utils.LogError                    import LogError
 from ORCA.utils.LogError                    import LogErrorSmall
 from ORCA.utils.TypeConvert                 import ToFloat
 from ORCA.ui.ShowErrorPopUp                 import ShowErrorPopUp
+from ORCA.Action                            import cAction
+
+import ORCA.Globals as Globals
+
 
 '''
 <root>
@@ -38,8 +44,8 @@ from ORCA.ui.ShowErrorPopUp                 import ShowErrorPopUp
       <description language='English'>HUE Helper Script</description>
       <description language='German'>HUE Hilfs - Skript</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/helper/helper_hue</local>
@@ -48,13 +54,14 @@ from ORCA.ui.ShowErrorPopUp                 import ShowErrorPopUp
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/helper/helper_hue/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
 </root>
 '''
 
+
+# noinspection PyUnusedLocal
 class cScript(cBaseScript):
     """
     WikiDoc:Doc
@@ -108,17 +115,18 @@ class cScript(cBaseScript):
 
     def __init__(self):
         cBaseScript.__init__(self)
-        self.uType              = u'HELPERS'
-        self.uIniFileLocation   = u"none"
+        self.uType:str                  = u'HELPERS'
+        self.uIniFileLocation:str       = u"none"
+        self.dStatus:Dict               = {}
+        self.oHueConverter              = None
 
-    def Init(self,uObjectName,uScriptFile=u''):
+    def Init(self, uObjectName: str, oFnObject: Union[cFileName, None] = None) -> None:
         """ Main Init, loads the HueConverter Script"""
-        cBaseScript.Init(self,uObjectName,uScriptFile)
+        cBaseScript.Init(self,uObjectName,oFnObject)
         self.oHueConverter = self._LoadHueConverter()
-        self.dStatus = {}
 
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> Union[Dict,None]:
         """ Main Entry point, parses the cmd_type and calls the relevant functions """
         try:
             if 'cmd_type' in kwargs:
@@ -135,72 +143,55 @@ class cScript(cBaseScript):
                     return self.XY2RGB(**kwargs)
 
         except Exception as e:
-            LogErrorSmall("Can't run Hue Helper script, invalid parameter",e)
-            return 1
+            LogErrorSmall(uMsg="Can't run Hue Helper script, invalid parameter",oException=e)
+            return
 
 
-    def DumpLight(self,**kwargs):
+    def DumpLight(self,**kwargs) -> None:
         """ Dumps a spezific light status set into customs vars """
         try:
-            dResult     = kwargs['result']
-            uPrefix     = kwargs.get('retvar','')
-            uLightKey   = kwargs.get('index', '')
+            dResult:Dict        = kwargs['result']
+            uPrefix:str         = kwargs.get('retvar','')
+            uLightKey:str       = kwargs.get('index', '')
             if uPrefix=='':
-                oAction=kwargs['oAction']
+                oAction:cAction =kwargs['oAction']
+                if oAction is not None:
+                    uPrefix:str=oAction.uRetVar
+
+            self.DumpSingleLight(iID=-1,uLightKey= uLightKey,dLight=dResult,uPrefix= uPrefix,uType=u'Light')
+        except Exception as e:
+            LogErrorSmall(uMsg="DumpLight: Error parsing HUE Bridge response",oException=e)
+
+    def DumpGroup(self,**kwargs) -> None:
+        """ Dumps a specific light status set into customs vars """
+        try:
+            dResult:Dict     = kwargs['result']
+            uPrefix:str      = kwargs.get('retvar','')
+            uLightKey:str    = kwargs.get('index', '')
+            if uPrefix=='':
+                oAction:cAction=kwargs['oAction']
                 if oAction is not None:
                     uPrefix=oAction.uRetVar
 
-            self.DumpSingleLight(-1, uLightKey, dResult, uPrefix, u'Light')
+            self.DumpSingleLight(iID=-1, uLightKey=uLightKey,dLight=dResult, uPrefix=uPrefix, uType=u'Group')
         except Exception as e:
-            LogErrorSmall("DumpLight: Error parsing HUE Bridge response",e)
-        return 0
+            LogErrorSmall(uMsg="DumpGroup: Error parsing HUE Bridge response",oException=e)
 
-    def DumpGroup(self,**kwargs):
-        """ Dumps a spezific light status set into customs vars """
-        try:
-            dResult     = kwargs['result']
-            uPrefix     = kwargs.get('retvar','')
-            uLightKey   = kwargs.get('index', '')
-            if uPrefix=='':
-                oAction=kwargs['oAction']
-                if oAction is not None:
-                    uPrefix=oAction.uRetVar
-
-            self.DumpSingleLight(-1, uLightKey, dResult, uPrefix, u'Group')
-        except Exception as e:
-            LogErrorSmall("DumpGroup: Error parsing HUE Bridge response",e)
-        return 0
-
-    def DumpStatus(self,**kwargs):
+    def DumpStatus(self,**kwargs) -> None:
         """ Dumps the lights and groups status into varsvars """
         try:
-            dResult = kwargs['result']
+            dResult:Dict = kwargs['result']
             self.dStatus = dResult
-            uPrefix = kwargs.get('retvar','')
+            uPrefix:str = kwargs.get('retvar','')
             if uPrefix=='':
-                oAction=kwargs['oAction']
+                oAction:cAction = kwargs['oAction']
                 if oAction is not None:
                     uPrefix=oAction.uRetVar
-            dLights = dResult['lights']
-            dGroups = dResult['groups']
-
-            '''
-            # Vars for Lights only
-            iIndex=0
-            for uLightKey in dLights:
-                self.DumpSingleLight(iIndex,uLightKey,dLights[uLightKey],uPrefix,"Light")
-                iIndex+=1
-
-            # Vars for Groups only
-            dGroups = dResult['groups']
-            iIndex=0
-            for uGroupKey in dGroups:
-                self.DumpSingleLight(iIndex,uGroupKey,dGroups[uGroupKey],uPrefix,"Group")
-                iIndex+=1
-            '''
+            dLights:Dict = dResult['lights']
+            dGroups:Dict = dResult['groups']
 
             # Vars for Lights & Groups in one list
-            iIndex=0
+            iIndex:int=0
             for uLightKey in dLights:
                 self.DumpSingleLight(iIndex,uLightKey,dLights[uLightKey],uPrefix,"Light")
                 iIndex+=1
@@ -208,24 +199,23 @@ class cScript(cBaseScript):
                 self.DumpSingleLight(iIndex,uGroupKey,dGroups[uGroupKey],uPrefix,"Group")
                 iIndex+=1
         except Exception as e:
-            LogErrorSmall("DumpStatus: Error parsing HUE Bridge response",e)
-        return 0
+            LogErrorSmall(uMsg="DumpStatus: Error parsing HUE Bridge response",oException=e)
 
-    def RGB2XY(self,**kwargs):
+    def RGB2XY(self,**kwargs) -> None:
         """ Converts rgb values to hue xy and dumps it into vars """
         try:
-            fR         = ToFloat(kwargs.get('r',1.0))
-            fG         = ToFloat(kwargs.get('g',1.0))
-            fB         = ToFloat(kwargs.get('b',1.0))
-            uPrefix    = kwargs.get('retvar','')
-            uLightKey  = kwargs.get('index', '')
-            uType      = kwargs.get('type', 'Light')
+            fR:float         = ToFloat(kwargs.get('r',1.0))
+            fG:float         = ToFloat(kwargs.get('g',1.0))
+            fB:float         = ToFloat(kwargs.get('b',1.0))
+            uPrefix:str      = kwargs.get('retvar','')
+            uLightKey:str    = kwargs.get('index', '')
+            uType:str        = kwargs.get('type', 'Light')
             if uType == "Group":
                 uType="groups"
             else:
                 uType="lights"
 
-            tGammut    = self._GetGamut(self.dStatus[uType][uLightKey].get('modelid', ""))
+            tGammut:Tuple    = self._GetGamut(self.dStatus[uType][uLightKey].get('modelid', ""))
             oConverter = self.oHueConverter.Converter(tGammut)
             x,y        = oConverter.rgb_to_xy(fR, fG, fB)
             if uPrefix=='':
@@ -236,13 +226,17 @@ class cScript(cBaseScript):
             self.oResultParser.SetVar2(str(x), "", uPrefix, u'Storing X-Value', uAddName=u"_x")
             self.oResultParser.SetVar2(str(y), "", uPrefix, u'Storing Y-Value', uAddName=u"_y")
         except Exception as e:
-            LogErrorSmall("RGB2XY: Error parsing parameter",e)
-        return 0
+            LogErrorSmall(uMsg="RGB2XY: Error parsing parameter",oException=e)
 
-
-    def XY2RGB(self,**kwargs):
+    def XY2RGB(self,**kwargs) -> None:
         """ Converts HUE xy to rgb and dumps it into vars """
         try:
+            r:float
+            g:float
+            b:float
+            fX:float
+            fY:float
+
             fX         = ToFloat(kwargs.get('x',1.0))
             fY         = ToFloat(kwargs.get('y',1.0))
             uPrefix    = kwargs.get('retvar','')
@@ -252,11 +246,11 @@ class cScript(cBaseScript):
                 uType = "groups"
             else:
                 uType = "lights"
-            tGammut = self._GetGamut(self.dStatus[uType][uLightKey].get('modelid', ""))
-            oConverter = self.oHueConverter.Converter(tGammut)
-            r,g,b       = oConverter.xy_to_rgb(fX, fY)
+            tGammut:Tuple = self._GetGamut(self.dStatus[uType][uLightKey].get('modelid', ""))
+            oConverter    = self.oHueConverter.Converter(tGammut)
+            r,g,b         = oConverter.xy_to_rgb(fX, fY)
 
-            dStatusLight = self.dStatus.get(uLightKey,{})
+            dStatusLight:Dict = self.dStatus.get(uLightKey,{})
             if len(dStatusLight)>0:
                 uType=dStatusLight["lightstype"]
 
@@ -264,25 +258,23 @@ class cScript(cBaseScript):
             self.oResultParser.SetVar2(str(g), "", uPrefix, u'Storing G-Value', uAddName=u"_g")
             self.oResultParser.SetVar2(str(b), "", uPrefix, u'Storing B-Value', uAddName=u"_b")
         except Exception as e:
-            LogErrorSmall("XY2RGB: Error parsing parameter",e)
-        return 0
+            LogErrorSmall(uMsg="XY2RGB: Error parsing parameter",oException=e)
 
-
-    def DumpSingleLight(self, iID,uLightKey, dLight, uPrefix,uType):
+    def DumpSingleLight(self, iID:int,uLightKey:str, dLight:Dict, uPrefix:str,uType:str) -> None:
         """ Helper function to dump a light/group into vars """
 
         try:
 
-            uIndex = u''
-            uOnTag = u"on"
-            uDetailsTag = "state"
+            uIndex:str      = u""
+            uOnTag:str      = u"on"
+            uDetailsTag:str = u"state"
 
-            r      = 1.0
-            g      = 1.0
-            b      = 1.0
-            x      = 1.0
-            y      = 1.0
-            bri    = 1.0
+            r:float      = 1.0
+            g:float      = 1.0
+            b:float      = 1.0
+            x:float      = 1.0
+            y:float      = 1.0
+            bri:float    = 1.0
 
             if iID >= 0:
                 uIndex = u"[" + str(iID) + u"]"
@@ -297,8 +289,8 @@ class cScript(cBaseScript):
 
             uOn=str(dLight['state'][uOnTag])
 
-            bri = dLight[uDetailsTag].get('bri', -1)
-            if bri == -1:
+            bri = dLight[uDetailsTag].get('bri', -1.0)
+            if bri == -1.0:
                 if uOn == "true":
                     bri = 254
                 else:
@@ -332,7 +324,7 @@ class cScript(cBaseScript):
             self.oResultParser.SetVar2(str(g), "", uPrefix, u'Storing Light Configuration', uAddName=u"_g" + uIndex)
             self.oResultParser.SetVar2(str(b), "", uPrefix, u'Storing Light Configuration', uAddName=u"_b" + uIndex)
         except Exception as e:
-            LogErrorSmall("Error parsing HUE Bridge response for single light/group of status", e)
+            LogErrorSmall(uMsg="Error parsing HUE Bridge response for single light/group of status", oException=e)
 
     def _LoadHueConverter(self):
         """ Loads the hue converter script """
@@ -342,17 +334,19 @@ class cScript(cBaseScript):
             return None
 
         try:
-            oModule = imp.load_source('Module_Rgb_xy', oFnScript.string)
-            return oModule
+            oModule=Globals.oModuleLoader.LoadModule(oFnScript,'Module_Rgb_xy')
+            oClasses=oModule.GetModule()
+            return oClasses
         except Exception as e:
-            uMsg=LogError(u'Script Hue Helper: Fatal Error Loading HUE RGB Converter: '+oFnScript.string+ u' :',e)
+            uMsg=LogError(uMsg=u'Script Hue Helper: Fatal Error Loading HUE RGB Converter: '+oFnScript.string+ u' :',oException=e)
             ShowErrorPopUp(uMessage=uMsg)
             return None
 
-    def _GetGamut(self,uModelId):
+    def _GetGamut(self,uModelId) ->Tuple:
         """ Gets the gammut for a model ID """
         try:
             return self.oHueConverter.get_light_gamut(uModelId)
-        except Exception as e:
+        except Exception:
+            # noinspection PyRedundantParentheses
             return (self.oHueConverter.XYPoint(1.0, 0.0), self.oHueConverter.XYPoint(0.0, 0.1), self.oHueConverter.XYPoint(0.0, 0.0),)
 

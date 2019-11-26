@@ -23,6 +23,11 @@
     <pages xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/page_*" parse="xml"></xi:include>
       <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+      <xi:include href="$dvar(definition_templatepath_mediaplayer_wizard)/$dvar(definition_templatename_mediaplayer_wizard)/elements/$var(MEDIATEMPLATESKINCONTEXT)/pages/page_*" parse="xml"></xi:include>
+      <xi:include href="$dvar(definition_templatepath_mediaplayer_wizard)/$dvar(definition_templatename_mediaplayer_wizard)/elements/$var(MEDIATEMPLATESKINCONTEXT)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+      <xi:include href="$dvar(definition_templatepath_mediaplayer_wizard)/$dvar(definition_templatename_mediaplayer_wizard)/elements/$var(MEDIATEMPLATESKINCONTEXT)/pages/landscape_smallsize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LS"></xi:include>
+      <xi:include href="$dvar(definition_templatepath_mediaplayer_wizard)/$dvar(definition_templatename_mediaplayer_wizard)/elements/$var(MEDIATEMPLATESKINCONTEXT)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+      <xi:include href="$dvar(definition_templatepath_mediaplayer_wizard)/$dvar(definition_templatename_mediaplayer_wizard)/elements/$var(MEDIATEMPLATESKINCONTEXT)/pages/portrait_smallsize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
     </pages>
   <stopskip/>
 
@@ -53,8 +58,8 @@
       <description language='English'>Wizard for Mediaplayer devices, which allows you to pick a template</description>
       <description language='German'>Wizard für Mediaplayer Geräte, um aus einem Schablone eine Definition zu wählen</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/mediaplayer_wizard</local>
@@ -69,7 +74,6 @@
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>$var(APPLICATIONPATH)/definitions/mediaplayer_wizard/*.ini</file>
         <file>$var(APPLICATIONPATH)/definitions/mediaplayer_wizard/interfacesettings*</file>
         <file>$var(APPLICATIONPATH)/definitions/mediaplayer_wizard/atlas*</file>
         <file>$var(APPLICATIONPATH)/definitions/mediaplayer_wizard/active_template*</file>

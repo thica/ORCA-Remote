@@ -8,8 +8,8 @@
       <description language='English'>German language strings</description>
       <description language='German'>Deutsche Zeichenketten</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/languages/German</local>
@@ -216,6 +216,8 @@
   <string id="607">Klick</string>
   <string id="608">Klick Sound Lautstärke</string>
   <string id="611">Zeige credits</string>
+  <string id="612">Rahmen</string>
+  <string id="613">Zeigt Rahmen um screen Elemente (für debugging)</string>
   <string id="633">Sonstiges</string>
   <string id="634">Töne</string>
   <string id="635">Wähle Töne</string>

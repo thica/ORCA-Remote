@@ -42,7 +42,7 @@ except Exception as e1:
 
 import ORCA.Globals as Globals
 
-def Vibrate(fDuration=0.05):
+def Vibrate(fDuration:float=0.05) -> None:
     """ Vibrates a device """
 
     if Globals.bVibrate:

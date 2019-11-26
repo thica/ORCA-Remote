@@ -19,31 +19,28 @@
 """
 
 from kivy.cache          import Cache
+
+from ORCA.utils.FileName import cFileName
 from ORCA.utils.LoadFile import LoadFile
 
 __all__ = ['CachedFile','ClearCache']
 
-uCacheName = 'CachedFiles'
+uCacheName:str = 'CachedFiles'
 Cache.register(category = uCacheName,  timeout=120)
 
 
-
-def CachedFile(oFileName):
+def CachedFile(*,oFileName: cFileName) -> str:
     """
     Returns the content of a file as string, using a cache if already loaded
-
-    :rtype: string
-    :param cFileName oFileName:
-    :return: The content of a file
     """
 
-    uFileContent = Cache.get(category = uCacheName, key = oFileName.string)
+    uFileContent: str = Cache.get(category = uCacheName, key = oFileName.string)
     if uFileContent is None:
         uFileContent = LoadFile(oFileName)
         Cache.append(category = uCacheName, key = oFileName.string, obj = uFileContent, timeout = 120)
 
     return uFileContent
 
-def ClearCache():
+def ClearCache() -> None:
     """ Clears the cache and frees memory """
     Cache.remove(category = uCacheName)

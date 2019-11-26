@@ -7,8 +7,8 @@
       <description language='English'>Orca default fonts</description>
       <description language='German'>Orca Standard Schriften</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <sources>
         <source>
           <local>$var(RESOURCEPATH)/fonts/Default</local>
@@ -103,7 +103,7 @@
     <icon name="menu"                 font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE5D2;" scale="1.0"/>
     <icon name="escape"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE15E;" scale="1.0"/>
     <icon name="aspect"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE85B;" scale="1.0"/>
-
+    <icon name="delete"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE872;" scale="1.0"/>
     <icon name="brightness"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE3AB;" scale="1.0"/>
     <icon name="audiochannel"         font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE3A1;" scale="1.0"/>
     <icon name="clock"                font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE924;" scale="1.0"/>
@@ -123,6 +123,7 @@
     <icon name="osd"                  font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE913;" scale="1.0"/>
     <icon name="escape"               font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE15F;" scale="1.0"/>
     <icon name="translate"            font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE3E8;" scale="1.0"/>
+    <icon name="recordings"           font="$var(RESOURCEPATH)/fonts/Default/MaterialIcons-Regular.ttf" char="&#xE8DA;" scale="1.0"/>
 
   </icons>
 

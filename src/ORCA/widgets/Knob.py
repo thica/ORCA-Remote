@@ -19,7 +19,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                             import Union
+from xml.etree.ElementTree              import Element
 from kivy.uix.image                     import Image
+from kivy.uix.widget                    import Widget
 from ORCA.vars.Helpers                  import Round
 from ORCA.vars.Access                   import SetVar
 from ORCA.vars.Access                   import GetVar
@@ -36,10 +39,14 @@ from ORCA.utils.XML                     import GetXMLIntAttribute
 from ORCA.utils.XML                     import GetXMLBoolAttributeVar
 from ORCA.utils.XML                     import GetXMLTextAttribute
 
-
 from ORCA.widgets.core.Border           import cBorder
 
-import ORCA.Globals as Globals
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
 
 __all__ = ['cWidgetKnob']
 
@@ -109,32 +116,31 @@ class cWidgetKnob(cWidgetBase):
 
     def __init__(self,**kwargs):
         super(cWidgetKnob, self).__init__(**kwargs)
-        self.oFnPictureNormal             = None
-        self.iAbsAngle                    = 0
-        self.fDataRange                   = 0.0
-        self.fValue                       = 0.0
-        self.oObjectPicture               = None
-        self.fMin                         = 0.0
-        self.fMax                         = 100.0
-        self.iRange                       = 360
-        self.iLeftBoundaryAngle           = 0
-        self.iRightBoundaryAngle          = 90
-        self.oBorder                      = None
-        self.bDiscardMoves                = True
-        self.fOldValue                    = -1.0
-        self.uDestVar                     = u''
-        self.iRoundPos                    = 0
+        self.oFnPictureNormal:Union[cFileName,None]  = None
+        self.iAbsAngle:int                           = 0
+        self.fDataRange:float                        = 0.0
+        self.fValue:float                            = 0.0
+        self.oObjectPicture:Union[Image,None]        = None
+        self.fMin:float                              = 0.0
+        self.fMax:float                              = 100.0
+        self.iRange:int                              = 360
+        self.iLeftBoundaryAngle:int                  = 0
+        self.iRightBoundaryAngle:int                 = 90
+        self.oBorderInner:Union[cBorder,None]        = None
+        self.bDiscardMoves:bool                      = True
+        self.fOldValue:float                         = -1.0
+        self.uDestVar:str                            = u''
+        self.iRoundPos:int                           = 0
 
-
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
             self.oFnPictureNormal           = cFileName("").ImportFullPath(GetXMLTextAttributeVar(oXMLNode,u'picturenormal',    False,u''))
-            self.fMin                       = GetXMLFloatAttributeVar(oXMLNode,u'mindatavalue',    False,u'0')
-            self.fMax                       = GetXMLFloatAttributeVar(oXMLNode,u'maxdatavalue',    False,u'100')
-            self.iLeftBoundaryAngle         = GetXMLIntAttributeVar(oXMLNode,u'leftboundaryangle', False,u'0')
-            self.iRightBoundaryAngle        = GetXMLIntAttributeVar(oXMLNode,u'rightboundaryangle', False,u'0')
+            self.fMin                       = GetXMLFloatAttributeVar(oXMLNode,u'mindatavalue',    False,0.0)
+            self.fMax                       = GetXMLFloatAttributeVar(oXMLNode,u'maxdatavalue',    False,100.0)
+            self.iLeftBoundaryAngle         = GetXMLIntAttributeVar(oXMLNode,u'leftboundaryangle', False,0)
+            self.iRightBoundaryAngle        = GetXMLIntAttributeVar(oXMLNode,u'rightboundaryangle', False,0)
             self.uDestVar                   = GetXMLTextAttribute(oXMLNode,u'destvar',    False,u'knob')
             self.bDiscardMoves              = GetXMLBoolAttributeVar(oXMLNode,u'discardmoves',    False,False)
             #roundpos: the position, the  number should be rounded
@@ -144,7 +150,7 @@ class cWidgetKnob(cWidgetBase):
             self.iAbsAngle                  = 0
         return bRet
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
         self.AddArg('allow_stretch',True)
         self.AddArg('keep_ratio',False)
@@ -155,9 +161,7 @@ class cWidgetKnob(cWidgetBase):
         self.AddArg('do_translation_y',False)
         self.AddArg('auto_bring_to_front',False)
         if self.CreateBase(Parent=oParent,Class=cRotateScatter):
-
             self.oObjectPicture.pos         = (0,0)
-
             self.fDataRange=abs(self.fMax-self.fMin)
 
             '''
@@ -195,20 +199,21 @@ class cWidgetKnob(cWidgetBase):
             self.oParent.add_widget(self.oObject)
             self.oObject.add_widget(self.oObjectPicture)
 
-            if Globals.oParameter.bShowBorders:
-                self.oBorder=cBorder(**self.dKwArgs)
-                self.oParent.add_widget(self.oBorder)
             return True
         return False
 
-    def OnNotifyChange(self,instance):
+    def OnNotifyChange(self,instance:Image) -> None:
         """ called, when the knob has been turned """
+
+        iRangePos:int
+        fRangeProz:float
 
         if self.bDiscardMoves and (instance.uMoveType == u'move'):
             return
 
         if not self.uDestVar==u'':
             iRangePos=self.oObject.iAngle-self.iLeftBoundaryAngle
+
             if not self.iRange==0:
                 fRangeProz=float(iRangePos)/float(self.iRange)
             else:
@@ -238,35 +243,55 @@ class cWidgetKnob(cWidgetBase):
                     self.fOldValue=self.fValue
                     self.On_Button_Up(instance)
 
-    def UpdateWidget(self):
+    def UpdateWidget(self) -> None:
+
+        super().UpdateWidget()
+
+        fNewValue:float
+        fNewProz:float
+        fNewDegree:float
+        uValue:str
 
         if not self.uDestVar==u'':
             if not self.fDataRange==0:
-                uValue=GetVar(uVarName = self.uDestVar)
-                fNewValue=ToFloat(uValue)
-                iNewProz=(fNewValue-self.fMin)/self.fDataRange
-                iNewDegree=self.iLeftBoundaryAngle+self.iRange*iNewProz
-                self.oObject.SetValue(iNewDegree)
-                self.fValue=Round(fNewValue,self.iRoundPos)
+                uValue      = GetVar(uVarName = self.uDestVar)
+                fNewValue   = ToFloat(uValue)
+                fNewProz    = (fNewValue-self.fMin)/self.fDataRange
+                fNewDegree  = self.iLeftBoundaryAngle+self.iRange*fNewProz
+                self.oObject.SetValue(fNewDegree)
+                self.fValue = Round(fNewValue,self.iRoundPos)
             self.UpdateVars()
 
-    def UpdateVars(self):
+    def UpdateVars(self) -> None:
         """ updates the destination vars """
         if not self.uDestVar==u'':
-            SetVar(uVarName = self.uDestVar,               oVarValue = ToUnicode(self.fValue))
+            SetVar(uVarName = self.uDestVar, oVarValue = ToUnicode(self.fValue))
             if self.oObject:
                 SetVar(uVarName = self.uDestVar+u'_degree',    oVarValue = ToUnicode(self.oObject.iAngle))
                 SetVar(uVarName = self.uDestVar+u'_direction', oVarValue = ToUnicode(self.oObject.uDirection))
             SetVar(uVarName = self.uDestVar+u'_absdegree', oVarValue = ToUnicode(self.iAbsAngle))
 
-    def SetMax(self,fMax):
+    def SetMax(self,fMax:float) -> None:
         """ Set the upper limit """
-        self.fMax=fMax
-        self.oObject.max=fMax
+        self.fMax        = fMax
+        self.oObject.max = fMax
         self.UpdateWidget()
 
-    def SetMin(self,fMin):
+    def SetMin(self,fMin:float) -> None:
         """ Set the lower limit """
-        self.fMin=fMin
-        self.oObject.min=fMin
+        self.fMin        = fMin
+        self.oObject.min = fMin
         self.UpdateWidget()
+
+    def FlipBorder(self) -> None:
+        """ Creates/Flips the Border just for the inner Knob """
+
+        if self.oObject != self.oObjectPicture and self.oObjectPicture is not  None:
+            oTmpObject = self.oObject
+            oTmpBorder = self.oBorder
+            self.oBorder = self.oBorderInner
+            self.oObject = self.oParent
+            super().FlipBorder()
+            self.oObject = oTmpObject
+            self.oBorderInner = self.oBorder
+            self.oBorder = oTmpBorder

@@ -11,8 +11,8 @@
       <description language='English'>HTPC Control using Eventghost / Plugin-Events</description>
       <description language='German'>HTPC Kontrolle über Eventghost / Plugin-Events</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

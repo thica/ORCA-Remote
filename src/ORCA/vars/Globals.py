@@ -18,17 +18,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-dUserVars       = {}
-dUserVarLinks   = {}
-dDefVars        = {'ttt':'AAA'}
-uRepContext     = u''
+from __future__ import annotations
+from typing import Dict
+from typing import List
+from typing import Any
+from typing import Union
 
 
-def InitSystemVars():
+oLinkPar:Union[str,List[Dict]] = ""
+
+dUserVars:Dict[str,Any]             = {}
+dUserVarLinks:Dict[str,oLinkPar]    = {}
+dDefVars:Dict[str,str]              = {}
+uRepContext:str                     = u''
+
+
+def InitSystemVars() -> None:
     """
     Initializies the variable system. Should only called once
-
-    :rtype: None
     """
-    dUserVars     = {}
-    dUserVarLinks = {}
+    dUserVars.clear()
+    dUserVarLinks.clear()

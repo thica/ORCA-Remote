@@ -27,12 +27,12 @@ try:
     # noinspection PyUnresolvedReferences
     from pyobjus.dylib_manager import load_framework
     Logger.debug("Sucessfully loaded autoclassios, load_framework")
-except Exception as e:
-    Logger.error("Not able to load autoclassios" + str(e))
+except Exception as e1:
+    Logger.error("Not able to load autoclassios" + str(e1))
 
 import ORCA.Globals as Globals
 
-class cRotation(object):
+class cRotation:
     """ Rotation Object for IOS untested    """
     def __init__(self):
         try:
@@ -54,23 +54,23 @@ class cRotation(object):
                 [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:") withObject:(id)UIInterfaceOrientationPortrait];
             '''
 
-    def set_no_preference(self):
+    def set_no_preference(self) -> None:
         """ untested / unfinished """
         pass
-    def lock(self):
+    def lock(self) -> None:
         """ untested / unfinished """
         if Globals.uDeviceOrientation=='landscape':
             self.set_landscape()
         else:
             self.set_portrait()
 
-    def set_landscape(self):
+    def set_landscape(self) -> None:
         """ untested / unfinished """
         try:
             self.UIDevice.setOrientation(1)
         except Exception as e:
             Logger.error("Orca is not supporting rotation on this IOS Version:"+str(e))
-    def set_portrait(self):
+    def set_portrait(self) -> None:
         """ untested / unfinished """
         try:
             self.UIDevice.setOrientation(2)

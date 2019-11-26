@@ -26,6 +26,6 @@ __all__ = ['SettingVarString']
 
 class SettingVarString(SettingString):
     def set_value(self, section, key, value):
-        value=value.replace(str(Globals.iVersion),'$var(REPVERSION)')
-        return super(SettingVarString, self).set_value(section, key, value)
+        value:str=value.replace(str(Globals.iVersion),'$var(REPVERSION)')
+        return super().set_value(section, key, value)
 

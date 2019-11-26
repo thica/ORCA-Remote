@@ -18,13 +18,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                     import Dict
+from typing                     import List
+from copy                       import copy
+from kivy.logger                import Logger
 
-from copy import copy
-from kivy.logger            import Logger
-
-from ORCA.actions.Base      import cEventActionBase
-from ORCA.vars.Replace      import ReplaceVars
-from ORCA.utils.TypeConvert import ToDic
+from ORCA.actions.Base          import cEventActionBase
+from ORCA.vars.Replace          import ReplaceVars
+from ORCA.utils.TypeConvert     import ToDic
+from ORCA.Action                import cAction
+from ORCA.actions.ReturnCode    import eReturnCode
 
 import ORCA.Globals as Globals
 
@@ -33,7 +36,7 @@ __all__ = ['cEventActionsNotifications']
 class cEventActionsNotifications(cEventActionBase):
     """ Actions for managing notification """
 
-    def ExecuteActionSendNotification(self,oAction):
+    def ExecuteActionSendNotification(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -57,17 +60,17 @@ class cEventActionsNotifications(cEventActionBase):
         WikiDoc:End
         """
 
-        uNotification                   = ReplaceVars(oAction.dActionPars.get("notification",""))
-        dActionPars                     = ToDic(ReplaceVars(oAction.dActionPars.get("actionpars","{}")))
+        uNotification:str                   = ReplaceVars(oAction.dActionPars.get("notification",""))
+        dActionPars:Dict                    = ToDic(ReplaceVars(oAction.dActionPars.get("actionpars","{}")))
         if not isinstance(dActionPars,dict):
             dActionPars = ToDic(oAction.dActionPars.get("actionpars", "{}"))
         self.oEventDispatcher.LogAction(u'SendNotification',oAction)
 
         Globals.oNotifications.SendNotification(uNotification,**dActionPars)
-        return -2
+        return eReturnCode.Nothing
 
 
-    def ExecuteActionRegisterNotification(self,oAction):
+    def ExecuteActionRegisterNotification(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
         WikiDoc:Context:ActionsDetails
@@ -96,58 +99,59 @@ class cEventActionsNotifications(cEventActionBase):
         WikiDoc:End
         """
 
-        uPageName                       = ReplaceVars(oAction.dActionPars.get("filterpagename", ""))
+        uPageName:str                = ReplaceVars(oAction.dActionPars.get("filterpagename", ""))
         self.oEventDispatcher.LogAction(u'RegisterNotification',oAction)
 
         if uPageName == u"ALL":
             for uPageKey in Globals.oTheScreen.oScreenPages:
-                oCopyAction = copy(oAction)
+                oCopyAction:cAction = copy(oAction)
                 oCopyAction.dActionPars["filterpagename"] = uPageKey
                 self.ExecuteActionRegisterNotification_sub(oCopyAction)
         elif uPageName==u"NOPOPUP":
             for uPageKey in Globals.oTheScreen.oScreenPages:
                 if not Globals.oTheScreen.oScreenPages[uPageKey].bIsPopUp:
-                    oCopyAction = copy(oAction)
+                    oCopyAction:cAction = copy(oAction)
                     oCopyAction.dActionPars["filterpagename"] = uPageKey
                     self.ExecuteActionRegisterNotification_sub(oCopyAction)
         elif uPageName==u"POPUP":
             for uPageKey in Globals.oTheScreen.oScreenPages:
                 if Globals.oTheScreen.oScreenPages[uPageKey].bIsPopUp:
-                    oCopyAction = copy(oAction)
+                    oCopyAction:cAction = copy(oAction)
                     oCopyAction.dActionPars["filterpagename"] = uPageKey
                     self.ExecuteActionRegisterNotification_sub(oCopyAction)
         else:
             self.ExecuteActionRegisterNotification_sub(oAction)
-        return -2
+        return eReturnCode.Nothing
 
-    def ExecuteActionRegisterNotification_sub(self,oAction):
-        uNotification                   = ReplaceVars(oAction.dActionPars.get("notification",""))
-        uActionName                     = ReplaceVars(oAction.dActionPars.get("notifyaction",""))
+    def ExecuteActionRegisterNotification_sub(self,oAction:cAction) -> eReturnCode:
+        uNotification:str                   = ReplaceVars(oAction.dActionPars.get("notification",""))
+        uActionName:str                     = ReplaceVars(oAction.dActionPars.get("notifyaction",""))
 
-        uRegisterOption                 = oAction.dActionPars.get("registeroption","replace")
-        uFilterPageName                 = oAction.dActionPars.get("filterpagename","")
+        uRegisterOption:str                 = oAction.dActionPars.get("registeroption","replace")
+        uFilterPageName:str                 = oAction.dActionPars.get("filterpagename","")
         if uRegisterOption == "append":
             Globals.oNotifications.RegisterNotification(uNotification=uNotification, fNotifyFunction=self.NotificationHandler, uDescription="Action:" + uActionName, bQuiet=True, **oAction.dActionPars)
         else:
-            uKey = uNotification+"_"+uFilterPageName
-            iHash = Globals.oNotifications.dFilterPageNames.get(uKey,0)
+            uKey:str = uNotification+"_"+uFilterPageName
+            iHash:int = Globals.oNotifications.dFilterPageNames.get(uKey,0)
             if iHash != 0:
                 Globals.oNotifications.UnRegisterNotification_ByHash(iHash)
             Globals.oNotifications.RegisterNotification(uNotification=uNotification, fNotifyFunction=self.NotificationHandler, uDescription="Action:" + uActionName, bQuiet=True, **oAction.dActionPars)
+        return eReturnCode.Nothing
 
-
+    # noinspection PyMethodMayBeStatic
     def NotificationHandler(self,**kwargs):
-        uActionName         = kwargs["notifyaction"]
-        uFilterPageName     = kwargs.get("filterpagename","")
+        uActionName:str         = kwargs["notifyaction"]
+        uFilterPageName:str     = kwargs.get("filterpagename","")
 
         if uFilterPageName  == "FIRSTPAGE":
             uFilterPageName=Globals.oTheScreen.uFirstPageName
         if uFilterPageName  == "CURRENT":
             uFilterPageName=Globals.oTheScreen.uCurrentPageName
         if uActionName and ((uFilterPageName == Globals.oTheScreen.uCurrentPageName) or uFilterPageName==u"" ):
-            aActions=Globals.oActions.GetActionList(uActionName = uActionName, bNoCopy = False)
+            aActions:List[cAction]=Globals.oActions.GetActionList(uActionName = uActionName, bNoCopy = False)
             if aActions is not None:
-                aTmpActions = []
+                aTmpActions:List[cAction] = []
                 for oAction in aActions:
                     Globals.oEvents.CopyActionPars(dTarget=oAction.dActionPars,dSource=kwargs,uReplaceOption="donotcopyempty")
                     aTmpActions.append(oAction)

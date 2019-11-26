@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
+from kivy.uix.settings import Settings
 from ORCA.settings.setttingtypes.SettingActions                 import SettingActions
 from ORCA.settings.setttingtypes.SettingButtons                 import SettingButtons
 from ORCA.settings.setttingtypes.SettingColorpicker             import SettingColorPicker
@@ -32,14 +32,14 @@ from ORCA.settings.setttingtypes.SettingVarString               import SettingVa
 
 __all__ = ['RegisterSettingTypes']
 
-def RegisterSettingTypes(oSetting):
+def RegisterSettingTypes(oSetting:Settings):
     """ Register ORCA "homemade" settings widgets """
     # Button to have buttons on the settings
     oSetting.register_type('buttons', SettingButtons)
     # For more convinient input of numbers
     oSetting.register_type('numericslider', SettingNumericSlider)
     # Bypass a "bug" in kivy, that you can't scroll the original options popup
-    oSetting.register_type('scrolloptions', SettingScrollOptions)
+    oSetting.register_type('scrolloptions',  SettingScrollOptions)
     # An extension to have options on options
     oSetting.register_type('scrolloptionsoptions', SettingScrollOptionsWithOptions)
     # Having a colorpicker (for later use)

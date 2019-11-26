@@ -23,7 +23,7 @@ from ORCA.utils.TypeConvert import ToUnicode
 from ORCA.utils.TypeConvert import ToFloat
 from ORCA.utils.TypeConvert import ToInt
 from ORCA.utils.Path        import cPath
-
+from kivy.config            import ConfigParser
 
 __all__ = ['Config_GetDefault_Bool',
            'Config_GetDefault_Str',
@@ -31,23 +31,22 @@ __all__ = ['Config_GetDefault_Bool',
            'Config_GetDefault_Int',
            'Config_GetDefault_Path']
 
-def Config_GetDefault_Bool(oConfig, uSection, uOption, uDefaultValue):
+def Config_GetDefault_Bool(oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) ->bool:
     return Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue) == u'1'
 
-def Config_GetDefault_Float(oConfig, uSection, uOption, uDefaultValue):
+def Config_GetDefault_Float(oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) ->float:
     return ToFloat(Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue))
 
-def Config_GetDefault_Int(oConfig, uSection, uOption, uDefaultValue):
+def Config_GetDefault_Int(oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) -> int:
     return ToInt(Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue))
 
-def Config_GetDefault_Path(oConfig, uSection, uOption, uDefaultValue):
+def Config_GetDefault_Path(oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) -> cPath:
     return cPath(Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue))
 
-def Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue):
+def Config_GetDefault_Str(oConfig: ConfigParser , uSection: str, uOption: str, uDefaultValue: str) -> str:
     """
     Replacement for the kivy function
 
-    :rtype: string
     :param Config oConfig: The configparser object
     :param string uSection: The name of the section
     :param string uOption: The name of the option
@@ -60,10 +59,10 @@ def Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue):
         if uDefaultValue is not None:
             if type(uDefaultValue)==bool:
                 if uDefaultValue:
-                    uDefaultValue=u'1'
+                    uDefaultValue: str=u'1'
                 else:
-                    uDefaultValue = u'0'
+                    uDefaultValue: str = u'0'
             oConfig.set(uSection, uOption, uDefaultValue)
         return uDefaultValue
-    sRetVal = ToUnicode(oConfig.get(uSection, uOption))
+    sRetVal: str = ToUnicode(oConfig.get(uSection, uOption))
     return sRetVal

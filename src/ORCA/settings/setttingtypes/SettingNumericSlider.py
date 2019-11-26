@@ -18,6 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Union
 from kivy.uix.boxlayout                 import BoxLayout
 from kivy.uix.popup                     import Popup
 from kivy.uix.textinput                 import TextInput
@@ -41,58 +42,60 @@ class SettingNumericSlider(SettingNumeric):
     """ An setting item, which has a slider to input a numeric value """
     def __init__(self, **kwargs):
         self.register_event_type('on_release')
-        super(SettingNumericSlider, self).__init__(**RemoveNoClassArgs(kwargs,SettingNumeric))
-        self.fMin=ToFloat(kwargs["min"])
-        self.fMax=ToFloat(kwargs["max"])
-        self.iRoundPos=int(kwargs["roundpos"])
-        self.slider = None
-        self.textvalue = None
+        super().__init__(**RemoveNoClassArgs(kwargs,SettingNumeric))
+        self.fMin:float                         = ToFloat(kwargs["min"])
+        self.fMax:float                         = ToFloat(kwargs["max"])
+        self.iRoundPos:int                      = int(kwargs["roundpos"])
+        self.slider:Union[Slider:None]          = None
+        self.textvalue:Union[TextInput,None]    = None
 
-    def _create_popup(self, instance):
+    def _create_popup(self, instance) -> None:
         """ create popup layout """
-        content = BoxLayout(orientation='vertical', spacing='5dp')
-        self.popup = popup = Popup(title=self.title,content=content, size_hint=(None, None), size=('400dp', '250dp'))
+        oBtn:cMultiLineButton
+        oContent:BoxLayout = BoxLayout(orientation='vertical', spacing='5dp')
+        self.popup = popup = Popup(title=self.title,content=oContent, size_hint=(None, None), size=('400dp', '250dp'))
 
         # Create the slider used for numeric input
-        self.slider = slider = Slider(min=self.fMin, max=self.fMax, value=float(self.value),size_hint_y=None, height='50dp')
-        slider.bind(on_touch_move = self.OnSliderMoved)
-        slider.bind(on_touch_up = self.OnSliderMoved)
+        self.slider = oSlider = Slider(min=self.fMin, max=self.fMax, value=float(self.value),size_hint_y=None, height='50dp')
+        oSlider.bind(on_touch_move = self.OnSliderMoved)
+        oSlider.bind(on_touch_up = self.OnSliderMoved)
         self.textvalue = TextInput(size_hint_y=None, height='30dp',multiline=False, )
         self.textvalue.bind(on_text_validate = self.On_Enter)
         self.textvalue.bind(focus=self.On_Focus)
 
         # construct the content, widget are used as a spacer
-        content.add_widget(Widget())
-        content.add_widget(slider)
-        content.add_widget(Widget())
-        content.add_widget(self.textvalue)
-        content.add_widget(Widget())
-        content.add_widget(SettingSpacer())
+        oContent.add_widget(Widget())
+        oContent.add_widget(oSlider)
+        oContent.add_widget(Widget())
+        oContent.add_widget(self.textvalue)
+        oContent.add_widget(Widget())
+        oContent.add_widget(SettingSpacer())
 
         # 2 buttons are created for accept or cancel the current value
-        btnlayout = BoxLayout(size_hint_y=None, height='50dp', spacing='5dp')
-        btn = cMultiLineButton(text=ReplaceVars('$lvar(5008)'), halign='center', valign='middle')
-        btn.bind(on_release=self._validate)
-        btnlayout.add_widget(btn)
-        btn = cMultiLineButton(text=ReplaceVars('$lvar(5009)'), halign='center', valign='middle')
-        btn.bind(on_release=self._dismiss)
-        btnlayout.add_widget(btn)
-        content.add_widget(btnlayout)
+        oBtnlayout:BoxLayout  = BoxLayout(size_hint_y=None, height='50dp', spacing='5dp')
+        oBtn                  = cMultiLineButton(text=ReplaceVars('$lvar(5008)'), halign='center', valign='middle')
+        oBtn.bind(on_release=self._validate)
+        oBtnlayout.add_widget(oBtn)
+        oBtn = cMultiLineButton(text=ReplaceVars('$lvar(5009)'), halign='center', valign='middle')
+        oBtn.bind(on_release=self._dismiss)
+        oBtnlayout.add_widget(oBtn)
+        oContent.add_widget(oBtnlayout)
 
         self.textvalue.text=str(self.value)
         # all done, open the popup !
         popup.open()
 
-    def _validate(self, instance):
+    def _validate(self, instance) -> None:
         """ returns the value of the slider """
         self._dismiss()
         self.value = ToUnicode(Round(self.slider.value,self.iRoundPos))
 
-    def OnSliderMoved(self,instance,touch):
+    # noinspection PyUnusedLocal
+    def OnSliderMoved(self,instance:Slider,touch) -> None:
         """ updates the text value, whne the slider is moved """
         self.textvalue.text=ToUnicode(Round(instance.value,self.iRoundPos))
 
-    def On_Enter(self,instance):
+    def On_Enter(self,instance:TextInput) -> None:
         """  when the user enters a value without slider """
         try:
             fValue=float(instance.text)
@@ -104,9 +107,11 @@ class SettingNumericSlider(SettingNumeric):
             self.slider.value=float(fValue)
             self.textvalue.text=ToUnicode(fValue)
 
-        except Exception as e:
+        except Exception:
             pass
-    def On_Focus(self,instance, value):
+
+    # noinspection PyUnusedLocal
+    def On_Focus(self,instance:TextInput, value:str) -> None:
         """ updates the slider, when the textfield gets the focus """
         self.On_Enter(self.textvalue)
 

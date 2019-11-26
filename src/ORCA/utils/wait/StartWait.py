@@ -26,7 +26,7 @@ import ORCA.utils.wait.Globals
 
 __all__ = ['StartWait']
 
-def StartWait(iWaitTime=-1):
+def StartWait(iWaitTime:int=-1) -> None:
     """
     wait function for interfaces / and to stop the queue if necessary
     iWaitTime 0: Stops Wait and let the status pass thought
@@ -42,9 +42,9 @@ def StartWait(iWaitTime=-1):
     ORCA.utils.wait.Globals.oWaitLock.acquire()  # will block if lock is already held
 
     if iWaitTime == 0:
-        ORCA.utils.wait.Globals.fWaitEndTime = 0
+        ORCA.utils.wait.Globals.oWaitEndTime = ORCA.utils.wait.Globals.oWaitZeroTime
         fSleep(0.01)
     else:
-        ORCA.utils.wait.Globals.fWaitEndTime = datetime.now() + timedelta(milliseconds=iWaitTime)
+        ORCA.utils.wait.Globals.oWaitEndTime = datetime.now() + timedelta(milliseconds=iWaitTime)
 
     ORCA.utils.wait.Globals.oWaitLock.release()

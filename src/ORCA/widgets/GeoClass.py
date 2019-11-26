@@ -19,8 +19,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from xml.etree.ElementTree          import Element
+from kivy.uix.widget                import Widget
 from ORCA.widgets.Base              import cWidgetBase
 from ORCA.vars.Replace              import ReplaceVars
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
 
 __all__ = ['cWidgetGeoClass']
 
@@ -30,13 +39,13 @@ class cWidgetGeoClass(cWidgetBase):
         super(cWidgetGeoClass, self).__init__(**kwargs)
         self.oGeoClass=None
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
-        self.AddArg('background_color',self.tBackGroundColor)
+        self.AddArg('background_color',self.aBackGroundColor)
         if self.CreateBase(Parent=oParent, Class=self.oGeoClass):
             if self.uActionName !=u'' or self.uActionNameDoubleTap !=u'' :
                 self.oObject.bind(on_q_release  = self.On_Button_Up)
@@ -49,8 +58,7 @@ class cWidgetGeoClass(cWidgetBase):
     def SetWidgetColor(self,uBackgroundColor):
         super(cWidgetGeoClass, self).SetWidgetColor(uBackgroundColor)
         if self.oObject:
-            self.oObject.SetColor(self.tBackGroundColor)
+            self.oObject.SetColor(self.aBackGroundColor)
 
     def UpdateWidget(self):
-        uBackgroundColor=ReplaceVars(self.uBackGroundColor)
-        self.SetWidgetColor(uBackgroundColor)
+        self.SetWidgetColor(ReplaceVars(self.uBackGroundColor))

@@ -8,7 +8,7 @@
     <fontsize_button>%h30</fontsize_button>
     <fontsize_text>%h30</fontsize_text>
     <author>Carsten Thielepape</author>
-    <version>3.70</version>
+    <version>4.6.0</version>
     <orientations>landscape</orientations>
     <support>http://www.orca-remote.org/forum/</support>
     <definitionvars>{"definition_alias_FHEMFS20LIGHTS":"FHEMFS20LIGHTS"}</definitionvars>
@@ -74,8 +74,8 @@
       <description language='English'>Simple FHEM example FS20 light</description>
       <description language='German'>Einfaches FHEM Beispiel Licht über FS20</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/fhem example</local>
@@ -90,7 +90,6 @@
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>$var(APPLICATIONPATH)/definitions/fhem example/definition.ini</file>
         <file>$var(APPLICATIONPATH)/definitions/fhem example/interfacesettings*</file>
         <file>$var(APPLICATIONPATH)/definitions/fhem example/atlas*</file>
       </skipfiles>

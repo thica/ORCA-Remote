@@ -18,7 +18,6 @@
       </element>
       <element name='Anchor Gap2' type='ANCHOR'  posy='of:totop:Anchor Effect Device Buttons' height='%1' />
       <element name='Picture StreamPic' type='PICTURE' posx='center' posy='top' width="%80" height='of:width:self' picturenormal='$var($dvar(definition_alias_mediaplayer_template)_mediapicture)' action='Send' actionpars='{"commandname":"main.net-usb-jacket-art.query"}' />
-
    </element>
 
 

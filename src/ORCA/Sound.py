@@ -18,9 +18,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                         import Any
+from typing                         import List
+from typing                         import Dict
 
+from xml.etree.ElementTree          import Element
 from kivy.core.audio                import SoundLoader
-from kivy.compat                    import string_types
 from kivy.logger                    import Logger
 
 from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
@@ -32,49 +35,47 @@ from ORCA.utils.Platform            import OS_RegisterSoundProvider
 from ORCA.utils.ConfigHelpers       import Config_GetDefault_Int
 from ORCA.utils.FileName            import cFileName
 
-
 import ORCA.Globals as Globals
 
 __all__ = ['cSound']
 
-class cSound(object):
+class cSound:
     """ Represents the Sound Object """
     def __init__(self):
-        self.aSounds = {u'startup'     :[None,100],
-                        u'shutdown'    :[None,100],
-                        u'error'       :[None,100],
-                        u'message'     :[None,100],
-                        u'question'    :[None,100],
-                        u'notification':[None,100],
-                        u'ring'        :[None,100],
-                        u'success'     :[None,100],
-                        u'click'       :[None,100]}
+        self.aSounds:Dict[str,List] = { u'startup'     :[None,100],
+                                        u'shutdown'    :[None,100],
+                                        u'error'       :[None,100],
+                                        u'message'     :[None,100],
+                                        u'question'    :[None,100],
+                                        u'notification':[None,100],
+                                        u'ring'        :[None,100],
+                                        u'success'     :[None,100],
+                                        u'click'       :[None,100]}
 
-        self.dSoundObjects = {}
-        self.aSoundsList   = None                      # List of all available soundsets (Just their names)
+        self.dSoundObjects:Dict[str,Any] = {}
+        self.aSoundsList:List[str]       = []                      # List of all available soundsets (Just their names)
         OS_RegisterSoundProvider()
 
     def Init(self):
         """ get a list of all sounds """
-        self.aSoundsList            = Globals.oPathSoundsRoot.GetFolderList()
+        self.aSoundsList = Globals.oPathSoundsRoot.GetFolderList()
 
     def LoadSoundsDescription(self):
         """ Loads the sound description (tunes) """
         try:
             Logger.debug (u'TheScreen: Loading Sounds')
-            oET_Root = LoadXMLFile(Globals.oFnSoundsXml)
+            oET_Root:Element = LoadXMLFile(Globals.oFnSoundsXml)
 
             if oET_Root is not None:
                 for oXMLSound in oET_Root.findall('sound'):
-                    uSoundName  = GetXMLTextAttribute(oXMLSound,u'name',False,u'')
-                    oFnSound  = cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLSound,u'file',False,u''))
+                    uSoundName:str      = GetXMLTextAttribute(oXMLSound,u'name',False,u'')
+                    oFnSound:cFileName  = cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLSound,u'file',False,u''))
                     if uSoundName in self.aSounds:
                         self.aSounds[uSoundName][0]=oFnSound
                     else:
-                        uMsg=Logger.warning(u'Unknown Sound:'+oFnSound)
+                        Logger.warning(u'Unknown Sound:'+oFnSound)
         except Exception as e:
-            uMsg=LogError(u'TheScreen:  LoadSoundDescription: can\'t load SoundDescription',e)
-            ShowErrorPopUp(uMessage=uMsg)
+            ShowErrorPopUp(uMessage=LogError(uMsg=u'TheScreen:  LoadSoundDescription: can\'t load SoundDescription',oException=e))
 
     def ReadSoundVolumesFromConfig(self,oConfig):
         for uSoundName in self.aSounds:
@@ -106,7 +107,7 @@ class cSound(object):
                     if oSound.state != 'stop':
                         oSound.stop()
 
-                    if isinstance(fSoundVolume, string_types):
+                    if isinstance(fSoundVolume, str):
                         if fSoundVolume!=u'':
                             fVolume=ToFloat(fSoundVolume)
 
@@ -122,5 +123,5 @@ class cSound(object):
                         oSound.play()
             return True
         except Exception as e:
-            LogError(u'Playing sound failed:'+uSoundName,e)
+            LogError(uMsg=u'Playing sound failed:'+uSoundName,oException=e)
             return False

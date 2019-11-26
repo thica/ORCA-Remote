@@ -19,9 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
-from ORCA.utils.Atlas               import ToAtlas
-from ORCA.utils.LogError            import LogError
+from typing                          import Union
+from xml.etree.ElementTree           import Element
+from kivy.uix.widget                 import Widget
+from ORCA.utils.Atlas                import ToAtlas
+from ORCA.utils.LogError             import LogError
 from ORCA.utils.TypeConvert          import ToFloat
 from ORCA.utils.TypeConvert          import ToUnicode
 from ORCA.utils.XML                  import GetXMLBoolAttributeVar
@@ -35,6 +37,14 @@ from ORCA.vars.Access                import GetVar
 from ORCA.widgets.Base               import cWidgetBase
 from ORCA.widgets.core.SliderEx      import cSliderEx
 from ORCA.utils.FileName             import cFileName
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
+
 
 __all__ = ['cWidgetSlider']
 
@@ -94,29 +104,32 @@ class cWidgetSlider(cWidgetBase):
     WikiDoc:End
     """
 
+    # noinspection PyUnusedLocal
     def __init__(self,**kwargs):
         super(cWidgetSlider, self).__init__(hastext=True)
-        self.oFnPictureNormal       = cFileName(u'')
-        self.oFnPictureButton       = cFileName(u'')
-        self.uDestVar               = u'slider'
-        self.uDeviceOrientation     = u'horizontal'
-        self.bDiscardMoves          = True
-        self.fMin                   = 0.0
-        self.fMax                   = 100.0
-        self.fValue                 = 0.0
-        self.fOldValue              = 10000.23445
-        self.fDataRange             = 100.0
-        self.iRoundPos              = 0
+        self.oFnPictureNormal:Union[cFileName,None] = None
+        self.oFnPictureButton:Union[cFileName,None] = None
+        self.uDestVar:str                           = u'slider'
+        self.uDeviceOrientation:str                 = u'horizontal'
+        self.bDiscardMoves:bool                     = True
+        self.fMin:float                             = 0.0
+        self.fMax:float                             = 100.0
+        self.uMin:str                               = u''
+        self.uMax:str                               = u''
+        self.fValue:float                           = 0.0
+        self.fOldValue:float                        = 10000.23445
+        self.fDataRange:float                       = 100.0
+        self.iRoundPos:int                          = 0
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
             self.oFnPictureNormal           = cFileName(u'').ImportFullPath(GetXMLTextAttributeVar(oXMLNode,u'picturenormal',    False,u''))
             self.oFnPictureButton           = cFileName(u'').ImportFullPath(GetXMLTextAttributeVar(oXMLNode,u'picturebutton',    False,u''))
 
-            self.fMin                       = GetXMLTextAttribute(oXMLNode,u'mindatavalue',      False,u'0.0')
-            self.fMax                       = GetXMLTextAttribute(oXMLNode,u'maxdatavalue',      False,u'100.0')
+            self.uMin                       = GetXMLTextAttribute(oXMLNode,u'mindatavalue',      False,u'0.0')
+            self.uMax                       = GetXMLTextAttribute(oXMLNode,u'maxdatavalue',      False,u'100.0')
             self.uDestVar                   = GetXMLTextAttribute(oXMLNode,u'destvar',           False,self.uDestVar)
             #roundpos: the position, the  number should be rounded
             self.iRoundPos                  = GetXMLIntAttribute(oXMLNode,u'roundpos', False,0)
@@ -126,12 +139,11 @@ class cWidgetSlider(cWidgetBase):
 
         return bRet
 
-    def Create(self,oParent):
+    def Create(self, oParent: Widget) -> bool:
         """ creates the Widget """
         try:
-
-            self.fMin = ToFloat(ReplaceVars(self.fMin))
-            self.fMax = ToFloat(ReplaceVars(self.fMax))
+            self.fMin = ToFloat(ReplaceVars(self.uMin))
+            self.fMax = ToFloat(ReplaceVars(self.uMax))
             self.AddArg('min',              self.fMin)
             self.AddArg('max',              self.fMax)
             self.AddArg('orientation',      self.uDeviceOrientation)
@@ -151,7 +163,7 @@ class cWidgetSlider(cWidgetBase):
                 return True
             return False
         except Exception as e:
-            LogError ( u'cWidgetSlider:Unexpected error Creating Object:',e)
+            LogError ( uMsg=u'cWidgetSlider:Unexpected error Creating Object:',oException=e)
             return False
 
     def OnNotifyChange(self,instance):
@@ -176,21 +188,28 @@ class cWidgetSlider(cWidgetBase):
                     self.fOldValue=self.fValue
                     self.On_Button_Up(instance)
 
-    def UpdateWidget(self):
+    def UpdateWidget(self) -> None:
         """ Updates the silder pos, based on the assigned Var """
+
+        uValue:str
+        fMax:float
+        fMin:float
+
+        super().UpdateWidget()
+
         if not self.uDestVar==u'':
             uValue=GetVar(uVarName = self.uDestVar)
             fNewValue=ToFloat(uValue)
 
-            if isinstance(self.fMax,float):
+            if GetVar(uVarName=self.uMax) != u'':
+                fMax = ToFloat(GetVar(uVarName=self.uMax))
+            else:
                 fMax = self.fMax
-            else:
-                fMax = ToFloat(GetVar(uVarName=self.fMax))
 
-            if isinstance(self.fMin,float):
-                fMin = self.fMin
+            if GetVar(uVarName=self.uMin) != u'':
+                fMin = ToFloat(GetVar(uVarName=self.uMin))
             else:
-                fMin = ToFloat(GetVar(uVarName=self.fMin))
+                fMin = self.fMin
 
             if fNewValue>fMax:
                 fNewValue=fMax

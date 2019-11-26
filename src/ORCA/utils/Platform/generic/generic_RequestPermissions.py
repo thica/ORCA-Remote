@@ -20,6 +20,6 @@
 """
 
 
-def RequestPermissions():
+def RequestPermissions() -> bool:
     """  Nothing Generic to do"""
     return True

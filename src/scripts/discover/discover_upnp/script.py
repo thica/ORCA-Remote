@@ -20,6 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__ import annotations
+
+from typing import Dict
+from typing import List
+from typing import Union
+
 import select
 import socket
 import threading
@@ -29,8 +35,8 @@ from xml.etree.ElementTree                  import ElementTree, fromstring
 
 from kivy.logger                            import Logger
 from kivy.network.urlrequest                import UrlRequest
+from kivy.uix.button                        import Button
 
-from ORCA.Compat                            import PY2
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
@@ -40,9 +46,8 @@ from ORCA.utils.TypeConvert                 import ToList
 from ORCA.utils.TypeConvert                 import ToBool
 from ORCA.utils.TypeConvert                 import ToUnicode
 from ORCA.utils.TypeConvert                 import ToBytes
-from ORCA.utils.PyXSocket                   import cPyXSocket
-
 from ORCA.vars.QueryDict                    import QueryDict
+from ORCA.utils.FileName                    import cFileName
 
 import ORCA.Globals as Globals
 
@@ -54,8 +59,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover devices by upnp</description>
       <description language='German'>Erkennt bwz. sucht Geraete ueber upnp</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_upnp</local>
@@ -64,14 +69,17 @@ import ORCA.Globals as Globals
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/discover/discover_upnp/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
 </root>
 '''
 
-def RemoveURN(uData):
+def RemoveURN(uData:str) -> str:
+
+    iPos:int
+    iPosEnd:int
+    uData:str
 
     iPos=uData.find('xmlns="')
     while iPos!=-1:
@@ -129,85 +137,95 @@ class cScript(cDiscoverScriptTemplate):
     """
 
     class cScriptSettings(cBaseScriptSettings):
-        def __init__(self,oScript):
+        def __init__(self,oScript:cScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aIniSettings.fTimeOut                     = 15.0
+            self.aIniSettings.fTimeOut = 15.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
-        self.uSubType        = u'UPNP'
-        self.bStopWait       = False
-        self.aResults        = []
-        self.aThreads        = []
-        self.oReq            = QueryDict()
+        self.uSubType:str                       = u'UPNP'
+        self.bStopWait:bool                     = False
+        self.aResults:List[QueryDict]           = []
+        self.aThreads:List[threading.Thread]    = []
+        self.dReq                               = QueryDict()
 
-    def Init(self,uObjectName,uScriptFile=u''):
-        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
+    def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
+        """
+        Init function for the script
+
+        :param str uObjectName: The name of the script (to be passed to all scripts)
+        :param cFileName oFnScript: The file of the script (to be passed to all scripts)
+        """
+
+        cDiscoverScriptTemplate.Init(self, uObjectName, oFnScript)
         self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
-    def GetHeaderLabels(self):
+    def GetHeaderLabels(self) -> List[str]:
         return ['$lvar(5029)','$lvar(5035)','$lvar(5030)','$lvar(5031)','$lvar(5032)','$lvar(SCRIPT_DISC_UPNP_1)']
 
-    def ListDiscover(self):
+    def ListDiscover(self) -> None:
 
-        dArgs                   = {"onlyonce":      0,
+        dArgs:Dict              = {"onlyonce":      0,
                                    "servicetypes":  "ssdp:all",
                                    "ipversion":     "All"}
-        aDevices                = {}
+        dDevices:Dict[str,QueryDict]                = {}
+        dDevice: QueryDict
 
         self.Discover(**dArgs)
 
-        for aDevice in self.aResults:
-            uTageLine=aDevice.sFoundIP+aDevice.uFoundHostName+aDevice.uFoundManufacturer+aDevice.uFoundModel+aDevice.uFoundFriendlyName+aDevice.uFoundServiceType
-            if aDevices.get(uTageLine) is None:
-               aDevices[uTageLine]=aDevice
-               self.AddLine([aDevice.sFoundIP,aDevice.uFoundHostName,aDevice.uFoundManufacturer,aDevice.uFoundModel,aDevice.uFoundFriendlyName,aDevice.uFoundServiceType],aDevice)
+        for dDevice in self.aResults:
+            uTageLine:str = dDevice.sFoundIP+dDevice.uFoundHostName+dDevice.uFoundManufacturer+dDevice.uFoundModel+dDevice.uFoundFriendlyName+dDevice.uFoundServiceType
+            if dDevices.get(uTageLine) is None:
+               dDevices[uTageLine]=dDevice
+               self.AddLine([dDevice.sFoundIP,dDevice.uFoundHostName,dDevice.uFoundManufacturer,dDevice.uFoundModel,dDevice.uFoundFriendlyName,dDevice.uFoundServiceType],dDevice)
         return
 
-    def CreateDiscoverList_ShowDetails(self,instance):
-        uText=  u"$lvar(5029): %s \n" \
-                u"$lvar(5035): %s \n" \
-                u"$lvar(5030): %s \n"\
-                u"$lvar(5031): %s \n"\
-                u"$lvar(5032): %s \n"\
-                u"$lvar(SCRIPT_DISC_UPNP_1): %s \n"\
-                u"\n"\
-                u"%s\n"\
-                u"\n"\
-                u"%s" % (instance.oDevice.sFoundIP,instance.oDevice.uFoundHostName,instance.oDevice.uFoundManufacturer,instance.oDevice.uFoundModel,instance.oDevice.uFoundFriendlyName,instance.oDevice.uFoundServiceType,instance.oDevice.sData,instance.oDevice.uResult)
+    def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
+
+        dDevice:QueryDict = oButton.dDevice
+
+        uText:str=  u"$lvar(5029): %s \n" \
+                    u"$lvar(5035): %s \n" \
+                    u"$lvar(5030): %s \n"\
+                    u"$lvar(5031): %s \n"\
+                    u"$lvar(5032): %s \n"\
+                    u"$lvar(SCRIPT_DISC_UPNP_1): %s \n"\
+                    u"\n"\
+                    u"%s\n"\
+                    u"\n"\
+                    u"%s" % (dDevice.sFoundIP,dDevice.uFoundHostName,dDevice.uFoundManufacturer,dDevice.uFoundModel,dDevice.uFoundFriendlyName,dDevice.uFoundServiceType,dDevice.sData,dDevice.uResult)
 
         ShowMessagePopUp(uMessage=uText)
 
 
-    def Discover(self,**kwargs):
+    def Discover(self,**kwargs) -> Dict:
 
-        self.oReq.clear()
-        uConfigName              = kwargs.get('configname',self.uConfigName)
-        oSetting                 = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        self.oReq.uManufacturer  = kwargs.get('manufacturer',"")
-        self.oReq.uModels        = kwargs.get('models',"")
-        self.oReq.uFriendlyName  = kwargs.get('prettyname',"")
-        self.oReq.bReturnPort    = ToBool(kwargs.get('returnport',"0"))
-        fTimeOut                 = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
-        uParST                   = kwargs.get('servicetypes',"ssdp:all")
-        uIPVersion               = kwargs.get('ipversion',"IPv4Only")
-        aST                      = uParST.split(',')
-        bOnlyOnce                = ToBool(kwargs.get('onlyonce',"1"))
+        self.dReq.clear()
+        uConfigName:str              = kwargs.get('configname',self.uConfigName)
+        oSetting:cBaseScriptSettings = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
+        self.dReq.uManufacturer  = kwargs.get('manufacturer',"")
+        self.dReq.uModels        = kwargs.get('models',"")
+        self.dReq.uFriendlyName  = kwargs.get('prettyname',"")
+        self.dReq.bReturnPort    = ToBool(kwargs.get('returnport',"0"))
+        fTimeOut:float           = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
+        uParST:str               = kwargs.get('servicetypes',"ssdp:all")
+        uIPVersion:str           = kwargs.get('ipversion',"IPv4Only")
+        aST:List                 = uParST.split(',')
+        bOnlyOnce:bool           = ToBool(kwargs.get('onlyonce',"1"))
 
-        Logger.debug (u'Try to discover %s device by UPNP:  Models: %s , PrettyName: %s ' % (self.oReq.uManufacturer,self.oReq.uModels, self.oReq.uFriendlyName ))
+        Logger.debug (u'Try to discover %s device by UPNP:  Models: %s , PrettyName: %s ' % (self.dReq.uManufacturer,self.dReq.uModels, self.dReq.uFriendlyName ))
 
         del self.aResults[:]
         del self.aThreads[:]
 
         try:
             for uST in aST:
-                oThread = None
                 if uIPVersion == "IPv4Only" or uIPVersion == "All" or (uIPVersion == "Auto" and Globals.uIPAddressV6 == ""):
-                    oThread = cThread_Discover_UPNP(bOnlyOnce=bOnlyOnce,oReq=self.oReq,uIPVersion="IPv4Only", fTimeOut=fTimeOut, uST=uST,oCaller=self)
+                    oThread = cThread_Discover_UPNP(bOnlyOnce=bOnlyOnce,dReq=self.dReq,uIPVersion="IPv4Only", fTimeOut=fTimeOut, uST=uST,oCaller=self)
                     self.aThreads.append(oThread)
                     self.aThreads[-1].start()
                 if uIPVersion == "IPv6Only" or uIPVersion == "All" or (uIPVersion == "Auto" and Globals.uIPAddressV6 != ""):
-                    oThread = cThread_Discover_UPNP(bOnlyOnce=bOnlyOnce, oReq=self.oReq, uIPVersion="IPv6Only", fTimeOut=fTimeOut, uST=uST,oCaller=self)
+                    oThread = cThread_Discover_UPNP(bOnlyOnce=bOnlyOnce, dReq=self.dReq, uIPVersion="IPv6Only", fTimeOut=fTimeOut, uST=uST,oCaller=self)
                     self.aThreads.append(oThread)
                     self.aThreads[-1].start()
 
@@ -224,7 +242,7 @@ class cScript(cDiscoverScriptTemplate):
                         "IPVersion":self.aResults[0].uIPVersion,
                         'Exception': None}
             else:
-                Logger.warning(u'No device found device %s:%s:%s' %(self.oReq.uManufacturer,self.oReq.uModels,self.oReq.uFriendlyName))
+                Logger.warning(u'No device found device %s:%s:%s' %(self.dReq.uManufacturer,self.dReq.uModels,self.dReq.uFriendlyName))
             return {"Host": "",
                     "Hostname": "",
                     "Model": "",
@@ -235,7 +253,7 @@ class cScript(cDiscoverScriptTemplate):
                     'Exception': None}
 
         except Exception as e:
-            LogError(u'Error on discover uPnP',e)
+            LogError(uMsg=u'Error on discover uPnP',oException=e)
             return {"Host": "",
                     "Hostname": "",
                     "Model": "",
@@ -246,7 +264,7 @@ class cScript(cDiscoverScriptTemplate):
                     'Exception': e}
 
     @classmethod
-    def GetConfigJSONforParameters(cls,dDefaults):
+    def GetConfigJSONforParameters(cls,dDefaults:Dict) -> Dict[str,Dict]:
         return  {"Manufacturer":    {"type": "string",       "order":0,  "title": "$lvar(6013)", "desc": "$lvar(6014)", "key": "manufacturer",    "default":""           },
                  "Models":          {"type": "string",       "order":1,  "title": "$lvar(6015)", "desc": "$lvar(6016)", "key": "models",          "default":""           },
                  "PrettyName":      {"type": "string",       "order":2,  "title": "$lvar(6017)", "desc": "$lvar(6018)", "key": "prettyname",      "default":""           },
@@ -262,20 +280,21 @@ class cScript(cDiscoverScriptTemplate):
 class cThread_Discover_UPNP(threading.Thread):
     oWaitLock = threading.Lock()
 
-    def __init__(self, bOnlyOnce,oReq,uIPVersion, uST,fTimeOut,oCaller):
+    def __init__(self, bOnlyOnce:bool,dReq:QueryDict,uIPVersion:str, uST:str,fTimeOut:float,oCaller:cScript):
         threading.Thread.__init__(self)
 
-        self.bOnlyOnce  = bOnlyOnce
-        self.uIPVersion = uIPVersion
-        self.oCaller    = oCaller
-        self.fTimeOut   = fTimeOut
-        self.uST        = uST
-        self.bStopWait  = False
-        self.oReq       = oReq
+        self.bOnlyOnce:bool     = bOnlyOnce
+        self.uIPVersion:str     = uIPVersion
+        self.oCaller:cScript    = oCaller
+        self.fTimeOut:float     = fTimeOut
+        self.uST:str            = uST
+        self.bStopWait:bool     = False
+        self.dReq:QueryDict    = dReq
+        self.oUrlRequest:Union[None,UrlRequest] = None
 
-    def run(self):
+    def run(self) -> None:
 
-        bReturnNow = False
+        bReturnNow:bool = False
         if self.bOnlyOnce:
             cThread_Discover_UPNP.oWaitLock.acquire()
             if len(self.oCaller.aResults)>0:
@@ -285,7 +304,7 @@ class cThread_Discover_UPNP(threading.Thread):
             return
         self.Discover()
 
-    def Discover(self):
+    def Discover(self) -> None:
 
         oSocket = None
         try:
@@ -296,25 +315,26 @@ class cThread_Discover_UPNP(threading.Thread):
                 # Parse all results
                 while True:
                     #we do not wait too long
-                    ready = select.select([oSocket], [], [],self.fTimeOut)
-                    if ready[0]:
+                    aReady = select.select([oSocket], [], [],self.fTimeOut)
+                    if aReady[0]:
                         # Get a response
-                        sData, tSenderAddr = oSocket.recvfrom(1024)
-                        oRet = self.GetDeviceDetails(sData=sData,tSenderAddr=tSenderAddr)
-                        self.CheckDeviceDetails(oRet=oRet)
-                        if oRet.bFound:
-                            Logger.info(u'Bingo: Discovered device %s:%s:%s at %s:' %(oRet.uFoundManufacturer,oRet.uFoundModel,oRet.uFoundFriendlyName,oRet.sFoundIP))
+                        byData, tSenderAddr = oSocket.recvfrom(1024)
+                        uData = ToUnicode(byData)
+                        dRet = self.GetDeviceDetails(uData=uData,tSenderAddr=tSenderAddr)
+                        self.CheckDeviceDetails(dRet=dRet)
+                        if dRet.bFound:
+                            Logger.info(u'Bingo: Discovered device %s:%s:%s at %s:' %(dRet.uFoundManufacturer,dRet.uFoundModel,dRet.uFoundFriendlyName,dRet.sFoundIP))
                             try:
-                                if oRet.uIPVersion == "IPv4":
-                                    oRet.uFoundHostName = socket.gethostbyaddr(oRet.sFoundIP)[0]
-                                elif oRet.uIPVersion == "IPv6":
+                                if dRet.uIPVersion == "IPv4":
+                                    dRet.uFoundHostName = socket.gethostbyaddr(dRet.sFoundIP)[0]
+                                elif dRet.uIPVersion == "IPv6":
                                     #todo: Does not work for unknown reasons
-                                    oRet.uFoundHostName = socket.gethostbyaddr(oRet.sFoundIP)[0]
-                            except Exception as e:
+                                    dRet.uFoundHostName = socket.gethostbyaddr(dRet.sFoundIP)[0]
+                            except Exception:
                                 # Logger.error("Cant get Hostname:"+oRet.sFoundIP+" "+str(e))
                                 pass
                             cThread_Discover_UPNP.oWaitLock.acquire()
-                            self.oCaller.aResults.append(oRet)
+                            self.oCaller.aResults.append(dRet)
                             cThread_Discover_UPNP.oWaitLock.release()
                             if self.bOnlyOnce:
                                 oSocket.close()
@@ -326,35 +346,37 @@ class cThread_Discover_UPNP(threading.Thread):
             return
 
         except Exception as e:
-            LogError(u'Error on discover uPnP (%s)' % self.uIPVersion, e)
+            LogError(uMsg=u'Error on discover uPnP (%s)' % self.uIPVersion, oException=e)
             if oSocket:
                 oSocket.close()
             return
 
     def NewWait(self,delay):
         while self.oUrlRequest.resp_status is None:
+            # noinspection PyProtectedMember
             self.oUrlRequest._dispatch_result(delay)
             sleep(delay)
             if self.bStopWait:
                 self.bStopWait=False
                 break
 
+    # noinspection PyUnusedLocal
     def OnError(self,request,error):
-        LogError(u'Discover:Error Receiving Response',error)
+        LogError(uMsg=u'Discover:Error Receiving Response',oException=error)
         self.bStopWait      = True
-
 
     def SendDiscover(self):
 
+        iUDP_PORT = 1900
+
         if self.uIPVersion=="IPv4Only":
             uUDP_IP     = u'239.255.255.250'
-            iUDP_PORT   = 1900
-            uMessage = u'M-SEARCH * HTTP/1.1\r\nHOST: %s:%d\r\nMAN: "ssdp:discover"\r\nMX: 2\r\nST: %s\r\n\r\n' % (uUDP_IP, iUDP_PORT, self.uST)
+            bMessage = ToBytes(u'M-SEARCH * HTTP/1.1\r\nHOST: %s:%d\r\nMAN: "ssdp:discover"\r\nMX: 2\r\nST: %s\r\n\r\n' % (uUDP_IP, iUDP_PORT, self.uST))
 
-            oSocket = cPyXSocket(socket.AF_INET, socket.SOCK_DGRAM)
+            oSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
             oSocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
-            oSocket.SendTo(uMessage, (uUDP_IP, iUDP_PORT))
+            oSocket.sendto(bMessage, (uUDP_IP, iUDP_PORT))
             return oSocket
 
         if self.uIPVersion == "IPv6Only":
@@ -367,19 +389,18 @@ class cThread_Discover_UPNP(threading.Thread):
                 pass
 
             uUDP_IP = u'FF02::C'
-            iUDP_PORT = 1900
-            uMessage = u'M-SEARCH * HTTP/1.1\r\nHOST: [%s]:%d\r\nMAN: "ssdp:discover"\r\nMX: 2\r\nST: %s\r\n\r\n' % (uUDP_IP, iUDP_PORT, self.uST)
+            bMessage = ToBytes(u'M-SEARCH * HTTP/1.1\r\nHOST: [%s]:%d\r\nMAN: "ssdp:discover"\r\nMX: 2\r\nST: %s\r\n\r\n' % (uUDP_IP, iUDP_PORT, self.uST))
 
-            oSocket = cPyXSocket(socket.AF_INET6, socket.SOCK_DGRAM)
+            oSocket = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
             oSocket.setsockopt(IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 2)
-            oSocket.SendTo(uMessage, (uUDP_IP, iUDP_PORT))
+            oSocket.sendto(bMessage, (uUDP_IP, iUDP_PORT))
             return oSocket
 
         return None
 
 
-    def GetDeviceDetails(self,sData,tSenderAddr):
+    def GetDeviceDetails(self,uData,tSenderAddr):
         oRet                     = QueryDict()
         oRet.uFoundManufacturer  = u""
         oRet.uFoundModel         = u""
@@ -388,13 +409,12 @@ class cThread_Discover_UPNP(threading.Thread):
         oRet.sFoundIP            = tSenderAddr[0]
         oRet.uIPVersion          = self.uIPVersion[:4]
         oRet.bFound              = False
-        oRet.sData               = sData
+        oRet.sData               = uData
         oRet.uResult             = u""
         oRet.uFoundHostName      = u""
-        uUrl                     = u""
+        uUrl:str                 = u""
 
-        if not PY2:
-            oRet.sData = ToUnicode(oRet.sData)
+        oRet.sData = ToUnicode(oRet.sData)
 
         if oRet.uIPVersion=="IPv6":
             oRet.sFoundIP="[%s}" % oRet.sFoundIP
@@ -429,45 +449,45 @@ class cThread_Discover_UPNP(threading.Thread):
 
                     try:
                         oRet.uFoundFriendlyName = oNode.find("friendlyName").text
-                    except Exception as e:
+                    except Exception:
                         pass
                     oRet.bFound              = True
                     Logger.debug(u'Found Device %s:%s:%s (%s)' % (oRet.uFoundManufacturer, oRet.uFoundModel, oRet.uFoundFriendlyName, oRet.sFoundIP))
             except Exception as e:
-                LogError("Can''t get device details. skipping device: "+uUrl,e)
+                LogError(uMsg="Can''t get device details. skipping device: "+uUrl,oException=e)
 
         return oRet
 
-    def CheckDeviceDetails(self,oRet):
-        if oRet.bFound:
-            if self.oReq.uManufacturer != "":
-                if self.oReq.uManufacturer != oRet.uFoundManufacturer:
-                    oRet.bFound = False
+    def CheckDeviceDetails(self,dRet):
+        if dRet.bFound:
+            if self.dReq.uManufacturer != "":
+                if self.dReq.uManufacturer != dRet.uFoundManufacturer:
+                    dRet.bFound = False
 
-            aModels = ToList(self.oReq.uModels)
-            if len(aModels) > 0 and oRet.bFound:
-                oRet.bFound = False
+            aModels = ToList(self.dReq.uModels)
+            if len(aModels) > 0 and dRet.bFound:
+                dRet.bFound = False
                 for uModel in aModels:
                     if uModel.startswith("'") or uModel.startswith('"'):
                         uModel=uModel[1:-2]
 
                     if uModel.endswith("*"):
-                        if uModel[:-1] == oRet.uFoundModel[:len(uModel) - 1]:
-                            oRet.bFound = True
+                        if uModel[:-1] == dRet.uFoundModel[:len(uModel) - 1]:
+                            dRet.bFound = True
                             break
                     else:
                         if uModel.startswith("'") or uModel.startswith('"'):
                             uModel=uModel[1:-1]
-                        if uModel == oRet.uFoundModel:
-                            oRet.bFound = True
+                        if uModel == dRet.uFoundModel:
+                            dRet.bFound = True
                             break
 
-            if self.oReq.uFriendlyName != "" and oRet.bFound:
-                oRet.bFound = False
-                if self.oReq.uFriendlyName.endswith("*"):
-                    if self.oReq.uFriendlyName[:-1] == oRet.uFoundFriendlyName[:len(oRet.uFriendlyName) - 1]:
-                        oRet.bFound = True
+            if self.dReq.uFriendlyName != "" and dRet.bFound:
+                dRet.bFound = False
+                if self.dReq.uFriendlyName.endswith("*"):
+                    if self.dReq.uFriendlyName[:-1] == dRet.uFoundFriendlyName[:len(dRet.uFriendlyName) - 1]:
+                        dRet.bFound = True
                 else:
-                    if self.oReq.uFriendlyName == oRet.uFoundFriendlyName:
-                        oRet.bFound = True
+                    if self.dReq.uFriendlyName == dRet.uFoundFriendlyName:
+                        dRet.bFound = True
 

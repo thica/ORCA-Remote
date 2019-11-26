@@ -53,6 +53,12 @@
     <action to="subtitles_toggle"         from="SUBTITLE"      />
     <action to="info"                     from="TITLE"      />
     <action to="zoom"                     from="ZOOM"      />
+    <action to="pause_toggle"             from="PLAY PAUSE TOGGLE"      />
+    <action to="teletext_toggle"          from="TELETEXT"      />
+    <action to="teletext_hold"            from="TELETEXT HOLD"      />
+    <action to="teletext_index"           from="TELETEXT INDEX"      />
+
+
 
     <action to="3dtoggle"                 from="3D"      />
     <action to="source tv/ant"            from="ANALOG TV"/>
@@ -64,7 +70,7 @@
     <action to="source usb"               from="USB"/>
     <action to="source usb"               from="INTERNET"/>
     <action to="return"                   from="MENU RETURN"/>
-
+    <action to="exit"                     from="EXIT"/>
     <action to="source net"               from="INTERNET"/>
     <action to="source net"               from="NET"/>
     <action to="source radio"             from="RADIO"/>

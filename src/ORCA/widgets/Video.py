@@ -19,7 +19,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+from typing                         import Tuple
+from xml.etree.ElementTree          import Element
+from kivy.uix.widget                import Widget
 from kivy.uix.video                 import Video
 from kivy.logger                    import Logger
 from ORCA.widgets.Base              import cWidgetBase
@@ -28,6 +30,13 @@ from ORCA.utils.LogError            import LogError
 from ORCA.utils.FileName            import cFileName
 
 import ORCA.Globals as Globals
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
 
 __all__ = ['cWidgetVideo']
 
@@ -57,22 +66,24 @@ class cWidgetVideo(cWidgetBase):
     WikiDoc:End
     """
 
+    # noinspection PyUnusedLocal
     def __init__(self,**kwargs):
         super(cWidgetVideo, self).__init__(hastext=False)
-        self.bRepeat        = False
-        self.fOldVolume     = -1
-        self.iOldPosition   = -1
-        self.iOldDuration   = -1
-        self.oConnection    = None
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+        self.bRepeat:bool           = False
+        self.fOldVolume:float       = -1.0
+        self.iOldPosition:int       = -1
+        self.iOldDuration:int       = -1
+        self.oConnection            = None
+        self.uFileName:str          = ''
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def Connect(self,oConnection):
-        """ connects to the tream or file """
+        """ connects to the stream or file """
         self.oConnection = oConnection
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
         try:
             if self.CreateBase(Parent=oParent, Class=Video):
@@ -81,37 +92,43 @@ class cWidgetVideo(cWidgetBase):
                 return True
             return False
         except Exception as e:
-            LogError(u'Widget:Video:Error on Create',e)
+            LogError(uMsg=u'Widget:Video:Error on Create',oException=e)
             return False
-    def On_Position_change(self,instance, value):
+
+    # noinspection PyUnusedLocal
+    def On_Position_change(self,instance:Video, value:str) -> None:
         """ Handles the change of the position """
         if self.oConnection:
-            iPosition=int(value)
+            iPosition:int=int(value)
             if not iPosition==self.iOldPosition:
                 self.iOldPosition = iPosition
                 self.oConnection.Receive(u'position:'+ToUnicode(iPosition))
 
-    def On_Duration_Change(self,instance, value):
+    # noinspection PyUnusedLocal
+    def On_Duration_Change(self,instance:Video, value:str) -> None:
         """ Handle the change of the Duration """
         if self.oConnection:
-            iDuration=int(value)
+            iDuration:int=int(value)
             if iDuration!=self.iOldDuration:
                 self.iOldDuration = iDuration
                 self.oConnection.Receive(u'duration:'+ToUnicode(iDuration))
 
-    def SetFileName(self,uFileName):
+    def SetFileName(self,uFileName:str) -> bool:
         """ Sets the filename or stream """
         try:
             if self.oObject:
-                uFileName=uFileName.encode('utf8')
+                self.uFileName=uFileName.encode('utf8')
                 self.oObject.source=self.NormalizeStream(uFileName)
+                return True
             else:
                 Logger.warning('Widget Video: You can''t set Filename before object is created:'+uFileName)
 
         except Exception as e:
-            LogError(u'Widget:Video:Error on SetFileName:'+uFileName,e)
+            LogError(uMsg=u'Widget:Video:Error on SetFileName:'+uFileName,oException=e)
 
-    def NormalizeStream(self,uStream):
+        return False
+    # noinspection PyMethodMayBeStatic
+    def NormalizeStream(self,uStream:str) -> str:
         """ Normalizes the stream name """
         if not uStream.startswith('rtsp') and uStream.startswith('http'):
             uStream  = (cFileName(u'').ImportFullPath(uStream)).string
@@ -121,7 +138,7 @@ class cWidgetVideo(cWidgetBase):
             uStream=uStream.encode('utf8')
         return uStream
 
-    def StatusControl(self,uStatus,uStream):
+    def StatusControl(self,uStatus:str,uStream:str) -> Tuple[int,str]:
         """ Controls the video stream """
         try:
             if uStatus==u'play':
@@ -136,11 +153,11 @@ class cWidgetVideo(cWidgetBase):
                 return 0,''
             if uStatus==u'getvolume':
                 return 0,ToUnicode(self.oObject.volume)
-            if uStatus==u'volume_up':
-                self.oObject.volume=max(0,self.oObject.volume-0.05)
-                return 0,ToUnicode(self.oObject.volume)
             if uStatus==u'volume_down':
-                self.oObject.volume=min(1,self.oObject.volume+0.05)
+                self.oObject.volume=max(0.0,self.oObject.volume-0.05)
+                return 0,ToUnicode(self.oObject.volume)
+            if uStatus==u'volume_up':
+                self.oObject.volume=min(1.0,self.oObject.volume+0.05)
                 return 0,ToUnicode(self.oObject.volume)
             if uStatus==u'repeat_toggle':
                 self.bRepeat=not self.bRepeat
@@ -168,6 +185,6 @@ class cWidgetVideo(cWidgetBase):
                     self.oObject.volume=self.fOldVolume
                 return 0,ToUnicode(self.oObject.volume)
         except Exception as e:
-            LogError(u'Widget:Video:Error on Statuscontrol:'+uStatus,e)
+            LogError(uMsg=u'Widget:Video:Error on Statuscontrol:'+uStatus,oException=e)
 
         return 0,''

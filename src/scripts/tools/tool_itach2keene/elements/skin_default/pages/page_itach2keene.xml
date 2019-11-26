@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
 <page name='Page_ITach2Keene'>
   <page_parameter>
     <popup>0</popup>
@@ -9,3 +9,4 @@
     <element name='ITACH2KEENE'   type='ITACH2KEENE' posx="center" posy="middle" width="%90" height="%90"  backgroundcolor='#454545ff' />
   </elements>
 </page>
+

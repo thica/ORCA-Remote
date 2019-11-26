@@ -19,13 +19,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+from typing                         import Callable
+from xml.etree.ElementTree          import Element
+from kivy.uix.widget                import Widget
 from ORCA.widgets.core.TouchButton  import cTouchButton
 from ORCA.widgets.Base              import cWidgetBase
 from ORCA.utils.Atlas               import ToAtlas
 from ORCA.utils.XML                 import GetXMLTextAttribute, GetXMLBoolAttribute
 from ORCA.utils.LogError            import LogError
 from ORCA.utils.FileName            import cFileName
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage            import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage   = TypeVar("cScreenPage")
 
 __all__ = ['cWidgetButton']
 
@@ -98,18 +107,18 @@ class cWidgetButton(cWidgetBase):
 
     def __init__(self,**kwargs):
         super(cWidgetButton, self).__init__(hastext=True)
-        self.oFnButtonPictureNormal        = cFileName('')
-        self.oFnButtonPicturePressed       = cFileName('')
-        self.bAutoHide                     = False
+        self.oFnButtonPictureNormal:cFileName        = cFileName('')
+        self.oFnButtonPicturePressed:cFileName       = cFileName('')
+        self.bAutoHide:bool                          = False
         # Disabled reserved for future
-        self.oFnButtonPictureDisabled      = cFileName('')
-        self.ClassName                     = cTouchButton
+        self.oFnButtonPictureDisabled:cFileName      = cFileName('')
+        self.ClassName:Callable                      = cTouchButton
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
+        bRet:bool =self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
-            self.SetPictureNormal   (GetXMLTextAttribute(oXMLNode,u'picturenormal',    False,u''))
+            self.SetPictureNormal   (GetXMLTextAttribute(oXMLNode,u'picturenormal',     False,u''))
             self.SetPicturePressed  (GetXMLTextAttribute(oXMLNode,u'picturepressed',    False,u''))
             #self.SetPictureDisabled (GetXMLTextAttribute(oXMLNode,u'picturedisabled',    False,u''))
             self.bAutoHide  = GetXMLBoolAttribute(oXMLNode,u'autohide',False,False)
@@ -123,7 +132,8 @@ class cWidgetButton(cWidgetBase):
 
         return bRet
 
-    def SetPictureNormal(self,uPictureNormal,bClearCache=False):
+    # noinspection PyUnusedLocal
+    def SetPictureNormal(self,uPictureNormal:str,bClearCache:bool=False) -> bool:
         """ sets the unpressed picture """
         if uPictureNormal!='':
             self.oFnButtonPictureNormal.ImportFullPath(uPictureNormal)
@@ -131,7 +141,8 @@ class cWidgetButton(cWidgetBase):
             self.oObject.background_normal  =  ToAtlas(self.oFnButtonPictureNormal)
             # self.SetCaption(self.uCaption)
         return True
-    def SetPicturePressed(self,uPicturePressed):
+
+    def SetPicturePressed(self,uPicturePressed:str) -> bool:
         """ sets the pressed picture """
 
         if uPicturePressed!='':
@@ -141,7 +152,7 @@ class cWidgetButton(cWidgetBase):
             self.oObject.background_down = ToAtlas(self.oFnButtonPicturePressed)
         return True
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
         try:
             if not self.oFnButtonPictureNormal.IsEmpty():
@@ -161,10 +172,10 @@ class cWidgetButton(cWidgetBase):
                 return True
             return False
         except Exception as e:
-            LogError(u'cWidgetButton:Unexpected error Creating Object:',e)
+            LogError(uMsg=u'cWidgetButton:Unexpected error Creating Object:',oException=e)
             return False
 
-    def UpdateWidget(self):
+    def UpdateWidget(self) -> None:
         super(cWidgetButton, self).UpdateWidget()
         self.SetPictureNormal("")
         return

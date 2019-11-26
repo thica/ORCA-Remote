@@ -20,15 +20,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__ import annotations
 import socket
 import re
 import select
 import threading
 
+from typing import Dict
+from typing import List
+from typing import Union
+from typing import Tuple
+
+
 from struct                                 import pack
 
 from kivy.logger                            import Logger
-from kivy.compat                            import PY2
+from kivy.uix.button                        import Button
 
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
@@ -40,6 +47,7 @@ from ORCA.utils.TypeConvert                 import ToUnicode
 from ORCA.utils.TypeConvert                 import ToBytes
 from ORCA.utils.TypeConvert                 import ToBool
 from ORCA.vars.QueryDict                    import QueryDict
+from ORCA.utils.FileName                    import cFileName
 
 import ORCA.Globals as Globals
 
@@ -51,8 +59,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover EISCP/Onkyo devices</description>
       <description language='German'>Erkennt sucht EISCP/Onkyo Geräte über upnp</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_eiscp</local>
@@ -61,7 +69,6 @@ import ORCA.Globals as Globals
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/discover/discover_eiscp/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -95,81 +102,84 @@ class cScript(cDiscoverScriptTemplate):
     WikiDoc:End
     """
     class cScriptSettings(cBaseScriptSettings):
-        def __init__(self,oScript):
+        def __init__(self,oScript:cScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aIniSettings.fTimeOut                     = 10.0
+            self.aIniSettings.fTimeOut = 10.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
-        self.uSubType        = u'EISCP (Onkyo)'
-        self.aResults        = []
-        self.aThreads        = []
-        self.oReq            = QueryDict()
-        self.bOnlyOnce       = True
-        self.uIPVersion      = "Auto"
+        self.uSubType:str                       = u'EISCP (Onkyo)'
+        self.aResults:List[QueryDict]           = []
+        self.aThreads:List[threading.Thread]    = []
+        self.dReq:QueryDict                     = QueryDict()
+        self.bOnlyOnce:bool                     = True
+        self.uIPVersion:str                     = u'Auto'
 
-    def Init(self,uObjectName,uScriptFile=u''):
+    def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
         """
         Init function for the script
 
-        :param string uObjectName: The name of the script (to be passed to all scripts)
-        :param uScriptFile: The file of the script (to be passed to all scripts)
+        :param str uObjectName: The name of the script (to be passed to all scripts)
+        :param cFileName oFnScript: The file of the script (to be passed to all scripts)
         """
 
-        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
+        cDiscoverScriptTemplate.Init(self, uObjectName, oFnScript)
         self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
-    def GetHeaderLabels(self):
+    def GetHeaderLabels(self) -> List[str]:
         return ['$lvar(5029)','$lvar(6002)','$lvar(5031)','$lvar(5032)']
 
-    def ListDiscover(self):
-        dArgs                   = {"onlyonce": 0,
+    def ListDiscover(self) -> None:
+        dArgs:Dict              = {"onlyonce": 0,
                                    "ipversion": "All"}
-        aDevices                = {}
+
+        dDevices:Dict[str,QueryDict] = {}
+        dDevice:QueryDict
 
         self.Discover(**dArgs)
 
-        for aDevice in self.aResults:
-            uTageLine = aDevice.sFoundIP + aDevice.uFoundModel + aDevice.uFoundIdentifier
-            if aDevices.get(uTageLine) is None:
-               aDevices[uTageLine]=aDevice
-               self.AddLine([aDevice.sFoundIP, aDevice.uFoundPort, aDevice.uFoundModel, aDevice.uFoundIdentifier], aDevice)
+        for dDevice in self.aResults:
+            uTageLine:str = dDevice.sFoundIP + dDevice.uFoundModel + dDevice.uFoundIdentifier
+            if dDevices.get(uTageLine) is None:
+               dDevices[uTageLine]=dDevice
+               self.AddLine([dDevice.sFoundIP, dDevice.uFoundPort, dDevice.uFoundModel, dDevice.uFoundIdentifier], dDevice)
         return
 
-    def CreateDiscoverList_ShowDetails(self,instance):
-        uText=  u"$lvar(5029): %s \n"\
-                u"$lvar(6002): %s \n"\
-                u"$lvar(5031): %s \n"\
-                u"$lvar(5032): %s \n"\
-                u"\n"\
-                u"%s" % (instance.oDevice.sFoundIP,instance.oDevice.uFoundPort,instance.oDevice.uFoundModel,instance.oDevice.uFoundIdentifier,instance.oDevice.sData)
+    def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
+
+        dDevice:QueryDict = oButton.dDevice
+
+        uText:str = u"$lvar(5029): %s \n"\
+                    u"$lvar(6002): %s \n"\
+                    u"$lvar(5031): %s \n"\
+                    u"$lvar(5032): %s \n"\
+                    u"\n"\
+                    u"%s" % (dDevice.sFoundIP,dDevice.uFoundPort,dDevice.uFoundModel,dDevice.uFoundIdentifier,dDevice.uData)
 
         ShowMessagePopUp(uMessage=uText)
 
 
-    def Discover(self,**kwargs):
+    def Discover(self,**kwargs) -> Dict:
 
-        self.oReq.clear()
-        uConfigName             = kwargs.get('configname',self.uConfigName)
-        oSetting                = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        fTimeOut                = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
-        self.oReq.uModels       = kwargs.get('models',"")
-        bOnlyOnce               = ToBool(kwargs.get('onlyonce',"1"))
-        uIPVersion              = kwargs.get('ipversion',"IPv4Only")
+        self.dReq.clear()
+        uConfigName:str                 = kwargs.get('configname',self.uConfigName)
+        oSetting:cBaseScriptSettings    = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
+        fTimeOut:float                  = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
+        self.dReq.uModels               = kwargs.get('models',"")
+        bOnlyOnce:bool                  = ToBool(kwargs.get('onlyonce',"1"))
+        uIPVersion:str                  = kwargs.get('ipversion',"IPv4Only")
 
-        Logger.debug (u'Try to discover Onkyo device by EISCP:  Models: %s ' % self.oReq.uModels)
-
+        Logger.debug (u'Try to discover Onkyo device by EISCP:  Models: %s ' % self.dReq.uModels)
         del self.aResults[:]
         del self.aThreads[:]
 
         try:
-            oThread = None
             if uIPVersion == "IPv4Only" or uIPVersion == "All" or (uIPVersion == "Auto" and Globals.uIPAddressV6 == ""):
-                oThread = cThread_Discover_EISCP(bOnlyOnce=bOnlyOnce,oReq=self.oReq,uIPVersion="IPv4Only", fTimeOut=fTimeOut, oCaller=self)
+                oThread:cThread_Discover_EISCP = cThread_Discover_EISCP(bOnlyOnce=bOnlyOnce,dReq=self.dReq,uIPVersion="IPv4Only", fTimeOut=fTimeOut, oCaller=self)
                 self.aThreads.append(oThread)
                 self.aThreads[-1].start()
             if uIPVersion == "IPv6Only" or uIPVersion == "All" or (uIPVersion == "Auto" and Globals.uIPAddressV6 != ""):
-                oThread = cThread_Discover_EISCP(bOnlyOnce=bOnlyOnce, oReq=self.oReq, uIPVersion="IPv6Only", fTimeOut=fTimeOut, oCaller=self)
+                oThread:cThread_Discover_EISCP = cThread_Discover_EISCP(bOnlyOnce=bOnlyOnce, dReq=self.dReq, uIPVersion="IPv6Only", fTimeOut=fTimeOut, oCaller=self)
                 self.aThreads.append(oThread)
                 self.aThreads[-1].start()
 
@@ -179,7 +189,7 @@ class cScript(cDiscoverScriptTemplate):
             if len(self.aResults)>0:
                 return {'Model': self.aResults[0].uFoundModel, 'Host': self.aResults[0].sFoundIP,'Port': self.aResults[0].uFoundPort, 'Category': self.aResults[0].uFoundCategory, 'Exception': None}
             else:
-                Logger.warning(u'No device found Models: %s' % self.oReq.uModels)
+                Logger.warning(u'No device found Models: %s' % self.dReq.uModels)
             return  {'Model':'','Host':'','Port':'','Category':'','Exception':None}
 
         except Exception as e:
@@ -187,7 +197,7 @@ class cScript(cDiscoverScriptTemplate):
             return {'Model':'','Host':'','Port':'','Category':'','Exception':e}
 
     @classmethod
-    def GetConfigJSONforParameters(cls,dDefaults):
+    def GetConfigJSONforParameters(cls,dDefaults:Dict) -> Dict[str,Dict]:
         return {"TimeOut": {"type": "numericfloat","active":"enabled", "order":0,  "title": "$lvar(6019)", "desc": "$lvar(6020)","key": "timeout", "default":"2.0"},
                 "Models":  {"type": "string",      "active":"enabled", "order":1,  "title": "$lvar(SCRIPT_DISC_EISCP_1)", "desc": "$lvar(SCRIPT_DISC_EISCP_2)","key": "models", "default":""},
                 "IP Version": {"type": "scrolloptions", "order": 4, "title": "$lvar(6037)", "desc": "$lvar(6038)", "key": "ipversion", "default": "IPv4Only", "options": ["IPv4Only", "IPv6Only", "All", "Auto"]}
@@ -197,15 +207,15 @@ class cScript(cDiscoverScriptTemplate):
 class cThread_Discover_EISCP(threading.Thread):
     oWaitLock = threading.Lock()
 
-    def __init__(self, bOnlyOnce,oReq,uIPVersion, fTimeOut,oCaller):
+    def __init__(self, bOnlyOnce:bool,dReq:QueryDict,uIPVersion:str, fTimeOut:float,oCaller:cScript):
         threading.Thread.__init__(self)
-        self.bOnlyOnce  = bOnlyOnce
-        self.uIPVersion = uIPVersion
-        self.oCaller    = oCaller
-        self.fTimeOut   = fTimeOut
-        self.oReq       = oReq
-        self.iOnkyoPort = 60128
-        self.rMatch           = r'''
+        self.bOnlyOnce:bool     = bOnlyOnce
+        self.uIPVersion:str     = uIPVersion
+        self.oCaller:cScript    = oCaller
+        self.fTimeOut:float     = fTimeOut
+        self.dReq:QueryDict     = dReq
+        self.iOnkyoPort:int     = 60128
+        self.rMatch     = r'''
                     !
                     (?P<device_category>\d)
                     ECN
@@ -215,17 +225,42 @@ class cThread_Discover_EISCP(threading.Thread):
                     (?P<identifier>.{0,12})
                     '''
 
-        self.bOnkyoMagic= self.CreateEISPPacket('!xECNQSTN\r')
+        self.bOnkyoMagic:bytes = self.CreateEISPPacket('!xECNQSTN\r')
 
-    def CreateEISPPacket(self, iscp_message):
+
+    # noinspection PyMethodMayBeStatic
+
+    def CreateEISPHeader(self,uMessage:str) -> bytes:
+        """
+        Creates an EISP Header for the given command and and adds the command
+        :param str uMessage: The
+        :return: The Header plus command
+        """
+        # struct.pack doesnt not work reliable on some Android Platform processors
+
+        iDataSize:int       = len(uMessage)
+        iReserved:int       = 0
+        iHeaderSize:int     = 16
+        iVersion:int        = 0
+
+        bHeaderSize:bytes   = iHeaderSize.to_bytes(4, byteorder='big')
+        bDataSize:bytes     = iDataSize.to_bytes(4, byteorder='big')
+        bVersion:bytes      = iVersion.to_bytes(1, byteorder='big')
+        bReserved:bytes     = iReserved.to_bytes(3, byteorder='big')
+        bMessage:bytes      = b'ISCP'+bHeaderSize+bDataSize+bVersion+bReserved+ToBytes(uMessage)
+
+        return bMessage
+
+
+    # noinspection PyMethodMayBeStatic
+    def CreateEISPPacket(self, iscp_message:str) -> bytes:
         # Test for discover
-        iscp_message = str(iscp_message)
         # We attach data separately, because Python's struct module does
         # not support variable length strings,
         return pack('! 4s I I b 3b', b'ISCP', 16, len(iscp_message), 0x01, 0x00, 0x00, 0x00) +ToBytes(iscp_message)
 
-    def run(self):
-        bReturnNow = False
+    def run(self) -> None:
+        bReturnNow:bool = False
         if self.bOnlyOnce:
             cThread_Discover_EISCP.oWaitLock.acquire()
             if len(self.oCaller.aResults)>0:
@@ -235,25 +270,29 @@ class cThread_Discover_EISCP(threading.Thread):
             return
         self.Discover()
 
-    def Discover(self):
+    def Discover(self) -> None:
 
-        oSocket = None
+        byData:bytes
+        tSenderAddr:Tuple
+        oRet:QueryDict
+
+        oSocket:Union[socket.socket,None] = None
         try:
-            oSocket = self.SendDiscover()
+            oSocket:socket.socket = self.SendDiscover()
             if oSocket:
                 # Parse all results
                 while True:
                     #we do not wait too long
-                    ready = select.select([oSocket], [], [],self.fTimeOut)
-                    if ready[0]:
+                    aReady:List = select.select([oSocket], [], [],self.fTimeOut)
+                    if aReady[0]:
                         # Get a response
-                        sData, tSenderAddr = oSocket.recvfrom(1024)
-                        oRet = self.GetDeviceDetails(sData=sData,tSenderAddr=tSenderAddr)
-                        self.CheckDeviceDetails(oRet=oRet)
-                        if oRet.bFound:
-                            Logger.info(u'Bingo: Discovered device %s:%s at %s:' % (oRet.uFoundIdentifier, oRet.uFoundModel, oRet.sFoundIP))
+                        byData, tSenderAddr = oSocket.recvfrom(1024)
+                        dRet = self.GetDeviceDetails(byData=byData,tSenderAddr=tSenderAddr)
+                        self.CheckDeviceDetails(dRet=dRet)
+                        if dRet.bFound:
+                            Logger.info(u'Bingo: Discovered device %s:%s at %s:' % (dRet.uFoundIdentifier, dRet.uFoundModel, dRet.sFoundIP))
                             cThread_Discover_EISCP.oWaitLock.acquire()
-                            self.oCaller.aResults.append(oRet)
+                            self.oCaller.aResults.append(dRet)
                             cThread_Discover_EISCP.oWaitLock.release()
                             if self.bOnlyOnce:
                                 oSocket.close()
@@ -264,12 +303,12 @@ class cThread_Discover_EISCP(threading.Thread):
             return
 
         except Exception as e:
-            LogError(u'Error on discover EISCP (%s)' % self.uIPVersion, e)
+            LogError(uMsg=u'Error on discover EISCP (%s)' % self.uIPVersion, oException=e)
             if oSocket:
                 oSocket.close()
             return
 
-    def SendDiscover(self):
+    def SendDiscover(self) -> Union[socket.socket,None]:
         if self.uIPVersion=="IPv4Only":
             oSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
@@ -295,48 +334,44 @@ class cThread_Discover_EISCP(threading.Thread):
 
         return None
 
-    def GetDeviceDetails(self,sData,tSenderAddr):
-        oRet                     = QueryDict()
-        oRet.bFound              = False
-        oRet.sFoundIP            = ""
-        oRet.uFoundPort          = ""
-        oRet.uFoundModel         = ""
-        oRet.uFoundIdentifier    = ""
-        oRet.uFoundCategory      = ""
-        oRet.sData               = ""
+    def GetDeviceDetails(self,byData:bytes,tSenderAddr:Tuple) -> QueryDict:
+        dRet:QueryDict           = QueryDict()
+        dRet.bFound              = False
+        dRet.sFoundIP            = u""
+        dRet.uFoundPort          = u""
+        dRet.uFoundModel         = u""
+        dRet.uFoundIdentifier    = u""
+        dRet.uFoundCategory      = u""
+        dRet.uData               = u""
 
-        if PY2:
-            uResponse = sData[16:]
-        else:
-            uResponse = ToUnicode(sData)[16:]
+        uResponse = ToUnicode(byData)[16:]
 
         if uResponse.find('ECN') != -1:
             info = re.match(self.rMatch, uResponse.strip(), re.VERBOSE).groupdict()
             uResponse = uResponse[10:]
-            oRet.sFoundIP            = tSenderAddr[0]
-            oRet.uFoundPort          = ToUnicode(info['iscp_port'])
-            oRet.uFoundModel         = info['model_name']
-            oRet.uFoundIdentifier    = info['identifier']
-            oRet.uFoundCategory      = ToUnicode(info['device_category'])
-            oRet.sData               = uResponse
-            oRet.bFound              = True
-        return oRet
+            dRet.sFoundIP            = tSenderAddr[0]
+            dRet.uFoundPort          = ToUnicode(info['iscp_port'])
+            dRet.uFoundModel         = info['model_name']
+            dRet.uFoundIdentifier    = info['identifier']
+            dRet.uFoundCategory      = ToUnicode(info['device_category'])
+            dRet.uData               = uResponse
+            dRet.bFound              = True
+        return dRet
 
-    def CheckDeviceDetails(self, oRet):
-        if oRet.bFound:
-            aModels = ToList(self.oReq.uModels)
+    def CheckDeviceDetails(self, dRet:QueryDict) -> None:
+        if dRet.bFound:
+            aModels:List[str] = ToList(self.dReq.uModels)
             if len(aModels) > 0:
-                oRet.bFound = False
+                dRet.bFound = False
                 for uModel in aModels:
                     if uModel.endswith("*"):
-                        if uModel[:-1] == oRet.uFoundModel[:len(uModel) - 1]:
-                            oRet.bFound = True
+                        if uModel[:-1] == dRet.uFoundModel[:len(uModel) - 1]:
+                            dRet.bFound = True
                             break
                     else:
                         if uModel.startswith("'") or uModel.startswith('"'):
                             uModel = uModel[1:-1]
-                        if uModel == oRet.uFoundModel:
-                            oRet.bFound = True
+                        if uModel == dRet.uFoundModel:
+                            dRet.bFound = True
                             break
-
 

@@ -25,13 +25,14 @@ __all__ = ['SettingInputHelper']
 class SettingInputHelper(SettingString):
     """ Shows in input field for settings """
 
+    # noinspection PyMissingConstructor,PyUnusedLocal
     def __init__(self, **kwargs):
         self.settings = None
         self.action   = ""
         self.title    = ""
         self.config   = None
 
-    def GetInput(self, settings,config,section,key,title,action,value):
+    def GetInput(self, settings,config,section,key,title,action,value) -> None:
         """ gets the input """
         # title = title to show
         self.title      = title
@@ -48,7 +49,7 @@ class SettingInputHelper(SettingString):
         self.config   = config
         self._create_popup(None)
 
-    def _validate(self, instance):
+    def _validate(self, instance) -> None:
         """ input is done """
         self._dismiss()
         value = self.textinput.text.strip()

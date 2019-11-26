@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_ScrollContainer">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+
+    <element name='Anchor Top' type='ANCHOR' posx='%2' posy='%25' width='%30' height='%1' />
+
+    <element name='Anchor1' type='ANCHOR' posx='%2' posy='of:bottom:Anchor Top' width='%23' height='%70' >
+      <elements>
+        <element name="ScollBox Left" type="SCROLLCONTAINER" picturenormal="background boxes" container="container_1" rowheight="%25"  />
+        <element name='Anchor1 Inner' type='ANCHOR'  height='%25' >
+           <element name="First Button"       type="BUTTON" posx="left"  posy="top"    height="%100" width="%40" picturenormal='button wide*'     container="container_1" caption="First Button" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h20'  />
+           <element name="Second Button Top"  type="BUTTON" posx="right" posy="top"    height="%30" width="%60" picturenormal="button wide*"     container="container_1" caption="$var(scrollcontent_button1_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h50'  />
+           <element name="Second Button Down" type="BUTTON" posx="right" posy="bottom" height="%70" width="%60" picturenormal="button wide*"     container="container_1" caption="$var(scrollcontent_button2_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h25'  />
+        </element>
+      </elements>
+    </element>
+
+    <element name='Explanation 1' type='TEXTFIELD' posx='of:left:Anchor1' posy='of:totop:Anchor1' width='of:width:Anchor1' height='%15' caption="This is a simple container with a static button on the left and two arrayed buttons on the right" fontsize='%h20'  htextalign='center' vtextalign='top' fontid='Serif'/>
+
+    <element name='Anchor2' type='ANCHOR' posx='%34' posy='of:bottom:Anchor Top' width='%23' height='%60' >
+      <elements>
+        <element name="ScollBox 2cnd left" type="SCROLLCONTAINER" picturenormal="background boxes" container="container_2" rowheight="%25"  />
+        <element name='Anchor2 Inner' type='ANCHOR'  height='%25' >
+          <element name="First Button"  type="BUTTON"          posx="left"  width="%40" picturenormal='button wide*'     container="container_2" caption="$var(scrollcontent_button1_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h20' />
+          <element name="Second Button" type="BUTTON"          posx="right" width="%60" picturenormal="button wide*"     container="container_2" caption="Second button" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h20' />
+        </element>
+      </elements>
+     </element>
+
+    <element name='Explanation 2' type='TEXTFIELD' posx='of:left:Anchor2' posy='of:totop:Anchor2' width='of:width:Anchor2' height='%15' caption="This is a simple container with a static button on the right and one arrayed button on the left" fontsize='%h20'  htextalign='center' vtextalign='top' fontid='Serif'/>
+
+    <element name='Anchor3' type='ANCHOR' posx='%66' posy='of:bottom:Anchor Top' width='%23' height='%65' >
+      <elements>
+        <element name="ScrollBox 2cnd right" type="SCROLLCONTAINER" picturenormal="background boxes" container="container_3" rowheight="%15"  />
+        <element name='Anchor3 Inner'   type='ANCHOR'  height='%15' >
+          <element name="First Button"  type="TEXTFIELD"   posx="left"          width="%68" picturenormal='button wide*'     container="container_3" caption="$var(scrollcontent_movies_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}'  />
+          <element name='Button Play'   type='BUTTON'   posx='right'         width='%16' picturenormal='button square*' container="container_3" action='Send Play'         fontsize='%h30' iconfontsize='%h70'  caption='icon:media_play' />
+          <element name='Button Delete' type='BUTTON'   posx='of:toleft:last' width='%16' picturenormal='button square*' container="container_3" action='FKT_ScrollContainer_DeleteMovie'     fontsize='%h30' iconfontsize='%h70'  caption='icon:delete' />
+        </element>
+      </elements>
+     </element>
+
+     <element name='Explanation 3' type='TEXTFIELD' posx='of:left:Anchor3' posy='of:totop:Anchor3' width='of:width:Anchor3' height='%15' caption="This is a container, containing a textbox and a button to remove a container element" fontsize='%h20'  htextalign='center' vtextalign='top' fontid='Serif'/>
+
+    <element name='Anchor4' type='ANCHOR' posx='%98' posy='of:bottom:Anchor Top' width='%23' height='%65' >
+      <elements>
+        <element name="ScrollBox right" type="SCROLLCONTAINER" picturenormal="background boxes" container="container_4" rowheight="%15"  />
+        <element name='Anchor4 Inner'   type='ANCHOR'  height='%15' >
+          <element name="First Button"  type="TEXTFIELD"   posx="left"           width="%60"   height='%90' picturenormal='button wide*'   container="container_4" caption="$var(scrollcontent_movies_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}'  />
+          <element name='Button Play'   type='BUTTON'      posx='right'          width='%20'   height='%90' picturenormal='button square*' container="container_4" action='Send Play'         fontsize='%h30' iconfontsize='%h70'  caption='icon:media_play' />
+          <element name='Button Delete' type='BUTTON'      posx='of:toleft:last' width='%20'   height='%90' picturenormal='button square*' container="container_4" action='FKT_ScrollContainer_DeleteMovie'     fontsize='%h30' iconfontsize='%h70'  caption='icon:delete' />
+          <element name='Devider'       type='RECTANGLE'   posx='left'           posy="bottom" height="%7"  backgroundcolor='$var(shadow)' container="container_4"  />
+        </element>
+      </elements>
+     </element>
+
+    <element name='Explanation 4' type='TEXTFIELD' posx='of:left:Anchor4' posy='of:totop:Anchor4' width='of:width:Anchor4' height='%15' caption="This is the same container plus a devider between the elements" fontsize='%h20'  htextalign='center' vtextalign='top' fontid='Serif'/>
+
+
+  </elements>
+</page>

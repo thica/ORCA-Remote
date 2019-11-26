@@ -22,7 +22,8 @@
         <element name='Anchor NumberPad' type='ANCHOR' posx='center' width='%55' height='of:width:self:*1.33' posy='top'>
           <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_numberpad.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD)==1"/>
       </element>
-      <element name='Button Show More' type='BUTTON' posx='left' posy='of:bottom:Anchor NumberPad'  height='of:width:self:*0.2' picturenormal='button wide*' action='Show Page' actionpars='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_template)_Button_Popup"}'  fontsize='%h30' caption='$lvar(1092)' />
+      <element name='Anchor Gap Numberpad' type='ANCHOR' posx='left' posy='of:bottom:Anchor NumberPad'  height='%1'  />
+      <element name='Button Show More' type='BUTTON' posx='left' posy='of:bottom:Anchor Gap Numberpad'  height='of:width:self:*0.2' picturenormal='button wide*' action='Show Page' actionpars='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_template)_Button_Popup"}'  fontsize='%h30' caption='$lvar(1092)' />
     </element>
 
     <element name='Anchor Media section' type='ANCHOR' posx='%65' posy='of:totop:Anchor BottomGap' width='%33' height='%85'>

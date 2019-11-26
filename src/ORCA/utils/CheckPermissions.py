@@ -37,6 +37,8 @@ import ORCA.Globals as Globals
 
 __all__ = ['HasPermissions','cCheckPermissions']
 
+
+# noinspection PyUnusedLocal
 def HasPermissions(*largs):
     """ checks, if the device has write permissions """
     Globals.oCheckPermissions.bHasPermissions = OS_CheckPermissions()
@@ -45,20 +47,23 @@ def HasPermissions(*largs):
 class cCheckPermissions(EventDispatcher):
     """ Waits, unitl we have the permissions """
     def __init__(self, *args, **kwargs):
-        super(cCheckPermissions, self).__init__(*args, **kwargs)
-        self.bCancel         = False
-        self.pNotifyFunction = None
-        self.bIsWaiting      = False
-        self.bHasPermissions = False
-        self.oPopup          = None
-        self.oThread         = None
+        super().__init__(*args, **kwargs)
+        self.bCancel: bool         = False
+        self.bIsWaiting: bool      = False
+        self.bHasPermissions: bool = False
+        self.oPopup                = None
+        self.oThread               = None
+        # noinspection PyUnresolvedReferences
         self.register_event_type('on_checkpermissions_finished')
 
+    # noinspection PyUnusedLocal
     def HasPermissions(self, *largs):
         """ sub function to test, if we have permissions """
         self.bHasPermissions = OS_CheckPermissions()
+        # noinspection PyUnresolvedReferences
         self.dispatch('on_permissionschecked')
 
+    # noinspection PyUnusedLocal
     def on_permissionschecked(self, *largs):
         """ called, wehn the tsated has been checked """
         # Logger.debug("Checking permissions")
@@ -70,6 +75,7 @@ class cCheckPermissions(EventDispatcher):
             return
         self.StopWait()
 
+    # noinspection PyUnusedLocal
     def StartNextThread(self,*largs):
         """ Starts the next thread to check, if online """
         #Logger.debug("Checking for network connectivity start thread")
@@ -96,13 +102,13 @@ class cCheckPermissions(EventDispatcher):
 
         StartWait()
 
-        bLangLoaded = ExistLVar('5042')
+        bLangLoaded: bool = ExistLVar('5042')
         if bLangLoaded:
-            uMessage    = u'$lvar(5042)'
-            uGrant      = u'$lvar(5043)'
+            uMessage: str    = u'$lvar(5042)'
+            uGrant: str      = u'$lvar(5043)'
         else:
-            uMessage    = "ORCA requires write access, please grant"
-            uGrant      = "Grant Access"
+            uMessage: str    = "ORCA requires write access, please grant"
+            uGrant: str      = "Grant Access"
 
         self.oPopup=ShowQuestionPopUp(uTitle=u'$lvar(5010)',uMessage= uMessage,fktYes=self.GrantAccess,fktNo=self.StopApp,uStringYes=uGrant,uStringNo=u'$lvar(5005)',uSound= u'message')
         Clock.schedule_once(self.StartNextThread, 0)
@@ -116,6 +122,7 @@ class cCheckPermissions(EventDispatcher):
         Globals.bHasPermissions = self.bHasPermissions
         self.CancelCheckPermissions()
 
+    # noinspection PyUnusedLocal
     def CancelCheckPermissions(self, *largs):
         """ Called, when the user pushes the cancel button """
         if self.oThread is not None:
@@ -125,13 +132,15 @@ class cCheckPermissions(EventDispatcher):
         self.oPopup     = None
         StopWait()
         self.bIsWaiting = False#
+        # noinspection PyUnresolvedReferences
         self.dispatch('on_checkpermissions_finished')
 
-
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def StopApp(self, *largs):
         Globals.oApp.StopApp()
         pass
 
+    # noinspection PyUnusedLocal
     def GrantAccess(self, *largs):
         """ Called, when the user pushes the grant accces button """
         self.StopWait()

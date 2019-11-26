@@ -8,21 +8,24 @@
 
     <action name="Set SetupTrigger $dvar(definition_alias_tvfavorites_template)">
         <!-- adjust favorites buttons if changed in settings -->
-
      </action>
 
      <action name="$dvar(definition_alias_tvfavorites_template)_switchbouquet_byindex">
-        <action name="get bouqet num"     string="setvar BOUQETNUM=$par(DROPDOWNINDEX)" />
-        <action name="adjust bouqet num"  string="modifyvar"  varname="BOUQETNUM" operator="increase" parameter1="1"  parameter2="10" />
-        <action name="and call switching function" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var(BOUQETNUM)" />
+        <action name="Block the gui"                string="blockgui 1"/>
+        <action name="get bouqet num"               string="setvar BOUQETNUM=$par(DROPDOWNINDEX)" />
+        <action name="adjust bouqet num"            string="modifyvar"  varname="BOUQETNUM" operator="increase" parameter1="1"  parameter2="10" />
+        <action name="and call switching function"  string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var(BOUQETNUM)" />
+        <action name="UnBlock the gui"              string="blockgui 0"/>
      </action>
 
      <action name="$dvar(definition_alias_tvfavorites_template)_switchbouquet">
-        <action name="Check if widget exists on current page"         string="getwidgetattribute" widgetname="Button CH1" attributename="exists" retvar="TMPWIDGETEXISTS" />
-        <action name="leave if we havent imported the tv channels"    string="if" condition="$var(TMPWIDGETEXISTS)==1"/>
-          <action name="get bouquet number" string="setvar $dvar(definition_alias_tvfavorites_template)_bouquet=$par(BOUQUETNUM)" />
-          <action name="and loop through channels of bouquet" string="forin" varname="$dvar(definition_alias_tvfavorites_template)_tvlogo[$var($dvar(definition_alias_tvfavorites_template)_bouquet)][]" level="2" actionname="$dvar(definition_alias_tvfavorites_template)_switchbouquet_sub" />
-        <action name="endif" string="endif" />
+        <action name="Block the gui"                                string="blockgui 1"/>
+        <action name="Check if widget exists on current page"       string="getwidgetattribute" widgetname="Button CH1" attributename="exists" retvar="TMPWIDGETEXISTS" />
+        <action name="leave if we havent imported the tv channels"  string="if" condition="$var(TMPWIDGETEXISTS)==1"/>
+          <action name="get bouquet number"                         string="setvar $dvar(definition_alias_tvfavorites_template)_bouquet=$par(BOUQUETNUM)" />
+          <action name="and loop through channels of bouquet"       string="forin" varname="$dvar(definition_alias_tvfavorites_template)_tvlogo[$var($dvar(definition_alias_tvfavorites_template)_bouquet)][]" level="2" actionname="$dvar(definition_alias_tvfavorites_template)_switchbouquet_sub" />
+        <action name="endif"                                        string="endif" />
+        <action name="UnBlock the gui"                              string="blockgui 0"/>
      </action>
 
     <action name="$dvar(definition_alias_tvfavorites_template)_switchbouquet_sub" >

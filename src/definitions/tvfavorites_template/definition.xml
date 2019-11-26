@@ -7,7 +7,7 @@
     <fontsize_button>%h30</fontsize_button>
     <fontsize_text>%h30</fontsize_text>
     <author>Carsten Thielepape</author>
-    <version>3.70</version>
+    <version>4.6.0</version>
     <support>http://www.orca-remote.org/forum/</support>
     <definitionvars>{"definition_alias_tvfavorites_template":"TV Channels"}</definitionvars>
   </def_parameter>
@@ -20,68 +20,65 @@
   <stopskip/>
 
   <settings>
-    <setting title="$lvar(tvtemplate_10507)"   desc="$lvar(tvtemplate_10508)" var="$dvar(definition_alias_tvfavorites_template)_bouquet"         type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10511)"     desc="$lvar(tvtemplate_10512)" var="$dvar(definition_alias_tvfavorites_template)_logopackfoldername" type="scrolloptions" default="" options='$var(SETTINGS_LOGOPACKFOLDERNAMES)'/>
+    <setting title="$lvar(tvtemplate_10507)"     desc="$lvar(tvtemplate_10508)" var="$dvar(definition_alias_tvfavorites_template)_bouquet"            type="numeric" default="1" />
     <setting title="$lvar(tvtemplate_10506) 1"   type='section' />
     <setting title="$lvar(tvtemplate_10501)"     type="title" />
     <setting title="$lvar(tvtemplate_10509) #1"  desc="$lvar(tvtemplate_10510" var="$dvar(definition_alias_tvfavorites_template)_bouquet_name[1]"     type="string"  default="Bouquet 1" />
     <setting title="$lvar(tvtemplate_10504) #1"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][1]"    type="numeric" default="1" />
-    <setting title="$lvar(tvtemplate_10505) #1"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][1]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/das erste.png" />
+    <setting title="$lvar(tvtemplate_10505) #1"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][1]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/dark.on.reflection/picons/DA/daserstehd.png" />
     <setting title="$lvar(tvtemplate_10504) #2"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][2]"    type="numeric" default="2" />
-    <setting title="$lvar(tvtemplate_10505) #2"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][2]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/zdf.png" />
+    <setting title="$lvar(tvtemplate_10505) #2"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][2]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/dark.on.reflection/picons/ZD/zdfhd.png" />
     <setting title="$lvar(tvtemplate_10504) #3"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][3]"    type="numeric" default="3" />
-    <setting title="$lvar(tvtemplate_10505) #3"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][3]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/wdr duesseldorf.png" />
+    <setting title="$lvar(tvtemplate_10505) #3"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][3]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/dark.on.reflection/picons/WD/wdr.png" />
     <setting title="$lvar(tvtemplate_10504) #4"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][4]"    type="numeric" default="4" />
-    <setting title="$lvar(tvtemplate_10505) #4"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][4]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/rtl hessen.png" />
+    <setting title="$lvar(tvtemplate_10505) #4"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][4]"       type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #5"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][5]"    type="numeric" default="5" />
-    <setting title="$lvar(tvtemplate_10505) #5"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][5]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/sat 1.png" />
+    <setting title="$lvar(tvtemplate_10505) #5"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][5]"       type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #6"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][6]"    type="numeric" default="6" />
-    <setting title="$lvar(tvtemplate_10505) #6"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][6]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/rtl2.png" />
+    <setting title="$lvar(tvtemplate_10505) #6"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][6]"       type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #7"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][7]"    type="numeric" default="7" />
-    <setting title="$lvar(tvtemplate_10505) #7"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][7]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/pro 7.png" />
+    <setting title="$lvar(tvtemplate_10505) #7"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][7]"       type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #8"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][8]"    type="numeric" default="8" />
-    <setting title="$lvar(tvtemplate_10505) #8"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][8]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/kabel eins.png" />
+    <setting title="$lvar(tvtemplate_10505) #8"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][8]"       type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #9"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][9]"    type="numeric" default="9" />
-    <setting title="$lvar(tvtemplate_10505) #9"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][9]"       type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/vox.png" />
+    <setting title="$lvar(tvtemplate_10505) #9"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][9]"       type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #10" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][10]"   type="numeric" default="10" />
-    <setting title="$lvar(tvtemplate_10505) #10" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][10]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/arte.png" />
+    <setting title="$lvar(tvtemplate_10505) #10" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][10]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #11" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][11]"   type="numeric" default="11" />
-    <setting title="$lvar(tvtemplate_10505) #11" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][11]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/3sat.png" />
+    <setting title="$lvar(tvtemplate_10505) #11" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][11]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #12" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][12]"   type="numeric" default="12" />
-    <setting title="$lvar(tvtemplate_10505) #12" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][12]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/sixx.png" />
+    <setting title="$lvar(tvtemplate_10505) #12" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][12]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #13" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][13]"   type="numeric" default="13" />
-    <setting title="$lvar(tvtemplate_10505) #13" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][13]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/anixe hd.png" />
+    <setting title="$lvar(tvtemplate_10505) #13" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][13]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #14" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][14]"   type="numeric" default="14" />
-    <setting title="$lvar(tvtemplate_10505) #14" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][14]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/disney channel.png" />
+    <setting title="$lvar(tvtemplate_10505) #14" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][14]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #15" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][15]"   type="numeric" default="15" />
-    <setting title="$lvar(tvtemplate_10505) #15" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][15]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/super rtl.png" />
+    <setting title="$lvar(tvtemplate_10505) #15" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][15]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #16" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][16]"   type="numeric" default="16" />
-    <setting title="$lvar(tvtemplate_10505) #16" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][16]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/dmax.png" />
+    <setting title="$lvar(tvtemplate_10505) #16" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][16]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #17" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][17]"   type="numeric" default="17" />
-    <setting title="$lvar(tvtemplate_10505) #17" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][17]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/one.png" />
+    <setting title="$lvar(tvtemplate_10505) #17" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][17]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #18" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][18]"   type="numeric" default="18" />
-    <setting title="$lvar(tvtemplate_10505) #18" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][18]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/tagesschau24.png" />
-    <setting title="$lvar(tvtemplate_10504) #19" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][19]"   type="numeric" default="20" />
-    <setting title="$lvar(tvtemplate_10505) #19" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][19]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/nickelodeon europe.png" />
-    <setting title="$lvar(tvtemplate_10504) #20" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][20]"   type="numeric" default="19" />
-    <setting title="$lvar(tvtemplate_10505) #20" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][20]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/servus tv.png" />
-    <setting title="$lvar(tvtemplate_10504) #21" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][21]"   type="numeric" default="22" />
-    <setting title="$lvar(tvtemplate_10505) #21" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][21]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/kika.png" />
-    <setting title="$lvar(tvtemplate_10504) #22" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][22]"   type="numeric" default="21" />
-    <setting title="$lvar(tvtemplate_10505) #22" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][22]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/deluxe television.png" />
-    <setting title="$lvar(tvtemplate_10504) #23" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][23]"   type="numeric" default="25" />
-    <setting title="$lvar(tvtemplate_10505) #23" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][23]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/phoenix hd.png" />
-    <setting title="$lvar(tvtemplate_10504) #24" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][24]"   type="numeric" default="28" />
-    <setting title="$lvar(tvtemplate_10505) #24" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][24]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/viva tv.png" />
-    <setting title="$lvar(tvtemplate_10504) #25" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][25]"   type="numeric" default="31" />
-    <setting title="$lvar(tvtemplate_10505) #25" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][25]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/rtl nitro.png" />
-    <setting title="$lvar(tvtemplate_10504) #26" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][26]"   type="numeric" default="30" />
-    <setting title="$lvar(tvtemplate_10505) #26" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][26]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/pearl.tv.png" />
-    <setting title="$lvar(tvtemplate_10504) #27" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][27]"   type="numeric" default="45" />
-    <setting title="$lvar(tvtemplate_10505) #27" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][27]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/zdf_neo.png" />
-    <setting title="$lvar(tvtemplate_10504) #28" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][28]"   type="numeric" default="13" />
-    <setting title="$lvar(tvtemplate_10505) #28" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][28]"      type="picture" default="$var(RESOURCEPATH)/tvlogos/tvlogos_small/zdfinfo.png" />
-    <setting title="$lvar(tvtemplate_10504) #29" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][29]"   type="numeric" default="29" />
-    <setting title="$lvar(tvtemplate_10505) #29" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][29]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10505) #18" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][18]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #19" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][19]"   type="numeric" default="19" />
+    <setting title="$lvar(tvtemplate_10505) #19" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][19]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #20" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][20]"   type="numeric" default="20" />
+    <setting title="$lvar(tvtemplate_10505) #20" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][20]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #21" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][21]"   type="numeric" default="21" />
+    <setting title="$lvar(tvtemplate_10505) #21" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][21]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #22" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][22]"   type="numeric" default="22" />
+    <setting title="$lvar(tvtemplate_10505) #22" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][22]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #23" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][23]"   type="numeric" default="23" />
+    <setting title="$lvar(tvtemplate_10505) #23" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][23]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #24" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][24]"   type="numeric" default="24" />
+    <setting title="$lvar(tvtemplate_10505) #24" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][24]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #25" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][25]"   type="numeric" default="25" />
+    <setting title="$lvar(tvtemplate_10505) #25" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][25]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #26" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][26]"   type="numeric" default="26" />
+    <setting title="$lvar(tvtemplate_10505) #26" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][26]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #27" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[1][27]"   type="numeric" default="27" />
+    <setting title="$lvar(tvtemplate_10505) #27" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[1][27]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10506) 2" type='section' />
     <setting title="$lvar(tvtemplate_10501)" type="title" />
     <setting title="$lvar(tvtemplate_10509) #2"  desc="$lvar(tvtemplate_10510" var="$dvar(definition_alias_tvfavorites_template)_bouquet_name[2]"          type="string"  default="Bouquet 2" />
@@ -139,10 +136,6 @@
     <setting title="$lvar(tvtemplate_10505) #26" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][26]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #27" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[2][27]"   type="numeric" default="1" />
     <setting title="$lvar(tvtemplate_10505) #27" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][27]"      type="picture" default="transparentpic" />
-    <setting title="$lvar(tvtemplate_10504) #28" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[2][28]"   type="numeric" default="1" />
-    <setting title="$lvar(tvtemplate_10505) #28" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][28]"      type="picture" default="transparentpic" />
-    <setting title="$lvar(tvtemplate_10504) #29" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[2][29]"   type="numeric" default="1" />
-    <setting title="$lvar(tvtemplate_10505) #29" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[2][29]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10506) 3" type='section' />
     <setting title="$lvar(tvtemplate_10501)" type="title" />
     <setting title="$lvar(tvtemplate_10509) #3"  desc="$lvar(tvtemplate_10510" var="$dvar(definition_alias_tvfavorites_template)_bouquet_name[3]"          type="string"  default="Bouquet 3" />
@@ -200,10 +193,6 @@
     <setting title="$lvar(tvtemplate_10505) #26" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][26]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #27" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[3][27]"   type="numeric" default="1" />
     <setting title="$lvar(tvtemplate_10505) #27" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][27]"      type="picture" default="transparentpic" />
-    <setting title="$lvar(tvtemplate_10504) #28" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[3][28]"   type="numeric" default="1" />
-    <setting title="$lvar(tvtemplate_10505) #28" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][28]"      type="picture" default="transparentpic" />
-    <setting title="$lvar(tvtemplate_10504) #29" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[3][29]"   type="numeric" default="1" />
-    <setting title="$lvar(tvtemplate_10505) #29" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[3][29]"      type="picture" default="transparentpic" />
 
     <setting title="$lvar(tvtemplate_10506) 4" type='section' />
     <setting title="$lvar(tvtemplate_10501)" type="title" />
@@ -262,11 +251,6 @@
     <setting title="$lvar(tvtemplate_10505) #26" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][26]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #27" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[4][27]"   type="numeric" default="1" />
     <setting title="$lvar(tvtemplate_10505) #27" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][27]"      type="picture" default="transparentpic" />
-    <setting title="$lvar(tvtemplate_10504) #28" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[4][28]"   type="numeric" default="1" />
-    <setting title="$lvar(tvtemplate_10505) #28" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][28]"      type="picture" default="transparentpic" />
-    <setting title="$lvar(tvtemplate_10504) #29" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[4][29]"   type="numeric" default="1" />
-    <setting title="$lvar(tvtemplate_10505) #29" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[4][29]"      type="picture" default="transparentpic" />
-
 
     <setting title="$lvar(tvtemplate_10506) 5" type='section' />
     <setting title="$lvar(tvtemplate_10501)" type="title" />
@@ -325,11 +309,64 @@
     <setting title="$lvar(tvtemplate_10505) #26" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][26]"      type="picture" default="transparentpic" />
     <setting title="$lvar(tvtemplate_10504) #27" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[5][27]"   type="numeric" default="1" />
     <setting title="$lvar(tvtemplate_10505) #27" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][27]"      type="picture" default="transparentpic" />
-    <setting title="$lvar(tvtemplate_10504) #28" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[5][28]"   type="numeric" default="1" />
-    <setting title="$lvar(tvtemplate_10505) #28" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][28]"      type="picture" default="transparentpic" />
-    <setting title="$lvar(tvtemplate_10504) #29" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[5][29]"   type="numeric" default="1" />
-    <setting title="$lvar(tvtemplate_10505) #29" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[5][29]"      type="picture" default="transparentpic" />
 
+    <setting title="$lvar(tvtemplate_10506) 6" type='section' />
+    <setting title="$lvar(tvtemplate_10501)" type="title" />
+    <setting title="$lvar(tvtemplate_10509) #6"  desc="$lvar(tvtemplate_10510" var="$dvar(definition_alias_tvfavorites_template)_bouquet_name[6]"     type="string"  default="Bouquet 6" />
+    <setting title="$lvar(tvtemplate_10504) #1"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][1]"    type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #1"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][1]"       type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #2"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][2]"    type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #2"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][2]"       type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #3"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][3]"    type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #3"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][3]"       type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #4"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][4]"    type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #4"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][4]"       type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #5"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][5]"    type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #5"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][5]"       type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #6"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][6]"    type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #6"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][6]"       type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #7"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][7]"    type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #7"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][7]"       type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #8"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][8]"    type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #8"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][8]"       type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #9"  desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][9]"    type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #9"  desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][9]"       type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #10" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][10]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #10" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][10]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #11" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][11]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #11" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][11]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #12" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][12]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #12" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][12]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #13" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][13]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #13" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][13]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #14" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][14]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #14" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][14]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #15" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][15]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #15" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][15]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #16" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][16]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #16" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][16]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #17" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][17]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #17" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][17]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #18" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][18]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #18" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][18]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #19" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][19]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #19" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][19]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #20" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][20]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #20" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][20]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #21" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][21]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #21" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][21]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #22" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][22]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #22" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][22]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #23" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][23]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #23" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][23]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #24" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][24]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #24" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][24]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #25" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][25]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #25" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][25]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #26" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][26]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #26" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][26]"      type="picture" default="transparentpic" />
+    <setting title="$lvar(tvtemplate_10504) #27" desc="$lvar(tvtemplate_10502)" var="$dvar(definition_alias_tvfavorites_template)_tvchannel[6][27]"   type="numeric" default="1" />
+    <setting title="$lvar(tvtemplate_10505) #27" desc="$lvar(tvtemplate_10503)" var="$dvar(definition_alias_tvfavorites_template)_tvlogo[6][27]"      type="picture" default="transparentpic" />
 
   </settings>
 
@@ -339,8 +376,8 @@
       <description language='English'>Standard TV Template for channels, not for direct use</description>
       <description language='German'>Standrad TV Template für Kanäle, nicht direkt verwenden</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/tvfavorites_template</local>
@@ -351,12 +388,11 @@
       <dependencies>
         <dependency>
           <type>others</type>
-          <name>TV Logo Pack Small</name>
+          <name>TV Logo Pack Dark Silver Backgound</name>
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>$var(APPLICATIONPATH)/definitions/tvfavorites_template/definition.ini</file>
-        <file>$var(APPLICATIONPATH)/definitions/tvfavorites_template/atlas*</file>
+         <file>$var(APPLICATIONPATH)/definitions/tvfavorites_template/atlas*</file>
 
       </skipfiles>
 

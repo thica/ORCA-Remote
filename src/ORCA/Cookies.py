@@ -40,62 +40,60 @@ this = sys.modules[__name__]
 this.rPatternCookie  =r"\$cookie\(([\|\w\s\[\]\-\+_]+)\)"
 
 
-def NormalizeFileName(uFileName):
+def NormalizeFileName(uFileName:str) -> str:
     """
     Removes all invalid characters in a filename
 
-    :rtype: string
-    :param uFileName: Filename to normalize
+    :param str uFileName: Filename to normalize
     :return: Normalized file name
     """
 
     uNew="".join(x for x in uFileName if x.isalnum())
     return uNew
 
-def Var_Save(uVarName,uPrefix):
+def Var_Save(uVarName:str,uPrefix:str) -> None:
     """ Saves a var to a cookie """
-    uValue=GetVar(uVarName = uVarName)
-
-    oFN=CookieName(uVarName,u'var_'+uPrefix)
+    uValue:str      = GetVar(uVarName = uVarName)
+    oFN:cFileName   = CookieName(uVarName,u'var_'+uPrefix)
     try:
         oFile = open(oFN.string, 'w')
         oFile.write(uValue)
         oFile.close()
     except Exception as e:
-        LogError(u'Var_Save: can\'t safe var',e)
-        return u'Error'
-    return
+        LogError(uMsg=u'Var_Save: can\'t safe var',oException=e)
 
-def Var_Load(uVarName, uDefault,uPrefix):
+def Var_Load(uVarName:str, uDefault:str,uPrefix:str) -> str:
     """ loads a var from a cookie """
-    oFN=CookieName(uVarName,u'var_'+uPrefix)
-    uVarValue=uDefault
+    oFN:cFileName   = CookieName(uVarName,u'var_'+uPrefix)
+    uVarValue:str   = uDefault
     if oFN.Exists():
         try:
             oFile = open(oFN.string, 'r')
             uVarValue=oFile.read()
             oFile.close()
         except Exception as e:
-            LogError(u'Var_Save: can\'t load var',e)
+            LogError(uMsg=u'Var_Save: can\'t load var',oException=e)
     SetVar(uVarName = uVarName, oVarValue = uVarValue)
     return uVarValue
 
-def Var_DeleteCookie(uVarName, uPrefix):
+def Var_DeleteCookie(uVarName:str, uPrefix:str) -> None:
     """ deletes a cookiefile """
     CookieName(uVarName,u'var_'+uPrefix).Delete()
 
-def CookieName(uVarName,uPrefix):
+def CookieName(uVarName:str,uPrefix:str) -> cFileName:
     """ creates a cookie filename """
-    oFnCookie = cFileName(Globals.oPathCookie) + (uPrefix + "_" + NormalizeFileName(uVarName) + ".cok")
+    oFnCookie:cFileName = cFileName(Globals.oPathCookie) + (uPrefix + "_" + NormalizeFileName(uVarName) + ".cok")
     return oFnCookie
 
-def GetCookieValue(uOrgIn):
+
+# noinspection PyUnresolvedReferences
+def GetCookieValue(uOrgIn:str) -> str:
     """ Returns the value stored in a cookie """
-    uRet=u''
-    uDefault=u''
-    oMatch=re.search(this.rPatternCookie,uOrgIn)
+    uRet:str        = u''
+    uDefault:str    = u''
+    oMatch          = re.search(this.rPatternCookie,uOrgIn)
     if oMatch:
-        uVarName=oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
+        uVarName:str=oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
         if "|" in uVarName:
             uVarName,uDefault=uVarName.split('|')
         uRet=Var_Load(uVarName,uDefault,u'')

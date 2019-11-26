@@ -21,8 +21,12 @@
 """
 
 
-from ORCA.interfaces.BaseInterface import cBaseInterFace
-from ORCA.utils.Network     import Ping
+from ORCA.interfaces.BaseInterface          import cBaseInterFace
+from ORCA.utils.Network                     import Ping
+from ORCA.utils.FileName                    import cFileName
+from ORCA.Action                            import cAction
+from ORCA.interfaces.BaseInterfaceSettings  import cBaseInterFaceSettings
+from ORCA.actions.ReturnCode                import eReturnCode
 
 '''
 <root>
@@ -32,8 +36,8 @@ from ORCA.utils.Network     import Ping
       <description language='English'>Interface to verify, if devices respond to ping</description>
       <description language='German'>Interface um zu prüfen, ob Geräte auf einen Ping antworten</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/ping</local>
@@ -42,7 +46,6 @@ from ORCA.utils.Network     import Ping
         </source>
       </sources>
       <skipfiles>
-        <file>ping/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -52,14 +55,14 @@ from ORCA.utils.Network     import Ping
 
 class cInterface(cBaseInterFace):
 
-    def Init(self, uObjectName, oFnObject=None):
+    def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
         cBaseInterFace.Init(self, uObjectName, oFnObject)
         self.oObjectConfig.dDefaultSettings['Host']['active']  = "enabled"
         self.oObjectConfig.dDefaultSettings['Host']['desc']    = "$lvar(IFACE_PING_1)"
 
-    def DoAction(self,oAction):
-        oSetting=self.GetSettingObjectForConfigName(oAction.dActionPars.get(u'configname',u''))
+    def DoAction(self,oAction:cAction) -> eReturnCode:
+        oSetting:cBaseInterFaceSettings=self.GetSettingObjectForConfigName(oAction.dActionPars.get(u'configname',u''))
         if Ping(oSetting.aIniSettings.uHost):
-            return 0
+            return eReturnCode.Success
         else:
-            return 1
+            return eReturnCode.Error

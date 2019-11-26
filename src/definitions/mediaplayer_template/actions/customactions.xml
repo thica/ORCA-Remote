@@ -35,6 +35,16 @@
     <action name="" string="call Delete Trigger $dvar(definition_alias_mediaplayer_template)" />
   </action>
 
+
+  <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)_Button_Popup">
+    <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)_Button_Popup starts here" />
+    <action name="Adjust Page on first page start" string="if $var(PAGESTARTCOUNT_$var(CURRENTPAGE))==1" />
+      <action name="Load TV Pictures on first start" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var($dvar(definition_alias_tvfavorites_template)_bouquet)" />
+    <action name="endif" string="endif"/>
+    <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)_Button_Popup ends here" />
+  </action>
+
+
   <action name="FKT WaitForReady_$dvar(definition_alias_mediaplayer_template)">
     <action name="if we want to wait" string="if $var($dvar(definition_alias_mediaplayer_template)_WAITFORDEVICE)==1" />
       <action name="Enable Tiny Wait picture" string="enablewaitpicture" />
@@ -53,7 +63,7 @@
   <action name="Check if $dvar(definition_alias_mediaplayer_template) on">
     <action name="" string="setvar DEVICEISONLINE=FALSE" />
     <action name="Send Check Command"  string="$var($dvar(definition_alias_mediaplayer_template)_POWERONCHECKCOMMAND)" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="setsuccessvar" string="setvar DEVICEISONLINE=TRUE" condition="$var(LASTERRORCODE)==0" />
+    <action name="setsuccessvar" string="setvar DEVICEISONLINE=TRUE" condition="$var(LASTERRORCODE)==$var(RETCODE_SUCCESS)" />
   </action>
 
   <action name="FKT GetVolume_$dvar(definition_alias_mediaplayer_template)">
@@ -61,8 +71,8 @@
       <action name="Save The Current Volume variable Name" string="setvar tmpvolumevarname=$var(CURRENTVOLUMEMAIN)" />
       <action name="Set the new Volume variable Name"      string="setvar CURRENTVOLUMEMAIN=$dvar(definition_alias_mediaplayer_template)_mainvolume" />
       <action name="Get Volume from $dvar(definition_alias_mediaplayer_template)" string="Send Get Volume" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)"/>
-      <action name="Update Volume slider" string="updatewidget Main Volume@$var(CURRENTPAGE)" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Slider"/>
-      <action name="Update Volume text (FKT GetVolume_$dvar(definition_alias_mediaplayer_template))" string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
+      <action name="Update Volume slider" string="updatewidget Main Volume@$var(CURRENTPAGE)" ignoremissing="1" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Slider"/>
+      <action name="Update Volume text (FKT GetVolume_$dvar(definition_alias_mediaplayer_template))" ignoremissing="1" string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
       <action name="restore the old volume variable Name" string="setvar CURRENTVOLUMEMAIN=$var(tmpvolumevarname)" />
     <action name="endif" string="endif" />
   </action>
@@ -101,7 +111,7 @@
     <action name="Show the Search Window" string="Send Show Search" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
     <action name="safe cookie" string="modifyvar" varname="inputstring" operator="save" parameter1="$dvar(definition_alias_mediaplayer_template)" />
     <action name="wait"                string="wait 1500"  />
-    <action name="And send the string" string="sendcommand" commandname="send_string" commandparameter='{"SENDTEXT":"$var(inputstring)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
+    <action name="And send the string" string="sendcommand send_string" commandparameter='{"SENDTEXT":"$var(inputstring)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
   </action>
 
   <action name="Send Volume Down $dvar(definition_alias_mediaplayer_template)">
@@ -117,7 +127,7 @@
   </action>
 
   <action name="FKT Send Switch Channel $dvar(definition_alias_mediaplayer_template)">
-    <action name="Switch Channel" string="sendcommand" commandname="$var($dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD)" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD)!=NoAction"   /> />
+    <action name="Switch Channel" string="sendcommand $var($dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD)" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD)!=NoAction"   /> />
   </action>
 
   <action name="Set Trigger $dvar(definition_alias_mediaplayer_template)">
@@ -139,6 +149,8 @@
 
   <action name="Set Gestures $dvar(definition_alias_mediaplayer_template)">
     <action name="if we want to use gestures" string="if $var($dvar(definition_alias_mediaplayer_template)_USEGESTURES)==1"/>
+        <action name="Block the gui" string="blockgui 1"/>
+        <action name="Enable Tiny Wait picture" string="enablewaitpicture" />
         <action name="if we want to invert gestures (left/right/up/down)" string="if $var($dvar(definition_alias_mediaplayer_template)_INVERTGESTURES)==1"/>
           <action name="" string="setvar tmpvar=$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[1])" />
           <action name="" string="setvar $dvar(definition_alias_mediaplayer_template)_GESTUREACTION[1]=$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[2])" />
@@ -162,6 +174,8 @@
         <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[12])"   actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[12])" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[12])!=NoAction"/>
         <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[13])"   actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[13])" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[13])!=NoAction"/>
         <action name="" string="addgesture" widgetname="Background" gesturename="$var($dvar(definition_alias_mediaplayer_template)_GESTURENAME[14])"   actionname="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[14])" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_GESTUREACTION[14])!=NoAction"/>
+        <action name="Disable Tiny Wait picture" string="disablewaitpicture" />
+        <action name="UnBlock the gui" string="blockgui 0"/>
     <action name="endif" string="endif"/>
 
   </action>
@@ -184,7 +198,9 @@
     </action>
 
     <action name="Set SetupTrigger $dvar(definition_alias_mediaplayer_template)">
-        <!-- adjust menue buttons if changed in settings -->
+       <!-- adjust menue buttons if changed in settings -->
+       <action name="Block the gui" string="blockgui 1"/>
+
        <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[1]" linktype="widget" widgetname="TVMenueButton 1@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
        <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[2]" linktype="widget" widgetname="TVMenueButton 2@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
        <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_TEXT_MENUEITEM[3]" linktype="widget" widgetname="TVMenueButton 3@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
@@ -264,5 +280,6 @@
          <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[10]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 10@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[10])"}' />
          <action name="" string="addvarlink" varname="$dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[11]" linktype="action" parameters='{"string":"setwidgetattribut","widgetname":"Button Number 11@Page_Device_$dvar(definition_alias_mediaplayer_template)","attributename":"action","attributevalue":"$var($dvar(definition_alias_mediaplayer_template)_CMD_NUMBERPADBUTTON[11])"}' />
        <action name="" string="endif"  />
+       <action name="UnBlock the gui" string="blockgui 0"/>
     </action>
 </includes>

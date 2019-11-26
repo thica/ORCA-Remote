@@ -24,24 +24,25 @@ from kivy.uix.scatter               import Scatter
 from kivy.vector                    import Vector
 from kivy.graphics.transformation   import Matrix
 from ORCA.utils.RemoveNoClassArgs   import RemoveNoClassArgs
+import ORCA.Globals as Globals
 
 __all__ = ['cRotateScatter']
 
 class cRotateScatter(Scatter):
     """ base class for a rotate scatter """
     def __init__(self, **kwargs):
-        super(cRotateScatter, self).__init__(**RemoveNoClassArgs(kwargs,Scatter))
+        super().__init__(**RemoveNoClassArgs(kwargs,Scatter))
         self.register_event_type('on_widget_turned')
-        self.bInit                  = False
-        self.fTotalAngle            = 0.0
-        self.iAngle                 = 0
-        self.iLeftBoundaryAngle     = 0
-        self.iRightBoundaryAngle    = 0
-        self.uDirection             = u'right'
-        self.iRightBoundaryAngle    = 90
-        self.uMoveType              = ''
-        self.xx=0
-        self.yy=0
+        self.bInit:bool                 = False
+        self.fTotalAngle:float          = 0.0
+        self.iAngle:int                 = 0
+        self.iLeftBoundaryAngle:int     = 0
+        self.iRightBoundaryAngle:int    = 0
+        self.uDirection:str             = u'right'
+        self.iRightBoundaryAngle:int    = 90
+        self.uMoveType:str              = ''
+        self.xx:int                     = 0
+        self.yy:int                     = 0
 
     def on_widget_turned(self):
         """ dummy """
@@ -50,13 +51,20 @@ class cRotateScatter(Scatter):
         self.uMoveType =u'move'
         self.On_Rotate(touch)
     def on_touch_up(self, touch):
-        # no need for test on colloide as we might get the up outside of the button
-        self.uMoveType =u'up'
-        self.On_Rotate(touch)
-        return super(cRotateScatter, self).on_touch_up(touch)
+        # no need for test on collide as we might get the up outside of the button
+        if not Globals.oTheScreen.GuiIsBlocked():
+            self.uMoveType =u'up'
+            self.On_Rotate(touch)
+            return super(cRotateScatter, self).on_touch_up(touch)
+        else:
+            return False
 
-    def On_Rotate(self, touch):
+    def On_Rotate(self, touch) -> None:
         """ handles the rotation event """
+
+        if Globals.oTheScreen.GuiIsBlocked():
+            return
+
         if not self.bInit:
             self.xx=self.x
             self.yy=self.y
@@ -80,10 +88,10 @@ class cRotateScatter(Scatter):
 
         self.dispatch('on_widget_turned')
 
-    def SetValueSub(self, iRad):
+    def SetValueSub(self, fRad:float) -> None:
         """ Sets the value """
         if self.iLeftBoundaryAngle!=self.iRightBoundaryAngle:
-            iCheckAngle=int(degrees(self.fTotalAngle+iRad)*-1)
+            iCheckAngle:int = int(degrees(self.fTotalAngle+fRad)*-1)
             # print iCheckAngle,' ',self.iLeftBoundaryAngle,' ',self.iRightBoundaryAngle
             if self.iRightBoundaryAngle>0:
                 if iCheckAngle>self.iRightBoundaryAngle:
@@ -98,13 +106,13 @@ class cRotateScatter(Scatter):
                 if iCheckAngle>self.iLeftBoundaryAngle:
                     return
 
-        if iRad>0:
+        if fRad>0.0:
             self.uDirection=u'left'
         else:
             self.uDirection=u'right'
-        self.fTotalAngle=self.fTotalAngle+iRad
-        self.iAngle=int(degrees(self.fTotalAngle))*-1
-        anchor=(self.xx+self.width/2,self.yy+self.height/2)
+        self.fTotalAngle = self.fTotalAngle+fRad
+        self.iAngle      = int(degrees(self.fTotalAngle))*-1
+        anchor           = (self.xx+self.width/2,self.yy+self.height/2)
 
         '''
         print 'Angle:',self.fTotalAngle
@@ -113,15 +121,15 @@ class cRotateScatter(Scatter):
         self.iAngle=int(degrees(self.fTotalAngle)*-1)
         print 'Angle:',self.iAngle
         '''
-        self.apply_transform(Matrix().rotate(iRad, 0, 0, 1), anchor=anchor)
+        self.apply_transform(Matrix().rotate(fRad, 0, 0, 1), anchor=anchor)
 
-    def SetValue(self, iNewDegree):
+    def SetValue(self, fNewDegree:float):
         """ sets the value """
         if not self.bInit:
-            self.xx=self.x
-            self.yy=self.y
-            self.bInit=True
-        iCurrentAngle=degrees(self.fTotalAngle)*-1
-        iDelta=iCurrentAngle-iNewDegree
-        iRadDelta=radians(iDelta)
-        self.SetValueSub(iRadDelta)
+            self.xx     = self.x
+            self.yy     = self.y
+            self.bInit  = True
+        fCurrentAngle:float = degrees(self.fTotalAngle)*-1
+        fDelta:float        = fCurrentAngle-fNewDegree
+        fRadDelta:float     = radians(fDelta)
+        self.SetValueSub(fRadDelta)

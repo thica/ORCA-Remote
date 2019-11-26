@@ -1,5 +1,5 @@
+from typing import Dict
 from kivy.logger import Logger
-from kivy.compat import string_types
 
 import ORCA.vars.Globals
 
@@ -7,43 +7,42 @@ __all__ = ['DumpVars',
            'DumpDefinitionVars'
           ]
 
-
-def DumpDefinitionVars(dArray, uFilter=""):
+def DumpDefinitionVars(dArray:Dict[str,str], uFilter:str="") -> None:
     """
     Dumps definition vars as debug messages
 
-    :rtype: None
-    :param dict dArray: Dictonray of definition vars
-    :param uFilter: A filter to just return vars, which CONTAINS the filter string
+    :param Dict dArray: Dictonray of definition vars
+    :param str uFilter: A filter to just return vars, which CONTAINS the filter string
     """
     Logger.debug('Dumping Definition Vars')
 
-    for uVarIdx in sorted(dArray):
-        oTmp = dArray[uVarIdx]
+    uVarIdx:str
+    uTmp:str
 
+    for uVarIdx in sorted(dArray):
+        uTmp = dArray[uVarIdx]
         if uFilter == "":
-            Logger.debug(u'DumpVar: DefVar:' + uVarIdx + '=' + oTmp)
+            Logger.debug(u'DumpVar: DefVar:' + uVarIdx + '=' + uTmp)
         else:
             if uFilter in uVarIdx:
-                Logger.debug(u'DumpVar: DefVar:' + uVarIdx + '=' + oTmp)
+                Logger.debug(u'DumpVar: DefVar:' + uVarIdx + '=' + uTmp)
 
 
-def DumpVars(uFilter=""):
+def DumpVars(uFilter:str="") -> None:
     """
     Dumps user vars as debug messages
-
-    :rtype: None
-    :param uFilter: A filter to just return vars, which CONTAINS the filter string
+    :param str uFilter: A filter to just return vars, which CONTAINS the filter string
     """
+
+    uTmp:str
 
     Logger.debug('Dumping Vars')
     for uVarIdx in sorted(ORCA.vars.Globals.dUserVars):
-        oTmp = u"Internal Object"
-        if isinstance(ORCA.vars.Globals.dUserVars[uVarIdx], string_types):
-            oTmp = ORCA.vars.Globals.dUserVars[uVarIdx]
-
+        uTmp = u"Internal Object"
+        if isinstance(ORCA.vars.Globals.dUserVars[uVarIdx], str):
+            uTmp = ORCA.vars.Globals.dUserVars[uVarIdx]
         if uFilter == "":
-            Logger.debug(u'DumpVar: Var:' + uVarIdx + '=' + oTmp)
+            Logger.debug(u'DumpVar: Var:' + uVarIdx + '=' + uTmp)
         else:
             if uFilter in uVarIdx:
-                Logger.debug(u'DumpVar: Var:' + uVarIdx + '=' + oTmp)
+                Logger.debug(u'DumpVar: Var:' + uVarIdx + '=' + uTmp)

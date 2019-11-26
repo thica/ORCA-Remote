@@ -19,12 +19,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing                                 import Dict
+from typing                                 import List
 
-from ORCA.scripts.Scripts import cScriptSettingPlugin
+from ORCA.scripts.Scripts                   import cScriptSettingPlugin
 from ORCA.scripttemplates.Template_Tools    import cToolsTemplate
+from ORCA.Action                            import cAction
+
 import ORCA.Globals as Globals
-
-
 
 '''
 <root>
@@ -34,8 +36,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to record gestures</description>
       <description language='German'>Tool um Gesten aufzuzeichnen</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -51,7 +53,6 @@ import ORCA.Globals as Globals
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>scripts/tools/tool_gesturerecorder/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -86,19 +87,20 @@ class cScript(cToolsTemplate):
         self.uSettingTitle      = u'Gestures'
         self.uIniFileLocation   = u'none'
 
-    def ShowPageGestureRecorder(self, *args, **kwargs):
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def ShowPageGestureRecorder(self, *args, **kwargs) -> None:
         Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_GestureRecorder')
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs)  -> None:
         cToolsTemplate.RunScript(self, *args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.ShowPageGestureRecorder(self, *args, **kwargs)
 
-    def Register(self, *args, **kwargs):
+    def Register(self, *args, **kwargs) -> Dict:
         cToolsTemplate.Register(self,*args, **kwargs)
         Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED", fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools GestureRecorder")
         Globals.oNotifications.RegisterNotification("STARTSCRIPTGESTURERECORDER", fNotifyFunction=self.ShowPageGestureRecorder, uDescription="Script Tools GestureRecorder")
-        oScriptSettingPlugin = cScriptSettingPlugin()
+        oScriptSettingPlugin:cScriptSettingPlugin = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "ORCA"
         oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
@@ -109,13 +111,13 @@ class cScript(cToolsTemplate):
         ''' If we press ESC on the Gestureboard page, goto to the settings page
             If we press the close button on the interface-settings page, goto to the settings page '''
 
-        oEvents = Globals.oEvents
-        aActions=oEvents.CreateSimpleActionList([{'name':'ESC Key Handler Gestureboard','string':'registernotification','filterpagename':'Page_GestureRecorder','notification':'on_key_ESC','notifyaction':'gotosettingspage'},
+        aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList([{'name':'ESC Key Handler Gestureboard','string':'registernotification','filterpagename':'Page_GestureRecorder','notification':'on_key_ESC','notifyaction':'gotosettingspage'},
                                                  {'name':'Button Close Gestureboard Key Handler Settings','string':'registernotification','filterpagename':'Page_GestureRecorder','notification':'closesetting_gesturerecorder','notifyaction':'gotosettingspage'}])
-        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        return {}
 
-
-    def LoadScriptPages(self,*args,**kwargs):
+    # noinspection PyUnusedLocal
+    def LoadScriptPages(self,*args,**kwargs) -> None:
         oDefinition = kwargs.get("definition")
 
         if oDefinition.uName == Globals.uDefinitionName:

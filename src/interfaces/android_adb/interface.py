@@ -20,6 +20,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__                             import annotations
+from typing                                 import TYPE_CHECKING
+from typing                                 import Dict
+from typing                                 import List
+from typing                                 import Union
+from ORCA.interfaces.BaseInterface          import cBaseInterFace
+from ORCA.interfaces.BaseInterfaceSettings  import cBaseInterFaceSettings
+from ORCA.vars.Replace                      import ReplaceVars
+from ORCA.vars.Access                       import SetVar
+from ORCA.vars.Access                       import GetVar
+from ORCA.utils.FileName                    import cFileName
+from ORCA.Action                            import cAction
+from ORCA.actions.ReturnCode                import eReturnCode
+
+import ORCA.Globals as Globals
+
 '''
 
  Parts of the code based on the project
@@ -28,15 +44,6 @@
 
 '''
 
-import  imp
-
-from kivy.clock             import Clock
-from ORCA.interfaces.BaseInterface import cBaseInterFace
-from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
-from ORCA.vars.Replace      import ReplaceVars
-from ORCA.vars.Access       import SetVar
-from ORCA.vars.Access       import GetVar
-from ORCA.utils.FileName    import cFileName
 
 '''
 <root>
@@ -46,8 +53,8 @@ from ORCA.utils.FileName    import cFileName
       <description language='English'>Interface control Android devices by adb (TCP/IP)</description>
       <description language='German'>Interface um Android Geräte per adb (TCP/IP) zu steuern</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/android_adb</local>
@@ -62,7 +69,6 @@ from ORCA.utils.FileName    import cFileName
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>android_adb/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -73,7 +79,7 @@ class cInterface(cBaseInterFace):
 
     class cInterFaceSettings(cBaseInterFaceSettings):
 
-        def __init__(self,oInterFace):
+        def __init__(self,oInterFace:cInterface):
             cBaseInterFaceSettings.__init__(self,oInterFace)
             self.aIniSettings.uHost                       = u"discover"
             self.aIniSettings.uPort                       = u"5555"
@@ -89,14 +95,19 @@ class cInterface(cBaseInterFace):
             self.aIniSettings.uDISCOVER_UPNP_prettyname   = ""
 
             # Load the helper
-            oFn_Adb_Helper = cFileName(self.oInterFace.oPathMyCode) + u'adb_helper.py'
-            oModule = imp.load_source('adb_helper' , oFn_Adb_Helper.string)
-            self.oDevice = oModule.cADB_Helper()
+            if TYPE_CHECKING:
+                from interfaces.android_adb.adb_helper import cADB_Helper
+                self.oDevice = cADB_Helper()
+            else:
+                oFn_Adb_Helper = cFileName(self.oInterFace.oPathMyCode) + u'adb_helper.py'
+                oModule = Globals.oModuleLoader.LoadModule(oFn_Adb_Helper,'adb_helper')
+                self.oDevice = oModule.GetClass("cADB_Helper")()
 
-        def ReadAction(self,oAction):
+        def ReadAction(self,oAction:cAction) -> None:
             cBaseInterFaceSettings.ReadAction(self,oAction)
             oAction.uParams      = oAction.dActionPars.get(u'params',u'')
-        def Disconnect(self):
+
+        def Disconnect(self) -> bool:
             if not self.bIsConnected:
                 return cBaseInterFaceSettings.Disconnect(self)
             try:
@@ -106,9 +117,8 @@ class cInterface(cBaseInterFace):
                 self.ShowError(u'Cannot diconnect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 return cBaseInterFaceSettings.Disconnect(self)
 
-        def Connect(self):
+        def Connect(self) -> bool:
 
-            bRet=True
             if not cBaseInterFaceSettings.Connect(self):
                 return False
 
@@ -131,15 +141,16 @@ class cInterface(cBaseInterFace):
                 return False
 
     def __init__(self):
+        cInterFaceSettings = self.cInterFaceSettings
         cBaseInterFace.__init__(self)
-        self.aSettings              = {}
-        self.oSetting               = None
-        self.aDiscoverScriptsBlackList = ["iTach (Global Cache)","Keene Kira","ELVMAX"]
+        self.dSettings:Dict                             = {}
+        self.oSetting:Union[cInterFaceSettings,None]    = None
+        self.aDiscoverScriptsBlackList:List[str]        = ["iTach (Global Cache)","Keene Kira","ELVMAX"]
 
-    def Init(self,uObjectName,oFnObject=None):
+    def Init(self, uObjectName:str, oFnObject:Union[cFileName,None]=None) -> None:
         """ Initialisizes the Interface
 
-        :param string uObjectName: unicode : Name of the interface
+        :param str uObjectName: unicode : Name of the interface
         :param cFileName oFnObject: The Filename of the interface
         """
 
@@ -153,32 +164,33 @@ class cInterface(cBaseInterFace):
         self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
-    def DeInit(self,**kwargs):
+    def DeInit(self,**kwargs) -> None:
         cBaseInterFace.DeInit(self,**kwargs)
-        for aSetting in self.aSettings:
-            self.aSettings[aSetting].DeInit()
+        for uSettingName in self.dSettings:
+            self.dSettings[uSettingName].DeInit()
 
-    def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
+    def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
-        iTryCount = 0
-        iRet      = 1
-        uTmpVar2  = ""
+        iTryCount:int    = 0
+        eRet:eReturnCode = eReturnCode.Success
+        uTmpVar2:str     = u""
 
         if oAction.dActionPars.get('commandname') == "send_string":
-            uTmpVar  = GetVar(uVarName = 'inputstring')
-            uTmpVar2 = uTmpVar
-            uTmpVar  = uTmpVar.replace(" ","%s")
+            uTmpVar:str  = GetVar(uVarName = 'inputstring')
+            uTmpVar2:str = uTmpVar
+            uTmpVar      = uTmpVar.replace(" ","%s")
             SetVar(uVarName = 'inputstring',oVarValue = uTmpVar)
 
-        uRetVar = ReplaceVars(uRetVar)
+        uRetVar:str = ReplaceVars(uRetVar)
         oSetting.uRetVar=uRetVar
 
         if uRetVar!="":
             oAction.uGlobalDestVar=uRetVar
 
-        uParams = ReplaceVars(oAction.uParams)
-        uParams = ReplaceVars(uParams,self.uObjectName+'/'+oSetting.uConfigName)
+        # noinspection PyUnresolvedReferences
+        uParams:str = ReplaceVars(oAction.uParams)
+        uParams     = ReplaceVars(uParams,self.uObjectName+'/'+oSetting.uConfigName)
 
         while iTryCount<2:
             iTryCount+=1
@@ -198,33 +210,13 @@ class cInterface(cBaseInterFace):
                     self.ShowDebug("Result:"+str( oResult))
                     break
                 except Exception as e:
-                    self.ShowError(u'can\'t Send Message',oSetting.uConfigName,e)
-                    iRet=1
+                    self.ShowError(uMsg=u'can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
+                    eRet=eReturnCode.Error
             else:
                 oSetting.bIsConnected=False
 
         if oAction.dActionPars.get('commandname') =="send_string":
             SetVar(uVarName = 'inputstring', oVarValue = uTmpVar2)
 
-        self.iLastRet=iRet
-
-        if not bNoLogOut:
-            if oSetting.aIniSettings.iTimeToClose==0:
-                oSetting.Disconnect()
-            elif oSetting.aIniSettings.iTimeToClose!=-1:
-                Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
-        return iRet
-
-
-
-
-
-
-
-
-
-
-
-
-
+        self.CloseSettingConnection(oSetting=oSetting, bNoLogOut=bNoLogOut)
+        return eRet

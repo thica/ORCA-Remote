@@ -32,6 +32,39 @@
     <action name="" string="setvar video2_position=0" />
     <action name="" string="setvar video2_len=0" />
 
+    <action name="" string="setvar scrollcontent_button1_text[]=" />
+    <action name="" string="setvar scrollcontent_button1_text[2]=Upper Button 2" />
+    <action name="" string="setvar scrollcontent_button1_text[4]=Upper Button 4" />
+    <action name="" string="setvar scrollcontent_button1_text[7]=Upper Button 7" />
+    <action name="" string="setvar scrollcontent_button1_text[9]=Upper Button 9" />
+    <action name="" string="setvar scrollcontent_button1_text[11]=Upper Button 11" />
+    <action name="" string="setvar scrollcontent_button1_text[12]=Upper Button 12" />
+    <action name="" string="setvar scrollcontent_button1_text[20]=Upper Button 14" />
+    <action name="" string="setvar scrollcontent_button1_text[21]=Upper Button 21" />
+
+    <action name="" string="setvar scrollcontent_button2_text[]=" />
+    <action name="" string="setvar scrollcontent_button2_text[2]=Lower Button 2" />
+    <action name="" string="setvar scrollcontent_button2_text[4]=Lower Button 4" />
+    <action name="" string="setvar scrollcontent_button2_text[7]=Lower Button 7" />
+    <action name="" string="setvar scrollcontent_button2_text[9]=Lower Button 9" />
+    <action name="" string="setvar scrollcontent_button2_text[11]=Lower Button 11" />
+    <action name="" string="setvar scrollcontent_button2_text[12]=Lower Button 12" />
+    <action name="" string="setvar scrollcontent_button2_text[20]=Lower Button 14" />
+    <action name="" string="setvar scrollcontent_button2_text[22]=Lower Button 22" />
+
+    <action name="" string="setvar scrollcontent_movies_text[]=" />
+    <action name="" string="setvar scrollcontent_movies_text[1]=Alien" />
+    <action name="" string="setvar scrollcontent_movies_text[2]=Hellraiser" />
+    <action name="" string="setvar scrollcontent_movies_text[3]=Shining" />
+    <action name="" string="setvar scrollcontent_movies_text[4]=The Others" />
+    <action name="" string="setvar scrollcontent_movies_text[5]=Omen" />
+    <action name="" string="setvar scrollcontent_movies_text[6]=Blair Witch Project" />
+    <action name="" string="setvar scrollcontent_movies_text[7]=The Sixt Sense" />
+    <action name="" string="setvar scrollcontent_movies_text[8]=Saw" />
+    <action name="" string="setvar scrollcontent_movies_text[9]=The Fog" />
+    <action name="" string="setvar scrollcontent_movies_text[10]=Halloween" />
+    <action name="" string="setvar scrollcontent_movies_text[11]=The Thing" />
+
   </pagestartaction>
   <pagestartaction name="definitionstart">
     <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Main" />
@@ -85,6 +118,10 @@
   </pagestartaction>
 
   <pagestartaction name="Page_Icons">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+  </pagestartaction>
+
+  <pagestartaction name="Page_ScrollContainer">
     <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
   </pagestartaction>
 

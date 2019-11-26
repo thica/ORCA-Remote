@@ -17,11 +17,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing import Any
+from typing import Dict
 
 from ORCA.vars.QueryDict    import cMonitoredSettings
 from kivy.logger import Logger
-from kivy.compat import string_types
-
 from ORCA.utils.ConfigHelpers               import Config_GetDefault_Str
 from ORCA.utils.LogError                    import LogErrorSmall
 from ORCA.utils.TypeConvert                 import ToInt, ToFloat, ToBool, ToUnicode
@@ -29,33 +29,43 @@ from ORCA.vars.Access                       import SetVar
 from ORCA.vars.Replace                      import ReplaceVars
 from ORCA.utils.Path                        import cPath
 
-class cObjectMonitoredSettings(cMonitoredSettings):
-    def WriteVar(self,sName,oValue):
-        self.oBaseSettings.SetContextVar("CONFIG_" + sName.upper()[1:], oValue)
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.BaseObject import cBaseObject
+else:
+    from typing import TypeVar
+    cBaseObject = TypeVar("cBaseObject")
 
-class cBaseSettings(object):
+
+class cObjectMonitoredSettings(cMonitoredSettings):
+    def WriteVar(self,uName:str,vValue:Any) -> None:
+        self.oBaseSettings.SetContextVar("CONFIG_" + uName.upper()[1:], vValue)
+
+class cBaseSettings:
     """ A base class for the script settings """
-    def __init__(self, oObject):
+    def __init__(self, oObject:cBaseObject ):
         # some default settings, which should be there even if not configured by the Object
         # use the exact spelling as in the settings json
 
-        self.oObject                                            = oObject
-        self.uConfigName                                        = "DEFAULT"
-        self.uContext                                           = u''
-        self.uSection                                           = None
-        self.aIniSettings                                       = cObjectMonitoredSettings(self)
+        self.oObject:cBaseObject                                = oObject
+        self.uConfigName:str                                    = "DEFAULT"
+        self.uContext:str                                       = u''
+        self.uSection:str                                       = u''
+        self.aIniSettings:cObjectMonitoredSettings              = cObjectMonitoredSettings(self)
         self.aIniSettings.bInitCompleted                        = False
-        self.bOnError                                           = False
+        self.bOnError:bool                                      = False
+        self.uType:str                                          = u''
 
-    def SetContextVar(self,uVarName,uVarValue):
+
+    def SetContextVar(self,uVarName:str,uVarValue:str) -> None:
         """ Sets a var within the interface context
 
-        :param string uVarName: The name of the var
-        :param string uVarValue: The value if the var
+        :param str uVarName: The name of the var
+        :param str uVarValue: The value if the var
         """
         SetVar(uVarName = uVarName, oVarValue = ToUnicode(uVarValue), uContext = self.oObject.uObjectName+u'/'+self.uConfigName)
 
-    def ReadConfigFromIniFile(self,uConfigName):
+    def ReadConfigFromIniFile(self,uConfigName:str) -> None:
         """
         Reads the object config file
 
@@ -80,13 +90,13 @@ class cBaseSettings(object):
             if self.oObject.uObjectType == "interface":
                 SetVar(uVarName = u'InterfaceCodesetList',   oVarValue = self.oObject.CreateCodsetListJSONString())
             SetVar(uVarName = u'ObjectConfigSection', oVarValue = uConfigName)
-            dIniDef = self.oObject.oObjectConfig.CreateSettingJsonCombined(oSetting=self)
+            dIniDef:Dict[str,Dict] = self.oObject.oObjectConfig.CreateSettingJsonCombined(oSetting=self)
 
             for uKey2 in dIniDef:
-                oLine       = dIniDef[uKey2]
-                uType       = oLine.get("type")
-                uKey        = oLine.get("key")
-                uDefault    = oLine.get("default")
+                dLine:Dict   = dIniDef[uKey2]
+                uType:str    = dLine.get("type")
+                uKey:str     = dLine.get("key")
+                uDefault:str = dLine.get("default")
 
                 if uKey is None or uDefault is None:
                     continue
@@ -95,7 +105,7 @@ class cBaseSettings(object):
                 if self.aIniSettings.queryget(uKey) is not None:
                     uDefault = self.aIniSettings.queryget(uKey)
 
-                uResult     = Config_GetDefault_Str(self.oObject.oObjectConfig.oConfigParser,self.uSection, uKey,uDefault)
+                uResult:str     = Config_GetDefault_Str(self.oObject.oObjectConfig.oConfigParser,self.uSection, uKey,uDefault)
 
                 if uType == "scrolloptions" or uType == "string":
                     self.aIniSettings[uKey]=ReplaceVars(uResult)
@@ -108,14 +118,14 @@ class cBaseSettings(object):
                 elif uType == "varstring":
                     self.aIniSettings[uKey] = ReplaceVars(uResult)
                 elif uType=="path":
-                    if isinstance(uResult,string_types):
+                    if isinstance(uResult,str):
                         self.aIniSettings[uKey]=cPath(uResult)
                     else:
                         self.aIniSettings[uKey] = uResult
                 elif uType == "title" or uType=="buttons":
                     pass
                 else:
-                    self.ShowError(u'Cannot read config name (base), wrong attribute:'+self.oObject.oObjectConfig.oFnConfig.string + u' Section:'+self.uSection+" " +oLine["type"])
+                    self.ShowError(u'Cannot read config name (base), wrong attribute:'+self.oObject.oObjectConfig.oFnConfig.string + u' Section:'+self.uSection+" " +dLine["type"])
 
                 if uKey == 'FNCodeset':
                     self.ReadCodeset()
@@ -125,38 +135,41 @@ class cBaseSettings(object):
             self.ShowError(u'Cannot read config name (base):'+self.oObject.oObjectConfig.oFnConfig.string + u' Section:'+self.uSection,e)
             return
 
-    def WriteConfigToIniFile(self):
+    def WriteConfigToIniFile(self) -> None:
         """ Writes changes to the object config file """
         self.oObject.oObjectConfig.oConfigParser.write()
 
-    def ReadCodeset(self):
+    def ReadCodeset(self) -> None:
         # Dummy
         pass
 
-    def ShowWarning(self,uMsg):
+    def ShowWarning(self,uMsg:str) -> str:
         """ Shows a warning """
-        uRet=u'Script '+self.oObject.uObjectName+u'/'+self.uConfigName+u': '+ uMsg
+        uRet:str=u'Script '+self.oObject.uObjectName+u'/'+self.uConfigName+u': '+ uMsg
         Logger.warning (uRet)
         return uRet
-    def ShowInfo(self,uMsg):
+
+    def ShowInfo(self,uMsg:str) -> str:
         """ Shows a warning """
-        uRet=u'Script '+self.oObject.uObjectName+u'/'+self.uConfigName+u': '+ uMsg
+        uRet:str=u'Script '+self.oObject.uObjectName+u'/'+self.uConfigName+u': '+ uMsg
         Logger.info (uRet)
         return uRet
-    def ShowDebug(self,uMsg):
+
+    def ShowDebug(self,uMsg:str)-> str:
         """ Shows a debug message """
-        uRet=u'Script '+self.oObject.uObjectName+u'/'+self.uConfigName+u': '+ uMsg
+        uRet:str = u'Script '+self.oObject.uObjectName+u'/'+self.uConfigName+u': '+ uMsg
         Logger.debug (uRet)
         return uRet
-    def ShowError(self,uMsg, oException=None):
+
+    def ShowError(self,uMsg:str, oException:Exception=None) -> str:
         """ Shows an error"""
-        iErrNo = 0
+        iErrNo:int = 0
         if oException is not None:
             if hasattr(oException,'errno'):
                 iErrNo=oException.errno
         if iErrNo is None:
             iErrNo=-1
 
-        uRet = LogErrorSmall (u'Script %s/%s %s (%d):' %( self.oObject.uObjectName,self.uConfigName, uMsg,iErrNo),oException)
+        uRet:str = LogErrorSmall (uMsg=u'Script %s/%s %s (%d):' %( self.oObject.uObjectName,self.uConfigName, uMsg,iErrNo),oException=oException)
 
         return uRet

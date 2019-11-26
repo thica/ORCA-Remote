@@ -18,14 +18,19 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing import Dict
+from typing import List
+from typing import Union
 
 from kivy.uix.label         import Label
 from kivy.uix.button        import Button
+from kivy.uix.gridlayout    import GridLayout
 from kivy.metrics           import dp
 
 from ORCA.utils.LogError    import LogError
 from ORCA.scripts.BaseScript import cBaseScript
 from ORCA.vars.Replace      import ReplaceVars
+from ORCA.vars.QueryDict    import QueryDict
 
 import ORCA.Globals as Globals
 
@@ -33,14 +38,14 @@ class cDiscoverScriptTemplate(cBaseScript):
     """ template class for discover scripts """
     def __init__(self):
         cBaseScript.__init__(self)
-        self.aDevices   = {}
-        self.uType      = u'DEVICE_DISCOVER'
-        self.iLineHeight= dp(35)
-        self.oGrid      = None
-        self.iDivide    = 1
-        self.bFirstLine = True
+        self.dDevices:Dict[str,QueryDict]   = {}
+        self.uType:str                      = u'DEVICE_DISCOVER'
+        self.iLineHeight:int                = dp(35)
+        self.oGrid:Union[GridLayout,None]   = None
+        self.iDivide:int                    = 1
+        self.bFirstLine:bool                = True
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> Dict:
         """ main entry point to run the script """
         if 'createlist' in kwargs:
             self.oGrid = kwargs['oGrid']
@@ -48,11 +53,11 @@ class cDiscoverScriptTemplate(cBaseScript):
         else:
             return self.Discover(**kwargs)
 
-    def AddHeaders(self):
-        aHeaders = self.GetHeaderLabels()
+    def AddHeaders(self) -> None:
+        aHeaders:List[str] = self.GetHeaderLabels()
         self.iDivide = len(aHeaders) * 1
 
-        self.oGrid.cols = len(aHeaders)
+        self.oGrid.cols              = len(aHeaders)
         self.oGrid.row_default_height = self.iLineHeight
         self.oGrid.row_force_default = True
         self.oGrid.col_default_width = (Globals.iAppWidth * 0.9) / self.iDivide
@@ -60,44 +65,45 @@ class cDiscoverScriptTemplate(cBaseScript):
         for uLabel in aHeaders:
             self.oGrid.add_widget(Label(text=ReplaceVars(uLabel)))
 
-    def CreateDiscoverList(self):
+    def CreateDiscoverList(self) -> Dict:
         """ creates a list of discover results """
         try:
             self.bFirstLine = True
-            self.aDevices   = {}
+            self.dDevices.clear()
             self.ListDiscover()
         except Exception as e:
-            LogError ("Template_Discover: Critical Error",e)
+            LogError (uMsg="Template_Discover: Critical Error",oException=e)
 
+        return self.dDevices
 
-    def Discover(self,**kwargs):
+    def Discover(self,**kwargs) -> Dict:
         """ empty placeholder """
-        pass
+        return {}
 
-    def GetHeaderLabels(self):
+    def GetHeaderLabels(self) -> List[str]:
         """ empty placeholder """
         return []
 
-    def AddLine(self,aLine,aDevice):
+    def AddLine(self,aLine:List[str],dDevice:QueryDict):
         """ adds a line to the discover results """
-        aButtons = []
+        aButtons:List[Button] = []
 
         if self.bFirstLine:
             self.AddHeaders()
 
         for uText in aLine:
             oButton=Button(text=uText, text_size=(Globals.iAppWidth*0.9/(self.iDivide*1.2),self.iLineHeight*0.9), shorten=True)
-            oButton.oDevice=aDevice
+            oButton.dDevice=dDevice
             aButtons.append(oButton)
             oButton.bind(on_release=self.CreateDiscoverList_ShowDetails)
             self.oGrid.add_widget(oButton)
 
         self.bFirstLine = False
 
-    def ListDiscover(self):
+    def ListDiscover(self) -> None:
         """ empty placeholder """
         pass
 
-    def CreateDiscoverList_ShowDetails(self,instance):
+    def CreateDiscoverList_ShowDetails(self,instance) -> None:
         """ empty placeholder """
         pass

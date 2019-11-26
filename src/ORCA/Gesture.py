@@ -18,17 +18,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                 import Union
+from xml.etree.ElementTree  import Element
 from ORCA.utils.XML         import GetXMLTextAttribute
 
 __all__ = ['cGesture']
 
-class cGesture(object):
+class cGesture:
     """ Gesture Abstraction Object """
     def __init__(self):
-        self.uGestureName        =  u''
-        self.oGesture            =  None
-        self.uGestureString      =  u''
-    def ParseGestureFromXMLNode(self,oXMLNode):
+        self.uGestureName:str           =  u''
+        self.oGesture:Union[str,None]   =  None
+        self.uGestureString:str         =  u''
+    def ParseGestureFromXMLNode(self,oXMLNode:Element) -> None:
         """ Parses a gesture from an xml object """
         self.uGestureName       =  GetXMLTextAttribute(oXMLNode,u'name',True,u'')
         self.uGestureString     =  GetXMLTextAttribute(oXMLNode,u'data',True,u'')

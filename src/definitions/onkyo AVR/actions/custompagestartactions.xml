@@ -36,6 +36,7 @@
     <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_CenterLevel_Max=12"/>
     <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Min=-15"/>
     <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Max=12"/>
+    <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model="/>
 
     <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[0]=" />
     <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_listtext[1]=" />
@@ -73,7 +74,7 @@
   <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Net">
     <action name="Remove Captions of Record Button" string="setwidgetattribute" widgetname="Button Record" attributename="caption" attributevalue=""/>
     <action name="Calling Onkyo Pagestart actions as a seperate function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)" />
-    <action name="Send Get Picture"  string="sendcommand" commandname="main.net-usb-jacket-art.query"  retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
+    <action name="Send Get Picture"  string="sendcommand main.net-usb-jacket-art.query"  retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
   </pagestartaction>
 
   <pagestopaction name="[Disabled] Page_Device_$dvar(definition_alias_mediaplayer_template)_Net">
@@ -82,7 +83,7 @@
 
   <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Radio">
     <action name="Calling Onkyo Pagestart actions as a seperate function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)" />
-    <action name="Send Get Picture"  string="sendcommand" commandname="main.net-usb-jacket-art.query"  retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
+    <action name="Send Get Picture"  string="sendcommand main.net-usb-jacket-art.query"  retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
 
   </pagestartaction>
 

@@ -23,16 +23,8 @@ AudioAndroid: implementation of Sound with Android Core Function
 
 """
 
-from jnius                                import detach
-from ORCA.utils.LogError                  import LogError
-from ORCA.utils.Platform.android_helper   import GetAndroidModule
-
-
-
 from kivy.logger        import Logger
 Logger.debug("Loading Module android_RegisterSoundprovider")
-
-
 
 from kivy.clock         import Clock
 from kivy.core.audio    import Sound, SoundLoader
@@ -51,9 +43,10 @@ try:
     Logger.debug("Sucessfully loaded autoclass, detach, Mediaplayer")
 except Exception as e:
     Logger.error("Can't load Android Mediaplayer from jnius")
-    Logger.error(e.message)
+    Logger.error(str(e))
 
 
+# noinspection PyUnusedLocal
 class SoundAndroid(Sound):
 
     _check_play_ev = None
@@ -66,13 +59,13 @@ class SoundAndroid(Sound):
         self._data      = oMPlayer
         self.start_time = 0
         self.secs       = 0
-        super(SoundAndroid, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def _check_play(self, p_dt):
         if self.state == 'play':
             return
         if self.loop:
-            def do_loop(p_dt):
+            def do_loop(parp_dt):
                 self.play()
             Clock.schedule_once(do_loop)
         else:
@@ -114,8 +107,8 @@ class SoundAndroid(Sound):
             self._data.setDataSource(self.filename)
             self._data.prepare()
             # self.length = self._data.getDuration() / 1000
-        except Exception as e:
-            Logger.error('SoundAndroid:error in title: %s : %s' % (self.filename,e.message))
+        except Exception as ex:
+            Logger.error('SoundAndroid:error in title: %s : %s' % (self.filename,str(ex)))
             return None
 
     def unload(self):
@@ -145,6 +138,6 @@ class SoundAndroid(Sound):
 '''
 
 
-def RegisterSoundProvider():
+def RegisterSoundProvider() -> None:
     Logger.info("Register MP3 Sound on Android")
     SoundLoader.register(SoundAndroid)

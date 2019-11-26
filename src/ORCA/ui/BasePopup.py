@@ -18,8 +18,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
+from __future__ import annotations
+from typing import List
+from typing import Union
 from kivy.uix.widget import Widget
+from kivy.uix.popup import Popup
+
 
 __all__ = ['SettingSpacer', 'cBasePopup', 'IsPopupActive', 'CloseActivePopup']
 
@@ -29,17 +33,17 @@ class SettingSpacer(Widget):
     pass
 
 
-class cBasePopup(object):
+class cBasePopup:
     """  Base class for Application Popups """
 
-    aPopUps = []
+    aPopUps:List[cBasePopup] = []
 
     def __init__(self):
         cBasePopup.aPopUps.append(self)
-        self.oPopup = None
-        self.bPreventCloseOnEscKey = False
+        self.oPopup:Union[Popup,None]   = None
+        self.bPreventCloseOnEscKey:bool = False
 
-    def ClosePopup(self):
+    def ClosePopup(self) -> None:
         """ closes the popup """
         if self.oPopup:
             # don't use animation, as this conflicts with scheduled init
@@ -49,12 +53,12 @@ class cBasePopup(object):
             cBasePopup.aPopUps.remove(self)
 
 
-def IsPopupActive():
+def IsPopupActive() -> bool:
     """ checks, if we already show a popup """
     return not len(cBasePopup.aPopUps) == 0
 
 
-def CloseActivePopup(oPopUp=None, bTriggeredByESCKey=False):
+def CloseActivePopup(oPopUp:Union[Popup,None]=None, bTriggeredByESCKey:bool=False) -> None:
     """ closes the latest popup """
     if oPopUp is None:
         if not len(cBasePopup.aPopUps) == 0:

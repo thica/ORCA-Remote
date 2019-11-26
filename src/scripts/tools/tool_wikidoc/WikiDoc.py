@@ -19,6 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__                     import annotations
+from typing                         import List
+from typing                         import Dict
+from typing                         import Tuple
+
 import  mwclient
 from kivy.logger                    import Logger
 from ORCA.utils.LogError            import LogError
@@ -26,34 +31,38 @@ from ORCA.utils.TypeConvert         import EscapeUnicode
 from ORCA.utils.Path                import cPath
 from ORCA.utils.FileName            import cFileName
 from ORCA.utils.LoadFile            import LoadFile
-from ORCA.utils.TypeConvert         import ToUnicode
 from ORCA.utils.Sleep               import fSleep
 
 import ORCA.Globals as Globals
 
-class cWikiTocEntry(object):
+class cWikiTocEntry:
     """ class for a TOC Entry """
     def __init__(self):
-        self.uTocTitle     = u''
-        self.uTocReference = u''
-    def AsListToc(self):
+        self.uTocTitle:str     = u''
+        self.uTocReference:str = u''
+    def AsListToc(self) -> str:
         return "* [[%s|%s]]" % (self.uTocReference,self.uTocTitle)
-    def RemoveOrder(self):
+    def RemoveOrder(self) -> None:
         self.uTocTitle = self.uTocTitle[self.uTocTitle.index("=")+1:]
 
-class cWikiPage(object):
+class cWikiPage:
     """ Class for a Wiki Page """
     def __init__(self):
-        self.uContext  = u''
-        self.uPage     = u''
-        self.uContent  = []
-        self.uTOCTitle = u''
-        self.oPages    = []
-        self.uWikiApp  = ""
-    def ParseFile(self,oFileName,iStartLine=0):
+        self.uContext:str           = u''
+        self.uPage:str              = u''
+        self.uContent:List[str]     = []
+        self.uTOCTitle:str          = u''
+        self.oPages:List[cWikiPage] = []
+        self.uWikiApp:str           = ""
+    def ParseFile(self,oFileName:cFileName,iStartLine:int=0) -> List[cWikiPage]:
         """ parses a single file """
 
-        i=0
+        uContent:str
+        aContent:List[str]
+        uParts:List[str]
+        uLine:str
+        bFound:bool
+        i:int=0
 
         if oFileName.string.endswith("__init__.py"):
             return self.oPages
@@ -62,7 +71,7 @@ class cWikiPage(object):
             Logger.debug("Reading File:"+oFileName.string)
         try:
             if oFileName.Exists():
-                uContent=ToUnicode(LoadFile(oFileName))
+                uContent=LoadFile(oFileName)
                 aContent=uContent.split("\n")
                 bFound = False
                 for  i,uLine in enumerate(aContent):
@@ -71,7 +80,6 @@ class cWikiPage(object):
                         if uLine.startswith(u'WikiDoc:Doc'):
                             bFound = True
                         elif uLine.startswith(u'WikiDoc:End'):
-                            bFound = False
                             self.oPages.append(self)
                             break
                         elif uLine.startswith("WikiDoc:Context:"):
@@ -92,10 +100,10 @@ class cWikiPage(object):
                             if bFound:
                                 self.uContent.append(uLine)
             else:
-                LogError(u'cWikiDoc:Cant find file:'+oFileName.string)
+                LogError(uMsg=u'cWikiDoc:Cant find file:'+oFileName.string)
 
             if len(self.oPages)>0:
-                oPage=cWikiPage()
+                oPage:cWikiPage = cWikiPage()
                 oPages=oPage.ParseFile(oFileName,i)
                 if len(oPages)>0:
                     self.oPages.extend(oPages)
@@ -104,13 +112,13 @@ class cWikiPage(object):
                     Logger.warning("No Wikidoc entry in file:"+oFileName.string)
             return self.oPages
         except Exception as e:
-            LogError(u'WikiDoc:Unexpected error reading file:',e)
+            LogError(uMsg=u'WikiDoc:Unexpected error reading file:',oException=e)
             return []
 
-    def WriteDoc(self,uPath):
+    def WriteDoc(self,uPath:cPath) -> None:
         """ writes the Wiki Doc File """
 
-        oFileName=cFileName(uPath) + (self.uPage+".mediawiki")
+        oFileName:cFileName = cFileName(uPath) + (self.uPage+".mediawiki")
         # oFileName.Delete()
         f = open(oFileName.string, 'w')
 
@@ -122,28 +130,35 @@ class cWikiPage(object):
             f.write(EscapeUnicode(uLine)+u"\n")
         f.close()
 
-    def WriteWiki(self,oWiki):
+    def WriteWiki(self,oWiki:mwclient.Site) -> None:
         try:
             Logger.debug("Writing Page to Wiki:"+self.uPage)
             oPage = oWiki.Pages[self.uPage]
-            uContent='\n'.join(self.uContent)
-            jRet=oPage.save(uContent)
+            uContent:str    = '\n'.join(self.uContent)
+            oPage.save(uContent)
         except Exception as e:
             Logger.error("Error writing page:"+str(e))
 
-    def ReplaceTocs(self,dTocs):
+    def ReplaceTocs(self,dTocs:Dict[str,List[cWikiTocEntry]]) -> None:
         """ replaces the Tocs Refs with the collected TOCs"""
+        i:int
+        uLine:str
+        aParts:List[str]
+        uContext:str
+        uSortType:str
+        aTocs:List[cWikiTocEntry]
+
         for i,uLine in enumerate(self.uContent):
             if uLine.startswith(u'WikiDoc:TOC:'):
-                uParts=uLine.split(":")
-                if len(uParts)==4:
-                    uContext=uParts[-2]
-                    uTocType=uParts[-1]
+                aParts=uLine.split(":")
+                if len(aParts)==4:
+                    uContext=aParts[-2]
+                    uTocType=aParts[-1]
                     uSortType="unsorted"
                 else:
-                    uContext=uParts[-3]
-                    uTocType=uParts[-2]
-                    uSortType=uParts[-1]
+                    uContext=aParts[-3]
+                    uTocType=aParts[-2]
+                    uSortType=aParts[-1]
 
                 aTocs=dTocs.get(uContext)
                 if aTocs:
@@ -159,9 +174,15 @@ class cWikiPage(object):
                             i+=1
                         self.uContent.remove(uLine)
                 else:
-                    LogError(u'Wikidoc:unable to find TOCS for context:'+uContext)
+                    LogError(uMsg=u'Wikidoc:unable to find TOCS for context:'+uContext)
 
-    def AdjustToTargetWiki(self,oWikiDoc):
+    def AdjustToTargetWiki(self,oWikiDoc:cWikiDoc) -> None:
+        iIndex:int
+        iPos:int
+        uFileName:str
+        uLine:str
+        uLink:str
+
         self.uWikiApp = oWikiDoc.uWikiApp
         if oWikiDoc.uWikiApp == "GITWIKI":
             iIndex = -1
@@ -176,7 +197,7 @@ class cWikiPage(object):
                         uLink = EscapeUnicode(oWikiDoc.uHost+oFile.unixstring[oFile.unixstring.rfind("/src/"):])
                         uLine = uLine[:iPos+2]+uLink+uLine[uLine.find("]]",iPos):]
                     else:
-                        LogError(u'Wikidoc:unable to find linked filename: [%s] [%s] [%s]' % (uFileName,uLine,self.uPage))
+                        LogError(uMsg=u'Wikidoc:unable to find linked filename: [%s] [%s] [%s]' % (uFileName,uLine,self.uPage))
                 # adjust syntaxhighlighting to GIT Wiki
 
                 uLine = uLine.replace('<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">', '<div style="overflow-x: auto;">\n```xml')
@@ -189,24 +210,24 @@ class cWikiPage(object):
                 self.uContent[iIndex]=uLine
 
 
-class cWikiDoc(object):
+class cWikiDoc:
     """ Class to create the ORCA Wiki Documentation """
     def __init__(self,**kwargs):
-        self.dFileList          = {}
-        self.aDocs              = []
-        self.dTocs              = {}
-        self.dImageFileList     = {}
-        self.dImageFileListBase = {}
-        self.oSourcePath        = cPath(Globals.oPathRoot) + "ORCA"
+        self.dFileList:Dict[str,cFileName]          = {}
+        self.aDocs:List[cWikiPage]                  = []
+        self.dTocs:Dict[str,List[cWikiTocEntry]]    = {}
+        self.dImageFileList:Dict[str,cFileName]     = {}
+        self.dImageFileListBase:Dict[str,cFileName] = {}
+        self.oSourcePath:cPath                      = cPath(Globals.oPathRoot) + "ORCA"
 
-        self.uHost              = kwargs["Host"]
-        self.uWikiPath          = kwargs["WikiPath"]
-        self.uUser              = kwargs["User"]
-        self.uPassword          = kwargs["Password"]
-        self.oWikiTargetFolder  = cPath(kwargs["WikiTargetFolder"])
-        self.uWikiApp           = kwargs["WikiApp"]
+        self.uHost:str                              = kwargs["Host"]
+        self.uWikiPath:str                          = kwargs["WikiPath"]
+        self.uUser:str                              = kwargs["User"]
+        self.uPassword:str                          = kwargs["Password"]
+        self.oWikiTargetFolder:cPath                = cPath(kwargs["WikiTargetFolder"])
+        self.uWikiApp:str                           = kwargs["WikiApp"]
 
-    def Run(self):
+    def Run(self) -> None:
         """ Collects all Wiki Docs """
         self.CleanUp()
         #self.CollectFile(self.uSourcePath + "/widgets/wikidoc.txt")
@@ -227,22 +248,24 @@ class cWikiDoc(object):
         if self.uWikiApp == "MEDIAWIKI":
             self.WriteWikiPages()
 
-    def CollectImages(self,oPath,bSubDirs):
+    def CollectImages(self,oPath:cPath,bSubDirs:bool) -> None:
         """ adds all files in a folder to the list of images """
-        aFiles  = oPath.GetFileList(bSubDirs=bSubDirs,bFullPath=True)
-        tFilter = (".jpg",".jpeg",".bmp",".png")
+        aFiles:List[str] = oPath.GetFileList(bSubDirs=bSubDirs,bFullPath=True)
+        tFilter:Tuple = (".jpg",".jpeg",".bmp",".png")
 
         for uFile in aFiles:
             if "wikidoc" in uFile:
                 if uFile.endswith(tFilter):
-                    oFile=cFileName(u'').ImportFullPath(uFile)
-                    self.dImageFileList[oFile.string] = oFile
+                    oFile:cFileName = cFileName(u'').ImportFullPath(uFile)
+                    self.dImageFileList[oFile.string]       = oFile
                     self.dImageFileListBase[oFile.basename] = oFile
 
-    def WriteWikiPages(self):
+    def WriteWikiPages(self) -> None:
         """ Write all wiki entries to wikipedia """
 
-        oSite     = None
+        oSite:mwclient.Site
+        uImageKey:str
+        oPage:cWikiPage
 
         try:
             oSite = mwclient.Site(self.uHost,path= self.uWikiPath,force_login=True)
@@ -250,19 +273,22 @@ class cWikiDoc(object):
 
             try:
                 for uImageKey in self.dImageFileList:
-                    oFnImage = self.dImageFileList[uImageKey]
+                    oFnImage:cFileName = self.dImageFileList[uImageKey]
                     Logger.debug("Uploading Image:" + oFnImage.string)
-                    jRec=oSite.upload(open(oFnImage.string, 'rb'), filename=oFnImage.basename, description='')
+                    # noinspection PyTypeChecker
+                    jRec:Dict=oSite.upload(file=open(oFnImage.string, 'rb'), filename=oFnImage.basename, description='')
                     # print (jRec["warnings"].keys()[0]," ",jRec["warnings"][jRec["warnings"].keys()[0]])
-                    dWarnings = jRec.get("warnings")
+                    dWarnings:Dict = jRec.get("warnings")
                     if dWarnings is not None:
-                        if "was-deleted" in dWarnings.keys()[0]:
+                        if "was-deleted" in dWarnings.keys():
                             Logger.error("You need Undelete File in Mediawiki:"+oFnImage.basename)
-                        if "exists" in dWarnings.keys()[0]:
-                            jRec = oSite.upload(open(oFnImage.string, 'rb'), filename=oFnImage.basename, description='', ignore=True)
+                        if "exists" in dWarnings.keys():
+                            # noinspection PyTypeChecker
+                            oSite.upload(file=open(oFnImage.string, 'rb'), filename=oFnImage.basename, description='', ignore=True)
 
             except Exception as e:
                 Logger.error("Error writing image:" + str(e))
+
 
             for oPage in self.aDocs:
                 if oPage.uPage:
@@ -272,12 +298,11 @@ class cWikiDoc(object):
         except Exception as e:
             Logger.error("Error writing page:"+str(e))
 
-
-
-    def CleanUp(self):
+    # noinspection PyMethodMayBeStatic
+    def CleanUp(self) -> None:
         Globals.oPathTmp.Clear()
 
-    def CollectFile(self,oFile):
+    def CollectFile(self,oFile:cFileName) -> None:
         """ Adds a file to list of sources """
         self.dFileList[oFile.string]=oFile
     def CollectFiles(self,oPath, bSubDirs=False):
@@ -288,50 +313,53 @@ class cWikiDoc(object):
             if oFile.string.endswith(".py") or oFile.string.endswith(".txt"):
                 self.dFileList[oFile.string]=oFile
 
-    def ParseFiles(self):
+    def ParseFiles(self) -> None:
         """ Parses all added files """
         for uFileKey in self.dFileList:
             self.ParseFile(self.dFileList[uFileKey])
 
-    def ReplaceTocs(self):
+    def ReplaceTocs(self) -> None:
         """ Replace all TOC references """
+        oPage:cWikiPage
         for oPage in self.aDocs:
             oPage.ReplaceTocs(self.dTocs)
 
-    def AdjustToTargetWiki(self):
-        """ Adjust to target wiki (currently GIT wiki( """
+    def AdjustToTargetWiki(self) -> None:
+        """ Adjust to target wiki (currently GIT wiki) """
+        oPage:cWikiPage
         for oPage in self.aDocs:
             oPage.AdjustToTargetWiki(self)
 
         if self.uWikiApp=="GITWIKI":
-            oWikiPath = Globals.oPathRoot + "wikidoc"
-            aFiles = oWikiPath.GetFileList(bSubDirs=False,bFullPath=True)
+            oWikiPath:cPath = Globals.oPathRoot + "wikidoc"
+            aFiles:List[str] = oWikiPath.GetFileList(bSubDirs=False,bFullPath=True)
             for uFile in aFiles:
                 if uFile.endswith(".md"):
-                    oSourceFileName = cFileName()
+                    oSourceFileName:cFileName = cFileName()
                     oSourceFileName.ImportFullPath(uFile)
                     oSourceFileName.Copy(self.oWikiTargetFolder)
 
 
-    def WriteDocs(self):
+    def WriteDocs(self) -> None:
         """ Write all wiki entries as txt file """
+        oPage:cWikiPage
         for oPage in self.aDocs:
             oPage.WriteDoc(self.oWikiTargetFolder)
 
-    def AddToc(self,oTocReference,uContext):
+    def AddToc(self,oTocReference:cWikiTocEntry,uContext:str) -> None:
         """ adds a toc reference to the list of all Tocs """
-        aTocs = self.dTocs.get(uContext)
+        aTocs:List[cWikiTocEntry] = self.dTocs.get(uContext)
         if aTocs is None:
             self.dTocs[uContext]=[]
         self.dTocs[uContext].append(oTocReference)
 
-    def ParseFile(self,oFileName):
+    def ParseFile(self,oFileName:cFileName) -> None:
         """ Parses a single file """
-        oPage=cWikiPage()
-        oPages=oPage.ParseFile(oFileName)
-        for oFoundPage in oPages:
+        oPage:cWikiPage=cWikiPage()
+        aPages:List[cWikiPage]=oPage.ParseFile(oFileName)
+        for oFoundPage in aPages:
             self.aDocs.append(oFoundPage)
-            oToc=cWikiTocEntry()
+            oToc:cWikiTocEntry=cWikiTocEntry()
             oToc.uTocReference=oFoundPage.uPage
             oToc.uTocTitle    =oFoundPage.uTOCTitle
             self.AddToc(oToc,oFoundPage.uContext)

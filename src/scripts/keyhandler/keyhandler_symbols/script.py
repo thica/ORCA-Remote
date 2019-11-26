@@ -20,7 +20,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+from typing import Dict
 from ORCA.scripttemplates.Template_Keyhandler import cKeyhandlerTemplate
 
 '''
@@ -31,8 +31,8 @@ from ORCA.scripttemplates.Template_Keyhandler import cKeyhandlerTemplate
       <description language='English'>Script to translate keycodes to symbolic names</description>
       <description language='German'>Script keycodes in symbolische Namen to ändern </description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -42,7 +42,6 @@ from ORCA.scripttemplates.Template_Keyhandler import cKeyhandlerTemplate
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/keyhandler/keyhandler_symbols/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -77,25 +76,24 @@ class cScript(cKeyhandlerTemplate):
         self.uIniFileLocation   = u'none'
 
         #this might get adjusted fo different platforms
-        self.dTranslation = { "27": "ESC",
-                             "282": "F1",
-                             "283": "F2",
-                             "284": "F3",
-                             "285": "F4",
-                             "286": "F5",
-                             "287": "F6",
-                             "288": "F7",
-                             "289": "F8",
-                             "290": "F9",
-                             "291": "F10",
-                             "292": "F11",
-                             "293": "F12"
-                             }
+        self.dTranslation:Dict = {   "27": "ESC",
+                                    "282": "F1",
+                                    "283": "F2",
+                                    "284": "F3",
+                                    "285": "F4",
+                                    "286": "F5",
+                                    "287": "F6",
+                                    "288": "F7",
+                                    "289": "F8",
+                                    "290": "F9",
+                                    "291": "F10",
+                                    "292": "F11",
+                                    "293": "F12"
+                                }
 
-    def HandleKey(self,**kwargs):
+    def HandleKey(self,**kwargs) -> Dict:
         cKeyhandlerTemplate.HandleKey(self, **kwargs)
 
-        uKey    = kwargs.get("key",0)
-        uKeyNew = self.dTranslation.get(uKey,uKey)
-
+        uKey:str     = kwargs.get("key",0)
+        uKeyNew:str = self.dTranslation.get(uKey,uKey)
         return {"key":uKeyNew}

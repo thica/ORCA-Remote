@@ -20,15 +20,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from shutil import ignore_patterns
-
-
+from typing                                 import Dict
+from shutil                                 import ignore_patterns
 from ORCA.scripts.Scripts                   import cScriptSettingPlugin
 from ORCA.scripttemplates.Template_Tools    import cToolsTemplate
 from ORCA.utils.FileName                    import cFileName
 from ORCA.utils.Path                        import cPath
 from ORCA.vars.Access                       import GetVar
 from ORCA.vars.Access                       import SetVar
+from ORCA.definition.Definition             import cDefinition
 
 import ORCA.Globals as Globals
 
@@ -40,8 +40,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to Im/Export Orca files</description>
       <description language='German'>Tool um die Orca Files zu Im/Exportieren</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -51,7 +51,6 @@ import ORCA.Globals as Globals
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/tools/tool_importexport/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -59,7 +58,7 @@ import ORCA.Globals as Globals
 '''
 
 
-
+# noinspection PyMethodMayBeStatic,PyUnusedLocal
 class cScript(cToolsTemplate):
     """
     WikiDoc:Doc
@@ -87,30 +86,30 @@ class cScript(cToolsTemplate):
         self.uIniFileLocation   = u'none'
 
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> None:
         cToolsTemplate.RunScript(self,*args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.ShowPageExport(self, *args, **kwargs)
 
-    def ShowPageExport(self, *args, **kwargs):
+    def ShowPageExport(self, *args, **kwargs) -> None:
         SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="EXPORT")
         oEvents = Globals.oEvents
         aActions=oEvents.CreateSimpleActionList([{'name':'show page','string':'showpage','pagename':'Page_Export'},
                                                  {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_8)', 'autoupdate':'1'}])
         oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
-    def ShowPageImport(self, *args, **kwargs):
+    def ShowPageImport(self, *args, **kwargs) -> None:
         SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="IMPORT")
         oEvents = Globals.oEvents
         aActions=oEvents.CreateSimpleActionList([{'name':'show page','string':'showpage','pagename':'Page_Export'},
                                                  {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_9)', 'autoupdate':'1'}])
         oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
-    def Register(self, *args, **kwargs):
+    def Register(self, *args, **kwargs) -> Dict:
         cToolsTemplate.Register(self,*args, **kwargs)
-        Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED", fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools Import Export")
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-IMPORT",   fNotifyFunction=self.ShowPageImport, uDescription="Script Tools Import / Export")
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-EXPORT",   fNotifyFunction=self.ShowPageExport, uDescription="Script Tools Import / Export")
+        Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED",            fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools Import Export")
+        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-IMPORT",   fNotifyFunction=self.ShowPageImport,  uDescription="Script Tools Import / Export")
+        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-EXPORT",   fNotifyFunction=self.ShowPageExport,  uDescription="Script Tools Import / Export")
         Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-DOIMPORT", fNotifyFunction=self.ImportOrcaFiles, uDescription="Script Tools Import / Export")
         Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-DOEXPORT", fNotifyFunction=self.ExportOrcaFiles, uDescription="Script Tools Import / Export")
 
@@ -124,30 +123,31 @@ class cScript(cToolsTemplate):
         Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
         self.LoadActions()
+        return {}
 
-    def LoadScriptPages(self,*args,**kwargs):
-        oDefinition = kwargs.get("definition")
+    def LoadScriptPages(self,*args,**kwargs) -> None:
+        oDefinition:cDefinition = kwargs.get("definition")
 
         if oDefinition.uName == Globals.uDefinitionName:
             if self.oFnXML.Exists():
                 oDefinition.LoadFurtherXmlFile(self.oFnXML)
 
-    def ExportOrcaFiles(self,*args,**kwargs):
+    def ExportOrcaFiles(self,*args,**kwargs) -> None:
         """
         Export all Orca Files a given location
         """
-        oPath = cPath(GetVar(uVarName="filebrowserfile")) + "/OrcaExport"
+        oPath:cPath = cPath(GetVar(uVarName="filebrowserfile")) + "/OrcaExport"
         oPath.Delete()
         if not Globals.oPathRoot.string in oPath.string:
             fIgnore = ignore_patterns('*.ini', 'ORCA', '*.py*')
             Globals.oPathRoot.Copy(oPath, fIgnore)
 
-    def ImportOrcaFiles(self,*args,**kwargs):
+    def ImportOrcaFiles(self,*args,**kwargs) -> None:
         """
         Import all ORCA files from a given location
         """
-        oPath = cPath(GetVar(uVarName="filebrowserfile"))
-        oFnCheckFile = cFileName(oPath + 'actions') + 'actions.xml'
+        oPath:cPath = cPath(GetVar(uVarName="filebrowserfile"))
+        oFnCheckFile:cFileName = cFileName(oPath + 'actions') + 'actions.xml'
         if oFnCheckFile.Exists():
             if not Globals.bProtected:
                 oPath.Copy(Globals.oPathRoot)

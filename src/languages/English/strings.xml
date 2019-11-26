@@ -8,8 +8,8 @@
       <description language='English'>English language strings</description>
       <description language='German'>Englische Zeichenketten</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/languages/English</local>
@@ -144,7 +144,6 @@
   <string id="522">Perform Action on touch down or touch up</string>
   <string id="523">Manage Definition</string>
   <string id="524">Load online Definitions, copy, rename, or delete Definitions</string>
-
   <string id="525">Repeat Touch Init Delay</string>
   <string id="526">Delay in secs for taking a long touch as a repeating touch</string>
   <string id="527">Repeat Touch Continous Delay</string>
@@ -170,7 +169,6 @@
   <string id="547">Powerstati</string>
   <string id="548">Show the status flags of devices and activities</string>
   <string id="549">Show Powerstati</string>
-
   <string id="550">Presentation</string>
   <string id="551">Clock with seconds</string>
   <string id="552">Format the time with or without seconds</string>
@@ -229,6 +227,8 @@
   <string id="609">Credits</string>
   <string id="610">Credits to contributors</string>
   <string id="611">Show credits</string>
+  <string id="612">Borders</string>
+  <string id="613">Show screen widget borders (for debugging)</string>
   <string id="633">Others</string>
   <string id="634">Sounds</string>
   <string id="635">Choose Sounds</string>

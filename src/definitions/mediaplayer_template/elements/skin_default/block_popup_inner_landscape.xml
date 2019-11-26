@@ -6,7 +6,7 @@
 
         <element name='Picture Transmit'  type='PICTURE'    posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%4' height='of:width:self' picturenormal='transmit' enabled='0' />
         <element name='Picture Wait'      type='PICTURE'    posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%4' height='of:width:self' picturenormal='wait' enabled='0' />
-        <element name='Label Device'      type='TEXTFIELD'  posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%25' height='of:width:self:*0.2' caption='$var($dvar(definition_alias_mediaplayer_template)_PRETTYNAME)' fontsize='%h60'/>
+        <element name='Label Device'      type='TEXTFIELD'  posx='of:left:Anchor Frame'   posy='of:top:Anchor Frame'  width='%25' height='of:width:self:*0.2' caption=' kjhkjhk $var($dvar(definition_alias_mediaplayer_template)_PRETTYNAME)' fontsize='%h60'/>
 
         <element name='Anchor TV Buttons' type='ANCHOR' posy='bottom' width='%25' height='of:width:self'>
             <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_buttonbars.xml" parse="xml" />
@@ -23,7 +23,6 @@
         </element>
 
         <element name='Hide_Show_SecondCaption' type='SWITCH' posx='of:left:Anchor Menu Buttons' posy='of:top:Anchor PowerOnOff'   width='of:width:Anchor PowerOnOff' height='of:width:self' picturenormal='button square*' action='Switch Second Caption Page_Device_$dvar(definition_alias_mediaplayer_template)' destvar="Status_Second_Caption_Page_Device_$dvar(definition_alias_mediaplayer_template)" fontsize='%h30' iconfontsize='%h70' caption='icon:translate' />
-
     </element>
 
 </elements>

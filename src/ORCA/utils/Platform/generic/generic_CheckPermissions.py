@@ -24,15 +24,8 @@ from ORCA.utils.Platform import OS_GetUserDownloadsDataPath
 import ORCA.Globals as Globals
 
 
-def CheckPermissions():
-    """ We assume to have all permissions, as long we do not OS specific code"""
-
-    '''
-    if Globals.oPathRoot is not None:
-        return Globals.oPathRoot.IsWriteable()
-    else:
-        return OS_GetUserDataPath().IsWriteable()
-    '''
+def CheckPermissions() -> bool:
+    """ We assume to have all permissions, as long we do not have OS specific code"""
 
     if Globals.oPathUserDownload is not None:
         return Globals.oPathUserDownload.IsWriteable()

@@ -17,14 +17,14 @@
         <xi:include href="$var(STANDARDELEMENTSPATH)/block_mediacircle.xml" parse="xml" />
       </element>
       <element name='Anchor Gap Media Circle' type='ANCHOR' posx='center' posy='of:bottom:Anchor Media Circle' height='%-2'/>
-      <xi:include href="$var(DEFINITIONPATH)/block_buttons_channels_v1.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWCHANNELUPDOWN)==1"/>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_channels_v1.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWCHANNELUPDOWN)==1"/>
     </element>
       <element name='Anchor Volume Button' type='ANCHOR' posx='%82' posy='of:top:Anchor Media section' width='of:width:Button Channel Up' height='%42' interface='$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)' configname='$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)'>
-          <xi:include href="$var(DEFINITIONPATH)/block_volume_buttons_ls_small.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Buttons"/>
+          <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_volume_buttons_ls_small.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Buttons"/>
       </element>
 
       <element name='Anchor Volume Slider' type='ANCHOR' posx='%82' posy='of:top:Anchor Media section' width='of:width:Button Channel Up' height='%42' interface='$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)' configname='$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)'>
-          <xi:include href="$var(DEFINITIONPATH)/block_volume_slider_ls_small.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Slider" />
+          <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_volume_slider_ls_small.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Slider" />
       </element>
 
       <element name='Anchor PowerOnOff' type='ANCHOR' posx='right' posy='of:tobottom:Anchor Volume Slider' width='of:width:Anchor Volume Button:*0.9' height='of:width:self:*2'>
@@ -34,12 +34,12 @@
       <element name='Anchor Midline' type='ANCHOR'  height='of:width:self:*1.5' posy='of:totop:Anchor BottomGap'>
 
       <element name='Anchor NumberPad' type='ANCHOR' posx='%98' width='%47' height='of:width:self:*1.33' posy='bottom'>
-          <xi:include href="$var(DEFINITIONPATH)/block_numberpad.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD)==1"/>
+          <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_numberpad.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_SHOWNUMBERPAD)==1"/>
       </element>
 
       <element name='Anchor Left Buttons' type='ANCHOR' posx='%2' posy='bottom' width='%47'  height='of:height:Anchor NumberPad' >
           <element name='Anchor Menu Buttons' type='ANCHOR' posy='bottom' height='of:width:self:*0.25'>
-              <xi:include href="$var(DEFINITIONPATH)/block_buttons_menu_tv.xml" parse="xml" />
+              <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_menu_tv.xml" parse="xml" />
           </element>
           <element name='Anchor Play Buttons' type='ANCHOR'  posy='of:totop:Anchor Menu Buttons' height='of:width:self:*0.4'>
               <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecord.xml" parse="xml"  condition="$var($dvar(definition_alias_mediaplayer_template)_MEDIABAR_TYPE)==SMALL"/>

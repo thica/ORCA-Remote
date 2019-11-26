@@ -48,11 +48,10 @@
     <action name="ESC Key Handler Default" string="registernotification" filterpagename="NOPOPUP" notification="on_key_ESC"  notifyaction="gotofirstpage"/>
 
     <!-- Standard behaviour for all pages: Show settings dialog, when dialog button is pressed -->
-    <action name="Settings Key Handler Default" string="registernotification" filterpagename="ALL" notification="on_key_282"  notifyaction="gotosettingspage"/>
+    <action name="Settings Key Handler Default" string="registernotification" filterpagename="ALL" notification="on_key_F1"  notifyaction="gotosettingspage"/>
     <action name="Settings Key Handler Default" string="registernotification" filterpagename="ALL" notification="on_key_319"  notifyaction="gotosettingspage"/>
 
-    <!-- we disable esc key for the settings dialog as popups from the framework might be open. So just the close button works -->
-    <action name="ESC Key Handler Settings" string="registernotification" filterpagename="Page_Settings" notification="on_key_ESC"  notifyaction=""/>
+    <action name="ESC Key Handler Settings" string="registernotification" filterpagename="Page_Settings" notification="on_key_ESC"  notifyaction="gotofirstpagefromsettings"/>
     <!-- If we press the close button on the settings page, goto to the first page -->
     <action name="Button Close settings Key Handler Settings" string="registernotification" filterpagename="Page_Settings" notification="closesetting_orca"  notifyaction="gotofirstpagefromsettings"/>
 
@@ -107,11 +106,11 @@
     <!--  Wait For Connectivity -->
     <action1 name="Wait For Connectivity" string="waitforconnectivity" />
 
-      <!-- Standard Pre Initialize empty discover interface-->
-      <action name="Set DISCOVERINTERFACE" string="setvar DISCOVERINTERFACE=" />
-      <action name="Set DISCOVERCONFIG"    string="setvar DISCOVERCONFIG=" />
-      <action name="Set DISCOVERACTION"    string="setvar DISCOVERACTION=" />
-      <action name="Standard Definitions end here" />
+    <!-- Standard Pre Initialize empty discover interface-->
+    <action name="Set DISCOVERINTERFACE" string="setvar DISCOVERINTERFACE=" />
+    <action name="Set DISCOVERCONFIG"    string="setvar DISCOVERCONFIG=" />
+    <action name="Set DISCOVERACTION"    string="setvar DISCOVERACTION=" />
+    <action name="Standard Definitions end here" />
 
   </pagestartaction>
   <pagestartaction name="Page_InterfaceSettings">

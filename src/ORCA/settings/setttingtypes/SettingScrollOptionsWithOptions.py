@@ -70,6 +70,7 @@ class SettingScrollOptionsWithOptions(SettingScrollOptions):
             i+=1
         return 0
 
+    # noinspection PyUnusedLocal
     def _create_subpopup(self, instance):
         kwargs={'title':self.uOption,'options':self.aSubOption}
         self.oSubScrollOptionsPopup=ScrollOptionsPopUp(**kwargs)

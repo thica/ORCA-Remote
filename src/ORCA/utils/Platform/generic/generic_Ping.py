@@ -23,19 +23,17 @@ import os
 from kivy.logger             import Logger
 from ORCA.utils.LogError     import LogError
 
-def Ping(uHostname):
+def Ping(uHostname:str) -> bool:
     """ executes an ping statement (Windows Version) """
-    response = 0
 
     try:
         #response = os.system(u"ping -c 1 -w 1 " + uHostname)
-        uCmd = u"ping -w 500 -c 1 " + uHostname
+        uCmd:str = u"ping -w 500 -c 1 " + uHostname
         Logger.debug('Ping: Sending Command :'+uCmd)
         response = os.system(uCmd)
         Logger.debug('Ping returned :'+str(response))
-
     except Exception as e:
-        LogError('Ping: Error on Ping:',e)
+        LogError(uMsg='Ping: Error on Ping:',oException=e)
         return True
 
     return response == 0

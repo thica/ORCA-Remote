@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page name='Page_Recordings_$dvar(definition_alias_mediaplayer_template)_Popup'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+    <interface>$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)</interface>
+    <configname>$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)</configname>
+    <popup>1</popup>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
+    <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%5" height="of:width:self" picturenormal="button wide*" action="Show Page" actionpars='{"pagename":"$var(LASTPAGE)"}' fontsize='%h50' caption="icon:close_window" />
+    <element name='Anchor Top' type='ANCHOR' posx='center' posy='%8' height='%1' width="%90" />
+    <element name='Anchor1' type='ANCHOR' posy='of:bottom:Anchor Top' posx='of:left:Anchor Top' width='of:width:Anchor Top' height='%90' >
+      <elements>
+        <element name="$dvar(definition_alias_mediaplayer_template)_MovieList" type="SCROLLCONTAINER" picturenormal="background boxes" container="$dvar(definition_alias_mediaplayer_template)_container_movielist" rowheight="%25"  />
+        <element name='Anchor1 Inner' type='ANCHOR'  height='%25' >
+           <element name='Anchor Left Edge' type='ANCHOR'  posx="left" width="%1" />
+           <element name="Title"         type="TEXTFIELD" posx="of:right:Anchor Left Edge"  posy="top"              height="%30"   width="%74"            container="$dvar(definition_alias_mediaplayer_template)_container_movielist" fontsize='%h50'  htextalign="left" vtextalign="middle"   caption="$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_title[])"  bold="1"/>
+           <element name="Details"       type="TEXTFIELD" posx="of:right:Anchor Left Edge"  posy="bottom"           height="%70"   width="of:width:last"  container="$dvar(definition_alias_mediaplayer_template)_container_movielist" fontsize='%h18'  htextalign="left" vtextalign="top"      caption="$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_description[])"    />
+           <element name='Button Play'   type='BUTTON'    posx='right'                      posy="top"              height="%50"   width='of:height:self' container="$dvar(definition_alias_mediaplayer_template)_container_movielist" fontsize='%h30'                                          caption='icon:media_play color:$var(green)' picturenormal='button square*' action='FKT_Enigma_PlayRecordings'  iconfontsize='%h70' tectcolor="green"  />
+           <element name='Button Delete' type='BUTTON'    posx='right'                      posy="bottom"           height="%50"   width='of:height:self' container="$dvar(definition_alias_mediaplayer_template)_container_movielist" fontsize='%h30'                                          caption='icon:delete color:$var(red)'       picturenormal='button square*' action='FKT_Enigma_DeleteMovie' iconfontsize='%h70'  />
+           <element name="Time"          type="TEXTFIELD" posx="of:toleft:Button Play"      posy="top"              height="%33.3" width="%18"            container="$dvar(definition_alias_mediaplayer_template)_container_movielist" fontsize='%h40'  htextalign="center" vtextalign="middle" caption="$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_date_time[])"  />
+           <element name="Lenght"        type="TEXTFIELD" posx="of:left:last"               posy="of:bottom:last"   height="%33.3" width="%18"            container="$dvar(definition_alias_mediaplayer_template)_container_movielist" fontsize='%h40'  htextalign="center" vtextalign="middle" caption="$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_length[])"     />
+           <element name="Service"       type="TEXTFIELD" posx="of:left:last"               posy="of:bottom:last"   height="%33.3" width="%18"            container="$dvar(definition_alias_mediaplayer_template)_container_movielist" fontsize='%h40'  htextalign="center" vtextalign="middle" caption="$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_servicename[])"  />
+        </element>
+      </elements>
+    </element>
+  </elements>
+</page>

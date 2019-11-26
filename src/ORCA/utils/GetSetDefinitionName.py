@@ -18,13 +18,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Tuple
 from ORCA.definition.DefinitionContext import SetDefinitionContext
 
-def GetSetDefinitionName(uText):
-    uRet=''
-    iLoc = uText.find('[')
+def GetSetDefinitionName(uText:str) ->Tuple:
+    """
+    Gets the definitionname from a string and sets the definitioncontext
+    :param uText:
+    :return: A Tuple of defintionanme and long defintion description
+    """
+    uRet:str = ''
+    iLoc2:int
+    iLoc:int = uText.find('[')
     if not iLoc == -1:
-        iLoc2 = uText.find(']',iLoc)
+        iLoc2= uText.find(']',iLoc)
         if not iLoc2 == -1:
             uRet=uText[iLoc+1:iLoc2]
             if not uRet=='':

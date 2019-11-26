@@ -20,21 +20,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__                                 import annotations
+from typing                                     import Dict
+from typing                                     import Union
+
 from ws4py.client.threadedclient                import WebSocketClient
-
-from kivy.compat            import string_types
-
-
 from ORCA.interfaces.BaseInterface              import cBaseInterFace
 from ORCA.interfaces.BaseInterfaceSettings      import cBaseInterFaceSettings
 from ORCA.vars.Replace                          import ReplaceVars
 from ORCA.vars.Access                           import SetVar
 from ORCA.utils.TypeConvert                     import ToUnicode
 from ORCA.utils.wait.StartWait                  import StartWait
-
 from ORCA.utils.Sleep                           import fSleep
-from kivy.clock                                 import Clock
-
+from ORCA.Action                                import cAction
+from ORCA.utils.FileName                        import cFileName
+from ORCA.actions.ReturnCode                    import eReturnCode
 
 '''
 <root>
@@ -44,8 +44,8 @@ from kivy.clock                                 import Clock
       <description language='English'>Sends commands via the Websocket protocol</description>
       <description language='German'>Sendet Befehle via dem Websocket protokoll</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -61,7 +61,6 @@ from kivy.clock                                 import Clock
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>websocket/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -73,23 +72,23 @@ class cInterface(cBaseInterFace):
     class cInterFaceSettings(cBaseInterFaceSettings):
 
         class cWebSocketClient(WebSocketClient):
-
-            def SetSettingObject(self, oSetting):
+            cInterFaceSettings: cInterface.cInterFaceSettings
+            def __init__(self,url, protocols=None, extensions=None, heartbeat_freq=None, ssl_options=None, headers=None, exclude_headers=None):
+                super().__init__(url, protocols, extensions, heartbeat_freq, ssl_options, headers, exclude_headers)
+                self.oSetting: Union[cInterface.cInterFaceSettings,None]=None
+            def SetSettingObject(self, oSetting:cInterFaceSettings) -> None:
                 self.oSetting = oSetting
-
-            def opened(self):
+            def opened(self) -> None:
                 self.oSetting.ShowDebug("Websocket opened")
-
-            def closed(self, code, reason=None):
+            def closed(self, code, reason=None) -> None:
                 self.oSetting.ShowDebug("Websocket closed! Code:%d Reason: %s" % (code, reason))
-
-            def received_message(self, m):
+            def received_message(self, m) -> None:
                 self.oSetting.Receive(m.data)
 
-        def __init__(self,oInterFace):
+        def __init__(self,oInterFace:cInterface):
             cBaseInterFaceSettings.__init__(self,oInterFace)
-            self.oWebSocket                                        = None
-            self.uRetVar                                           = u''
+            self.oWebSocket                               = None
+            self.uRetVar                                  = u''
 
             # default config fits for KODI
             self.aIniSettings.uHost                       = u"discover"
@@ -106,7 +105,7 @@ class cInterface(cBaseInterFace):
             self.aIniSettings.uDISCOVER_UPNP_prettyname   = ""
             self.aIniSettings.bDISCOVER_UPNP_returnport   = False
 
-        def Connect(self):
+        def Connect(self) -> bool:
 
             if not cBaseInterFaceSettings.Connect(self):
                 return False
@@ -122,17 +121,18 @@ class cInterface(cBaseInterFace):
                 self.oWebSocket.connect()
                 self.bInConnect   = True
                 self.bIsConnected = True
-                tRet= self.ExecuteStandardAction('logon')
+                self.ExecuteStandardAction('logon')
                 self.bInConnect = False
                 self.bIsConnected =True
             except Exception as e:
                 self.ShowError(u'Interface not connected: Cannot open socket #2:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
                 self.bOnError=True
-                return
+                return False
 
             self.ShowDebug(u'Interface connected!')
+            return True
 
-        def Disconnect(self):
+        def Disconnect(self) -> bool:
 
             if not cBaseInterFaceSettings.Disconnect(self):
                 self.ShowDebug(u'Interface Disconnect #1: Connection is already closed, no further actions')
@@ -140,13 +140,14 @@ class cInterface(cBaseInterFace):
             self.ShowDebug(u'Interface Disconnect #2:Closing Connection')
 
             try:
-                tRet = self.ExecuteStandardAction('logoff')
+                self.ExecuteStandardAction('logoff')
                 self.oWebSocket.close()
             except Exception:
                 pass
             self.bOnError = False
+            return True
 
-        def Receive(self, uResponse):
+        def Receive(self, uResponse:str):
             uResponse = ToUnicode(uResponse)
             if self.oAction is not None:
                 uCmd,uRetVal=self.oInterFace.ParseResult(self.oAction,uResponse,self)
@@ -157,10 +158,10 @@ class cInterface(cBaseInterFace):
                 StartWait(0)
                 self.oAction=None
             else:
-                oAction = self.dStandardActions["defaultresponse"]
+                oAction:cAction = self.dStandardActions["defaultresponse"]
                 if oAction:
                     uCommand = self.oInterFace.ParseResult(oAction, uResponse, self)
-                    if not isinstance(uCommand, string_types):
+                    if not isinstance(uCommand, str):
                         if len(uCommand)>0:
                             uCommand = uCommand[1]
 
@@ -173,12 +174,12 @@ class cInterface(cBaseInterFace):
 
     def __init__(self):
         cBaseInterFace.__init__(self)
-        self.aSettings      = {}
+        self.dSettings:Dict      = {}
         self.oSetting       = None
         self.uResponse      = u''
         self.iWaitMs        = 100
 
-    def Init(self, uObjectName, oFnObject=None):
+    def Init(self, uObjectName: str, oFnObject: Union[cFileName,None] = None) -> None:
         cBaseInterFace.Init(self, uObjectName, oFnObject)
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
@@ -191,22 +192,22 @@ class cInterface(cBaseInterFace):
         self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
-    def GetConfigJSON(self):
+    def GetConfigJSON(self) -> Dict:
         return {"Service": {"active": "enabled", "order": 3, "type": "string",         "title": "$lvar(IFACE_WEBSOCKET_1)", "desc": "$lvar(IFACE_WEBSOCKET_2)", "section": "$var(ObjectConfigSection)","key": "Service",                  "default":"ws://$cvar(HOST):$cvar(PORT)/jsonrpc"}}
 
-    def DeInit(self, **kwargs):
+    def DeInit(self, **kwargs) -> None:
         cBaseInterFace.DeInit(self,**kwargs)
-        for aSetting in self.aSettings:
-            self.aSettings[aSetting].DeInit()
+        for uSettingName in self.dSettings:
+            self.dSettings[uSettingName].DeInit()
 
-    def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
+    def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
         cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
         if uRetVar!="":
             oAction.uGlobalDestVar=uRetVar
 
-        iTryCount=0
-        iRet=1
+        iTryCount        = 0
+        eRet:eReturnCode = eReturnCode.Error
         #Logger.info ('Interface '+self.sInterFaceName+': Sending Command: '+sCommand + ' to '+oSetting.sHost+':'+oSetting.sPort)
         while iTryCount<2:
             iTryCount+=1
@@ -233,11 +234,11 @@ class cInterface(cBaseInterFace):
                         StartWait(self.iWaitMs)
                     oSetting.oWebSocket.send(uMsg)
                     fSleep(0.01)
-                    iRet=0
+                    eRet = eReturnCode.Success
                     break
                 except Exception as e:
-                    self.ShowError(u'Can\'t send message',oSetting.uConfigName,e)
-                    iRet=1
+                    self.ShowError(uMsg=u'Can\'t send message',uParConfigName=oSetting.uConfigName,oException=e)
+                    eRet = eReturnCode.Error
                     oSetting.Disconnect()
                     oSetting.bOnError=True
                     if not uRetVar==u'':
@@ -246,11 +247,6 @@ class cInterface(cBaseInterFace):
                 if not uRetVar==u'':
                     SetVar(uVarName = uRetVar, oVarValue = u"Error")
 
-        if oSetting.bIsConnected:
-            if oSetting.aIniSettings.iTimeToClose==0:
-                oSetting.Disconnect()
-            elif oSetting.aIniSettings.iTimeToClose!=-1:
-                Clock.unschedule(oSetting.FktDisconnect)
-                Clock.schedule_once(oSetting.FktDisconnect, oSetting.aIniSettings.iTimeToClose)
-        return iRet
+        self.CloseSettingConnection(oSetting=oSetting, bNoLogOut=bNoLogOut)
+        return eRet
 

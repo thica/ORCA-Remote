@@ -20,5 +20,5 @@
 """
 
 
-def GetDefaultStretchMode():
+def GetDefaultStretchMode() -> str:
     return u'STRETCH'

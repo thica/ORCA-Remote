@@ -18,6 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                             import List
 from kivy.uix.widget                    import Widget
 from kivy.uix.settings                  import SettingItem
 import ORCA.Globals as Globals
@@ -38,8 +39,11 @@ class SettingHidden(SettingItem):
     """ a hidden setting """
     pass
 
-def GetLanguageList():
+def GetLanguageList() -> List[str]:
     """ Return the list of all defined language vars """
+
+    uKey:str
+    uValue:str
 
     if "aList" not in vars(GetLanguageList):
         GetLanguageList.aList=[]
@@ -50,8 +54,10 @@ def GetLanguageList():
         GetLanguageList.aList.sort()
     return GetLanguageList.aList
 
-def GetGestureList():
+def GetGestureList() -> List[str]:
     """ Return the list of all Gesture Names"""
+
+    uKey:str
     if "aList" not in vars(GetGestureList):
         GetGestureList.aList=[]
         for uKey in Globals.oTheScreen.dGestures:
@@ -59,8 +65,9 @@ def GetGestureList():
         GetGestureList.aList.sort()
     return GetGestureList.aList
 
-def GetPageList():
+def GetPageList() -> List[str]:
     """ Return the list of all Page Names"""
+    uKey:str
     if "aList" not in vars(GetPageList):
         GetPageList.aList=[]
         for uKey in Globals.oTheScreen.oScreenPages:
@@ -68,8 +75,10 @@ def GetPageList():
         GetPageList.aList.sort()
     return GetPageList.aList
 
-def GetActionList():
+def GetActionList()  -> List[str]:
     """ Return the list of all Action Names"""
+    uKey:str
+
     if "aList" not in vars(GetActionList):
         GetActionList.aList=[]
         for uKey in Globals.oActions.dActionsCommands:
@@ -77,8 +86,10 @@ def GetActionList():
         GetActionList.aList.sort()
     return GetActionList.aList
 
-def GetSendActionList():
+def GetSendActionList() -> List[str]:
     """ Return the list of all Send Action Names"""
+    uKey:str
+
     if "aList" not in vars(GetSendActionList):
         GetSendActionList.aList=[]
         for uKey in Globals.oActions.dActionsCommands:

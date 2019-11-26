@@ -24,20 +24,21 @@ from ORCA.utils.TypeConvert  import ToUnicode
 import ORCA.Globals as Globals
 
 try:
+    # noinspection PyUnresolvedReferences
     from   plyer                 import vibrator
     Logger.info("plyer/vibrator available")
 except Exception as e:
     Logger.info("plyer/vibrator not available")
 
 
-def Vibrate(fDuration=0.05):
+def Vibrate(fDuration:float=0.05) -> bool:
     """ Vibrates a device """
     if Globals.bVibrate:
         try:
             vibrator.vibrate(fDuration)
         except NotImplementedError:
             pass
-        except Exception as e:
-            uMsg=u'Globals: can\'t Vibrate:'+ToUnicode(e)
+        except Exception as ex:
+            uMsg=u'Globals: can\'t Vibrate:'+ToUnicode(ex)
             Logger.info (uMsg)
             return False

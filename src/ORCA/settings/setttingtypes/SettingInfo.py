@@ -29,9 +29,9 @@ class SettingInfo(SettingString):
     def __init__(self, **kwargs):
         self.register_event_type('on_release')
         super(SettingItem, self).__init__(**RemoveNoClassArgs(kwargs,SettingString))
-        value=kwargs["info"]
-        self.value=value
-    def _create_popup(self, instance):
+        uValue:str = kwargs["info"]
+        self.value = uValue
+    def _create_popup(self, instance) -> None:
         """ shows the popup """
         SettingString._create_popup(self,instance)
         self.textinput.readonly=True

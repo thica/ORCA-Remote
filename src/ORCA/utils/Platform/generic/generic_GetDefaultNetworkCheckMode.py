@@ -20,6 +20,6 @@
 """
 
 
-def GetDefaultNetworkCheckMode():
+def GetDefaultNetworkCheckMode() -> str:
     """ returns the default way for an OS hpw to check if a device is online"""
-    return "ping"
+    return u"ping"

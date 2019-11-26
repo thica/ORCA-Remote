@@ -18,7 +18,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.BaseConfig                    import cBaseConfig
+from typing import Union
+from typing import List
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.scripts.BaseScript import cBaseScript
+else:
+    from typing import TypeVar
+    cBaseScript = TypeVar("cBaseScript")
+
+from ORCA.BaseConfig        import cBaseConfig
 
 
 class cScriptConfig(cBaseConfig):
@@ -26,15 +35,15 @@ class cScriptConfig(cBaseConfig):
     Class to manage the initialisation/configuration and access the the settings of an Script settings objects
     """
 
-    def __init__(self, oScript):
+    def __init__(self, oScript:cBaseScript):
 
         super(cScriptConfig,self).__init__(oScript)
 
         self.uType                          = "script"
         self.uWidgetName                    = "Scriptsettings"
-
         self.uDefaultConfigName             = u'SCRIPTDEFAULT'
-        self.aDiscoverScriptList            = None
+
+        self.aDiscoverScriptList:Union[List[str],None]  = None
         self.dDefaultSettings               = {"SettingTitle":               {"active": "enabled",  "order": 0,    "type": "title" ,       "title": "$lvar(560)"},
                                                "TimeOut":                    {"active": "disabled", "order": 1,    "type": "numericfloat", "title": "$lvar(6019)", "desc": "$lvar(6020)", "section": "$var(ObjectConfigSection)", "key": "TimeOut", "default": "1.0"},
                                                "Host":                       {"active": "disabled", "order": 5,    "type": "string",       "title": "$lvar(6004)", "desc": "$lvar(6005)", "section": "$var(ObjectConfigSection)", "key": "Host", "default": "192.168.1.2"},

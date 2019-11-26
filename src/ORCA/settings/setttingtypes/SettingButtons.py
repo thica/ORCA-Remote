@@ -20,9 +20,12 @@
 
 __all__ = ['SettingButtons']
 
+from typing                             import Dict
+from typing                             import Union
 from kivy.uix.settings                  import SettingItem
 from ORCA.widgets.core.MultiLineButton  import cMultiLineButton
 from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
+from ORCA.settings.setttingtypes.SettingScrollOptions import ScrollOptionsPopUp
 
 class SettingButtons(SettingItem):
     """ a setting item with several buttons """
@@ -31,17 +34,36 @@ class SettingButtons(SettingItem):
         self.register_event_type('on_release')
         # by purpose: we super to the settingitem directly, as SettingItem tries to read a non existing section
         super(SettingItem, self).__init__(**RemoveNoClassArgs(kwargs,SettingItem))
+        self.dKwArgs:Dict                                       = kwargs
+        self.aOptions                                           = kwargs.get('buttonoptions',None)
+        self.iButton:int                                        = 0
+        self.oScrollOptionsPopup:Union[ScrollOptionsPopUp,None] = None
+        aButton:Dict[str,str]
+        i:int                                                   = 0
 
         for aButton in kwargs["buttons"]:
-            oButton=cMultiLineButton(text=aButton['title'], font_size= '15sp', halign='center', valign='middle')
+            oButton:cMultiLineButton = cMultiLineButton(text=aButton['title'], font_size= '15sp', halign='center', valign='middle')
             oButton.ID=aButton['id']
+            oButton.iOrder = i
             self.add_widget(oButton)
             oButton.bind (on_release=self.On_ButtonPressed)
-    def set_value(self, section, key, value):
+            i=i+1
+    def set_value(self, section, key, value) -> None:
         """ set_value normally reads the configparser values and runs on an error to do nothing here """
         return
-    def On_ButtonPressed(self,instance):
+    def On_ButtonPressed(self,oButton:cMultiLineButton) -> None:
         """ dispatch a message, when the button is pressed """
-        self.panel.settings.dispatch('on_config_change',self.panel.config, self.section, self.key, instance.ID)
-        # self.panel.config._do_callbacks(self.section, self.key, instance.ID)
+        if self.aOptions is None:
+            self.panel.settings.dispatch('on_config_change',self.panel.config, self.section, self.key, oButton.ID)
+        else:
+            self.iButton = oButton.iOrder
+            self.dKwArgs['options'] = self.aOptions[oButton.iOrder]
+            self.oScrollOptionsPopup = ScrollOptionsPopUp(**self.dKwArgs)
+            self.oScrollOptionsPopup.CreatePopup(self.value, self._set_option, None)
+
+    def _set_option(self, oButton:cMultiLineButton):
+        """ called when the first option is selected """
+        uValue:str = '%s:%s'% (self.dKwArgs["buttons"][self.iButton]['id'], oButton.text)
+        self.oScrollOptionsPopup.popup.dismiss()
+        self.panel.settings.dispatch('on_config_change', self.panel.config, self.section, self.key, uValue)
 

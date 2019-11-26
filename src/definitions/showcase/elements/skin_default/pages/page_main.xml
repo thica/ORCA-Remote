@@ -9,7 +9,7 @@
     </element>
     <element name="Textblock Welcome" type="TEXTFIELD" posx="%10" posy="%20" width="%47" height="%35" fontsize='%h13'  caption='$lvar(showcase_10000)' vtextalign='top' htextalign='left' />
     <element name="Picture Orca" type="PICTURE" posx="left" posy="bottom" width="%40" height="of:width:self:*0.5" picturenormal="logo" />
-    <element name='Anchor Buttons' type='ANCHOR' posx='%95' posy='%35' width='%31' height='%74'>
+    <element name='Anchor Buttons' type='ANCHOR' posx='%95' posy='%55' width='%31' height='%85'>
       <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_main_menu.xml" parse="xml" />
     </element>
   </elements>

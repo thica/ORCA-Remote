@@ -17,6 +17,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing import List
+from typing import Tuple
+from typing import Dict
+from typing import Union
+
+from xml.etree.ElementTree           import Element
+
 
 from kivy.logger            import Logger
 
@@ -27,32 +34,29 @@ from ORCA.vars.Replace      import ReplaceVars
 from ORCA.utils.TypeConvert import ToFloat2
 from ORCA.Action            import cAction
 
+
+
 # One Character Conditions at the end
-aConditions = [u'==', u'!=', u'<>', u'>=', u'<=', u'=', u'<', u'>']
+aConditions: List[str] = [u'==', u'!=', u'<>', u'>=', u'<=', u'=', u'<', u'>']
 
-
-def SplitCondition(uParCondition):
+def SplitCondition(*,uCondition: str) -> Tuple[str,str,str]:
     """
     Splits a condition string by operators
-
-    :rtype: list
-    :param string uParCondition: Condition to split
-    :return: list: [0]=uConditionCheckType, [1]=uConditionVar, {2]=uConditionValue
+    :param string uCondition: Condition to split
+    :return: tuple: [0]=uConditionCheckType, [1]=uConditionVar, {2]=uConditionValue
     """
-
-    for uCondition in aConditions:
-        tRsp = uParCondition.split(uCondition)
-        if len(tRsp) == 2:
-            uConditionCheckType = uCondition
-            uConditionVar       = tRsp[0]
-            uConditionValue     = tRsp[1]
+    for uConditionSeparator in aConditions:
+        aRsp: List[str,str] = uCondition.split(uConditionSeparator)
+        if len(aRsp) == 2:
+            uConditionCheckType:str = uConditionSeparator
+            uConditionVar:str       = aRsp[0]
+            uConditionValue:str     = aRsp[1]
             return uConditionCheckType,uConditionVar,uConditionValue
 
-    Logger.error(u'Wrong Condition:', uParCondition)
+    Logger.error(u'Wrong Condition:', uCondition)
     return "", "", ""
 
-
-def CheckCondition(oPar):
+def CheckCondition(*,oPar: Union[Dict,cAction,Element]) -> bool:
     """
     Checks if a condition is true
     We check for Single Click and Double Click
@@ -60,32 +64,31 @@ def CheckCondition(oPar):
     ConditionTypes: '<' , '>' compares Integers )
     ConditionVar / ConditionValue: If Starts if '$' , the Application Vars are referenced
 
-    :rtype: bool
     :param cAction|dict oPar: Either an cAction or a dict
     :return: True, if condition checks to true
     """
 
     if oPar.__class__.__name__ == "cAction":
-        oAction = oPar
+        oAction: cAction = oPar
         oPar = oAction.dActionPars
     else:
-        oAction = cAction()
+        oAction: cAction = cAction()
 
-    uConditionCheckType = oPar.get(u'conditionchecktype')
-    uCondition          = oPar.get(u'condition')
-    uContext            = oPar.get(u"varcontext", "")
+    uConditionCheckType: str = oPar.get(u'conditionchecktype')
+    uCondition: str          = oPar.get(u'condition')
+    uContext: str            = oPar.get(u"varcontext", "")
 
     if uConditionCheckType is None:
         if uCondition is None:
             return True
 
-    uConditionVar = oPar.get(u'conditionvar')
-    uConditionValue = oPar.get(u'conditionvalue')
+    uConditionVar: str   = oPar.get(u'conditionvar')
+    uConditionValue: str = oPar.get(u'conditionvalue')
 
     if uCondition != '' and uCondition is not None:
-        uConditionCheckType, uConditionVar, uConditionValue = SplitCondition(uCondition)
+        uConditionCheckType, uConditionVar, uConditionValue = SplitCondition(uCondition=uCondition)
 
-    bRet = False
+    bRet: bool = False
 
     try:
         if not oAction.oParentWidget is None:
@@ -99,12 +102,12 @@ def CheckCondition(oPar):
 
         if uConditionCheckType == u'':
             return True
-        uVar = ReplaceVars(uConditionVar, uContext)
+        uVar: str = ReplaceVars(uConditionVar, uContext)
         if uVar.startswith('$var('):
             uVar = ReplaceVars(uVar, uContext)
 
-        uValue = ReplaceVars(uConditionValue, uContext)
-        uConditionCheckType = ReplaceVars(uConditionCheckType, uContext)
+        uValue: str              = ReplaceVars(uConditionValue, uContext)
+        uConditionCheckType: str = ReplaceVars(uConditionCheckType, uContext)
         if uConditionCheckType == u'==' or uConditionCheckType == u'=':
             if uVar == uValue:
                 bRet = True
@@ -112,8 +115,12 @@ def CheckCondition(oPar):
             if uVar != uValue:
                 bRet = True
         else:
+            fValue: float
+            bIsValue: bool
+            fVar: float
+            bIsVar: bool
             fValue, bIsValue = ToFloat2(uValue)
-            fVar, bIsVar = ToFloat2(uVar)
+            fVar, bIsVar     = ToFloat2(uVar)
 
             if bIsValue and bIsVar:
                 if uConditionCheckType == u'>':
@@ -129,9 +136,7 @@ def CheckCondition(oPar):
                     if fVar <= fValue:
                         bRet = True
     except Exception as e:
-        uMsg = LogError(u'CheckCondition: Cannot validate option: %s %s %s' % (uConditionVar, uConditionCheckType, uConditionValue), e)
-        Logger.error(uMsg)
-        ShowErrorPopUp(uMessage=uMsg)
+        ShowErrorPopUp(uMessage=LogError(uMsg=u'CheckCondition: Cannot validate option: %s %s %s' % (uConditionVar, uConditionCheckType, uConditionValue), oException=e))
         return False
 
     Logger.debug("Checking condition [%s]:[%s][%s][%s] returns %s" % (uConditionVar, uVar, uConditionCheckType, uValue[:100], str(bRet)))

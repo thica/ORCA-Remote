@@ -22,35 +22,49 @@
 Base Module for Scripts and Interfaces
 """
 
+from typing import Dict
+from typing import Union
+
+
 from kivy.logger                             import Logger
 from ORCA.utils.LogError                     import LogError
 from ORCA.utils.TypeConvert                  import ToIntVersion
 from ORCA.utils.TypeConvert                  import ToUnicode
 from ORCA.utils.FileName                     import cFileName
-from ORCA.RepManagerEntry                    import cRepManagerEntry
+from ORCA.utils.Path                         import cPath
+from ORCA.download.RepManagerEntry import cRepManagerEntry
 from ORCA.vars.Replace                       import ReplaceVars
 
 import ORCA.Globals as Globals
 
 __all__ = ['cBaseObject']
 
-class cBaseObject(object):
-    def __init__(self):
-        self.aSettings                  = {}
-        self.bIsInit                    = False
-        self.iLastRet                   = 0
-        self.iMyVersion                 = ToIntVersion('1.0.0')
-        self.iOrcaVersion               = ToIntVersion('1.0.0')     #OrcaVersion defines for what Orca Version the Interface has been developed
-        self.oFnObject                  = None
-        self.oObjectConfig              = None
-        self.oPathMyData                = None
-        self.oPathMyCode                = None
-        self.uConfigName                = "DEFAULT"
-        self.uIniFileLocation           = "local"
-        self.uObjectName                = u''
-        self.uObjectType                = ""
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.BaseSettings import cBaseSettings
+    from ORCA.BaseConfig   import cBaseConfig
+else:
+    from typing import TypeVar
+    cBaseSettings = TypeVar("cBaseSettings")
+    cBaseConfig   = TypeVar("cBaseConfig")
 
-    def Init(self,uObjectName,oFnObject=None):
+
+class cBaseObject:
+    def __init__(self):
+        self.dSettings:Dict[str,cBaseSettings]  = {}
+        self.bIsInit:bool                       = False
+        self.iMyVersion:int                     = ToIntVersion('1.0.0')
+        self.iOrcaVersion:int                   = ToIntVersion('1.0.0')     #OrcaVersion defines for what Orca Version the Interface has been developed
+        self.oFnObject:Union[cFileName,None]    = None
+        self.oObjectConfig:cBaseConfig          = None
+        self.oPathMyData:Union[cPath,None]      = None
+        self.oPathMyCode:Union[cPath,None]      = None
+        self.uConfigName:str                    = u'DEFAULT'
+        self.uIniFileLocation:str               = u'local'
+        self.uObjectName:str                    = u''
+        self.uObjectType:str                    = u''
+
+    def Init(self,uObjectName:str,oFnObject:Union[cFileName,None]=None) -> None:
         """ Initializes the script """
 
         self.bIsInit            = True
@@ -78,7 +92,7 @@ class cBaseObject(object):
         self.oFnObject            = cFileName(oFnObject)
 
         Globals.oLanguage.LoadXmlFile(self.uObjectType.upper(), self.uObjectName)
-        oRepManagerEntry=cRepManagerEntry(oFnObject)
+        oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFnObject)
         if oRepManagerEntry.ParseFromSourceFile():
             self.iMyVersion     = oRepManagerEntry.oRepEntry.iVersion
             self.iOrcaVersion   = oRepManagerEntry.oRepEntry.iMinOrcaVersion
@@ -88,88 +102,84 @@ class cBaseObject(object):
 
         self.ShowDebug(u'Init')
 
-    def DeInit(self, **kwargs):
+    def DeInit(self, **kwargs) -> None:
         """ Deinitialisizes the object """
         self.ShowDebug(u'DeInit')
 
-    def OnPause(self,**kwargs):
+    def OnPause(self,**kwargs) -> None:
         """ called by system, if the device goes on pause """
         self.ShowInfo(u'OnPause')
-    def OnResume(self,**kwargs):
+    def OnResume(self,**kwargs) -> None:
         """ called by system, if the device resumes """
         self.ShowInfo(u'OnResume')
 
-    def _FormatShowMessage(self,uMsg,uParConfigName=""):
+    def _FormatShowMessage(self,uMsg:str,uParConfigName:str=u"",uParAdd:str=u"") -> str:
         """
         Creates a debug line for the object
 
-        :rtype: string
-        :param string uMsg: The message to show
-        :param string uParConfigName:  The name of the configuration
+        :param str uMsg: The message to show
+        :param str uParConfigName:  The name of the configuration
         :return: The formatted debug string
         """
-        uConfigName = u''
+        uConfigName:str = u''
         if uParConfigName:
             uConfigName = u'/' + uParConfigName
+        if uParAdd!="":
+            uConfigName = uConfigName+u'/' + uConfigName
 
         return "%s %s %s: %s" % (self.uObjectType.capitalize(),self.uObjectName , uConfigName , uMsg)
 
-    def ShowWarning(self,uMsg,uParConfigName=""):
+    def ShowWarning(self,uMsg:str,uParConfigName:str=u"") -> str:
         """
-        writes a warning message
+        Writes a warning message
 
-        :rtype: string
-        :param string uMsg: The warning message
-        :param string uParConfigName: The configuration name
+        :param str uMsg: The warning message
+        :param str uParConfigName: The configuration name
         :return: The written logfile entry
         """
-        uRet = self._FormatShowMessage(uMsg,uParConfigName)
+        uRet:str = self._FormatShowMessage(uMsg,uParConfigName)
         Logger.warning (uRet)
         return uRet
 
-    def ShowDebug(self,uMsg,uParConfigName=""):
+    def ShowDebug(self,uMsg:str,uParConfigName:str=u"") -> str:
         """
         writes a debug message
 
-        :rtype: string
-        :param string uMsg: The debug message
-        :param string uParConfigName: The configuration name
+        :rtype: str
+        :param str uMsg: The debug message
+        :param str uParConfigName: The configuration name
         :return: The written logfile entry
         """
-        uRet = self._FormatShowMessage(uMsg,uParConfigName)
+        uRet:str = self._FormatShowMessage(uMsg,uParConfigName)
         Logger.debug (uRet)
         return uRet
 
-    def ShowInfo(self,uMsg,uParConfigName=""):
+    def ShowInfo(self,uMsg:str,uParConfigName:str=U"") -> str:
         """
         writes a info message
 
-        :rtype: string
-        :param string uMsg: The info message
-        :param string uParConfigName: The configuration name
+        :param str uMsg: The info message
+        :param str uParConfigName: The configuration name
         :return: The written logfile entry
         """
 
-        uRet = self._FormatShowMessage(uMsg,uParConfigName)
+        uRet:str = self._FormatShowMessage(uMsg,uParConfigName)
         Logger.info (uRet)
         return uRet
 
-    def ShowError(self,uMsg, uParConfigName="",oException=None):
+    def ShowError(self,uMsg:str, uParConfigName:str=u"",uParAdd:str=u"",oException:Exception=None) -> str:
         """
         writes an error message
 
-        :rtype: string
-        :param string uMsg: The error message
-        :param string uParConfigName: The configuration name
+        :param str uMsg: The error message
+        :param str uParConfigName: The configuration name
+        :param str uParAdd: The additional text
         :param exception oException: Optional, an exception to show
         :return: The written logfile entry
         """
 
-        # uRet = self._FormatShowMessage(uMsg,uParConfigName)
-        # Logger.debug (uRet)
-        # return uRet
-        uRet = self._FormatShowMessage(uMsg,uParConfigName)
-        iErrNo = 0
+        uRet:str = self._FormatShowMessage(uMsg=uMsg,uParConfigName=uParConfigName,uParAdd=uParAdd)
+        iErrNo:int = 0
         if oException is not None:
             if hasattr(oException,'errno'):
                 iErrNo = oException.errno
@@ -177,10 +187,10 @@ class cBaseObject(object):
             iErrNo = 12345
         if iErrNo!=0:
             uRet = uRet + u" "+ToUnicode(iErrNo)
-        uRet=LogError (uRet,oException)
+        uRet=LogError(uMsg=uRet,oException=oException)
         return uRet
 
-    def GetConfigJSON(self):
+    def GetConfigJSON(self) -> Dict:
         """
         Abstract function, needs to be overriden by object class
 
@@ -189,28 +199,32 @@ class cBaseObject(object):
         """
         return {}
 
-    def GetNewSettingObject(self):
+    def GetNewSettingObject(self) -> Union[cBaseSettings,None]:
         """ Dummy """
-        pass
+        return None
 
 
-    def GetSettingObjectForConfigName(self,uConfigName):
+    def GetSettingObjectForConfigName(self,uConfigName:str) -> cBaseSettings:
         """
         Creates/returns a config object
 
-        :rtype: cSetting
         :param string uConfigName: The Name of the configuration
         :return: a Setting object
         """
 
-        oSetting=self.aSettings.get(uConfigName)
+        oSetting: cBaseSettings
+        oSetting = self.dSettings.get(uConfigName)
 
         if oSetting is None:
-            uConfigName=ReplaceVars(uConfigName)
-            oSetting = self.aSettings.get(uConfigName)
+            uConfigName:str=ReplaceVars(uConfigName)
+            oSetting = self.dSettings.get(uConfigName)
 
         if oSetting is None:
-            oSetting=self.GetNewSettingObject()
-            self.aSettings[uConfigName]=oSetting
+            oSetting = self.GetNewSettingObject()
+            self.dSettings[uConfigName]=oSetting
             oSetting.ReadConfigFromIniFile(uConfigName)
         return oSetting
+
+    def CreateCodsetListJSONString(self) -> str:
+        """ Dummy """
+        pass

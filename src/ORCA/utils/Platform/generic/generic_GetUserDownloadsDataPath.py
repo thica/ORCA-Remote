@@ -25,7 +25,7 @@ from ORCA.utils.Platform     import OS_ToPath
 from ORCA.utils.Path         import cPath
 
 
-def GetUserDownloadsDataPath():
+def GetUserDownloadsDataPath() -> cPath:
     """ returns the path to the download folder """
     oRetPath = cPath(OS_ToPath(expanduser('~') + sep + 'Downloads'))
     Logger.debug("Download Folder  = "+oRetPath.string)

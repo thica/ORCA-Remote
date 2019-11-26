@@ -20,11 +20,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                     import Dict
+from typing                     import List
+from typing                     import Union
+
 from kivy.logger                import Logger
-from ORCA.interfaces.BaseInterface import cBaseInterFace
 from ORCA.vars.Replace          import ReplaceVars
 from ORCA.utils.TypeConvert     import ToInt
+from ORCA.utils.FileName        import cFileName
+from ORCA.Action                import cAction
+from ORCA.actions.ReturnCode    import eReturnCode
 import ORCA.Globals as Globals
+
 
 try:
     # noinspection PyUnresolvedReferences
@@ -41,8 +48,8 @@ except Exception as e:
       <description language='English'>Send IR Commands on Android devices with IR tranmitter WIP</description>
       <description language='German'>Sendet IR Befehle auf Android Geräten mit eingebautem IR Sender WIP</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -58,28 +65,26 @@ except Exception as e:
         </dependency>
       </dependencies>
       <skipfiles>
-        <file>ir_on_android/interface.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
 </root>
 '''
 
+oBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass("cInterface")
 
-oBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared')
+class cInterface(oBaseInterFaceInfrared):
 
-class cInterface(oBaseInterFaceInfrared.cInterface):
-
-    class cInterFaceSettings(oBaseInterFaceInfrared.cInterface.cInterFaceSettings):
+    class cInterFaceSettings(oBaseInterFaceInfrared.cInterFaceSettings):
         def __init__(self,oInterFace):
-            oBaseInterFaceInfrared.cInterface.cInterFaceSettings.__init__(self,oInterFace)
+            oBaseInterFaceInfrared.cInterFaceSettings.__init__(self,oInterFace)
             self.bIsConnected = False
             self.bOnError     = False
 
-        def Connect(self):
+        def Connect(self) -> bool:
 
             self.bIsConnected = False
-            if not oBaseInterFaceInfrared.cInterface.cInterFaceSettings.Connect(self):
+            if not oBaseInterFaceInfrared.cInterFaceSettings.Connect(self):
                 Logger.debug("ir_on_android: Connect cancelled by root class")
                 return False
             try:
@@ -91,39 +96,41 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
                     self.ShowDebug("No Ir-Blaster at device")
                     self.bIsConnected = False
 
-            except Exception as e:
-                self.ShowError(u'Cannot open IR Device',e)
+            except Exception as ex:
+                self.ShowError(u'Cannot open IR Device',ex)
                 self.bOnError=True
             return False
 
-        def Disconnect(self):
-            if oBaseInterFaceInfrared.cInterface.cInterFaceSettings.Disconnect(self):
+        def Disconnect(self) -> bool:
+            if oBaseInterFaceInfrared.cInterFaceSettings.Disconnect(self):
                 return False
 
-
     def __init__(self):
-        oBaseInterFaceInfrared.cInterface.__init__(self)
-        self.aSettings   = {}
-        self.oSetting = None
-    def Init(self, uObjectName, oFnObject=None):
-        cBaseInterFace.Init(self,uObjectName, oFnObject)
+        oBaseInterFaceInfrared.__init__(self)
+        cInterFaceSettings=cInterface.cInterFaceSettings
+        self.dSettings:Dict[cInterFaceSettings]     = {}
+        self.oSetting:Union[cInterFaceSettings,None]= None
+
+    def Init(self, uObjectName:str, oFnObject:Union[cFileName,None]=None) -> None:
+        oBaseInterFaceInfrared.Init(self,uObjectName, oFnObject)
         self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
 
-    def DeInit(self, **kwargs):
-        oBaseInterFaceInfrared.cInterface.DeInit(self,**kwargs)
-        for aSetting in self.aSettings:
-            self.aSettings[aSetting].DeInit()
+    def DeInit(self, **kwargs) -> None:
+        oBaseInterFaceInfrared.DeInit(self,**kwargs)
+        for uSettingName in self.dSettings:
+            self.dSettings[uSettingName].DeInit()
 
-    def SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut=False):
-        cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+    def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
+        oBaseInterFaceInfrared.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
 
-        iRet=1
+        eRet:eReturnCode = eReturnCode.Error
 
         if oAction.uCCF_Code != u"":
+            # noinspection PyUnresolvedReferences
             oAction.oIRCode=CCfToAndroidIR(oAction.uCCF_Code,ToInt(oAction.uRepeatCount))
             oAction.uCCF_Code = u""
 
-        uCmd=ReplaceVars(oAction.uCmd)
+        uCmd:str=ReplaceVars(oAction.uCmd)
 
         self.ShowInfo(u'Sending Command: '+uCmd + u' to '+oSetting.uConfigName)
 
@@ -132,26 +139,29 @@ class cInterface(oBaseInterFaceInfrared.cInterface):
             try:
                 Logger.debug("Sending IR Commend to IRBLASTER")
                 irblaster.transmit(oAction.oIRCode.iFrequency,oAction.oIRCode.aPattern)
-            except Exception as e:
-                self.ShowWarning(u'Can\'t send message: '+e.message,oSetting.uConfigName)
+                eRet = eReturnCode.Success
+            except Exception as ex:
+                self.ShowWarning(u'Can\'t send message: '+str(ex),oSetting.uConfigName)
         else:
             Logger.debug("Not Connected")
-        return iRet
+        return eRet
 
-class cIRCommand(object):
+class cIRCommand:
     """ Object to hold an Android  IR Command  """
-    def __init__(self,iFrequency, aPattern):
-        self.iFrequency=iFrequency
-        self.aPattern=aPattern
+    def __init__(self,iFrequency:int, aPattern:List):
+        self.iFrequency:int = iFrequency
+        self.aPattern:List  = aPattern
 
-def CCfToAndroidIR(sCCFString,iRepeatCount):
-    iCount = 0
-    aList = sCCFString.split(" ")
-    iFrequency = int(aList[1], 16)
+
+# noinspection PyUnusedLocal
+def CCfToAndroidIR(sCCFString:str,iRepeatCount:int) -> cIRCommand:
+    iCount:int
+    aList:List = sCCFString.split(" ")
+    iFrequency:int = int(aList[1], 16)
     aList=aList[3:]
-    iFrequency = ToInt(iFrequency * 0.241246)
-    iPulses = int(1000000 / iFrequency)
-    aPattern = []
+    iFrequency:int = ToInt(iFrequency * 0.241246)
+    iPulses:int = int(1000000 / iFrequency)
+    aPattern:List = []
     for uElem in aList:
         iCount = int(uElem, 16)
         aPattern.append(int(iCount*iPulses))

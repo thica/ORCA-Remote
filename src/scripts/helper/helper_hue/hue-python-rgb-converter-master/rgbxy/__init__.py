@@ -48,7 +48,6 @@ def get_light_gamut(modelId):
         return GamutC
     else:
         raise ValueError
-    return None
 
 
 class ColorHelper:

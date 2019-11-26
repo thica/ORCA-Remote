@@ -28,14 +28,10 @@ from pyasn1.codec.der       import decoder
 from pyasn1.type            import univ
 from rsa                    import pkcs1
 from kivy.logger            import Logger
-from kivy.compat            import PY2
-
 from ORCA.utils.Path        import cPath
 from ORCA.utils.Platform    import OS_GetSystemUserPath
 from ORCA.utils.TypeConvert import ToBytes
 from ORCA.utils.TypeConvert import ToUnicode
-
-from ORCA.utils.PyXSocket   import cPyXSocket
 
 import ORCA.Globals as Globals
 
@@ -61,9 +57,8 @@ def MakeWireIDs(ids):
 def CalculateChecksum(data):
     # The checksum is just a sum of all the bytes. I swear.
 
-    if not PY2:
-        if isinstance(data,str):
-            data = data.encode('utf-8')
+    if isinstance(data,str):
+        data = data.encode('utf-8')
 
     if isinstance(data, bytearray):
         total = sum(data)
@@ -79,7 +74,7 @@ def CalculateChecksum(data):
         total = sum(map(ord, data))
     return total & 0xFFFFFFFF
 
-class cIP_Connection(object):
+class cIP_Connection:
     """ The pysical (TCP/IP) Connection to the target device """
     def __init__(self):
         self.oSocket        = None
@@ -103,8 +98,8 @@ class cIP_Connection(object):
         self.uHost       = uHost
         self.uPort       = uPort
 
-        self.oSocket = cPyXSocket(socket.AF_INET, socket.SOCK_STREAM)
-        self.oSocket.SetBlocking(0)
+        self.oSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.oSocket.setblocking(False)
         self.oSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.oSocket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
         self.oSocket.settimeout(fTimeOut)
@@ -127,11 +122,8 @@ class cIP_Connection(object):
         :param string uData: The data to write
         :return: Unknown
         """
-
-        if not PY2:
-            uData = ToBytes(uData)
-
-        return self.oSocket.sendall(uData)
+        bData = ToBytes(uData)
+        return self.oSocket.sendall(bData)
 
     def ReadAll(self, iNumBytes):
         """
@@ -162,7 +154,7 @@ class cIP_Connection(object):
         return self.bIsConnected
 
 
-class cADB_Connection(object):
+class cADB_Connection:
     """ The logical (ADB) Connection to the target device
         All Communication will be managed by the cADB_Message class
     """
@@ -225,13 +217,14 @@ class cADB_Connection(object):
     def Close(self):
         self._Send('CLSE', arg0=self.iLocal_id, arg1=self.iRemote_id)
         return
+        '''
         uCmd, uData = self.ReadUntil('CLSE')
         if uCmd != 'CLSE':
             if uCmd == 'FAIL':
                 raise Exception('cADB_Connection:Close Command failed. (%s))' %  uData)
             raise Exception('Expected a CLSE response, got %s (%s)',uCmd, uData)
-
-class cADB_Commands(object):
+        '''
+class cADB_Commands:
     """ The set of exposed / implemented ADB Commands """
 
     def __init__(self):
@@ -266,9 +259,8 @@ class cADB_Commands(object):
             uIdentifier = u"ORCA_" + Globals.uMACAddressDash
 
         self.uDeviceState = self.oADB_Message.Connect(uIdentifier=uIdentifier, **kwargs)
-        if not PY2:
-            if isinstance(self.uDeviceState,bytes):
-                self.uDeviceState=ToUnicode(self.uDeviceState)
+        if isinstance(self.uDeviceState,bytes):
+            self.uDeviceState=ToUnicode(self.uDeviceState)
 
         # Remove banner and colons after device state (state::banner)
         self.uDeviceState = self.uDeviceState.split(':')[0]
@@ -288,7 +280,7 @@ class cADB_Commands(object):
     def CloseWithConnection(self):
         self.oADB_Message.Close()
 
-class cADB_Message(object):
+class cADB_Message:
     """ Compiles the Message and sends it to the device using the cConnection Class
 
     Protocol Notes
@@ -377,20 +369,12 @@ class cADB_Message(object):
         return uCommand, arg0, arg1, uData
 
     def ReadRestOfData(self,iData_length):
-        if PY2:
-            uData = ''
-            while iData_length > 0:
-                uTemp = self.oIP_Connection.ReadAll(iData_length)
-                uData += uTemp
-                iData_length -= len(uTemp)
-            return uData
-        else:
-            bData = b''
-            while iData_length > 0:
-                bTemp = self.oIP_Connection.ReadAll(iData_length)
-                bData += bTemp
-                iData_length -= len(bTemp)
-            return bData
+        bData = b''
+        while iData_length > 0:
+            bTemp = self.oIP_Connection.ReadAll(iData_length)
+            bData += bTemp
+            iData_length -= len(bTemp)
+        return bData
 
 
     def Connect(self,  uIdentifier=b'notadb', aRsa_keys=None, fTimeOut=0.1):
@@ -417,9 +401,8 @@ class cADB_Message(object):
 
         """
 
-        if not PY2:
-            if isinstance(uIdentifier,str):
-                uIdentifier=ToBytes(uIdentifier)
+        if isinstance(uIdentifier,str):
+            uIdentifier=ToBytes(uIdentifier)
 
         if aRsa_keys is None:
             aRsa_keys = []
@@ -517,11 +500,8 @@ class cADB_Message(object):
         """
         if self.Open(uDestination='%s:%s' % (uService, uCommand),fTimeOut=fTimeOut):
             for uData in self.oADB_Connection.ReadUntilClose():
-                if not PY2:
-                    print (uData)
-                    if isinstance(uData,bytes):
-                        uData=ToUnicode(uData)
-                    print (uData)
+                if isinstance(uData,bytes):
+                    uData=ToUnicode(uData)
                 yield uData
 
     def Close(self):
@@ -534,12 +514,9 @@ class cADB_Message(object):
 # need to slap a signature on top of already hashed message. Introduce "fake"
 # hashing algo for this.
 
-class _Accum(object):
+class _Accum:
     def __init__(self):
-        if PY2:
-            self._buf = ''
-        else:
-            self._buf = b''
+        self._buf = b''
 
     def update(self, msg):
         self._buf += msg
@@ -566,7 +543,7 @@ def _load_rsa_private_key(pem):
     return rsa.PrivateKey.load_pkcs1(private_key_der, format='DER')
 
 
-class PythonRSASigner(object):
+class PythonRSASigner:
     """Implements adb_protocol.AuthSigner using http://stuvel.eu/rsa."""
     @classmethod
     def FromRSAKeyPath(cls, rsa_key_path):
@@ -587,7 +564,7 @@ class PythonRSASigner(object):
         return self.pub_key
 
 
-class cADB_Helper(object):
+class cADB_Helper:
 
     def __init__(self):
         self.aGlobalRSA_KEYS = []

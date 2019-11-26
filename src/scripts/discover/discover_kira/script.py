@@ -19,12 +19,17 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import annotations
+from typing import Dict
+from typing import List
+from typing import Union
 
 import select
 import socket
 import threading
 
 from kivy.logger                            import Logger
+from kivy.uix.button                        import Button
 
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
@@ -32,8 +37,9 @@ from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
 from ORCA.utils.LogError                    import LogError
 from ORCA.utils.TypeConvert                 import ToFloat
 from ORCA.utils.TypeConvert                 import ToBool
-from ORCA.utils.PyXSocket                   import cPyXSocket
+from ORCA.utils.TypeConvert                 import ToUnicode
 from ORCA.vars.QueryDict                    import QueryDict
+from ORCA.utils.FileName                    import cFileName
 
 import ORCA.Globals as Globals
 
@@ -45,8 +51,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover Keene Kira devices</description>
       <description language='German'>Erkennt sucht Keene Kira Geräte</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_kira</local>
@@ -55,7 +61,6 @@ import ORCA.Globals as Globals
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/discover/discover_kira/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -85,65 +90,69 @@ class cScript(cDiscoverScriptTemplate):
     WikiDoc:End
     """
     class cScriptSettings(cBaseScriptSettings):
-        def __init__(self,oScript):
+        def __init__(self,oScript:cScript):
             cBaseScriptSettings.__init__(self,oScript)
-            self.aIniSettings.fTimeOut                     = 10.0
+            self.aIniSettings.fTimeOut  = 10.0
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
-        self.uSubType        = u'Keene Kira'
-        self.aResults        = []
-        self.aThreads        = []
-        self.oReq            = QueryDict()
+        self.uSubType:str                       = u'Keene Kira'
+        self.aResults:List[QueryDict]           = []
+        self.aThreads:List[threading.Thread]    = []
+        self.dReq                               = QueryDict()
 
-    def Init(self,uObjectName,uScriptFile=u''):
+    def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
         """
         Init function for the script
 
-        :param string uObjectName: The name of the script (to be passed to all scripts)
-        :param uScriptFile: The file of the script (to be passed to all scripts)
+        :param str uObjectName: The name of the script (to be passed to all scripts)
+        :param cFileName oFnScript: The file of the script (to be passed to all scripts)
         """
-        cDiscoverScriptTemplate.Init(self, uObjectName, uScriptFile)
+
+        cDiscoverScriptTemplate.Init(self, uObjectName, oFnScript)
         self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
-    def GetHeaderLabels(self):
+    def GetHeaderLabels(self) -> List[str]:
         return ['$lvar(5029)','$lvar(5035)','$lvar(6002)']
 
-    def ListDiscover(self):
+    def ListDiscover(self) -> None:
 
-        dArgs                   = {"onlyonce": 0,
-                                   "ipversion": "IPv4Only"}
-        aDevices                = {}
+        dArgs:Dict                   = {"onlyonce": 0,
+                                      "ipversion": "IPv4Only"}
+        dDevices:Dict[str,QueryDict] = {}
+        dDevice:QueryDict
 
         self.Discover(**dArgs)
 
-        for aDevice in self.aResults:
-            uTageLine=aDevice.sFoundIP+aDevice.uFoundHostName+aDevice.uFoundPort
-            if aDevices.get(uTageLine) is None:
-               aDevices[uTageLine]=aDevice
-               self.AddLine([aDevice.sFoundIP,aDevice.uFoundHostName,aDevice.uFoundPort],aDevice)
+        for dDevice in self.aResults:
+            uTageLine:str=dDevice.sFoundIP+dDevice.uFoundHostName+dDevice.uFoundPort
+            if dDevices.get(uTageLine) is None:
+               dDevices[uTageLine]=dDevice
+               self.AddLine([dDevice.sFoundIP,dDevice.uFoundHostName,dDevice.uFoundPort],dDevice)
         return
 
-    def CreateDiscoverList_ShowDetails(self,instance):
+    def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
+
+        dDevice:QueryDict = oButton.dDevice
 
         uText=  u"$lvar(5029): %s \n" \
                 u"$lvar(6002): %s \n" \
                 u"$lvar(5035): %s \n"\
                 u"\n"\
-                u"%s" % (instance.oDevice.sFoundIP,instance.oDevice.uFoundPort,instance.oDevice.uFoundHostName,instance.oDevice.sData)
+                u"%s" % (dDevice.sFoundIP,dDevice.uFoundPort,dDevice.uFoundHostName,dDevice.sData)
 
         ShowMessagePopUp(uMessage=uText)
 
 
     def Discover(self,**kwargs):
 
-        self.oReq.clear()
-        uConfigName              = kwargs.get('configname',self.uConfigName)
-        oSetting                 = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        self.oReq.bReturnPort    = ToBool(kwargs.get('returnport',"0"))
-        fTimeOut                 = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
-        uIPVersion               = kwargs.get('ipversion',"IPv4Only")
-        bOnlyOnce                = ToBool(kwargs.get('onlyonce',"1"))
+        self.dReq.clear()
+        uConfigName:str              = kwargs.get('configname',self.uConfigName)
+        oSetting:cBaseScriptSettings = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
+        self.dReq.bReturnPort        = ToBool(kwargs.get('returnport',"0"))
+        fTimeOut:float               = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
+        uIPVersion:str               = kwargs.get('ipversion',"IPv4Only")
+        bOnlyOnce:bool               = ToBool(kwargs.get('onlyonce',"1"))
 
         Logger.debug (u'Try to discover device by Kira Discovery (%s)' % uIPVersion)
 
@@ -152,11 +161,11 @@ class cScript(cDiscoverScriptTemplate):
 
         try:
             if uIPVersion == "IPv4Only" or uIPVersion == "All" or (uIPVersion == "Auto" and Globals.uIPAddressV6 == ""):
-                oThread = cThread_Discover_Kira(bOnlyOnce=bOnlyOnce,oReq=self.oReq,uIPVersion="IPv4Only", fTimeOut=fTimeOut, oCaller=self)
+                oThread = cThread_Discover_Kira(bOnlyOnce=bOnlyOnce,dReq=self.dReq,uIPVersion="IPv4Only", fTimeOut=fTimeOut, oCaller=self)
                 self.aThreads.append(oThread)
                 self.aThreads[-1].start()
             if uIPVersion == "IPv6Only" or uIPVersion == "All" or (uIPVersion == "Auto" and Globals.uIPAddressV6 != ""):
-                oThread = cThread_Discover_Kira(bOnlyOnce=bOnlyOnce, oReq=self.oReq, uIPVersion="IPv6Only", fTimeOut=fTimeOut, oCaller=self)
+                oThread = cThread_Discover_Kira(bOnlyOnce=bOnlyOnce, dReq=self.dReq, uIPVersion="IPv6Only", fTimeOut=fTimeOut, oCaller=self)
                 self.aThreads.append(oThread)
                 self.aThreads[-1].start()
 
@@ -174,18 +183,17 @@ class cScript(cDiscoverScriptTemplate):
                     'Exception': None}
 
         except Exception as e:
-            LogError(u'Error on discover uPnP',e)
+            LogError(uMsg=u'Error on discover uPnP',oException=e)
             return {"Host": "",
                     "Hostname": "",
                     'Exception': e}
 
     @classmethod
-    def GetConfigJSONforParameters(cls,dDefaults):
+    def GetConfigJSONforParameters(cls,dDefaults:Dict) -> Dict[str,Dict]:
         return  {"Name":            {"type": "string",       "order":0,  "title": "$lvar(6013)", "desc": "$lvar(6014)", "key": "name",            "default":""           },
                  "IP Version":      {"type": "scrolloptions","order":4,  "title": "$lvar(6037)", "desc": "$lvar(6038)", "key": "ipversion",       "default":"IPv4Only", "options":["IPv4Only","IPv6Only","All","Auto"]},
                  "TimeOut":         {"type": "numericfloat", "order":6,  "title": "$lvar(6019)", "desc": "$lvar(6020)", "key": "timeout",         "default":"15.0"}
                 }
-
 
         #"ReturnPort":      {"type": "bool", "order": 4, "title": "$lvar(SCRIPT_DISC_UPNP_2)", "desc": "$lvar(SCRIPT_DISC_UPNP_3)", "key": "returnport", "default": "1"},
 
@@ -198,19 +206,19 @@ ff02::c
 class cThread_Discover_Kira(threading.Thread):
     oWaitLock = threading.Lock()
 
-    def __init__(self, bOnlyOnce,oReq,uIPVersion,fTimeOut,oCaller):
+    def __init__(self, bOnlyOnce:bool,dReq:QueryDict,uIPVersion:str,fTimeOut:float,oCaller:cScript):
         threading.Thread.__init__(self)
 
-        self.bOnlyOnce  = bOnlyOnce
-        self.uIPVersion = uIPVersion
-        self.oCaller    = oCaller
-        self.fTimeOut   = fTimeOut
-        self.bStopWait  = False
-        self.oReq       = oReq
+        self.bOnlyOnce:bool     = bOnlyOnce
+        self.uIPVersion:str     = uIPVersion
+        self.oCaller:cScript    = oCaller
+        self.fTimeOut:float     = fTimeOut
+        self.bStopWait:bool     = False
+        self.dReq               = dReq
 
-    def run(self):
+    def run(self) -> None:
 
-        bReturnNow = False
+        bReturnNow:bool = False
         if self.bOnlyOnce:
             cThread_Discover_Kira.oWaitLock.acquire()
             if len(self.oCaller.aResults)>0:
@@ -220,7 +228,7 @@ class cThread_Discover_Kira(threading.Thread):
             return
         self.Discover()
 
-    def Discover(self):
+    def Discover(self) -> None:
 
         oSocket = None
         try:
@@ -231,20 +239,21 @@ class cThread_Discover_Kira(threading.Thread):
                 # Parse all results
                 while True:
                     #we do not wait too long
-                    ready = select.select([oSocket], [], [],self.fTimeOut)
-                    if ready[0]:
+                    aReady = select.select([oSocket], [], [],self.fTimeOut)
+                    if aReady[0]:
                         # Get a response
-                        sData, tSenderAddr = oSocket.recvfrom(1024)
-                        oRet = self.GetDeviceDetails(sData=sData,tSenderAddr=tSenderAddr)
-                        self.CheckDeviceDetails(oRet=oRet)
-                        if oRet.bFound:
-                            Logger.info(u'Bingo: Discovered device  %s:' %oRet.sFoundIP)
+                        byData, tSenderAddr = oSocket.recvfrom(1024)
+                        uData = ToUnicode(byData)
+                        dRet = self.GetDeviceDetails(uData=uData,tSenderAddr=tSenderAddr)
+                        self.CheckDeviceDetails(dRet=dRet)
+                        if dRet.bFound:
+                            Logger.info(u'Bingo: Discovered device  %s:' %dRet.sFoundIP)
                             try:
-                                oRet.uFoundHostName = socket.gethostbyaddr(oRet.sFoundIP)[0]
+                                dRet.uFoundHostName = socket.gethostbyaddr(dRet.sFoundIP)[0]
                             except Exception:
                                 pass
                             cThread_Discover_Kira.oWaitLock.acquire()
-                            self.oCaller.aResults.append(oRet)
+                            self.oCaller.aResults.append(dRet)
                             cThread_Discover_Kira.oWaitLock.release()
                             if self.bOnlyOnce:
                                 oSocket.close()
@@ -256,7 +265,7 @@ class cThread_Discover_Kira(threading.Thread):
             return
 
         except Exception as e:
-            LogError(u'Error on discover Kira (%s)' % self.uIPVersion, e)
+            LogError(uMsg=u'Error on discover Kira (%s)' % self.uIPVersion,oException=e)
             if oSocket:
                 oSocket.close()
             return
@@ -264,17 +273,16 @@ class cThread_Discover_Kira(threading.Thread):
 
     def SendDiscover(self):
 
+        bMessage = b'disD'
+        iUDP_PORT = 30303
 
         if self.uIPVersion=="IPv4Only":
             uUDP_IP     = u'239.255.255.250'
-            iUDP_PORT   = 30303
-            uMessage = u'disD'
 
-            # oSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            oSocket = cPyXSocket(socket.AF_INET, socket.SOCK_DGRAM)
+            oSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
             oSocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 20)
-            oSocket.SendTo(uMessage, (uUDP_IP, iUDP_PORT))
+            oSocket.sendto(bMessage, (uUDP_IP, iUDP_PORT))
             return oSocket
 
         if self.uIPVersion == "IPv6Only":
@@ -287,27 +295,24 @@ class cThread_Discover_Kira(threading.Thread):
                 pass
 
             uUDP_IP = u'ff02::f'
-            iUDP_PORT = 30303
-            uMessage = u'disD'
 
-            oSocket = cPyXSocket(socket.AF_INET6, socket.SOCK_DGRAM)
+            oSocket = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
             oSocket.setsockopt(IPPROTO_IPV6, socket.IP_MULTICAST_TTL, 20)
-            oSocket.SendTo(uMessage, (uUDP_IP, iUDP_PORT))
+            oSocket.sendto(bMessage, (uUDP_IP, iUDP_PORT))
             return oSocket
 
         return None
 
 
-    def GetDeviceDetails(self,sData,tSenderAddr):
-        oRet                     = QueryDict()
-        oRet.sFoundIP            = tSenderAddr[0]
-        oRet.uFoundPort          = tSenderAddr[1]
-        oRet.bFound              = True
-        oRet.sData               = sData
-        oRet.uIPVersion          = self.uIPVersion
-        return oRet
+    def GetDeviceDetails(self,uData:str,tSenderAddr):
+        dRet                     = QueryDict()
+        dRet.sFoundIP            = tSenderAddr[0]
+        dRet.uFoundPort          = tSenderAddr[1]
+        dRet.bFound              = True
+        dRet.sData               = uData
+        dRet.uIPVersion          = self.uIPVersion
+        return dRet
 
-    def CheckDeviceDetails(self,oRet):
+    def CheckDeviceDetails(self,dRet:QueryDict) -> None:
         return
-

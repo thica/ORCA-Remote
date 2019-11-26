@@ -19,6 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Callable
 from kivy.uix.colorpicker           import ColorPicker
 from ORCA.utils.RemoveNoClassArgs   import RemoveNoClassArgs
 
@@ -28,19 +29,17 @@ class cColorPicker(ColorPicker):
     """ Core Widget for a colorpicker """
     def __init__(self,**kwargs):
 
-        super(cColorPicker, self).__init__(**RemoveNoClassArgs(kwargs,ColorPicker))
+        super().__init__(**RemoveNoClassArgs(kwargs,ColorPicker))
         self.register_event_type('on_colorset')
-        # oContent=self.children[0]
-        # oContent.remove_widget(oContent.children[1])
-        self.cFktTouchUp=self.wheel.on_touch_up
+        self.cFktTouchUp:Callable = self.wheel.on_touch_up
         self.wheel.on_touch_up=self.On_TouchUpColorWheel
 
-    def On_TouchUpColorWheel(self,touch):
+    def On_TouchUpColorWheel(self,touch) -> None:
         """ action will be scheduled on a colorpicker click """
         self.cFktTouchUp(touch)
         self.dispatch('on_colorset')
 
-    def on_colorset(self,**kwargs):
+    def on_colorset(self,**kwargs) -> None:
         """ dummy """
         pass
 

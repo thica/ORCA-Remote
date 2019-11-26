@@ -18,6 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import List
+from typing import BinaryIO
 import ftplib
 
 from kivy.logger            import Logger
@@ -30,25 +32,26 @@ from ORCA.utils.Path        import cPath
 
 __all__ = ['cFTP']
 
-class cFTP(object):
+class cFTP:
     """ This for uploading files per FTP to an FTP server, NOT for downloading """
 
-    PATH_CACHE = []
+    PATH_CACHE: List = []
 
-    def __init__(self, bEncrypt = False):
-        super(cFTP, self).__init__()
+    def __init__(self, bEncrypt:bool = False):
+        super().__init__()
         self.oFTP           = None
         self.bEncrypt       = bEncrypt
 
-    def DirExists(self, oPath):
+    def DirExists(self, oPath: cPath) ->bool:
         """
         checks, if a remote ftp path exists
 
         :param cPath oPath: The remote path, to check
         :return: True/False
         """
-        bExists = False
-        uPath = oPath.unixstring
+        bExists:bool = False
+        uPath:str    = oPath.unixstring
+
         if uPath not in self.PATH_CACHE:
             try:
                 self.oFTP.cwd(uPath)
@@ -61,7 +64,7 @@ class cFTP(object):
             bExists = True
         return bExists
 
-    def CreateDir(self, oPath, uSep=u'/'):
+    def CreateDir(self, oPath:cPath, uSep:str=u'/') ->bool:
         """
         creates a remote ftp path
         :param cPath oPath: The Remote Path to create
@@ -69,10 +72,11 @@ class cFTP(object):
         :return: True/False
         """
 
-        uPath = oPath.unixstring
-        uSplitPath = uPath.split(uSep)
-        uNewDir = u''
-        for uServerDir in uSplitPath:
+        uPath:str             = oPath.unixstring
+        aSplitPath:List[str]  = uPath.split(uSep)
+        uNewDir:str           = u''
+
+        for uServerDir in aSplitPath:
             if uServerDir:
                 uNewDir += uSep + uServerDir
                 if not self.DirExists(cPath(uNewDir)):
@@ -80,11 +84,11 @@ class cFTP(object):
                         Logger.debug('Attempting to create directory (%s) ...' % uNewDir)
                         self.oFTP.mkd(uNewDir)
                     except Exception as e:
-                        LogError('can\'t create directory (%s) ...' % (uNewDir),e)
+                        LogError(uMsg='can\'t create directory (%s) ...' % uNewDir,oException=e)
                         return False
         return True
 
-    def ChangeDir(self,oPath):
+    def ChangeDir(self,oPath:cPath)->bool:
         """
         Changes to a remote ftp directory
 
@@ -95,10 +99,10 @@ class cFTP(object):
             self.oFTP.cwd(oPath.unixstring)
             return True
         except Exception as e:
-            LogError('can\'t change directory (%s) ...' % (oPath.unixstring),e)
+            LogError(uMsg='can\'t change directory (%s) ...' % oPath.unixstring,oException=e)
         return False
 
-    def Connect(self, uServer):
+    def Connect(self, uServer:str) ->bool:
         """ connects to an ftp server """
         if not self.bEncrypt: # Use standard FTP
             self.oFTP = ftplib.FTP()
@@ -110,30 +114,29 @@ class cFTP(object):
                 self.oFTP.prot_p()
             return True
         except Exception as e:
-            uMsg=LogError('FTP: Could not connect to (%s)' % (uServer), e)
-            ShowErrorPopUp(uMessage=uMsg)
+             ShowErrorPopUp(uMessage=LogError(uMsg='FTP: Could not connect to (%s)' % uServer, oException=e))
         return False
-    def DisConnect(self):
+    def DisConnect(self) ->bool:
         try:
             self.oFTP.quit()
         except Exception as e:
-            LogError('FTP: Could not disconnect', e)
+            LogError(uMsg='FTP: Could not disconnect', oException=e)
+            return False
         return True
-    def Login(self,uUsername,uPassword):
+    def Login(self,uUsername:str, uPassword:str) ->bool:
         """ logs to an ftp server """
-        uMsg=''
         try:
             self.oFTP.login(uUsername,uPassword)
-            Logger.debug('Logged in as (%s)' % (uUsername))
+            Logger.debug('Logged in as (%s)' % uUsername)
             return True
         except ftplib.error_perm as e:
-            uMsg=LogError('FTP: can\'t login, check Username/Password',e)
+            uMsg=LogError(uMsg='FTP: can\'t login, check Username/Password',oException=e)
         except Exception as e:
-            uMsg=LogError('FTP: can\'t login, general failure',e)
+            uMsg=LogError(uMsg='FTP: can\'t login, general failure',oException=e)
         ShowErrorPopUp(uMessage=uMsg)
         return False
 
-    def _UploadFile(self,oFile,oRemoteSubPath):
+    def _UploadFile(self,oFile:cFileName,oRemoteSubPath:cPath) ->bool:
         """
         uploads a file to an ftp server
 
@@ -141,25 +144,25 @@ class cFTP(object):
         :param cPath oRemoteSubPath:
         :return:
         """
-        oFileHandle = open(oFile.string,'rb')
-        uFileName = oFile.basename
+        oFileHandle:BinaryIO = open(oFile.string,'rb')
+        uFileName:str        = oFile.basename
 
-        uDisplayFilename = uFileName
+        uDisplayFilename:str = uFileName
 
         Logger.debug('Sending (%s) via FTP to %s' % (uDisplayFilename,oRemoteSubPath.unixstring))
-        uSendCmd = 'STOR %s' % (uFileName)
+        uSendCmd:str = 'STOR %s' % uFileName
         try:
             self.oFTP.storbinary(uSendCmd, oFileHandle)
             Logger.debug('FTP: Upload done!')
             oFileHandle.close()
             return True
         except Exception as e:
-            LogError('FTP: can\'t upload file (%s), general failure' % (uFileName),e)
+            LogError(uMsg='FTP: can\'t upload file (%s), general failure' % uFileName,oException=e)
             oFileHandle.close()
         return False
 
 
-    def UploadLocalFile(self,oFile, oBaseLocalDir, oBaseRemoteDir):
+    def UploadLocalFile(self,oFile:cFileName, oBaseLocalDir:cPath, oBaseRemoteDir:cPath) ->bool:
         """
         Subfunction to upload a local file including sub pathes to to remote folder
 
@@ -169,10 +172,10 @@ class cFTP(object):
         :return:
         """
         try:
-            bRet             = False
-            uPath            = oFile.oPath.string
-            oRemoteSubPath   = cPath(uPath.replace(oBaseLocalDir.string, ''))
-            oRemotePath      = cPath(uPath.replace(oBaseLocalDir.string, oBaseRemoteDir.string))
+            bRet:bool             = False
+            uPath:str             = oFile.oPath.string
+            oRemoteSubPath:cPath  = cPath(uPath.replace(oBaseLocalDir.string, ''))
+            oRemotePath:cPath     = cPath(uPath.replace(oBaseLocalDir.string, oBaseRemoteDir.string))
 
             if not self.DirExists(oRemotePath):
                 self.CreateDir(oRemotePath)
@@ -186,6 +189,5 @@ class cFTP(object):
             return bRet
 
         except Exception as e:
-            bOnError=True
-            LogError('Fatal FTP error' ,e)
-        return bOnError
+            LogError(uMsg='Fatal FTP error',oException=e)
+            return False

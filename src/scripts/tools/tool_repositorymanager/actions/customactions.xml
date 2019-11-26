@@ -8,13 +8,13 @@
 
     <action name="UploadRepository">
       <action name="Create Array" string="sendnotification" notification='CREATEREPOSITORYVARARRAY' actionpars='{"baselocaldir":"$var(REPMAN_BASELOCALDIR)"}' />
-      <action name="SET" string="setvar LASTERRORCODE=0" />
-      <action name="SET" string="setvar RESULTERRORCODE=0" />
+      <action name="SET" string="setvar LASTERRORCODE=$var(RETCODE_SUCCESS)" />
+      <action name="SET" string="setvar RESULTERRORCODE=$var(RETCODE_SUCCESS)" />
       <action name="SET" string="setvar TMPPOS=0" />
       <action name="Show the Progressbar"  string="showprogressbar" title="$lvar(5015)" message="Connecting to $var(REPMAN_FTPSERVER)" max="$var(REPMAN_CNTFILES)" />
       <action name="Login To FTP Server"   string="executeftpcommand" command="connect" host="$var(REPMAN_FTPSERVER)" user="$var(REPMAN_FTPUSER)" password="$var(REPMAN_FTPPASSWORD)" ssl="$var(REPMAN_FTPSSL)"/>
-      <action name="SET" string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
-      <action name="if not failed"   string="if $var(LASTERRORCODE)==0" />
+      <action name="SET" string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=$var(RETCODE_SUCCESS)"/>
+      <action name="if not failed"   string="if $var(LASTERRORCODE)==$var(RETCODE_SUCCESS)" />
         <action name="SET" string="setvar TMPBREAKLOOP=0" />
         <action name="loop through all files" string="forin"  varname="REPMAN_LOCALFILENAMES[]" level="1" actionname="UploadRepository_Sub" breakvar="TMPBREAKLOOP" />
         <action name="SET" string="setvar RESULTERRORCODE=$var(LASTERRORCODE)" />
@@ -29,10 +29,8 @@
         <action name="increase scrollbar pointer"  string="modifyvar"             varname="TMPPOS" operator="increase"  parameter1="1" />
         <action name="Update the Progressbar"      string="showprogressbar"       message="$par(forin_value)" current="$var(TMPPOS)" />
         <action name="Upload File to FTP Server"   string="executeftpcommand"     command="uploadfile" localfile="$par(forin_value)" localbasefolder="$var(REPMAN_LOCALBASENAME)" remotebasefolder="$var(REPMAN_FTPPATH)"/>
-        <action name="Break loop on Error"         string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=0"/>
+        <action name="Break loop on Error"         string="setvar TMPBREAKLOOP=1" condition="$var(LASTERRORCODE)!=$var(RETCODE_SUCCESS)"/>
     </action>
-
-
 
  </actions>
 </ORCA>

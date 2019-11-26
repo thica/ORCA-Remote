@@ -21,7 +21,7 @@
 
 from ORCA.utils.Path         import cPath
 
-def Android_SystemUserPath():
+def Android_SystemUserPath() -> cPath:
     """
     Returns the Operation System User Path
     """

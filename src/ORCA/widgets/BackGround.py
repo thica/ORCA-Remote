@@ -19,9 +19,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+from xml.etree.ElementTree          import Element
+from kivy.uix.widget                import Widget
 from ORCA.widgets.Rectangle         import cWidgetRectangle
 from ORCA.widgets.Picture           import cWidgetPicture
+import ORCA.Globals as Globals
+
+
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.ScreenPage import cScreenPage
+else:
+    from typing import TypeVar
+    cScreenPage = TypeVar("cScreenPage")
+
 
 __all__ = ['cWidgetBackGround']
 
@@ -73,17 +85,21 @@ class cWidgetBackGround(cWidgetPicture,cWidgetRectangle):
     def __init__(self,**kwargs):
         super(cWidgetBackGround, self).__init__(**kwargs)
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage,uAnchor=''):
-        bRet1      = cWidgetPicture.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
-        bRet2      = cWidgetRectangle.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage,uAnchor:str=''):
+        bRet1:bool = cWidgetPicture.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
+        bRet2:bool = cWidgetRectangle.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
         self.iPosX = 0
         self.iPosY = 0
+        self.iHeight = Globals.iAppHeight * self.oDef.fRationY
+        self.iWidth = Globals.iAppWidth * self.oDef.fRationX
+
         self.uName = u'Background'
         if bRet1 and bRet2:
             return True
         return False
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget):
+        bRet:bool
         if not self.oFnPictureNormal.IsEmpty():
             bRet = cWidgetPicture.Create(self, oParent)
         else:

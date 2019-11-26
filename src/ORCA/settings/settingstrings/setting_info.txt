@@ -1,0 +1,13 @@
+[{"type": "title","title": "$lvar(586)" },
+{"type": "info","title": "$lvar(587)","section": "ORCA","info":"$var(VERSION)"},
+{"type": "info","title": "$lvar(588)","section": "ORCA","info":"$var(AUTHOR)"},
+{"type": "info","title": "$lvar(589)","section": "ORCA","info":"$var(SUPPORT)"},
+{"type": "buttons","title": "$lvar(653)","desc": "$lvar(654)","section": "ORCA","key": "button_show_logfile","buttons":[{"title":"$lvar(655)","id":"button_show_logfile"}]},
+{"type": "buttons","title": "$lvar(660)","desc": "$lvar(661)","section": "ORCA","key": "button_show_licensefile","buttons":[{"title":"$lvar(662)","id":"button_show_licensefile"}]},
+{"type": "buttons","title": "$lvar(609)","desc": "$lvar(610)","section": "ORCA","key": "button_show_credits","buttons":[{"title":"$lvar(611)","id":"button_show_credits"}]},
+{"type": "buttons","title": "$lvar(547)","desc": "$lvar(548)","section": "ORCA","key": "button_show_powerstati","buttons":[{"title":"$lvar(549)","id":"button_show_powerstati"}]},
+{"type": "title","title":"$lvar(652)"},
+{"type": "info","title": "$lvar(587)","section": "ORCA","info":"$var(DEFINITIONVERSION)"},
+{"type": "info","title": "$lvar(588)","section": "ORCA","info":"$var(DEFINITIONAUTOR)"},
+{"type": "info","title": "$lvar(589)","section": "ORCA","info":"$var(DEFINITIONSUPPORT)"},
+{"type": "buttons","title": "$lvar(657)","desc": "$lvar(658)","section": "ORCA","key": "button_show_installationhint","buttons":[{"title":"$lvar(659)","id":"button_show_installationhint"}]}]

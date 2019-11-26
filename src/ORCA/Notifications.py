@@ -18,38 +18,42 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from copy                import copy
-from kivy.logger         import Logger
+from typing             import Dict
+from typing             import List
+from typing             import Callable
+from typing             import Union
+
+from copy               import copy
+from kivy.logger        import Logger
 import ORCA.Globals as Globals
 
 
 __all__ = ['cNotifications']
 
-class cNotifications(object):
+class cNotifications:
     """ Class for in App communication """
     def __init__(self):
-        self.dNotifications     = {}
-        self.dNotificationsHash = {}
-        self.dFilterPageNames   = {}
+        self.dNotifications:Dict[str,List]     = {}
+        self.dNotificationsHash:Dict[int,Dict] = {}
+        self.dFilterPageNames:Dict[str,int]    = {}
 
-    def RegisterNotification(self, uNotification, fNotifyFunction, uDescription="", bQuiet=False, aValueLinks=None, **kwargs):
+    def RegisterNotification(self, uNotification:str, fNotifyFunction:Callable, uDescription:str="", bQuiet:bool=False, aValueLinks:Union[None,List[Dict]]=None, **kwargs) -> int:
 
         if aValueLinks is None:
             aValueLinks = []
 
-        dArgs                            = copy(kwargs)
+        dArgs:Dict                       = copy(kwargs)
         dArgs["notificationdescription"] = uDescription
         dArgs["nofification"]            = uNotification
-        iHash                            = hash(repr(dArgs)+repr(fNotifyFunction))
-        bFound                           = False
-        uFilterPageName                  = kwargs.get("filterpagename","")
+        iHash:int                        = hash(repr(dArgs)+repr(fNotifyFunction))
+        uFilterPageName:str              = kwargs.get("filterpagename","")
 
-        aNotificationFunctions           = self.dNotifications.get(uNotification, [])
+        aNotificationFunctions:List      = self.dNotifications.get(uNotification, [])
 
         if iHash in self.dNotificationsHash:
-            Logger.warning("Duplicate notification registration %s:%s, replace old one" % (uNotification,dArgs["notificationdescription"]))
+            Logger.warning("Duplicate notification registration %s:%s, replacing old one" % (uNotification,dArgs["notificationdescription"]))
 
-        dEntry = {"function":fNotifyFunction,"args":dArgs,"hash":iHash,"quiet":bQuiet,"valuelinks": aValueLinks}
+        dEntry:Dict = {"function":fNotifyFunction,"args":dArgs,"hash":iHash,"quiet":bQuiet,"valuelinks": aValueLinks}
         aNotificationFunctions.append(dEntry)
         self.dNotifications[uNotification]  = aNotificationFunctions
         self.dNotificationsHash[iHash]      = dEntry
@@ -58,30 +62,29 @@ class cNotifications(object):
 
         return iHash
 
-    def UnRegisterNotification_ByHash(self,iHash):
+    def UnRegisterNotification_ByHash(self,iHash:int) -> None:
 
-        dEntry = self.dNotificationsHash.get(iHash,None)
+        dEntry:Dict = self.dNotificationsHash.get(iHash,None)
 
         if dEntry is not None:
-            uNotification          = dEntry["args"]["notification"]
-            aNotificationFunctions = self.dNotifications.get(uNotification, [])
+            uNotification:str            = dEntry["args"]["notification"]
+            aNotificationFunctions:List  = self.dNotifications.get(uNotification, [])
             aNotificationFunctions.remove(dEntry)
             del self.dNotificationsHash[iHash]
-            uFilterPageName = dEntry["args"].get("filterpagename","")
-            uFilterKey = uNotification+"_"+uFilterPageName
+            uFilterPageName:str = dEntry["args"].get("filterpagename","")
+            uFilterKey:str = uNotification+"_"+uFilterPageName
             if uFilterKey in self.dFilterPageNames:
                 del self.dFilterPageNames[uFilterKey]
         else:
             Logger.error("Tried to Degister notification with wrong hash")
 
-    def SendNotification(self,uNotification, **kwargs):
+    def SendNotification(self,uNotification:str, **kwargs) -> Dict:
         dRet = {}
-        Ret  = None
 
         # Format for dValueLinks
         # [{"out":"name","in":"name"}]
 
-        aNotificationFunctions = self.dNotifications.get(uNotification, []) + self.dNotifications.get("*", [])
+        aNotificationFunctions:List = self.dNotifications.get(uNotification, []) + self.dNotifications.get("*", [])
 
         for dFunction in aNotificationFunctions:
             dArgs = copy(kwargs)

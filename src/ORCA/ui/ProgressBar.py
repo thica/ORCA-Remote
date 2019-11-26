@@ -19,7 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+from typing                         import Union
 from kivy.uix.widget                import Widget
 from kivy.uix.label                 import Label
 from kivy.uix.progressbar           import ProgressBar
@@ -40,63 +40,64 @@ class cProgressBar(cBasePopup):
 
     def __init__(self):
         super(cProgressBar, self).__init__()
-        self.oLabel        = None
-        self.oProgressText = None
-        self.oProgressBar  = None
-        self.lMax          = 100
-        self.bCancel       = False
+        self.oLabel:Union[Label:None]               = None
+        self.oProgressText:Union[Label,None]        = None
+        self.oProgressBar:Union[ProgressBar,None]   = None
+        self.iMax:int                               = 100
+        self.bCancel:bool                           = False
 
-    def Show(self,uTitle,uMessage,lMax):
+    def Show(self,uTitle:str,uMessage:str,iMax:int) -> Popup:
         """ Shows the Popup """
-        self.lMax           = lMax
+        self.iMax           = iMax
         self.bCancel        = False
-        oContent            = BoxLayout(orientation='vertical', spacing='5dp')
-        iHeight=Globals.iAppHeight*0.5
+        oContent:BoxLayout  = BoxLayout(orientation='vertical', spacing='5dp')
+        iHeight:int         = int(Globals.iAppHeight*0.5)
         if Globals.uDeviceOrientation=="landscape":
-            iHeight=Globals.iAppHeight*0.9
+            iHeight=int(Globals.iAppHeight*0.9)
         self.oPopup         = Popup(title=ReplaceVars(uTitle),content=oContent, size=(Globals.iAppWidth*0.9,iHeight),size_hint=(None, None),auto_dismiss=False)
-        self.oLabel         = label = Label(text=ReplaceVars(uMessage), text_size=(Globals.iAppWidth*0.86, None), shorten=True, valign='top',halign='left')
+        self.oLabel         = Label(text=ReplaceVars(uMessage), text_size=(Globals.iAppWidth*0.86, None), shorten=True, valign='top',halign='left')
         self.oProgressText  = Label(valign='top',halign='center',text_size=(Globals.iAppWidth*0.86, None), shorten=True)
         oContent.add_widget(Widget())
-        oContent.add_widget(label)
+        oContent.add_widget(self.oLabel)
         oContent.add_widget(Widget())
         self.oProgressText.text=""
 
-        self.oProgressBar = ProgressBar(size_hint_y=None, height='50dp', max=lMax)
+        self.oProgressBar = ProgressBar(size_hint_y=None, height='50dp', max=iMax)
         oContent.add_widget(self.oProgressBar)
         oContent.add_widget(self.oProgressText)
         oContent.add_widget(SettingSpacer())
-        oBtn = Button(size_hint_y=None, height='50dp',text=ReplaceVars('$lvar(5009)'))
+        oBtn:Button = Button(size_hint_y=None, height='50dp',text=ReplaceVars('$lvar(5009)'))
         oBtn.bind(on_release=self.OnCancel)
         oContent.add_widget(oBtn)
         self.oPopup.open()
         return self.oPopup
 
-    def Update(self,lCurrent,uTxt=None):
+    def Update(self,iCurrent:int,uTxt:str=None) -> None:
         """ Updates the progressbar """
-        self.oProgressBar.value = lCurrent
-        self.oProgressText.text = r"[%3.2f%%]" % (lCurrent * 100. / self.lMax)
+        self.oProgressBar.value = iCurrent
+        self.oProgressText.text = r"[%3.2f%%]" % (iCurrent * 100. / self.iMax)
         if uTxt:
             self.oLabel.text = uTxt
 
-    def ReInit(self,uTitle,uMessage,lMax):
+    def ReInit(self,uTitle:str,uMessage:str,iMax:int) -> None:
         """ Re-Starts the progressbar """
         self.oPopup.title       = ReplaceVars(uTitle)
         self.oLabel.text        = ReplaceVars(uMessage)
         self.oProgressBar.value = 0
-        self.oProgressBar.max   = lMax
-        self.lMax               = lMax
         self.bCancel            = False
-    def SetMax(self,lMax):
-        """ Sets the maximal Progressbar Value """
-        self.oProgressBar.max   = lMax
-        self.lMax               = lMax
+        self.SetMax(iMax)
 
-    def OnCancel(self, *largs):
+    def SetMax(self,iMax:int) -> None:
+        """ Sets the maximal Progressbar Value """
+        self.oProgressBar.max   = iMax
+        self.iMax               = iMax
+
+    # noinspection PyUnusedLocal
+    def OnCancel(self, *largs) -> None:
         """ Cancel event handler """
         self.bCancel=True
 
-    def ClosePopup(self):
+    def ClosePopup(self) -> None:
         """ will be called by keyhandler, if esc has been pressed """
         self.OnCancel(self)
         cBasePopup.ClosePopup(self)

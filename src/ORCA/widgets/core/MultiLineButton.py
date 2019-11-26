@@ -26,5 +26,5 @@ __all__ = ['cMultiLineButton']
 class cMultiLineButton(Button):
     """ base class for a multiline button """
     def __init__(self, **kw):
-        super(cMultiLineButton, self).__init__(**RemoveNoClassArgs(kw,Button))
+        super().__init__(**RemoveNoClassArgs(kw,Button))
         self.bind(size=self.setter('text_size'))

@@ -18,7 +18,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Union
+
 from xml.etree.ElementTree  import ParseError
+from xml.etree.ElementTree  import Element
 
 from kivy.uix.label         import  Label
 from kivy.uix.boxlayout     import  BoxLayout
@@ -32,7 +35,6 @@ from kivy.base              import  EventLoop
 
 import kivy.core.window
 
-from ORCA.Compat                    import string_types
 from ORCA.Screen                    import cTheScreen
 from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
 from ORCA.utils.LogError            import LogError
@@ -43,31 +45,41 @@ from ORCA.utils.XML                 import GetXMLIntValue
 from ORCA.utils.XML                 import GetXMLTextValue
 from ORCA.vars.Replace              import ReplaceVars
 from ORCA.vars.Access               import SetVar
+from ORCA.vars.Access               import GetVar
+from ORCA.actions.ReturnCode        import eReturnCode
+
+from ORCA.settings.BuildSettingOptionList  import BuildSettingOptionListVar
 
 import ORCA.Globals as Globals
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.definition.Definition import cDefinition
+else:
+    from typing import TypeVar
+    cDefinition = TypeVar("cDefinition")
+
+
+# noinspection PyMethodMayBeStatic
 class cTheScreenWithInit(cTheScreen):
     """ Just for better code readability
         All Funtions to initialize the screen are here """
     def __init__(self):
         super(cTheScreenWithInit,self).__init__()
-        self.oSplashBox    = None
-        self.oSplashLogger = None
-        self.oSplashLogger2 = None
-        self.oProgessBar    = None
-        self.uSplashText    = u''
+        self.oSplashBox:Union[BoxLayout,None]     = None
+        self.oProgessBar:Union[ProgressBar,None]  = None
         self.ShowSplash()
         EventLoop.window.bind(size          = Globals.oApp.On_Size)
         EventLoop.window.bind(on_keyboard   = Globals.oApp.hook_keyboard)
         EventLoop.window.bind(on_motion     = self.on_motion)
 
-    def Init(self):
+    def Init(self) -> None:
         """ Adds the vars and the Settings options """
         self.AddGlobalVars()
         Globals.oNotifications.RegisterNotification("on_stopapp",self.DeInit,"The Screen")
 
 
-    def __CreateSplashBackGround(self):
+    def __CreateSplashBackGround(self) -> None:
         """ Creates the Background for the splash screen """
         if len(self.oSplashBackground.children) == 0:
             self.oSplashBox                         = BoxLayout(orientation="vertical")
@@ -80,42 +92,36 @@ class cTheScreenWithInit(cTheScreen):
             self.oSplashBox.add_widget(self.oSplashLogger2)
             self.oSplashBackground.add_widget(self.oSplashBox)
 
-    def LogToSplashScreen(self,uText,uPercentage=''):
+    def LogToSplashScreen(self,uText:str,uPercentage:str='') -> None:
         """ Logs a main text message to the splash screen """
         self.uSplashText                        = uText
         self.oSplashLogger.size=(Globals.iAppWidth*0.95,Globals.iAppHeight/3)
         self.oSplashLogger.text_size=(Globals.iAppWidth*0.95,None)
         self.oSplashLogger.text                 = ReplaceVars(uText)
         if uPercentage!='':
-            fPercentage=0
-            if isinstance(uPercentage, string_types):
-                if uPercentage.startswith('+'):
-                    fPercentage=self.oProgessBar.value+ToFloat(uPercentage[1:])
-                else:
-                    fPercentage=ToFloat(uPercentage)
+            fPercentage:float
+            if uPercentage.startswith('+'):
+                fPercentage=self.oProgessBar.value+ToFloat(uPercentage[1:])
             else:
                 fPercentage=ToFloat(uPercentage)
             self.oProgessBar.value=fPercentage
 
         self.LogToSplashScreen2('')
 
-    def LogToSplashScreen2(self,uText,uPercentage=''):
+    def LogToSplashScreen2(self,uText:str,uPercentage:str='') -> None:
         """ Logs a sub text message to the splash screen """
         self.oSplashLogger2.size                 =(Globals.iAppWidth*0.95,Globals.iAppHeight/3)
         self.oSplashLogger2.text_size            =(Globals.iAppWidth*0.95,None)
         self.oSplashLogger2.text                 = ReplaceVars(uText)
         if uPercentage!='':
-            fPercentage=0
-            if isinstance(uPercentage, string_types):
-                if uPercentage.startswith('+'):
-                    fPercentage=self.oProgessBar.value+ToFloat(uPercentage[1:])
-                else:
-                    fPercentage=ToFloat(uPercentage)
+            fPercentage:float
+            if uPercentage.startswith('+'):
+                fPercentage=self.oProgessBar.value+ToFloat(uPercentage[1:])
             else:
                 fPercentage=ToFloat(uPercentage)
             self.oProgessBar.value=fPercentage
 
-    def ShowSplash(self):
+    def ShowSplash(self) -> None:
         """ Shows the splash screen """
         self.__CreateSplashBackGround()
         self.oRootSM.current = "SPLASH"
@@ -129,40 +135,39 @@ class cTheScreenWithInit(cTheScreen):
                 if oScreen.name != "SPLASH":
                     self.oRootSM.remove_widget(oScreen)
 
-    def LoadLanguage(self, uLanguageFileName=u'', uContext=''):
+    def LoadLanguage(self, uLanguageFileName:str=u'') -> None:
         """ Loads the languages files """
         try:
             if uLanguageFileName:
                 Logger.info(u'TheScreen: Loading Language File [%s]' % uLanguageFileName)
                 Globals.oLanguage.LoadXmlFile(uLanguageFileName)
             else:
-                Logger.info(u'TheScreen: Loading Language [%s]' % (Globals.uLanguage))
+                Logger.info(u'TheScreen: Loading Language [%s]' % Globals.uLanguage)
                 Globals.oLanguage.LoadXmlFile("APP")
                 self.LoadLocales()
         except Exception as e:
-            uMsg=LogError(u'TheScreen: LoadLanguage: can\'t load Language:',e)
-            ShowErrorPopUp(uMessage=uMsg)
+            ShowErrorPopUp(uMessage=LogError(uMsg=u'TheScreen: LoadLanguage: can\'t load Language:',oException=e))
 
-    def LoadLocales(self):
+    def LoadLocales(self) -> None:
         """ Loads the locales """
-        Logger.info (u'TheScreen: Loading Locales [%s]' % (Globals.uLocalesName))
+        Logger.info (u'TheScreen: Loading Locales [%s]' % Globals.uLocalesName)
         try:
             if not Globals.uLocalesName in Globals.oLanguage.oLocales.oLocalesEntries:
                 for  Globals.uLocalesName in Globals.oLanguage.oLocales.oLocalesEntries:
-                    Logger.debug (u'TheScreen: Cant\'t find locales, defaulting to [%s]' % (Globals.uLocalesName))
+                    Logger.debug (u'TheScreen: Cant\'t find locales, defaulting to [%s]' % Globals.uLocalesName)
                     oConfig=Globals.oOrcaConfigParser
                     oConfig.set(u'ORCA', u'locales', Globals.uLocalesName)
                     break
         except Exception as e:
-            uMsg=LogError(u'TheScreen: LoadLocales: can\'t load Locales',e)
-            ShowErrorPopUp(uMessage=uMsg)
+            ShowErrorPopUp(uMessage=LogError(uMsg=u'TheScreen: LoadLocales: can\'t load Locales',oException=e))
 
-    def LoadSkinDescription(self):
+    def LoadSkinDescription(self) -> None:
         """ Loads the skin description """
         self.oSkin.LoadSkinDescription()
 
-    def LoadAtlas(self):
+    def LoadAtlas(self) -> None:
         """ Loads the atlas picture file(s) """
+        oAtlas:Atlas
         try:
             Logger.debug (u'TheScreen: Loading Skin Atlas')
             if not Globals.bIgnoreAtlas:
@@ -174,18 +179,17 @@ class cTheScreenWithInit(cTheScreen):
                     oAtlas = Atlas(Globals.oDefinitionPathes.oFnDefinitionAtlas.string)
                     Cache.append('kv.atlas', Globals.oDefinitionPathes.oFnDefinitionAtlas.string, oAtlas)
         except ParseError as e:
-            uMsg=LogError(u'TheScreen: Fatal Error:Load Atlas',e)
-            ShowErrorPopUp(uTitle="Fatal Error",uMessage=uMsg,bAbort=True)
+            ShowErrorPopUp(uTitle="Fatal Error",uMessage=LogError(uMsg=u'TheScreen: Fatal Error:Load Atlas',oException=e),bAbort=True)
 
-    def RegisterInterFaces(self,uInterFaceName):
+    def RegisterInterFaces(self,uInterFaceName:str) -> None:
         """ Registers all interfaces """
         Globals.oInterFaces.RegisterInterFaces(uInterFaceName,self.oProgessBar.value)
 
-    def RegisterFonts(self,uFontName):
+    def RegisterFonts(self,uFontName:str) -> None:
         """ Registers all fonts """
         self.oFonts.RegisterFonts(uFontName,self.oProgessBar.value)
 
-    def LoadActions_ForDefinition(self,uDefinitionName):
+    def LoadActions_ForDefinition(self,uDefinitionName:str) -> None:
         """ Loads all definition actions """
 
         if not uDefinitionName:
@@ -193,27 +197,27 @@ class cTheScreenWithInit(cTheScreen):
         else:
             Globals.oDefinitions[uDefinitionName].LoadActions()
 
-    def InitInterFaceSettings_ForDefinition(self,uDefinitionName):
+    def InitInterFaceSettings_ForDefinition(self,uDefinitionName:str) -> None:
         """ Initializes the inerface settings for the definitions """
         Globals.oDefinitions.InitInterFaceSettings(uDefinitionName,self.oProgessBar.value)
 
-    def LoadFonts_ForDefinition(self,uDefinitionName):
+    def LoadFonts_ForDefinition(self,uDefinitionName:str) -> None:
         """ Loads the fonts files for the definitions """
         Globals.oDefinitions.LoadFonts(uDefinitionName,self.oProgessBar.value)
 
-    def LoadLanguages_ForDefinition(self):
+    def LoadLanguages_ForDefinition(self) -> None:
         """ Loads the language files for the definitions """
         Globals.oDefinitions.LoadLanguages(self.oProgessBar.value)
 
-    def LoadGestures_ForDefinition(self,uDefinitionName):
+    def LoadGestures_ForDefinition(self,uDefinitionName:str) -> None:
         """ Loads the gestures files for the definitions """
         Globals.oDefinitions.LoadGestures(uDefinitionName,self.oProgessBar.value)
 
-    def ParseDefinitionXmlFile(self,uDefinitionName):
+    def ParseDefinitionXmlFile(self,uDefinitionName:str) -> None:
         """ Loads the main definition xml file for the definitions"""
         Globals.oDefinitions.ParseXmlFiles(uDefinitionName,self.oProgessBar.value)
 
-    def LoadSettings_ForDefinition(self,uDefinitionName):
+    def LoadSettings_ForDefinition(self,uDefinitionName:str) -> None:
         """ Loads all definition settings """
 
         if uDefinitionName=='PARSESETTINGS':
@@ -221,12 +225,17 @@ class cTheScreenWithInit(cTheScreen):
         else:
             Globals.oDefinitions.LoadSettings(uDefinitionName,self.oProgessBar.value)
 
-    def CheckToRotate(self):
+    def CheckToRotate(self) -> None:
         """ Check if we need to rotate the screen """
-        oDef=Globals.oDefinitions[0]
-        oET_Root=oDef.oET_Root
+
+        oListDef:cDefinition
+        uDefinitionDefaultOrientation:str
+        fRatio:float
+
+        oDef:cDefinition = Globals.oDefinitions[0]
+        oET_Root:Element = oDef.oET_Root
         #Get Definition Wide Setting
-        oRef                    = oET_Root.find('def_parameter')
+        oRef             = oET_Root.find('def_parameter')
 
         for oListDef in Globals.oDefinitions:
             oListDef.iDefMaxX           = GetXMLIntValue(oRef,u'maxx',True,1)
@@ -263,6 +272,7 @@ class cTheScreenWithInit(cTheScreen):
             Logger.debug("Rotation adjusted")
 
         if Globals.uStretchMode=="RESIZE":
+            # noinspection PySimplifyBooleanCheck
             if kivy.core.window.Window.fullscreen!=True:
                 fRatio=float(float(Globals.iAppWidth)/float(Globals.iAppHeight))/float(float(oDef.iDefMaxX)/float(oDef.iDefMaxY))
                 if fRatio<1:
@@ -274,8 +284,11 @@ class cTheScreenWithInit(cTheScreen):
                 kivy.core.window.Window.size=(Globals.iAppWidth,Globals.iAppHeight)
 
 
-    def AdjustRatiosAfterResize(self):
+    def AdjustRatiosAfterResize(self) -> None:
         """ we need to re-adjust the screen dimensions if we did change rotation of size  """
+
+        oDef:cDefinition
+        fRatio:float
         for oDef in Globals.oDefinitions:
             fRatio=float(float(Globals.iAppWidth)/float(Globals.iAppHeight))/float(float(oDef.iDefMaxX)/float(oDef.iDefMaxY))
             if fRatio<1:
@@ -287,7 +300,7 @@ class cTheScreenWithInit(cTheScreen):
 
             Logger.debug("Ratios: Def [%s]: X=%d y=%d | Screen: X=%d y=%d" %(oDef.uName,oDef.iDefMaxX,oDef.iDefMaxY,Globals.iAppWidth,Globals.iAppHeight))
 
-    def AddGlobalVars(self):
+    def AddGlobalVars(self) -> None:
         """ Adds system vars """
 
         SetVar(uVarName=u'DEFINITIONROOTPATH',    oVarValue=Globals.oPathDefinitionRoot.string)
@@ -329,6 +342,8 @@ class cTheScreenWithInit(cTheScreen):
         SetVar(uVarName=u'INTERFACENAMES',        oVarValue=Globals.oInterFaces.uInterFaceListSettingString)
         SetVar(uVarName=u'WAITFORROTATION',       oVarValue=u'0')
         SetVar(uVarName=u'FIRSTPAGE',             oVarValue=u'')
+        SetVar(uVarName=u'RETCODE_ERROR',         oVarValue=str(eReturnCode.Error))
+        SetVar(uVarName=u'RETCODE_SUCCESS',       oVarValue=str(eReturnCode.Success))
 
         # do NOT change this if we change the definitioncontext
         SetVar(uVarName = u'DEFINITIONNAME',                        oVarValue = Globals.uDefinitionName)
@@ -337,3 +352,8 @@ class cTheScreenWithInit(cTheScreen):
         SetVar(uVarName = u"ORCASTANDARDGESTURESINCLUDED",          oVarValue = u"0")
         SetVar(uVarName = u'ORCASTANDARDACTIONSINCLUDED',           oVarValue = u"0")
 
+        if Globals.aLogoPackFolderNames:
+            SetVar("LOGOPACKFOLDERNAME", Globals.aLogoPackFolderNames[0])
+            BuildSettingOptionListVar(Globals.aLogoPackFolderNames, "SETTINGS_LOGOPACKFOLDERNAMES")
+            uLogoPackFolderNames = GetVar("SETTINGS_LOGOPACKFOLDERNAMES")
+            SetVar("SETTINGS_LOGOPACKFOLDERNAMES",uLogoPackFolderNames[1:-1])

@@ -18,12 +18,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                         import Dict
+from typing                         import List
+from typing                         import Union
+
 from copy                           import copy
+from xml.etree.ElementTree          import Element
 
 from kivy.logger                    import  Logger
 
+from ORCA.ActionType                import cActionType
 from ORCA.Action                    import cAction
-from ORCA.Action                    import cActionType
 from ORCA.utils.FileName            import cFileName
 from ORCA.utils.LogError            import LogError
 from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
@@ -32,25 +37,28 @@ from ORCA.utils.XML                 import LoadXMLFile
 
 import ORCA.Globals as Globals
 
-class cActions(object):
+
+class cActions:
     """ The Actions Representation """
     def __init__(self):
-        self.dActionsCommands       = {}
-        self.dActionsPageStart      = {}
-        self.dActionsPageStop       = {}
-        self.oActionType            = cActionType()
-        self.iIndent                = 0
-    def InitVars(self):
+        self.dActionsCommands:Dict       = {}
+        self.dActionsPageStart:Dict      = {}
+        self.dActionsPageStop:Dict       = {}
+        self.oActionType:cActionType     = cActionType()
+        self.iIndent:int                 = 0
+
+    def InitVars(self) -> None:
         """ (re) Initialisises all Actions (also after a definition change) """
         self.dActionsCommands.clear()
         self.dActionsPageStart.clear()
         self.dActionsPageStop.clear()
 
-    def LoadActionsAppStart(self):
+    def LoadActionsAppStart(self) -> None:
         """ Loads the appstart Actions """
         Logger.debug (u'Load AppStart Actions XmlFile')
+        oET_Root:Element
 
-        oFnActionFile = cFileName(Globals.oFnActionEarlyAppStart)
+        oFnActionFile:cFileName = cFileName(Globals.oFnActionEarlyAppStart)
 
         if not oFnActionFile.Exists():
             if (len(Globals.aDefinitionList)== 0) and (not Globals.bProtected):
@@ -63,25 +71,26 @@ class cActions(object):
             self.LoadActionsSub(oET_Root ,u'actions',u'action',self.dActionsCommands,oFnActionFile.string)
 
         except Exception as e:
-            uMsg=LogError(u'TheScreen: Fatal Error:Load Appstart Action XmlFile (%s)' % oFnActionFile.string, e)
-            ShowErrorPopUp(uTitle="Fatal Error",uMessage=uMsg,bAbort=True)
+            uMsg:str=LogError(uMsg=u'TheScreen: Fatal Error:Load Appstart Action XmlFile (%s)' % oFnActionFile.string,oException=e)
+            ShowErrorPopUp(uTitle="LoadActionsAppStart: Fatal Error",uMessage=uMsg,bAbort=True)
 
-        aActions=self.dActionsPageStart.get(u'earlyappstart')
+        aActions:List[cAction] = self.dActionsPageStart.get(u'earlyappstart')
         if aActions:
             Logger.debug (u'TheScreen: Calling Early Application StartActions')
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
-        oET_Root=None
 
-    def __ParseXMLActions(self, oXMLNode, aActions,uFunctionName):
-        bFound = False
+    # noinspection PyMethodMayBeStatic,PyMethodMayBeStatic
+    def __ParseXMLActions(self, oXMLNode:Element, aActions:List[cAction],uFunctionName:str) -> None:
+        bFound:bool = False
+        oXMLAction:List[Element]
         for oXMLAction in oXMLNode.findall('action'):
             aActions.append(cAction(pars=oXMLAction,functionname=uFunctionName))
             bFound = True
         # If we got no child actions, then we use the Command Tag as a single action
-        if bFound == False:
+        if not bFound:
             aActions.append(cAction(pars=oXMLNode,functionname=uFunctionName))
 
-    def LoadActionsSub(self,oET_Root,uSegmentTag, uListTag,aTargetDic,uFileName=u''):
+    def LoadActionsSub(self,oET_Root:Element,uSegmentTag:Union[str,None], uListTag:str,dTargetDic:Dict,uFileName:Union[str,cFileName]=u'') -> None:
         """
             replaceoptions
             * appendtoexisting
@@ -89,6 +98,8 @@ class cActions(object):
             * renameexisting = rename original actions if exist
             * renamemeifexist = rename this action
         """
+
+        oET_SegmentsStart:Element
 
         try:
 
@@ -100,7 +111,7 @@ class cActions(object):
             if oET_SegmentsStart is not None:
                 for oET_Includes in oET_SegmentsStart:
                     if oET_Includes.tag==u'includes':
-                        self.LoadActionsSub(oET_Includes,None, uListTag,aTargetDic,uFileName)
+                        self.LoadActionsSub(oET_Includes,None, uListTag,dTargetDic,uFileName)
                     elif oET_Includes.tag==uListTag:
                         uName=GetXMLTextAttribute(oET_Includes,'name',True,u'')
                         uReplaceOption = GetXMLTextAttribute(oET_Includes,'replaceoption',False,u'appendtoexisting')
@@ -108,7 +119,7 @@ class cActions(object):
                         uNewname       = GetXMLTextAttribute(oET_Includes,'newname',False,u'')
                         aActions        = []
                         bOldExist       = True
-                        aActionsOrg     = aTargetDic.get(uName)
+                        aActionsOrg     = dTargetDic.get(uName)
                         if aActionsOrg is None:
                             aActionsOrg=[]
                             bOldExist       = False
@@ -117,20 +128,23 @@ class cActions(object):
                             aActions = aActionsOrg
 
                         if uReplaceOption=='renameexisting' and bOldExist:
-                            aTargetDic[uNewname] = aActionsOrg
+                            dTargetDic[uNewname] = aActionsOrg
 
                         if uReplaceOption=='renamemeifexist' and bOldExist:
                             uName=uNewname
 
                         self.__ParseXMLActions(oXMLNode=oET_Includes,aActions=aActions,uFunctionName=uName)
-                        aTargetDic[uName]=aActions
+                        dTargetDic[uName]=aActions
 
         except Exception as e:
-            uMsg=LogError(u'TheScreen: Fatal Error:Load Action XmlFile:',e)
-            ShowErrorPopUp(uTitle="Fatal Error",uMessage=uMsg,bAbort=True)
+            uMsg=LogError(uMsg=u'TheScreen: Fatal Error:Load Action XmlFile:',oException=e)
+            ShowErrorPopUp(uTitle="LoadActionsSub: Fatal Error",uMessage=uMsg,bAbort=True)
 
-    def Dump(self,uFilter):
+    def Dump(self,uFilter:str) -> None:
         """ Dumps all Actions """
+
+        uActionName:str
+        aActions:List[cAction]
 
         for uActionName in sorted(self.dActionsCommands):
             if uFilter == u"" or uFilter in uActionName:
@@ -147,7 +161,7 @@ class cActions(object):
                 aActions=self.dActionsPageStop[uActionName]
                 self.DumpActions_Sub(uActionName,aActions)
 
-    def DumpActions_Sub(self,uActionName,aActions):
+    def DumpActions_Sub(self,uActionName:str,aActions:List[cAction]) -> None:
         """ Little helper for dumping actions """
 
         if len(aActions)==1 and uActionName==aActions[0].uActionName:
@@ -163,12 +177,12 @@ class cActions(object):
                 if oAction.iActionId==Globals.oActions.oActionType.If:
                     self.iIndent+=2
 
-    def SetActionList(self, uActionName, aActions):
+    def SetActionList(self, uActionName:str, aActions:List[cAction]) -> None:
         """ Adds an Actionlist to the global list of Actions """
         self.dActionsCommands[uActionName] = aActions
 
 
-    def GetActionList(self, uActionName, bNoCopy):
+    def GetActionList(self, uActionName, bNoCopy:bool) -> List[cAction]:
         """ Returns a (copy of an) action (list)  """
 
         if bNoCopy:
@@ -176,7 +190,7 @@ class cActions(object):
         else:
             return self._CopyActonList(self.dActionsCommands,uActionName)
 
-    def GetPageStartActionList(self, uActionName, bNoCopy):
+    def GetPageStartActionList(self, uActionName, bNoCopy) -> List[cAction]:
         """ Returns a (copy of an) action (list)  """
 
         if bNoCopy:
@@ -184,16 +198,17 @@ class cActions(object):
         else:
             return self._CopyActonList(self.dActionsPageStart,uActionName)
 
-    def GetPageStopActionList(self, uActionName, bNoCopy):
+    def GetPageStopActionList(self, uActionName, bNoCopy) -> List[cAction]:
         """ Returns a (copy of an) action (list)  """
         if bNoCopy:
             return self.dActionsPageStop.get(uActionName)
         else:
             return self._CopyActonList(self.dActionsPageStop,uActionName)
 
-    def _CopyActonList(self,dActionList,uActionName):
+    @staticmethod
+    def _CopyActonList(dActionList:Dict, uActionName:str) -> Union[List[cAction],None]:
         """ Creates a copy of an action list  """
-        aList = dActionList.get(uActionName)
+        aList:List[cAction] = dActionList.get(uActionName)
         if aList is None:
             return None
         aRet = []

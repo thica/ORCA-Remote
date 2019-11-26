@@ -17,58 +17,74 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__                 import annotations
 
+from typing                     import Dict
+from typing                     import List
 from kivy.clock                 import Clock
-from kivy.logger                import Logger
 from ORCA.utils.wait.IsWaiting  import IsWaiting
 
 import ORCA.Globals as Globals
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.Action import cAction
+else:
+    from typing import TypeVar
+    cAction = TypeVar("cAction")
+
 __all__ = ['cCustomTimer', 'cAllTimer']
 
-class cAllTimer(object):
+
+# noinspection PyMethodMayBeStatic
+class cAllTimer:
     """ Object for all event timer """
-    aCustomTimer= {}
-    def HasTimer(self,uTimerName):
+    aCustomTimer:Dict[str,cCustomTimer] = {}
+    def HasTimer(self,uTimerName:str) -> bool:
         """ returns, if a timer exists"""
         return cAllTimer.aCustomTimer.get(uTimerName) is not None
-    def AddTimer(self,uTimerName,oTimer):
+
+    def AddTimer(self,uTimerName:str,oTimer:cCustomTimer) -> None:
         """ Adds a timer object """
         cAllTimer.aCustomTimer[uTimerName]=oTimer
-    def DeleteTimer(self,uTimerName):
+
+    def DeleteTimer(self,uTimerName:str) -> None:
         """ Deletes a timer objects"""
         if self.HasTimer(uTimerName):
             cAllTimer.aCustomTimer[uTimerName].StopTimer()
             del cAllTimer.aCustomTimer[uTimerName]
-    def DeleteAllTimer(self):
+
+    def DeleteAllTimer(self) -> None:
         """ Deletes all timer """
         if Clock is not None:
             for uTimerName in cAllTimer.aCustomTimer:
                 cAllTimer.aCustomTimer[uTimerName].StopTimer()
         cAllTimer.aCustomTimer.clear()
 
-class cCustomTimer(object):
+class cCustomTimer:
     """ a single timer object """
-    def __init__(self, uTimerName, uActionName, fTimerIntervall):
-        self.uTimerName       = uTimerName
-        self.uActionName      = uActionName
-        self.fTimerIntervall  = fTimerIntervall
-        self.bStopped         = False
+    def __init__(self, uTimerName:str, uActionName:str, fTimerIntervall:float):
+        self.uTimerName:str         = uTimerName
+        self.uActionName:str        = uActionName
+        self.fTimerIntervall:float  = fTimerIntervall
+        self.bStopped:bool          = False
 
-    def StartTimer(self):
+    def StartTimer(self) -> None:
         """ starts the timer """
         Clock.schedule_interval(self.DoTimer,self.fTimerIntervall)
-    def StopTimer(self):
+
+    def StopTimer(self) -> None:
         """ stops the timer """
         Clock.unschedule(self.DoTimer)
         self.bStopped         = True
 
-    def DoTimer(self,*largs):
+    # noinspection PyUnusedLocal
+    def DoTimer(self,*largs) -> bool:
         """ executes the timer """
         if IsWaiting():
             return True
 
-        aActions=Globals.oActions.GetActionList(uActionName = self.uActionName, bNoCopy = False)
+        aActions:List[cAction]=Globals.oActions.GetActionList(uActionName = self.uActionName, bNoCopy = False)
         if aActions is None:
             aActions = Globals.oEvents.CreateSimpleActionList([{'string': self.uActionName, 'name': self.uActionName, "force":True}])
 

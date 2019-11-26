@@ -20,7 +20,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing                                 import Dict
+from typing                                 import Union
+
+from xml.etree.ElementTree                  import Element
+
 from ORCA.scripttemplates.Template_System   import cSystemTemplate
+from kivy.uix.widget                        import Widget
 from kivy.gesture                           import GestureDatabase
 from kivy.graphics                          import Color
 from kivy.graphics                          import Ellipse
@@ -29,9 +35,9 @@ from kivy.graphics                          import Line
 from ORCA.widgets.core.TouchRectangle       import cTouchRectangle
 from ORCA.widgets.core.ButtonBehaviour      import simplegesture
 from ORCA.widgets.Base                      import cWidgetBase
+from ORCA.ScreenPage                        import cScreenPage
 
 import ORCA.Globals as Globals
-
 
 '''
 <root>
@@ -41,8 +47,8 @@ import ORCA.Globals as Globals
       <description language='English'>Additional Widget to record gestures</description>
       <description language='German'>Zusätzliches Widgets um Gesten aufzuzeichnen</description>
       <author>Carsten Thielepape</author>
-      <version>3.70</version>
-      <minorcaversion>3.7.0</minorcaversion>
+      <version>4.6.2</version>
+      <minorcaversion>4.6.2</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -52,7 +58,6 @@ import ORCA.Globals as Globals
         </source>
       </sources>
       <skipfiles>
-        <file>scripts/system/system_widget_gesturerecorder/script.pyc</file>
       </skipfiles>
     </entry>
   </repositorymanager>
@@ -64,9 +69,9 @@ class cGestureBoard(cTouchRectangle):
     """ base class for recording gestures """
     def __init__(self, **kwargs):
         super(cGestureBoard, self).__init__(**kwargs)
-        self.gdb = GestureDatabase()
+        self.gdb:GestureDatabase = GestureDatabase()
 
-    def on_touch_down(self, touch):
+    def on_touch_down(self, touch) -> bool:
 
         #self.DrawStandardGestures()
         # start collecting points in touch.ud
@@ -84,11 +89,10 @@ class cGestureBoard(cTouchRectangle):
             userdata['line'] = Line(points=(touch.x, touch.y))
         return True
 
-    def on_touch_move(self, touch):
+    def on_touch_move(self, touch) -> bool:
 
         if touch.grab_current is not self:
-            return
-
+            return False
         # store points of the touch movement
         try:
             touch.ud['line'].points += [touch.x, touch.y]
@@ -97,14 +101,14 @@ class cGestureBoard(cTouchRectangle):
             pass
         return True
 
-    def on_touch_up(self, touch):
+    def on_touch_up(self, touch) -> bool:
 
         if touch.grab_current is not self:
-            return
+            return False
 
         g = simplegesture('',zip(touch.ud['line'].points[::2], touch.ud['line'].points[1::2]))
         # print "gesture representation:", ':',self.gdb.gesture_to_str(g)
-        uLogName=Globals.oFnGestureLog.string
+        uLogName:str=Globals.oFnGestureLog.string
 
         oLogFile = open(uLogName, 'a')
         oLogFile.write('Gesturecode:'+self.gdb.gesture_to_str(g)+'\n')
@@ -143,19 +147,17 @@ class cWidgetGestureRecorder(cWidgetBase):
     def __init__(self, **kwargs):
         super(cWidgetGestureRecorder, self).__init__(**kwargs)
 
-    def InitWidgetFromXml(self,oXMLNode,oParentScreenPage, uAnchor):
+    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
-    def Create(self,oParent):
+    def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
 
         if self.CreateBase(Parent=oParent,Class=cGestureBoard):
             self.oParent.add_widget(self.oObject)
             return True
         return False
-
-
 
 class cScript(cSystemTemplate):
     """
@@ -185,14 +187,15 @@ class cScript(cSystemTemplate):
         self.uIniFileLocation   = u'none'
 
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> None:
         Globals.oNotifications.RegisterNotification("UNKNOWNWIDGET",fNotifyFunction=self.AddWidgetFromXmlNode,uDescription="Script Widget GestureRecorder")
 
-    def AddWidgetFromXmlNode(self,*args,**kwargs):
-        oScreenPage = kwargs.get("SCREENPAGE")
-        oXMLNode    = kwargs.get("XMLNODE")
-        uAnchor     = kwargs.get("ANCHOR")
-        oWidget     = kwargs.get("WIDGET")
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def AddWidgetFromXmlNode(self,*args,**kwargs) -> Union[Dict,None]:
+        oScreenPage:cScreenPage = kwargs.get("SCREENPAGE")
+        oXMLNode:Element        = kwargs.get("XMLNODE")
+        uAnchor:str             = kwargs.get("ANCHOR")
+        oWidget:cWidgetBase     = kwargs.get("WIDGET")
 
         if uAnchor is None or oScreenPage is None or oXMLNode is None or oWidget is None:
             return None
@@ -200,6 +203,6 @@ class cScript(cSystemTemplate):
         if oWidget.uTypeString != "GESTURERECORDER":
             return None
 
-        Ret = oScreenPage._AddWidgetFromXmlNode_Class(oXMLNode=oXMLNode,  uAnchor=uAnchor,oClass=cWidgetGestureRecorder)
+        Ret = oScreenPage.AddWidgetFromXmlNode_Class(oXMLNode=oXMLNode,  uAnchor=uAnchor,oClass=cWidgetGestureRecorder)
         return {"ret":Ret}
 

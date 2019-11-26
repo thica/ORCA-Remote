@@ -19,23 +19,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Union, List
+
 from   kivy.logger           import Logger
 
-def GetAndroidModule(uModuleName, uParClass = None):
+def GetAndroidModule(uModuleName:str, uParClass:Union[str,None] = None):
     if uParClass is not None:
-        lClasses = []
-        lClasses.append(uParClass+".")
+        aClasses: List[str] = [uParClass+"."]
     else:
-        lClasses = ('org.kivy.android.','org.renpy.android.')
+        aClasses = ['org.kivy.android.','org.renpy.android.']
 
-    oModule  = None
-    uLib     = ""
+    oModule      = None
+    uLib:str     = ""
 
     try:
         # noinspection PyUnresolvedReferences
         from jnius import autoclass
 
-        for uClass in lClasses:
+        for uClass in aClasses:
             try:
                 uLib = uClass + uModuleName
                 Logger.debug("Try to load Android Lib from %s" % uLib)

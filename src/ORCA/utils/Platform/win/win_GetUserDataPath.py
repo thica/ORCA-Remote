@@ -23,8 +23,6 @@ import sys
 from ORCA.utils.Path import cPath
 
 
-def GetUserDataPath():
+def GetUserDataPath() -> cPath:
     """ Gets the path to the user folder """
-
-    oPath = cPath('').ImportFullPath(sys.argv[0])
-    return oPath
+    return cPath('').ImportFullPath(sys.argv[0])

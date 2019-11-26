@@ -19,6 +19,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Dict
+from typing import Union
 from ORCA.scripts.BaseScript import cBaseScript
 from ORCA.utils.FileName import cFileName
 
@@ -28,25 +30,26 @@ class cToolsTemplate(cBaseScript):
     """ template class for discover scripts """
     def __init__(self):
         cBaseScript.__init__(self)
-        self.uType      = u'TOOLS'
-        self.iHash      = 0
-        self.aScriptSettingPlugins = []
+        self.uType:str                      = u'TOOLS'
+        self.iHash:int                      = 0
+        self.oFnXML:Union[cFileName,None]   = None
+        # self.aScriptSettingPlugins        = []
 
-    def Init(self,uObjectName,oFnObject=None):
+    def Init(self,uObjectName:str,oFnObject:Union[cFileName,str]=None) -> None:
         cBaseScript.Init(self,uObjectName,oFnObject)
         self.oFnXML     = cFileName(Globals.oScripts.dScriptPathList[self.uObjectName])+"script.xml"
 
-    def RunScript(self, *args, **kwargs):
+    def RunScript(self, *args, **kwargs) -> Union[Dict,None]:
         """ main entry point to run the script """
         if 'register' in args or kwargs.get("caller")=="appstart":
             return self.Register(*args,**kwargs)
         elif "unregister" in args:
             return self.UnRegister(*args,**kwargs)
-        return 0
+        return None
 
-    def Register(self,*args,**kwargs):
-        pass
+    def Register(self,*args,**kwargs) -> None:
+        return None
 
-
-    def UnRegister(self,*args,**kwargs):
-        pass
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def UnRegister(self,*args,**kwargs) -> None:
+        return None

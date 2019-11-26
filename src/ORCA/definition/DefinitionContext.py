@@ -27,12 +27,12 @@ __all__ = ['SetDefinitionPathes',
            'RestoreDefinitionContext'
            ]
 
-def SetDefinitionPathes(uDefinitionName, uDefinitionPathName=u''):
+def SetDefinitionPathes(uDefinitionName:str, uDefinitionPathName:str=u'') -> None:
     """
     Sets the definition pathes to a specific definition
     """
     if not uDefinitionName in Globals.dDefinitionPathes:
-        oDefinitionPathes = cDefinitionPathes(uDefinitionName, uDefinitionPathName)
+        oDefinitionPathes:cDefinitionPathes = cDefinitionPathes(uDefinitionName, uDefinitionPathName)
         Globals.dDefinitionPathes[uDefinitionName] = oDefinitionPathes
 
     Globals.oDefinitionPathes = Globals.dDefinitionPathes[uDefinitionName]
@@ -43,7 +43,7 @@ def SetDefinitionPathes(uDefinitionName, uDefinitionPathName=u''):
     SetVar(uVarName=u'DEFINITIONPATHSKINELEMENTS',      oVarValue=Globals.oDefinitionPathes.oPathDefinitionSkinElements.string)
 
 
-def SetDefinitionContext(uDefinitionName, uDefinitionPathName=u''):
+def SetDefinitionContext(uDefinitionName:str, uDefinitionPathName:str=u'') -> None:
     """
     Changes the context (mainly the the definition pathes) to a specific definition
     """
@@ -52,9 +52,8 @@ def SetDefinitionContext(uDefinitionName, uDefinitionPathName=u''):
         SetDefinitionPathes(uDefinitionName, uDefinitionPathName)
 
 
-def RestoreDefinitionContext():
+def RestoreDefinitionContext() -> None:
     """
     Restores the context (mainly the the definition pathes) to the main definition
     """
-
     SetDefinitionContext(Globals.uDefinitionName)

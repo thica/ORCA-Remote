@@ -18,22 +18,45 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-__all__ = ['BuildSettingOptionList','BuildSettingOptionListDict']
+from typing             import Dict
+from typing             import Iterable
+from ORCA.vars.Access   import SetVar
 
-def BuildSettingOptionList(aArray):
+__all__ = ['BuildSettingOptionList','BuildSettingOptionListDict','BuildSettingOptionListVar','BuildSettingOptionListDictVar']
+
+def BuildSettingOptionList(aArray:Iterable[str]) -> str:
     """
     Little helper function to create a json option list
     """
-    uValueString=u''
+    uToken:str
+    uValueString:str=u''
     for uToken in aArray:
         uValueString+=u'\"'+uToken+u'\",'
     return uValueString[:-1]
 
-def BuildSettingOptionListDict(dArray):
+def BuildSettingOptionListVar(aArray:Iterable[str],uDestVar:str) -> str:
     """
     Little helper function to create a json option list
     """
-    uValueString=u''
+    uValueString = "["+BuildSettingOptionList(aArray)+"]"
+    SetVar(uDestVar,uValueString)
+    return uValueString
+
+
+def BuildSettingOptionListDict(dArray:Dict[str,str]) -> str:
+    """
+    Little helper function to create a json option list
+    """
+    uToken:str
+    uValueString:str=u''
     for uToken in dArray:
         uValueString+=u'\"'+dArray[uToken]+u" ["+uToken+u"]" +u'\",'
     return uValueString[:-1]
+
+def BuildSettingOptionListDictVar(dArray:Dict[str,str],uDestVar:str) -> str:
+    """
+    Little helper function to create a json option list
+    """
+    uValueString = "[" + BuildSettingOptionListDict(dArray) + "]"
+    SetVar(uDestVar, uValueString)
+    return uValueString

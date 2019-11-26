@@ -18,6 +18,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing                 import Union
+from typing                 import Tuple
+from typing                 import List
+from typing                 import Dict
+from typing                 import Callable
 
 from functools              import  partial
 from copy                   import  copy
@@ -28,45 +33,62 @@ from kivy.gesture           import  Gesture
 from kivy.clock             import  Clock
 
 from ORCA.utils.LogError    import  LogError
-from ORCA.Compat            import PY2
 
 import ORCA.Globals as Globals
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from kivy.uix.widget import Widget
+    from ORCA.widgets.Base import cWidgetBase
+    from ORCA.Action import cAction
+else:
+    from typing import TypeVar
+    Widget  = TypeVar("Widget")
+    cAction = TypeVar("cAction")
+    cWidgetBase = TypeVar("cWidgetBase")
+
+
 
 
 __all__ = ['simplegesture','cOrcaButtonBehaviour']
 
-bStopRepeat = False
-oDownWidget = None
+bStopRepeat:bool               = False
+oDownWidget:Union[Widget,None] = None
 
-def simplegesture(name, point_list):
+def simplegesture(uName:str, point_list) -> Gesture:
     """
     A simple helper function
     Taken from original Kivy examples
     """
     g = Gesture()
-    if PY2:
-        g.add_stroke(point_list)
-    else:
-        g.add_stroke(list(point_list))
+    g.add_stroke(list(point_list))
     g.normalize()
-    g.name = name
+    g.name = uName
     return g
 
-def GetTouchActions(touch,aGestures):
+def GetTouchActions(touch,dGestures:Dict[str,Tuple]) -> Union[List,None]:
     """ gets the actions for a touch """
-    try:
-        g = simplegesture('',zip(touch.ud['line'].points[::2], touch.ud['line'].points[1::2]))
-        # use database to find the more alike gesture, if any
-        g2 = Globals.oTheScreen.oGdb.find(g, minscore=0.70)
 
-        if g2:
-            Logger.debug (u'Gesturewidget: Identified Gesture:'+ g2[1].Name)
+    uAction:str
+    uInterFace:str
+    uConfigName:str
+    oAction:cAction
+
+    try:
+        oGesture:Gesture = simplegesture('',zip(touch.ud['line'].points[::2], touch.ud['line'].points[1::2]))
+        # use database to find the more alike gesture, if any
+        tGesture:Tuple[float,Gesture] = Globals.oTheScreen.oGdb.find(oGesture, minscore=0.70)
+
+        if tGesture:
+            # name is added by kivy pickler but not in kivy init
+            # noinspection PyUnresolvedReferences
+            Logger.debug (u'Gesturewidget: Identified Gesture:'+ tGesture[1].name)
             for key in Globals.oTheScreen.dGestures.keys():
-                if g2[1] ==Globals.oTheScreen.dGestures[key].oGesture:
-                    if key in aGestures:
-                        uAction,uInterFace,uConfigName =aGestures[key]
-                        Logger.debug (u'Gesturewidget: Calling GestureActions')
-                        aActions=Globals.oActions.GetActionList(uActionName = uAction, bNoCopy=False)
+                if tGesture[1] == Globals.oTheScreen.dGestures[key].oGesture:
+                    if key in dGestures:
+                        uAction, uInterFace, uConfigName = dGestures[key]
+                        Logger.debug (u'Gesturewidget: Calling Gesture Actions')
+                        aActions:List[cAction]=Globals.oActions.GetActionList(uActionName = uAction, bNoCopy=False)
                         if aActions:
                             for oAction in aActions:
                                 if uInterFace!='':
@@ -75,83 +97,92 @@ def GetTouchActions(touch,aGestures):
                                     oAction.dActionPars['configname']=uConfigName
                             return aActions
                         else:
-                            LogError (u'Gesturewidget: Action Not Found:' + uAction)
+                            LogError (uMsg=u'Gesturewidget: Action Not Found:' + uAction)
         return None
     except Exception as e:
-        LogError(u'Gesturewidget: f_on_touch_up: Runtime Error:',e)
+        LogError(uMsg=u'Gesturewidget: f_on_touch_up: Runtime Error:',oException=e)
         return None
 
 # We don't use grab()/ungrab() as it didn't show reliable and we had to
 # deal with duplicate messages
 
-class cOrcaButtonBehaviour(object):
+# noinspection PyUnresolvedReferences,PyUnusedLocal
+class cOrcaButtonBehaviour:
     """ a buttonbehaviour addon class """
     def __init__(self,**kwargs):
         # for gestures stuff
-        self.dGestures      = {}
-        self.oOldTouch      = None
+        self.dGestures:Dict[str,Tuple]      = {}
+        self.oOldTouch                      = None
 
         # flag to show , if we are on touchdown state
         # Not all widgets have state flag, so we can't use it
-        self.bIsDown        = False
+        self.bIsDown:bool                  = False
 
         # Flag if we wait for a double touch event check
         # to avoid to trigger an action on the first touch
-        self.bWaitForDouble = False
+        self.bWaitForDouble:bool           = False
 
         # Flag, if we missed the double touch timer
         #so that we trigger a normal up event
-        self.bProcessed     = False
+        self.bProcessed:bool               = False
 
         # Flag, if we have to schedule the first Repeat time, or the repeating time
-        self.bFirstRepeat   = True
+        self.bFirstRepeat:bool             = True
         # Flag, to force fire a event on touch up
-        self.bForceUp       = False
-        self.uTapType       = u''
+        self.bForceUp:bool                = False
+        self.uTapType:str                 = u''
         # Flag, to execute up event by the current down widget
-        self.bProcessUp     = False
+        self.bProcessUp:bool              = False
 
+        # noinspection PyUnresolvedReferences
         self.register_event_type('on_q_press')
+        # noinspection PyUnresolvedReferences
         self.register_event_type('on_q_release')
+        # noinspection PyUnresolvedReferences
         self.register_event_type('on_gesture')
 
-        self.fktCallBackLong   = None
-        self.fktCallBackRepeat = None
-        self.fktCallBackDouble = None
+        self.fktCallBackLong:Union[Callable,None]   = None
+        self.fktCallBackRepeat:Union[Callable,None] = None
+        self.fktCallBackDouble:Union[Callable,None] = None
 
         if 'forceup' in kwargs:
             self.bForceUp=bool(kwargs['forceup'])
 
-        self.aActions = None
+        self.aActions:Union[List[Dict],None] = None
 
-    def AddGesture(self,uGestureName, uActionName,uInterFace,uConfigName):
+    def AddGesture(self,uGestureName:str, uActionName:str,uInterFace:str,uConfigName:str) -> None:
         """ adds a gesture to the widget """
         self.dGestures[uGestureName]=(uActionName,uInterFace,uConfigName)
 
-    def Create_LongPressClock(self, touch, *args):
+    def Create_LongPressClock(self, touch, *args) -> None:
         """ starts a clock to detect a long press button press """
         self.fktCallBackLong = partial(self.fLongPress, touch)
         FktTrigger=Clock.create_trigger(self.fktCallBackLong, Globals.fLongPressTime)
         FktTrigger()
 
-    def Delete_LongPressClock(self,touch, *args):
+    def Delete_LongPressClock(self,touch, *args)  -> None:
         """ deletes a clock to detect a long press button press"""
         Clock.unschedule(self.fktCallBackLong)
 
-    def fLongPress(self, touch, *args):
+    def fLongPress(self, touch, *args)  -> bool:
         """ we detected a long button press """
         self.uTapType       = u"long_up"
+        # noinspection PyUnresolvedReferences
         self.dispatch('on_q_release')
         self.bProcessed     = True
         return True
 
-    def Create_RepeatClock(self, touch, *args):
+    def Create_RepeatClock(self, touch, *args) -> None:
         """ create a clock to detect repeating press (only, if we havnen't define a long press)"""
+
+        FktTrigger:Union[Callable,None]
 
         if not hasattr(self,'oOrcaWidget'):
             return
 
-        if self.oOrcaWidget.uActionNameLongTap!=u'':
+        # noinspection PyUnresolvedReferences
+        oOrcaWidget:cWidgetBase = self.oOrcaWidget
+        if oOrcaWidget.uActionNameLongTap!=u'':
             return
 
         if Globals.fStartRepeatDelay>0:
@@ -165,17 +196,17 @@ class cOrcaButtonBehaviour(object):
             if FktTrigger:
                 FktTrigger()
 
-    def Delete_RepeatClock(self,touch, *args):
+    def Delete_RepeatClock(self,touch, *args) -> None:
         """ Deletes the repeating clock """
         Clock.unschedule(self.fktCallBackRepeat)
 
-    def fRepeat(self, touch, *args):
+    def fRepeat(self, touch, *args) -> None:
         """ we detected a repeat and call the assigned function """
         self.bFirstRepeat = False
         self.fRepeatPress(touch)
         self.Create_RepeatClock(touch)
 
-    def Create_DoublePressClock(self, touch, *args):
+    def Create_DoublePressClock(self, touch, *args) -> None:
         """ create a clock to detect double press """
         if not self.bWaitForDouble:
             self.bWaitForDouble = True
@@ -183,19 +214,19 @@ class cOrcaButtonBehaviour(object):
             FktTrigger=Clock.create_trigger(self.fktCallBackDouble , Globals.fDoubleTapTime+0.005)
             FktTrigger()
 
-    def Delete_DoublePressClock(self,touch, *args):
+    def Delete_DoublePressClock(self,touch, *args) -> None:
         """ Deletes the double press clock """
         Clock.unschedule(self.fktCallBackDouble )
         self.bWaitForDouble = False
 
-    def fRepeatPress(self, touch, *args):
+    def fRepeatPress(self, touch, *args) -> bool:
         """ we detected a repeat and call the assigned function """
         self.uTapType = u'repeat_down'
         self.dispatch('on_q_release')
         self.bProcessed     = True
         return True
 
-    def fDoublePress(self, touch, *args):
+    def fDoublePress(self, touch, *args) -> bool:
         """ we detected a double press and call the assigned function """
         # Logger.debug("fDoublePress")
         # Logger.debug("fDoublePress: IsDown:"+str(self.bIsDown))
@@ -209,7 +240,7 @@ class cOrcaButtonBehaviour(object):
         self.bWaitForDouble = False
         return False
 
-    def IsMyTouch(self, touch):
+    def IsMyTouch(self, touch) -> bool:
         """ Detect, if the touch belongs to this widget """
         # Hacky to work with widgets inside a scrollview, eg dropdown buttons
         if hasattr(self,'oOrcaWidget'):
@@ -224,11 +255,11 @@ class cOrcaButtonBehaviour(object):
                         return False
         return self.collide_point(*touch.pos)
 
-    def on_touch_down(self, touch):
+    def on_touch_down(self, touch) -> bool:
         """ called by the framework, if a widget is touched """
         global oDownWidget
 
-        uButton = "left"
+        uButton:str = "left"
         if hasattr(touch,"button"):
             uButton = touch.button
 
@@ -264,9 +295,9 @@ class cOrcaButtonBehaviour(object):
             return True
         return False
 
-    def on_touch_up(self, touch):
+    def on_touch_up(self, touch) -> bool:
         """ called by the framework, if the touch ends """
-        bRet = False
+        bRet:bool = False
 
         if oDownWidget is not None:
             if not oDownWidget.bProcessUp:
@@ -305,7 +336,7 @@ class cOrcaButtonBehaviour(object):
             return bRet
         return bRet
 
-    def on_touch_move(self, touch):
+    def on_touch_move(self, touch) -> bool:
 
         """ gesture handling """
 
@@ -326,15 +357,15 @@ class cOrcaButtonBehaviour(object):
             return True
         return False
 
-    def on_gesture(self):
+    def on_gesture(self) -> None:
         """ placeholder """
         #print ("default move for ",self.oMainWidget.oOrcaWidget.uName)
         pass
-    def on_q_press(self):
+    def on_q_press(self)  -> None:
         """ placeholder """
         #print ("default down for" ,self.oMainWidget.oOrcaWidget.uName)
         pass
-    def on_q_release(self):
+    def on_q_release(self)  -> None:
         """ placeholder """
         # print ("default up for " ,self.oMainWidget.oOrcaWidget.uName)
         pass

@@ -19,14 +19,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from kivy.logger                          import Logger
+from kivy.logger                                    import Logger
 # noinspection PyUnresolvedReferences
-from jnius                                import detach
-from ORCA.utils.LogError                  import LogError
-from ORCA.utils.Platform.android_helper   import GetAndroidModule
+from jnius                                          import detach
+from ORCA.utils.LogError                            import LogError
+from ORCA.utils.Platform.android.android_helper     import GetAndroidModule
 
 
-def SystemIsOnline():
+def SystemIsOnline() -> bool:
     """
     verifies, if the system has a network connection by system APIs (not by ping)
     returns true, if OS doesn't support it
@@ -38,7 +38,7 @@ def SystemIsOnline():
         cConnectivityManager = GetAndroidModule("ConnectivityManager","android.net")
         oPythonActivity      = cPythonActivity.mActivity
         oConnectionManager   = oPythonActivity.getSystemService(cActivity.CONNECTIVITY_SERVICE)
-        bConnection          = oConnectionManager.getNetworkInfo(cConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()
+        bConnection:bool     = oConnectionManager.getNetworkInfo(cConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()
 
         if bConnection:
             detach()
@@ -51,7 +51,7 @@ def SystemIsOnline():
             else:
                 return False
     except Exception as e:
-        LogError('SystemIsOnline:',e)
+        LogError(uMsg='SystemIsOnline:',oException=e)
         return True
 
 
@@ -67,6 +67,6 @@ def SystemIsOnlineOld():
         detach()
         return bRet
     except Exception as e:
-        LogError('SystemIsOnline:',e)
+        LogError(uMsg='SystemIsOnline:',oException=e)
         return True
 

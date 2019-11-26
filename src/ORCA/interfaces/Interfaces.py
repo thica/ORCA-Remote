@@ -18,7 +18,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import  imp
+from typing import List
+from typing import Dict
+from typing import Union
 
 from kivy.logger            import Logger
 
@@ -26,126 +28,141 @@ from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
 from ORCA.utils.FileName    import cFileName
 from ORCA.utils.LogError    import LogError
 from ORCA.vars.Replace      import ReplaceVars
+from ORCA.interfaces.BaseInterface import cBaseInterFace
+from ORCA.utils.ModuleLoader import cModule
+from ORCA.actions.ReturnCode import eReturnCode
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
+    from ORCA.Action import cAction
+else:
+    from typing import TypeVar
+    cBaseInterFaceSettings = TypeVar("cBaseInterFaceSettings")
+    cAction = TypeVar("cAction")
 
 import ORCA.Globals as Globals
 
-class cInterFaces(object):
+class cInterFaces:
     """ A container class for all interfaces """
     def __init__(self):
         #list of all Interfaces
-        self.oInterfaceList              = []
-        self.dInterfaces                 = {}
-        self.dModules                    = {}
-        self.uInterFaceListSettingString = u''
-        self.dUsedInterfaces             = {}
+        self.aInterfaceList:List[str]               = []
+        self.dInterfaces:Dict[str,cBaseInterFace]   = {}
+        self.dModules:[str,cModule]                 = {}
+        self.uInterFaceListSettingString:str        = u''
+        self.dUsedInterfaces:[str,bool]             = {}
 
-    def InitVars(self):
+    def InitVars(self) -> None:
         """ Clears the list of interfaces """
         self.dUsedInterfaces.clear()
 
-    def Init(self):
+    def Init(self) -> None:
         """ dummy """
         pass
-    def DeInit(self):
+    def DeInit(self) -> None:
         """ deinits the interfaces object """
-        for oInterfaceName in self.dInterfaces:
-            self.dInterfaces[oInterfaceName].DeInit()
+        uInterfaceName:str
+        for uInterfaceName in self.dInterfaces:
+            self.dInterfaces[uInterfaceName].DeInit()
 
-    def Clear(self):
+    def Clear(self) -> None:
         """ clears the lst of interfaces """
         self.DeInit()
-        del self.oInterfaceList[:]
+        del self.aInterfaceList[:]
         self.dInterfaces.clear()
 
-    def LoadInterfaceList(self):
+    def LoadInterfaceList(self) -> None:
         """ loads the list of all inerfaces """
         Logger.debug (u'Interfaces: Loading Interface List')
+        uInterFaceName:str
         self.uInterFaceListSettingString = u''
-        self.oInterfaceList = Globals.oPathInterface.GetFolderList()
-        self.oInterfaceList.sort(key = lambda x: x)
+        self.aInterfaceList = Globals.oPathInterface.GetFolderList()
+        self.aInterfaceList.sort(key = lambda x: x)
 
-        for uInterFaceName in self.oInterfaceList:
+        for uInterFaceName in self.aInterfaceList:
             self.uInterFaceListSettingString+=u'"{0}",'.format(uInterFaceName)
         self.uInterFaceListSettingString=self.uInterFaceListSettingString[:-1]
 
-    def GetInterface(self,uInterFaceName):
+    def GetInterface(self,uInterFaceName:str) -> cBaseInterFace:
         """
         Returns an cInterface class
 
-        :rtype: cBaseInterFace
-        :param string uInterFaceName: The name of the interface
+        :param str uInterFaceName: The name of the interface
         :return: The interface class (cBaseInterface)
         """
-
         return self.dInterfaces.get(uInterFaceName)
 
 
-    def LoadInterface(self,uInterFaceName):
+    def LoadInterface(self,uInterFaceName:str) -> Union[cModule,None]:
         """
         Loads an interface
 
-        :rtype: module
-        :param string uInterFaceName: The name of the interface
+        :param str uInterFaceName: The name of the interface
         :return: The interface module (not cBaseInterface)
         """
+
+        uInterFaceName:str
         if uInterFaceName in self.dInterfaces:
             return self.dModules.get(uInterFaceName)
 
         if uInterFaceName=="":
             return None
         Logger.info (u'Interfaces: Loading Interface: '+uInterFaceName)
-        oFnInterfacePy  = cFileName(Globals.oPathInterface + uInterFaceName) + u'interface.py'
-        oFnInterface    = cFileName(oFnInterfacePy)
+        oFnInterfacePy:cFileName  = cFileName(Globals.oPathInterface + uInterFaceName) + u'interface.py'
+        oFnInterface:cFileName    = cFileName(oFnInterfacePy)
 
         if not oFnInterface.Exists():
-            LogError(u'Interfaces: Fatal Error Loading Interface,  Interface not found: '+uInterFaceName)
+            LogError(uMsg=u'Interfaces: Fatal Error Loading Interface,  Interface not found: '+uInterFaceName)
             return None
 
         try:
-            oModule=self.dModules.get(uInterFaceName, imp.load_source('cInterface' + "_" + uInterFaceName, oFnInterface.string))
-            self.dModules[uInterFaceName]=oModule
-            oInterface = oModule.cInterface()
+            # noinspection PyDeprecation
+            oModule=Globals.oModuleLoader.LoadModule(oFnInterface,'cInterface' + "_" + uInterFaceName)
+            self.dModules[uInterFaceName] = oModule
+            oInterface: cBaseInterFace=oModule.GetClass('cInterface')()
             oInterface.Init(uInterFaceName, oFnInterface)
             self.dInterfaces[uInterFaceName]=oInterface
             return oModule
         except Exception as e:
-            uMsg=LogError(u'Interfaces: Fatal Error Loading Interface: '+uInterFaceName+ u' :',e)
-            ShowErrorPopUp(uTitle='Fatal Error',uMessage=uMsg, bAbort=True)
+            ShowErrorPopUp(uTitle='Fatal Error',uMessage=LogError(uMsg=u'Interfaces: Fatal Error Loading Interface: '+uInterFaceName+ u' :',oException=e), bAbort=True)
             return None
 
-    def OnPause(self):
+    def OnPause(self) -> None:
         """ Entry for on Pause """
-        for oInterfaceName in self.dInterfaces:
-            self.dInterfaces[oInterfaceName].OnPause()
+        uInterfaceName:str
+        for uInterfaceName in self.dInterfaces:
+            self.dInterfaces[uInterfaceName].OnPause()
 
-    def OnResume(self):
+    def OnResume(self) -> None:
         """ Entry for on resume """
-        for oInterfaceName in self.dInterfaces:
-            self.dInterfaces[oInterfaceName].OnResume()
+        uInterfaceName:str
+        for uInterfaceName in self.dInterfaces:
+            self.dInterfaces[uInterfaceName].OnResume()
 
-    def RegisterInterFaces(self,uInterFaceName,fSplashScreenPercentageStartValue):
+    def RegisterInterFaces(self,uInterFaceName:str,fSplashScreenPercentageStartValue:float) -> None:
 
         """ we do it here, as we load only used interfaces, which we know after loading the definition """
         Logger.debug ('TheScreen: Register Interfaces')
 
-        fSplashScreenPercentageRange=10.0
+        fSplashScreenPercentageRange:float=10.0
 
         if not uInterFaceName:
-            fPercentage=fSplashScreenPercentageStartValue
-            fPercentageStep=fSplashScreenPercentageRange/len(self.dUsedInterfaces)
+            fPercentage:float=fSplashScreenPercentageStartValue
+            fPercentageStep:float=fSplashScreenPercentageRange/len(self.dUsedInterfaces)
 
             # Scheduling Register Interface
-            aActions=Globals.oEvents.CreateSimpleActionList([{'name':'Show Message the we register the interfaces','string':'showsplashtext','maintext':'$lvar(409)'}])
+            aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList([{'name':'Show Message the we register the interfaces','string':'showsplashtext','maintext':'$lvar(409)'}])
 
             #for Interface
-            for uInterFaceName in self.oInterfaceList:
+            for uInterFaceName in self.aInterfaceList:
                 for uKey in self.dUsedInterfaces:
                     uKey2=ReplaceVars(uKey)
                     if uKey2==uInterFaceName and uInterFaceName!=u'':
                         fPercentage=fPercentage+fPercentageStep
                         Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Update Percentage and Interface Name','string':'showsplashtext','subtext':uKey2,'percentage':str(fPercentage)},
-                                                                                 {'name':'Register the Interface','string':'registerinterfaces','interfacename':uKey2}
-                                                                                ])
+                                                                        {'name':'Register the Interface','string':'registerinterfaces','interfacename':uKey2}
+                                                                       ])
 
 
                         break
@@ -154,14 +171,17 @@ class cInterFaces(object):
             self.LoadInterface(uInterFaceName)
 
 
-    def DiscoverAll(self,uInterFaceName=u'', uConfigName=u'', bGui = False, bForce = False):
+    def DiscoverAll(self,uInterFaceName:str=u'', uConfigName:str=u'', bGui:bool = False, bForce:bool = False) -> eReturnCode:
         # bForce not used (by now)
+        aActions: List[Dict]
+        oInterFace: cBaseInterFace
+        oSetting: cBaseInterFaceSettings
         if uInterFaceName == u'':
             aActions=[]
             for uInterFaceName in self.dInterfaces:
                 oInterFace=self.dInterfaces[uInterFaceName]
                 if oInterFace.oObjectConfig.oConfigParser.filename =='':
-                    oInterFace.oObjectConfig.oConfigParser.LoadConfig(self)
+                    oInterFace.oObjectConfig.LoadConfig()
                 for uConfigName in oInterFace.oObjectConfig.oConfigParser.sections():
                     if uConfigName != "DEVICE_DEFAULT":
                         oSetting=oInterFace.GetSettingObjectForConfigName(uConfigName)
@@ -170,20 +190,20 @@ class cInterFaces(object):
                         if oSetting.aIniSettings.uHost=="discover" and oSetting.aIniSettings.uOldDiscoveredIP  == "":
                             Globals.oEvents.AddToSimpleActionList(aActions, [{'name': 'Discover single with gui', 'string': 'discover', 'interface': uInterFaceName, 'configname': uConfigName, 'gui': '1'}])
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
-            return 0
+            return eReturnCode.Success
         elif bGui:
             aActions=[]
             uAlias = Globals.oDefinitions.FindDefinitionAliasForInterfaceConfiguration(uInterFaceName=uInterFaceName, uConfigName=uConfigName)
             uDetail = "\n\n%s\n%s:%s" % (uAlias, uInterFaceName, uConfigName)
             Globals.oEvents.AddToSimpleActionList(aActions, [{'name': 'And Discover', 'string': 'call DiscoverSingle', 'DISCOVERINTERFACE': uInterFaceName, 'DISCOVERCONFIG': uConfigName, 'DISCOVERDETAILS': uDetail, 'gui':'0'}])
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+            return eReturnCode.Success
         else:
             oInterFace = self.dInterfaces.get(uInterFaceName)
             if oInterFace:
                 oSetting = oInterFace.GetSettingObjectForConfigName(uConfigName)
                 if oSetting:
                     if oSetting.Discover():
-                        return 0
-        return 1
-
+                        return eReturnCode.Success
+        return eReturnCode.Error
 

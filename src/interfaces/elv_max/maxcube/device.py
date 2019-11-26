@@ -27,7 +27,7 @@ modestrings = {MAX_DEVICE_MODE_AUTOMATIC:"automatic",
                MAX_DEVICE_MODE_UNKNOWN:"Unknown"}
 
 
-class MaxDevice(object):
+class MaxDevice:
     def __init__(self):
         self.type = None
         self.rf_address = None

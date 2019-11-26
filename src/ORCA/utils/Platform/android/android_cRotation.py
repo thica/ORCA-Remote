@@ -23,13 +23,15 @@ from kivy.logger                           import Logger
 import ORCA.Globals as Globals
 
 try:
+    # noinspection PyUnresolvedReferences
     from plyer import orientation
     Logger.info("plyer/orientation available")
 except Exception as e:
     Logger.info("plyer/orientation not available")
 
 
-class cRotation(object):
+# noinspection PyMethodMayBeStatic
+class cRotation:
     """
     Rotation object for Android
     CTH: Reworked to use plyer
@@ -38,7 +40,7 @@ class cRotation(object):
     def __init__(self):
         pass
 
-    def lock(self):
+    def lock(self) -> None:
         """ Locks to the current screen orientation. """
         Logger.debug("Android Locking orienation to "+Globals.uDeviceOrientation)
 
@@ -48,17 +50,17 @@ class cRotation(object):
             orientation.set_portrait()
 
 
-    def set_landscape(self):
+    def set_landscape(self) -> None:
         """
         Asks the activity to take a landscape orientation.
         """
 
         orientation.set_landscape()
 
-    def set_portrait(self):
-        '''
+    def set_portrait(self) -> None:
+        """
         Asks the activity to take a portrait orientation.
-        '''
+        """
 
         orientation.set_portrait()
 

@@ -17,21 +17,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import                      logging
-from functools              import partial
+from typing                             import List
+from typing                             import Dict
+from typing                             import Tuple
+from typing                             import Union
+from typing                             import Callable
 
-from kivy.logger            import Logger
-from kivy.clock             import Clock
-from kivy.compat            import string_types
-
+import                                  logging
+from functools                          import partial
+from kivy.logger                        import Logger
+from kivy.clock                         import Clock
 
 from ORCA.Action                        import CreateActionForSimpleActionList
 from ORCA.EventTimer                    import cAllTimer
+from ORCA.ui.ProgressBar                import cProgressBar
 from ORCA.Queue                         import GetActiveQueue
 from ORCA.Queue                         import GetNewQueue
 from ORCA.Queue                         import GetQueueLen
 from ORCA.Queue                         import StopQueue
 from ORCA.Queue                         import ResumeQueue
+from ORCA.Queue                         import cQueue
+from ORCA.actions.Base                  import cEventActionBase
 from ORCA.actions.AppControl            import cEventActionsAppControl
 from ORCA.actions.FlowControl           import cEventActionsFlowControl
 from ORCA.actions.GuiControl            import cEventActionsGuiControl
@@ -44,17 +50,26 @@ from ORCA.actions.VarControl            import cEventActionsVarControl
 from ORCA.actions.WidgetControl         import cEventActionsWidgetControl
 from ORCA.actions.Notifications         import cEventActionsNotifications
 
-from ORCA.utils.TypeConvert             import ToUnicode
 from ORCA.vars.Replace                  import ReplaceVars
 
 import ORCA.Globals as Globals
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.Action import cAction
+    from ORCA.widgets.Base import cWidgetBase
+else:
+    from typing import TypeVar
+    cAction = TypeVar("cAction")
+    cWidgetBase = TypeVar("cWidgetBase")
+
 __all__ = ['cEvents']
 
-class cEvents(object):
+class cEvents:
     """ The core event objects which manages the queues and actions """
     def __init__(self):
-        self.aEventActions = [cEventActionsFlowControl(self),
+        self.aEventActions:List[cEventActionBase] = [
+                              cEventActionsFlowControl(self),
                               cEventActionsInternal(self),
                               cEventActionsGuiControl(self),
                               cEventActionsVarControl(self),
@@ -68,57 +83,61 @@ class cEvents(object):
                               cEventActionsNotifications(self)
                              ]
 
-        self.dActionFunctions      = {}
-        self.aHiddenKeyWords       = ['string','condition','name','taptype','interface','configname','conditionchecktype','conditionvar','conditionvalue','retvar','force','linefilename']
-        self.aProgressBars         = []
-        self.bDoNext               = False
-        self.bForceState           = False
-        self.oAllTimer             = cAllTimer()
+        self.dActionFunctions:Dict[str,Callable]     = {}
+        self.aHiddenKeyWords:List[str]               = ['string','condition','name','taptype','interface','configname','conditionchecktype','conditionvar','conditionvalue','retvar','force','linefilename']
+        self.aProgressBars:List[cProgressBar]        = []
+        self.bDoNext:bool                            = False
+        self.bForceState:bool                        = False
+        self.oAllTimer:cAllTimer                     = cAllTimer()
 
         for oEventActions in self.aEventActions:
             self.RegisterEventActions(oEventActions)
 
-    def RegisterEventActions(self,oEventActions):
+
+
+    def RegisterEventActions(self,oEventActions:cEventActionBase) -> None:
         """ register all actions managed by the eventdispatcher """
         aFuncs=dir(oEventActions)
         for uFuncName in aFuncs:
             if uFuncName.startswith('ExecuteAction'):
-                uName = uFuncName[13:]
+                uName:str = uFuncName[13:]
                 Globals.oActions.oActionType.RegisterAction(uName)
                 self.dActionFunctions[Globals.oActions.oActionType.ActionToId[uName.lower()]] = getattr(oEventActions, uFuncName)
 
-    def DeInit(self):
+    def DeInit(self) -> None:
         """ stops all timer """
         self.oAllTimer.DeleteAllTimer()
 
-    def StopQueue(self):
+    # noinspection PyMethodMayBeStatic
+    def StopQueue(self) -> None:
         """ Stops the latest queue """
         StopQueue()
 
-    def UnPauseQueue(self):
+    def UnPauseQueue(self) -> None:
         """ restarts a queue by reactivating the timer """
         ResumeQueue()
         Clock.schedule_once(partial(GetActiveQueue().WorkOnQueue,self.bForceState),0)
 
-    def ExecuteActionsNewQueue(self,aActions, oParentWidget, bForce=False):
+    def ExecuteActionsNewQueue(self,aActions:List[cAction], oParentWidget:Union[cWidgetBase,None], bForce:bool=False) -> Union[bool,None]:
         """ Execute all actions in a new queue, new queue will atomatic appended to the queue stack"""
-        oQueue              = GetNewQueue()
-        oQueue.bForceState  = bForce
-        bRet                = self._ExecuteActions(aActions=aActions,oParentWidget=oParentWidget)
+        oQueue:cQueue           = GetNewQueue()
+        oQueue.bForceState      = bForce
+        bRet:Union[bool,None]   = self._ExecuteActions(aActions=aActions,oParentWidget=oParentWidget)
         return bRet
 
-    def ExecuteActions(self,aActions, oParentWidget):
+    def ExecuteActions(self,aActions:List[cAction], oParentWidget:Union[cWidgetBase,None]) -> None:
         """ execute actions by either adding multiple actions to a new queue, or appending a single action to the existing queue """
         if len(aActions) > 1:
             self.ExecuteActionsNewQueue(aActions, oParentWidget)
         else:
             self._ExecuteActions(aActions, oParentWidget)
 
-    def _ExecuteActions(self,aActions, oParentWidget):
+    # noinspection PyMethodMayBeStatic
+    def _ExecuteActions(self,aActions:List[cAction], oParentWidget:cWidgetBase) -> Union[int,None]:
         """ This functions just adds the action commands to the queue and calls the scheduler at the end """
 
-        oQueue      = GetActiveQueue()
-        bForceState = oQueue.bForceState
+        oQueue:cQueue     = GetActiveQueue()
+        bForceState:bool  = oQueue.bForceState
         oQueue.AddActions(aActions, oParentWidget)
 
         if not bForceState:
@@ -126,15 +145,15 @@ class cEvents(object):
         else:
             return oQueue.WorkOnQueue(oQueue.bForceState)
 
-
-    def GetTargetInterfaceAndConfig(self,oAction):
+    # noinspection PyMethodMayBeStatic
+    def GetTargetInterfaceAndConfig(self,oAction:cAction) -> Tuple[str,str]:
         """
         Gets the interface and config for an sendcommand action
         If interfaces has not been set, we set the page defaults
         but we need to restore old values, as actions could be used from several pages  """
 
-        uOrgInterFace  =   oAction.dActionPars.get(u'interface',u'')
-        uOrgConfigName =   oAction.dActionPars.get(u'configname',u'')
+        uOrgInterFace:str  =   oAction.dActionPars.get(u'interface',u'')
+        uOrgConfigName:str =   oAction.dActionPars.get(u'configname',u'')
 
         #Interface / config detection
         #Action Interfaces rules
@@ -142,8 +161,8 @@ class cEvents(object):
         #then Anchor Interface
         #then Page Interface
 
-        uToUseInterFace  = uOrgInterFace
-        uToUseConfigName = uOrgConfigName
+        uToUseInterFace:str  = uOrgInterFace
+        uToUseConfigName:str = uOrgConfigName
 
         if oAction.oParentWidget:
             if uToUseInterFace==u'':
@@ -152,9 +171,9 @@ class cEvents(object):
                 uToUseConfigName=oAction.oParentWidget.uConfigName
 
             if uToUseInterFace==u'':
-                uAnchorName=oAction.oParentWidget.uAnchorName
+                uAnchorName:str=oAction.oParentWidget.uAnchorName
                 while uAnchorName!=u'':
-                    aTmpAnchor = oAction.oParentWidget.oParentScreenPage.dWidgets[uAnchorName]
+                    aTmpAnchor:List = oAction.oParentWidget.oParentScreenPage.dWidgets[uAnchorName]
                     if aTmpAnchor:
                         oTmpAnchor = aTmpAnchor[0]
                         uToUseInterFace=oTmpAnchor.uInterFace
@@ -187,7 +206,7 @@ class cEvents(object):
         return uToUseInterFace,uToUseConfigName
 
 
-    def CopyActionPars(self, dSource, dTarget, uReplaceOption, bIgnoreHiddenWords=False):
+    def CopyActionPars(self, dSource:Dict, dTarget:Dict, uReplaceOption:str, bIgnoreHiddenWords=False) -> None:
         """
             Copies the action pars
             uReplaceOption
@@ -212,7 +231,7 @@ class cEvents(object):
                     dTarget[uKey]=dSource[uKey]
 
 
-    def CreateDebugLine(self,oAction, uTxt):
+    def CreateDebugLine(self,oAction:cAction, uTxt:str) ->str:
         """ Creates a debugline for the logger """
 
         if uTxt:
@@ -223,15 +242,15 @@ class cEvents(object):
         for uKey in oAction.dActionPars:
             if not uKey in self.aHiddenKeyWords:
                 uValue=oAction.dActionPars[uKey]
-                if isinstance(uValue,string_types):
+                if isinstance(uValue,str):
                     if '$var' in uValue or '$lvar' in uValue:
                         uValue=u'{0} [{1}]'.format(uValue , ReplaceVars(uValue))
                 else:
                     uValue=u"[unknown object]"
                 uTemp+=u'| %s:%s' % (uKey,uValue)
-        return ToUnicode(uTemp)
+        return uTemp
 
-    def LogAction(self,uTxt,oAction,uAddText=''):
+    def LogAction(self,uTxt:str,oAction:cAction,uAddText:str='') -> None:
         """ Logs an action """
 
         if Logger.getEffectiveLevel()!=logging.DEBUG:
@@ -241,17 +260,22 @@ class cEvents(object):
         if uAddText:
             uTemp+=u"| "+uAddText
         try:
-            Logger.debug (uTemp)
-        except:
-            Logger.error ("Cant Create Debugline")
+            from ORCA.utils.TypeConvert import ToUnicode
+            Logger.debug (ToUnicode(uTemp))
+        except Exception:
+            try:
+                Logger.debug(uTemp.encode("'UTF-8'",errors='replace'))
+            except Exception as e:
+                Logger.error ("Cant Create Debugline:"+str(e))
 
-    def CreateSimpleActionList(self,aActions):
+    def CreateSimpleActionList(self,aActions:List[Dict]) -> List[cAction]:
         """ Creates a simple action list from an array of action """
         aTmpActions  = []
         self.AddToSimpleActionList(aTmpActions,aActions)
         return aTmpActions
 
-    def AddToSimpleActionList(self,aActionList,aActions):
+    # noinspection PyMethodMayBeStatic
+    def AddToSimpleActionList(self,aActionList:List[cAction],aActions:List[Dict]) -> None:
         """ Adds a set actions to the action list """
-        for aAction in aActions:
-            aActionList.append(CreateActionForSimpleActionList(aAction))
+        for dAction in aActions:
+            aActionList.append(CreateActionForSimpleActionList(dAction))
