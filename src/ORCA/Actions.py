@@ -30,7 +30,6 @@ from kivy.logger                    import  Logger
 from ORCA.ActionType                import cActionType
 from ORCA.Action                    import cAction
 from ORCA.utils.FileName            import cFileName
-from ORCA.utils.LogError            import LogError
 from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
 from ORCA.utils.XML                 import GetXMLTextAttribute
 from ORCA.utils.XML                 import LoadXMLFile
@@ -71,8 +70,7 @@ class cActions:
             self.LoadActionsSub(oET_Root ,u'actions',u'action',self.dActionsCommands,oFnActionFile.string)
 
         except Exception as e:
-            uMsg:str=LogError(uMsg=u'TheScreen: Fatal Error:Load Appstart Action XmlFile (%s)' % oFnActionFile.string,oException=e)
-            ShowErrorPopUp(uTitle="LoadActionsAppStart: Fatal Error",uMessage=uMsg,bAbort=True)
+            ShowErrorPopUp(uTitle="LoadActionsAppStart: Fatal Error",uMessage=u'TheScreen: Fatal Error:Load Appstart Action XmlFile (%s)' % oFnActionFile.string,bAbort=True,oException=e)
 
         aActions:List[cAction] = self.dActionsPageStart.get(u'earlyappstart')
         if aActions:
@@ -137,8 +135,7 @@ class cActions:
                         dTargetDic[uName]=aActions
 
         except Exception as e:
-            uMsg=LogError(uMsg=u'TheScreen: Fatal Error:Load Action XmlFile:',oException=e)
-            ShowErrorPopUp(uTitle="LoadActionsSub: Fatal Error",uMessage=uMsg,bAbort=True)
+            ShowErrorPopUp(uTitle="LoadActionsSub: Fatal Error",uMessage=u'TheScreen: Fatal Error:Load Action XmlFile:',bAbort=True,oException=e)
 
     def Dump(self,uFilter:str) -> None:
         """ Dumps all Actions """

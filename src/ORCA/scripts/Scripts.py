@@ -139,7 +139,7 @@ class cScripts:
             self.dModules[uScriptName] = oModule
             oScript:cBaseScript = oModule.GetClass('cScript')()
             oScript.Init(uScriptName, oFnScript)
-            self.dScripts[uScriptName]=oScript
+            self.dScripts[uScriptName] = oScript
             if oScript.uIniFileLocation != "none":
                 self.aScriptNameListWithConfig.append(uScriptName)
             return oModule

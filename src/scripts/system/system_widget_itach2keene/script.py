@@ -47,7 +47,7 @@ from ORCA.vars.Replace                      import ReplaceVars
 from ORCA.widgets.core.FileBrowser          import FileBrowser
 from ORCA.utils.RemoveNoClassArgs           import RemoveNoClassArgs
 from ORCA.scripttemplates.Template_System   import cSystemTemplate
-from ORCA.widgets.Base                      import cWidgetBase
+from ORCA.widgets.base.Base                 import cWidgetBase
 from ORCA.ScreenPage                        import cScreenPage
 
 import ORCA.Globals as Globals
@@ -453,7 +453,7 @@ class cWidgetITach2Keene(cWidgetBase):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetITach2Keene, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """

@@ -63,6 +63,10 @@ class cScreenPages(dict):
             self[oTmpScreenPage.uPageName]=oTmpScreenPage
             oTmpScreenPage.AddPageElementsFromXmlNode(oXMLNode=oXMLPage)
 
+    def GetLastPageReal(self) -> Union[cScreenPage,None]:
+        """ returns the last (not current) page, ignoring popups and the queue stack """
+        return self.get(GetVar("LASTPAGEREAL"))
+
     def GetLastPage(self) -> Union[cScreenPage,None]:
         """ returns the last (not current) page """
         return self.get(GetVar("LASTPAGE"))
@@ -77,9 +81,12 @@ class cScreenPages(dict):
             SetVar(uVarName = u'FIRSTPAGE', oVarValue = oPage.uPageName)
         SetVar(uVarName = u'CURRENTPAGE', oVarValue = oPage.uPageName)
 
+        if len(self.aPageHistory)>0:
+            SetVar(uVarName = u'LASTPAGEREAL', oVarValue = self.aPageHistory[-1].uPageName)
+
+
         if len(self.aPageHistory)>2:
             if oPage.uPageName == self.aPageHistory[-1].uCalledByPageName:
-                # SetVar(uVarName=u'LASTPAGE', oVarValue=self.aPageHistory[-1].uCalledByPageName)
                 SetVar(uVarName=u'LASTPAGE', oVarValue=self.aPageHistory[-2].uCalledByPageName)
                 self.aPageHistory.pop()
                 return
@@ -88,10 +95,8 @@ class cScreenPages(dict):
         if len(self.aPageHistory)>1:
             SetVar(uVarName = u'LASTPAGE', oVarValue = self.aPageHistory[-2].uPageName)
 
-
-
     def CreatePages(self,uPageName:str) -> None:
-        """ Create all pages of all defitions or start the timer to create the next page """
+        """ Create all pages of all definitions or start the timer to create the next page """
 
         aActions:List[cAction]
 
@@ -132,7 +137,7 @@ class cScreenPages(dict):
         if oPage:
             oPage.Create()
             return
-        ShowErrorPopUp(uTitle="Create Page: Fatal Error",uMessage=LogError(uMsg=u'TheScreen: Fatal Error:Page does not exist:'+uPageName),bAbort=True)
+        ShowErrorPopUp(uTitle="Create Page: Fatal Error",uMessage='TheScreen: Fatal Error:Page does not exist:'+uPageName,bAbort=True)
 
     def CreateNextPage(self) -> bool:
         """ will be used for late schedule init

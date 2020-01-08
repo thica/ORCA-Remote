@@ -24,7 +24,7 @@ from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
 from kivy.uix.video                 import Video
 from kivy.logger                    import Logger
-from ORCA.widgets.Base              import cWidgetBase
+from ORCA.widgets.base.Base         import cWidgetBase
 from ORCA.utils.TypeConvert         import ToUnicode
 from ORCA.utils.LogError            import LogError
 from ORCA.utils.FileName            import cFileName
@@ -68,7 +68,7 @@ class cWidgetVideo(cWidgetBase):
 
     # noinspection PyUnusedLocal
     def __init__(self,**kwargs):
-        super(cWidgetVideo, self).__init__(hastext=False)
+        super(cWidgetVideo, self).__init__()
         self.bRepeat:bool           = False
         self.fOldVolume:float       = -1.0
         self.iOldPosition:int       = -1

@@ -30,7 +30,12 @@
     <element name="Circle 3" type="CIRCLE" posx="%80" posy="%65" width="%8" height="of:width:self:*1.2" backgroundcolor='#FFFFFFFF' startangle='45' stopangle='120' picturenormal="button round normal"/>
     <element name="Circle 4" type="CIRCLE" posx="%90" posy="%70" width="%8" height="of:width:self:*1.2" backgroundcolor='#FFFFFFFF' startangle='-135' stopangle='$var(CIRCLE4ENDANGLE)' picturenormal="button round normal"/>
 
-    <element name="SliderHor"                       type="SLIDER"     posx="%90" posy="of:bottom:last"  width="%16" height="of:width:self:*0.25" picturenormal="background boxes" picturebutton="button round normal"  mindatavalue="-130" maxdatavalue="220" destvar="CIRCLE4ENDANGLE"  roundpos="1" orientation="horizontal" action="Update Circle 4 Angle"/>
+    <element name="SliderHor"  type="SLIDER"     posx="%90" posy="of:bottom:last"  width="%16" height="of:width:self:*0.25" picturenormal="background boxes" picturebutton="button round normal"  mindatavalue="-130" maxdatavalue="220" destvar="CIRCLE4ENDANGLE"  roundpos="1" orientation="horizontal" action="Update Circle 4 Angle"/>
+
+    <element name="Border 1" type="BORDER" posx="%40" posy="%45" width="%8" height="of:width:self:*0.83"  backgroundcolor='#00FF00FF' linewidth="5" />
+    <element name="Border 2" type="BORDER" posx="%45" posy="%50" width="%8" height="of:width:self"  backgroundcolor='#0000FFFF' linewidth="1"/>
+    <element name="Border 3" type="BORDER" posx="%50" posy="%55" width="%8" height="of:width:self:*1.2"  backgroundcolor='#FF00FFFF' linewidth="of:width:self:*0.01"/>
+    <element name="Border 4" type="BORDER" posx="%45" posy="%60" width="%8" height="of:width:self"  linewidth="d3" />
 
 
   </elements>

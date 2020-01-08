@@ -33,7 +33,7 @@ from kivy.logger                           import FileHandler
 from kivy.logger                           import Logger
 from kivy.metrics                          import Metrics
 from kivy.uix.settings                     import SettingsWithSpinner
-from kivy.core.window                      import Window
+# from kivy.core.window                      import Window
 
 import ORCA.Globals as Globals
 
@@ -64,13 +64,10 @@ from ORCA.utils.ConfigHelpers              import Config_GetDefault_Float
 from ORCA.utils.ConfigHelpers              import Config_GetDefault_Str
 from ORCA.utils.ConfigHelpers              import Config_GetDefault_Int
 from ORCA.utils.ConfigHelpers              import Config_GetDefault_Path
+from ORCA.utils.ModuleLoader               import cModuleLoader
 from ORCA.utils.FileName                   import cFileName
 from ORCA.utils.Path                       import cPath
 from ORCA.utils.LogError                   import LogError
-from ORCA.utils.ModuleLoader               import cModuleLoader
-from ORCA.utils.Network                    import GetLocalIPV4
-from ORCA.utils.Network                    import GetLocalIPV6
-from ORCA.utils.Network                    import GetMACAddress
 from ORCA.utils.Network                    import cWaitForConnectivity
 from ORCA.utils.CheckPermissions           import cCheckPermissions
 from ORCA.utils.Platform                   import OS_GetDefaultNetworkCheckMode
@@ -81,6 +78,14 @@ from ORCA.utils.Platform                   import OS_GetInstallationDataPath
 from ORCA.utils.Platform                   import OS_GetUserDownloadsDataPath
 from ORCA.utils.Platform                   import OS_Platform
 from ORCA.utils.Platform                   import OS_GetUserDataPath
+from ORCA.utils.Platform                   import OS_GetIPAddressV4
+from ORCA.utils.Platform                   import OS_GetIPAddressV6
+from ORCA.utils.Platform                   import OS_GetGatewayV4
+from ORCA.utils.Platform                   import OS_GetGatewayV6
+from ORCA.utils.Platform                   import OS_GetSubnetV4
+from ORCA.utils.Platform                   import OS_GetSubnetV6
+from ORCA.utils.Platform                   import OS_GetMACAddress
+
 from ORCA.utils.Rotation                   import cRotation
 from ORCA.utils.Sleep                      import fSleep
 from ORCA.utils.TypeConvert                import ToFloat
@@ -90,7 +95,6 @@ from ORCA.utils.wait.StartWait             import StartWait
 from ORCA.utils.wait.StopWait              import StopWait
 from ORCA.definition.DefinitionContext     import SetDefinitionPathes
 from ORCA.Queue                            import ClearQueue
-
 
 class ORCA_App(App):
     """ The Main Orca Class, here starts all """
@@ -105,12 +109,11 @@ class ORCA_App(App):
         App.__init__(self)
 
         # Don't Move or change
-        self.sVersion="4.6.2"
+        self.sVersion="4.6.3"
         self.sBranch="Dublin"
 
         #todo: Remove in release
         #Logger.setLevel(logging.DEBUG)
-
 
         Globals.uVersion                                    = ToUnicode(self.sVersion)
         Globals.iVersion                                    = ToIntVersion(Globals.uVersion)      # string of App Version
@@ -132,8 +135,8 @@ class ORCA_App(App):
                                                                ('$lvar(691)', 'fonts'),
                                                                ('$lvar(688)', 'others')]
 
-        Globals.oOrcaConfigParser                            = OrcaConfigParser()
         Globals.oModuleLoader                                = cModuleLoader()
+        Globals.oOrcaConfigParser                            = OrcaConfigParser()
         Globals.oActions                                     = cActions()
         Globals.oCheckPermissions                            = cCheckPermissions()     # Object for checking, if we have permissions
         Globals.oDefinitions                                 = cDefinitions()           # Object which holds all loaded definitions
@@ -176,7 +179,7 @@ class ORCA_App(App):
         """
 
         try:
-            Window.borderless = True
+            # Window.borderless = True
             Globals.oCheckPermissions.Wait()
             kivyConfig.set('graphics', 'kivy_clock', 'interrupt')
             kivyConfig.set('kivy','log_maxfiles','3')
@@ -185,10 +188,7 @@ class ORCA_App(App):
             Clock.schedule_once(self.Init_ReadConfig, 0)    # Trigger the scheduled init functions
             return Globals.oTheScreen.oRootSM               # And return the root object (black background at first instance)
         except Exception as e:
-            uMsg = LogError(uMsg=u'build: Fatal Error running Orca', oException=e)
-            print (uMsg)
-            Logger.critical(uMsg)
-            ShowErrorPopUp(uTitle='build: Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='', uTextQuit=u'Quit')
+            ShowErrorPopUp(uTitle='build: Fatal Error', uMessage=u'build: Fatal Error running Orca', bAbort=True, uTextContinue='', uTextQuit=u'Quit', oException=e)
 
     # noinspection PyUnusedLocal
     def On_Size(self, win, size):
@@ -321,9 +321,19 @@ class ORCA_App(App):
 
             Globals.oPathAppReal    = OS_GetInstallationDataPath()
             Globals.oPathRoot       = OS_GetUserDataPath()
-            Globals.uIPAddressV4, Globals.uIPGateWayAssumedV4, Globals.uIPSubNetAssumedV4 = GetLocalIPV4()
-            Globals.uIPAddressV6, Globals.uIPGateWayAssumedV6 = GetLocalIPV6()
-            Globals.uMACAddressColon, Globals.uMACAddressDash = GetMACAddress()
+            # Globals.uIPAddressV4, Globals.uIPGateWayAssumedV4, Globals.uIPSubNetAssumedV4 = GetLocalIPV4()
+            Globals.uIPAddressV4    = OS_GetIPAddressV4()
+            Globals.uIPSubNetV4     = OS_GetSubnetV4()
+            Globals.uIPGateWayV4    = OS_GetGatewayV4()
+
+            # Globals.uIPAddressV6, Globals.uIPGateWayAssumedV6 = GetLocalIPV6()
+            Globals.uIPAddressV6    = OS_GetIPAddressV6()
+            Globals.uIPSubNetV6     = OS_GetSubnetV6()
+            Globals.uIPGateWayV6    = OS_GetGatewayV6()
+
+            Globals.uMACAddressColon, Globals.uMACAddressDash = OS_GetMACAddress()
+
+            # Globals.uMACAddressColon, Globals.uMACAddressDash = GetMACAddress()
             Globals.oPathApp = cPath(os.getcwd())
 
             if Globals.oParameter.oPathDebug.string:
@@ -811,7 +821,7 @@ class ORCA_App(App):
         if dRet:
             key = dRet.get("key",key)
 
-        print ("Key:"+key)
+        # print ("Key:"+key)
 
         Globals.oNotifications.SendNotification("on_key_"+key)
 

@@ -162,11 +162,10 @@ class cScript(cDiscoverScriptTemplate):
                                 bytearray('*' * 10, "utf-8") + \
                                 bytearray('I',      "utf-8")
 
-
             if Globals.uPlatform != 'win':
                 oSendSocket.sendto(byData,("255.255.255.255",iPort))
             else:
-                oSendSocket.sendto(byData, (Globals.uIPSubNetAssumedV4, iPort))
+                oSendSocket.sendto(byData, (Globals.uIPSubNetV4, iPort))
 
             oReceiveSocket:socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             oReceiveSocket.settimeout(fTimeOut)

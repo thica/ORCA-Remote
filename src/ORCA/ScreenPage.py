@@ -48,7 +48,7 @@ from ORCA.vars.Replace              import ReplaceDefVars
 from ORCA.vars.Replace              import ReplaceVars
 from ORCA.widgets.Anchor            import cWidgetAnchor
 from ORCA.widgets.BackGround        import cWidgetBackGround
-from ORCA.widgets.Base              import cWidgetBase
+from ORCA.widgets.base.Base         import cWidgetBase
 from ORCA.widgets.helper.WidgetType import eWidgetType
 from ORCA.widgets.Button            import cWidgetButton
 from ORCA.widgets.Circle            import cWidgetCircle
@@ -66,6 +66,7 @@ from ORCA.widgets.TextField         import cWidgetTextField
 from ORCA.widgets.TextInput         import cWidgetTextInput
 from ORCA.widgets.Video             import cWidgetVideo
 from ORCA.widgets.ScrollContainer   import cWidgetScrollContainer
+from ORCA.widgets.Border            import cWidgetBorder
 from ORCA.utils.FileName            import cFileName
 
 import ORCA.Globals as Globals
@@ -138,6 +139,7 @@ class cScreenPage:
         self.dFktsCreateWidget[eWidgetType.Settings]         = self.AddWidgetFromXmlNode_Class, cWidgetSettings
         self.dFktsCreateWidget[eWidgetType.FileBrowser]      = self.AddWidgetFromXmlNode_Class, cWidgetFileBrowser
         self.dFktsCreateWidget[eWidgetType.ScrollContainer]  = self.AddWidgetFromXmlNode_Class, cWidgetScrollContainer
+        self.dFktsCreateWidget[eWidgetType.Border]           = self.AddWidgetFromXmlNode_Class, cWidgetBorder
         self.dFktsCreateWidget[eWidgetType.NoWidget]         = self.AddWidgetFromXmlNode_None, None
         self.dFktsCreateWidget[eWidgetType.SkipWidget]       = self.AddWidgetFromXmlNode_Skip, None
 
@@ -318,7 +320,7 @@ class cScreenPage:
 
         if oTmpWidget.InitWidgetFromXml(oXMLNode,self, uAnchor):
             if oClass==cWidgetButton:
-                if u':::' in oTmpWidget.uCaption:
+                if u':::' in oTmpWidget.GetCaption():
                     oTmpWidget=cWidgetDropDown()
                     oTmpWidget.RestoreLastWidgetPos()
 

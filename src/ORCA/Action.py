@@ -35,7 +35,7 @@ import ORCA.Globals as Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.widgets.Base import cWidgetBase
+    from ORCA.widgets.base.Base import cWidgetBase
 else:
     from typing import TypeVar
     cWidgetBase = TypeVar("cWidgetBase")

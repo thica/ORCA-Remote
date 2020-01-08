@@ -45,7 +45,7 @@ class cWidgetRectangle(cWidgetGeoClass):
     |fixed: needs to be "RECTANGLE". Capital letters!
     |-
     |backgroundcolor
-    |The background color of the circle in hexedecimal RGBA format. It has to start with a pound sign (eg: #ff00ffff). Please use only low capital chars.
+    |The background color of the rectangle in hexadecimal RGBA format. It has to start with a pound sign (eg: #ff00ffff). Please use only low capital chars.
     |}</div>
 
     Below you see an example for a rectangle
@@ -56,5 +56,5 @@ class cWidgetRectangle(cWidgetGeoClass):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetRectangle, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.oGeoClass=cTouchRectangle

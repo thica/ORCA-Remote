@@ -157,7 +157,7 @@ class cBaseSettings:
 
     def ShowDebug(self,uMsg:str)-> str:
         """ Shows a debug message """
-        uRet:str = u'Script '+self.oObject.uObjectName+u'/'+self.uConfigName+u': '+ uMsg
+        uRet:str = "%s %s/%s:%s" % (self.uType.capitalize(),self.oObject.uObjectName,self.uConfigName,uMsg)
         Logger.debug (uRet)
         return uRet
 
@@ -170,6 +170,6 @@ class cBaseSettings:
         if iErrNo is None:
             iErrNo=-1
 
-        uRet:str = LogErrorSmall (uMsg=u'Script %s/%s %s (%d):' %( self.oObject.uObjectName,self.uConfigName, uMsg,iErrNo),oException=oException)
+        uRet:str = LogErrorSmall (uMsg=u'%s %s/%s %s (%d):' %(self.uType.capitalize(), self.oObject.uObjectName,self.uConfigName, uMsg,iErrNo),oException=oException)
 
         return uRet

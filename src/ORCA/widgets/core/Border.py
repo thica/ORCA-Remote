@@ -25,8 +25,7 @@ from typing                             import Union
 from kivy.uix.widget                    import Widget
 from kivy.graphics                      import Color
 from kivy.graphics                      import Line
-
-from ORCA.utils.RemoveNoClassArgs          import RemoveNoClassArgs
+from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
 
 __all__ = ['cBorder']
 
@@ -50,7 +49,8 @@ class cBorder(Widget):
         with self.canvas:
             Color(self.aBackGroundColor[0],self.aBackGroundColor[1], self.aBackGroundColor[2],self.aBackGroundColor[3])
             # noinspection PyArgumentList
-            self.oLine:Line = Line(points=[self.pos[0],self.pos[1], self.pos[0]+self.width, self.pos[1],self.pos[0]+self.width,self.pos[1]+self.height,self.pos[0],self.pos[1]+self.height], close=True)
+            self.oLine:Line = Line(points=[self.pos[0],self.pos[1], self.pos[0]+self.width, self.pos[1],self.pos[0]+self.width,self.pos[1]+self.height,self.pos[0],self.pos[1]+self.height], close=True, width=self.fLineWidth, cap="none")
+            # self.oLine: Line = Line(rectangle=(self.pos[0], self.pos[1],self.width,self.height), width=self.fLineWidth)
 
     def update_graphics_pos(self, instance, value) -> None:
         """ Redraws the border, if screen position changes """

@@ -21,7 +21,10 @@
 
 from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
-from ORCA.widgets.Base              import cWidgetBase
+from ORCA.widgets.base.Base         import cWidgetBase
+from ORCA.widgets.base.BaseBase     import cWidgetBaseBase
+from ORCA.widgets.base.BaseAction   import cWidgetBaseAction
+
 from ORCA.vars.Replace              import ReplaceVars
 
 from typing import TYPE_CHECKING
@@ -33,10 +36,10 @@ else:
 
 __all__ = ['cWidgetGeoClass']
 
-class cWidgetGeoClass(cWidgetBase):
+class cWidgetGeoClass(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
     """ base class for circles and rectangles """
     def __init__(self,**kwargs):
-        super(cWidgetGeoClass, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.oGeoClass=None
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
@@ -56,7 +59,7 @@ class cWidgetGeoClass(cWidgetBase):
         return False
 
     def SetWidgetColor(self,uBackgroundColor):
-        super(cWidgetGeoClass, self).SetWidgetColor(uBackgroundColor)
+        super().SetWidgetColor(uBackgroundColor)
         if self.oObject:
             self.oObject.SetColor(self.aBackGroundColor)
 

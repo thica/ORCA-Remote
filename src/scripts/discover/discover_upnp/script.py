@@ -452,7 +452,7 @@ class cThread_Discover_UPNP(threading.Thread):
                     except Exception:
                         pass
                     oRet.bFound              = True
-                    Logger.debug(u'Found Device %s:%s:%s (%s)' % (oRet.uFoundManufacturer, oRet.uFoundModel, oRet.uFoundFriendlyName, oRet.sFoundIP))
+                    Logger.debug(u'Found Device Manufacturer=%s Model=%s Friendlyname=%s IP=%s' % (oRet.uFoundManufacturer, oRet.uFoundModel, oRet.uFoundFriendlyName, oRet.sFoundIP))
             except Exception as e:
                 LogError(uMsg="Can''t get device details. skipping device: "+uUrl,oException=e)
 

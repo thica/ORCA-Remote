@@ -21,7 +21,10 @@
 
 from xml.etree.ElementTree              import Element
 from kivy.uix.widget                    import Widget
-from ORCA.widgets.Base                  import cWidgetBase
+from ORCA.widgets.base.Base             import cWidgetBase
+from ORCA.widgets.base.BaseBase         import cWidgetBaseBase
+from ORCA.widgets.base.BaseAction       import cWidgetBaseAction
+
 from ORCA.widgets.core.TouchImage       import cTouchImage
 from ORCA.utils.Atlas                   import ToAtlas
 from ORCA.utils.XML                     import GetXMLTextAttribute
@@ -43,7 +46,7 @@ else:
 
 __all__ = ['cWidgetPicture']
 
-class cWidgetPicture(cWidgetBase):
+class cWidgetPicture(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
     """
     WikiDoc:Doc
     WikiDoc:Context:Widgets
@@ -75,7 +78,7 @@ class cWidgetPicture(cWidgetBase):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetPicture, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.oFnPictureNormal:cFileName               = cFileName('')
         # we dont use a cFileName object by purpose, as we might need to handle vars and skin reference
         self.uFnPictureNormalVar:str            = ""

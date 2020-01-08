@@ -198,7 +198,7 @@ class cInterface(cBaseInterFace):
             if oSetting.bIsConnected:
                 try:
                     self.ShowDebug("Sending adb command: %s:%s" % (oAction.uCmd,uParams))
-                    oMethod = getattr(oSetting.oDevice.oADB_Commands, oAction.uCmd)
+                    oMethod = getattr(oSetting.oDevice, oAction.uCmd)
                     oResult = oMethod(uParams)
                     uCmd,uRetVal=self.ParseResult(oAction,oResult,oSetting)
                     self.ShowDebug(u'Parsed Resonse:'+uRetVal)

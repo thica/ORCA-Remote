@@ -27,7 +27,8 @@ from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
 from kivy.uix.scrollview            import ScrollView
 from kivy.uix.floatlayout           import FloatLayout
-from ORCA.widgets.Base              import cWidgetBase
+from ORCA.widgets.base.Base         import cWidgetBase
+
 from ORCA.widgets.Picture           import cWidgetPicture
 from ORCA.utils.XML                 import GetXMLTextAttribute
 from ORCA.vars.Actions              import Var_GetArrayEx
@@ -63,7 +64,7 @@ class cWidgetScrollContainer(cWidgetPicture):
     You can place all kind of widgets (with the exception of dropdowns in a row/line of the container
     All widgets got an index "[x]" added to the widget name, to manage them thought the actions
 
-    The following attributes are additional attributes to common picture attributs
+    The following attributes are additional attributes to common picture attributes
 
     <div style="overflow:auto; ">
     {| class="wikitable"
@@ -151,11 +152,12 @@ class cWidgetScrollContainer(cWidgetPicture):
         aChildCaptions: List[Tuple[str, str]]
         for oChild in aChilds:
             aChildCaptions = []
-            if oChild.uOrgCaption.endswith("[])"):
-                aTmp = Var_GetArrayEx(uVarName=oChild.uOrgCaption[5:-1], iLevel=1, bSort=False)
-                for tItem in aTmp:
-                    aChildCaptions.append((u"$var(" + tItem[0] + ")",tItem[1]))
-                self.iNumRows = max(self.iNumRows, len(aChildCaptions))
+            if hasattr(oChild,'uOrgCaption'):
+                if oChild.uOrgCaption.endswith("[])"):
+                    aTmp = Var_GetArrayEx(uVarName=oChild.uOrgCaption[5:-1], iLevel=1, bSort=False)
+                    for tItem in aTmp:
+                        aChildCaptions.append((u"$var(" + tItem[0] + ")",tItem[1]))
+                    self.iNumRows = max(self.iNumRows, len(aChildCaptions))
             aCaptions.append(aChildCaptions)
         return aCaptions
 
@@ -188,23 +190,25 @@ class cWidgetScrollContainer(cWidgetPicture):
             for oChild in aChilds:
                 dTmpdActionPars         = CopyDict(oChild.dActionPars)
                 oTmpChild               = copy(oChild)
-                oTmpChild.uName         = "%s[%s]" % (oTmpChild.uName, str(u))
+                oTmpChild.uName          = "%s[%s]" % (oTmpChild.uName, str(u))
                 oTmpChild.iHeightInit   = self.iRowHeight * (oChild.iHeightInit/oChild.iAnchorHeight)
                 oTmpChild.iPosXInit     = oTmpChild.iPosXInit - self.iPosXInit
                 oTmpChild.iGapY         = (self.iPosY *-1) + (self.iRowHeightScreen * (u + 0))
 
                 if len(aCaptions[iIndex]) > u:
-                    oTmpChild.uOrgCaption   = aCaptions[iIndex][u][0]
-                    oTmpChild.uCaption      = ReplaceVars(aCaptions[iIndex][u][0])
-                    uVarIndex               = ReplaceVars(aCaptions[iIndex][u][1])
+                    if hasattr(oTmpChild,"uCaption"):
+                        oTmpChild.uOrgCaption   = aCaptions[iIndex][u][0]
+                        oTmpChild.uCaption      = ReplaceVars(aCaptions[iIndex][u][0])
+                        uVarIndex               = ReplaceVars(aCaptions[iIndex][u][1])
                 oTmpChild.Create(self.oObjectContent)
 
-                try:
-                    oTmpChild.dActionPars["CONTAINERVALUE"] = oTmpChild.oObject.text
-                except:
-                    oTmpChild.dActionPars["CONTAINERVALUE"] = ""
-                oTmpChild.dActionPars["CONTAINERINDEX"]     = str(u)
-                oTmpChild.dActionPars["CONTAINERVARINDEX"]  = uVarIndex
+                if hasattr(oTmpChild,"dActionPars"):
+                    try:
+                        oTmpChild.dActionPars["CONTAINERVALUE"] = oTmpChild.oObject.text
+                    except:
+                        oTmpChild.dActionPars["CONTAINERVALUE"] = ""
+                    oTmpChild.dActionPars["CONTAINERINDEX"]     = str(u)
+                    oTmpChild.dActionPars["CONTAINERVARINDEX"]  = uVarIndex
 
                 self.aContainerChilds.append(oTmpChild)
                 self.oParentScreenPage.aAddWidgets.append(oTmpChild)

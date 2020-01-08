@@ -119,6 +119,6 @@ class cInterface(cBaseInterFace):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         sock.sendto(bySend_data, ('255.255.255.255', 9))
-        sock.sendto(bySend_data, (Globals.uIPSubNetAssumedV4, 9)) # This should do it, the rest is fallbal
+        sock.sendto(bySend_data, (Globals.uIPSubNetV4, 9)) # This should do it, the rest is fallbal
         sock.sendto(bySend_data, ('255.255.255.255', 7))
-        sock.sendto(bySend_data, (Globals.uIPSubNetAssumedV4, 7))
+        sock.sendto(bySend_data, (Globals.uIPSubNetV4, 7))

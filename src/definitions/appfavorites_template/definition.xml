@@ -27,26 +27,26 @@
 
   <settings>
     <setting title="$lvar(apptemplate_10500) #1"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[1]"   type="string" default="Kodi" />
-    <setting title="$lvar(apptemplate_10502) #1"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[1]"  type="string" default="org.xbmc.kodi/.Splash" />
-    <setting title="$lvar(apptemplate_10505) #1"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[1]"  type="string" default="org.xbmc.kodi" />
+    <setting title="$lvar(apptemplate_10502) #1"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[1]"  type="string" default="^(?=.*kodi)(?=.*xbmc).*$" />
+    <setting title="$lvar(apptemplate_10505) #1"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[1]"  type="string" default="^(?=.*kodi)(?=.*xbmc).*$" />
     <setting title="$lvar(apptemplate_10500) #2"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[2]"   type="string" default="Netflix" />
-    <setting title="$lvar(apptemplate_10502) #2"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[2]"  type="string" default="com.netflix.ninja/.MainActivity" />
-    <setting title="$lvar(apptemplate_10505) #2"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[2]"  type="string" default="com.netflix.ninja" />
-    <setting title="$lvar(apptemplate_10500) #3"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[3]"   type="string" default="Hulu Plus" />
-    <setting title="$lvar(apptemplate_10502) #3"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[3]"  type="string" default="com.hulu.plusx.activity.Root" />
-    <setting title="$lvar(apptemplate_10505) #3"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[3]"  type="string" default="com.hulu.plusx.activity.Root" />
+    <setting title="$lvar(apptemplate_10502) #2"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[2]"  type="string" default="^(?=.*netflix).*$" />
+    <setting title="$lvar(apptemplate_10505) #2"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[2]"  type="string" default="^(?=.*netflix).*$" />
+    <setting title="$lvar(apptemplate_10500) #3"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[3]"   type="string" default="Zattoo" />
+    <setting title="$lvar(apptemplate_10502) #3"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[3]"  type="string" default="^(?=.*zattoo).*$" />
+    <setting title="$lvar(apptemplate_10505) #3"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[3]"  type="string" default="^(?=.*zattoo).*$" />
     <setting title="$lvar(apptemplate_10500) #4"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[4]"   type="string" default="YouTube TV" />
-    <setting title="$lvar(apptemplate_10502) #4"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[4]"  type="string" default="com.google.android.youtube.tv/com.google.android.apps.youtube.tv.activity.TvGuideActivity" />
-    <setting title="$lvar(apptemplate_10505) #4"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[4]"  type="string" default="com.google.android.youtube.tv" />
-    <setting title="$lvar(apptemplate_10500) #5"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[5]"   type="string" default="Pandora" />
-    <setting title="$lvar(apptemplate_10502) #5"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[5]"  type="string" default="com.pandora.android/.Main" />
-    <setting title="$lvar(apptemplate_10505) #5"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[5]"  type="string" default="com.pandora.android" />
+    <setting title="$lvar(apptemplate_10502) #4"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[4]"  type="string" default="^(?=.*youtube)(?=.*tv).*$" />
+    <setting title="$lvar(apptemplate_10505) #4"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[4]"  type="string" default="^(?=.*youtube)(?=.*tv).*$" />
+    <setting title="$lvar(apptemplate_10500) #5"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[5]"   type="string" default="Plex" />
+    <setting title="$lvar(apptemplate_10502) #5"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[5]"  type="string" default="^(?=.*plex).*$" />
+    <setting title="$lvar(apptemplate_10505) #5"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[5]"  type="string" default="^(?=.*plex).*$" />
     <setting title="$lvar(apptemplate_10500) #6"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[6]"   type="string" default="Amazon Prime" />
-    <setting title="$lvar(apptemplate_10502) #6"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[6]"  type="string" default="com.amazon.aiv.eu/com.amazon.blasthtml5android.MainActivity" />
-    <setting title="$lvar(apptemplate_10505) #6"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[6]"  type="string" default="com.amazon.aiv.eu" />
+    <setting title="$lvar(apptemplate_10502) #6"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[6]"  type="string" default="^(?=.*amazon)(?=.*video).*$" />
+    <setting title="$lvar(apptemplate_10505) #6"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[6]"  type="string" default="^(?=.*amazon)(?=.*video).*$" />
     <setting title="$lvar(apptemplate_10500) #7"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[7]"   type="string" default="Google Music" />
-    <setting title="$lvar(apptemplate_10502) #7"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[7]"  type="string" default="com.google.android.music/.tutorial.ExternalTutorialLaunchActivity" />
-    <setting title="$lvar(apptemplate_10505) #7"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[7]"  type="string" default="com.google.android.music" />
+    <setting title="$lvar(apptemplate_10502) #7"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[7]"  type="string" default="^(?=.*google)(?=.*music).*$" />
+    <setting title="$lvar(apptemplate_10505) #7"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[7]"  type="string" default="^(?=.*google)(?=.*music).*$" />
     <setting title="$lvar(apptemplate_10500) #8"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[8]"   type="string" default="" />
     <setting title="$lvar(apptemplate_10502) #8"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[8]"  type="string" default="" />
     <setting title="$lvar(apptemplate_10505) #8"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[8]"  type="string" default="" />

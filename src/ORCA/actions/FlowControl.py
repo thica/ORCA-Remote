@@ -247,7 +247,7 @@ class cEventActionsFlowControl(cEventActionBase):
             elif uActionName=="PAGESTARTACTIONS":
                 # we want to prevent pagestart actions, if the old page was just a popup, or we enforce it
                 uLastPageName=""
-                oLastPage=Globals.oTheScreen.oScreenPages.GetLastPage()
+                oLastPage=Globals.oTheScreen.oScreenPages.GetLastPageReal()
                 if oLastPage:
                     uLastPageName=oLastPage.uPageName
                 if (not Globals.oTheScreen.IsPopup(uLastPageName)) or ('ENFORCESTARTACTIONS' in uEnforce):

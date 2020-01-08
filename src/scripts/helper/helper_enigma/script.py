@@ -33,6 +33,8 @@ from datetime                               import timezone
 
 import urllib
 
+from kivy                                   import Logger
+
 from ORCA.scripts.BaseScript                import cBaseScript
 from ORCA.vars.Access                       import GetVar
 from ORCA.vars.Access                       import SetVar
@@ -354,8 +356,9 @@ class cScript(cBaseScript):
 
             self.ShowInfo("Parsing movies into "+uContext)
 
-            if self.dMovies.get(uContext) is not None:
-                return {"ret":1}
+            # cache disabled
+            # if self.dMovies.get(uContext) is not None:
+            #     return {"ret":1}
 
             uXmlContent = GetVar(uResultVar)
             uXmlContent = EscapeUnicode(uXmlContent)
@@ -450,6 +453,7 @@ class cScript(cBaseScript):
         uFnLogo = self.FindChannelLogo_sub(uChannelName=uChannelName,uReference=uReference,uLogoPackFolderName=uLogoPackFolderName)
         if uFnLogo == u"" or uFnLogo is None:
             uFnLogo = u"text:"+uChannelName
+            Logger.warning("Can't find logo [%s] [%s] in [%s]:" % ( uChannelName,uReference,uLogoPackFolderName))
         return uFnLogo
 
     def FindChannelLogo_sub(self,uChannelName:str, uReference:str, uLogoPackFolderName:str) -> str:

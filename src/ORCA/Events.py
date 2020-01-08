@@ -56,8 +56,8 @@ import ORCA.Globals as Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.Action import cAction
-    from ORCA.widgets.Base import cWidgetBase
+    from ORCA.Action            import cAction
+    from ORCA.widgets.base.Base import cWidgetBase
 else:
     from typing import TypeVar
     cAction = TypeVar("cAction")
@@ -165,10 +165,11 @@ class cEvents:
         uToUseConfigName:str = uOrgConfigName
 
         if oAction.oParentWidget:
-            if uToUseInterFace==u'':
-                uToUseInterFace=oAction.oParentWidget.uInterFace
-            if uToUseConfigName==u'':
-                uToUseConfigName=oAction.oParentWidget.uConfigName
+            if hasattr(oAction.oParentWidget,"uInterFace"):
+                if uToUseInterFace==u'':
+                    uToUseInterFace=oAction.oParentWidget.uInterFace
+                if uToUseConfigName==u'':
+                    uToUseConfigName=oAction.oParentWidget.uConfigName
 
             if uToUseInterFace==u'':
                 uAnchorName:str=oAction.oParentWidget.uAnchorName
@@ -176,8 +177,9 @@ class cEvents:
                     aTmpAnchor:List = oAction.oParentWidget.oParentScreenPage.dWidgets[uAnchorName]
                     if aTmpAnchor:
                         oTmpAnchor = aTmpAnchor[0]
-                        uToUseInterFace=oTmpAnchor.uInterFace
-                        uAnchorName=oTmpAnchor.uInterFace
+                        if hasattr(oTmpAnchor,"uInterFace"):
+                            uToUseInterFace=oTmpAnchor.uInterFace
+                        uAnchorName=oTmpAnchor.uAnchorName
                     if uToUseInterFace!="":
                         break
 
@@ -189,8 +191,9 @@ class cEvents:
                     aTmpAnchors = oAction.oParentWidget.oParentScreenPage.dWidgets[uAnchorName]
                     if aTmpAnchors:
                         oTmpAnchor=aTmpAnchors[0]
-                        uToUseConfigName=oTmpAnchor.uConfigName
-                        uAnchorName=oTmpAnchor.uInterFace
+                        if hasattr(oTmpAnchor, "uConfigName"):
+                            uToUseConfigName=oTmpAnchor.uConfigName
+                        uAnchorName=oTmpAnchor.uAnchorName
                     if uToUseConfigName!="":
                         break
 

@@ -20,6 +20,7 @@
 """
 
 from typing                 import Dict
+from typing                 import List
 from typing                 import Any
 from typing                 import Callable
 
@@ -53,9 +54,15 @@ __all__ = ['OS_ToPath',
            'OS_Platform',
            'OS_RegisterSoundProvider',
            'OS_RequestPermissions',
-           'OS_Vibrate'
+           'OS_Vibrate',
+           'OS_GetGatewayV4',
+           'OS_GetGatewayV6',
+           'OS_GetIPAddressV4',
+           'OS_GetIPAddressV6',
+           'OS_GetSubnetV4',
+           'OS_GetSubnetV6',
+           'OS_GetMACAddress'
           ]
-
 
 # noinspection PyUnusedLocal
 def FunctionDummy(**kwargs):
@@ -162,3 +169,23 @@ def OS_GetWindowSize() -> None:
     Globals.iAppWidth  = kivy.core.window.Window.size[0]
     Globals.iAppHeight = kivy.core.window.Window.size[1]
 
+def OS_GetIPAddressV4() -> str:
+    return GetFunction("GetIPAddressV4")()
+
+def OS_GetSubnetV4() -> str:
+    return GetFunction("GetSubnetV4")()
+
+def OS_GetGatewayV4() -> str:
+    return GetFunction("GetGatewayV4")()
+
+def OS_GetIPAddressV6() -> str:
+    return GetFunction("GetIPAddressV6")()
+
+def OS_GetSubnetV6() -> str:
+    return GetFunction("GetSubnetV6")()
+
+def OS_GetGatewayV6() -> str:
+    return GetFunction("GetGatewayV6")()
+
+def OS_GetMACAddress() -> List:
+    return GetFunction("GetMACAddress")()

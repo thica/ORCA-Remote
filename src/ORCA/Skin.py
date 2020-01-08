@@ -99,15 +99,19 @@ class cSkin:
                         self.dSkinAttributes[uAttName]=uAtt
                         SetVar(uVarName = uAttName, oVarValue = uAtt)
 
-                if self.dSkinAttributes.get('fontcolor button'):
-                    SetVar(uVarName = u'SKIN_FONTCOLOR_BUTTON', oVarValue = self.dSkinAttributes['fontcolor button'])
-                    self.dSkinAttributes['fontcolor button']        =  GetColorFromHex(self.dSkinAttributes['fontcolor button'])
-                if self.dSkinAttributes.get('fontcolor text'):
-                    SetVar(uVarName = u'SKIN_FONTCOLOR_TEXT', oVarValue = self.dSkinAttributes['fontcolor text'])
-                    self.dSkinAttributes['fontcolor text']  =  GetColorFromHex(self.dSkinAttributes['fontcolor text'])
-                if self.dSkinAttributes.get('fontcolor file'):
-                    SetVar(uVarName = u'SKIN_FONTCOLOR_FILE', oVarValue = self.dSkinAttributes['fontcolor file'])
-                    self.dSkinAttributes['fontcolor file']          =  GetColorFromHex(self.dSkinAttributes['fontcolor file'])
+                if self.dSkinAttributes.get('color font button'):
+                    SetVar(uVarName = u'SKIN_FONTCOLOR_BUTTON', oVarValue = self.dSkinAttributes['color font button'])
+                    self.dSkinAttributes['color font button']        =  GetColorFromHex(self.dSkinAttributes['color font button'])
+                if self.dSkinAttributes.get('color font text'):
+                    SetVar(uVarName = u'SKIN_FONTCOLOR_TEXT', oVarValue = self.dSkinAttributes['color font text'])
+                    self.dSkinAttributes['color font text']  =  GetColorFromHex(self.dSkinAttributes['color font text'])
+                if self.dSkinAttributes.get('color font file'):
+                    SetVar(uVarName = u'SKIN_FONTCOLOR_FILE', oVarValue = self.dSkinAttributes['color font file'])
+                    self.dSkinAttributes['color font file']          =  GetColorFromHex(self.dSkinAttributes['color font file'])
+                if self.dSkinAttributes.get('color border'):
+                    SetVar(uVarName = u'SKIN_COLOR_BORDER', oVarValue = self.dSkinAttributes['color border'])
+                    self.dSkinAttributes['color border']             =  GetColorFromHex(self.dSkinAttributes['color border'])
+
 
             oPathSkinAtlas:cPath = Globals.oPathSkin + 'atlas'
             oPathSkinAtlas.Create()

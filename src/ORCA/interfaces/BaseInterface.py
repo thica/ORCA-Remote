@@ -295,6 +295,7 @@ class cBaseInterFace(cBaseObject):
     def GetNewSettingObject(self) -> cBaseInterFaceSettings:
         return self.cInterFaceSettings(self)
 
+    # noinspection PyMethodMayBeStatic
     def CloseSettingConnection(self,oSetting:cBaseInterFaceSettings,bNoLogOut:bool):
         if not bNoLogOut:
             if oSetting.bIsConnected:

@@ -135,10 +135,11 @@ uDefinitionName:             str
 uDefinitionToConfigure:      str
 uDeviceOrientation:          str
 uIPAddressV4:                str
-uIPGateWayAssumedV4:         str
-uIPSubNetAssumedV4:          str
+uIPGateWayV4:                str
+uIPSubNetV4:                 str
 uIPAddressV6:                str
 uIPGateWayV6:                str
+uIPSubNetV6:                 str
 
 uLanguage:                   str
 uLocalesName:                str

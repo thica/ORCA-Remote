@@ -28,7 +28,10 @@ from ORCA.vars.Access                   import SetVar
 from ORCA.vars.Access                   import GetVar
 from ORCA.utils.TypeConvert             import ToFloat
 from ORCA.utils.TypeConvert             import ToUnicode
-from ORCA.widgets.Base                  import cWidgetBase
+from ORCA.widgets.base.Base             import cWidgetBase
+from ORCA.widgets.base.BaseBase         import cWidgetBaseBase
+from ORCA.widgets.base.BaseAction       import cWidgetBaseAction
+
 from ORCA.widgets.core.RotateScatter    import cRotateScatter
 from ORCA.utils.Atlas                   import ToAtlas
 from ORCA.utils.FileName                import cFileName
@@ -50,7 +53,7 @@ else:
 
 __all__ = ['cWidgetKnob']
 
-class cWidgetKnob(cWidgetBase):
+class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
     """ a knob widget """
 
     '''
@@ -115,7 +118,7 @@ class cWidgetKnob(cWidgetBase):
     ''' todo: add example for Knob '''
 
     def __init__(self,**kwargs):
-        super(cWidgetKnob, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.oFnPictureNormal:Union[cFileName,None]  = None
         self.iAbsAngle:int                           = 0
         self.fDataRange:float                        = 0.0

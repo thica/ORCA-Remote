@@ -23,10 +23,13 @@ from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
 from kivy.uix.label                 import Label
 from ORCA.ui.InputKeyboard          import ShowKeyBoard
-from ORCA.vars.Access import GetVar
+from ORCA.vars.Access               import GetVar
 from ORCA.utils.XML                 import GetXMLTextAttribute
-import ORCA.Globals as Globals
 from ORCA.widgets.TextField         import cWidgetTextField
+
+import ORCA.Globals as Globals
+
+
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ORCA.ScreenPage            import cScreenPage
@@ -72,7 +75,7 @@ class cWidgetTextInput(cWidgetTextField):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetTextInput, self).__init__(hastext=True)
+        super().__init__()
         self.uDestVar:str       = u''
         self.oInputKeyboard = None
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
@@ -86,7 +89,7 @@ class cWidgetTextInput(cWidgetTextField):
 
     def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """
-        if super(cWidgetTextInput, self).Create(oParent):
+        if super().Create(oParent):
             self.oObject.unbind(on_q_release    = self.On_Button_Up)
             self.oObject.bind(on_q_release    = self.On_Button_Up1)
             return True

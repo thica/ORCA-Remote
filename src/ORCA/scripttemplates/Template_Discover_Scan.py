@@ -93,7 +93,7 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
         oSetting:cBaseScriptSettings   = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
         fTimeOut:float                 = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
         bOnlyOnce:bool                 = ToBool(kwargs.get('onlyonce', "1"))
-        uIPSubNet:str                  = Globals.uIPGateWayAssumedV4
+        uIPSubNet:str                  = Globals.uIPGateWayV4
         uIPSubNet:str                  = uIPSubNet[:uIPSubNet.rfind(".")]+"."
 
         del self.aResults[:]

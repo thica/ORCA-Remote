@@ -48,8 +48,32 @@
   <!-- could be 1 as well, Invoke the Android context menu (OptionsMenu).  -->
   <action string="codeset" name='menu'          waitforresponse='0' cmd='Shell' params="input keyevent 82" />
 
-  <action string="codeset" name='startapp'      waitforresponse='0' cmd='Shell' params="am start -n $var(startapp)" />
-  <action string="codeset" name='closeapp'      waitforresponse='0' cmd='Shell' params="am force-stop $var(stopapp)" />
+  <action name='startapp'>
+    <action  string="codeset" name='getapplist_int'    waitforresponse='1' cmd='GetAppList' params="pm list packages -f"/>
+    <action  string="codeset" name='getappname_int'    waitforresponse='1' cmd='GetAppName' params="$var(startapp)" ldestvar="appnamereal"  />
+    <action1 string="codeset" name='startapp_int'      waitforresponse='1' cmd='Shell'      params="am start $(cmd package resolve-activity --brief $cvar(appnamereal) | tail -n 1)" />
+    <action1  string="codeset" name='get-intent'        waitforresponse='1' cmd='Shell'      params="pm dump $cvar(appnamereal) | grep -A 1 'MAIN' | grep $cvar(appnamereal) | awk '{print $2}' | grep $cvar(appnamereal)" ldestvar="appintent"/>
+    <action1  string="codeset" name='startapp_byintent' waitforresponse='1' cmd='Shell'      params="am start -n $cvar(appintent)" />
+
+    <action  string="codeset" name='dump_app'          waitforresponse='1' cmd='Shell'             params="pm dump $cvar(appnamereal)" ldestvar="appdump" />
+    <action  string="codeset" name='get-intent'        waitforresponse='1' cmd='GetAppIntent'      params="$cvar(appnamereal)|||$cvar(appdump)" ldestvar="appintent" />
+    <action  string="codeset" name='startapp_byintent' waitforresponse='1' cmd='Shell'      params="am start -a android.intent.action.VIEW -d -n $cvar(appintent)" />
+  </action>
+
+  <action string="codeset" name='startapp_oldapi'      waitforresponse='0' cmd='Shell'  params="am start -n $var(startapp)" />
+
+  adb shell 'am start $(cmd package resolve-activity --brief com.google.android.calculator | tail -n 1)'
+
+  <action string="codeset" name='getapplist'      waitforresponse='0' cmd='Shell' params="pm list packages -f" />
+
+
+  <action name='closeapp'>
+    <action string="codeset" name='getapplist_int'    waitforresponse='0' cmd='GetAppList' params="pm list packages -f"/>
+    <action string="codeset" name='getappname_int'    waitforresponse='0' cmd='GetAppName' params="$var(stopapp)" ldestvar="appnamereal"  />
+    <action string="codeset" name='stopapp_int'       waitforresponse='0' cmd='Shell'  params="am force-stop $cvar(appnamereal)" />
+  </action>
+
+  <action1 string="codeset" name='closeapp'      waitforresponse='0' cmd='Shell' params="am force-stop $var(stopapp)" />
 
   <!--  NO ADB Codes
   <action string="codeset" name="repeat_toggle" waitforresponse='0' cmd='Shell'  params="input keyevent 0" />
@@ -213,7 +237,7 @@
   <action string="codeset" name='page_down'     waitforresponse='0' cmd='Shell' params="input keyevent 93" />
   <action string="codeset" name='page_up'       waitforresponse='0' cmd='Shell' params="input keyevent 92" />
 
-  <action string="codeset" name='reboot'        waitforresponse='0' cmd='Reboot' />
+  <action string="codeset" name='reboot'        waitforresponse='0' cmd='Shell' params="reboot" />
   <action string="codeset" name='getversion'    waitforresponse='1' cmd='Shell' params="grep ro.build.version.sdk= system/build.prop" parseoption='tokenize' parsetoken='=' ldestvar='adbversion' />
   <action string="codeset" name='getpowerstatus' waitforresponse='1' cmd='Shell' params="dumpsys input_method | grep -o mInteractive=true" parseoption='tokenize' parsetoken='=' ldestvar='adbpowerstatus' gdestvar='adbpowerstatus' />
   <action string="codeset" name='send_string'   waitforresponse='0' cmd='Shell' params="input text '$cvar(SENDTEXT)'"/>

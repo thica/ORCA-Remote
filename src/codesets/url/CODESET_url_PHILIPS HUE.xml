@@ -44,12 +44,12 @@
   <action name="get_config_lights" >
     <action string="setvar RESULT=" />
     <action string="codeset" name='get_config_lights_sub'    type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)'         headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='store' />
-    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_light","result":$var(RESULT),"index":$var(HUELIGHTNUM)}' condition="$var(RESULT)!="/>
+    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_light","result":"$var(RESULT)","index":"$var(HUELIGHTNUM)"}' condition="$var(RESULT)!="/>
   </action>
   <action name="get_config_groups" >
     <action string="setvar RESULT=" />
     <action string="codeset" name='get_config_groups_sub'    type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$var(HUELIGHTNUM)'         headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='store' />
-    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_group","result":$var(RESULT),"index":$var(HUELIGHTNUM)}' condition="$var(RESULT)!="/>
+    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_group","result":"$var(RESULT)","index":"$var(HUELIGHTNUM)"}' condition="$var(RESULT)!="/>
   </action>
 
 
@@ -62,7 +62,7 @@
   <action name="get_config_alllights" >
      <action string="setvar RESULT=" />
      <action string="codeset" name='get_config_alllights_sub' type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)'    headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='store' />
-    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_status","result":$var(RESULT)}' condition="$var(RESULT)!="/>
+    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_status","result":"$var(RESULT)"}' condition="$var(RESULT)!="/>
   </action>
   <action name="ping" type="alias" cmd="get_config" />
 </includes>

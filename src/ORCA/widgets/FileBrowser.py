@@ -25,7 +25,10 @@ from kivy.uix.screenmanager             import FadeTransition
 from kivy.logger                        import Logger
 from kivy.uix.widget                    import Widget
 from ORCA.widgets.core.FileBrowser      import FileBrowser
-from ORCA.widgets.Base                  import cWidgetBase
+from ORCA.widgets.base.Base             import cWidgetBase
+from ORCA.widgets.base.BaseBase         import cWidgetBaseBase
+from ORCA.widgets.base.BaseAction       import cWidgetBaseAction
+
 from ORCA.vars.Replace                  import ReplaceVars
 from ORCA.vars.Access                   import SetVar
 from ORCA.vars.Access                   import GetVar
@@ -47,7 +50,7 @@ else:
 
 __all__ = ['cWidgetFileBrowser']
 
-class cWidgetFileBrowser(cWidgetBase):
+class cWidgetFileBrowser(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
     """
     WikiDoc:Doc
     WikiDoc:Context:Widgets
@@ -85,7 +88,7 @@ class cWidgetFileBrowser(cWidgetBase):
     """
 
     def __init__(self, **kwargs):
-        super(cWidgetFileBrowser, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.oPathStart:cPath       = cPath()
         self.uActionNameCancel:str  = ""
         self.bDirSelect:bool        = False

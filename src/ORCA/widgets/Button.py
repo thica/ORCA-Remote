@@ -23,7 +23,11 @@ from typing                         import Callable
 from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
 from ORCA.widgets.core.TouchButton  import cTouchButton
-from ORCA.widgets.Base              import cWidgetBase
+from ORCA.widgets.base.Base         import cWidgetBase
+from ORCA.widgets.base.BaseBase     import cWidgetBaseBase
+from ORCA.widgets.base.BaseText     import cWidgetBaseText
+from ORCA.widgets.base.BaseAction   import cWidgetBaseAction
+
 from ORCA.utils.Atlas               import ToAtlas
 from ORCA.utils.XML                 import GetXMLTextAttribute, GetXMLBoolAttribute
 from ORCA.utils.LogError            import LogError
@@ -38,7 +42,7 @@ else:
 
 __all__ = ['cWidgetButton']
 
-class cWidgetButton(cWidgetBase):
+class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBase):
     """
     WikiDoc:Doc
     WikiDoc:Context:Widgets
@@ -106,7 +110,7 @@ class cWidgetButton(cWidgetBase):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetButton, self).__init__(hastext=True)
+        super().__init__()
         self.oFnButtonPictureNormal:cFileName        = cFileName('')
         self.oFnButtonPicturePressed:cFileName       = cFileName('')
         self.bAutoHide:bool                          = False
@@ -124,7 +128,7 @@ class cWidgetButton(cWidgetBase):
             self.bAutoHide  = GetXMLBoolAttribute(oXMLNode,u'autohide',False,False)
             if self.bAutoHide:
                 if self.uCaption == u'':
-                    self.bEnabled = False
+                    self.EnableWidget(bEnable=False)
             if not self.oFnButtonPictureNormal.string.rfind('*')==-1:
                 if self.oFnButtonPicturePressed.IsEmpty():
                     self.oFnButtonPicturePressed.ImportFullPath(self.oFnButtonPictureNormal.string.replace(u'*',u' pressed'))
@@ -176,7 +180,7 @@ class cWidgetButton(cWidgetBase):
             return False
 
     def UpdateWidget(self) -> None:
-        super(cWidgetButton, self).UpdateWidget()
+        super().UpdateWidget()
         self.SetPictureNormal("")
         return
 

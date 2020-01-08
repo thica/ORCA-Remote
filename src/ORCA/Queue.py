@@ -47,7 +47,7 @@ from ORCA import Globals as Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.widgets.Base import cWidgetBase
+    from ORCA.widgets.base.Base import cWidgetBase
 else:
     from typing import TypeVar
     cWidgetBase     = TypeVar("cWidgetBase")
@@ -196,7 +196,7 @@ class cQueue:
                     fSleep (fWait/1000)
                     Globals.oEvents.LogAction(u'Wait2',oAction)
 
-                #We will execute some basic Actions like Var manipulation immediatly, to make it faster
+                #We will execute some basic Actions like Var manipulation immediately, to make it faster
                 #If we wait, then prevent fast execution
                 if IsWaiting():
                     Globals.oEvents.bDoNext=False
@@ -256,12 +256,12 @@ class cQueue:
                 uPagenameToCall = oAction.dActionPars.get('pagename','')
                 if uPagenameToCall == "":
                     if oAction.oParentWidget is not None:
-                        uPagenameToCall = oAction.oParentWidget.dActionPars.get('pagename','')
+                        if hasattr(oAction.oParentWidget,"dActionPars"):
+                            uPagenameToCall = oAction.oParentWidget.dActionPars.get('pagename','')
                 oTmpAction.dActionPars['string'] = 'call'
                 oTmpAction.dActionPars['actionname'] = 'PAGESTARTACTIONS'
                 oTmpAction.dActionPars['pagename'] = uPagenameToCall
                 oTmpAction.dActionPars['currentpagename'] = GetVar(uVarName = 'CURRENTPAGE')
-                #oTmpAction.dActionPars['currentpagename'] = GetVar('LASTPAGE')
                 oTmpAction.iActionId = GetActionID(oTmpAction.dActionPars['string'])
                 self.__InsertToQueue(oTmpAction)
             if iActionId == Globals.oActions.oActionType.SendCommand:

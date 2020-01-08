@@ -281,6 +281,7 @@ class cInterface(cBaseInterFace):
                             self.bBusy = True
 
                             byResponseHeader:bytes = oParent.Helper_ReceiveAll(aReadSocket[0], 16)
+                            # noinspection PyInterpreter
                             if len(byResponseHeader)>0:
                                 # Get the Command and the payload
                                 uCommand,uResponse=oParent.UnpackEISPResponse(byResponseHeader)

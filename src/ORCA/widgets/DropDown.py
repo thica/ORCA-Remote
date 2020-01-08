@@ -96,7 +96,7 @@ class cWidgetDropDown(cWidgetButton):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetDropDown, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.oDropDownButtons:List[cWidgetButton]   = []
         self.aCaptions:List[str]                    = []
         self.aSecondCaptions:List[str]              = []
@@ -198,7 +198,7 @@ class cWidgetDropDown(cWidgetButton):
                     if (not oWidget.bIcon) and (not self.bIcon):
                         oWidget.oObject.font_size = self.oObject.font_size
 
-                    oWidget.uName               = "*DROPDOWNBUTTON*"+oWidget.uName
+                    oWidget.uName                = "*DROPDOWNBUTTON*"+oWidget.uName
                     oBtn                        = oWidget.oObject
                     oWidget.oParent.remove_widget(oBtn)
                     oBtn.size_hint_y            = None

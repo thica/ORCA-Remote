@@ -77,7 +77,7 @@ class cWidgetSwitch(cWidgetButton):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetSwitch, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.oFnButtonPictureNormalOrg:cFileName  = cFileName(u'')
         self.oFnButtonPicturePressedOrg:cFileName = cFileName(u'')
         self.uDestVar:str                         = u''
@@ -85,7 +85,7 @@ class cWidgetSwitch(cWidgetButton):
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        bRet:bool = super(cWidgetSwitch, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
+        bRet:bool = super().InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
         self.uDestVar                         = GetXMLTextAttribute(oXMLNode,u'destvar',    False,self.uName+'_switchstate')
         self.uGroup                           = GetXMLTextAttribute(oXMLNode,u'group',      False,'')
         self.oFnButtonPictureNormalOrg        = cFileName(self.oFnButtonPictureNormal)
@@ -146,7 +146,7 @@ class cWidgetSwitch(cWidgetButton):
                 #return
         Var_Invert(self.uDestVar)
         self.InvertSwitch(None)
-        super(cWidgetSwitch, self).UpdateWidget()
+        super().UpdateWidget()
         return
 
     def AllButtonsOff(self):

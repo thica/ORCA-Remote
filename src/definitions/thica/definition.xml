@@ -632,11 +632,6 @@
           <type>interfaces</type>
           <name>Ping</name>
         </dependency>
-        <dependency>
-          <type>others</type>
-          <name>TV Logo Pack Dark Silver Backgound</name>
-        </dependency>
-
       </dependencies>
       <skipfiles>
         <file>$var(APPLICATIONPATH)/definitions/thica/interfacesettings*</file>

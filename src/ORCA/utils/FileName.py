@@ -61,7 +61,7 @@ class cFileName:
         self.uFinal: str      = u''
         self.bDirty: bool     = True
 
-        if Logger.level==logging.DEBUG:
+        if Logger.level==logging.DEBUG and False:
             if self.uRaw:
                 for uChar in u"/\\:":
                     if uChar in self.uRaw:

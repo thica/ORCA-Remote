@@ -34,7 +34,11 @@ from ORCA.vars.Replace               import ReplaceVars
 from ORCA.vars.Helpers               import Round
 from ORCA.vars.Access                import SetVar
 from ORCA.vars.Access                import GetVar
-from ORCA.widgets.Base               import cWidgetBase
+from ORCA.widgets.base.Base          import cWidgetBase
+from ORCA.widgets.base.BaseBase      import cWidgetBaseBase
+from ORCA.widgets.base.BaseText      import cWidgetBaseText
+from ORCA.widgets.base.BaseAction    import cWidgetBaseAction
+
 from ORCA.widgets.core.SliderEx      import cSliderEx
 from ORCA.utils.FileName             import cFileName
 
@@ -48,7 +52,7 @@ else:
 
 __all__ = ['cWidgetSlider']
 
-class cWidgetSlider(cWidgetBase):
+class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBase):
     """
     WikiDoc:Doc
     WikiDoc:Context:Widgets
@@ -106,7 +110,7 @@ class cWidgetSlider(cWidgetBase):
 
     # noinspection PyUnusedLocal
     def __init__(self,**kwargs):
-        super(cWidgetSlider, self).__init__(hastext=True)
+        super().__init__()
         self.oFnPictureNormal:Union[cFileName,None] = None
         self.oFnPictureButton:Union[cFileName,None] = None
         self.uDestVar:str                           = u'slider'
@@ -172,7 +176,7 @@ class cWidgetSlider(cWidgetBase):
         if self.bDiscardMoves and (instance.uMoveType == u'move'):
             return
 
-        if not self.bEnabled:
+        if not self.bIsEnabled:
             return
 
         if not self.uDestVar==u'':

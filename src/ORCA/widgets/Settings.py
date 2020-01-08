@@ -41,6 +41,8 @@ from ORCA.vars.Actions              import Var_Invert
 from ORCA.widgets.FileViewer        import cWidgetFileViewer
 from ORCA.interfaces.BaseInterface  import cBaseInterFace
 from ORCA.scripts.BaseScript        import cBaseScript
+from ORCA.widgets.base.Base import cWidgetBase
+
 
 import ORCA.Globals as Globals
 from typing import TYPE_CHECKING
@@ -88,7 +90,7 @@ class cWidgetSettings(cWidgetFileViewer):
     """
 
     def __init__(self, **kwargs):
-        super(cWidgetSettings, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.uSettingsType:str                  = u''
         self.oXMLNode:Union[Element,None]       = None
         self.aSettingObjects:Dict[str,Settings] = {}
@@ -96,7 +98,6 @@ class cWidgetSettings(cWidgetFileViewer):
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         self.uSettingsType  = GetXMLTextAttribute(oXMLNode,u'settingstype', False,u'interface')
-        self.bHasText       = False
         self.oXMLNode       = oXMLNode
         bRet=super(cWidgetSettings, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
         if bRet:

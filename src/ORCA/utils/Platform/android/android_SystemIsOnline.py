@@ -41,11 +41,11 @@ def SystemIsOnline() -> bool:
         bConnection:bool     = oConnectionManager.getNetworkInfo(cConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()
 
         if bConnection:
-            detach()
+            # detach()
             return True
         else:
             bConnection = oConnectionManager.getNetworkInfo(cConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting()
-            detach()
+            # detach()
             if bConnection:
                 return True
             else:
@@ -64,7 +64,7 @@ def SystemIsOnlineOld():
         Logger.debug("Checking Android network connectivity")
         Hardware = GetAndroidModule("Hardware")
         bRet=Hardware.checkNetwork()
-        detach()
+        # detach()
         return bRet
     except Exception as e:
         LogError(uMsg='SystemIsOnline:',oException=e)

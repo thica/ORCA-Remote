@@ -109,9 +109,9 @@ The following attributes are used to define attributes
 |-
 |name
 |The name of the attribute, can be one of the following names:
-* fontcolor button
-* fontcolor text
-* fontcolor file
+* color font button
+* color font text
+* color font file
 * defaultfont
 |-
 |file
@@ -185,9 +185,10 @@ Below you see an example for a skin definition
     <pic name="bulb on" file="$var(SKINPATH)/pics/devices/bulb on.png" />
   </pics>
   <attributes>
-    <attribute name="fontcolor button" att="#000000ff" />
-    <attribute name="fontcolor text" att="#000000ff" />
-    <attribute name="fontcolor file" att="#ff0000ff" />
+    <attribute name="color font button" att="#000000ff" />
+    <attribute name="color font text" att="#000000ff" />
+    <attribute name="color font file" att="#ff0000ff" />
+    <attribute name="color border" att="#ff0000ff" />
     <attribute name="defaultfont" att="Font1"/>
   </attributes>
 </skin>

@@ -63,6 +63,7 @@ else:
     from typing import TypeVar
     cDefinitions = TypeVar("cDefinitions")
 
+
 __all__ = ['cDefinition', 'LoadFontFromXML', 'aLoadedFontFiles', 'aLoadedGestures', 'LoadGesturesFromXML']
 
 aLoadedFontFiles=[]

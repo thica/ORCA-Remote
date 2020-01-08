@@ -22,6 +22,7 @@ from __future__             import annotations
 from typing                 import Callable
 from typing                 import Union
 from typing                 import List
+from typing                 import Tuple
 from typing                 import Dict
 
 from xml.etree.ElementTree  import ElementTree,ParseError, Element, SubElement, fromstring
@@ -780,7 +781,7 @@ class Account(cIRDB_Object):
     def ToData(self)->str:
         return urllib.parse.urlencode({"Email":self.uEmail, "Password":self.uPassword})
 
-def ITach2CCF(uITACHString:str) -> str:
+def ITach2CCF(uITACHString:str) -> Tuple[str,str]:
     aArray:List[str]
     uDelimiter:str        = u','
     uFinalString:str      = u"0000 " #0000 denotes CCF type
@@ -797,16 +798,16 @@ def ITach2CCF(uITACHString:str) -> str:
 
     if len(aArray) < 6:
         Logger.error (u'ITach2CCF: Invalid String (#1)')
-        return u''
+        return u'',u''
 
     if aArray[3]=="":
         Logger.error (u'ITach2CCF: Invalid String (#2)')
-        return u''
+        return u'',u''
 
     iFreqNum = ToInt(aArray[3])
     if iFreqNum==0:
         Logger.error (u'ITach2CCF: Invalid String (#3)')
-        return u''
+        return u'',u''
 
     #todo Check if iFreq and Itranscount needs to converted to int
     iFreq = int(41450 / (iFreqNum / 100))
@@ -820,7 +821,7 @@ def ITach2CCF(uITACHString:str) -> str:
     for uElement in aArray[6:]:
         if uElement=="":
             Logger.error (u'ITach2CCF: Invalid String (#4)')
-            return u''
+            return u'',u''
         iPairData = ToInt(uElement)
         uTmpString='{0:0>4X}'.format(iPairData)             #iPairData.ToString("X04");
         uFinalString = uFinalString + " "+ uTmpString

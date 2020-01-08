@@ -30,7 +30,9 @@ from ORCA.utils.TypeConvert        import ToFloat
 from ORCA.utils.XML                import GetXMLTextAttribute
 from ORCA.vars.Access              import GetVar
 from ORCA.vars.Access              import SetVar
-from ORCA.widgets.Base             import cWidgetBase
+from ORCA.widgets.base.Base        import cWidgetBase
+from ORCA.widgets.base.BaseBase    import cWidgetBaseBase
+from ORCA.widgets.base.BaseAction  import cWidgetBaseAction
 from ORCA.widgets.helper.HexColor  import GetColorFromHex
 from ORCA.widgets.core.ColorPicker import cColorPicker
 
@@ -45,7 +47,7 @@ else:
 __all__ = ['cWidgetColorPicker']
 
 
-class cWidgetColorPicker(cWidgetBase):
+class cWidgetColorPicker(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
     """
     WikiDoc:Doc
     WikiDoc:Context:Widgets
@@ -76,7 +78,7 @@ class cWidgetColorPicker(cWidgetBase):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetColorPicker, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.fOldValue:float                = 10000.23445
         self.fValue:float                   = 0.0
         self.oTrigger                       = Clock.create_trigger(self.On_Color_Wheel)

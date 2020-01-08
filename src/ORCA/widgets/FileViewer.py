@@ -24,7 +24,10 @@ from xml.etree.ElementTree          import Element
 from kivy.logger                    import Logger
 from kivy.uix.widget                import Widget
 from ORCA.widgets.core.ScrollableLabelLarge   import cScrollableLabelLarge
-from ORCA.widgets.Base              import cWidgetBase
+from ORCA.widgets.base.Base         import cWidgetBase
+from ORCA.widgets.base.BaseBase     import cWidgetBaseBase
+from ORCA.widgets.base.BaseText     import cWidgetBaseText
+
 from ORCA.utils.XML                 import GetXMLTextAttribute
 from ORCA.utils.LoadFile            import LoadFile
 from ORCA.utils.FileName            import cFileName
@@ -39,7 +42,7 @@ else:
 __all__ = ['cWidgetFileViewer']
 
 
-class cWidgetFileViewer(cWidgetBase):
+class cWidgetFileViewer(cWidgetBase,cWidgetBaseText,cWidgetBaseBase):
 
     """
     WikiDoc:Doc
@@ -73,7 +76,7 @@ class cWidgetFileViewer(cWidgetBase):
     """
 
     def __init__(self,**kwargs):
-        super().__init__(hastext=True)
+        super().__init__()
         self.uFileName:str = "" #we don't  use cFileName by purpose to handle vars properly
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:

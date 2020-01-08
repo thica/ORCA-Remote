@@ -53,9 +53,10 @@
     <pic name="bulb on" file="$var(SKINPATH)/pics/devices/bulb on.png"/>
   </pics>
   <attributes>
-    <attribute name="fontcolor button" att="$var(black)"/>
-    <attribute name="fontcolor text" att="$var(black)"/>
-    <attribute name="fontcolor file" att="$var(black)"/>
+    <attribute name="color font button" att="$var(black)"/>
+    <attribute name="color font text" att="$var(black)"/>
+    <attribute name="color font file" att="$var(black)"/>
+    <attribute name="color border" att="$var(black)"/>
     <attribute name="defaultfont" att="Sans"/>
   </attributes>
   <colors>

@@ -54,7 +54,7 @@ from ORCA.vars.Globals              import  InitSystemVars
 from ORCA.vars.Actions              import  Var_Increase
 from ORCA.ScreenPages               import  cScreenPages
 from ORCA.vars.Access               import  SetVar
-from ORCA.widgets.Base              import  cWidgetBase
+from ORCA.widgets.base.Base         import  cWidgetBase
 from ORCA.actions.ReturnCode        import  eReturnCode
 
 import ORCA.Globals as Globals

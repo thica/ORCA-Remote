@@ -83,7 +83,7 @@ class cWidgetBackGround(cWidgetPicture,cWidgetRectangle):
         We use Rectangle for just a color, as gestures are implemented here '''
 
     def __init__(self,**kwargs):
-        super(cWidgetBackGround, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage,uAnchor:str=''):
         bRet1:bool = cWidgetPicture.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')

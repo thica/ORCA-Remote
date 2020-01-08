@@ -36,7 +36,7 @@ from ORCA.utils.TypeConvert             import ToFloat
 from ORCA.utils.TypeConvert             import ToUnicode
 from ORCA.vars.Access                   import SetVar
 from ORCA.vars.Replace                  import ReplaceVars
-from ORCA.widgets.Base                  import cWidgetBase
+from ORCA.widgets.base.Base             import cWidgetBase
 from ORCA.widgets.Button                import cWidgetButton
 from ORCA.widgets.Circle                import cWidgetCircle
 from ORCA.widgets.Knob                  import cWidgetKnob
@@ -528,7 +528,7 @@ class cEventActionsWidgetControl(cEventActionBase):
                 if uAttributeName==u'bold' or uAttributeName==u'italic' or uAttributeName==u'textcolor':
                     uRet = oWidget.GetWidgetFontStyle(uAttributeName)
                 elif uAttributeName==u'caption':
-                    uRet =  oWidget.uCaption
+                    uRet =  oWidget.GetCaption()
                 elif uAttributeName==u'picturenormal':
                     oWidget:Union[cWidgetPicture,cWidgetButton,cWidgetSwitch]
                     if oWidget.eWidgetType == eWidgetType.Picture or oWidget.eWidgetType == eWidgetType.Button or oWidget.eWidgetType == eWidgetType.Switch:
@@ -549,16 +549,21 @@ class cEventActionsWidgetControl(cEventActionBase):
                         uRet =  oWidget.uFileName
                 elif uAttributeName==u'enabled':
                     uRet = u"0"
-                    if oWidget.bEnabled:
+                    if oWidget.bIsEnabled:
                         uRet= u"1"
                 elif uAttributeName==u'startangle':
                     oWidget:cWidgetCircle
                     if oWidget.eWidgetType == eWidgetType.Circle:
                         uRet = ToUnicode(oWidget.fStartAngle)
                 elif uAttributeName==u'endangle':
-                    uRet = ToUnicode(oWidget.eWidgetType)
+                    oWidget:cWidgetCircle
+                    if oWidget.eWidgetType == eWidgetType.Circle:
+                        uRet = ToUnicode(oWidget.fEndAngle)
                 elif uAttributeName==u'action':
-                    uRet=oWidget.uActionName
+                    if hasattr(oWidget,"uActionName"):
+                        uRet = oWidget.uActionName
+                    else:
+                        uRet = ""
                 elif uAttributeName == u'exists':
                     uRet = "1"
                 else:

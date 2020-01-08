@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String
+cmd = command to send, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>Unraid Power off / via Web interface</name>
+      <description language='English'>Power off command for Unraid NAS Server using the web interface</description>
+      <description language='German'>Power off Befehl für Unraid NAS Server über das Web Interface</description>
+      <author>Carsten Thielepape</author>
+      <version>4.6.0</version>
+      <minorcaversion>4.6.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_UNRAID.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_UNRAID.zip</sourcefile>
+          <targetpath>codesets/url</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>URL-Web</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action name="power_off" >
+     <action string="codeset"  name="move to page"  type="encode" waitforresponse='1' requesttype='GET' cmd='/update.htm'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  getvar='dummy' parseoption='store' gdestvar='RESULT' />
+     <action string="codeset"  name="power down"  type="encode" waitforresponse='1' requesttype='GET' cmd='/update.htm?shutdown=apply'  headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  getvar='dummy' parseoption='store' gdestvar='RESULT' />
+   </action>
+
+
+</includes>

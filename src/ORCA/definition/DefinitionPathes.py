@@ -62,7 +62,7 @@ class cDefinitionPathes:
         self.oPathTemplateSkinElements:cFileName        = cFileName()
 
         uCheck = "skin_" + Globals.uSkinName
-        oPathCheck = self.oPathDefinitionSkinElements + (uCheck)
+        oPathCheck = self.oPathDefinitionSkinElements + uCheck
         if oPathCheck.Exists():
             self.oPathDefinitionSkinElements = oPathCheck
             SetVar("SKINCONTEXT",uCheck)

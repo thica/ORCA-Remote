@@ -21,7 +21,7 @@
 
 from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
-from ORCA.widgets.Base              import cWidgetBase
+from ORCA.widgets.base.Base         import cWidgetBase
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -65,7 +65,7 @@ class cWidgetAnchor(cWidgetBase):
 
 
     def __init__(self,**kwargs):
-        super(cWidgetAnchor, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         # For the Border
         self.AddArg('background_color', [1.0, 0.0, 1.0, 1.0])
         self.AddArg('linewidth', "2")

@@ -20,7 +20,7 @@
 """
 
 import traceback
-from kivy.logger                    import Logger
+from ORCA.utils.LogError            import LogError
 from ORCA.ui.RaiseQuestion          import cRaiseQuestion
 from ORCA.utils.wait.StartWait      import StartWait
 from ORCA.utils.wait.StopWait       import StopWait
@@ -60,13 +60,21 @@ class cShowErrorPopUp(cRaiseQuestion):
         """ Stops waiting and continues ORCA """
         StopWait()
 
-def ShowErrorPopUp(uTitle:str='$lvar(5017)',uMessage:str=u'',bAbort:bool=False,uTextContinue:str=u'$lvar(5000)',uTextQuit:str=u'$lvar(5005)',uStringDetails:str=u'') -> cShowErrorPopUp:
-    """ Convinience function """
+def ShowErrorPopUp(*,uTitle:str='$lvar(5017)',uMessage:str=u'',bAbort:bool=False,uTextContinue:str=u'$lvar(5000)',uTextQuit:str=u'$lvar(5005)',uStringDetails:str=u'', oException=None) -> cShowErrorPopUp:
+    """ Convenience function """
     oShowErrorPopUp:cShowErrorPopUp = cShowErrorPopUp()
+    uTrace   = traceback.format_exc()
+    uMsg:str = uMessage
+
+    if uStringDetails!=u'':
+        uMsg = uMessage + u"\n" + uStringDetails
+    else:
+        uMsg = uMsg + u"\n" + uTrace
+
+    LogError(uMsg=uMsg,oException=oException)
 
     if uStringDetails==u'':
-        uStringDetails=traceback.format_exc()
-        Logger.error(uStringDetails)
+        uStringDetails = uTrace
 
     Globals.oSound.PlaySound(u'error')
     oShowErrorPopUp.ShowError(uTitle=uTitle, uMessage=uMessage, bAbort=bAbort, uTextContinue=uTextContinue, uTextQuit=uTextQuit,uStringDetails=uStringDetails)

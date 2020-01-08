@@ -12,7 +12,7 @@
         <source>
           <local>$var(RESOURCEPATH)/tvlogos/dark.on.reflection</local>
           <sourcefile>$var(REPOSITORYWWWPATH)/others/tvlogos_dark.on.reflection.zip</sourcefile>
-          <targetpath>resources/tvlogos/dark.on.reflection</targetpath>
+          <targetpath>resources/tvlogos</targetpath>
         </source>
       </sources>
     </entry>

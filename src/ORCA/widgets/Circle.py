@@ -48,7 +48,7 @@ class cWidgetCircle(cWidgetGeoClass):
     The circle widget creates a colored circle or ellipse.
     You could add click/double click and wipe actions as well. Below you see an example for  a circle
 
-    The following attributes are additional attributes to common widget attributs
+    The following attributes are additional attributes to common widget attributes
     <div style="overflow:auto; ">
     {| class="wikitable"
     ! align="left" | Attribute
@@ -58,13 +58,13 @@ class cWidgetCircle(cWidgetGeoClass):
     |fixed: needs to be "CIRCLE". Capital letters!
     |-
     |backgroundcolor
-    |The background color of the circle in hexedecimal RGBA format. It has to start with a pound sign (eg: #ff00ffff). Please use only low capital chars.
+    |The background color of the circle in hexadecimal RGBA format. It has to start with a pound sign (eg: #ff00ffff). Please use only low capital chars.
     |-
     |startangle
-    |If you dont want to have a full circle, and just want a have a part of the cake, you can set the starting angle of the circle here
+    |If you don't want to have a full circle, and just want a have a part of the cake, you can set the starting angle of the circle here
     |-
     |stopangle
-    |If you dont want to have a full circle, and just want a have a part of the cake, you can set the stopg angle of the circle here
+    |If you don't want to have a full circle, and just want a have a part of the cake, you can set the stop angle of the circle here
     |-
     |picturenormal
     |Instead of a color, you can use a picture as a circle background, For that, give the picturename here
@@ -80,7 +80,7 @@ class cWidgetCircle(cWidgetGeoClass):
     """
 
     def __init__(self,**kwargs):
-        super(cWidgetCircle, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.oGeoClass:Callable      = cTouchCircle
         self.fStartAngle:float       = 0.0
         self.fEndAngle:float         = 360.0

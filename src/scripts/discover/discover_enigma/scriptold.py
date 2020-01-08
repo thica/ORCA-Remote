@@ -166,7 +166,7 @@ class cScript(cDiscoverScriptTemplate):
         del self.aResults[:]
         del self.aThreads[:]
 
-        uIPSubNet:str = Globals.uIPGateWayAssumedV4
+        uIPSubNet:str = Globals.uIPGateWayV4
         uIPSubNet:str = uIPSubNet[:uIPSubNet.rfind(".")]+"."
 
         for i in range(1,255):

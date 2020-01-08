@@ -21,7 +21,11 @@
 
 from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
-from ORCA.widgets.Base              import cWidgetBase
+from ORCA.widgets.base.Base         import cWidgetBase
+from ORCA.widgets.base.BaseBase     import cWidgetBaseBase
+from ORCA.widgets.base.BaseText     import cWidgetBaseText
+from ORCA.widgets.base.BaseAction   import cWidgetBaseAction
+
 from ORCA.widgets.core.Label        import cLabel
 from ORCA.utils.XML                 import GetXMLBoolAttribute
 from typing import TYPE_CHECKING
@@ -34,7 +38,7 @@ else:
 
 __all__ = ['cWidgetTextField']
 
-class cWidgetTextField(cWidgetBase):
+class cWidgetTextField(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBase):
     """
     WikiDoc:Doc
     WikiDoc:Context:Widgets
@@ -98,7 +102,7 @@ class cWidgetTextField(cWidgetBase):
     def __init__(self,**kwargs):
         self.bIsClock:bool = False
         self.bIsDate:bool = False
-        super(cWidgetTextField, self).__init__(hastext=True)
+        super().__init__()
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
@@ -110,5 +114,8 @@ class cWidgetTextField(cWidgetBase):
         """ creates the Widget """
         if self.CreateBase(Parent=oParent,Class=cLabel):
             self.oParent.add_widget(self.oObject)
+            self.oObject.bind(on_q_release=self.On_Button_Up)
+            self.oObject.bind(on_q_press=self.On_Button_Down)
+            self.oObject.bind(on_gesture=self.On_Gesture)
             return True
         return False

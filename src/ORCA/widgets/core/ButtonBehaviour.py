@@ -38,9 +38,9 @@ import ORCA.Globals as Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from kivy.uix.widget import Widget
-    from ORCA.widgets.Base import cWidgetBase
-    from ORCA.Action import cAction
+    from kivy.uix.widget        import Widget
+    from ORCA.widgets.base.Base import cWidgetBase
+    from ORCA.Action            import cAction
 else:
     from typing import TypeVar
     Widget  = TypeVar("Widget")
@@ -249,7 +249,7 @@ class cOrcaButtonBehaviour:
                     x2, y2 = self.parent.to_local(touch.x, touch.y)
                     return self.collide_point(x2, y2)
                 else:
-                    if self.oOrcaWidget.bEnabled:
+                    if self.oOrcaWidget.bIsEnabled:
                         return self.collide_point(*touch.pos)
                     else:
                         return False

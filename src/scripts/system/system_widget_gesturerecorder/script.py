@@ -34,7 +34,7 @@ from kivy.graphics                          import Line
 
 from ORCA.widgets.core.TouchRectangle       import cTouchRectangle
 from ORCA.widgets.core.ButtonBehaviour      import simplegesture
-from ORCA.widgets.Base                      import cWidgetBase
+from ORCA.widgets.base.Base                 import cWidgetBase
 from ORCA.ScreenPage                        import cScreenPage
 
 import ORCA.Globals as Globals
@@ -68,7 +68,7 @@ import ORCA.Globals as Globals
 class cGestureBoard(cTouchRectangle):
     """ base class for recording gestures """
     def __init__(self, **kwargs):
-        super(cGestureBoard, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.gdb:GestureDatabase = GestureDatabase()
 
     def on_touch_down(self, touch) -> bool:
@@ -145,7 +145,7 @@ class cWidgetGestureRecorder(cWidgetBase):
     """
 
     def __init__(self, **kwargs):
-        super(cWidgetGestureRecorder, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """

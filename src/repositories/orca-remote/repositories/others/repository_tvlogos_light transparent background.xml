@@ -12,7 +12,7 @@
         <source>
           <local>$var(RESOURCEPATH)/tvlogos/light.on.transparent</local>
           <sourcefile>$var(REPOSITORYWWWPATH)/others/tvlogos_light.on.transparent.zip</sourcefile>
-          <targetpath>resources/tvlogos/light.on.transparent</targetpath>
+          <targetpath>resources/tvlogos</targetpath>
         </source>
       </sources>
     </entry>
