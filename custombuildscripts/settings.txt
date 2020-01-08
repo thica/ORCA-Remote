@@ -1,0 +1,32 @@
+BUILD_ANDROID=0
+BUILD_WINDOWS=0
+BUILD_OSX=0
+BUILD_IOS=0
+BUILD_DEBIAN=1
+UPLOAD_AS_ARTIFACT=1
+# For those builds without buildozer
+#KIVY_VERSION=1.11.0
+KIVY_VERSION=1.11.1
+
+USE_GSTREAMER=1
+
+# Android Specific
+
+# eiher debug or release
+ANDROID_RELEASE=release
+# not used by now
+ANDROID_APP_APK_NAME=MyAndroidApp.apk
+# not used by now
+ANDROID_APP_NAME=MyApp
+# For the keystore definiton
+ANDROID_KEYSTORE_CN=myapp.test.org
+ANDROID_KEYSTORE_OU=Private
+ANDROID_KEYSTORE_O=Private
+ANDROID_KEYSTORE_L=Myname
+ANDROID_KEYSTORE_S=Myname
+ANDROID_KEYSTORE_C=Germany
+
+# OSX Specific
+
+# eiher debug or release
+OSX_RELEASE=debug

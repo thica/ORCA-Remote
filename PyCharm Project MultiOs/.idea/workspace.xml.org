@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5bf5c066-c0b1-4dd1-956f-2f6902123d11" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Border.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/widgets/base/BaseAction.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/widgets/base/BaseBase.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/widgets/base/BaseText.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/widgets/base/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_UNRAID.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/interfaces/android_adb/example_outputs.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ORCA.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ORCA.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PyCharm Project MultiOs.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PyCharm Project MultiOs.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/CTHIELEP.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/CTHIELEP.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Action.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Actions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/App.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/App.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/BaseSettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/BaseSettings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Events.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Events.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Queue.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Queue.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Screen.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Screen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ScreenPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ScreenPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ScreenPages.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ScreenPages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Screen_Init.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Screen_Init.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Skin.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Skin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/FlowControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/FlowControl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/WidgetControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/WidgetControl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/definition/Definition.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/definition/Definition.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/definition/DefinitionPathes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/definition/DefinitionPathes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/interfaces/BaseInterface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/interfaces/BaseInterface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/scripts/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/scripts/Scripts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ui/ShowErrorPopUp.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ui/ShowErrorPopUp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/FileName.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/FileName.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Anchor.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Anchor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/BackGround.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/BackGround.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/base/Base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Button.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Circle.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Circle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/ColorPicker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/ColorPicker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/DropDown.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/DropDown.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/FileBrowser.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/FileBrowser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/FileViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/FileViewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/GeoClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/GeoClass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Knob.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Knob.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Picture.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Picture.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Rectangle.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Rectangle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/ScrollContainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/ScrollContainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Slider.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Slider.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Switch.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Switch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/TextField.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/TextField.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/TextInput.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/TextInput.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Video.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Video.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/Border.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/Border.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/ButtonBehaviour.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/ButtonBehaviour.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/helper/WidgetType.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/helper/WidgetType.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/android_adb/CODESET_android_adb_DEFAULT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/android_adb/CODESET_android_adb_DEFAULT.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/appfavorites_template/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/appfavorites_template/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/mediaplayer_template/actions/customactions.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/mediaplayer_template/actions/customactions.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/shared_documents/elements/skin_default/block_mediacircle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/shared_documents/elements/skin_default/block_mediacircle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/showcase/elements/skin_default/pages/page_pictures.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/showcase/elements/skin_default/pages/page_pictures.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/android_adb/adb_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/android_adb/adb_helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/system/system_widget_gesturerecorder/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/system/system_widget_gesturerecorder/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/system/system_widget_itach2keene/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/system/system_widget_itach2keene/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_irdbitach/IRDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_irdbitach/IRDB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/skins/ORCA_silver_hires/skin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/skins/ORCA_silver_hires/skin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wikidoc/pages/develop_interfaces/skins.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wikidoc/pages/develop_interfaces/skins.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/nvidia shield tv/definitionsettings/settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/nvidia shield tv/definitionsettings/settings.xml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1VIxKyYSy7S2Hgi28mrI7lJLftm" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5bf5c066-c0b1-4dd1-956f-2f6902123d11" name="Default Changelist" comment="" />
+      <created>1576954350818</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1576954350818</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576965433679">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.736@0.0.1366.736" timestamp="1576965433679" />
+    <state x="172" y="3" key="SettingsEditor" timestamp="1576965391184">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="172" y="3" key="SettingsEditor/0.0.1366.736@0.0.1366.736" timestamp="1576965391184" />
+    <state x="339" y="195" key="com.intellij.ide.util.TipDialog" timestamp="1576964102506">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="339" y="195" key="com.intellij.ide.util.TipDialog/0.0.1366.736@0.0.1366.736" timestamp="1576964102506" />
+  </component>
+</project>

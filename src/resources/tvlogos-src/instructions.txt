@@ -1,0 +1,20 @@
+source:
+Website: https://www.picons.eu/
+
+Use the hardlinks 220x132
+use: 
+
+dark.on.reflection
+light.on.reflection
+light.on.transparent
+
+download
+Extract all to folder resources/tvlogos-src
+
+download:
+srp.index.txt
+copy to resources
+ 
+
+
+

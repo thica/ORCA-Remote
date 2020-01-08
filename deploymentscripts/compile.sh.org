@@ -1,0 +1,8 @@
+#!/bin/bash
+# mount -t vboxsf ORCA /mnt/ORCA
+
+cd ~
+source buildozer-env/bin/activate
+/mnt/ORCA/Development/ORCA/Master/deploymentscripts/createandroidpackage_orca.sh
+
+
