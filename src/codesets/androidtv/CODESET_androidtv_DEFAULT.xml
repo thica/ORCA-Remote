@@ -8,9 +8,9 @@
       <description language='English'>Default commandset for AndroidTV by AndroidTV API</description>
       <description language='German'>Standard Kommandos für Android über AndroidTV API</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.0</version>
+      <version>4.6.4</version>
       <skip>1</skip>
-      <minorcaversion>4.6.0</minorcaversion>
+      <minorcaversion>4.6.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/android_adb/CODESET_androidtv_DEFAULT.xml</local>

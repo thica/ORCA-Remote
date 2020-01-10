@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2019  Carsten Thielepape
+    Copyright (C) 2013-2020  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -109,7 +109,7 @@ class ORCA_App(App):
         App.__init__(self)
 
         # Don't Move or change
-        self.sVersion="4.6.3"
+        self.sVersion="4.6.4"
         self.sBranch="Dublin"
 
         #todo: Remove in release

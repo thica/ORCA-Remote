@@ -7,8 +7,8 @@
             <description language="English">PANASONIC TV command set using IR</description>
             <description language="German">PANASONIC TV Befehls Satz über IR</description>
             <author>Carsten Thielepape</author>
-            <version>4.6.0</version>
-            <minorcaversion>4.6.0</minorcaversion>
+            <version>4.6.4</version>
+            <minorcaversion>4.6.4</minorcaversion>
             <sources>
                 <source>
                     <local>$var(APPLICATIONPATH)/codesets/infrared_ccf/CODESET_infrared_ccf_PANASONIC TV N2QAYB000181.xml</local>

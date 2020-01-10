@@ -6,8 +6,8 @@
       <description language='English'>TV Logos Light on transparent background (50 MB!)</description>
       <description language='German'>TV Logos Hell auf transparentem Hintergrund  (50 MB!)</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.0</version>
-      <minorcaversion>4.6.0</minorcaversion>
+      <version>4.6.4</version>
+      <minorcaversion>4.6.4</minorcaversion>
       <sources>
         <source>
           <local>$var(RESOURCEPATH)/tvlogos/light.on.transparent</local>

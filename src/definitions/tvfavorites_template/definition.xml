@@ -7,7 +7,7 @@
     <fontsize_button>%h30</fontsize_button>
     <fontsize_text>%h30</fontsize_text>
     <author>Carsten Thielepape</author>
-    <version>4.6.0</version>
+    <version>4.6.4</version>
     <support>http://www.orca-remote.org/forum/</support>
     <definitionvars>{"definition_alias_tvfavorites_template":"TV Channels"}</definitionvars>
   </def_parameter>
@@ -376,8 +376,8 @@
       <description language='English'>Standard TV Template for channels, not for direct use</description>
       <description language='German'>Standrad TV Template für Kanäle, nicht direkt verwenden</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.0</version>
-      <minorcaversion>4.6.0</minorcaversion>
+      <version>4.6.4</version>
+      <minorcaversion>4.6.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/tvfavorites_template</local>

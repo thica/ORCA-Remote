@@ -6,7 +6,7 @@ WikiDoc:TOCTitle:fhem example
 
 = FHEM Example =
 
-The fhem example definition is more a showcase haow to intercat with a FHEM home automatisation server , rather than a ready to use definition. It defines 4 swiches and for dimmer slider and two group switches
+The fhem example definition is more a showcase how to interact with a FHEM home automatisation server , rather than a ready to use definition. It defines 4 swiches and for dimmer slider and two group switches
 
 [[File:fhem example main.png|link=]]
 
@@ -61,7 +61,7 @@ WikiDoc:TOCTitle:fhem example
 
 = Overview =
 
-The fhem example definition is more a showcase haow to intercat with a FHEM home automatisation server , rather than a ready to use definition. It defines 4 swiches and for dimmer slider and two group switches
+The fhem example definition is more a showcase how to interact with a FHEM home automatisation server , rather than a ready to use definition. It defines 4 swiches and for dimmer slider and two group switches
 
 = definitionvars =
 

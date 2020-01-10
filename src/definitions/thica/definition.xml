@@ -558,8 +558,8 @@
       <description language='English'>Personal definition from the developer, good to see, how ORCA is fully utilized</description>
       <description language='German'>Persönliche Definition des Enwicklers, hilfreich um zu sehen, wie ORCA genutzt wird</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.0</version>
-      <minorcaversion>4.6.0</minorcaversion>
+      <version>4.6.4</version>
+      <minorcaversion>4.6.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/thica</local>

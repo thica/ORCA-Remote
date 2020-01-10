@@ -6,8 +6,8 @@
       <description language='English'>Enigma2 DVB Control by Webinterface (for mediaplayer template)</description>
       <description language='German'>Enigma2 DVB Kontrolle über das Webinterface  (Für Mediaplayer Template)</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.0</version>
-      <minorcaversion>4.6.0</minorcaversion>
+      <version>4.6.4</version>
+      <minorcaversion>4.6.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/enigma2</local>

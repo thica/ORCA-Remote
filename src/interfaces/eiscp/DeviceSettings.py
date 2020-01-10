@@ -273,7 +273,7 @@ class cDeviceSettings:
             if oXMLControlList is not None:
                 for oControlElement in oXMLControlList:
                     uID = GetXMLTextAttribute(oControlElement, 'id', False, u'')
-                    print (uID)
+                    # print (uID)
                     if uID == "Bass":
                         uZone = GetXMLTextAttribute(oControlElement, 'zone', False, u'')
                         if uZone == "1":

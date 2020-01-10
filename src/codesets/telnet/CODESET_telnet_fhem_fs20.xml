@@ -10,8 +10,8 @@
       <description language='English'>Command set to send FS20 Commands to FHEM using telnet</description>
       <description language='German'>Befehlssatz für FS20 Befehle an FHEM über Telnet</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.0</version>
-      <minorcaversion>4.6.0</minorcaversion>
+      <version>4.6.4</version>
+      <minorcaversion>4.6.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/telnet/CODESET_telnet_fhem_fs20.xml</local>

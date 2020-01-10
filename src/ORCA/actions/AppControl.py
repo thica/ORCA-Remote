@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2019  Carsten Thielepape
+    Copyright (C) 2013-2020  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -158,6 +158,29 @@ class cEventActionsAppControl(cEventActionBase):
         Globals.oTheScreen.BlockGui(ToBool(ReplaceVars(oAction.dActionPars.get("status", "0"))))
         return eReturnCode.Nothing
 
+    def ExecuteActionResumeApp(self,oAction:cAction) -> eReturnCode:
+        """
+        WikiDoc:Doc
+        WikiDoc:Context:ActionsDetails
+        WikiDoc:Page:Actions-ResumeApp
+        WikiDoc:TOCTitle:resumeapp
+
+        = resumeapp =
+        This helper function enable to resume the app, in case thhis event is not fired or is missed by the sstem
+        This action will not modify the error code
+
+        <div style="overflow:auto; ">
+        {| border=1 class="wikitable"
+        ! align="left" | string
+        |-
+        |resumeapp
+        |}</div>
+        WikiDoc:End
+        """
+        self.oEventDispatcher.LogAction(u'ResumeApp',oAction)
+        Globals.oApp.on_resume()
+        return eReturnCode.Nothing
+
     def ExecuteActionNoAction(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc
@@ -221,12 +244,14 @@ class cEventActionsAppControl(cEventActionBase):
         ! align="left" | interval
         ! align="left" | switch
         ! align="left" | actionname
+        ! align="left" | doonpause
         |-
         |definetimer
         |Timer Name (Mandantory)
         |Time Interval in seconds
         |on / off : on to enable/set a timer, off to remove the timer
         |Action to execute by the timer
+        |Execute the timer, even if the device is on sleep
         |}</div>
 
         If you want to change a timer, ou need to remove the timer and add it with the new settings
@@ -239,10 +264,11 @@ class cEventActionsAppControl(cEventActionBase):
         uInterval:str      = ReplaceVars(oAction.dActionPars.get("interval",""))
         uSwitch:str        = ReplaceVars(oAction.dActionPars.get("switch",""))
         uActionName:str    = ReplaceVars(oAction.dActionPars.get("actionname",""))
+        bDoOnPause:bool    = ToBool(ReplaceVars(oAction.dActionPars.get("doonpause","0")))
 
         if uSwitch==u'on':
             if not self.oEventDispatcher.oAllTimer.HasTimer(uTimerName):
-                oCustomTimer:cCustomTimer = cCustomTimer( uTimerName, uActionName,ToFloat(uInterval))
+                oCustomTimer:cCustomTimer = cCustomTimer(uTimerName=uTimerName,uActionName=uActionName,fTimerIntervall=ToFloat(uInterval),bDoOnPause=bDoOnPause)
                 self.oEventDispatcher.oAllTimer.AddTimer(uTimerName,oCustomTimer)
                 oCustomTimer.StartTimer()
                 return eReturnCode.Success

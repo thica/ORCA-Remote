@@ -6,8 +6,8 @@
             <description language='English'>LAN KODI Remote Control (using JSON/Websocket) (for mediaplayer template)</description>
             <description language='German'>LAN KODI Fernbedienung (verwendet JSON/Websocket) (Für Mediaplayer Template)</description>
             <author>Carsten Thielepape</author>
-            <version>4.6.0</version>
-            <minorcaversion>4.6.0</minorcaversion>
+            <version>4.6.4</version>
+            <minorcaversion>4.6.4</minorcaversion>
             <sources>
                 <source>
                     <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/kodi</local>

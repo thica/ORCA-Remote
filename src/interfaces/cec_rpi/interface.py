@@ -2,7 +2,7 @@
 # cec_rpi
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2019  Carsten Thielepape
+    Copyright (C) 2013-2020  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify

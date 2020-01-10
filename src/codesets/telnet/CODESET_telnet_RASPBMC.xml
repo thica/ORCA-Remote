@@ -10,8 +10,8 @@ cmd = command to send, -->
       <description language='English'>Power off / Reboot commands for Raspbmc using Telnet</description>
       <description language='German'>Power off / Reboot Befehle für Raspbmc über Telnet</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.0</version>
-      <minorcaversion>4.6.0</minorcaversion>
+      <version>4.6.4</version>
+      <minorcaversion>4.6.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/telnet/CODESET_telnet_RASPBMC.xml</local>

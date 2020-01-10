@@ -9,8 +9,8 @@
       <description language='English'>LAN Control for Sharp Aquos TVs (european models)</description>
       <description language='German'>LAN Steuerung für Sharp Aquos TVs (europäische Modelle)</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.0</version>
-      <minorcaversion>4.6.0</minorcaversion>
+      <version>4.6.4</version>
+      <minorcaversion>4.6.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_AQUOS.xml</local>

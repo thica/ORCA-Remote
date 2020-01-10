@@ -1,0 +1,12 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Templates
+WikiDoc:Page:Mediaplayer Template
+WikiDoc:TOCTitle:mediaplayer_template
+= mediaplayer_template =
+The mediaplayer template is a powerful template for for devices who can get controlled a mediaplayer, like TVs, cd-player, streaming boxes, ..
+
+Details to follow.
+
+WikiDoc:End
+'''

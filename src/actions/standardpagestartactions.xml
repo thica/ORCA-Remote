@@ -37,8 +37,6 @@
 
     <!-- Timer for the clock -->
     <action name="update page clocks" string="definetimer" timername="UpdatePageTimer" interval="1" switch="on" actionname="Update Page Clocks"/>
-    <!-- Timer for the resume cecker -->
-    <action name="check resume timer" string="definetimer" timername="CheckOnSleepTimer" interval="2" switch="on" actionname="checkonsleep"/>
 
     <!-- If ESC on First page , asked to finish app -->
     <action name="ESC Key Handler QuitApp" string="registernotification" filterpagename="FIRSTPAGE" notification="on_key_ESC" notifyaction="askonexit"/>

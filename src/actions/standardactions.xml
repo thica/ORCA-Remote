@@ -100,6 +100,7 @@
   <action name="Send Favorite PGDN" string="sendcommand favorite pgdn" />
   <action name="Send Favorite Next" string="sendcommand favorite next" />
   <action name="Send Favorite Prev" string="sendcommand favorite prev" />
+  <action name="Get Favorites" string="sendcommand getfavorites" />
 
   <action name="Send AVMode" string="sendcommand avmode" />
   <action name="Send Audiochannel Select" string="sendcommand audiochannel_select" />
@@ -295,20 +296,27 @@
 
   <action name="on_pause">
     <action name="If not already on pause" string="if $var(ONPAUSE)!=TRUE" />
+      <!-- Timer for the resume checker -->
+      <action name="start check resume timer" string="definetimer" timername="CheckOnSleepTimer" interval="2" switch="on" actionname="checkonsleep" doonpause="1"/>
       <action name="Initialize Value" string="setvar ONPAUSE=TRUE" />
       <action name="Safe Current Page Name (On Pause)" string="setvar TMPPAGENAME=$var(CURRENTPAGE)" condition="$var(CURRENTPAGE)!=Page_Wait" />
       <action name="show wait (On Pause)" string="showpage Page_Wait"  condition="$var(CURRENTPAGE)!=Page_Wait" />
       <action name="OnPause_WaitLoop" string="noaction" />
-        <action name="wait" string="wait 200"  />
+        <action name="wait" string="wait 2000"  />
         <action name="break loop" string="setvar ONPAUSE=FALSE" condition="$var(CURRENTPAGE)!=Page_Wait"/>
       <action name="loop" string="goto OnPause_WaitLoop" condition="$var(ONPAUSE)==TRUE" />
+      <action name="resume check resume timer" string="definetimer" timername="CheckOnSleepTimer" switch="off" />
       <action name="In case the loop has been interrupted by ESC" string="setvar ONPAUSE=FALSE"/>
       <action name="Wait For Connectivity" string="waitforconnectivity" />
       <action name="Remove Wait Page (on Resume)" string="showpage $var(TMPPAGENAME)"  condition="$var(TMPPAGENAME)!=Page_Wait" />
       <action name="if date has changed (on Resume)" string="call Update Page Dates"   />
     <action name="endif" string="endif" />
-
   </action>
+
+  <action name="checkonsleep">
+    <action name="resume App" string="resumeapp" condition="$var(ONPAUSE)==TRUE"/>
+  </action>
+
   <action name="on_resume">
     <action name="Stop Loop" string="setvar ONPAUSE=FALSE" force="1"/>
   </action>

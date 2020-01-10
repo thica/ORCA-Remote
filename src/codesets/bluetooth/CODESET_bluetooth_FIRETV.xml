@@ -8,8 +8,8 @@
       <description language='English'>FireTV commandset for Bluetooth (WIP), not working</description>
       <description language='German'>FireTV Kommandos für Bluetooth (WIP), not working</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.0</version>
-      <minorcaversion>4.6.0</minorcaversion>
+      <version>4.6.4</version>
+      <minorcaversion>4.6.4</minorcaversion>
       <skip>1</skip>
       <sources>
         <source>
