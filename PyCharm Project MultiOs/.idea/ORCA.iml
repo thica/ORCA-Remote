@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
     <content url="file://$MODULE_DIR$/../custombuildscripts" />
+    <content url="file://$MODULE_DIR$/../docs" />
     <content url="file://$MODULE_DIR$/../src">
       <sourceFolder url="file://$MODULE_DIR$/../src" isTestSource="false" />
     </content>
