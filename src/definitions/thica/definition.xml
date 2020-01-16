@@ -510,7 +510,7 @@
     <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdaction[11]"                  default='Send Restart KODI1'   />
     <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdparameter[11]"               default="" />
     <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdname[12]"                    default='$lvar(thica_10002)' />
-    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdaction[12]"                  default='Send Reboot'  />
+    <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdaction[12]"                  default='Send Reboot HTPC1'  />
     <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdparameter[12]"               default="" />
     <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdname[13]"                    default='TV Commands' />
     <default var="$dvar(definition_alias_cmdfavorites_kodi1)_cmdaction[13]"                  default='Show Page'  />

@@ -6,25 +6,28 @@ Create a windows 10 image
 
 Create some subfolders which points to some ORCA folder
 * c:\media\Master
-* c:\/media\snapshots
-* c\media\secrets
+* c:\media\snapshots
+* c:\media\secrets
+* c:\media\upload
 
 For my setup:
 
 mklink /D c:\media\Master \\VBoxsvr\CTPrivat\Orca\Development\ORCA\Master
 mklink /D c:\media\snapshots \\VBoxsvr\CTPrivat\Orca\Development\snapshots
 mklink /D c:\media\secrets \\VBoxsvr\CTPrivat\Orca\Development\secrets
+mklink /D c:\media\upload \\VBoxsvr\CTPrivat\Orca\Development\ORCA\Deployment
 
 
-* /media/secrets should point to a folder where to store the secrets
+* \media\secrets should point to a folder where to store the secrets
 
 Folder contents:
-/media/Master:
+\media\Master:
     should point to the (Github) Master folder of Orca files
-/media/snapshots:
+\media\snapshots:
     should point to a folder to find the buildozer version to use as a zip file
     This is tested for buildozer version
-/media/secrets:
+\media\secrets:
     should point to a folder containing the secrets.txt for passwords, etc
-
+\media\upload:
+    should point to a folder to store the compiled app
 

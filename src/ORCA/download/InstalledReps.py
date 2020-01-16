@@ -21,12 +21,14 @@
 
 __all__ = ['cInstalledReps']
 
+from dataclasses import dataclass
 
+@dataclass
 class cInstalledReps:
     """ A class representing an installed repository"""
-    def __init__(self):
-        self.uType:str    = ''
-        self.uName:str    = ''
-        self.iVersion:int = 0
+    uType:str    = ''
+    uName:str    = ''
+    iVersion:int = 0
+
     def __str__(self) -> str:
         return self.uType

@@ -302,7 +302,7 @@
       <action name="Safe Current Page Name (On Pause)" string="setvar TMPPAGENAME=$var(CURRENTPAGE)" condition="$var(CURRENTPAGE)!=Page_Wait" />
       <action name="show wait (On Pause)" string="showpage Page_Wait"  condition="$var(CURRENTPAGE)!=Page_Wait" />
       <action name="OnPause_WaitLoop" string="noaction" />
-        <action name="wait" string="wait 2000"  />
+        <action name="wait" string="wait 200"  />
         <action name="break loop" string="setvar ONPAUSE=FALSE" condition="$var(CURRENTPAGE)!=Page_Wait"/>
       <action name="loop" string="goto OnPause_WaitLoop" condition="$var(ONPAUSE)==TRUE" />
       <action name="resume check resume timer" string="definetimer" timername="CheckOnSleepTimer" switch="off" />

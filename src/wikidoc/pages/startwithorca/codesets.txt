@@ -1,0 +1,10 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:StartWithOrca
+WikiDoc:Page:listofcodeset
+WikiDoc:TOCTitle:10=Pre defined codesets
+
+WikiDoc:TOC:Codesets:List:sorted
+
+WikiDoc:End
+'''

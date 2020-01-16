@@ -4,6 +4,16 @@ WikiDoc:Context:StartWithOrca
 WikiDoc:Page:listofdefinitions
 WikiDoc:TOCTitle:8=Pre defined definitions
 
+Orca has a set of pre defined definitions. A definition is a combination of screen layout, functions, interfaces, commands/codesets and settings.
+You can a see a definition as a remote control. A definition can include further definitions to compile a set of remotes.
+Usually you can configure some options within an definition, so if so, there is a section for each definition in the settings dialog of ORCA
+There are some definitions, which don't work stand alone, their purpose is to get included as a functionality extension for other definitions. They usually ends with "_template in the name.
+
+A special one is the "mediaplayer_wizard". This definition pushes settings in a definition called mediaplayer_settings and runs this definition.
+There are a lot of templates available for the mediaplayer_wizard, so please have a look there to find further pre defined definitions
+
+Below you see list of pre defined definitions
+
 WikiDoc:TOC:DefinitionsForUser:List:sorted
 
 WikiDoc:End

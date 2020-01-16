@@ -219,7 +219,7 @@ def Orca_include(oElem, pLoader: Callable,uFileName:str = "Unknown Filename")-> 
     uAlias = oElem.get('definitionalias')
     oDef = None
     if uAlias is not None:
-        oDef = Globals.oDefinitions.dDefinitionList_Dict[uAlias]
+        oDef = Globals.oDefinitions[uAlias]
 
     Orca_includesub(oElem, pLoader,Globals.uDefinitionContext,oDef,uFileName)
     RestoreDefinitionContext()

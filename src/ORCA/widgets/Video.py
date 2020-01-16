@@ -132,7 +132,7 @@ class cWidgetVideo(cWidgetBase):
         """ Normalizes the stream name """
         if not uStream.startswith('rtsp') and uStream.startswith('http'):
             uStream  = (cFileName(u'').ImportFullPath(uStream)).string
-        if Globals.uPlatform!='win':
+        if Globals.uPlatform!='win' and Globals.uPlatform!="linux":
             # prevent bug in ffmpeg (Android) not able to deal with unicode strings
             # todo: check with later kivy/ffmpeg versions
             uStream=uStream.encode('utf8')

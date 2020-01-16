@@ -327,7 +327,7 @@ class cBaseInterFaceSettings(cBaseSettings):
         oTrigger.uGlobalDestVar             = uRetVar
         oTrigger.uLocalDestVar              = uRetVar
 
-        # If we link to a codsetcode setting
+        # If we link to a codesetcode setting
         '''
         if uGetVar.startswith(u'codesetcode:'):
             uActionName = self.MakeLocalActionName(uGetVar[12:])

@@ -2,7 +2,7 @@
 WikiDoc:Doc
 WikiDoc:Context:StartWithOrca
 WikiDoc:Page:The setup dialog
-WikiDoc:TOCTitle:8=The setup dialog
+WikiDoc:TOCTitle:11=The setup dialog
 
 Configuration of ORCA settings will be done by the settings dialog. As default there should be a button in your Definiton to call the settings dialog.
 

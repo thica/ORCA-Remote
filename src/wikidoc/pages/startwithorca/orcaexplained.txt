@@ -32,7 +32,7 @@ WikiDoc:TOCTitle:1=ORCA explained
 ** Limited layout and design capabilities
 ** No support for macros / linked actions
 * Orca is designed to overcome these limitations
-* But: Unlimited options increases complexibity. Ready made remote definitions are available, but to change / create remotes ORCA will target experienced IT users and integrators. Designers and wizards are planned for a second phase
+* But: Unlimited options increases complexity. Ready made remote definitions are available, but to change / create remotes ORCA will target experienced IT users and integrators. Designers and wizards are planned for a second phase
 
 =Design=
 * ORCA is based an Kivy, a portable framework for Android, Windows, Apple and Linux

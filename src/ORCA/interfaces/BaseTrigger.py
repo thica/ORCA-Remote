@@ -18,20 +18,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from dataclasses import dataclass
+
 __all__ = ['cBaseTrigger']
 
-
+@dataclass
 class cBaseTrigger:
     """ a trigger representation """
-    def __init__(self):
-        self.uTriggerAction:str             = u''
-        self.uTriggerName:str               = u''
-        self.uGetVar:str                    = u''
-        self.uRetVar:str                    = u''
-
-        self.uGlobalDestVar:str             = u''
-        self.uLocalDestVar:str              = u''
-
-        # just to have them defined, no usage
-        self.uCmd:str                       = u''
+    uTriggerAction:str             = u''
+    uTriggerName:str               = u''
+    uGetVar:str                    = u''
+    uRetVar:str                    = u''
+    uGlobalDestVar:str             = u''
+    uLocalDestVar:str              = u''
+    # just to have them defined, no usage
+    uCmd:str                       = u''
 

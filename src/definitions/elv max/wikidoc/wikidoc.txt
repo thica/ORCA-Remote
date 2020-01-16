@@ -7,14 +7,14 @@ WikiDoc:TOCTitle:elv max
 = ELV Max =
 
 The ELV MAX definition control radiator thermostats from ELV and IQ3. It uses the cube it transfer commands to the thermostats.
-Remark: Vacation mode is not supportet (Date / Time Picker Widget not available by now)
+Remark: Vacation mode is not supported (Date / Time Picker Widget not available by now)
 Remark: Return of current temperature is not reliable, no clue, why (but it looks like a cube bug).
 
 Key features:
 * Works for large screen sizes and all orientations
 * Customizable minimum and maximum temperatures
 * Display current temperature, where available
-* Quick Set buttons for eco, target, current and comfort temperatures
+* Quick set buttons for eco, target, current and comfort temperatures
 * Autodiscover the cube
 * No logon required
 

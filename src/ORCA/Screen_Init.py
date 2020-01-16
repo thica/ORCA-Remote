@@ -237,7 +237,8 @@ class cTheScreenWithInit(cTheScreen):
         #Get Definition Wide Setting
         oRef             = oET_Root.find('def_parameter')
 
-        for oListDef in Globals.oDefinitions:
+        for uListDefName in Globals.oDefinitions:
+            oListDef = Globals.oDefinitions[uListDefName]
             oListDef.iDefMaxX           = GetXMLIntValue(oRef,u'maxx',True,1)
             oListDef.iDefMaxY           = GetXMLIntValue(oRef,u'maxy',True,1)
             oListDef.uOrientations      = GetXMLTextValue(oRef,u'orientations',False,'landscape')
@@ -251,7 +252,8 @@ class cTheScreenWithInit(cTheScreen):
 
         #check if we need to swap x/y
         if Globals.uDeviceOrientation in oDef.uOrientations:
-            for oListDef in Globals.oDefinitions:
+            for uListDefName in Globals.oDefinitions:
+                oListDef = Globals.oDefinitions[uListDefName]
                 uDefinitionDefaultOrientation = 'landscape'
                 if oListDef.iDefMaxX<oListDef.iDefMaxY:
                     uDefinitionDefaultOrientation='portrait'
@@ -289,7 +291,8 @@ class cTheScreenWithInit(cTheScreen):
 
         oDef:cDefinition
         fRatio:float
-        for oDef in Globals.oDefinitions:
+        for uDefName in Globals.oDefinitions:
+            oDef = Globals.oDefinitions[uDefName]
             fRatio=float(float(Globals.iAppWidth)/float(Globals.iAppHeight))/float(float(oDef.iDefMaxX)/float(oDef.iDefMaxY))
             if fRatio<1:
                 oDef.fRationX           = float(oDef.iDefMaxX)/float(Globals.iAppWidth)

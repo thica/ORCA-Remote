@@ -2,6 +2,8 @@
 <!-- Translates Orca Actions to Interface Commands action = Orca Action String -->
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
+  <!--
+
   <repositorymanager>
     <entry>
       <name>Android adb Fire TV</name>
@@ -26,6 +28,18 @@
     </entry>
   </repositorymanager>
 
+  WikiDoc:Doc
+  WikiDoc:Context:Codesets
+  WikiDoc:Page:Userdescription codeset Android_adb_FIRETV
+  WikiDoc:TOCTitle:android_adb_FIRETV
+
+  = Android FireTV =
+
+  This codeset defines some commands, which are on Amazons FireTV different to the Android standard
+  WikiDoc:End
+
+
+   -->
    <xi:include href="$var(CODESETPATH)/android_adb/CODESET_android_adb_DEFAULT.xml" parse="xml" />
 
  <!-- Different codes on FireTV -->
@@ -39,7 +53,6 @@
   <action name='play' waitforresponse='0' type="alias"  cmd='pause_toggle' />
   <action name='stop' waitforresponse='0' type="alias"  cmd='exit' />
   <action name='esc' waitforresponse='0' type="alias"  cmd='exit' />
-
 
   <!-- FireTV does not support direct powerdown-->
   <action name='power_on'         type="alias"  cmd='power_toggle'  />

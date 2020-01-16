@@ -106,6 +106,11 @@ class cWidgetBaseBase:
     oParent:Union[Widget, None]                = property(lambda self: self._oParent,           lambda self, value: setattr(self, '_oParent',value))
     oParentScreenPage:Union[cScreenPage, None] = property(lambda self: self._oParentScreenPage, lambda self, value: setattr(self, '_oParentScreenPage',value))
 
+    # as we can use most widgets as Anchors, we need to have interface and config generic
+    uConfigName:str          = property(lambda self: self._uConfigName,      lambda self, value: setattr(self, '_uConfigName',value))
+    uInterFace:str           = property(lambda self: self._uInterFace,       lambda self, value: setattr(self, '_uInterFace',value))
+
+
     def ParseXMLBaseNode (self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         return True
     def CreateBase(self,Parent:Widget,Class:Union[Callable,str]) -> bool:

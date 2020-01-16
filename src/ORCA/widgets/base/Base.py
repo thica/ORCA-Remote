@@ -222,7 +222,7 @@ class cWidgetBase(cWidgetBaseBase):
             uAlias                  = oXMLNode.get('definitionalias')
             oDef                    = None
             if uAlias is not None:
-                oDef = Globals.oDefinitions.dDefinitionList_Dict[uAlias]
+                oDef = Globals.oDefinitions[uAlias]
 
             self.oDef               = oDef
             self.uDefinitionContext = uDefinitionContext
@@ -279,6 +279,9 @@ class cWidgetBase(cWidgetBaseBase):
 
             uPosX:str               = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'posx', False, u'left'))
             self.iPosX              = self.CalculatePosX(uPosX)
+
+            self.uInterFace         = GetXMLTextAttribute(oXMLNode,u'interface',False,u'')
+            self.uConfigName        = GetXMLTextAttribute(oXMLNode,u'configname',False,u'')
 
             if not hasattr(self,'bIsDropButton'):
                 oLastWidget = self

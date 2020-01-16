@@ -2,6 +2,7 @@
 <!-- Translates Orca Actions to Interface Commands action = Orca Action String -->
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
+  <!--
   <repositorymanager>
     <entry>
       <name>ELV Max</name>
@@ -25,6 +26,21 @@
       </dependencies>
     </entry>
   </repositorymanager>
+
+
+  WikiDoc:Doc
+  WikiDoc:Context:Codesets
+  WikiDoc:Page:Userdescription codeset elv_max
+  WikiDoc:TOCTitle:elv_max (ELV/EQ3)
+
+  = ELV / EQ3 Max! =
+
+  This codeset defines the available commands for controlling the cube to control the ELV/EQ3 heating system.
+
+  * Special Commands: The clearcache must be used after changes send to the heating system to get updated values
+
+  WikiDoc:End
+  -->
 
   <action string="codeset" name='clearcache'                  cmd='{"method": "clearcache",              "params": {}}'  />
   <action string="codeset" name='getrooms'                    cmd='{"method": "getrooms",                "params": {}}'                       gdestvar='"elvmax_name","elvmax_rfaddress","elvmax_type"'  getvar='ORCAMULTI"name","rf_address","typestring"' />

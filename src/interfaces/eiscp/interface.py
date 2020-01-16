@@ -235,9 +235,11 @@ class cInterface(cBaseInterFace):
 
             try:
                 while len(byData) < iSize:
-                    byPacket = oSocket.recv(iSize - len(byData))
+                    iMissing:int = iSize - len(byData)
+                    byPacket = oSocket.recv(iMissing)
                     if not byPacket:
-                        self.ShowError("Can't get complete response 1")
+                        if len(byData)>0:
+                            self.ShowError("Can't get complete response 1 ({}) ({})".format(iMissing,byData) )
                         return byData
                     byData += byPacket
                 return byData
@@ -296,9 +298,9 @@ class cInterface(cBaseInterFace):
                                 # Default is the last action (That is the command, where we MIGHT get the response from
                                 oTmpAction = self.oAction
                                 if uCommand == self.uMsg[:3]:
-                                    # if we have a respose to the last action, lets store the action for future use
-                                    # in case we got a response without requsting it
-                                    # Not 100% logic, but shoud fit in 99.9 % of the cases
+                                    # if we have a response to the last action, lets store the action for future use
+                                    # in case we got a response without requesting it
+                                    # Not 100% logic, but should fit in 99.9 % of the cases
                                     if oParent.GetTrigger(uCommand) is None:
                                         oParent.dResponseActions[uCommand] = oTmpAction
                                         bHandleSpecialResponse = True
@@ -363,6 +365,10 @@ class cInterface(cBaseInterFace):
 #                               self.uMsg=''
                                 # We do not need to wait for an response anymore
                                 StartWait(0)
+                            else:
+                                Logger.warning("Onkyo close request")
+                                oParent.Disconnect()
+                                oParent.Conncet()
                             self.bBusy = False
 
 

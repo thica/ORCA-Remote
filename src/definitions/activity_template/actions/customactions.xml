@@ -63,13 +63,13 @@
         <action name="Create Volume part 2"                                                                                        string="modifyvar" varname="volumetoset" operator="fromvar"  />
         <action name="Create Main InterFaceName #1"                                                                                string="setvar DEVICEMAININTERFACE=$par(forin_value)_INTERFACE_MAIN" />
         <action name="Create Main InterFaceName #2"                                                                                string="modifyvar" varname="DEVICEMAININTERFACE" operator="fromvar"  />
-        <action name="Create Main InterFaceName #1"                                                                                string="setvar DEVICEMAINCONFIGNAME=$par(forin_value)_CONFIGNAME_MAIN" />
-        <action name="Create Main InterFaceName #2"                                                                                string="modifyvar" varname="DEVICEMAINCONFIGNAME" operator="fromvar"  />
+        <action name="Create Main ConfigName #1"                                                                                   string="setvar DEVICEMAINCONFIGNAME=$par(forin_value)_CONFIGNAME_MAIN" />
+        <action name="Create Main ConfigName #2"                                                                                   string="modifyvar" varname="DEVICEMAINCONFIGNAME" operator="fromvar"  />
 
         <action name="Create Volume InterFaceName #1"                                                                              string="setvar DEVICEVOLUMEINTERFACE=$par(forin_value)_INTERFACE_VOLUME" />
         <action name="Create Volume InterFaceName #2"                                                                              string="modifyvar" varname="DEVICEVOLUMEINTERFACE" operator="fromvar"  />
-        <action name="Create Volume InterFaceName #1"                                                                              string="setvar DEVICEVOLUMECONFIGNAME=$par(forin_value)_CONFIGNAME_VOLUME" />
-        <action name="Create Volume InterFaceName #2"                                                                              string="modifyvar" varname="DEVICEVOLUMECONFIGNAME" operator="fromvar"  />
+        <action name="Create Volume ConfigName #1"                                                                                 string="setvar DEVICEVOLUMECONFIGNAME=$par(forin_value)_CONFIGNAME_VOLUME" />
+        <action name="Create Volume ConfigName #2"                                                                                 string="modifyvar" varname="DEVICEVOLUMECONFIGNAME" operator="fromvar"  />
 
         <!--we use a codeset command send by "sendcommand" if its start with "sendcommand",  otherwise we use a standard command-->
         <action name="if we have a input selection"                                                                                string="if $var(inputaction)!=NoAction" />

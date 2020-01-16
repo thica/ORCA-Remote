@@ -2,6 +2,8 @@
 <!-- Translates Orca Actions to Interface Commands action = Orca Action String -->
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
+  <!--
+
   <repositorymanager>
     <entry>
       <name>Android adb Default</name>
@@ -25,6 +27,34 @@
       </dependencies>
     </entry>
   </repositorymanager>
+
+  WikiDoc:Doc
+  WikiDoc:Context:Codesets
+  WikiDoc:Page:Userdescription codeset Android_adb_Default
+  WikiDoc:TOCTitle:android_adb_DEFAULT
+
+  = Android Default =
+
+  This codeset defines the available commands for the android_adb interfaces. These are generic commands. For a full list of commands you have to have a look into the codeset files
+  Remarks: Amazon firetv has some variations, so there is a separate codeset for it
+
+  Key Features: Provides: "power_on", "power_off", "power_toogle", "reboot"
+
+  Special commands:
+  *startapp: This starts an app on the android device. The appname must be given as regex strings to identify the App on the device. This sounds more complicated than it is.
+  The application name has to be provided as a regex string (see below) in the "startapp" parameter
+  some examples:
+  ^(?=.*netflix).*$           :  This will start an app on the android device which has the text "Netflix" in its name
+  ^(?=.*youtube)(?=.*tv).*$   :  This will start an app on the android device which has the text "Youtube" and the text "tv" in its name
+  *closeapp: This stops an app on the android device. Same logic as "startapp", but the application name has to be passed n the "stopapp" argument
+
+  For startapp and closeapp, your android device need to have android version 7.1 or higher
+
+  *startapp_oldapi: ORCA will try to identify the right code to start an app. If this fails, you can still use the fallback and provide the full intent manually
+  *closeapp_oldapi: same as startapp_oldapi
+
+  WikiDoc:End
+  -->
 
   <!-- KEYCODE_DPAD_CENTER /  enter=66-->
   <action string="codeset" name='ok'            waitforresponse='0' cmd='Shell' params="input keyevent 23" />
@@ -51,10 +81,6 @@
   <action name='startapp'>
     <action  string="codeset" name='getapplist_int'    waitforresponse='1' cmd='GetAppList' params="pm list packages -f"/>
     <action  string="codeset" name='getappname_int'    waitforresponse='1' cmd='GetAppName' params="$var(startapp)" ldestvar="appnamereal"  />
-    <action1 string="codeset" name='startapp_int'      waitforresponse='1' cmd='Shell'      params="am start $(cmd package resolve-activity --brief $cvar(appnamereal) | tail -n 1)" />
-    <action1  string="codeset" name='get-intent'        waitforresponse='1' cmd='Shell'      params="pm dump $cvar(appnamereal) | grep -A 1 'MAIN' | grep $cvar(appnamereal) | awk '{print $2}' | grep $cvar(appnamereal)" ldestvar="appintent"/>
-    <action1  string="codeset" name='startapp_byintent' waitforresponse='1' cmd='Shell'      params="am start -n $cvar(appintent)" />
-
     <action  string="codeset" name='dump_app'          waitforresponse='1' cmd='Shell'             params="pm dump $cvar(appnamereal)" ldestvar="appdump" />
     <action  string="codeset" name='get-intent'        waitforresponse='1' cmd='GetAppIntent'      params="$cvar(appnamereal)|||$cvar(appdump)" ldestvar="appintent" />
     <action  string="codeset" name='startapp_byintent' waitforresponse='1' cmd='Shell'      params="am start -a android.intent.action.VIEW -d -n $cvar(appintent)" />
@@ -62,10 +88,7 @@
 
   <action string="codeset" name='startapp_oldapi'      waitforresponse='0' cmd='Shell'  params="am start -n $var(startapp)" />
 
-  adb shell 'am start $(cmd package resolve-activity --brief com.google.android.calculator | tail -n 1)'
-
   <action string="codeset" name='getapplist'      waitforresponse='0' cmd='Shell' params="pm list packages -f" />
-
 
   <action name='closeapp'>
     <action string="codeset" name='getapplist_int'    waitforresponse='0' cmd='GetAppList' params="pm list packages -f"/>
@@ -73,7 +96,7 @@
     <action string="codeset" name='stopapp_int'       waitforresponse='0' cmd='Shell'  params="am force-stop $cvar(appnamereal)" />
   </action>
 
-  <action1 string="codeset" name='closeapp'      waitforresponse='0' cmd='Shell' params="am force-stop $var(stopapp)" />
+  <action string="codeset" name='closeapp_oldapi'      waitforresponse='0' cmd='Shell' params="am force-stop $var(stopapp)" />
 
   <!--  NO ADB Codes
   <action string="codeset" name="repeat_toggle" waitforresponse='0' cmd='Shell'  params="input keyevent 0" />

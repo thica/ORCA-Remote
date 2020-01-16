@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
+  <!--
   <repositorymanager>
     <entry>
       <name>Onkyo EISCP</name>
@@ -24,6 +25,21 @@
       </dependencies>
     </entry>
   </repositorymanager>
+
+
+  WikiDoc:Doc
+  WikiDoc:Context:Codesets
+  WikiDoc:Page:Userdescription codeset eiscp
+  WikiDoc:TOCTitle:eiscp (ONKYO)
+
+  = EISCP (Onkyo) =
+
+  This codeset defines the available commands for controlling Onkyo devices (mainly receivers) by the ISCP protocoll over ethernet (EISCP).
+  The ISCP protocol definition is massive, and all of them are defined within this codeset. but not all of them are linked to standard commands. Have a look into the codeset to find additional commands
+
+  WikiDoc:End
+  -->
+
 
   <!--
       Aliases

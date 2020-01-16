@@ -1,0 +1,12 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:StartWithOrca
+WikiDoc:Page:listofmediaplayertemplates
+WikiDoc:TOCTitle:9=Pre defined mediaplayer templates
+
+
+
+WikiDoc:TOC:MediaplayerTemplatesForUser:List:sorted
+
+WikiDoc:End
+'''

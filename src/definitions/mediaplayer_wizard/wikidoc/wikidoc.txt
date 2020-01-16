@@ -6,8 +6,8 @@ WikiDoc:TOCTitle:mediaplayer_wizard
 
 = Mediaplayer Wizard =
 
-The mediaplayer wizard definition is a helper definition to push mediaplayer wizard templates into the mediaplayer_template definition. This is a convinient way to use predefined settings without the need to create a new definition.
-On first start, you get a selection screen for the wizard templates. Later you can change the wizard templates in the definition settings. You should download the wizard templates befor you start this definition.
+The mediaplayer wizard definition is a helper definition to push mediaplayer wizard templates into the mediaplayer_template definition. This is a convenient way to use predefined settings without the need to create a new definition.
+On first start, you get a selection screen for the wizard templates. Later you can change the wizard templates in the definition settings. You should download the wizard templates before you start this definition.
 
 [[File:mediaplayer_wizard_main.png|link=]]
 

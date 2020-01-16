@@ -22,7 +22,8 @@ from typing import List
 from typing import Dict
 from typing import Union
 from typing import Any
-
+from dataclasses                import dataclass
+from dataclasses                import field
 from kivy.logger                import Logger
 from ORCA.ui.ShowErrorPopUp     import ShowErrorPopUp
 from ORCA.utils.FileName        import cFileName
@@ -35,14 +36,13 @@ import ORCA.Globals as Globals
 
 __all__ = ['cScriptSettingPlugin', 'cScripts']
 
-
+@dataclass
 class cScriptSettingPlugin:
-    def __init__(self):
-        self.uScriptName:str    = u""
-        self.uSettingName:str   = u""
-        self.uSettingPage:str   = u""
-        self.uSettingTitle:str  = u''
-        self.aSettingJson:List = []
+     uScriptName:str    = u""
+     uSettingName:str   = u""
+     uSettingPage:str   = u""
+     uSettingTitle:str  = u""
+     aSettingJson:List = field(default_factory=list)
 
 class cScripts:
     """ container for all scripts """

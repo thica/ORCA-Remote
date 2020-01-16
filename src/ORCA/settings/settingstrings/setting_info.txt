@@ -8,6 +8,6 @@
 {"type": "buttons","title": "$lvar(547)","desc": "$lvar(548)","section": "ORCA","key": "button_show_powerstati","buttons":[{"title":"$lvar(549)","id":"button_show_powerstati"}]},
 {"type": "title","title":"$lvar(652)"},
 {"type": "info","title": "$lvar(587)","section": "ORCA","info":"$var(DEFINITIONVERSION)"},
-{"type": "info","title": "$lvar(588)","section": "ORCA","info":"$var(DEFINITIONAUTOR)"},
+{"type": "info","title": "$lvar(588)","section": "ORCA","info":"$var(DEFINITIONAUTHOR)"},
 {"type": "info","title": "$lvar(589)","section": "ORCA","info":"$var(DEFINITIONSUPPORT)"},
 {"type": "buttons","title": "$lvar(657)","desc": "$lvar(658)","section": "ORCA","key": "button_show_installationhint","buttons":[{"title":"$lvar(659)","id":"button_show_installationhint"}]}]

@@ -52,15 +52,17 @@ def GetSubnetV4() -> str:
                 if uNetiface == uPreferredAdapter:
                     aFound = [dNetDetails]
                     break
+
+        # we prefer a local subnet if given
+        if len(aFound)>0:
+            uRet = aFound[-1]['broadcast']
+
+        for dFound in aFound:
+            if dFound["addr"].startswith("192"):
+                uRet=dFound['broadcast']
+
     except Exception as e:
         Logger.error("Error on GetSubnetV4:"+str(e))
 
-    # we prefer a local subnet if given
-    if len(aFound)>0:
-        uRet = aFound[-1]['broadcast']
-
-    for dFound in aFound:
-        if dFound["addr"].startswith("192"):
-            uRet=dFound['broadcast']
 
     return uRet

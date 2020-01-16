@@ -33,7 +33,7 @@ from kivy.logger                           import FileHandler
 from kivy.logger                           import Logger
 from kivy.metrics                          import Metrics
 from kivy.uix.settings                     import SettingsWithSpinner
-# from kivy.core.window                      import Window
+from kivy.core.window                      import Window
 
 import ORCA.Globals as Globals
 
@@ -167,8 +167,6 @@ class ORCA_App(App):
         OS_GetWindowSize()
         Logger.info(u'Init: ORCA Remote Application started: Version %s (%s):' % (Globals.uVersion, Globals.uPlatform))
 
-        # Globals.oCheckPermissions.Wait()
-
     def build(self):
         """
         Frame work function, which gets called on application start
@@ -179,7 +177,7 @@ class ORCA_App(App):
         """
 
         try:
-            # Window.borderless = True
+            Window.borderless = True
             Globals.oCheckPermissions.Wait()
             kivyConfig.set('graphics', 'kivy_clock', 'interrupt')
             kivyConfig.set('kivy','log_maxfiles','3')

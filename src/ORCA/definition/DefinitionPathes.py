@@ -72,14 +72,14 @@ class cDefinitionPathes:
 
         self.LanguageChange()
 
-        if uDefinitionName in Globals.oDefinitions.dDefinitionList_Dict:
-            if "definition_templatename_mediaplayer_wizard" in Globals.oDefinitions.dDefinitionList_Dict[uDefinitionName].oDefinitionVars:
-                oPathCheck = Globals.oPathWizardTemplates +(Globals.oDefinitions.dDefinitionList_Dict[uDefinitionName].oDefinitionVars["definition_templatename_mediaplayer_wizard"]+"/elements/" +uCheck)
+        if uDefinitionName in Globals.oDefinitions:
+            if "definition_templatename_mediaplayer_wizard" in Globals.oDefinitions[uDefinitionName].oDefinitionVars:
+                oPathCheck = Globals.oPathWizardTemplates +(Globals.oDefinitions[uDefinitionName].oDefinitionVars["definition_templatename_mediaplayer_wizard"]+"/elements/" +uCheck)
                 if oPathCheck.Exists():
                     self.oPathTemplateSkinElements = oPathCheck
                     SetVar("MEDIATEMPLATESKINCONTEXT",uCheck)
                 else:
-                    self.oPathDefinitionSkinElements = Globals.oPathWizardTemplates +(Globals.oDefinitions.dDefinitionList_Dict[uDefinitionName].oDefinitionVars["definition_templatename_mediaplayer_wizard"]+"/elements/" + "skin_default")
+                    self.oPathDefinitionSkinElements = Globals.oPathWizardTemplates +(Globals.oDefinitions[uDefinitionName].oDefinitionVars["definition_templatename_mediaplayer_wizard"]+"/elements/" + "skin_default")
                     SetVar("MEDIATEMPLATESKINCONTEXT", "skin_default")
 
 

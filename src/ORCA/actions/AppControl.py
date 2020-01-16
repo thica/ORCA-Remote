@@ -101,7 +101,8 @@ class cEventActionsAppControl(cEventActionBase):
                 if oDef is not None:
                     DumpDefinitionVars(dArray = oDef.oDefinitionVars, uFilter = uFilter)
             else:
-                for oDef in Globals.oDefinitions:
+                for uDefName in Globals.oDefinitions:
+                    oDef = Globals.oDefinitions[uDefName]
                     Logger.debug("Definition Name: %s / %s / %s" %(oDef.uName, oDef.uAlias, oDef.uDefPublicTitle))
                     DumpDefinitionVars(dArray = oDef.oDefinitionVars, uFilter = uFilter)
 

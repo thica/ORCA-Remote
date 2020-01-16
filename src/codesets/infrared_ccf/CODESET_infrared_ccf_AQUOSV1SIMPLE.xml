@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
+    <!--
     <repositorymanager>
         <entry>
             <name>Aquos IR simple</name>
@@ -32,6 +33,24 @@
             </dependencies>
         </entry>
     </repositorymanager>
+
+    WikiDoc:Doc
+    WikiDoc:Context:Codesets
+    WikiDoc:Page:Userdescription codeset infrared_ccf_AQUOSV1SIMPLE
+    WikiDoc:TOCTitle:infrared_ccf_AQUOSV1SIMPLE
+
+    = CCF AQUOSV1SIMPLE =
+
+    This codeset defines CCF commands as generic infrared commands, which can be used by th iTAch, Keene Kira, and the IR on Android interfaces
+    This codeset defines the available commands for controlling Aquos TVs (European version)
+    This is a very reduced command set for the purpose to switch on(switch off the TV.
+    As the TV does not have a separate on/off command, power_on and power_off leads to power_toggle
+
+    * Special Commands: "power_toggle1" and "power_toggle2" are defined as further variations
+
+    WikiDoc:End
+  -->
+
     <action string="codeset" name="power_toggle1" cmd_ccf="0000 006D 0000 0040 000A 0045 000A 001E 000A 001E 000A 001E 000A 001E 000A 001E 000A 0045 000A 0045 000A 001E 000A 0045 000A 001E 000A 001E 000A 001E 000A 0045 000A 001E 000A 06DE 000A 0045 000A 001E 000A 001E 000A 001E 000A 001E 000A 0045 000A 001E 000A 001E 000A 0045 000A 001E 000A 0045 000A 0045 000A 0045 000A 001E 000A 0045 000A 068F 000A 0046 000A 001E 000A 001E 000A 001E 000A 001E 000A 001E 000A 0045 000A 0045 000A 001E 000A 0045 000A 001E 000A 001E 000A 001E 000A 0045 000A 001E 000A 06F9 000A 0045 000A 001E 000A 001E 000A 001E 000A 001E 000A 0045 000A 001E 000A 001E 000A 0045 000A 001E 000A 0045 000A 0045 000A 0045 000A 001E 000A 0045 000A 12E1" repeatcount="3" type="string"/>
     <action string="codeset" name="power_toggle2" cmd_ccf="0000 006D 0000 0040 000A 0045 000A 001E 000A 001E 000A 001E 000A 001E 000A 001E 000A 0045 000A 0045 000A 001E 000A 0045 000A 001E 000A 001E 000A 001E 000A 0045 000A 001E 000A 06DE 000A 0045 000A 001E 000A 001E 000A 001E 000A 001E 000A 0045 000A 001E 000A 001E 000A 0045 000A 001E 000A 0045 000A 0045 000A 0045 000A 001E 000A 0045 000A 068F 000A 0046 000A 001E 000A 001E 000A 001E 000A 001E 000A 001E 000A 0045 000A 0045 000A 001E 000A 0045 000A 001E 000A 001E 000A 001E 000A 0045 000A 001E 000A 06F9 000A 0045 000A 001E 000A 001E 000A 001E 000A 001E 000A 0045 000A 001E 000A 001E 000A 0045 000A 001E 000A 0045 000A 0045 000A 0045 000A 001E 000A 0045 000A 12E1" repeatcount="1" type="string"/>
     <action string="codeset" name="power_toggle" cmd_ccf="0000 006D 0000 0020 000A 0046 000A 001E 000A 001E 000A 001E 000A 001E 000A 001E 000A 0046 000A 0046 000A 001E 000A 0046 000A 001E 000A 001E 000A 001E 000A 0046 000A 001E 000A 0679 000A 0046 000A 001E 000A 001E 000A 001E 000A 001E 000A 0046 000A 001E 000A 001E 000A 0046 000A 001E 000A 0046 000A 0046 000A 0046 000A 001E 000A 0046 000A 0679" repeatcount="1" type="string"/>

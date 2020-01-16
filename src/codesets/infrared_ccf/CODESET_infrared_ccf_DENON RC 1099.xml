@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <!--
     <repositorymanager>
         <entry>
             <name>Denon RC 1099 IR</name>
@@ -31,6 +33,19 @@
             </dependencies>
         </entry>
     </repositorymanager>
+
+    WikiDoc:Doc
+    WikiDoc:Context:Codesets
+    WikiDoc:Page:Userdescription codeset infrared_ccf_DENON RC 1099
+    WikiDoc:TOCTitle:infrared_ccf_DENON RC 1099
+
+    = CCF DENON RC 1099 =
+
+    This codeset defines CCF commands as generic infrared commands, which can be used by th iTAch, Keene Kira, and the IR on Android interfaces
+    This codeset defines the available commands for controlling the DENON RC 1099 receiver
+
+    WikiDoc:End
+     -->
 
     <action string="codeset" name="power_on" cmd_ccf="0000 006B 0000 0040 000A 001E 000A 0047 0009 001F 000A 001F 0009 001F 0009 0047 000A 001F 0009 001F 000A 001E 000A 001F 0009 0047 000A 0047 0009 0047 000A 001E 000A 001F 0009 069C 0009 001F 000A 0046 000A 001F 0009 001F 000A 001F 0009 001F 0009 0047 000A 0047 0009 0047 000A 0046 000A 001F 0009 001F 000A 001F 0009 0047 000A 0046 000A 069B 000A 001F 0009 0047 000A 001E 000A 001F 0009 001F 000A 0047 0009 001F 0009 001F 000A 001F 0009 001F 000A 0046 000A 0047 0009 0047 000A 001F 0009 001F 000A 069B 0009 001F 000A 0047 0009 001F 000A 001E 000A 001F 0009 001F 000A 0047 0009 0047 0009 0047 000A 0047 0009 001F 000A 001E 000A 001F 0009 0047 000A 0047 0009 0F06" repeatcount="1" type="string"/>
     <action string="codeset" name="power_off" cmd_ccf="0000 006B 0000 0020 000A 001E 000A 0047 0009 001F 000A 001E 000A 001F 000A 001E 000A 0047 0009 001F 000A 001E 000A 001F 0009 0047 000A 0046 000A 0047 000A 001E 000A 001F 0009 06A0 000A 001F 000A 0046 000A 001F 0009 001F 000A 001E 000A 0047 000A 001E 000A 0047 0009 0047 000A 0046 000A 001F 000A 001E 000A 001E 000A 0047 000A 0046 000A 0F12" repeatcount="1" type="string"/>

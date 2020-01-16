@@ -16,12 +16,14 @@ Create some subfolders which points to some ORCA folder
 * /media/Master
 * /media/snapshots
 * /media/secrets
+* /media/upload
 
 For my setup:
 
 sudo ln -s /media/sf_Orca/Development/ORCA/Master /media/Master
 sudo ln -s /media/sf_Orca/Development/snapshots /media/snapshots
 sudo ln -s /media/sf_Orca/Development/secrets /media/secrets
+sudo ln -s /media/sf_Orca/Development/ORCA/Deployment /media/upload
 
 This is tested for buildozer version downloaed 27.10.2019 from Master
 
@@ -35,5 +37,7 @@ Folder contents:
     This is tested for buildozer version
 /media/secrets:
     should point to a folder containing the secrets.txt for passwords, etc
+/media/upload:
+    should point to a folder to store the compiled app
 
 

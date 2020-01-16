@@ -30,5 +30,5 @@ class cDefinitionVars(OrderedDict):
     #    return key in self
     # noinspection PyUnusedLocal
     def encode(self,encoding, decode) ->str:
-        """ Dummy to return the number of definiton vars """
+        """ Dummy to return the number of definition vars """
         return '%d Definitionvars' % (len(self))

@@ -67,8 +67,6 @@ class cWidgetBaseAction(cWidgetBaseBase):
         self.uActionNameLongTap:str                     = u''
         self.uActionNameUpOnly:str                      = u''
         self.uTapType:str                               = u''
-        self.uConfigName:str                            = u''
-        self.uInterFace:str                             = u''
 
     # noinspection PyUnresolvedReferences
     def ParseXMLBaseNode (self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
@@ -79,8 +77,6 @@ class cWidgetBaseAction(cWidgetBaseBase):
             self.uActionNameLongTap   = GetXMLTextAttribute(oXMLNode,u'actionlongtap',False,u'')
             self.uActionNameDownOnly  = GetXMLTextAttribute(oXMLNode,u'actiondownonly',False,u'')
             self.uActionNameUpOnly    = GetXMLTextAttribute(oXMLNode,u'actionuponly',False,u'')
-            self.uInterFace           = GetXMLTextAttribute(oXMLNode,u'interface',False,u'')
-            self.uConfigName          = GetXMLTextAttribute(oXMLNode,u'configname',False,u'')
             uActionPars:str           = GetXMLTextAttribute(oXMLNode,u'actionpars',False,u'{}')
             if uActionPars.startswith("$var("):
                 uActionPars=ReplaceVars(uActionPars)

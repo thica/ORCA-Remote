@@ -4,6 +4,7 @@
 
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
+  <!--
   <repositorymanager>
     <entry>
       <name>CEC control using Telnet</name>
@@ -29,6 +30,18 @@
     </entry>
   </repositorymanager>
 
+  WikiDoc:Doc
+  WikiDoc:Context:Codesets
+  WikiDoc:Page:Userdescription codeset cec_rpi_telnet
+  WikiDoc:TOCTitle:cec_rpi_telnet
+
+  = CEC Commends on Raspberry PI =
+
+  This codeset defines commends to send commands by CEC/HDMI to a device connect by HDMI to an raspberry PI.
+  This is an extended list of commands, likyly not all commands are supported by your device (eg TV, soundbar, DVD Player)
+  WikiDoc:End
+
+  -->
 
   <action string="codeset" name="power_off"    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 36" | cec-client -s\r\n' />
   <action string="codeset" name="power_on"     waitforresponse='0' cmd='echo "on $cvar(DESTTYPE)" |  cec-client -s\r\n' />

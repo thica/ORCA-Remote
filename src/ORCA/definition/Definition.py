@@ -218,9 +218,9 @@ class cDefinition:
         SetVar(uVarName = 'ORCASTANDARDPAGESINCLUDED', oVarValue = "1")
 
         Globals.oTheScreen.uDefName            = self.oRepManEntry.oRepEntry.uName
-        self.oDefinitions.uDefinitionAutor   = self.oRepManEntry.oRepEntry.uAuthor
-        self.oDefinitions.uDefinitionVersion = self.oRepManEntry.oRepEntry.uVersion
-        SetVar(uVarName = u'DEFINITIONAUTOR',   oVarValue = self.oDefinitions.uDefinitionAutor)
+        self.oDefinitions.uDefinitionAuthor    = self.oRepManEntry.oRepEntry.uAuthor
+        self.oDefinitions.uDefinitionVersion   = self.oRepManEntry.oRepEntry.uVersion
+        SetVar(uVarName = u'DEFINITIONAUTHOR',  oVarValue = self.oDefinitions.uDefinitionAuthor)
         SetVar(uVarName = u'DEFINITIONVERSION', oVarValue = self.oDefinitions.uDefinitionVersion)
         SetVar(uVarName = u'DEFINITIONSUPPORT', oVarValue = self.oDefinitions.uDefinitionSupport)
 

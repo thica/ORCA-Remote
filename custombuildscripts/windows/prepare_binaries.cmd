@@ -1,5 +1,5 @@
 echo "Create Zipfile"
-set zipdest=z:\Orca\Development\ORCA\Deployment\orca-%branch%-%version%-windows.zip
+set zipdest=c:\media\upload\orca-%branch%-%version%-windows.zip
 set zippar=-CompressionLevel Fastest
 echo Clean up finals
 rmdir "%BUILDDIR%\dist\ORCA\interfacestmp" /S /Q > nul

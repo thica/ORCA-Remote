@@ -16,7 +16,8 @@
         <action name="Restart Amazon Instant Video in Living Room" string="call Stop Start APP By Name $dvar(definition_alias_appfavorites_android)" appname="Amazon Prime" APPINTERFACE="$var($dvar(definition_alias_mediaplayer_shield)_INTERFACE_MAIN)" APPCONFIGNAME="$var($dvar(definition_alias_mediaplayer_shield)_CONFIGNAME_MAIN)"/>
     </action>
 
-  <action name="Send Reboot HTPC2"  string="Send Reboot" interface="$var($dvar(definition_alias_mediaplayer_firetv2)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_firetv2)_CONFIGNAME_MAIN)" />
+    <action name="Send Reboot HTPC1"  string="Send Reboot" interface="$var($dvar(definition_alias_mediaplayer_shield)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_shield)_CONFIGNAME_MAIN)" />
+    <action name="Send Reboot HTPC2"  string="Send Reboot" interface="$var($dvar(definition_alias_mediaplayer_firetv2)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_firetv2)_CONFIGNAME_MAIN)" />
 
   <action name="FKT Reboot HTPC2">
     <action string="showquestion" title="$lvar(5003)" message="$lvar(thica_10100)" actionyes="Send Reboot HTPC2"/>
@@ -45,28 +46,10 @@
   </action>
 
 
-  <!-- Set the Bouquet Num for the non Enigma Receiver -->
+    <action replaceoption="appendtoexisting" name="Set Trigger $dvar(definition_activityalias_mediaplayer_kodi1)">
+        <action name="Set Trigger to Onkyo" string="call Set Trigger $dvar(definition_alias_mediaplayer_onkyoavr)" />
+    </action>
 
-  <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_enigma2)" replaceoption="renameexisting" newname="PageStart Page_Device_$dvar(definition_alias_mediaplayer_enigma2)_new">
-    <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=$var(thica_bouquet)" />
-    <action name="and call the org function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_enigma2)_new" />
-  </action>
-
-
-  <action name="PageStart Page_Device_$dvar(definition_activityalias_mediaplayer_tv1)" replaceoption="renameexisting" newname="PageStart Page_Device_$dvar(definition_activityalias_mediaplayer_tv1)_new">
-    <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=$var(thica_bouquet)" />
-    <action name="and call the org function" string="call PageStart Page_Device_$dvar(definition_activityalias_mediaplayer_tv1)_new" />
-  </action>
-
-  <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)" replaceoption="renameexisting" newname="PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)_new">
-    <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=1" />
-    <action name="and call the org function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)_new" />
-  </action>
-
-  <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonic_4k)" replaceoption="renameexisting" newname="PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonic_4k)_new">>
-    <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=1" />
-    <action name="and call the org function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_panasonic_4k)_new" />
-  </action>
 
     <!--- Lights  Commands -->
   <xi:include href="$var(DEFINITIONPATH)/actions/customactions_hue.xml" parse="xml" />

@@ -1,0 +1,47 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:MediaplayerTemplatesForUser
+WikiDoc:Page:Userdescription Mediaplayer Template android_adb
+WikiDoc:TOCTitle:android_adb
+
+= Android by ADB =
+
+The Android ADB Mediaplayer Templates configures the MediaPlayer to control android devices.
+There is no discover in place, so you need either to configure the android_adb host options manually, or you need to configure the discover settings which fits to your device.
+Remark: Not all android devices supports volume control
+
+Key features:
+* Works for large screen sizes and all orientations (as the mediaplayer template does)
+* There some standard apps configured, which likely will not fit to your android device
+
+
+[[File:mw_android_adb_main_large_landscape.png|link=]]
+
+The main page in large screen and landscape mode
+
+
+WikiDoc:End
+'''
+
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_MediaplayerTemplates
+WikiDoc:Page:Reference Mediaplayer template android_adb
+WikiDoc:TOCTitle:android_adb
+
+= Overview =
+
+The Android ADB Mediaplayer Templates configures the MediaPlayer to control android devices.
+
+[[File:mw_android_adb_main_large_landscape.png|link=]]
+
+= Actions =
+
+This template defines two actions:
+
+* Check if $dvar(definition_alias_mediaplayer_template) on:
+* Get $dvar(definition_alias_mediaplayer_template) Power Status:
+
+
+WikiDoc:End
+'''

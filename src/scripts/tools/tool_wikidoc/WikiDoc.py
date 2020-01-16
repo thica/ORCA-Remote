@@ -234,12 +234,16 @@ class cWikiDoc:
         self.CollectFile(oFile  = cFileName(self.oSourcePath + "widgets") + "Base.py")
         self.CollectFiles(oPath = self.oSourcePath + "widgets")
         self.CollectFiles(oPath = self.oSourcePath + "actions")
+        self.CollectFiles(oPath = Globals.oPathCodesets, bSubDirs=True)
         self.CollectFiles(oPath = Globals.oPathInterface, bSubDirs=True)
         self.CollectFiles(oPath = Globals.oPathScripts, bSubDirs=True)
         self.CollectFiles(oPath = Globals.oPathDefinitionRoot, bSubDirs=True)
+        self.CollectFiles(oPath = Globals.oPathWizardTemplates, bSubDirs=True)
         self.CollectFiles(oPath = Globals.oPathRoot + "wikidoc", bSubDirs=True)
+
         self.CollectImages(oPath= Globals.oPathRoot + "wikidoc/images", bSubDirs=True)
-        self.CollectImages(oPath= Globals.oPathRoot + "definitions", bSubDirs=True)
+        self.CollectImages(oPath= Globals.oPathDefinitionRoot, bSubDirs=True)
+        self.CollectImages(oPath= Globals.oPathWizardTemplates, bSubDirs=True)
 
         self.ParseFiles()
         self.ReplaceTocs()

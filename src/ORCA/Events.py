@@ -165,11 +165,10 @@ class cEvents:
         uToUseConfigName:str = uOrgConfigName
 
         if oAction.oParentWidget:
-            if hasattr(oAction.oParentWidget,"uInterFace"):
-                if uToUseInterFace==u'':
-                    uToUseInterFace=oAction.oParentWidget.uInterFace
-                if uToUseConfigName==u'':
-                    uToUseConfigName=oAction.oParentWidget.uConfigName
+            if uToUseInterFace==u'':
+                uToUseInterFace=oAction.oParentWidget.uInterFace
+            if uToUseConfigName==u'':
+                uToUseConfigName=oAction.oParentWidget.uConfigName
 
             if uToUseInterFace==u'':
                 uAnchorName:str=oAction.oParentWidget.uAnchorName
@@ -177,8 +176,7 @@ class cEvents:
                     aTmpAnchor:List = oAction.oParentWidget.oParentScreenPage.dWidgets[uAnchorName]
                     if aTmpAnchor:
                         oTmpAnchor = aTmpAnchor[0]
-                        if hasattr(oTmpAnchor,"uInterFace"):
-                            uToUseInterFace=oTmpAnchor.uInterFace
+                        uToUseInterFace=oTmpAnchor.uInterFace
                         uAnchorName=oTmpAnchor.uAnchorName
                     if uToUseInterFace!="":
                         break
@@ -191,8 +189,7 @@ class cEvents:
                     aTmpAnchors = oAction.oParentWidget.oParentScreenPage.dWidgets[uAnchorName]
                     if aTmpAnchors:
                         oTmpAnchor=aTmpAnchors[0]
-                        if hasattr(oTmpAnchor, "uConfigName"):
-                            uToUseConfigName=oTmpAnchor.uConfigName
+                        uToUseConfigName=oTmpAnchor.uConfigName
                         uAnchorName=oTmpAnchor.uAnchorName
                     if uToUseConfigName!="":
                         break

@@ -19,12 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from typing import List
-from typing import Dict
-from typing import Union
-
 import                              logging
-
+from typing                         import List
+from typing                         import Dict
+from typing                         import Union
+from collections                    import OrderedDict
 from xml.etree.ElementTree          import fromstring
 from xml.etree.ElementTree          import Element
 from copy                           import copy
@@ -66,56 +65,41 @@ import ORCA.Globals as Globals
 
 __all__ = ['cDefinitions','GetDefinitionFileNameByName']
 
-class cDefinitions:
+class cDefinitions(OrderedDict): #type: OrderedDict[str,cDefinition]
     """ Class which holds all definitions, as related functions, iterable """
     def __init__(self):
-        self.dDefinitionList_Dict:Dict[str,cDefinition]         = {}
-        self.aDefinitionList_List:List[cDefinition]             = []
+        super().__init__()
         self.aDefinitionSettingVars:List[str]                   = []
         self.dInitInterfaceSettings:Dict[str,Dict[str,Dict]]    = {}
         self.aSettingsVars:List[str]                            = []
         self.dSettingsDefaults:Dict[str,str]                    = {}
         self.uInstallationHint:str                              = u''
-        self.uDefinitionAutor:str                               = u''
+        self.uDefinitionAuthor:str                              = u''
         self.uDefinitionSupport:str                             = u''
         self.uDefinitionVersion:str                             = u''
         self.dSettingFormatStrings:Dict[str,str]                = {}
         self.dInstallationsHints:Dict[str,str]                  = {}
 
-    def __iter__(self) -> iter:
-        return iter(self.aDefinitionList_List)
-
-    def __len__(self) -> int:
-        return len(self.aDefinitionList_List)
-
     def __getitem__(self,key:Union[str,int]) -> Union[cDefinition,None]:
         try:
             if isinstance(key,int):
-                return self.aDefinitionList_List[key]
+                return list(self.values())[key]
             else:
-                return self.dDefinitionList_Dict[key]
+                return self[key]
         except Exception as e:
             LogError(uMsg="Wrong Definition Name or Index given:"+str(key),oException=e)
             return None
 
-    def get(self,key:str) -> cDefinition:
-        """ returns a dinition object idetified by alias name """
-        return self.dDefinitionList_Dict.get(key)
-
-    def __contains__(self,key:str) -> bool:
-        return key in self.dDefinitionList_Dict
-
     def InitVars(self) -> None:
         """ (Re) Initialize all vars of the definitions """
-        self.dDefinitionList_Dict.clear()
-        del self.aDefinitionList_List[:]
+        self.clear()
         del self.aDefinitionSettingVars[:]
         self.dInitInterfaceSettings.clear()
         self.dSettingsDefaults.clear()
         self.dInstallationsHints.clear()
         del self.aSettingsVars[:]
         self.uInstallationHint  = u''
-        self.uDefinitionAutor   = u''
+        self.uDefinitionAuthor  = u''
         self.uDefinitionSupport = u''
         self.uDefinitionVersion = u''
         self.dSettingFormatStrings={'options'       :',{{"type":"{type}","title":"{title}","desc":"{description}","section":"{section}","key":"{var}","allowtextinput":"{allowtextinput}","options":[{options}]}}',
@@ -128,13 +112,12 @@ class cDefinitions:
     def DumpDefinitionList(self) -> None:
         """ Dumps a list af all available definition (alias) names """
         LogError(uMsg=u'Available Definition Names:')
-        for uKey in self.dDefinitionList_Dict:
+        for uKey in self:
             LogError(uMsg=u'Available Name:'+uKey)
 
     def AddDefinition(self,oDefinition:cDefinition) -> None:
         """ adds a definition member to the list of definitions """
-        self.aDefinitionList_List.append(oDefinition)
-        self.dDefinitionList_Dict[oDefinition.uAlias] = oDefinition
+        self[oDefinition.uAlias] = oDefinition
 
     def LoadLanguages(self,fSplashScreenPercentageStartValue:float) -> None:
         """ Loads the language files for the definitions """
@@ -144,10 +127,11 @@ class cDefinitions:
         aCommands:List[Dict]
         fSplashScreenPercentageRange:float  = 10.0
         fPercentage:float                   = fSplashScreenPercentageStartValue
-        fPercentageStep:float               = fSplashScreenPercentageRange/len(self.dDefinitionList_Dict)
+        fPercentageStep:float               = fSplashScreenPercentageRange/len(self)
 
         aActions:List[Dict] = Globals.oEvents.CreateSimpleActionList([{'name':'Show Message to Load the Language','string':'showsplashtext','maintext':'$lvar(413)'}])
-        for oDefinition in reversed(self.aDefinitionList_List):
+        for uDefinitionKey in reversed(self):
+            oDefinition=self[uDefinitionKey]
             fPercentage=fPercentage+fPercentageStep
             if oDefinition.bImportLanguages:
                 if Logger.getEffectiveLevel() != logging.DEBUG:
@@ -173,10 +157,11 @@ class cDefinitions:
 
         fSplashScreenPercentageRange:float          = 10.0
         fPercentage:float                           = fSplashScreenPercentageStartValue
-        fPercentageStep:float                       = fSplashScreenPercentageRange/len(self.dDefinitionList_Dict)
+        fPercentageStep:float                       = fSplashScreenPercentageRange/len(self)
 
         aActions:List[Dict] = Globals.oEvents.CreateSimpleActionList([{'name':'Show Message we load Actions','string':'showsplashtext','maintext':'$lvar(403)'}])
-        for oDefinition in reversed(self.aDefinitionList_List):
+        for uDefinitionKey in reversed(self):
+            oDefinition = self[uDefinitionKey]
             fPercentage=fPercentage+fPercentageStep
             if oDefinition.bImportActions:
                 if Logger.getEffectiveLevel() != logging.DEBUG:
@@ -197,13 +182,14 @@ class cDefinitions:
         if uDefinitionName=="":
             fSplashScreenPercentageRange:float      = 10.0
             fPercentage:float                       = fSplashScreenPercentageStartValue
-            fPercentageStep:float                   = fSplashScreenPercentageRange/(len(self.dDefinitionList_Dict)+1)
+            fPercentageStep:float                   = fSplashScreenPercentageRange/(len(self)+1)
 
             # Scheduling Loading Definition Fonts
             aActions:List[Dict] = Globals.oEvents.CreateSimpleActionList([{'name':'Show Message we load Fonts','string':'showsplashtext','maintext':'Loading Definition Fonts'}])
 
             #for definition
-            for oDefinition in reversed(self.aDefinitionList_List):
+            for uDefinitionKey in reversed(self):
+                oDefinition = self[uDefinitionKey]
                 fPercentage = fPercentage+fPercentageStep
                 if Logger.getEffectiveLevel() != logging.DEBUG:
                     aCommands = []
@@ -223,7 +209,7 @@ class cDefinitions:
                     aLoadedFontFiles.append(oFnFontDefinition.string)
                     LoadFontFromXML(LoadXMLFile(oFnFontDefinition))
         else:
-            self.dDefinitionList_Dict[uDefinitionName].LoadFonts()
+            self[uDefinitionName].LoadFonts()
 
     def LoadGestures(self,uDefinitionName:str,fSplashScreenPercentageStartValue:float) -> None:
         """ Loads the gestures for a single definition, or creates the queue entries """
@@ -233,11 +219,12 @@ class cDefinitions:
         if uDefinitionName=="":
             fSplashScreenPercentageRange:float  = 10.0
             fPercentage:float                   = fSplashScreenPercentageStartValue
-            fPercentageStep:float               = fSplashScreenPercentageRange/len(self.aDefinitionList_List)
+            fPercentageStep:float               = fSplashScreenPercentageRange/len(self)
 
             # Scheduling Loading Definition Gestures
             aActions:List[Dict] = Globals.oEvents.CreateSimpleActionList([{'name':'Show Message we load Gestures','string':'showsplashtext','maintext':'$lvar(404)'}])
-            for oDefinition in reversed(self.aDefinitionList_List):
+            for uDefinitionKey in reversed(self):
+                oDefinition = self[uDefinitionKey]
                 fPercentage=fPercentage+fPercentageStep
                 if Logger.getEffectiveLevel() != logging.DEBUG:
                     aCommands = []
@@ -249,7 +236,7 @@ class cDefinitions:
                     Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         else:
-            self.dDefinitionList_Dict[uDefinitionName].LoadGestures()
+            self[uDefinitionName].LoadGestures()
 
     def GetUsedDefinitions(self) -> None:
         """ Gets a list of all used definitions """
@@ -273,7 +260,7 @@ class cDefinitions:
 
         dAdditionalDefVars:Dict[str,cDefinitionVars] ={}
 
-        if not uAlias in self.dDefinitionList_Dict:
+        if not uAlias in self:
             oDefinitionPathes:cDefinitionPathes = cDefinitionPathes(uDefinitionName)
             SetVar(uVarName   = "DEFINITIONPATH[%s]" % uDefinitionName, oVarValue = oDefinitionPathes.oPathDefinition.string)
             SetVar(uVarName   = "DEFINITIONPATHSKINELEMENTS[%s]" % uDefinitionName, oVarValue=oDefinitionPathes.oPathDefinitionSkinElements.string)
@@ -333,7 +320,7 @@ class cDefinitions:
 
             oDefinition.uAlias                     = uAlias
 
-            if not uAlias in self.dDefinitionList_Dict:
+            if not uAlias in self:
                 # create defvars for import pages
                 oTmpDefinitionVars:cDefinitionVars=copy(oDefinition.oDefinitionVars)
                 for uVar in oTmpDefinitionVars:
@@ -382,11 +369,12 @@ class cDefinitions:
 
         if not uDefinitionName:
             fPercentage:float       = fSplashScreenPercentageStartValue
-            fPercentageStep:float   = fSplashScreenPercentageRange/len(self.aDefinitionList_List)
+            fPercentageStep:float   = fSplashScreenPercentageRange/len(self)
 
             aActions:List[Dict] = Globals.oEvents.CreateSimpleActionList([{'name':'Show Message that we parse the XML Files','string':'showsplashtext','maintext':'$lvar(412)'}])
             # Scheduling Parsing of Definition XML Files
-            for oDefinition in self.aDefinitionList_List:
+            for uDefinitionKey in self:
+                oDefinition = self[uDefinitionKey]
                 fPercentage = fPercentage+fPercentageStep
                 if Logger.getEffectiveLevel() != logging.DEBUG:
                     aCommands = []
@@ -397,7 +385,7 @@ class cDefinitions:
 
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         else:
-            self.dDefinitionList_Dict[uDefinitionName].LoadXMLFile()
+            self[uDefinitionName].LoadXMLFile()
 
     def InitInterFaceSettings(self,uDefinitionName:str,fSplashScreenPercentageStartValue:float) -> None:
         """ Init The Interface settings of a definition  """
@@ -409,11 +397,12 @@ class cDefinitions:
         if not uDefinitionName:
             # Scheduling Initialize Interface settings
             fPercentage     = fSplashScreenPercentageStartValue
-            fPercentageStep = fSplashScreenPercentageRange/len(self.aDefinitionList_List)
+            fPercentageStep = fSplashScreenPercentageRange/len(self)
 
             aActions:List[Dict] = Globals.oEvents.CreateSimpleActionList([{'name':'Show Message the we initialize the interfaces','string':'showsplashtext','maintext':'$lvar(418)'}])
 
-            for oDefinition in reversed(self.aDefinitionList_List):
+            for uDefinitionKey in reversed(self):
+                oDefinition = self[uDefinitionKey]
                 fPercentage=fPercentage+fPercentageStep
                 if Logger.getEffectiveLevel() != logging.DEBUG:
                     aCommands = []
@@ -442,7 +431,7 @@ class cDefinitions:
                     Logger.warning('Interface [%s] not on device, so it will not be configured!' % uInterfaceName)
 
         else:
-            oDef:cDefinition = self.dDefinitionList_Dict[uDefinitionName]
+            oDef:cDefinition = self[uDefinitionName]
             SetDefinitionContext(oDef.uName)
             oDef.InitInterFaceSettings(oDef.oET_Root)
             RestoreDefinitionContext()
@@ -450,8 +439,9 @@ class cDefinitions:
     def LoadParameter(self) -> None:
         """ Loads the parameter for all definitions  """
         oDef:cDefinition
-        for oDef in self.aDefinitionList_List:
-            oDef.LoadParameter()
+        for uDefinitionKey in self:
+            oDefinition = self[uDefinitionKey]
+            oDefinition.LoadParameter()
 
     def LoadSettings(self,uDefinitionName:str,fSplashScreenPercentageStartValue:float):
         """ Loads the settings for a specific definition """
@@ -464,10 +454,11 @@ class cDefinitions:
         if not uDefinitionName:
             # Scheduling Loading Definition Settings
             fPercentage:float     = fSplashScreenPercentageStartValue
-            fPercentageStep:float = fSplashScreenPercentageRange/len(self.aDefinitionList_List)
+            fPercentageStep:float = fSplashScreenPercentageRange/len(self)
 
             aActions=Globals.oEvents.CreateSimpleActionList([{'name':'Show Message that we load the settings','string':'showsplashtext','maintext':'$lvar(414)'}])
-            for oDefinition in reversed(self.aDefinitionList_List):
+            for uDefinitionKey in reversed(self):
+                oDefinition = self[uDefinitionKey]
                 fPercentage=fPercentage+fPercentageStep
                 if Logger.getEffectiveLevel() != logging.DEBUG:
                     aCommands = []
@@ -486,7 +477,7 @@ class cDefinitions:
             SetVar(uVarName = "INSTALLATIONHINT", oVarValue = self.uInstallationHint)
 
         else:
-            oDefinition=self.dDefinitionList_Dict[uDefinitionName]
+            oDefinition=self[uDefinitionName]
             SetDefinitionContext(oDefinition.uName)
             oDefinition.ParseSettings()
             RestoreDefinitionContext()
@@ -500,8 +491,8 @@ class cDefinitions:
         uVisSection:str
         oConfig:Config = Globals.oDefinitionConfigParser
 
-        for oDef in self.aDefinitionList_List:
-
+        for uDefinitionKey in self:
+            oDef = self[uDefinitionKey]
             uVisSection=oDef.uName
             if len(oDef.aDefinitionsSettings)>0:
                 uTitle:str = oDef.uDefPublicTitle
@@ -543,7 +534,8 @@ class cDefinitions:
         oConfig.write()
 
     def FindDefinitionAliasForInterfaceConfiguration(self,uInterFaceName:str,uConfigName:str) -> str:
-        for oDefinition in self.aDefinitionList_List:
+        for uDefinitionKey in self:
+            oDefinition = self[uDefinitionKey]
             uAddVar:str = oDefinition.uAlias
             uDefinitionInterFace:str=GetVar(uAddVar+"_INTERFACE_MAIN")
             if uDefinitionInterFace == uInterFaceName:
