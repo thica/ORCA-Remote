@@ -85,7 +85,7 @@ class cDefinitions(OrderedDict): #type: OrderedDict[str,cDefinition]
             if isinstance(key,int):
                 return list(self.values())[key]
             else:
-                return self[key]
+                return OrderedDict.__getitem__(self, key)
         except Exception as e:
             LogError(uMsg="Wrong Definition Name or Index given:"+str(key),oException=e)
             return None

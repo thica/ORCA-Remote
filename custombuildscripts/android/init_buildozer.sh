@@ -5,13 +5,13 @@
 function APT_INSTALL ()
 {
   echo "Install $1$2"
-  echo "Install $1$2" >> $LOGFILE
-  sudo apt install -y $1$2 >> $LOGFILE 2>>$LOGFILE
+  echo "Install $1$2" >> "$LOGFILE"
+  sudo apt install -y $1$2 >> "$LOGFILE" 2>>"$LOGFILE"
   if [ $? -eq 0 ]; then
-    echo OK >> $LOGFILE
+    echo OK >> "$LOGFILE"
   else
     echo FAIL
-    echo FAIL >> $LOGFILE
+    echo FAIL >> "$LOGFILE"
     exit 1
   fi
 }
@@ -19,13 +19,13 @@ function APT_INSTALL ()
 function PIP_INSTALL ()
 {
   echo "Install $1$2"
-  echo "Install $1$2" >> $LOGFILE
-  pip3 install $3 $1$2  >> $LOGFILE 2>>$LOGFILE
+  echo "Install $1$2" >> "$LOGFILE"
+  pip3 install $3 $1$2  >> "$LOGFILE" 2>>"$LOGFILE"
   if [ $? -eq 0 ]; then
-    echo OK >> $LOGFILE
+    echo OK >> "$LOGFILE"
   else
     echo FAIL
-    echo FAIL >> $LOGFILE
+    echo FAIL >> "$LOGFILE"
     exit 1
   fi
 
@@ -39,7 +39,7 @@ export LOGFILE=${HOME}/logfile.txt
 # export LOGFILE=/dev/tty
 
 echo "Logging to $LOGFILE"
-echo "Start Log" > $LOGFILE
+echo "Start Log" > "$LOGFILE"
 
 
 cd "${HOME}"
@@ -72,8 +72,8 @@ source "$SECRETSDIR/secrets.ini"
 set +o allexport
 
 echo "Update repositories"
-echo "Update repositories" >> $LOGFILE
-sudo apt update >> $LOGFILE 2>>$LOGFILE
+echo "Update repositories" >> "$LOGFILE"
+sudo apt update >> "$LOGFILE" 2>>"$LOGFILE"
 
 # Path to Keystore (we create it, if it does not exist)
 export P4A_RELEASE_KEYSTORE="$SECRETSDIR/release-key.keystore"
@@ -91,28 +91,28 @@ fi
 if [ "$FROMSCRATCH" == "1" ]
 then
     echo "Create Folder"
-    echo "Create Folder" >> $LOGFILE
-    mkdir "${SOURCEDIR}" >> $LOGFILE
-    mkdir "${TARGETDIR}" >> $LOGFILE
-    mkdir "${BUILDDIR}" >> $LOGFILE
+    echo "Create Folder" >> "$LOGFILE"
+    mkdir "${SOURCEDIR}" >> "$LOGFILE"
+    mkdir "${TARGETDIR}" >> "$LOGFILE"
+    mkdir "${BUILDDIR}" >> "$LOGFILE"
 fi
 
 echo "Copy sources"
-echo "Copy sources" >> $LOGFILE
-cp -R /media/Master/. "${SOURCEDIR}" >> $LOGFILE
+echo "Copy sources" >> "$LOGFILE"
+cp -R /media/Master/. "${SOURCEDIR}" >> "$LOGFILE"
 # rsync -vazCq  /media/Master/. "${SOURCEDIR}" >> $LOGFILE
 
 echo "Run custom script to prepare sources"
-echo "Run custom script to prepare sources" >> $LOGFILE
+echo "Run custom script to prepare sources" >> "$LOGFILE"
 # 'Prepare/Copy sources (Make the script excutable)'
 chmod +x "${SOURCEDIR}/custombuildscripts/android/prepare_sources.sh"
 # do not remove the leading dot
-. "${SOURCEDIR}/custombuildscripts/android/prepare_sources.sh"  >> $LOGFILE
+. "${SOURCEDIR}/custombuildscripts/android/prepare_sources.sh"  >> "$LOGFILE"
 
 echo "Copy buildozer.spec"
-echo "Copy buildozer.spec" >> $LOGFILE
+echo "Copy buildozer.spec" >> "$LOGFILE"
 # Copy buildozer.spec file to target folder (root)'
-cp "${SOURCEDIR}/custombuildscripts/buildozer.spec" "${BUILDDIR}/buildozer.spec"  >> $LOGFILE
+cp "${SOURCEDIR}/custombuildscripts/buildozer.spec" "${BUILDDIR}/buildozer.spec"  >> "$LOGFILE"
 
 if [ "$FROMSCRATCH" == "1" ]
 then
@@ -130,14 +130,14 @@ then
   PIP_INSTALL "setuptools" "$VERSION_SETUPTOOLS"
 
   echo "Unzip buildozer"
-  echo "Unzip buildozer" >> $LOGFILE
-  7z x "$SNAPSHOTDIR/buildozer.zip" >> $LOGFILE
-  mv "${HOME}/buildozer-master" "${HOME}/buildozer" >> $LOGFILE
+  echo "Unzip buildozer" >> "$LOGFILE"
+  7z x "$SNAPSHOTDIR/buildozer.zip" >> "$LOGFILE"
+  mv "${HOME}/buildozer-master" "${HOME}/buildozer" >> "$LOGFILE"
   cd "${HOME}/buildozer"
   echo "Build buildozer"
-  echo "Build buildozer" >> $LOGFILE
-  python setup.py build >> $LOGFILE 2>>$LOGFILE
-  sudo pip3 install -e . >> $LOGFILE 2>>$LOGFILE
+  echo "Build buildozer" >> "$LOGFILE"
+  python setup.py build >> "$LOGFILE" 2>>"$LOGFILE"
+  sudo pip3 install -e . >> "$LOGFILE" 2>>"$LOGFILE"
   export PATH="${HOME}/.local/bin:$PATH"
 
   cd "${HOME}"
@@ -159,10 +159,10 @@ then
 
 
   echo "Run Buildozer First Time (this will fail (buildozer bug)"
-  echo "Run Buildozer First Time (this will fail (buildozer bug)" >> $LOGFILE
+  echo "Run Buildozer First Time (this will fail (buildozer bug)" >> "$LOGFILE"
   # 'Run Buildozer First Time (this will fail (buildozer bug), but shown as succeed)'
   cd "${BUILDDIR}"
-  timeout 180 buildozer -v android release >> $LOGFILE 2>>$LOGFILE
+  timeout 180 buildozer -v android release >> "$LOGFILE" 2>>"$LOGFILE"
   # buildozer -v android release
 
 
@@ -170,19 +170,19 @@ then
   then
     echo ""
     echo "Reusing existing Key/Keystore"
-    echo "Reusing existing" >> $LOGFILE
+    echo "Reusing existing" >> "$LOGFILE"
   else
     # 'Create Keystore'
     echo ""
     echo "Create Key/Keystore"
-    echo "Create Key/Keystore" >> $LOGFILE
-    keytool -genkey -v -keystore "$P4A_RELEASE_KEYSTORE" -alias "$P4A_RELEASE_KEYALIAS" -keyalg RSA -keysize 2048 -validity 10000 -storepass "$P4A_RELEASE_KEYSTORE_PASSWD" -keypass "$P4A_RELEASE_KEYALIAS_PASSWD" -dname "CN=$ANDROID_KEYSTORE_NAME, OU=$ANDROID_KEYSTORE_ORGANISATION_UNIT, O=$AANDROID_KEYSTORE_ORGANISATION, L=$ANDROID_KEYSTORE_CITY, ST=$ANDROID_KEYSTORE_REGION, C=$ANDROID_KEYSTORE_COUNTRYCODE" >> $LOGFILE 2>>$LOGFILE
+    echo "Create Key/Keystore" >> "$LOGFILE"
+    keytool -genkey -v -keystore "$P4A_RELEASE_KEYSTORE" -alias "$P4A_RELEASE_KEYALIAS" -keyalg RSA -keysize 2048 -validity 10000 -storepass "$P4A_RELEASE_KEYSTORE_PASSWD" -keypass "$P4A_RELEASE_KEYALIAS_PASSWD" -dname "CN=$ANDROID_KEYSTORE_NAME, OU=$ANDROID_KEYSTORE_ORGANISATION_UNIT, O=$AANDROID_KEYSTORE_ORGANISATION, L=$ANDROID_KEYSTORE_CITY, ST=$ANDROID_KEYSTORE_REGION, C=$ANDROID_KEYSTORE_COUNTRYCODE" >> "$LOGFILE" 2>>"$LOGFILE"
   fi
 
   # Buildozer installs ths SDK to /home/kivy
   echo "Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)"
-  echo "Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)" >> $LOGFILE
-  yes | "${HOME}/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" "build-tools;29.0.2" >> $LOGFILE 2>>$LOGFILE
+  echo "Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)" >> "$LOGFILE"
+  yes | "${HOME}/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" "build-tools;29.0.2" >> "$LOGFILE" 2>>"$LOGFILE"
 
   # 'Remove the old buildozer app build folder'
   cd "${BUILDDIR}"
@@ -190,32 +190,32 @@ then
 fi
 
 echo "Remove any old Build"
-echo "Remove any old Build" >> $LOGFILE
-rm "${BUILDDIR}/bin/*.apk" >> $LOGFILE >/dev/null 2>dev/null
+echo "Remove any old Build" >> "$LOGFILE"
+rm "${BUILDDIR}/bin/*.apk" >> "$LOGFILE" >/dev/null 2>dev/null
 
 
 echo "Run buildozer (this should work)"
-echo "Run buildozer (this should work)" >> $LOGFILE
+echo "Run buildozer (this should work)" >> "$LOGFILE"
 # 'Run buildozer second time (this should work)'
 cd "${BUILDDIR}"
 buildozer -v android release
 
 # find the apk
 echo "Searching for APK"
-echo "Searching for APK" >> $LOGFILE
+echo "Searching for APK" >> "$LOGFILE"
 export BUILD_APK=$(find "${BUILDDIR}/bin/" -type f -name "*.apk")
 echo "Found APK: $BUILD_APK"
-echo "Found APK: $BUILD_APK" >> $LOGFILE
+echo "Found APK: $BUILD_APK" >> "$LOGFILE"
 
 
 # 'Prepare/Copy Binray (Make the script excutable)'
 echo "Finalize Binary"
-echo "Finalize Binary" >> $LOGFILE
+echo "Finalize Binary" >> "$LOGFILE"
 chmod +x "${SOURCEDIR}/custombuildscripts/android/prepare_binaries.sh"
 . "${SOURCEDIR}/custombuildscripts/android/prepare_binaries.sh"
 
 echo "Done/Finished"
-echo "Done/Finished" >> $LOGFILE
+echo "Done/Finished" >> "$LOGFILE"
 
 
 

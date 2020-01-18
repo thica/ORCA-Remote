@@ -20,23 +20,16 @@
 """
 
 from typing import List
-from typing import Dict
 
 
 from kivy.logger                                    import Logger
 # noinspection PyUnresolvedReferences
 from jnius                                          import detach
-from ORCA.utils.LogError                            import LogError
 from ORCA.utils.Platform.android.android_helper     import GetAndroidModule
-
-import ORCA.Globals as Globals
 
 __all__ = ['GetMACAddress']
 
 def GetMACAddress() -> List:
-
-    uInet_Type:str        = u'AF_INET'
-    iInet_num:int
 
     uRetColon:str = u'00:00:00:00:00:00'
     uRetDash:str  = u'00-00-00-00-00-00'
@@ -46,9 +39,9 @@ def GetMACAddress() -> List:
         cPythonActivity      = GetAndroidModule("PythonActivity")
         oPythonActivity      = cPythonActivity.mActivity
         oWifiManager         = oPythonActivity.getSystemService(cContext.WIFI_SERVICE)
-        uRetColon:str        = oWifiManager.getConnectionInfo().getMacAddress();
+        uRetColon:str        = oWifiManager.getConnectionInfo().getMacAddress()
         uRetDash             = uRetColon.replace(":","-")
-    except Exception:
+    except Exception as e:
         Logger.error("Error on GetMACAdress:"+str(e))
 
-    return uRetColon,uRetDash
+    return [uRetColon,uRetDash]

@@ -238,7 +238,7 @@ class cTheScreenWithInit(cTheScreen):
         oRef             = oET_Root.find('def_parameter')
 
         for uListDefName in Globals.oDefinitions:
-            oListDef = Globals.oDefinitions[uListDefName]
+            oListDef                    = Globals.oDefinitions[uListDefName]
             oListDef.iDefMaxX           = GetXMLIntValue(oRef,u'maxx',True,1)
             oListDef.iDefMaxY           = GetXMLIntValue(oRef,u'maxy',True,1)
             oListDef.uOrientations      = GetXMLTextValue(oRef,u'orientations',False,'landscape')

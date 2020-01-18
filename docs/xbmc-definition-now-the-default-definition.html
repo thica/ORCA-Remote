@@ -13,11 +13,11 @@
         <link rel="alternate" type="application/atom+xml" href="https://orca-remote.de/feed.xml" />
 <link rel="alternate" type="application/json" href="https://orca-remote.de/feed.json" />
 
-        <meta property="og:title" content="XBMC definition now the default definition" /><meta property="og:image" content="https://orca-remote.de/media/website/site_logo-neu.png"/><meta property="og:site_name" content="ORCA-Remote" /><meta property="og:description" content="Hello, I deciced to create a pure XBMC defintion, which is now the default definition for new users. So XBMC users can use ORCA 'out of the box', they only need to adjust the host name of their XBMC device (and of cause need to&hellip;" /><meta property="og:url" content="https://orca-remote.de/xbmc-definition-now-the-default-definition.html" /><meta property="og:type" content="article" />
+        <meta property="og:title" content="XBMC definition now the default definition" /><meta property="og:site_name" content="ORCA-Remote" /><meta property="og:description" content="Hello, I deciced to create a pure XBMC defintion, which is now the default definition for new users. So XBMC users can use ORCA 'out of the box', they only need to adjust the host name of their XBMC device (and of cause need to&hellip;" /><meta property="og:url" content="https://orca-remote.de/xbmc-definition-now-the-default-definition.html" /><meta property="og:type" content="article" />
         <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
         <style>h1,h2,h3,h4,h5,h6,.btn,[type=button],[type=submit],button,.navbar .navbar__menu li,.navbar_mobile_sidebar .navbar__menu li,.feed__author,.post__tag,.post__share>a span,.post__nav-link>span,.footer{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"}body,h1,.h1,blockquote,.search__input,.author__name,.author__info>p,.feed__item h2,.post__nav-link{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"}</style>
-        <link rel="stylesheet" href="https://orca-remote.de/assets/css/style.css?v=cc87cb8806c844f0646558fe70d5c5d1">
-        <script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://orca-remote.de/xbmc-definition-now-the-default-definition.html"},"headline":"XBMC definition now the default definition","datePublished":"2013-04-02T08:19","dateModified":"2020-01-17T22:59","image":{"@type":"ImageObject","url":"https://orca-remote.de/media/website/site_logo-neu.png","height":100,"width":400},"description":"Hello, I deciced to create a pure XBMC defintion, which is now the default definition for new users. So XBMC users can use ORCA \"out of the box\", they only need to adjust the host name of their XBMC device (and of cause need to&hellip;","author":{"@type":"Person","name":"Carsten Thielepape"},"publisher":{"@type":"Organization","name":"Carsten Thielepape","logo":{"@type":"ImageObject","url":"https://orca-remote.de/media/website/site_logo-neu.png","height":100,"width":400}}}</script>
+        <link rel="stylesheet" href="https://orca-remote.de/assets/css/style.css?v=2c4fe628aea2f72a9930ec5f6565c687">
+        <script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://orca-remote.de/xbmc-definition-now-the-default-definition.html"},"headline":"XBMC definition now the default definition","datePublished":"2013-04-02T08:19","dateModified":"2020-01-17T22:59","description":"Hello, I deciced to create a pure XBMC defintion, which is now the default definition for new users. So XBMC users can use ORCA \"out of the box\", they only need to adjust the host name of their XBMC device (and of cause need to&hellip;","author":{"@type":"Person","name":"Carsten Thielepape"},"publisher":{"@type":"Organization","name":"Carsten Thielepape"}}</script>
             <script src="https://orca-remote.de/assets/js/ls.parent-fit.min.js?v=1c78585e2a70398fe95085061942fd37"></script>
             <script async src="https://orca-remote.de/assets/js/lazysizes.min.js?v=149ff45fc6c2f13e892e438a58abb77f"></script>          
         
@@ -27,7 +27,7 @@
         <div class="site-container">
    <header class="top" id="js-header">
       <a class="logo" href="https://orca-remote.de/">
-            <img src="https://orca-remote.de/media/website/site_logo-neu.png" alt="ORCA-Remote">
+            ORCA-Remote
       </a>
             <nav class="navbar js-navbar">
                <button
@@ -40,15 +40,6 @@
                   </span>
                </button>
              <ul class="navbar__menu">
-                      <li>
-                        <a
-                           href="https://orca-remote.de/"
-                              target="_self"
-         >
-                           Home
-                       </a>
-         
-                  </li>
                       <li>
                         <a
                            href="https://orca-remote.de/about.html"
@@ -67,57 +58,47 @@
                        </a>
          
                   </li>
-                      <li>
+                      <li class="has-submenu">
                         <a
                            href="https://orca-remote.de/support.html"
                               target="_self"
-         >
+                              aria-haspopup="true"
+                           >
                            Support
                        </a>
          
-                  </li>
-                      <li>
-                        <a
-                           href="https://orca-remote.de/license.html"
-                              target="_blank"
-         >
-                           License
-                       </a>
-         
-                  </li>
-                      <li>
-                        <a
-                           href="https://orca-remote.de/impressum.html"
-                              target="_self"
-         >
-                           Impressum
-                       </a>
-         
+                            <ul class="navbar__submenu level-2" aria-hidden="true" >
+                                     <li>
+                                       <a
+                                          href="https://orca-remote.de/impressum.html"
+                                             target="_self"
+                        >
+                                          Impressum
+                                      </a>
+                        
+                                 </li>
+                                     <li>
+                                       <a
+                                          href="https://orca-remote.de/sponsors.html"
+                                             target="_self"
+                        >
+                                          Sponsors
+                                      </a>
+                        
+                                 </li>
+                                     <li>
+                                       <a
+                                          href="https://orca-remote.de/license.html"
+                                             target="_blank"
+                        >
+                                          License
+                                      </a>
+                        
+                                 </li>
+                            </ul>
                   </li>
              </ul>
             </nav>
-         <div class="search">
-            <div class="search__overlay js-search-overlay">
-               <div class="search__overlay-inner">
-                  <form action="https://orca-remote.de/search.html" class="search__form">
-                     <input
-                        class="search__input js-search-input"
-                        type="search"
-                        name="q"
-                        placeholder="search..."
-                        autofocus="autofocus"/>
-                  </form>
-                  <button class="search__close js-search-close" aria-label="Close">
-                     Close
-                  </button>
-               </div>
-            </div>
-            <button class="search__btn js-search-btn" aria-label="Search">
-               <svg role="presentation" focusable="false">
-                  <use xlink:href="https://orca-remote.de/assets/svg/svg-map.svg#search"/>
-               </svg>
-            </button>
-         </div>
    </header>
 <main>
       <article class="post">

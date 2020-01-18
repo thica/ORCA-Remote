@@ -177,7 +177,7 @@ class ORCA_App(App):
         """
 
         try:
-            Window.borderless = True
+            # Window.borderless = True
             Globals.oCheckPermissions.Wait()
             kivyConfig.set('graphics', 'kivy_clock', 'interrupt')
             kivyConfig.set('kivy','log_maxfiles','3')
