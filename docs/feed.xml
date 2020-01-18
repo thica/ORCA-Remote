@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>ORCA-Remote</title>
+    <link href="https://orca-remote.de/feed.xml" rel="self" />
+    <link href="https://orca-remote.de" />
+    <updated>2020-01-18T13:02:48+01:00</updated>
+    <author>
+        <name>Carsten Thielepape</name>
+    </author>
+    <id>https://orca-remote.de</id>
+
+    <entry>
+        <title>Update to Dublin</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/update-to-dublin.html"/>
+        <id>https://orca-remote.de/update-to-dublin.html</id>
+
+        <updated>2020-01-17T22:59:49+01:00</updated>
+            <summary>
+                <![CDATA[
+                     Hello, a lot of activities in the background. We are now on version 4.6.2 Dublin, which has major improvements in structure and functionality on adb deveices and enigma control. Too many to name in detail. The website is now on https, so older version&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p><!-- wp:paragraph --></p>
+<p>Hello, a lot of activities in the background. We are now on version 4.6.2 Dublin, which has major improvements in structure and functionality on adb deveices and enigma control. Too many to name in detail. The website is now on https, so older version can't pull resources anymore.</p>
+<p><!-- /wp:paragraph --></p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Version 3.5.1 Canberra Released</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/version-351-canberra-released.html"/>
+        <id>https://orca-remote.de/version-351-canberra-released.html</id>
+
+        <updated>2020-01-17T22:59:49+01:00</updated>
+            <summary>
+                <![CDATA[
+                    Hi all, sorry for being so inactive on the announcements. Just uploaded version 3.5.1. It has some improvements on the ONKYO definition and some major improvements on the Enigma2 Template. It introduces scripts as a new way to extend ORCAs functionality. More infos later
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Hi all,</p>
+<p>sorry for being so inactive on the announcements. Just uploaded version 3.5.1. It has some improvements on the ONKYO definition and some major improvements on the Enigma2 Template. It introduces scripts as a new way to extend ORCAs functionality.<br />
+More infos later</p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Version 3.0.0 Canberra Released</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/version-300-canberra-released.html"/>
+        <id>https://orca-remote.de/version-300-canberra-released.html</id>
+
+        <updated>2020-01-17T22:59:49+01:00</updated>
+            <summary>
+                <![CDATA[
+                    For a long time I didn't pulish new versions, because I developed massive changes to ORCA. Now it's tme to release V3, the branch is called Canberra. The main changes: Importing definitions: It's now possible to import defintions into a definition, which helps to create&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>For a long time I didn't pulish new versions, because I developed massive changes to ORCA. Now it's tme to release V3, the branch is called Canberra.</p>
+<p>The main changes:</p>
+<p>Importing definitions: It's now possible to import defintions into a definition, which helps to create multi-device definitions.<br />
+Mediaplayer template: This is a generic, very customizable definition to control all kind of media player devices (TV/Receiver/SetTop Boxes/Kodi,...)<br />
+Mediaplayer Wizard: This is a template defintion, where you can add prepared settings for the Mediaplayer definitions</p>
+<p>And tons of further minor changes</p>
+<p>Please remove your old Orca Version before installing this version</p>
+<p>Known Limitations:</p>
+<p>This version hasn't been tested intensly, so espect some bugs.<br />
+On Android, the Check für Network function is not working. Please use Ping!</p>
+<p>Have fun</p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Orca 1.1.2 released</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/orca-112-released.html"/>
+        <id>https://orca-remote.de/orca-112-released.html</id>
+
+        <updated>2020-01-17T22:59:49+01:00</updated>
+            <summary>
+                <![CDATA[
+                    Mainly, this fixes some issues with release update. In fact you need to to reinstall ORCA from older versions. Have fun!
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Mainly, this fixes some issues with release update. In fact you need to to reinstall ORCA from older versions. Have fun!</p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>ORCA 1.1.1 Bugfix release</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/orca-111-bugfix-release.html"/>
+        <id>https://orca-remote.de/orca-111-bugfix-release.html</id>
+
+        <updated>2020-01-17T22:59:49+01:00</updated>
+            <summary>
+                <![CDATA[
+                    Just compiled a bugfix release. On definitions with two orientations it could happen, that ORCA shows wrong dimensions.
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Just compiled a bugfix release. On definitions with two orientations it could happen, that ORCA shows wrong dimensions.</p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>ORCA Version 1.1.0 available for download</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/orca-version-110-available-for-download.html"/>
+        <id>https://orca-remote.de/orca-version-110-available-for-download.html</id>
+
+        <updated>2020-01-17T22:59:49+01:00</updated>
+            <summary>
+                <![CDATA[
+                    As already announced, a new version is now available for download at the download page. It's only the Windows and the Android version. The Kivy Launcher version will not work on Android anymore due to missing user rights. The MAC version is missing as I&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>As already announced, a new version is now available for download at the download page. It's only the Windows and the Android version. The Kivy Launcher version will not work on Android anymore due to missing user rights. The MAC version is missing as I do not have a MAC and currently have no time to deal with emulators to compile the MAC version.</p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Forum moved to freeforums.org</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/forum-moved-to-freeforumsorg.html"/>
+        <id>https://orca-remote.de/forum-moved-to-freeforumsorg.html</id>
+
+        <updated>2020-01-17T22:59:48+01:00</updated>
+            <summary>
+                <![CDATA[
+                    I underestimated the workload to maintain a forum software (just the app not the content). So I decided to move the forum to a public hoster. The new forum can be found at http://orca.freeforums.org/index.php
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>I underestimated the workload to maintain a forum software (just the app not the content). So I decided to move the forum to a public hoster. The new forum can be found at http://orca.freeforums.org/index.php</p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Version 1.1 coming soon</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/version-11-coming-soon.html"/>
+        <id>https://orca-remote.de/version-11-coming-soon.html</id>
+
+        <updated>2020-01-17T22:59:48+01:00</updated>
+            <summary>
+                <![CDATA[
+                    <p>Hello,</p>
+<p>a long time without updates has been passed, so shame on me. The main reason was, that I was busy at work AND I introduced some massive changes to ORCA. Currently I am testing some last features and will update the Wiki &amp; Forum.</p>
+<p><span style="text-decoration: underline;">The changelog to the new version:</span></p>
+<ul>
+<li>Introduction of online repositories:</li>
+</ul>
+<p style="padding-left: 30px;">The ORCA package will just include the core files, any further files will be downloaded by an online repository for definitions, codesets, skins, languages,…. Developer can build their own repository to offer their work easily to ORCA users.<br />
+
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Hello,</p>
+<p>a long time without updates has been passed, so shame on me. The main reason was, that I was busy at work AND I introduced some massive changes to ORCA. Currently I am testing some last features and will update the Wiki &amp; Forum.</p>
+<p><span style="text-decoration: underline;">The changelog to the new version:</span></p>
+<ul>
+<li>Introduction of online repositories:</li>
+</ul>
+<p style="padding-left: 30px;">The ORCA package will just include the core files, any further files will be downloaded by an online repository for definitions, codesets, skins, languages,…. Developer can build their own repository to offer their work easily to ORCA users.<br />
+</p>
+<ul>
+<li>Importing of definitions into definitions:</li>
+</ul>
+<p style="padding-left: 30px;">ORCA can import definitions into definitions. If you develop a definition which supports multiple devices, there is no need to copy files anymore.</p>
+<ul>
+<li>Definition templates:</li>
+</ul>
+<p style="padding-left: 30px;">The support of definition imports opened the opportunity to develop templates for device types. Currently two templates are available: One for TV&amp;DVB receivers, one for channel selection.</p>
+<ul>
+<li>Orientation support:</li>
+</ul>
+<p style="padding-left: 30px;">A definition <strong><em>can</em></strong> include layouts for different orientations. The orientation will change (at startup only), if the definition will support only a specific orientation</p>
+<ul>
+<li>Screen size support:</li>
+</ul>
+<p style="padding-left: 30px;">Developer of definitions <em><strong>can</strong></em> support different screen sizes in their definition</p>
+<ul>
+<li>Standard elements:</li>
+</ul>
+<p style="padding-left: 30px;">The ORCA core packages includes some standard elements like Media Bar / Play Pause stop, etc for easy reuse</p>
+<ul>
+<li>Conditional loading:</li>
+</ul>
+<p style="padding-left: 30px;">XML elements can be imported a start time based on conditions and user preferences</p>
+<ul>
+<li>Elements tweaking:</li>
+</ul>
+<p style="padding-left: 30px;">You can adjust elements (eg the Action to trigger) remove elements, reload elements at runtime.</p>
+<ul>
+<li>IR Database:</li>
+</ul>
+<p style="padding-left: 30px;">You can download infrared codesets online from a Infrared Code Datasets for Keene Kira and iTach.</p>
+<ul>
+<li>Integrated tools:</li>
+</ul>
+<p style="padding-left: 30px;">Gesture recorder and IR Code converter are integrated in the core app.</p>
+<ul>
+<li>Better information on system start:</li>
+</ul>
+<p style="padding-left: 30px;">ORAC provides more detailed information while loading the app.</p>
+<ul>
+<li>Better support of screen layouts</li>
+</ul>
+<p style="padding-left: 30px;">You can align elements based on the size and position of other elements. If the screen ratio of the target device is different to the screen ratio of your defintion, the adjustment of the elements has been approved</p>
+<ul>
+<li>New definitions and interfaces</li>
+</ul>
+<p style="padding-left: 30px;">New Interfaces:  Android ADB control, Philips Jointspace. New definitions: Fire TV Panasonic TVs, Philips TVs</p>
+<ul>
+<li>Removal of Kivy Launcher package:</li>
+</ul>
+<p style="padding-left: 30px;">As I do use some features, where the kivy launcher is missing system rights, I needed to remove the Kivy Launcher package</p>
+<ul>
+<li>Removal of OSX package</li>
+</ul>
+<p style="padding-left: 30px;">I dont have a MAC and currently I am just to busy to tweak around with emulators to test OSX packages</p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Working on Sharp AQUOS Interface(s)</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/working-on-sharp-aquos-interfaces.html"/>
+        <id>https://orca-remote.de/working-on-sharp-aquos-interfaces.html</id>
+
+        <updated>2020-01-17T22:59:48+01:00</updated>
+            <summary>
+                <![CDATA[
+                    Just started to work on a new interfaces for AQUOS TV. In fact, I ordered a new SHARP TV and started to develop an interface for this (before I got it), using public information. After I got the the TV , I recognized, that this&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Just started to work on a new interfaces for AQUOS TV. In fact, I ordered a new SHARP TV and started to develop an interface for this (before I got it), using public information. After I got the the TV , I recognized, that this model has a complete undocumented way to get controlled by LAN</p>
+<p>This brings me to the following situation:</p>
+<p>One complete developed interface and assignment, which is untested, as I do net have a TV to test it. So likely, it is not working properly.<br />
+One complete developed interface which is working with my new TV, but the assignment is incomplete due to missing information by Sharp.</p>
+<p>Keep you updated.</p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>No IOS Version short term</title>
+        <author>
+            <name>Carsten Thielepape</name>
+        </author>
+        <link href="https://orca-remote.de/no-ios-version-short-term.html"/>
+        <id>https://orca-remote.de/no-ios-version-short-term.html</id>
+
+        <updated>2020-01-17T22:59:48+01:00</updated>
+            <summary>
+                <![CDATA[
+                    Hello, I played a little bit around creating the IOS version. As I am quiet confident, that the app would run on IOS, I would have to spend too much money to create the app. You NEED to have an IOS device (iPhone, iPad) You&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Hello,</p>
+<p>I played a little bit around creating the IOS version. As I am quiet confident, that the app would run on IOS, I would have to spend too much money to create the app.</p>
+<p>You NEED to have an IOS device (iPhone, iPad)<br />
+You NEED to have a developer license<br />
+You NEED to have a distribution license</p>
+<p>At all , minimun of 500 €uro to spend for a freeware application. I am not willing to do this.</p>
+<p>Carsten</p>
+
+            ]]>
+        </content>
+    </entry>
+</feed>
