@@ -25,7 +25,7 @@ from typing                 import List
 from ORCA.utils.Path        import cPath
 from ORCA.vars.Helpers      import GetEnvVar
 from ORCA.utils.Platform    import OS_GetSystemUserPath
-from ORCA.vars.QueryDict    import QueryDict
+from ORCA.vars.QueryDict    import TypedQueryDict
 import argparse
 
 __all__ = ['cParameter','cParserAction']
@@ -49,7 +49,7 @@ class cParserAction(argparse.Action):
         else:
             self.oParameter[uName]=uValue
 
-class cParameter(QueryDict):
+class cParameter(TypedQueryDict):
     def __init__(self):
         super(cParameter, self).__init__()
         oParser:argparse.ArgumentParser = argparse.ArgumentParser(description='ORCA Open Remote Control Application')

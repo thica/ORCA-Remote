@@ -28,5 +28,5 @@ __all__ = ['cTouchImage']
 
 class cTouchImage(cOrcaButtonBehaviour,Image):
     def __init__(self,**kwargs):
-        Image.__init__(self,**RemoveNoClassArgs(kwargs,Image))
+        Image.__init__(self,**RemoveNoClassArgs(dInArgs=kwargs,oObject=Image))
         cOrcaButtonBehaviour.__init__(self,**kwargs)

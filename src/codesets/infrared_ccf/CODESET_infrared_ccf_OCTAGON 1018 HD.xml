@@ -1,14 +1,13 @@
 <?xml version="1.0" ?>
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
-    <!--
     <repositorymanager>
         <entry>
             <name>Octagon 1018HD IR</name>
             <description language="English">Octagon 1018HD receiver command set using IR (might work for other Octagons as well)</description>
             <description language="German">Octagon 1018HD Receiver Befehlssatz über IR (sollte auch für andere Octagon Modelle funkionieren)</description>
             <author>Carsten Thielepape</author>
-            <version>4.6.4</version>
-            <minorcaversion>4.6.4</minorcaversion>
+            <version>5.0.0</version>
+            <minorcaversion>5.0.0</minorcaversion>
             <sources>
                 <source>
                     <local>$var(APPLICATIONPATH)/codesets/infrared_ccf/CODESET_infrared_ccf_OCTAGON 1018 HD.xml</local>
@@ -33,18 +32,20 @@
         </entry>
     </repositorymanager>
 
-    WikiDoc:Doc
-    WikiDoc:Context:Codesets
-    WikiDoc:Page:Userdescription codeset infrared_OCTAGON 1018 HD
-    WikiDoc:TOCTitle:infrared_ccf_OCTAGON 1018 HD
+<!--
 
-    = CCF OCTAGON 1018 HD =
+WikiDoc:Doc
+WikiDoc:Context:Codesets
+WikiDoc:Page:Userdescription codeset infrared_OCTAGON 1018 HD
+WikiDoc:TOCTitle:infrared_ccf_OCTAGON 1018 HD
 
-    This codeset defines CCF commands as generic infrared commands, which can be used by th iTAch, Keene Kira, and the IR on Android interfaces
-    This codeset defines the available commands for controlling Octagon 1018 HD receiver. Likely to work which other Octagon models as well
+= CCF OCTAGON 1018 HD =
+
+This codeset defines CCF commands as generic infrared commands, which can be used by th iTAch, Keene Kira, and the IR on Android interfaces
+This codeset defines the available commands for controlling Octagon 1018 HD receiver. Likely to work which other Octagon models as well
 =
-    WikiDoc:End
-     -->
+WikiDoc:End
+ -->
 
     <action string="codeset" name="power_toggle" cmd_ccf="0000 006D 0000 0024 0157 00AB 0015 0015 0016 003F 0016 0015 0016 0015 0015 0015 0016 0015 0016 0015 0015 0015 0016 003F 0016 0015 0016 0015 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0015 0016 003F 0016 0015 0016 003F 0016 0015 0015 0015 0016 0015 0016 0015 0015 0040 0015 0015 0016 003F 0016 0015 0016 003F 0016 003F 0016 003F 0016 003F 0016 0627 0157 0055 0015 0EE2" repeatcount="1" type="string"/>
     <action name="power_off" cmd="power_toggle" type="alias" waitforresponse="0"/>

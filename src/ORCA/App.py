@@ -19,6 +19,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import List
+
 import logging
 import sys
 import os
@@ -52,7 +54,6 @@ from ORCA.International                    import cLanguage
 from ORCA.Notifications                    import cNotifications
 from ORCA.Screen_Init                      import cTheScreenWithInit
 from ORCA.scripts.Scripts                  import cScripts
-from ORCA.settings.SettingChanges          import OrcaConfigParser_On_Setting_Change
 from ORCA.Sound                            import cSound
 from ORCA.Parameter                        import cParameter
 from ORCA.vars.Replace                     import ReplaceVars
@@ -109,8 +110,8 @@ class ORCA_App(App):
         App.__init__(self)
 
         # Don't Move or change
-        self.sVersion="4.6.4"
-        self.sBranch="Dublin"
+        self.sVersion="5.0.0"
+        self.sBranch="Edinburgh"
 
         #todo: Remove in release
         #Logger.setLevel(logging.DEBUG)
@@ -217,6 +218,8 @@ class ORCA_App(App):
         More or less all actions after here will be executed by the scheduler/queue
         """
 
+        aActions:List[cActions]
+
         if not self.Init():
             return False
 
@@ -226,10 +229,13 @@ class ORCA_App(App):
         Globals.oTheScreen.Init()           # Add Global Vars first
         Globals.oInterFaces.Init()          # Create the Interfaces:
 
+        # from ORCA.utils.ParseResult_Test import ResultParser_Test
+        # ResultParser_Test()
+
         # and execute the startup scripts
-        aActions = Globals.oEvents.CreateSimpleActionList([{u'name':u'Show Message we begin',u'string': u'showsplashtext', u'maintext': u'Executing Startup Script'},
-                                                           {u'name':u'And kick off the start up actions',u'string': u'loaddefinition'}
-                                                          ])
+        aActions = Globals.oEvents.CreateSimpleActionList(aActions = [{u'name':u'Show Message we begin',u'string': u'showsplashtext', u'maintext': u'Executing Startup Script'},
+                                                                      {u'name':u'And kick off the start up actions',u'string': u'loaddefinition'}
+                                                                     ])
         Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions, oParentWidget=None)
         return False
 
@@ -239,7 +245,7 @@ class ORCA_App(App):
                 Downloads a specific definition and restarts after
         """
         StartWait()
-        Globals.oDownLoadSettings.LoadDirect(' :definitions:' + uDefinitionName, True)
+        Globals.oDownLoadSettings.LoadDirect(uDirect=' :definitions:' + uDefinitionName, bForce=True)
         return False          # we do not proceed here as Downloader will restart
 
 
@@ -263,7 +269,7 @@ class ORCA_App(App):
 
         if uRepType == u'definitions':
             if self.CheckForOrcaFiles():
-                uDefName = GetDefinitionFileNameByName(uRepName)
+                uDefName = GetDefinitionFileNameByName(uDefinitionName=uRepName)
                 Globals.uDefinitionName = uDefName
                 Globals.oOrcaConfigParser.set(u'ORCA', u'definition', uDefName)
                 Globals.oOrcaConfigParser.write()
@@ -358,7 +364,7 @@ class ORCA_App(App):
             # Create the atlas files for the skin and the definition
             if Globals.oDefinitionPathes.oPathDefinition.Exists():
                 if Globals.uDefinitionName != "setup":
-                    CreateAtlas(Globals.oDefinitionPathes.oPathDefinition, Globals.oDefinitionPathes.oFnDefinitionAtlas,u'Create Definition Atlas Files')
+                    CreateAtlas(oPicPath=Globals.oDefinitionPathes.oPathDefinition,oAtlasFile=Globals.oDefinitionPathes.oFnDefinitionAtlas,uDebugMsg=u'Create Definition Atlas Files')
 
             Globals.bInit = True
             return True
@@ -397,14 +403,14 @@ class ORCA_App(App):
             if not oConfig.has_section(u'ORCA'):
                 oConfig.add_section(u'ORCA')
 
-            Globals.uDefinitionName = Config_GetDefault_Str(oConfig, u'ORCA', u'definition', u'setup')
+            Globals.uDefinitionName = Config_GetDefault_Str(oConfig=oConfig,uSection= u'ORCA',uOption= u'definition',vDefaultValue= u'setup')
             if "[" in Globals.uDefinitionName:
                 Globals.uDefinitionName = Globals.uDefinitionName[Globals.uDefinitionName.find("[")+1 : Globals.uDefinitionName.find("]")]
 
             if Globals.uDefinitionName == u'setup':
                 Logger.setLevel(logging.DEBUG)
 
-            oRootPath = Config_GetDefault_Path(oConfig, u'ORCA', u'rootpath', Globals.oPathRoot.string)
+            oRootPath = Config_GetDefault_Path(oConfig=oConfig, uSection=u'ORCA', uOption=u'rootpath', uDefaultValue=Globals.oPathRoot.string)
             if oRootPath.string:
                 Globals.oPathRoot = oRootPath
             oFnCheck = cFileName(Globals.oPathRoot + 'actions') +'actionsfallback.xml'
@@ -414,7 +420,7 @@ class ORCA_App(App):
             Logger.debug(u'Init: Override Path:' + Globals.oPathRoot)
 
             self.InitRootDirs()
-            Globals.iLastInstalledVersion = Config_GetDefault_Int(oConfig, u'ORCA', 'lastinstalledversion', Globals.uVersion)
+            Globals.iLastInstalledVersion = Config_GetDefault_Int(oConfig=oConfig, uSection=u'ORCA', uOption='lastinstalledversion',uDefaultValue= Globals.uVersion)
 
             Globals.bProtected = (Globals.oPathRoot + u'protected').Exists()
             if Globals.bProtected:
@@ -427,11 +433,11 @@ class ORCA_App(App):
             while True:
                 oInstalledRep = cInstalledReps()
                 uKey = u'installedrep%i_type' % i
-                oInstalledRep.uType = Config_GetDefault_Str(oConfig, u'ORCA', uKey, '')
+                oInstalledRep.uType = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=uKey, vDefaultValue='')
                 uKey = u'installedrep%i_name' % i
-                oInstalledRep.uName = Config_GetDefault_Str(oConfig, u'ORCA', uKey, '')
+                oInstalledRep.uName = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=uKey, vDefaultValue='')
                 uKey = u'installedrep%i_version' % i
-                oInstalledRep.iVersion = Config_GetDefault_Int(oConfig, u'ORCA', uKey, "0")
+                oInstalledRep.iVersion = Config_GetDefault_Int(oConfig=oConfig, uSection=u'ORCA', uOption=uKey, uDefaultValue="0")
 
                 if not oInstalledRep.uName == '':
                     uKey = '%s:%s' % (oInstalledRep.uType, oInstalledRep.uName)
@@ -449,21 +455,21 @@ class ORCA_App(App):
                 else:
                     uDefault = ''
                 uKey = u'repository' + str(i)
-                uRep = ReplaceVars(Config_GetDefault_Str(oConfig, u'ORCA', uKey, uDefault))
+                uRep = ReplaceVars(Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=uKey, vDefaultValue=uDefault))
                 Globals.aRepositories.append(uRep)
 
                 # we add some values for state, which helps for the Download Settings
                 uKey = u'repository_state' + str(i)
-                Config_GetDefault_Str(oConfig, u'ORCA', uKey, '1')
+                Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=uKey, vDefaultValue='1')
 
             # Getting the lists for skins, definitions and languages
             Globals.aSkinList          = self.oPathSkinRoot.GetFolderList()
             Globals.aLanguageList      = Globals.oPathLanguageRoot.GetFolderList()
             Globals.aDefinitionList    = Globals.oPathDefinitionRoot.GetFolderList()
-            Globals.uSkinName          = Config_GetDefault_Str(oConfig, u'ORCA', u'skin', u'ORCA_silver_hires')
-            self.uSoundsName           = Config_GetDefault_Str(oConfig, u'ORCA', u'sounds', u'ORCA_default')
-            Globals.uLanguage          = Config_GetDefault_Str(oConfig, u'ORCA', u'language', OS_GetLocale())
-            Globals.bShowBorders       = Config_GetDefault_Bool(oConfig, u'ORCA', u'showborders', u'0')
+            Globals.uSkinName          = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'skin', vDefaultValue=u'ORCA_silver_hires')
+            self.uSoundsName           = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'sounds', vDefaultValue=u'ORCA_default')
+            Globals.uLanguage          = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'language', vDefaultValue=OS_GetLocale())
+            Globals.bShowBorders       = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'showborders', uDefaultValue=u'0')
             Globals.uDefinitionContext = Globals.uDefinitionName
 
             if Globals.uDefinitionName == 'setup':
@@ -474,7 +480,7 @@ class ORCA_App(App):
                     Globals.uLanguage = Globals.aLanguageList[0]
             oConfig.set(u'ORCA', u'language', Globals.uLanguage)
 
-            Globals.uLocalesName = Config_GetDefault_Str(oConfig, u'ORCA', u'locales', u'UK (12h)')
+            Globals.uLocalesName = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'locales', vDefaultValue=u'UK (12h)')
 
             if 'shared_documents' in Globals.aDefinitionList:
                 Globals.aDefinitionList.remove('shared_documents')
@@ -493,28 +499,28 @@ class ORCA_App(App):
             oConfig.set(u'ORCA', u'script',             ReplaceVars("select"))
             oConfig.set(u'ORCA', u'definitionmanage',   ReplaceVars("select"))
 
-            Globals.bInitPagesAtStart          = Config_GetDefault_Bool(oConfig, u'ORCA', u'initpagesatstartup', u'0')
-            Globals.fDelayedPageInitInterval   = Config_GetDefault_Float(oConfig, u'ORCA', u'delayedpageinitinterval', u'60')
-            Globals.fStartRepeatDelay          = Config_GetDefault_Float(oConfig, u'ORCA', u'startrepeatdelay', u'0.8')
-            Globals.fContRepeatDelay           = Config_GetDefault_Float(oConfig, u'ORCA', u'contrepeatdelay', u'0.2')
-            Globals.fLongPressTime             = Config_GetDefault_Float(oConfig, u'ORCA', u'longpresstime', u'1')
-            Globals.bConfigCheckForNetwork     = Config_GetDefault_Bool(oConfig, u'ORCA', u'checkfornetwork', u'1')
-            Globals.uNetworkCheckType          = Config_GetDefault_Str(oConfig, u'ORCA', u'checknetworktype',OS_GetDefaultNetworkCheckMode())
-            Globals.uConfigCheckNetWorkAddress = Config_GetDefault_Str(oConfig, u'ORCA', u'checknetworkaddress', 'auto')
-            Globals.bClockWithSeconds          = Config_GetDefault_Bool(oConfig, u'ORCA', u'clockwithseconds', u'1')
-            Globals.bLongDate                  = Config_GetDefault_Bool(oConfig, u'ORCA', u'longdate', u'0')
-            Globals.bLongDay                   = Config_GetDefault_Bool(oConfig, u'ORCA', u'longday', u'0')
-            Globals.bLongMonth                 = Config_GetDefault_Bool(oConfig, u'ORCA', u'longmonth', u'0')
-            Globals.bVibrate                   = Config_GetDefault_Bool(oConfig, u'ORCA', u'vibrate', u'0')
-            Globals.bIgnoreAtlas               = Config_GetDefault_Bool(oConfig, u'ORCA', u'ignoreatlas', u'0')
-            Globals.fScreenSize                = Config_GetDefault_Float(oConfig, u'ORCA', u'screensize', u'0')
+            Globals.bInitPagesAtStart          = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'initpagesatstartup', uDefaultValue=u'0')
+            Globals.fDelayedPageInitInterval   = Config_GetDefault_Float(oConfig=oConfig, uSection=u'ORCA', uOption=u'delayedpageinitinterval',uDefaultValue= u'60')
+            Globals.fStartRepeatDelay          = Config_GetDefault_Float(oConfig=oConfig, uSection=u'ORCA', uOption=u'startrepeatdelay',uDefaultValue= u'0.8')
+            Globals.fContRepeatDelay           = Config_GetDefault_Float(oConfig=oConfig, uSection=u'ORCA', uOption=u'contrepeatdelay', uDefaultValue=u'0.2')
+            Globals.fLongPressTime             = Config_GetDefault_Float(oConfig=oConfig, uSection=u'ORCA', uOption=u'longpresstime', uDefaultValue=u'1')
+            Globals.bConfigCheckForNetwork     = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'checkfornetwork', uDefaultValue=u'1')
+            Globals.uNetworkCheckType          = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'checknetworktype',vDefaultValue=OS_GetDefaultNetworkCheckMode())
+            Globals.uConfigCheckNetWorkAddress = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'checknetworkaddress', vDefaultValue='auto')
+            Globals.bClockWithSeconds          = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'clockwithseconds', uDefaultValue=u'1')
+            Globals.bLongDate                  = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'longdate', uDefaultValue=u'0')
+            Globals.bLongDay                   = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'longday', uDefaultValue=u'0')
+            Globals.bLongMonth                 = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'longmonth', uDefaultValue=u'0')
+            Globals.bVibrate                   = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'vibrate', uDefaultValue=u'0')
+            Globals.bIgnoreAtlas               = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'ignoreatlas', uDefaultValue=u'0')
+            Globals.fScreenSize                = Config_GetDefault_Float(oConfig=oConfig, uSection=u'ORCA', uOption=u'screensize', uDefaultValue=u'0')
 
             if Globals.fScreenSize == 0:
                 Globals.fScreenSize = math.sqrt(Globals.iAppWidth ** 2 + Globals.iAppHeight ** 2) / Metrics.dpi
 
             self.InitOrientationVars()
-            Globals.uStretchMode = Config_GetDefault_Str(oConfig, u'ORCA', u'stretchmode', OS_GetDefaultStretchMode())
-            Globals.oSound.ReadSoundVolumesFromConfig(oConfig)
+            Globals.uStretchMode = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'stretchmode', vDefaultValue=OS_GetDefaultStretchMode())
+            Globals.oSound.ReadSoundVolumesFromConfig(oConfig=oConfig)
             oConfig.write()
 
             self.InitPathes()   # init all used pathes
@@ -645,7 +651,7 @@ class ORCA_App(App):
         Globals.oPathSounds                     = cPath(Globals.oPathSoundsRoot)                + self.uSoundsName
         Globals.oFnSoundsXml                    = cFileName(Globals.oPathSounds)                + u'sounds.xml'
         Globals.oPathFonts                      = Globals.oPathResources                        + u'fonts'
-        Globals.oFnGestureLog                   = cFileName(Globals.oPathRoot)                  + u'gestures.log'
+        Globals.oFnGestureLog                   = cFileName(Globals.oPathUserDownload)          + u'gestures.log'
         Globals.oFnLangInfo                     = cFileName(Globals.oPathLanguageRoot + Globals.uLanguage) + u'langinfo.xml'
         Globals.oFnAction                       = cFileName(Globals.oPathAction)                + u'actions.xml'
         Globals.oFnActionEarlyAppStart          = cFileName(Globals.oPathAction)                + u'actionsearly.xml'
@@ -654,16 +660,16 @@ class ORCA_App(App):
 
         Globals.oPathGestures                   = cPath(Globals.oPathAction)
         Globals.oFnGestures                     = cFileName(Globals.oPathGestures)              + u'gestures.xml'
-        Globals.oFnLog                          = cFileName('').ImportFullPath(FileHandler.filename)
+        Globals.oFnLog                          = cFileName('').ImportFullPath(uFnFullName=FileHandler.filename)
         Globals.oFnLicense                      = cFileName(Globals.oPathAppReal)               + u'license.txt'
         Globals.oPathCookie                     = Globals.oPathTmp
         Globals.uScriptLanguageFileTail         = u'/languages/'+Globals.uLanguage+'/strings.xml'
         Globals.uScriptLanguageFallBackTail     = u'/languages/English/strings.xml'
         Globals.oFnInterfaceLanguage            = cFileName(Globals.oPathInterface         + u'/%s/languages/' + Globals.uLanguage)  + u'strings.xml'
         Globals.oFnInterfaceLanguageFallBack    = cFileName(Globals.oPathInterface         + u'/%s/languages/English')               + u'strings.xml'
-        oDefinitionPathes                       = cDefinitionPathes(Globals.uDefinitionName)
+        oDefinitionPathes                       = cDefinitionPathes(uDefinitionName=Globals.uDefinitionName)
         Globals.dDefinitionPathes[Globals.uDefinitionName] = oDefinitionPathes
-        SetDefinitionPathes(Globals.uDefinitionName)
+        SetDefinitionPathes(uDefinitionName=Globals.uDefinitionName)
 
         Globals.aLogoPackFolderNames            = Globals.oPathTVLogos.GetFolderList(bFullPath=False)
 
@@ -684,13 +690,6 @@ class ORCA_App(App):
 
     def On_CloseSetting(self, **kwArgs):
         pass
-
-    def on_config_change(self, config, section, key, value):
-        """
-        call back, if the user changes a setting
-        trigger the tools as well
-        """
-        OrcaConfigParser_On_Setting_Change(config=config,section=section,key=key,value=value)
 
     # noinspection PyUnusedLocal
     def fdo_config_change_load_definition(self, *largs):
@@ -743,7 +742,7 @@ class ORCA_App(App):
         """
         Call to stop Interfaces, Queues, Timer, Scripts
         """
-        Globals.oNotifications.SendNotification("on_stopapp")
+        Globals.oNotifications.SendNotification(uNotification="on_stopapp")
 
     def StopApp(self):
         """
@@ -751,8 +750,8 @@ class ORCA_App(App):
         """
         Logger.debug("Quit App on request")
         # self.DeInit()
-        Globals.oSound.PlaySound('shutdown')
-        fSleep(0.5)
+        Globals.oSound.PlaySound(uSoundName='shutdown')
+        fSleep(fSeconds=0.5)
 
         if Globals.oPathUserDownload:
             Globals.oFnLog.Copy(oNewFile=cFileName(Globals.oPathUserDownload) + 'orca.log')
@@ -770,7 +769,7 @@ class ORCA_App(App):
             # We prevent any on_pause activities as long we didn't finish starting actions
             if Globals.oTheScreen.uCurrentPageName=="":
                 return True
-            Globals.oNotifications.SendNotification("on_pause")
+            Globals.oNotifications.SendNotification(uNotification="on_pause")
             Globals.bOnSleep = True
         else:
             Logger.warning("Duplicate on_pause, this should not happen")
@@ -779,7 +778,7 @@ class ORCA_App(App):
 
     def on_resume(self):
         # this is the normal entry point, if android would work
-        Globals.oNotifications.SendNotification("on_resume")
+        Globals.oNotifications.SendNotification(uNotification="on_resume")
         Globals.bOnSleep = False
         return True
 
@@ -800,7 +799,7 @@ class ORCA_App(App):
         if Globals.oWinOrcaSettings is None:
             return App.close_settings(self, *largs)
 
-        Globals.oNotifications.SendNotification("closesetting_orca")
+        Globals.oNotifications.SendNotification(uNotification="closesetting_orca")
         return True
 
     def _install_settings_keys(self, window):
@@ -814,14 +813,14 @@ class ORCA_App(App):
 
         key = str(key)
         Logger.debug('hook_keyboard: key:' + key)
-        dRet = Globals.oNotifications.SendNotification("on_key",**{"key":key,"window":window})
+        dRet = Globals.oNotifications.SendNotification(uNotification="on_key",**{"key":key,"window":window})
 
         if dRet:
             key = dRet.get("key",key)
 
         # print ("Key:"+key)
 
-        Globals.oNotifications.SendNotification("on_key_"+key)
+        Globals.oNotifications.SendNotification(uNotification="on_key_"+key)
 
         if not Globals.oTheScreen.oCurrentPage is None:
             return Globals.oTheScreen.oCurrentPage.OnKey(window, 'key_' +key)
@@ -854,4 +853,3 @@ class ORCA_App(App):
             self.bDeInitDone = True
             self.DeInit()
         return True
-

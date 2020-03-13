@@ -87,7 +87,7 @@ class cWidgetColorPicker(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        self.uDestVar = GetXMLTextAttribute(oXMLNode,u'destvar',    False,u'colorpicker')
+        self.uDestVar = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'destvar', bMandatory=False,vDefault=u'colorpicker')
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def Create(self,oParent:Widget) -> bool:

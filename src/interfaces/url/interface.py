@@ -23,7 +23,7 @@
 from __future__                            import annotations
 from typing                                import Dict
 from typing                                import Tuple
-from typing                                import Union
+from typing                                import Optional
 
 import urllib
 import base64
@@ -49,8 +49,8 @@ from ORCA.actions.ReturnCode               import eReturnCode
       <description language='English'>Interface to send web based commands</description>
       <description language='German'>Interface um webbasierte Kommandos zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/url</local>
@@ -79,7 +79,7 @@ class cInterface(cBaseInterFace):
     class cInterFaceSettings(cBaseInterFaceSettings):
 
         def __init__(self,oInterFace:cInterface):
-            cBaseInterFaceSettings.__init__(self,oInterFace)
+            super().__init__(oInterFace)
             self.bIgnoreTimeOut                           = False
             self.aIniSettings.uHost                       = u"discover"
             self.aIniSettings.uPort                       = u"80"
@@ -95,7 +95,7 @@ class cInterface(cBaseInterFace):
             self.aIniSettings.uDISCOVER_UPNP_prettyname   = ""
 
         def ReadAction(self,oAction:cAction) -> None:
-            cBaseInterFaceSettings.ReadAction(self,oAction)
+            super().ReadAction(oAction)
             oAction.uParams      = oAction.dActionPars.get(u'params',u'')
             oAction.uRequestType = oAction.dActionPars.get(u'requesttype',u'POST')
             oAction.uHeaders     = oAction.dActionPars.get(u'headers',u'{}')
@@ -107,24 +107,24 @@ class cInterface(cBaseInterFace):
                 if str(error)=="timed out":
                     return
             if self.bIsConnected:
-                self.ShowError(u'Error Receiving Response (Error)',error)
+                self.ShowError(uMsg=u'Error Receiving Response (Error)',oException=error)
             self.oInterFace.bStopWait      = True
         def OnFailure(self,request,result) -> None:
-            self.ShowError(u'Error Receiving Response (Failure)')
+            self.ShowError(uMsg=u'Error Receiving Response (Failure)')
             self.oInterFace.bStopWait      = True
         def OnReceive(self,oRequest,oResult) -> None:
-            self.ShowDebug(u'Received Response:'+ToUnicode(oResult))
+            self.ShowDebug(uMsg=u'Received Response:'+ToUnicode(oResult))
             self.oInterFace.bStopWait      = True
         def Disconnect(self) -> bool:
 
             if not self.bIsConnected:
-                return cBaseInterFaceSettings.Disconnect(self)
+                return super().Disconnect()
             try:
-                tRet = self.ExecuteStandardAction('logoff')
-                return cBaseInterFaceSettings.Disconnect(self)
+                tRet = self.ExecuteStandardAction(uActionName='logoff')
+                return super().Disconnect()
             except Exception as e:
-                self.ShowError(u'Cannot diconnect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
-                return cBaseInterFaceSettings.Disconnect(self)
+                self.ShowError(uMsg=u'Cannot diconnect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                return super().Disconnect()
 
         def Connect(self) -> bool:
 
@@ -132,7 +132,7 @@ class cInterface(cBaseInterFace):
                 return True
 
             bRet=True
-            if not cBaseInterFaceSettings.Connect(self):
+            if not super().Connect():
                 return False
             try:
                 self.bInConnect   = True
@@ -150,28 +150,28 @@ class cInterface(cBaseInterFace):
                 # self.bIsConnected = (iStatusCode == 200)
                 self.bIsConnected = (iStatusCode == 0)
                 if not self.bIsConnected:
-                    self.ShowDebug(u'Auth. failed:'+self.oInterFace.uResponse )
-                    self.ShowError(u'Cannot connect:' + self.aIniSettings.uHost + ':' + self.aIniSettings.uPort)
+                    self.ShowDebug(uMsg=u'Auth. failed:'+self.oInterFace.uResponse )
+                    self.ShowError(uMsg=u'Cannot connect:' + self.aIniSettings.uHost + ':' + self.aIniSettings.uPort)
 
                 return self.bIsConnected
 
             except Exception as e:
-                self.ShowError(u'Cannot connect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
+                self.ShowError(uMsg=u'Cannot connect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.bOnError=True
                 return False
 
     def __init__(self):
         cInterFaceSettings=self.cInterFaceSettings
-        cBaseInterFace.__init__(self)
+        super().__init__()
         self.dSettings:Dict                             = {}
-        self.oSetting:Union[cInterFaceSettings,None]    = None
+        self.oSetting:Optional[cInterFaceSettings]      = None
         self.uResponse:str                              = u''
         self.oReq                                       = None
         self.bStopWait:bool                             = False
-        self.iWaitMs:int                               = 2000
+        self.iWaitMs:int                                = 2000
 
-    def Init(self, uObjectName: str, oFnObject: Union[cFileName,None] = None) -> None:
-        cBaseInterFace.Init(self, uObjectName, oFnObject)
+    def Init(self, uObjectName: str, oFnObject: Optional[cFileName] = None) -> None:
+        super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
 
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
@@ -187,12 +187,12 @@ class cInterface(cBaseInterFace):
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
     def DeInit(self, **kwargs) -> None:
-        cBaseInterFace.DeInit(self,**kwargs)
+        super().DeInit(**kwargs)
         for uSettingName in self.dSettings:
             self.dSettings[uSettingName].DeInit()
 
     def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
-        cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+        super().SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=uRetVar,bNoLogOut=bNoLogOut)
 
         iTryCount:int    = 0
         eRet:eReturnCode = eReturnCode.Error
@@ -202,7 +202,7 @@ class cInterface(cBaseInterFace):
         if uRetVar!="":
             oAction.uGlobalDestVar=uRetVar
 
-        while iTryCount<2:
+        while iTryCount<self.iMaxTryCount:
             iTryCount+=1
             oSetting.Connect()
             if oSetting.bIsConnected:
@@ -210,22 +210,22 @@ class cInterface(cBaseInterFace):
                     iStatusCode, uRes = self.SendCommand_Helper(oAction,oSetting,self.uObjectName)
                     if iStatusCode == 200:
                         eRet = eReturnCode.Success
-                        self.ShowDebug(u'Sending Command succeeded: : %d' % iStatusCode, oSetting.uConfigName)
+                        self.ShowDebug(uMsg=u'Sending Command succeeded: : %d' % iStatusCode, uParConfigName=oSetting.uConfigName)
                         break
                     elif iStatusCode == 0:
                         eRet = eReturnCode.Unknown
-                        self.ShowWarning(u'Sending Command: Response should be 200, maybe error, maybe success: %d [%s]' % (iStatusCode,uRes),oSetting.uConfigName)
+                        self.ShowWarning(uMsg=u'Sending Command: Response should be 200, maybe error, maybe success: %d [%s]' % (iStatusCode,uRes),uParConfigName=oSetting.uConfigName)
                         break
                     else:
                         eRet = eRet.Error
                         oSetting.bIsConnected=False
-                        self.ShowError(u'Sending Command failed: %d [%s]' % (iStatusCode,ToUnicode(uRes)),oSetting.uConfigName)
+                        self.ShowError(uMsg=u'Sending Command failed: %d [%s]' % (iStatusCode,ToUnicode(uRes)),uParConfigName=oSetting.uConfigName)
                 except Exception as e:
                     self.ShowError(uMsg=u'can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
                     eRet = eReturnCode.Error
             else:
-                if iTryCount==2:
-                    self.ShowWarning(u'Nothing done,not connected! ->[%s]' % oAction.uActionName, oSetting.uConfigName)
+                if iTryCount==self.iMaxTryCount:
+                    self.ShowWarning(uMsg=u'Nothing done,not connected! ->[%s]' % oAction.uActionName, uParConfigName=oSetting.uConfigName)
                 oSetting.bIsConnected=False
 
         self.CloseSettingConnection(oSetting=oSetting, bNoLogOut=bNoLogOut)
@@ -307,7 +307,7 @@ class cInterface(cBaseInterFace):
             if not sAuth == u'':
                 aHeader['Authorization'] = "Basic %s" % sAuth
 
-            self.ShowInfo(u'Sending Command [%s]: %s %s to %s' % (oAction.uActionName,uData,UnEscapeUnicode(uHeader),uUrlFull),oSetting.uConfigName)
+            self.ShowInfo(uMsg=u'Sending Command [%s]: %s %s to %s' % (oAction.uActionName,uData,UnEscapeUnicode(uHeader),uUrlFull),uParConfigName=oSetting.uConfigName)
 
             if not oAction.bWaitForResponse:
                 oSetting.bIgnoreTimeOut=True

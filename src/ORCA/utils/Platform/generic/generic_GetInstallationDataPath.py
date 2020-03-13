@@ -26,4 +26,4 @@ from ORCA.utils.Path         import cPath
 def GetInstallationDataPath() -> cPath:
     """ Gets the path to the folder where the installer places the ORCA files"""
 
-    return cPath().ImportFullPath(sys.argv[0])
+    return cPath().ImportFullPath(uFnFullName=sys.argv[0])

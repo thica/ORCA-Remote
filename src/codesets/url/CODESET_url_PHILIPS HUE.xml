@@ -6,8 +6,8 @@
       <description language='English'>Philips HUE control by Webserver/URL</description>
       <description language='German'>Philips HUE Kontrolle über Webserver/URL</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_PHILIPS HUE.xml</local>
@@ -36,7 +36,7 @@
 
   <action string="codeset" name='power_off'            type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":false}' />
   <action string="codeset" name='power_on'             type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":true}'  />
-  <action string="codeset" name='get_config'           type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)/config'                           headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='json' ldestvar='"hue_name","hue_apiversion"' gdestvar='"hue_name","hue_apiversion"' getvar='ORCAMULTI"name","apiversion"' />
+  <action string="codeset" name='get_config'           type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)/config'                           headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='json' ldestvar='"hue_name","hue_apiversion"' gdestvar='"hue_name","hue_apiversion"' getvar='"name","apiversion"' parseflags='L'/>
   <action string="codeset" name='setlight_hsv'         type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"hue":$var(hue_h),"sat":$var(hue_s),"bri":$var(hue_v),"transitiontime":$var(hue_t)}'  />
   <action string="codeset" name='setlight_xy'          type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"xy": [$var(hue_x),$var(hue_y)],"transitiontime":$var(hue_t)}'  />
   <action string="codeset" name='setlight_hsv_group'   type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$var(HUELIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"hue":$var(hue_h),"sat":$var(hue_s),"bri":$var(hue_v),"transitiontime":$var(hue_t)}'  />

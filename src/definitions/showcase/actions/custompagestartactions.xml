@@ -121,7 +121,7 @@
     <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
   </pagestartaction>
 
-  <pagestartaction name="Page_ScrollContainer">
+  <pagestartaction name="Page_ScrollList">
     <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
   </pagestartaction>
 

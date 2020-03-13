@@ -20,10 +20,9 @@
 """
 
 from typing import Union
+from typing import cast
 
-from xml.etree.ElementTree  import ElementTree
 from xml.etree.ElementTree  import Element
-from xml.etree.ElementTree  import fromstring
 
 from kivy.logger            import Logger
 
@@ -31,36 +30,38 @@ from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
 from ORCA.utils.FileName    import cFileName
 from ORCA.utils.LoadFile    import LoadFile
 from ORCA.utils.LogError    import LogError
+from ORCA.utils.XML         import LoadXMLFile
+from ORCA.utils.XML         import LoadXMLString
 from ORCA.download.RepEntry import cRepEntry
 
 class cRepManagerEntry:
     """ Single entry of Repository entry """
-    def __init__(self, oFileName:Union[str,cFileName]):
+    def __init__(self, *,oFileName:Union[str,cFileName]):
         if isinstance(oFileName,str):
-            self.oFnEntry = cFileName(u'').ImportFullPath(oFileName)
+            self.oFnEntry = cFileName(u'').ImportFullPath(uFnFullName=oFileName)
         else:
             self.oFnEntry = cFileName(oFileName)
         self.oRepEntry:cRepEntry=cRepEntry()
 
-    def ParseFromXML(self,oContent:Union[str,Element,None]=None) -> bool:
+    def ParseFromXML(self,*,vContent:Union[str,Element,None]=None) -> bool:
         """ Parses an xms string into object vars """
-        oET_Root:Union[Element,ElementTree]
+        oET_Root: Element
         oNode:Element
         try:
-            if oContent is None:
-                oET_Root = ElementTree(file=self.oFnEntry.string).getroot()
+            if vContent is None:
+                oET_Root = LoadXMLFile(oFile=self.oFnEntry)
                 Logger.debug('RepManager: Parsing File: [%s]' % self.oFnEntry.string)
-            elif isinstance(oContent,Element):
-                oET_Root = oContent
+            elif isinstance(vContent,Element):
+                oET_Root = cast(Element,vContent)
             else:
-                oET_Root = ElementTree(fromstring(oContent))
+                oET_Root = LoadXMLString(uXML=cast(str,vContent))
 
             if not oET_Root is None:
                 oNode=oET_Root.find('repositorymanager')
                 if not oNode is None:
                     oNode=oNode.find('entry')
                     if not oNode is None:
-                        self.oRepEntry.ParseFromXMLNode(oNode)
+                        self.oRepEntry.ParseFromXMLNode(oXMLEntry=oNode)
             return self.oRepEntry.uName!='Error'
         except Exception as e:
             ShowErrorPopUp(uMessage=LogError(uMsg='Invalid XML Syntax on file '+self.oFnEntry ,oException=e))
@@ -68,11 +69,15 @@ class cRepManagerEntry:
 
     def ParseFromSourceFile(self) -> bool:
         """ Parses an xml file into object vars """
-        uContent:str=LoadFile(self.oFnEntry)
-        iPos=uContent.find('<root>')
-        iPos2=uContent.find('</root>')
+        uContent:str=LoadFile(oFileName=self.oFnEntry)
+        #iPos=uContent.find('<root>')
+        #iPos2=uContent.find('</root>')
+        iPos=uContent.find('<repositorymanager>')
+        iPos2=uContent.find('</repositorymanager>')
         if iPos==-1 or iPos2==-1:
             return False
-        uContent=uContent[iPos:iPos2+7]
-        return self.ParseFromXML(uContent)
+        #uContent=uContent[iPos:iPos2+7]
+        uContent="<root>"+uContent[iPos:iPos2+21]+"</root>"
+
+        return self.ParseFromXML(vContent=uContent)
 

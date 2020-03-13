@@ -1,0 +1,1316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SPLITTER_PROPORTION" value="0.57128364" />
+    <option name="GROUP_BY_SEVERITY" value="true" />
+    <option name="SCOPE_TYPE" value="8" />
+    <option name="CUSTOM_SCOPE_NAME" value="Current File" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f0d469bd-4cb2-48a1-ba0e-fb6b8aac8499" name="Default" comment="New Static Web Page">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Incorrect_Call_Arguments.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Missing_Type_Hint.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/MyPy.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/pylint.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/mypy.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../custombuildscripts/debian/init_pyinstaller.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../custombuildscripts/debian/install_modules.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../custombuildscripts/debian/prepare_binaries.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../custombuildscripts/debian/prepare_sources.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/discover_ws.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/utils/ParseDict.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetDrives.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetDrives.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/ios/ios_GetDrives.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/linux/linux_GetDrives.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/macosx/macosx_GetDrives.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_GetDrives.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_GetSystemUserPath.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src/scripts/helper/helper_gettvlogo/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../InstallPython.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/../InstallPython.cmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ORCA.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ORCA.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../custombuildscripts/android/init_buildozer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../custombuildscripts/android/init_buildozer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../custombuildscripts/windows/init_pyinstaller.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/../custombuildscripts/windows/init_pyinstaller.cmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../custombuildscripts/windows/install_modules.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/../custombuildscripts/windows/install_modules.cmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/404.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/404.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/about-orca.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/about.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/announcement.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/announcement.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/2/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/3/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/4/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/4/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/5/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/5/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/6/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/6/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/7/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/authors/carsten-thielepape/page/7/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/beta-0914-available-for-download.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/beta-0914-available-for-download.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/beta-test-started.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/beta-test-started.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/download-orca.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/download-orca.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/download-tools.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/download-tools.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/feed.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/files.publii.json" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/files.publii.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/first-alpha-release-available-for-download.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/first-alpha-release-available-for-download.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/forum-created.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/forum-created.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/forum-moved-to-freeforumsorg.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/forum-moved-to-freeforumsorg.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/impressum.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/impressum.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/license.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/license.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/macosx-version-coming-soon.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/macosx-version-coming-soon.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/making-progress.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/making-progress.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/media/website/responsive/site_logo-neu-2xl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/media/website/responsive/site_logo-neu-lg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/media/website/responsive/site_logo-neu-md.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/media/website/responsive/site_logo-neu-sm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/media/website/responsive/site_logo-neu-xl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/media/website/responsive/site_logo-neu-xs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/media/website/site_logo-neu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/next-step-home-automation-interfaces.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/next-step-home-automation-interfaces.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/no-ios-version-short-term.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/no-ios-version-short-term.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/orca-111-bugfix-release.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/orca-111-bugfix-release.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/orca-112-released.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/orca-112-released.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/orca-version-110-available-for-download.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/orca-version-110-available-for-download.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/page/2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/page/2/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/page/3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/page/3/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/page/4/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/page/4/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/page/5/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/page/5/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/page/6/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/page/6/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/page/7/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/progress-on-deployment.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/progress-on-deployment.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/rc1-coming-soon.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/rc1-coming-soon.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/release-version-1000-available-for-download.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/release-version-1000-available-for-download.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/search.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/sitemap.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/sitemap.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/sponsors.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/sponsors.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/support.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/support.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/update-to-dublin.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/update-to-dublin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/version-11-coming-soon.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/version-11-coming-soon.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/version-300-canberra-released.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/version-300-canberra-released.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/version-351-canberra-released.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/version-351-canberra-released.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/welcome-to-orca-remote.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/welcome-to-orca-remote.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/wiki-created.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/wiki-created.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/wiki-spammed.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/wiki-spammed.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/wordpress-is-difficult.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/wordpress-is-difficult.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/working-on-sharp-aquos-interfaces.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/working-on-sharp-aquos-interfaces.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/xbmc-definition-now-the-default-definition.html" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/xbmc-definition-now-the-default-definition.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Action.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ActionType.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ActionType.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Actions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/App.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/App.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/BaseConfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/BaseConfig.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/BaseObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/BaseObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/BaseSettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/BaseSettings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Cookies.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Cookies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/EventTimer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/EventTimer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Events.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Events.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Fonts.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Fonts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Gesture.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Gesture.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Globals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Globals.pyi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/International.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/International.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Notifications.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Notifications.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Parameter.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Parameter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Queue.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Queue.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Screen.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Screen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ScreenPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ScreenPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ScreenPages.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ScreenPages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Screen_Init.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Screen_Init.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Skin.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Skin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/Sound.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/Sound.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/AppControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/AppControl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/FlowControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/FlowControl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/GuiControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/GuiControl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/GuiInput.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/GuiInput.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/GuiStatusPictures.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/GuiStatusPictures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/Internal.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/Internal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/Notifications.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/Notifications.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/ScriptsAndInterfaces.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/ScriptsAndInterfaces.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/Settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/Settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/VarControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/VarControl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/actions/WidgetControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/actions/WidgetControl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/definition/Definition.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/definition/Definition.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/definition/DefinitionContext.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/definition/DefinitionContext.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/definition/DefinitionPathes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/definition/DefinitionPathes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/definition/Definitions.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/definition/Definitions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/DownLoadSettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/DownLoadSettings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/DownloadObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/DownloadObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/LoadOnlineResource.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/LoadOnlineResource.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/RegisterDownload.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/RegisterDownload.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/RepDependency.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/RepDependency.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/RepDescription.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/RepDescription.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/RepEntry.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/RepEntry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/RepManagerEntry.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/RepManagerEntry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/RepSkipFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/RepSkipFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/RepSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/RepSource.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/download/Repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/download/Repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/interfaces/BaseInterface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/interfaces/BaseInterface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/interfaces/BaseInterfaceSettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/interfaces/BaseInterfaceSettings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/interfaces/InterfaceConfigDiscover.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/interfaces/InterfaceConfigDiscover.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/interfaces/InterfaceResultParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/interfaces/InterfaceResultParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/interfaces/Interfaces.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/interfaces/Interfaces.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/scripts/BaseScript.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/scripts/BaseScript.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/scripts/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/scripts/Scripts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Discover.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Discover.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Discover_Scan.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Discover_Scan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Keyhandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Keyhandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/AppSettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/AppSettings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/SettingChanges.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/SettingChanges.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingActions.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingActions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingButtons.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingButtons.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingColorpicker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingColorpicker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingInfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingInfo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingNumericSlider.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingNumericSlider.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingPicture.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingPicture.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingScrollOptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingScrollOptions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ui/BasePopup.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ui/BasePopup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ui/InputKeyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ui/InputKeyboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ui/ProgressBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ui/ProgressBar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ui/RaiseQuestion.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ui/RaiseQuestion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ui/ShowErrorPopUp.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ui/ShowErrorPopUp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/ui/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/ui/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Atlas.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Atlas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/CachedFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/CachedFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/CheckCondition.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/CheckCondition.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/CheckPermissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/CheckPermissions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/ConfigHelpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/ConfigHelpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Discover.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Discover.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/EventResultParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/EventResultParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/FTP.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/FTP.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/FileName.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/FileName.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Filesystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Filesystem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/GetSetDefinitionName.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/GetSetDefinitionName.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/LoadFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/LoadFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/LogError.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/LogError.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/ModuleLoader.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/ModuleLoader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Network.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/ParseResult.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/ParseResult.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Path.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Path.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetIPAddressV6.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetIPAddressV6.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetMACAddress.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetMACAddress.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetUserDataPath.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetUserDataPath.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetGatewayV4.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetGatewayV4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetGatewayV6.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetGatewayV6.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetInstallationDataPath.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetInstallationDataPath.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetMACAddress.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetMACAddress.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetSubnetV4.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetSubnetV4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_Vibrate.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_Vibrate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_GetUserDataPath.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_GetUserDataPath.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/RemoveNoClassArgs.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/RemoveNoClassArgs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Rotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Rotation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/Sleep.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/Sleep.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/TypeConvert.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/TypeConvert.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/XML.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/XML.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/wait/IsWaiting.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/wait/IsWaiting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/wait/StartWait.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/wait/StartWait.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/utils/wait/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/utils/wait/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/vars/Actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/vars/Actions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/vars/Globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/vars/Globals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/vars/Links.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/vars/Links.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/vars/QueryDict.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/vars/QueryDict.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/vars/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/vars/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Border.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Border.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Button.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Circle.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Circle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/ColorPicker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/ColorPicker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/DropDown.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/DropDown.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/FileBrowser.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/FileBrowser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/FileViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/FileViewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Knob.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Knob.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Picture.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Picture.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/ScrollContainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/ScrollContainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Slider.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Slider.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Switch.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Switch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/TextField.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/TextField.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/TextInput.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/TextInput.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/Video.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/Video.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/base/Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/base/Base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/base/BaseAction.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/base/BaseAction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/base/BaseText.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/base/BaseText.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/Border.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/Border.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/ButtonBehaviour.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/ButtonBehaviour.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/ColorPicker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/ColorPicker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/FileBrowser.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/FileBrowser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/Label.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/Label.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/MultiLineButton.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/MultiLineButton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/RotateScatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/RotateScatter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/ScrollableLabelLarge.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/ScrollableLabelLarge.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/SliderEx.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/SliderEx.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/TouchButton.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/TouchButton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/TouchCircle.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/TouchCircle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/TouchImage.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/TouchImage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ORCA/widgets/core/TouchRectangle.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ORCA/widgets/core/TouchRectangle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/android_adb/CODESET_android_adb_DEFAULT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/android_adb/CODESET_android_adb_DEFAULT.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/android_adb/CODESET_android_adb_FIRETV.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/android_adb/CODESET_android_adb_FIRETV.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/cec_rpi/CODESET_cec_rpi_telnet.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/cec_rpi/CODESET_cec_rpi_telnet.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/eiscp/CODESET_eiscp_ONKYO_AVR.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/eiscp/CODESET_eiscp_ONKYO_AVR.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/elv_max/CODESET_elv_max_DEFAULT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/elv_max/CODESET_elv_max_DEFAULT.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_AQUOSV1SIMPLE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_AQUOSV1SIMPLE.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_DENON RC 1099.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_DENON RC 1099.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_MCE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_MCE.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_OCTAGON 1018 HD.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_OCTAGON 1018 HD.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_ONKYO_AVR_Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_ONKYO_AVR_Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_PANASONIC TV N2QAYB000181.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/infrared_ccf/CODESET_infrared_ccf_PANASONIC TV N2QAYB000181.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/json-tcp/CODESET_json-tcp_KODI-Helix.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/json-tcp/CODESET_json-tcp_KODI-Helix.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/orca_video/CODESET_orca_video_default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/orca_video/CODESET_orca_video_default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/remoteghost/CODESET_remoteghost_DVBVIEWER_key.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/remoteghost/CODESET_remoteghost_DVBVIEWER_key.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/remoteghost/CODESET_remoteghost_DVBVIEWER_plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/remoteghost/CODESET_remoteghost_DVBVIEWER_plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/remoteghost/CODESET_remoteghost_HTPC.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/remoteghost/CODESET_remoteghost_HTPC.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/remoteghost/CODESET_remoteghost_KODI_key.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/remoteghost/CODESET_remoteghost_KODI_key.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_ENIGMA2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_ENIGMA2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_RASPBMC.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_RASPBMC.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_UNRAID.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_UNRAID.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_WD LIVE TV.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_WD LIVE TV.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_fhem_fs20.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_fhem_fs20.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_fhem_generic.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/telnet/CODESET_telnet_fhem_generic.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_AQUOS.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_AQUOS.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_DVBVIEWER.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_DVBVIEWER.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_ENIGMA2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_ENIGMA2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_JOINTSPACE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_JOINTSPACE.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_PHILIPS HUE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_PHILIPS HUE.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_UNRAID.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_UNRAID.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_VIERA.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_VIERA.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_WD LIVE TV_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/url/CODESET_url_WD LIVE TV_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/codesets/websocket/CODESET_websocket_KODI-Leia.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/codesets/websocket/CODESET_websocket_KODI-Leia.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/activity_template/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/activity_template/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/appfavorites_template/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/appfavorites_template/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/cmdfavorites_template/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/cmdfavorites_template/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/elv max/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/elv max/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/fhem example/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/fhem example/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/kodi on android/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/kodi on android/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/mediaplayer_template/actions/customactions.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/mediaplayer_template/actions/customactions.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/mediaplayer_template/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/mediaplayer_template/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/mediaplayer_template/elements/skin_default/block_popup_inner_landscape.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/mediaplayer_template/elements/skin_default/block_popup_inner_landscape.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/mediaplayer_wizard/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/mediaplayer_wizard/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/onkyo AVR/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/onkyo AVR/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/philips hue/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/philips hue/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/setup/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/setup/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/shared_documents/elements/skin_default/pages/page_filebrowser.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/shared_documents/elements/skin_default/pages/page_filebrowser.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/showcase/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/showcase/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/showcase/elements/skin_default/pages/page_widget_overview.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/showcase/elements/skin_default/pages/page_widget_overview.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/showcase/languages/English/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/showcase/languages/English/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/thica/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/thica/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/tvfavorites_template/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/tvfavorites_template/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions/unraid simple/definition.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/definitions/unraid simple/definition.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/Keene_Kira/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/Keene_Kira/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/android_adb/adb_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/android_adb/adb_helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/android_adb/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/android_adb/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/cec_rpi/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/cec_rpi/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/eiscp/DeviceSettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/eiscp/DeviceSettings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/eiscp/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/eiscp/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/elv_max/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/elv_max/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/generic_infrared/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/generic_infrared/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/iTach/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/iTach/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/ir_on_android/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/ir_on_android/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/orca_video/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/orca_video/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/ping/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/ping/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/remoteghost/Evenghost_Plugin/ORCA/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/remoteghost/Evenghost_Plugin/ORCA/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/remoteghost/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/remoteghost/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/telnet/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/telnet/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/telnet/wikidoc.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/telnet/wikidoc.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/url/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/url/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/wake_on_lan/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/wake_on_lan/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/interfaces/websocket/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/interfaces/websocket/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/languages/English/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/languages/English/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/languages/German/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/languages/German/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/repositories/orca-remote/repositories/others/repository_orca_core.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/repositories/orca-remote/repositories/others/repository_orca_core.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/repositories/orca-remote/repositories/others/repository_tvlogos_dark siver background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/repositories/orca-remote/repositories/others/repository_tvlogos_dark siver background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/repositories/orca-remote/repositories/others/repository_tvlogos_dark transparent background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/repositories/orca-remote/repositories/others/repository_tvlogos_dark transparent background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/repositories/orca-remote/repositories/others/repository_tvlogos_light transparent background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/repositories/orca-remote/repositories/others/repository_tvlogos_light transparent background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/resources/fonts/Default/fonts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/resources/fonts/Default/fonts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/resources/fonts/Unifont/fonts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/resources/fonts/Unifont/fonts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/discover/discover_eiscp/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/discover/discover_eiscp/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/discover/discover_elvmax/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/discover/discover_elvmax/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/discover/discover_enigma/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/discover/discover_enigma/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/discover/discover_enigma/scriptold.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/discover/discover_itach/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/discover/discover_itach/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/discover/discover_kira/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/discover/discover_kira/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/discover/discover_upnp/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/discover/discover_upnp/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/helper/helper_createtvlogos/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/helper/helper_createtvlogos/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/helper/helper_enigma/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/helper/helper_enigma/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/helper/helper_hue/hue-python-rgb-converter-master/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/helper/helper_hue/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/helper/helper_hue/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/keyhandler/keyhandler_debug/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/keyhandler/keyhandler_debug/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/keyhandler/keyhandler_symbols/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/keyhandler/keyhandler_symbols/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/system/system_debuglogger/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/system/system_debuglogger/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/system/system_widget_gesturerecorder/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/system/system_widget_gesturerecorder/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/system/system_widget_itach2keene/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/system/system_widget_itach2keene/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_gesturerecorder/languages/English/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_gesturerecorder/languages/English/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_gesturerecorder/languages/German/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_gesturerecorder/languages/German/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_gesturerecorder/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_gesturerecorder/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_importexport/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_importexport/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_irdbitach/IRDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_irdbitach/IRDB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_irdbitach/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_irdbitach/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_itach2keene/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_itach2keene/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_repositorymanager/RepManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_repositorymanager/RepManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_repositorymanager/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_repositorymanager/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_wikidoc/WikiDoc.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_wikidoc/WikiDoc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_wikidoc/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_wikidoc/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/scripts/tools/tool_wikidocgit/script.py" beforeDir="false" afterPath="$PROJECT_DIR$/../src/scripts/tools/tool_wikidocgit/script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/skins/ORCA_silver_hires/skin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/skins/ORCA_silver_hires/skin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/sounds/ORCA_default/sounds.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/sounds/ORCA_default/sounds.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/android_adb/android_adb.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/android_adb/android_adb.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/dvbviewer/dvbviewer.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/dvbviewer/dvbviewer.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/enigma2/enigma2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/enigma2/enigma2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/enigma2/interfacesettings/settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/enigma2/interfacesettings/settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/firetv_adb/firetv_adb.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/firetv_adb/firetv_adb.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/kodi/actions/custompagestartactions.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/kodi/actions/custompagestartactions.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/kodi/kodi.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/kodi/kodi.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/nvidia shield tv/nvidia shield tv.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/nvidia shield tv/nvidia shield tv.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/octagon 1018/octagon 1018.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/octagon 1018/octagon 1018.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/panasonic TV IR/panasonic TV IR.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/panasonic TV IR/panasonic TV IR.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/panasonic TV Net/panasonic TV Net.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/panasonic TV Net/panasonic TV Net.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/philips tv jointspace/philips tv jointspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/philips tv jointspace/philips tv jointspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/sharp_aquos_EU/sharp_aquos_EU.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/wizard templates/mediaplayer wizard/sharp_aquos_EU/sharp_aquos_EU.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="ORCA">
+      <favorite_root url="file://$PROJECT_DIR$/../src/ORCA" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ui" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ui/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ui/BasePopup.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ui/ProgressBar.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ui/InputKeyboard.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ui/RaiseQuestion.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ui/ShowErrorPopUp.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars/Dump.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars/Links.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars/Access.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars/Actions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars/Globals.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars/Helpers.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars/Replace.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/vars/QueryDict.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/wait" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/wait/Globals.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/wait/StopWait.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/wait/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/wait/IsWaiting.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/wait/StartWait.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          </favorite_root>
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/FTP.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/XML.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Zip.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Path.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Atlas.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/ios" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/ios/ios_GetDrives.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/ios/ios_cRotation.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/ios/ios_GetDefaultStretchMode.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </favorite_root>
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/win" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_Ping.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_ToPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_Vibrate.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_GetDrives.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_GetUserDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_GetSystemUserPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/win/win_GetUserDownloadsDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </favorite_root>
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/linux" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/linux/linux_GetDrives.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/linux/linux_GetUserDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </favorite_root>
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/macosx" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/macosx/macosx_GetDrives.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/macosx/macosx_GetUserDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </favorite_root>
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_helper.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_Vibrate.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetDrives.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetLocale.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_cRotation.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetGatewayV4.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetMACAddress.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetIPAddressV4.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetIPAddressV6.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_SystemIsOnline.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetUserDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetSystemUserPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_RequestPermissions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetDefaultStretchMode.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_RegisterSoundProvider.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetInstallationDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetUserDownloadsDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/android/android_GetDefaultNetworkCheckMode.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </favorite_root>
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_Ping.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_ToPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_Vibrate.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetDrives.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetLocale.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_cRotation.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetSubnetV4.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetSubnetV6.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetGatewayV4.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetGatewayV6.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetMACAddress.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetIPAddressV4.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetIPAddressV6.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_SystemIsOnline.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetUserDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_CheckPermissions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetSystemUserPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_RequestPermissions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetDefaultStretchMode.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_RegisterSoundProvider.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetInstallationDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetUserDownloadsDataPath.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+              <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/generic/generic_GetDefaultNetworkCheckMode.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </favorite_root>
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Platform/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          </favorite_root>
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Sleep.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Network.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Discover.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/FileName.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/LoadFile.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/LogError.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Rotation.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Wildcard.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/CachedFile.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/Filesystem.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/ParseResult.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/TypeConvert.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/ModuleLoader.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/ConfigHelpers.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/CheckCondition.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/CheckPermissions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/ParseResult_Test.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/EventResultParser.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/RemoveNoClassArgs.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/utils/GetSetDefinitionName.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/App.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Skin.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/Base.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/GuiInput.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/Internal.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/Settings.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/AppControl.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/GuiControl.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/ReturnCode.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/VarControl.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/FlowControl.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/Notifications.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/WidgetControl.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/GuiStatusPictures.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/actions/ScriptsAndInterfaces.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripts" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripts/Scripts.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripts/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripts/BaseScript.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripts/ScriptConfig.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripts/BaseScriptSettings.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/base" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/base/Base.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/base/BaseBase.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/base/BaseText.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/base/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/base/BaseAction.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          </favorite_root>
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/Label.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/Border.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/SliderEx.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/TouchImage.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/ColorPicker.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/FileBrowser.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/TouchButton.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/TouchCircle.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/RotateScatter.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/TouchRectangle.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/ButtonBehaviour.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/MultiLineButton.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/ScrollableLabel.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/core/ScrollableLabelLarge.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          </favorite_root>
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/helper" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/helper/HexColor.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/helper/WidgetType.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          </favorite_root>
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Knob.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Video.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Anchor.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Border.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Button.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Circle.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Slider.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Switch.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Picture.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/DropDown.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/GeoClass.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Settings.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/Rectangle.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/TextField.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/TextInput.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/BackGround.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/FileViewer.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/ColorPicker.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/FileBrowser.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/widgets/ScrollContainer.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Fonts.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Queue.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Sound.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/RepEntry.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/RepSource.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/Repository.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/RepSkipFile.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/InstalledReps.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/RepDependency.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/DownloadObject.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/RepDescription.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/RepManagerEntry.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/DownLoadSettings.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/RegisterDownload.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/download/LoadOnlineResource.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/services" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/services/main.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/Base.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/Public.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingFile.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingInfo.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingActions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingButtons.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingPicture.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingVarString.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingColorpicker.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingInputHelper.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingNumericFloat.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingNumericSlider.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingScrollOptions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/setttingtypes/SettingScrollOptionsWithOptions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          </favorite_root>
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/AppSettings.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/settingstrings" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/settingstrings/setting_info.txt" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/settingstrings/setting_orca.txt" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          </favorite_root>
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/SettingChanges.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/settings/BuildSettingOptionList.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Action.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Compat.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Events.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Screen.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Actions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Cookies.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Gesture.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Globals.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/definition" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/definition/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/definition/Definition.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/definition/Definitions.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/definition/DefinitionVars.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/definition/DefinitionPathes.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/definition/DefinitionContext.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/interfaces" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/interfaces/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/interfaces/Interfaces.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/interfaces/BaseTrigger.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/interfaces/BaseInterface.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/interfaces/InterfaceConfig.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/interfaces/BaseInterfaceSettings.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/interfaces/InterfaceResultParser.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/interfaces/InterfaceConfigDiscover.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Parameter.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ActionType.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/BaseConfig.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/BaseObject.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/EventTimer.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ScreenPage.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Globals.pyiold" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/ScreenPages.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Screen_Init.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/BaseSettings.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripttemplates" module="ORCA" type="directory" klass="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode">
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripttemplates/__init__.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Tools.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_System.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Discover.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Keyhandler.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+          <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/scripttemplates/Template_Discover_Scan.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        </favorite_root>
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/International.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+        <favorite_root url="file://$PROJECT_DIR$/../src/ORCA/Notifications.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+      </favorite_root>
+    </favorites_list>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Stub" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Carsten Thielepape &lt;carsten@thielepape.de&gt;" />
+        <option value="thica" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="UPDATE_TYPE" value="MERGE" />
+    <option name="WARN_ABOUT_CRLF" value="false" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="C:\CTPrivat\Orca\Development\ORCA\Master\PyCharm Project MultiOs\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="NamedScopeManager">
+    <order>
+      <scope name="OrcaCore" />
+    </order>
+  </component>
+  <component name="ProjectId" id="1OXt2cHgEqLAfCepVAxdEB85GJ0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
+    <property name="settings.editor.selected.configurable" value="preferences.general" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="ORCA" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="ORCA" />
+      </console-settings>
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/../custombuildscripts/windows" />
+      <recent name="$PROJECT_DIR$/../custombuildscripts/android" />
+      <recent name="C:\CTPrivat\Orca\Development\ORCA\Master\src\wizard templates\mediaplayer wizard\enigma2\elements\skin_default\pages\landscape_largesize" />
+      <recent name="C:\CTPrivat\Orca\Development\ORCA\Master\src\ORCA\settings" />
+      <recent name="G:\CTPrivat\Orca\Development\ORCA\Master\src\ORCA\download" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/../custombuildscripts/debian" />
+      <recent name="$PROJECT_DIR$/../src/ORCA/utils" />
+      <recent name="$PROJECT_DIR$/../src/scripts/helper/helper_gettvlogo" />
+      <recent name="$PROJECT_DIR$/../src/ORCA/utils/Platform/win" />
+      <recent name="$PROJECT_DIR$/../src/ORCA/utils/Platform/macosx" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.OSX 2.7 wide">
+    <configuration name="LIX 3.x wide debug" type="PythonConfigurationType" factoryName="Python" folderName="LINUX">
+      <module name="ORCA" />
+      <option name="INTERPRETER_OPTIONS" value="-B" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../src/main.py" />
+      <option name="PARAMETERS" value="--w --size=900x600 -- --debugpath=&quot;$USER_HOME$/ORCADebugTmp&quot;" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="LIX 3.x wide" type="PythonConfigurationType" factoryName="Python" folderName="LINUX">
+      <module name="ORCA" />
+      <option name="INTERPRETER_OPTIONS" value="-B" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../src/main.py" />
+      <option name="PARAMETERS" value="--w --size=900x600" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="OSX 2.7 wide" type="PythonConfigurationType" factoryName="Python" folderName="OSX">
+      <module name="ORCA" />
+      <option name="INTERPRETER_OPTIONS" value="-B" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../src/main.py" />
+      <option name="PARAMETERS" value="--w --size=900x600" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Win 3.x porttrait" type="PythonConfigurationType" factoryName="Python" folderName="Windows">
+      <module name="ORCA" />
+      <option name="INTERPRETER_OPTIONS" value="-B" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Development\Python3\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../src" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../src/main.py" />
+      <option name="PARAMETERS" value="--w --size=600x900" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Win 3.x wide Debug" type="PythonConfigurationType" factoryName="Python" folderName="Windows">
+      <module name="ORCA" />
+      <option name="INTERPRETER_OPTIONS" value="-B" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../src/main.py" />
+      <option name="PARAMETERS" value="--w --size=900x600  -- --debugpath=&quot;C:/tmp/ORCA&quot;" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Win 3.x wide" type="PythonConfigurationType" factoryName="Python" folderName="Windows">
+      <module name="ORCA" />
+      <option name="INTERPRETER_OPTIONS" value="-B" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Development\Python_venv\ORCA\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../src" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../src/main.py" />
+      <option name="PARAMETERS" value="--w --size=900x600" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="ORCA" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/bin/python2.7" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.LIX 3.x wide debug" />
+      <item itemvalue="Python.LIX 3.x wide" />
+      <item itemvalue="Python.OSX 2.7 wide" />
+      <item itemvalue="Python.Win 3.x porttrait" />
+      <item itemvalue="Python.Win 3.x wide Debug" />
+      <item itemvalue="Python.Win 3.x wide" />
+    </list>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f0d469bd-4cb2-48a1-ba0e-fb6b8aac8499" name="Default" comment="" />
+      <created>1505136599063</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1505136599063</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Update 3.7.0">
+      <created>1552663438886</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1552663438886</updated>
+    </task>
+    <task id="LOCAL-00002" summary="README adjustements and minor changes">
+      <created>1552685264332</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1552685264333</updated>
+    </task>
+    <task id="LOCAL-00003" summary="README adjustements and minor changes">
+      <created>1552685756437</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1552685756437</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Rebase by recreation V 3.7.0">
+      <created>1553204579268</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1553204579268</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Wikidoc updates">
+      <created>1553633263099</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1553633263099</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Wikidoc updates">
+      <created>1578512038551</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1578512038551</updated>
+    </task>
+    <task id="LOCAL-00007" summary="TV Logos and github pages preparation">
+      <created>1578514112275</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1578514112275</updated>
+    </task>
+    <task id="LOCAL-00008" summary="github pages preparation">
+      <created>1578514335271</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1578514335271</updated>
+    </task>
+    <task id="LOCAL-00009" summary="wiki and version update">
+      <created>1578688050604</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1578688050604</updated>
+    </task>
+    <task id="LOCAL-00010" summary="wiki and version update">
+      <created>1579204342956</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1579204342956</updated>
+    </task>
+    <task id="LOCAL-00011" summary="wiki and version update">
+      <created>1579205731920</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1579205731920</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Starting with jekyll">
+      <created>1579210985841</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1579210985841</updated>
+    </task>
+    <task id="LOCAL-00013" summary="New Static Web Page">
+      <created>1579375872975</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1579375872975</updated>
+    </task>
+    <task id="LOCAL-00014" summary="New Static Web Page">
+      <created>1579385503775</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1579385503775</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="latest updates" />
+    <MESSAGE value="Update 3.7.0" />
+    <MESSAGE value="README adjustements and minor changes" />
+    <MESSAGE value="Rebase by recreation V 3,7.0" />
+    <MESSAGE value="Rebase by recreation V 3.7.0" />
+    <MESSAGE value="Wikidoc updates" />
+    <MESSAGE value="TV Logos and github pages preparation" />
+    <MESSAGE value="github pages preparation" />
+    <MESSAGE value="wiki and version update" />
+    <MESSAGE value="Starting with jekyll" />
+    <MESSAGE value="New Static Web Page" />
+    <option name="LAST_COMMIT_MESSAGE" value="New Static Web Page" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="193" y="58" width="1166" height="609" key="#Inspections" timestamp="1581719668939">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="193" y="58" width="848" height="614" key="#Inspections/0.0.1366.736@0.0.1366.736" timestamp="1581719668939" />
+    <state x="217" y="66" key="#Inspections/0.0.1536.834@0.0.1536.834" timestamp="1580447668092" />
+    <state x="469" y="66" width="1166" height="609" key="#Inspections/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580993912021" />
+    <state x="759" y="59" key="#LIX_3.x_wide" timestamp="1580282538053">
+      <screen x="0" y="0" width="2048" height="834" />
+    </state>
+    <state x="759" y="59" key="#LIX_3.x_wide/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580282538053" />
+    <state x="451" y="147" key="#Notifications" timestamp="1582531718116">
+      <screen x="0" y="23" width="1920" height="875" />
+    </state>
+    <state x="451" y="147" key="#Notifications/0.23.1920.875@0.23.1920.875" timestamp="1582531718116" />
+    <state x="278" y="30" width="804" height="674" key="#Scopes" timestamp="1579205536358">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="278" y="30" width="804" height="674" key="#Scopes/0.0.1366.736@0.0.1366.736" timestamp="1579205536358" />
+    <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1579029233806">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.736@0.0.1366.736" timestamp="1579029233806" />
+    <state x="264" y="37" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1577016171574" />
+    <state x="337" y="173" width="685" height="387" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582487335227">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="337" y="173" width="685" height="387" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.736@0.0.1366.736" timestamp="1582487335227" />
+    <state x="424" y="239" width="512" height="254" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog" timestamp="1581717059420">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="424" y="239" width="512" height="254" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/0.0.1366.736@0.0.1366.736" timestamp="1581717059420" />
+    <state x="366" y="101" width="628" height="532" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1581454183541">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="366" y="101" width="628" height="532" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1366.736@0.0.1366.736" timestamp="1581454183541" />
+    <state x="549" y="114" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580203763622" />
+    <state x="143" y="204" width="1142" height="479" key="#com.intellij.tools.ToolEditorDialog" timestamp="1581362889589">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="143" y="204" width="1142" height="479" key="#com.intellij.tools.ToolEditorDialog/0.0.1366.736@0.0.1366.736" timestamp="1581362889589" />
+    <state x="128" y="103" key="#com.intellij.tools.ToolEditorDialog/0.0.1536.834@0.0.1536.834" timestamp="1580446562634" />
+    <state x="925" y="105" width="1003" height="442" key="#com.intellij.tools.ToolEditorDialog/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580195807685" />
+    <state x="585" y="151" key="#xdebugger.evaluate" timestamp="1578005785429">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="585" y="151" key="#xdebugger.evaluate/0.0.1366.736@0.0.1366.736" timestamp="1578005785429" />
+    <state x="493" y="320" width="834" height="285" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1582202494117">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="263" y="224" width="834" height="285" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.736@0.0.1366.736" timestamp="1581720074117" />
+    <state x="296" y="254" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1536.834@0.0.1536.834" timestamp="1580470578454" />
+    <state x="493" y="320" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1582202494117" />
+    <state x="394" y="254" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580996844920" />
+    <state x="144" y="0" width="896" height="733" key="CommitChangelistDialog2" timestamp="1579459171373">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="144" y="0" width="896" height="733" key="CommitChangelistDialog2/0.0.1366.736@0.0.1366.736" timestamp="1579459171373" />
+    <state width="1167" height="414" key="DebuggerActiveHint" timestamp="1581668624019">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state width="1167" height="414" key="DebuggerActiveHint/0.0.1366.736@0.0.1366.736" timestamp="1581668624019" />
+    <state width="1693" height="665" key="DebuggerActiveHint/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581590541707" />
+    <state width="1480" height="529" key="DebuggerActiveHint/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580992814385" />
+    <state x="651" y="170" width="505" height="481" key="FileChooserDialogImpl" timestamp="1582531816167">
+      <screen x="0" y="23" width="1920" height="875" />
+    </state>
+    <state x="463" y="124" width="505" height="481" key="FileChooserDialogImpl/0.0.1366.736@0.0.1366.736" timestamp="1581717057858" />
+    <state x="521" y="141" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1580447616735" />
+    <state x="651" y="170" key="FileChooserDialogImpl/0.23.1920.875@0.23.1920.875" timestamp="1582531816167" />
+    <state x="694" y="141" key="FileChooserDialogImpl/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580367300710" />
+    <state width="795" height="254" key="GridCell.Tab.0.bottom" timestamp="1582539405150">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state width="1345" height="193" key="GridCell.Tab.0.bottom/0.0.1366.736@0.0.1366.736" timestamp="1582409125461" />
+    <state width="1515" height="287" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1580463314247" />
+    <state width="2539" height="207" key="GridCell.Tab.0.bottom/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581610568079" />
+    <state width="795" height="254" key="GridCell.Tab.0.bottom/0.23.1920.821@0.23.1920.821" timestamp="1582539405150" />
+    <state width="2027" height="162" key="GridCell.Tab.0.bottom/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580997424748" />
+    <state width="795" height="254" key="GridCell.Tab.0.center" timestamp="1582539405148">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state width="1345" height="193" key="GridCell.Tab.0.center/0.0.1366.736@0.0.1366.736" timestamp="1582409125461" />
+    <state width="1515" height="287" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1580463314247" />
+    <state width="2539" height="207" key="GridCell.Tab.0.center/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581610568079" />
+    <state width="795" height="254" key="GridCell.Tab.0.center/0.23.1920.821@0.23.1920.821" timestamp="1582539405148" />
+    <state width="2027" height="162" key="GridCell.Tab.0.center/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580997424748" />
+    <state width="795" height="254" key="GridCell.Tab.0.left" timestamp="1582539405147">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state width="1345" height="193" key="GridCell.Tab.0.left/0.0.1366.736@0.0.1366.736" timestamp="1582409125461" />
+    <state width="1515" height="287" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1580463314247" />
+    <state width="2539" height="207" key="GridCell.Tab.0.left/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581610568079" />
+    <state width="795" height="254" key="GridCell.Tab.0.left/0.23.1920.821@0.23.1920.821" timestamp="1582539405147" />
+    <state width="2027" height="162" key="GridCell.Tab.0.left/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580997424747" />
+    <state width="795" height="254" key="GridCell.Tab.0.right" timestamp="1582539405149">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state width="1345" height="193" key="GridCell.Tab.0.right/0.0.1366.736@0.0.1366.736" timestamp="1582409125461" />
+    <state width="1515" height="287" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1580463314247" />
+    <state width="2539" height="207" key="GridCell.Tab.0.right/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581610568079" />
+    <state width="795" height="254" key="GridCell.Tab.0.right/0.23.1920.821@0.23.1920.821" timestamp="1582539405149" />
+    <state width="2027" height="162" key="GridCell.Tab.0.right/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580997424748" />
+    <state width="795" height="254" key="GridCell.Tab.1.bottom" timestamp="1582539405153">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state width="1345" height="190" key="GridCell.Tab.1.bottom/0.0.1366.736@0.0.1366.736" timestamp="1582409125452" />
+    <state width="1515" height="287" key="GridCell.Tab.1.bottom/0.0.1536.834@0.0.1536.834" timestamp="1580463314247" />
+    <state width="2539" height="207" key="GridCell.Tab.1.bottom/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581610568079" />
+    <state width="795" height="254" key="GridCell.Tab.1.bottom/0.23.1920.821@0.23.1920.821" timestamp="1582539405153" />
+    <state width="2027" height="162" key="GridCell.Tab.1.bottom/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580997424748" />
+    <state width="795" height="254" key="GridCell.Tab.1.center" timestamp="1582539405151">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state width="1345" height="190" key="GridCell.Tab.1.center/0.0.1366.736@0.0.1366.736" timestamp="1582409125452" />
+    <state width="1515" height="287" key="GridCell.Tab.1.center/0.0.1536.834@0.0.1536.834" timestamp="1580463314247" />
+    <state width="2539" height="207" key="GridCell.Tab.1.center/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581610568079" />
+    <state width="795" height="254" key="GridCell.Tab.1.center/0.23.1920.821@0.23.1920.821" timestamp="1582539405151" />
+    <state width="2027" height="162" key="GridCell.Tab.1.center/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580997424748" />
+    <state width="795" height="254" key="GridCell.Tab.1.left" timestamp="1582539405150">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state width="1345" height="190" key="GridCell.Tab.1.left/0.0.1366.736@0.0.1366.736" timestamp="1582409125452" />
+    <state width="1515" height="287" key="GridCell.Tab.1.left/0.0.1536.834@0.0.1536.834" timestamp="1580463314247" />
+    <state width="2539" height="207" key="GridCell.Tab.1.left/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581610568079" />
+    <state width="795" height="254" key="GridCell.Tab.1.left/0.23.1920.821@0.23.1920.821" timestamp="1582539405150" />
+    <state width="2027" height="162" key="GridCell.Tab.1.left/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580997424748" />
+    <state width="795" height="254" key="GridCell.Tab.1.right" timestamp="1582539405152">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state width="1345" height="190" key="GridCell.Tab.1.right/0.0.1366.736@0.0.1366.736" timestamp="1582409125452" />
+    <state width="1515" height="287" key="GridCell.Tab.1.right/0.0.1536.834@0.0.1536.834" timestamp="1580463314247" />
+    <state width="2539" height="207" key="GridCell.Tab.1.right/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581610568079" />
+    <state width="795" height="254" key="GridCell.Tab.1.right/0.23.1920.821@0.23.1920.821" timestamp="1582539405152" />
+    <state width="2027" height="162" key="GridCell.Tab.1.right/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580997424748" />
+    <state x="232" y="112" key="IDE.errors.dialog" timestamp="1580458706163">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="232" y="112" key="IDE.errors.dialog/0.0.1536.834@0.0.1536.834" timestamp="1580458706163" />
+    <state x="309" y="112" key="IDE.errors.dialog/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580196798806" />
+    <state x="416" y="106" width="568" height="562" key="MultipleFileMergeDialog" timestamp="1579375922149">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="416" y="106" width="568" height="562" key="MultipleFileMergeDialog/0.0.1366.736@0.0.1366.736" timestamp="1579375922149" />
+    <state x="378" y="23" width="904" height="722" key="SettingsEditor" timestamp="1582539561500">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state x="269" y="0" width="904" height="727" key="SettingsEditor/0.0.1366.736@0.0.1366.736" timestamp="1582216549127" />
+    <state x="107" y="3" key="SettingsEditor/0.0.1536.834@0.0.1536.834" timestamp="1580463310277" />
+    <state x="322" y="4" key="SettingsEditor/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1582201998599" />
+    <state x="378" y="23" width="904" height="722" key="SettingsEditor/0.23.1920.821@0.23.1920.821" timestamp="1582539561500" />
+    <state x="378" y="23" key="SettingsEditor/0.23.1920.875@0.23.1920.875" timestamp="1582532225774" />
+    <state x="704" y="82" width="977" height="715" key="SettingsEditor/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580972054558" />
+    <state x="604" y="279" width="716" height="342" key="StringManipulation.SortTypeDialog" timestamp="1582202483021">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="322" y="196" width="716" height="342" key="StringManipulation.SortTypeDialog/0.0.1366.736@0.0.1366.736" timestamp="1580417372369" />
+    <state x="362" y="222" key="StringManipulation.SortTypeDialog/0.0.1536.834@0.0.1536.834" timestamp="1580460167965" />
+    <state x="604" y="279" key="StringManipulation.SortTypeDialog/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1582202483021" />
+    <state x="483" y="222" key="StringManipulation.SortTypeDialog/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580976196971" />
+    <state x="278" y="104" width="804" height="525" key="Vcs.Push.Dialog.v2" timestamp="1579385506053">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="278" y="104" width="804" height="525" key="Vcs.Push.Dialog.v2/0.0.1366.736@0.0.1366.736" timestamp="1579385506053" />
+    <state width="685" height="369" key="XDebugger.FullValuePopup" timestamp="1581193545096">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state width="685" height="369" key="XDebugger.FullValuePopup/0.0.1366.736@0.0.1366.736" timestamp="1581193545096" />
+    <state x="741" y="299" key="com.intellij.ide.util.TipDialog" timestamp="1582539465651">
+      <screen x="0" y="23" width="1920" height="821" />
+    </state>
+    <state x="527" y="247" key="com.intellij.ide.util.TipDialog/0.0.1366.736@0.0.1366.736" timestamp="1582485836863" />
+    <state x="593" y="280" key="com.intellij.ide.util.TipDialog/0.0.1536.834@0.0.1536.834" timestamp="1580463357065" />
+    <state x="988" y="352" key="com.intellij.ide.util.TipDialog/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1582201982944" />
+    <state x="741" y="299" key="com.intellij.ide.util.TipDialog/0.23.1920.821@0.23.1920.821" timestamp="1582539465651" />
+    <state x="790" y="280" key="com.intellij.ide.util.TipDialog/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580992199570" />
+    <state x="356" y="103" width="465" height="523" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1578513768261">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="356" y="103" width="465" height="523" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.0.1366.736@0.0.1366.736" timestamp="1578513768261" />
+    <state x="474" y="288" width="411" height="157" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1579205842006">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="474" y="288" width="411" height="157" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.736@0.0.1366.736" timestamp="1579205842006" />
+    <state x="376" y="139" width="867" height="519" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1581366883539">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="376" y="139" width="867" height="519" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1366.736@0.0.1366.736" timestamp="1581366883539" />
+    <state x="564" y="157" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580111035538" />
+    <state x="183" y="102" width="1021" height="570" key="find.popup" timestamp="1582408976943">
+      <screen x="0" y="0" width="1366" height="736" />
+    </state>
+    <state x="183" y="102" width="1021" height="570" key="find.popup/0.0.1366.736@0.0.1366.736" timestamp="1582408976943" />
+    <state x="217" y="55" width="1149" height="629" key="find.popup/0.0.1536.834@0.0.1536.834" timestamp="1580467657844" />
+    <state x="646" y="123" width="1914" height="792" key="find.popup/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1582202103373" />
+    <state x="257" y="22" width="1531" height="742" key="find.popup/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580997248900" />
+    <state x="766" y="66" key="refactoring.ChangeSignatureDialog" timestamp="1579793382511">
+      <screen x="0" y="0" width="2048" height="834" />
+    </state>
+    <state x="766" y="66" key="refactoring.ChangeSignatureDialog/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1579793382511" />
+    <state x="649" y="82" width="1260" height="969" key="search.everywhere.popup" timestamp="1581578339950">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="346" y="57" width="672" height="678" key="search.everywhere.popup/0.0.1366.736@0.0.1366.736" timestamp="1577652966018" />
+    <state x="389" y="65" width="756" height="769" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1579800995005" />
+    <state x="649" y="82" width="1260" height="969" key="search.everywhere.popup/0.0.2560.1050/-1920.-112.1920.1170@0.0.2560.1050" timestamp="1581578339950" />
+    <state x="519" y="65" width="1008" height="769" key="search.everywhere.popup/2560.0.1536.834/0.0.2048.834@0.0.2048.834" timestamp="1580798827191" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint suspend="NONE" type="python-line">
+          <url>file://$PROJECT_DIR$/../src/ORCA/utils/TypeConvert.py</url>
+          <line>176</line>
+          <option name="timeStamp" value="148" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../src/ORCA/vars/QueryDict.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="205" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../src/ORCA/vars/QueryDict.py</url>
+          <line>95</line>
+          <option name="timeStamp" value="206" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../src/scripts/discover/discover_itach/script.py</url>
+          <line>267</line>
+          <option name="timeStamp" value="219" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../src/ORCA/widgets/Picture.py</url>
+          <line>114</line>
+          <option name="timeStamp" value="220" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

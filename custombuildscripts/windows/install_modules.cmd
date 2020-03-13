@@ -16,7 +16,7 @@ pip3 install wakeonlan
 echo Install ws4py
 pip3 install ws4py
 
-echo Install httlib2
+echo Install httplib2
 pip3 install httplib2
 
 echo Install pycparser
@@ -27,3 +27,13 @@ pip3 install mwclient
 
 echo Install netiface
 pip3 install netifaces
+
+echo Install pillow
+pip3 install pillow
+
+echo Install demjson
+pip3 install demjson
+
+echo Install adb-shell
+pip3 install adb-shell
+

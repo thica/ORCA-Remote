@@ -21,7 +21,7 @@
 from typing import Tuple
 from ORCA.definition.DefinitionContext import SetDefinitionContext
 
-def GetSetDefinitionName(uText:str) ->Tuple:
+def GetSetDefinitionName(*,uText:str) ->Tuple:
     """
     Gets the definitionname from a string and sets the definitioncontext
     :param uText:
@@ -35,7 +35,7 @@ def GetSetDefinitionName(uText:str) ->Tuple:
         if not iLoc2 == -1:
             uRet=uText[iLoc+1:iLoc2]
             if not uRet=='':
-                SetDefinitionContext(uRet)
+                SetDefinitionContext(uDefinitionName=uRet)
                 uText=uText[:iLoc]+uText[iLoc2+1:]
 
     return uRet,uText

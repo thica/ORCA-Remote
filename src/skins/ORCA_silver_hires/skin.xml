@@ -44,6 +44,7 @@
     <pic name="device nvidia shield" file="$var(SKINPATH)/pics/devices/device nvidia shield.png"/>
     <pic name="device android" file="$var(SKINPATH)/pics/devices/device android.png"/>
     <pic name="device firetv" file="$var(SKINPATH)/pics/devices/device firetv.png"/>
+    <pic name="device firetv stick" file="$var(SKINPATH)/pics/devices/device firetv-stick.png"/>
     <pic name="device kodi" file="$var(SKINPATH)/pics/devices/device kodi.png"/>
     <pic name="device heater" file="$var(SKINPATH)/pics/devices/device heater.png"/>
     <pic name="activity tv" file="$var(SKINPATH)/pics/activities/activity-tv.png"/>
@@ -89,8 +90,8 @@
       <description language='English'>ORCA Standard Skin, High Resolution, Silver Elements</description>
       <description language='German'>ORCA Standard Skin, Hohe Auflösung, Silberne Elemente</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/skins/ORCA_silver_hires</local>

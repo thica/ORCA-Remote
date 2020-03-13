@@ -25,7 +25,15 @@ from kivy.logger            import Logger
 from ORCA.utils.LogError    import LogError
 import ORCA.Globals as Globals
 
-__all__ = ['QueryDict','cMonitoredSettings']
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.BaseSettings import cBaseSettings
+else:
+    from typing import TypeVar
+    cBaseSettings = TypeVar("cBaseSettings")
+
+
+__all__ = ['QueryDict','TypedQueryDict','cMonitoredSettings']
 
 
 class QueryDict(dict):
@@ -40,96 +48,126 @@ class QueryDict(dict):
             if attr!="__name__":
                 LogError(uMsg=u'QueryDict: can''t find attribute:'+attr)
             return u''
-
     def __setattr__(self, attr, value):
         self.__setitem__(attr, value)
 
+class TypedQueryDict(QueryDict):
+    """
+    QueryDict with typing handling / Checking
+    """
 
-class cMonitoredSettings(QueryDict):
-    def __init__(self, oBaseSettings, **kwargs):
-        """
-        Initializes the Querydict
-
-        :type object oBaseSettings: The parent interfacesetting
-        """
-        super(cMonitoredSettings, self).__init__(**kwargs)
-        self.oBaseSettings = oBaseSettings
-
-    # noinspection PyMethodMayBeStatic
-    def __NormalizeName(self,uName:str,vValue:Any) ->str:
-
-        uPre:str = 'o'
-
-        if len(uName)>1:
-            if uName[0].islower() and uName[1].isupper():
-                uPre = ''
-
-        if uPre:
-            if isinstance(vValue,str):
-                uPre = 'u'
-            elif type(vValue) is int:
-                uPre = 'i'
-            elif type(vValue) is float:
-                uPre = 'f'
-            elif type(vValue) is bool:
-                uPre = 'b'
-            elif type(vValue) is list:
-                uPre = 'a'
-            elif isinstance(vValue,object):
-                uPre = 'o'
-            else:
-                Logger.error("Unknown Type for cMonitoredSettings:"+uName)
-
-        return str(uPre+uName)
-
-    def WriteVar(self,uName:str,vValue:Any):
-        # DUMMY
-        pass
-
-    def __setitem__(self, k, v):
-
-        uName:str = self.__NormalizeName(uName=k,vValue=v)
-        super(cMonitoredSettings, self).__setitem__(uName, v)
-        self.WriteVar(uName=uName, vValue=v)
+    def __setitem__(self, k, v) -> str:
+        uName:str = NormalizeName(uName=k,vValue=v)
+        super().__setitem__(uName, v)
         if Globals.bProtected:
-            self.CheckSpelling() # todo: remove in release'
+            self.CheckSpelling()
+        return uName
 
-    '''
-    def __setattr__(self, attr, value):
+    def queryget(self,item:Any) -> Any:
         """
-        Sets the Attribute in the Querydict AND set the contextvar
-
-        :param string attr: The attribute name
-        :param value: The attribute value
+        Returns the value an item, independent of its type prefix, This enable easier handling of ini files, where you usually will not use a type prefix
+        :param item: The key of the item
+        :return: The value or none
         """
-        sName=self.__NormalizeName(uName=attr,value=value)
-        super(cMonitoredSettings, self).__setattr__(sName, value)
-        self.WriteVar(sName=sName, oValue=value)
-        self.CheckSpelling() # todo: remove in release'
-    '''
+        ret = dict.get(self,item)
+        if ret is not None: return ret
+        for pre in "uifboad":
+            ret = dict.get(self,pre+item)
+            if ret is not None: return ret
+        return None
 
     def CheckSpelling(self) -> None:
+        """
+        Debug helper function, which checks of the type prefix fits to the type of the var and if we have duplicate entries with different types
+        This is automatic disabled in release version
+        :return:
+        """
         dCheck:Dict[str,str]={}
-        #for key in self.iterkeys():
+        key:str
         for key in self:
             if key.upper() in dCheck:
                 Logger.error("Duplicate Key with mismatch spelling:"+ key+" "+dCheck[key.upper()])
                 return
             dCheck[key.upper()]=key
 
-        #for key in self.iterkeys():
         for key in self:
             if key[1:].upper() in dCheck:
                 Logger.error("Duplicate Key with mismatch type:"+ key+" "+dCheck[key.upper()])
                 return
             dCheck[key[1:].upper()]=key
 
-    def queryget(self,item) -> Any:
+        for key in self:
+            if key[0] == "u" and not isinstance(self[key],str):
+                Logger.error("TypedQueryDict Wrong str type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
+            elif key[0] == "í" and not isinstance(self[key],int):
+                Logger.error("TypedQueryDict Wrong int type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
+            elif key[0] == "f" and not isinstance(self[key],float):
+                Logger.error("TypedQueryDict Wrong float type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
+            elif key[0] == "b" and not isinstance(self[key],bool):
+                Logger.error("TypedQueryDict Wrong bool type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
+            elif key[0] == "a" and not isinstance(self[key],list):
+                Logger.error("TypedQueryDict Wrong list type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
+            elif key[0] == "d" and not isinstance(self[key],dict):
+                Logger.error("TypedQueryDict Wrong dict type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
+            elif key[0].islower() and not key[1].isupper():
+                Logger.error("TypedQueryDict Wrong key name (not lower/Uppercase) " + key)
 
-        ret = dict.get(self,item)
-        if ret is not None: return ret
-        for pre in "uifboa":
-            ret = dict.get(self,pre+item)
-            if ret is not None: return ret
-        return None
+class cMonitoredSettings(TypedQueryDict):
+    """
+    A sub of querydict, which writes changes of dict values automatically into a config files
+    """
+    def __init__(self, oBaseSettings:cBaseSettings, **kwargs):
+        """
+        Initializes the Querydict
 
+        :type object oBaseSettings: The parent interfacesetting
+        """
+        super().__init__(**kwargs)
+        self.oBaseSettings:cBaseSettings = oBaseSettings
+
+    def WriteVar(self,uName:str,vValue:Any):
+        """
+        Dummy function to write the value into a config. Needs to be overloades
+        :param uName: The key name
+        :param vValue: The value
+        """
+        Logger.error("cMonitoredSettings: Overload for WriteVar is missing")
+        pass
+
+    def __setitem__(self, k, v):
+        uName:str =super().__setitem__(k, v)
+        self.WriteVar(uName=uName, vValue=v)
+
+
+def NormalizeName(uName:str,vValue:Any) ->str:
+    """
+    Normalizes the type by adding a prefix which fits to the variable type
+    :param uName:
+    :param vValue:
+    :return:
+    """
+    uPre:str = 'o'
+
+    if len(uName)>1:
+        if uName[0].islower() and uName[1].isupper():
+            uPre = ''
+
+    if uPre:
+        if isinstance(vValue,str):
+            uPre = 'u'
+        elif type(vValue) is int:
+            uPre = 'i'
+        elif type(vValue) is float:
+            uPre = 'f'
+        elif type(vValue) is bool:
+            uPre = 'b'
+        elif type(vValue) is list:
+            uPre = 'a'
+        elif type(vValue) is dict:
+            uPre = 'd'
+        elif isinstance(vValue,object):
+            uPre = 'o'
+        else:
+            Logger.error("Unknown Type for cMonitoredSettings:"+uName)
+
+    return str(uPre+uName)

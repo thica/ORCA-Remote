@@ -91,11 +91,11 @@ class cFileName:
 
         return self
 
-    def __radd__(self, oOther: str) ->str:
-        if isinstance(oOther, str):
-            return oOther+self.string
+    def __radd__(self, uOther: str) ->str:
+        if isinstance(uOther, str):
+            return uOther+self.string
         else:
-            return oOther
+            return uOther
 
     @property
     def basename(self) ->str:
@@ -111,16 +111,16 @@ class cFileName:
 
     @property
     def unixstring(self) ->str:
-        return AdjustPathToUnix(self.string)
+        return AdjustPathToUnix(uPath=self.string)
 
     @property
     def urlstring(self) ->str:
-        return AdjustPathToUnix(self.string).replace(":/", "://")
+        return AdjustPathToUnix(uPath=self.string).replace(":/", "://")
 
     def _CreateFinal(self) ->None:
         self.bDirty = False
         if self.uRaw:
-            self.uFinal = CleanUp(ReplaceVars(self.oPath.uRaw)+ ReplaceVars(self.uRaw))
+            self.uFinal = CleanUp(uFinal=ReplaceVars(self.oPath.uRaw)+ ReplaceVars(self.uRaw))
         else:
             self.uFinal=u''
 
@@ -138,7 +138,7 @@ class cFileName:
         return isfile(self.string)
 
 
-    def Copy(self,oNewFile: Union[cFileName,cPath]) ->bool:
+    def Copy(self,*,oNewFile: Union[cFileName,cPath]) ->bool:
         """
         Copies a file
 
@@ -157,14 +157,14 @@ class cFileName:
             LogError (uMsg=u'can\'t copy file [%s] to [%s]' % (self.string,oNewFile.string),oException=e)
             return False
 
-    def ImportFullPath(self,uFnFullName: str) ->cFileName:
+    def ImportFullPath(self,*,uFnFullName: str) ->cFileName:
         if uFnFullName.startswith("$var("):
             if uFnFullName.endswith(")"):
                 if not uSeparator in uFnFullName:
                     Logger.warning("Variable on FileName needs to replaced on import, is this what you want?:"+uFnFullName)
                     uFnFullName = ReplaceVars(uFnFullName)
 
-        self.oPath.ImportFullPath(uFnFullName)
+        self.oPath.ImportFullPath(uFnFullName=uFnFullName)
         self.uRaw=basename(uFnFullName)
         self.bDirty = True
         return self
@@ -183,7 +183,7 @@ class cFileName:
             Logger.warning (uMsg)
             return False
 
-    def Rename(self,oNewFileName: cFileName) ->bool:
+    def Rename(self,*,oNewFileName: cFileName) ->bool:
         """
         Renames a File
 

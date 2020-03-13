@@ -86,8 +86,8 @@ class cWidgetSwitch(cWidgetButton):
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet:bool = super().InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
-        self.uDestVar                         = GetXMLTextAttribute(oXMLNode,u'destvar',    False,self.uName+'_switchstate')
-        self.uGroup                           = GetXMLTextAttribute(oXMLNode,u'group',      False,'')
+        self.uDestVar                         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'destvar', bMandatory=False, vDefault=self.uName+'_switchstate')
+        self.uGroup                           = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'group',   bMandatory=False, vDefault='')
         self.oFnButtonPictureNormalOrg        = cFileName(self.oFnButtonPictureNormal)
         self.oFnButtonPicturePressedOrg       = cFileName(self.oFnButtonPicturePressed)
         if GetVar(uVarName = self.uDestVar)=='1':

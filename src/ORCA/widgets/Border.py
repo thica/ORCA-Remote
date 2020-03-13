@@ -84,7 +84,7 @@ class cWidgetBorder(cWidgetBase):
 
         bRet:bool=self.ParseXMLBaseNode(oXMLNode, oParentScreenPage, uAnchor)
         if bRet:
-            self.uLineWidth  = GetXMLTextAttributeVar(oXMLNode,u'linewidth',    False,"1.0")
+            self.uLineWidth  = GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'linewidth', bMandatory=False, uDefault="1.0")
             if self.uBackGroundColor=="#00000000":
                 self.aBackGroundColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('color border')
 

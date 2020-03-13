@@ -55,7 +55,7 @@ def GetMACAddress() -> List:
                 if dNetDetails["addr"] == Globals.uIPAddressV4:
                     uRetColon = netifaces.ifaddresses(uNetiface)[netifaces.AF_LINK][0]['addr']
                     uRetDash  = uRetColon.replace(":","-")
-                    return uRetColon,uRetDash
+                    return [uRetColon,uRetDash]
     except Exception:
         pass
 
@@ -64,4 +64,4 @@ def GetMACAddress() -> List:
         uRetDash  = u'-'.join(re.findall('..', '%012x' % uuid.getnode()))
     except Exception as e:
         Logger.error("Error on GetMACAdress:"+str(e))
-    return uRetColon,uRetDash
+    return [uRetColon,uRetDash]

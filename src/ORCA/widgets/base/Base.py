@@ -200,7 +200,7 @@ class cWidgetBase(cWidgetBaseBase):
         self.uPageName:str                              = u''
         self.uTapType:str                               = u''
         self.uTypeString:str                            = u''
-
+        self.oParentScreenPage:Union[cScreenPage,None]  = None
 
     # noinspection PyUnresolvedReferences
     def ParseXMLBaseNode (self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
@@ -218,7 +218,7 @@ class cWidgetBase(cWidgetBaseBase):
 
             self.GetWidgetTypeFromXmlNode(oXMLNode)
 
-            uDefinitionContext      = GetXMLTextAttribute  (oXMLNode,u'definitioncontext',  False, Globals.uDefinitionContext)
+            uDefinitionContext      = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag=u'definitioncontext', bMandatory=False, vDefault=Globals.uDefinitionContext)
             uAlias                  = oXMLNode.get('definitionalias')
             oDef                    = None
             if uAlias is not None:
@@ -226,7 +226,7 @@ class cWidgetBase(cWidgetBaseBase):
 
             self.oDef               = oDef
             self.uDefinitionContext = uDefinitionContext
-            self.uName               = GetXMLTextAttribute(oXMLNode,u'name',True,u'NoName')
+            self.uName               = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'NoName')
             self.oParentScreenPage  = oParentScreenPage
             self.uPageName          = self.oParentScreenPage.uPageName
 
@@ -239,7 +239,7 @@ class cWidgetBase(cWidgetBaseBase):
             self.iGapY              = oDef.iGapY
             self.fRationX           = oDef.fRationX
             self.fRationY           = oDef.fRationY
-            self.uAnchorName        = GetXMLTextAttribute(oXMLNode,u'anchor',False,u'')
+            self.uAnchorName        = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'anchor',bMandatory=False,vDefault=u'')
 
             if self.uAnchorName == u'':
                 self.uAnchorName=uAnchor
@@ -258,8 +258,8 @@ class cWidgetBase(cWidgetBaseBase):
                     self.oTmpAnchor=None
 
             # We parse for Text and change later to integer
-            uWidth                  = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'width', False, u''))
-            uHeight                 = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'height', False, u''))
+            uWidth                  = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag= u'width', bMandatory=False,  vDefault=u''))
+            uHeight                 = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag= u'height',bMandatory= False, vDefault=u''))
 
             iAnchorWidth            = self.iAnchorWidth
             iAnchorHeight           = self.iAnchorHeight
@@ -269,19 +269,19 @@ class cWidgetBase(cWidgetBaseBase):
             if bApplyWidth:
                 self.iWidth = self._ParseDimPosValue(uWidth)
 
-            self.bIsEnabled         = GetXMLBoolAttribute (oXMLNode,u'enabled', False,True)
-            self.uContainer         = GetXMLTextAttribute(oXMLNode, u'container', False, u'')
-            self.uBackGroundColor   = GetXMLTextAttribute(oXMLNode,u'backgroundcolor',False,u'#00000000')
+            self.bIsEnabled         = GetXMLBoolAttribute(oXMLNode=oXMLNode, uTag=u'enabled',        bMandatory=False,  bDefault=True)
+            self.uContainer         = GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'container',      bMandatory=False,  vDefault=u'')
+            self.uBackGroundColor   = GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'backgroundcolor',bMandatory=False,  vDefault=u'#00000000')
             self.aBackGroundColor   = GetColorFromHex(ReplaceVars(self.uBackGroundColor))
 
-            uPosY:str               = ReplaceVars(GetXMLTextAttribute  (oXMLNode,u'posy',   False, u'top'))
+            uPosY:str               = ReplaceVars(GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag=u'posy',bMandatory=False,vDefault=u'top'))
             self.iPosY              = self.CalculatePosY(uPosY)
 
-            uPosX:str               = ReplaceVars(GetXMLTextAttribute(oXMLNode, u'posx', False, u'left'))
+            uPosX:str               = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'posx', bMandatory=False,vDefault=u'left'))
             self.iPosX              = self.CalculatePosX(uPosX)
 
-            self.uInterFace         = GetXMLTextAttribute(oXMLNode,u'interface',False,u'')
-            self.uConfigName        = GetXMLTextAttribute(oXMLNode,u'configname',False,u'')
+            self.uInterFace         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'interface', bMandatory=False,        vDefault=u'')
+            self.uConfigName        = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'configname',bMandatory=False,        vDefault=u'')
 
             if not hasattr(self,'bIsDropButton'):
                 oLastWidget = self
@@ -438,7 +438,7 @@ class cWidgetBase(cWidgetBaseBase):
             elif tFrom == 'self':
                 tFrom = self
             else:
-                aFrom = Globals.oTheScreen.FindWidgets(self.oParentScreenPage.uPageName,tSplit[2])
+                aFrom = Globals.oTheScreen.FindWidgets(uPageName=self.oParentScreenPage.uPageName,uWidgetName=tSplit[2])
                 if len(aFrom)>0:
                     tFrom=aFrom[0]
                 else:
@@ -512,7 +512,7 @@ class cWidgetBase(cWidgetBaseBase):
                     self.oObject = Class(**self.dKwArgs)
                 else:
                     from ORCA.utils.RemoveNoClassArgs import RemoveNoClassArgs
-                    self.oObject = Class(**RemoveNoClassArgs(self.dKwArgs, Class))
+                    self.oObject = Class(**RemoveNoClassArgs(dInArgs=self.dKwArgs, oObject=Class))
                     # self.RemoveNoClassArgs(kwargs, Widget))
                     # self.oObject = Class(**self.dKwArgs)
                 self.oObject.oOrcaWidget = self
@@ -536,7 +536,7 @@ class cWidgetBase(cWidgetBaseBase):
                     self.oBorder = None
 
     def GetWidgetTypeFromXmlNode(self,oXMLNode:Element) -> None:
-        self.uTypeString = GetXMLTextAttribute (oXMLNode,u'type',True,u'')
+        self.uTypeString = GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'type',bMandatory=True,vDefault=u'')
         self._eWidgetType = dWidgetTypeToId.get(self.uTypeString,eWidgetType.ERROR)
         if not CheckCondition(oPar=oXMLNode):
             self._eWidgetType = eWidgetType.SkipWidget
@@ -571,12 +571,13 @@ class cWidgetBase(cWidgetBaseBase):
         self.fOrgOpacity = fTransparancy
         return True
 
-    def SetWidgetColor(self,sBackgroundColor:str) -> None:
+    def SetWidgetColor(self,sBackgroundColor:str) -> bool:
         sColor = ReplaceVars(sBackgroundColor)
         self.uBackGroundColor = sColor
         self.aBackGroundColor = GetColorFromHex(sColor)
         if self.oObject:
             self.oObject.background_color = self.aBackGroundColor
+        return True
 
     def AddArg(self,uKey:str,oValue:Any) -> None:
         super().AddArg(uKey,oValue)

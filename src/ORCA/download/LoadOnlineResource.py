@@ -19,11 +19,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from typing import Union
+from typing import Optional
 
 import urllib
 
-from xml.etree.ElementTree      import ElementTree
 from xml.etree.ElementTree      import Element
 
 from kivy.logger                import Logger
@@ -37,6 +36,7 @@ from ORCA.utils.wait.StopWait   import StopWait
 from ORCA.vars.Access           import SetVar
 from ORCA.utils.TypeConvert     import ToInt
 from ORCA.utils.FileName        import cFileName
+from ORCA.utils.XML             import LoadXMLFile
 from ORCA.utils.Path            import cPath
 import ORCA.Globals as Globals
 
@@ -66,36 +66,37 @@ class cLoadOnlineResource(EventDispatcher):
         self.register_event_type('on_download_finished')
 
         self.bIsLoading:bool                        = False
-        self.oRef:Union[cDownLoadObject,None]       = None
-        self.uDest:str                              = ""
+        self.oRef:Optional[cDownLoadObject]         = None
         self.uTarget:str                            = ""
+        self.oFnDest:Optional[cFileName]            = None
+
         self.uType:str                              = ""
         self.uName:str                              = ""
         self.uVersion:str                           = ""
         self.oWeb                                   = None
-        self.oProgressBar:Union[cProgressBar,None]  = None
+        self.oProgressBar:Optional[cProgressBar]    = None
         self.bFinished:bool                         = False
         self.bOnError:bool                          = False
         self.bIsLoading:bool                        = True
         self.bFirstMessage:bool                     = True
         self.uUrl:str                               = ''
 
-
-    def LoadSingleFile(self, sRef:str,oProgressBar:cProgressBar) -> bool:
+    def LoadSingleFile(self,*,uRef:str,oProgressBar:cProgressBar) -> bool:
         """
         Loads a single resource by web
         dispatches on_download_finished when finished
         """
 
         self.oRef           = cDownLoadObject()
-        self.oRef.FromString(sRef)
+        self.oRef.FromString(uPars=uRef)
 
         uUrl                 = self.oRef.dPars["Url"]
-        self.uDest           = self.oRef.dPars["Dest"]
         self.uTarget         = self.oRef.dPars["Target"]
         self.uType           = self.oRef.dPars["Type"]
         self.uName           = self.oRef.dPars["Name"]
         self.uVersion        = self.oRef.dPars["Version"]
+
+        self.oFnDest         = cFileName('').ImportFullPath(uFnFullName=self.oRef.dPars["Dest"])
 
         self.oWeb            = None
         self.oProgressBar    = oProgressBar
@@ -107,17 +108,17 @@ class cLoadOnlineResource(EventDispatcher):
         StartWait()
 
         try:
-            Logger.debug("LoadOnlineResource: Downloading [%s] to [%s]" % (uUrl,self.uDest))
+            Logger.debug("LoadOnlineResource: Downloading [%s] to [%s]" % (uUrl,self.oFnDest.string))
             # noinspection PyUnresolvedReferences
             self.uUrl = urllib.parse.quote(uUrl, safe="%/:=&?~#+!$,;'@()*[]")
 
             #self.uUrl         = urllib.quote(uUrl,safe="%:=&?~#+!$,;'@()*[]")
             #todo: fix ocaremote ssl problem and remove verify=false
-            self.oWeb         = UrlRequest(self.uUrl, verify=False, on_success=self.OnSuccess,on_failure=self.OnFailure,on_error=self.OnError,on_progress=self.OnProgress, decode=False,file_path=self.uDest, debug=False)
+            self.oWeb         = UrlRequest(self.uUrl, verify=False, on_success=self.OnSuccess,on_failure=self.OnFailure,on_error=self.OnError,on_progress=self.OnProgress, decode=False,file_path=self.oFnDest.string, debug=False)
 
             return True
         except Exception as e:
-            LogError(uMsg=u'can\'t load online resource: %s to %s' % (self.uUrl,self.uDest),oException=e)
+            LogError(uMsg=u'can\'t load online resource LSF: %s to %s' % (self.uUrl,self.oFnDest.string),oException=e)
             self.bFinished  = True
             self.bOnError   = True
             self.bIsLoading = False
@@ -135,15 +136,15 @@ class cLoadOnlineResource(EventDispatcher):
         """ Handle an FTP Failure event """
         self.bFinished = True
         self.bOnError  = True
-        cFileName('').ImportFullPath(self.uDest).Delete()
-        LogError(uMsg=u'can\'t load online resource: %s to %s [%s]' % (self.uUrl,self.uDest,result))
+        self.oFnDest.Delete()
+        LogError(uMsg=u'can\'t load online resource OnFailure: %s to %s [%s]' % (self.uUrl,self.oFnDest.string,result))
         self.OnSuccess(None,None)
         self.bIsLoading=False
         SetVar(uVarName = "DOWNLOADERROR", oVarValue = "1")
         StopWait()
         return
 
-    def OnProgress(self,request,iCurrentSize,iTotalSize) -> None:
+    def OnProgress(self,request,iCurrentSize:int,iTotalSize:int) -> None:
         """ Updates the progressbar  """
         if not self.oProgressBar is None:
             if self.bFirstMessage:
@@ -153,7 +154,7 @@ class cLoadOnlineResource(EventDispatcher):
             if self.oProgressBar.bCancel:
                 self.bFinished = True
                 self.bOnError  = True
-                cFileName('').ImportFullPath(self.uDest).Delete()
+                self.oFnDest.Delete()
                 self.OnSuccess(None,None)
                 return
 
@@ -166,9 +167,8 @@ class cLoadOnlineResource(EventDispatcher):
         self.dispatch('on_download_finished')
         self.bFinished = True
 
-        oFileName = cFileName().ImportFullPath(self.uDest)
-        if not oFileName.Exists():
-            Logger.error("Target File not found:" + oFileName.string)
+        if not self.oFnDest.Exists():
+            Logger.error("Target File not found:" + self.oFnDest.string)
             self.bOnError = True
 
         if not self.bOnError:
@@ -186,9 +186,9 @@ class cLoadOnlineResource(EventDispatcher):
 
         if self.oRef.dPars["Finalize"]=="REPOSITORY XML":
             try:
-                oET_Root = ElementTree(file=self.uDest).getroot()
+                oET_Root = LoadXMLFile(oFile=self.oFnDest, bNoCache=True)
                 if not oET_Root is None:
-                    self.oRepository.ParseFromXMLNode(oET_Root)
+                    self.oRepository.ParseFromXMLNode(oXMLNode=oET_Root)
             except Exception as e:
                 LogError(uMsg=u'can\'t parse repository:'+self.uUrl,oException=e)
                 return True
@@ -198,7 +198,7 @@ class cLoadOnlineResource(EventDispatcher):
                     if self.uTarget.startswith('.' or '..' in self.uTarget):
                         LogError(uMsg='All destination pathes must be inside the ORCA directory, absolute pathes are not allowed!:'+self.uTarget)
                     else:
-                        oZipFile:cZipFile = cZipFile('').ImportFullPath(self.uDest)
+                        oZipFile:cZipFile = cZipFile('').ImportFullPath(uFnFullName=self.oFnDest.string)
                         if oZipFile.IsZipFile():
                             if not Globals.bProtected:
                                 oZipFile.Unzip(cPath('$var(APPLICATIONPATH)/'+self.uTarget))
@@ -212,6 +212,6 @@ class cLoadOnlineResource(EventDispatcher):
                                 #todo: handle unzipped files
                         oZipFile.Delete()
                 Logger.debug('LoadOnlineResource: Finished download Resource  [%s][%s]' % (self.uType,self.uName))
-                RegisterDownLoad(self.uType,self.uName,ToInt(self.uVersion))
+                RegisterDownLoad(uType=self.uType,uName=self.uName,iVersion=ToInt(self.uVersion))
             except Exception as e:
                 LogError(uMsg=u'can\'t unpack resources:'+self.uUrl,oException=e)

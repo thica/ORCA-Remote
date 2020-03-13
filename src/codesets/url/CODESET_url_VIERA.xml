@@ -9,8 +9,8 @@
       <description language='English'>LAN Control for Panasonic Viera TVs</description>
       <description language='German'>LAN Steuerung für Panasonic Viera TVs</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_VIERA.xml</local>
@@ -53,7 +53,7 @@
     </action>
 
   <action name='setvolume'      string="codeset"      params='$var(vieraparamssetvol)'                                            type="soap" waitforresponse='1' requesttype='POST' cmd='/dmr/control_0' headers="$var(vieraheadersetvol)"  />
-  <action name='getvolume'      string="codeset"      params='$var(vieraparamsgetvol)'                                            type="soap" waitforresponse='1' requesttype='POST' cmd='/dmr/control_0' headers="$var(vieraheadergetvol)"  gdestvar='tvvolviera' getvar='{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:schemas-upnp-org:service:RenderingControl:1}GetVolumeResponse,CurrentVolume' parseoption='xml' />
+  <action name='getvolume'      string="codeset"      params='$var(vieraparamsgetvol)'                                            type="soap" waitforresponse='1' requesttype='POST' cmd='/dmr/control_0' headers="$var(vieraheadergetvol)"  gdestvar='tvvolviera' getvar='CurrentVolume' parseoption='xml' parseflags="U"/>
 
   <action name='info'           string="codeset"      params='$var(vieraparamskeypre)NRC_INFO-ONOFF$var(vieraparamskeypost)'      type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
   <action name='power_toggle'   string="codeset"      params='$var(vieraparamskeypre)NRC_POWER-ONOFF$var(vieraparamskeypost)'     type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />

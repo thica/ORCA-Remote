@@ -19,8 +19,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from typing import List
+from typing import Dict
 from kivy import Logger
+import ORCA.Globals as Globals
 
 try:
     import netifaces
@@ -31,16 +32,15 @@ __all__ = ['GetGatewayV4']
 
 def GetGatewayV4() -> str:
 
-    uIP:str        = u'192.168.1.1'
     uFamily:str    = u'AF_INET'
     iInet_num:int
 
     try:
         iInet_num = getattr(netifaces, uFamily)
-        aGateways:List = netifaces.gateways()
+        dGateways:Dict = netifaces.gateways()
         # noinspection PyTypeChecker
-        uIP  = aGateways['default'][iInet_num][0]
+        uIP  = dGateways['default'][iInet_num][0]
     except Exception as e:
-        Logger.error("Error on GetGatewayV4:"+str(e))
-
+        Logger.error("Error on GetGatewayV4, using fallback:"+str(e))
+        uIP:str = Globals.uIPAddressV4[:Globals.uIPAddressV4.rfind(".")] + '.1'
     return uIP

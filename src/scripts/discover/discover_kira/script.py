@@ -38,7 +38,7 @@ from ORCA.utils.LogError                    import LogError
 from ORCA.utils.TypeConvert                 import ToFloat
 from ORCA.utils.TypeConvert                 import ToBool
 from ORCA.utils.TypeConvert                 import ToUnicode
-from ORCA.vars.QueryDict                    import QueryDict
+from ORCA.vars.QueryDict                    import TypedQueryDict
 from ORCA.utils.FileName                    import cFileName
 
 import ORCA.Globals as Globals
@@ -51,8 +51,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover Keene Kira devices</description>
       <description language='German'>Erkennt sucht Keene Kira Geräte</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_kira</local>
@@ -91,15 +91,15 @@ class cScript(cDiscoverScriptTemplate):
     """
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript:cScript):
-            cBaseScriptSettings.__init__(self,oScript)
+            super().__init__(oScript)
             self.aIniSettings.fTimeOut  = 10.0
 
     def __init__(self):
-        cDiscoverScriptTemplate.__init__(self)
+        super().__init__()
         self.uSubType:str                       = u'Keene Kira'
-        self.aResults:List[QueryDict]           = []
+        self.aResults:List[TypedQueryDict]      = []
         self.aThreads:List[threading.Thread]    = []
-        self.dReq                               = QueryDict()
+        self.dReq                               = TypedQueryDict()
 
     def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
         """
@@ -109,7 +109,7 @@ class cScript(cDiscoverScriptTemplate):
         :param cFileName oFnScript: The file of the script (to be passed to all scripts)
         """
 
-        cDiscoverScriptTemplate.Init(self, uObjectName, oFnScript)
+        super().Init(uObjectName=uObjectName, oFnObject=oFnScript)
         self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
     def GetHeaderLabels(self) -> List[str]:
@@ -119,27 +119,27 @@ class cScript(cDiscoverScriptTemplate):
 
         dArgs:Dict                   = {"onlyonce": 0,
                                       "ipversion": "IPv4Only"}
-        dDevices:Dict[str,QueryDict] = {}
-        dDevice:QueryDict
+        dDevices:Dict[str,TypedQueryDict] = {}
+        dDevice:TypedQueryDict
 
         self.Discover(**dArgs)
 
         for dDevice in self.aResults:
-            uTageLine:str=dDevice.sFoundIP+dDevice.uFoundHostName+dDevice.uFoundPort
+            uTageLine:str=dDevice.uFoundIP+dDevice.uFoundHostName+dDevice.uFoundPort
             if dDevices.get(uTageLine) is None:
                dDevices[uTageLine]=dDevice
-               self.AddLine([dDevice.sFoundIP,dDevice.uFoundHostName,dDevice.uFoundPort],dDevice)
+               self.AddLine([dDevice.uFoundIP,dDevice.uFoundHostName,dDevice.uFoundPort],dDevice)
         return
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
 
-        dDevice:QueryDict = oButton.dDevice
+        dDevice:TypedQueryDict = oButton.dDevice
 
         uText=  u"$lvar(5029): %s \n" \
                 u"$lvar(6002): %s \n" \
                 u"$lvar(5035): %s \n"\
                 u"\n"\
-                u"%s" % (dDevice.sFoundIP,dDevice.uFoundPort,dDevice.uFoundHostName,dDevice.sData)
+                u"%s" % (dDevice.uFoundIP,dDevice.uFoundPort,dDevice.uFoundHostName,dDevice.sData)
 
         ShowMessagePopUp(uMessage=uText)
 
@@ -173,7 +173,7 @@ class cScript(cDiscoverScriptTemplate):
                 oT.join()
 
             if len(self.aResults)>0:
-                return {"Host":self.aResults[0].sFoundIP,
+                return {"Host":self.aResults[0].uFoundIP,
                         "Hostname": self.aResults[0].uFoundHostName,
                         'Exception': None}
             else:
@@ -206,7 +206,7 @@ ff02::c
 class cThread_Discover_Kira(threading.Thread):
     oWaitLock = threading.Lock()
 
-    def __init__(self, bOnlyOnce:bool,dReq:QueryDict,uIPVersion:str,fTimeOut:float,oCaller:cScript):
+    def __init__(self, bOnlyOnce:bool,dReq:TypedQueryDict,uIPVersion:str,fTimeOut:float,oCaller:cScript):
         threading.Thread.__init__(self)
 
         self.bOnlyOnce:bool     = bOnlyOnce
@@ -247,9 +247,9 @@ class cThread_Discover_Kira(threading.Thread):
                         dRet = self.GetDeviceDetails(uData=uData,tSenderAddr=tSenderAddr)
                         self.CheckDeviceDetails(dRet=dRet)
                         if dRet.bFound:
-                            Logger.info(u'Bingo: Discovered device  %s:' %dRet.sFoundIP)
+                            Logger.info(u'Bingo: Discovered device  %s:' %dRet.uFoundIP)
                             try:
-                                dRet.uFoundHostName = socket.gethostbyaddr(dRet.sFoundIP)[0]
+                                dRet.uFoundHostName = socket.gethostbyaddr(dRet.uFoundIP)[0]
                             except Exception:
                                 pass
                             cThread_Discover_Kira.oWaitLock.acquire()
@@ -306,13 +306,13 @@ class cThread_Discover_Kira(threading.Thread):
 
 
     def GetDeviceDetails(self,uData:str,tSenderAddr):
-        dRet                     = QueryDict()
-        dRet.sFoundIP            = tSenderAddr[0]
+        dRet                     = TypedQueryDict()
+        dRet.uFoundIP            = tSenderAddr[0]
         dRet.uFoundPort          = tSenderAddr[1]
         dRet.bFound              = True
         dRet.sData               = uData
         dRet.uIPVersion          = self.uIPVersion
         return dRet
 
-    def CheckDeviceDetails(self,dRet:QueryDict) -> None:
+    def CheckDeviceDetails(self,dRet:TypedQueryDict) -> None:
         return

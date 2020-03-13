@@ -37,7 +37,7 @@ import ORCA.Globals as Globals
 __all__ = ['cWaitForConnectivity','Ping']
 
 
-def Ping(uHostname:str) ->bool:
+def Ping(*,uHostname:str) ->bool:
     """ Ping function """
     return OS_Ping(uHostname)
 
@@ -54,7 +54,7 @@ def IsOnline(*largs):
         if uPingAddress=="auto":
             uPingAddress=Globals.uIPGateWayV4
         Logger.debug("Pinging "+uPingAddress)
-        Globals.oWaitForConnectivity.bIsOnline = Ping(uPingAddress)
+        Globals.oWaitForConnectivity.bIsOnline = Ping(uHostname=uPingAddress)
     elif Globals.uNetworkCheckType=="system":
         Globals.oWaitForConnectivity.bIsOnline = OS_SystemIsOnline()
     else:
@@ -84,7 +84,7 @@ class cWaitForConnectivity(EventDispatcher):
         elif Globals.uNetworkCheckType=="ping":
             Logger.debug("Checking for network connectivity (ping)")
             Logger.debug("Pinging "+Globals.uConfigCheckNetWorkAddress)
-            self.bIsOnline = Ping(Globals.uConfigCheckNetWorkAddress)
+            self.bIsOnline = Ping(uHostname=Globals.uConfigCheckNetWorkAddress)
         elif Globals.uNetworkCheckType=="system":
             self.bIsOnline=OS_SystemIsOnline()
         else:
@@ -100,7 +100,7 @@ class cWaitForConnectivity(EventDispatcher):
             return
         if not self.bIsOnline:
             Clock.schedule_once(self.StartNextThread, 0)
-            fSleep(0.6)
+            fSleep(fSeconds=0.6)
             return
         self.StopWait()
 

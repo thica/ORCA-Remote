@@ -3,7 +3,7 @@
 # set -x
 
 cd "${HOME}"
-echo Preparing for Android
+echo Preparing sources
 
 # Source Folder
 varSOURCE="${SOURCEDIR}/src"

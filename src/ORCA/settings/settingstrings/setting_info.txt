@@ -10,4 +10,11 @@
 {"type": "info","title": "$lvar(587)","section": "ORCA","info":"$var(DEFINITIONVERSION)"},
 {"type": "info","title": "$lvar(588)","section": "ORCA","info":"$var(DEFINITIONAUTHOR)"},
 {"type": "info","title": "$lvar(589)","section": "ORCA","info":"$var(DEFINITIONSUPPORT)"},
-{"type": "buttons","title": "$lvar(657)","desc": "$lvar(658)","section": "ORCA","key": "button_show_installationhint","buttons":[{"title":"$lvar(659)","id":"button_show_installationhint"}]}]
+{"type": "buttons","title": "$lvar(657)","desc": "$lvar(658)","section": "ORCA","key": "button_show_installationhint","buttons":[{"title":"$lvar(659)","id":"button_show_installationhint"}]},
+{"type": "title","title":"$lvar(614)"},
+{"type": "info","title": "$lvar(615)","section": "ORCA","info":"$var(IP_ADDRESSV4)"},
+{"type": "info","title": "$lvar(616)","section": "ORCA","info":"$var(IP_GATEWAYV4)"},
+{"type": "info","title": "$lvar(617)","section": "ORCA","info":"$var(IP_SUBNETV4)"},
+{"type": "info","title": "$lvar(618)","section": "ORCA","info":"$var(IP_ADDRESSV6)"},
+{"type": "info","title": "$lvar(619)","section": "ORCA","info":"$var(MAC_ADDRESS_COLON)"}
+]

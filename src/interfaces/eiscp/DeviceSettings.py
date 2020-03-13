@@ -1,14 +1,19 @@
 from __future__ import annotations
 from typing import Dict
-from xml.etree.ElementTree import ElementTree
-from xml.etree.ElementTree import fromstring
+from typing import Optional
+
 from xml.etree.ElementTree import Element
 
 from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
 from ORCA.interfaces.InterfaceResultParser import cInterFaceResultParser
 from ORCA.vars.Actions import Var_DelArray
 
-from ORCA.utils.XML import *
+from ORCA.utils.XML import GetXMLTextValue
+from ORCA.utils.XML import GetXMLTextAttribute
+from ORCA.utils.XML import GetXMLTextAttributeVar
+from ORCA.utils.XML import LoadXMLString
+
+
 from ORCA.Action import cAction
 
 from typing import TYPE_CHECKING
@@ -253,49 +258,55 @@ class cDeviceSettings:
         try:
             iPos: int
             oXML: Element
+            oXMLControlList: Optional[Element]
+            oXMLNetServices: Optional[Element]
+            oXMLPresets: Optional[Element]
+            oXMLSources: Optional[Element]
+            oXMLControls: Optional[Element]
             uID: str
             uZone: str
 
-            oXML                                = ElementTree(fromstring(uXML)).find("device")
+            oXML                                = LoadXMLString(uXML=uXML).find("device")
 
-            self.uVar_MacAdress                 = GetXMLTextValue(oXML, "macaddress", False, "Unknown")
-            self.uVar_Brand                     = GetXMLTextValue(oXML, "brand", False, "Unknown")
-            self.uVar_Category                  = GetXMLTextValue(oXML, "category", False, "Unknown")
-            self.uVar_DeviceName                = GetXMLTextAttributeVar(oXML, "id", False, "Unknown")
-            self.uVar_Year                      = GetXMLTextValue(oXML, "year", False, "Unknown")
-            self.uVar_Destination               = GetXMLTextValue(oXML, "destination", False, "Unknown")
-            self.uVar_Model                     = GetXMLTextValue(oXML, "model", False, "Unknown")
-            self.uVar_ModelIconUrl              = GetXMLTextValue(oXML, "modeliconurl", False, "")
-            self.uVar_FriendlyName              = GetXMLTextValue(oXML, "friendlyname", False, "Unknown")
-            self.uVar_FirmwareVersion           = GetXMLTextValue(oXML, "firmwareversion", False, "Unknown")
 
-            oXMLControlList: Element = oXML.find("controllist")
+            self.uVar_MacAdress                 = GetXMLTextValue(oXMLNode=oXML,        uTag="macaddress",      bMandatory=False, vDefault="Unknown")
+            self.uVar_Brand                     = GetXMLTextValue(oXMLNode=oXML,        uTag="brand",           bMandatory=False, vDefault="Unknown")
+            self.uVar_Category                  = GetXMLTextValue(oXMLNode=oXML,        uTag="category",        bMandatory=False, vDefault="Unknown")
+            self.uVar_DeviceName                = GetXMLTextAttributeVar(oXMLNode=oXML, uTag="id",              bMandatory=False, uDefault="Unknown")
+            self.uVar_Year                      = GetXMLTextValue(oXMLNode=oXML,        uTag="year",            bMandatory=False, vDefault="Unknown")
+            self.uVar_Destination               = GetXMLTextValue(oXMLNode=oXML,        uTag="destination",     bMandatory=False, vDefault="Unknown")
+            self.uVar_Model                     = GetXMLTextValue(oXMLNode=oXML,        uTag="model",           bMandatory=False, vDefault="Unknown")
+            self.uVar_ModelIconUrl              = GetXMLTextValue(oXMLNode=oXML,        uTag="modeliconurl",    bMandatory=False, vDefault="")
+            self.uVar_FriendlyName              = GetXMLTextValue(oXMLNode=oXML,        uTag="friendlyname",    bMandatory=False, vDefault="Unknown")
+            self.uVar_FirmwareVersion           = GetXMLTextValue(oXMLNode=oXML,        uTag="firmwareversion", bMandatory=False, vDefault="Unknown")
+
+            oXMLControlList = oXML.find("controllist")
             if oXMLControlList is not None:
                 for oControlElement in oXMLControlList:
-                    uID = GetXMLTextAttribute(oControlElement, 'id', False, u'')
+                    uID = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='id', bMandatory=False, vDefault=u'')
                     # print (uID)
                     if uID == "Bass":
-                        uZone = GetXMLTextAttribute(oControlElement, 'zone', False, u'')
+                        uZone = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='zone', bMandatory=False, vDefault=u'')
                         if uZone == "1":
-                            self.uVar_Bass_Min = GetXMLTextAttribute(oControlElement, 'min', False, u'-10')
-                            self.uVar_Bass_Max = GetXMLTextAttribute(oControlElement, 'max', False, u'+10')
+                            self.uVar_Bass_Min = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='min', bMandatory=False, vDefault=u'-10')
+                            self.uVar_Bass_Max = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='max', bMandatory=False, vDefault=u'+10')
                     if uID == "Treble":
-                        uZone = GetXMLTextAttribute(oControlElement, 'zone', False, u'')
+                        uZone = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='zone', bMandatory=False, vDefault=u'')
                         if uZone == "1":
-                            self.uVar_Treble_Min = GetXMLTextAttribute(oControlElement, 'min', False, u'-10')
-                            self.uVar_Treble_Max = GetXMLTextAttribute(oControlElement, 'max', False, u'+10')
+                            self.uVar_Treble_Min = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='min', bMandatory=False, vDefault=u'-10')
+                            self.uVar_Treble_Max = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='max', bMandatory=False, vDefault=u'+10')
                     if uID == "Center Level":
-                        uZone = GetXMLTextAttribute(oControlElement, 'zone', False, u'')
+                        uZone = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='zone', bMandatory=False, vDefault=u'')
                         if uZone == "1":
-                            self.uVar_CenterLevel_Min = GetXMLTextAttribute(oControlElement, 'min', False, u'-12')
-                            self.uVar_CenterLevel_Max = GetXMLTextAttribute(oControlElement, 'max', False, u'+12')
+                            self.uVar_CenterLevel_Min = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='min', bMandatory=False, vDefault=u'-12')
+                            self.uVar_CenterLevel_Max = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='max', bMandatory=False, vDefault=u'+12')
                     if uID == "Subwoofer Level":
-                        uZone = GetXMLTextAttribute(oControlElement, 'zone', False, u'')
+                        uZone = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='zone', bMandatory=False, vDefault=u'')
                         if uZone == "1":
-                            self.uVar_SubWooferLevel_Min = GetXMLTextAttribute(oControlElement, 'min', False, u'-15')
-                            self.uVar_SubWooferLevel_Max = GetXMLTextAttribute(oControlElement, 'max', False, u'+12')
+                            self.uVar_SubWooferLevel_Min = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='min', bMandatory=False, vDefault=u'-15')
+                            self.uVar_SubWooferLevel_Max = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='max', bMandatory=False, vDefault=u'+12')
 
-            oXMLNetServices: Element = oXML.find("netservicelist")
+            oXMLNetServices = oXML.find("netservicelist")
             self.dVar_NetService.clear()
             Var_DelArray(uVarName=oAction.uGlobalDestVar + u'_NetService_id[]')
             Var_DelArray(uVarName=oAction.uGlobalDestVar + u'_NetService_name[]')
@@ -303,14 +314,14 @@ class cDeviceSettings:
             if oXMLNetServices is not None:
                 iPos = 0
                 for oNetServiceElement in oXMLNetServices:
-                    uID = GetXMLTextAttribute(oNetServiceElement, 'id', False, u'')
-                    uName = GetXMLTextAttribute(oNetServiceElement, 'name', False, u'')
-                    uValue = GetXMLTextAttribute(oNetServiceElement, 'value', False, u'')
+                    uID = GetXMLTextAttribute(oXMLNode=oNetServiceElement,    uTag='id',    bMandatory=False, vDefault=u'')
+                    uName = GetXMLTextAttribute(oXMLNode=oNetServiceElement,  uTag='name',  bMandatory=False, vDefault=u'')
+                    uValue = GetXMLTextAttribute(oXMLNode=oNetServiceElement, uTag='value', bMandatory=False, vDefault=u'')
                     if uID and uValue == "1":
-                        iPos = iPos + 1
+                        iPos += 1
                         self.dVar_NetService[str(iPos)] = {"id": uID, "name": uName}
 
-            oXMLPresets: Element = oXML.find("presetlist")
+            oXMLPresets= oXML.find("presetlist")
             # <preset id="01" band="0" freq="0" name="" />
             self.dVar_Presets.clear()
             Var_DelArray(uVarName=oAction.uGlobalDestVar + u'_Presets_id[]')
@@ -318,13 +329,13 @@ class cDeviceSettings:
             if oXMLPresets is not None:
                 iPos = 0
                 for oPresetElement in oXMLPresets:
-                    uID = GetXMLTextAttribute(oPresetElement, 'id', False, u'')
-                    uName = GetXMLTextAttribute(oPresetElement, 'name', False, u'')
+                    uID   = GetXMLTextAttribute(oXMLNode=oPresetElement, uTag='id',   bMandatory=False, vDefault=u'')
+                    uName = GetXMLTextAttribute(oXMLNode=oPresetElement, uTag='name', bMandatory=False, vDefault=u'')
                     if uID and uName != "":
-                        iPos = iPos + 1
+                        iPos += 1
                         self.dVar_Presets[str(iPos)] = {"id": uID, "name": uName}
 
-            oXMLSources:Element = oXML.find("selectorlist")
+            oXMLSources = oXML.find("selectorlist")
             self.dVar_Sources.clear()
             Var_DelArray(uVarName=oAction.uGlobalDestVar + u'_Sources_id[]')
             Var_DelArray(uVarName=oAction.uGlobalDestVar + u'_Sources_name[]')
@@ -332,14 +343,14 @@ class cDeviceSettings:
             if oXMLSources is not None:
                 iPos = 0
                 for oSourceElement in oXMLSources:
-                    uID = GetXMLTextAttribute(oSourceElement, 'id', False, u'')
-                    uName = GetXMLTextAttribute(oSourceElement, 'name', False, u'')
-                    uValue = GetXMLTextAttribute(oSourceElement, 'value', False, u'')
+                    uID    = GetXMLTextAttribute(oXMLNode=oSourceElement, uTag='id',    bMandatory=False, vDefault=u'')
+                    uName  = GetXMLTextAttribute(oXMLNode=oSourceElement, uTag='name',  bMandatory=False, vDefault=u'')
+                    uValue = GetXMLTextAttribute(oXMLNode=oSourceElement, uTag='value', bMandatory=False, vDefault=u'')
                     if uID and uValue == "1":
-                        iPos = iPos + 1
+                        iPos += 1
                         self.dVar_Sources[str(iPos)] = {"id": uID, "name": uName}
 
-            oXMLControls:Element = oXML.find("controllist")
+            oXMLControls = oXML.find("controllist")
             self.dVar_ListeningModes.clear()
             Var_DelArray(uVarName=oAction.uGlobalDestVar + u'_ListeningModes_id[]')
             Var_DelArray(uVarName=oAction.uGlobalDestVar + u'_ListeningModes_name[]')
@@ -347,11 +358,11 @@ class cDeviceSettings:
             if oXMLControls is not None:
                 iPos = 0
                 for oControlElement in oXMLControls:
-                    uID = GetXMLTextAttribute(oControlElement, 'id', False, u'')
-                    uValue = GetXMLTextAttribute(oControlElement, 'value', False, u'')
-                    uCode = GetXMLTextAttribute(oControlElement, 'code', False, u'')
+                    uID    = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='id',    bMandatory=False, vDefault=u'')
+                    uValue = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='value', bMandatory=False, vDefault=u'')
+                    uCode  = GetXMLTextAttribute(oXMLNode=oControlElement, uTag='code',  bMandatory=False, vDefault=u'')
                     if uID.startswith(u"LMD ") and uValue == "1":
-                        iPos = iPos + 1
+                        iPos += 1
                         self.dVar_ListeningModes[str(iPos)] = {"code": uCode, "name": uID[4:]}
 
             dCapability:Dict = dDeviceCaps.get(self.uVar_Model,dDeviceCaps["TX-NR900"])
@@ -407,4 +418,4 @@ class cDeviceSettings:
             for uKey in self.dCapability['ListeningModes']:
                 self.oSetting.oResultParser.SetVar2(uKey, oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Listening Mode', uAddName=u"_ListeningMode_key[" + str(iIdx) + "]")
                 self.oSetting.oResultParser.SetVar2(self.oInterFace.dLMD_Text[uKey], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Listening Mode', uAddName=u"_ListeningMode_name[" + str(iIdx) + "]")
-                iIdx = iIdx + 1
+                iIdx += 1

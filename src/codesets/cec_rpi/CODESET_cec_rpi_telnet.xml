@@ -4,15 +4,14 @@
 
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
-  <!--
   <repositorymanager>
     <entry>
       <name>CEC control using Telnet</name>
       <description language='English'>CEC Control using Telnet for the RPI</description>
       <description language='German'>CEC Steuerung über Telnet für den RPI</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -29,6 +28,8 @@
       </dependencies>
     </entry>
   </repositorymanager>
+
+<!--
 
   WikiDoc:Doc
   WikiDoc:Context:Codesets
@@ -134,6 +135,6 @@
   <action string="codeset" name="data"         waitforresponse='0' cmd='echo "tx $cvar(TARGET) 44 76" | cec-client -s\r\n' />
 
   <action string="codeset" name="setvolume"    waitforresponse='0' cmd='echo "tx $cvar(TARGET) 9A $cvar(volumetoset)" | cec-client -s\r\n' />
-  <action string="codeset" name='getvolume'    waitforresponse='1' cmd='echo "tx $cvar(TARGET) 71" | cec-client -s\r\n' parseoption='xml' ldestvar='volume' gdestvar='mainvolume' getvar='volume'/>
+  <action string="codeset" name='getvolume'    waitforresponse='1' cmd='echo "tx $cvar(TARGET) 71" | cec-client -s\r\n' parseoption='xml' ldestvar='volume' gdestvar='mainvolume' getvar='volume' parseflags="U"/>
 
 </includes>

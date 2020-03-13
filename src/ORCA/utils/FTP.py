@@ -19,6 +19,7 @@
 """
 
 from typing import List
+from typing import Union
 from typing import BinaryIO
 import ftplib
 
@@ -39,10 +40,10 @@ class cFTP:
 
     def __init__(self, bEncrypt:bool = False):
         super().__init__()
-        self.oFTP           = None
-        self.bEncrypt       = bEncrypt
+        self.oFTP:Union[ftplib.FTP,None] = None
+        self.bEncrypt:bool               = bEncrypt
 
-    def DirExists(self, oPath: cPath) ->bool:
+    def DirExists(self,*, oPath: cPath) ->bool:
         """
         checks, if a remote ftp path exists
 
@@ -64,7 +65,7 @@ class cFTP:
             bExists = True
         return bExists
 
-    def CreateDir(self, oPath:cPath, uSep:str=u'/') ->bool:
+    def CreateDir(self,*, oPath:cPath, uSep:str=u'/') ->bool:
         """
         creates a remote ftp path
         :param cPath oPath: The Remote Path to create
@@ -79,7 +80,7 @@ class cFTP:
         for uServerDir in aSplitPath:
             if uServerDir:
                 uNewDir += uSep + uServerDir
-                if not self.DirExists(cPath(uNewDir)):
+                if not self.DirExists(oPath=cPath(uNewDir)):
                     try:
                         Logger.debug('Attempting to create directory (%s) ...' % uNewDir)
                         self.oFTP.mkd(uNewDir)
@@ -88,7 +89,7 @@ class cFTP:
                         return False
         return True
 
-    def ChangeDir(self,oPath:cPath)->bool:
+    def ChangeDir(self,*,oPath:cPath)->bool:
         """
         Changes to a remote ftp directory
 
@@ -102,7 +103,7 @@ class cFTP:
             LogError(uMsg='can\'t change directory (%s) ...' % oPath.unixstring,oException=e)
         return False
 
-    def Connect(self, uServer:str) ->bool:
+    def Connect(self, *,uServer:str) ->bool:
         """ connects to an ftp server """
         if not self.bEncrypt: # Use standard FTP
             self.oFTP = ftplib.FTP()
@@ -123,7 +124,7 @@ class cFTP:
             LogError(uMsg='FTP: Could not disconnect', oException=e)
             return False
         return True
-    def Login(self,uUsername:str, uPassword:str) ->bool:
+    def Login(self,*,uUsername:str, uPassword:str) ->bool:
         """ logs to an ftp server """
         try:
             self.oFTP.login(uUsername,uPassword)
@@ -136,7 +137,7 @@ class cFTP:
         ShowErrorPopUp(uMessage=uMsg)
         return False
 
-    def _UploadFile(self,oFile:cFileName,oRemoteSubPath:cPath) ->bool:
+    def _UploadFile(self,*,oFile:cFileName,oRemoteSubPath:cPath) ->bool:
         """
         uploads a file to an ftp server
 
@@ -162,7 +163,7 @@ class cFTP:
         return False
 
 
-    def UploadLocalFile(self,oFile:cFileName, oBaseLocalDir:cPath, oBaseRemoteDir:cPath) ->bool:
+    def UploadLocalFile(self,*,oFile:cFileName, oBaseLocalDir:cPath, oBaseRemoteDir:cPath) ->bool:
         """
         Subfunction to upload a local file including sub pathes to to remote folder
 
@@ -177,12 +178,12 @@ class cFTP:
             oRemoteSubPath:cPath  = cPath(uPath.replace(oBaseLocalDir.string, ''))
             oRemotePath:cPath     = cPath(uPath.replace(oBaseLocalDir.string, oBaseRemoteDir.string))
 
-            if not self.DirExists(oRemotePath):
-                self.CreateDir(oRemotePath)
+            if not self.DirExists(oPath=oRemotePath):
+                self.CreateDir(oPath=oRemotePath)
 
-            if self.ChangeDir(oRemotePath):
+            if self.ChangeDir(oPath=oRemotePath):
                 if oFile.Exists():
-                    bRet = self._UploadFile(oFile,oRemoteSubPath)
+                    bRet = self._UploadFile(oFile=oFile,oRemoteSubPath=oRemoteSubPath)
                 else:
                     Logger.warning ("File no longer exists, (%s)!" % oFile.string)
 

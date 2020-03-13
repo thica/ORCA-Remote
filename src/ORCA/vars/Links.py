@@ -18,12 +18,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import List
 from kivy.logger import Logger
 import ORCA.vars.Globals
 import ORCA.Globals as Globals
 from ORCA.utils.TypeConvert import ToDic
+from ORCA.vars.Globals import cLinkPar
 
-oLinkPar:ORCA.vars.Globals.oLinkPar=""
+oLinkPar:cLinkPar=""
 
 __all__ = ['VarHasLinks',
            'SetVarLink',
@@ -43,20 +45,20 @@ def VarHasLinks(uVarName:str) -> bool:
     """
     return ORCA.vars.Globals.dUserVarLinks.get(uVarName) is not None
 
-def SetVarLink(uVarName:str, oActions:oLinkPar) -> None:
+def SetVarLink(uVarName:str, oActions:cLinkPar) -> None:
     """
-    Sets a variable link, means something will be executed if the value of a variable changes. You can set multipe var links to one variable, but not duplicate var links. There will be no error or warning, if you try to add a duplicate valink, or the variable name does not exist
+    Sets a variable link, means something will be executed if the value of a variable changes. You can set multiple var links to one variable, but not duplicate var links. There will be no error or warning, if you try to add a duplicate valink, or the variable name does not exist
 
     :param str uVarName: The variable name, for which the var link should get added
     :param object oActions: The executable actions, which will be passed to the event handler. Either a string, which represents a dict, or a list of dicts (NOT Strings)
     """
-    aLinkedObjects:oLinkPar = ORCA.vars.Globals.dUserVarLinks.get(uVarName, [])
+    aLinkedObjects:List[cLinkPar] = ORCA.vars.Globals.dUserVarLinks.get(uVarName, [])
     if not oActions in aLinkedObjects:
         aLinkedObjects.append(oActions)
     ORCA.vars.Globals.dUserVarLinks[uVarName] = aLinkedObjects
 
 
-def DelVarLink(uVarName:str, oActions:oLinkPar) -> None:
+def DelVarLink(uVarName:str, oActions:cLinkPar) -> None:
     """
     Removes a variable link from a variable. There will be no error or warning, if you try to remove a valink, which has not been added
 
@@ -68,7 +70,7 @@ def DelVarLink(uVarName:str, oActions:oLinkPar) -> None:
         DelVarLinks(uVarName=uVarName)
         return
 
-    aLinkedObjects:oLinkPar = ORCA.vars.Globals.dUserVarLinks.get(uVarName)
+    aLinkedObjects:List[cLinkPar] = ORCA.vars.Globals.dUserVarLinks.get(uVarName)
     if aLinkedObjects is None:
         return
     if oActions in aLinkedObjects:
@@ -82,7 +84,7 @@ def DelVarLinks(uVarName:str) -> None:
     :param str uVarName: The variable name, for which the var links should get removed
     """
 
-    aLinkedObjects:oLinkPar = ORCA.vars.Globals.dUserVarLinks.get(uVarName)
+    aLinkedObjects:List[cLinkPar] = ORCA.vars.Globals.dUserVarLinks.get(uVarName)
     if aLinkedObjects is None:
         return
     ORCA.vars.Globals.dUserVarLinks[uVarName] = []
@@ -101,7 +103,7 @@ def TriggerLinkActions(uVarName:str) -> None:
     Executes all Actions given as a variable link to a variable. The actions will get excecuted immmediatly
     :param str uVarName: The variable name, for which the actions should get executed
     """
-    aVarLinks:oLinkPar = ORCA.vars.Globals.dUserVarLinks.get(uVarName, [])
+    aVarLinks:cLinkPar = ORCA.vars.Globals.dUserVarLinks.get(uVarName, [])
     if len(aVarLinks)==0:
         return
     if isinstance(aVarLinks, list):

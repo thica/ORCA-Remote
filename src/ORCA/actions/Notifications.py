@@ -64,9 +64,9 @@ class cEventActionsNotifications(cEventActionBase):
         dActionPars:Dict                    = ToDic(ReplaceVars(oAction.dActionPars.get("actionpars","{}")))
         if not isinstance(dActionPars,dict):
             dActionPars = ToDic(oAction.dActionPars.get("actionpars", "{}"))
-        self.oEventDispatcher.LogAction(u'SendNotification',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'SendNotification',oAction=oAction)
 
-        Globals.oNotifications.SendNotification(uNotification,**dActionPars)
+        Globals.oNotifications.SendNotification(uNotification=uNotification,**dActionPars)
         return eReturnCode.Nothing
 
 
@@ -99,21 +99,21 @@ class cEventActionsNotifications(cEventActionBase):
         WikiDoc:End
         """
 
-        uPageName:str                = ReplaceVars(oAction.dActionPars.get("filterpagename", ""))
-        self.oEventDispatcher.LogAction(u'RegisterNotification',oAction)
+        uPageName:str = ReplaceVars(oAction.dActionPars.get("filterpagename", ""))
+        self.oEventDispatcher.LogAction(uTxt=u'RegisterNotification',oAction=oAction)
 
         if uPageName == u"ALL":
             for uPageKey in Globals.oTheScreen.oScreenPages:
                 oCopyAction:cAction = copy(oAction)
                 oCopyAction.dActionPars["filterpagename"] = uPageKey
                 self.ExecuteActionRegisterNotification_sub(oCopyAction)
-        elif uPageName==u"NOPOPUP":
+        elif uPageName == u"NOPOPUP":
             for uPageKey in Globals.oTheScreen.oScreenPages:
                 if not Globals.oTheScreen.oScreenPages[uPageKey].bIsPopUp:
                     oCopyAction:cAction = copy(oAction)
                     oCopyAction.dActionPars["filterpagename"] = uPageKey
                     self.ExecuteActionRegisterNotification_sub(oCopyAction)
-        elif uPageName==u"POPUP":
+        elif uPageName == u"POPUP":
             for uPageKey in Globals.oTheScreen.oScreenPages:
                 if Globals.oTheScreen.oScreenPages[uPageKey].bIsPopUp:
                     oCopyAction:cAction = copy(oAction)
@@ -135,14 +135,14 @@ class cEventActionsNotifications(cEventActionBase):
             uKey:str = uNotification+"_"+uFilterPageName
             iHash:int = Globals.oNotifications.dFilterPageNames.get(uKey,0)
             if iHash != 0:
-                Globals.oNotifications.UnRegisterNotification_ByHash(iHash)
+                Globals.oNotifications.UnRegisterNotification_ByHash(iHash=iHash)
             Globals.oNotifications.RegisterNotification(uNotification=uNotification, fNotifyFunction=self.NotificationHandler, uDescription="Action:" + uActionName, bQuiet=True, **oAction.dActionPars)
         return eReturnCode.Nothing
 
     # noinspection PyMethodMayBeStatic
     def NotificationHandler(self,**kwargs):
-        uActionName:str         = kwargs["notifyaction"]
-        uFilterPageName:str     = kwargs.get("filterpagename","")
+        uActionName:str     = kwargs["notifyaction"]
+        uFilterPageName:str = kwargs.get("filterpagename","")
 
         if uFilterPageName  == "FIRSTPAGE":
             uFilterPageName=Globals.oTheScreen.uFirstPageName

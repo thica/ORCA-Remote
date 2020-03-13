@@ -7,8 +7,8 @@
       <description language='English'>ENIGMA2 Remote Control using the open webinterface</description>
       <description language='German'>ENIGMA2 Fernbedienung über das Open Web-Interface</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -78,7 +78,7 @@
   <action string="codeset" name="volume_up"        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol?set=up'                headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
   <action string="codeset" name="volume_down"      type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol?set=down'              headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}' />
 
-  <action string="codeset" name='getvolume'        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol'                       headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  getvar='e2current' parseoption='xml' gdestvar='enigma2vol' />
+  <action string="codeset" name='getvolume'        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol'                       headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  getvar='e2current' parseoption='xml' gdestvar='enigma2vol' parseflags="U"/>
   <action string="codeset" name='setvolume'        type="encode" waitforresponse='1' requesttype='GET' cmd='/web/vol?set=set$cvar(volumetoset)'    headers='{"Content-type":"text/xml;charset=utf-8","Connection":"Keep-Alive","Accept-Encoding":"gzip"}'  />
 
   <action name="channel_down"     type="alias" cmd='key_channelup'/>

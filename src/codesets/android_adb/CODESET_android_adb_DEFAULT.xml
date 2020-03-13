@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- Translates Orca Actions to Interface Commands action = Orca Action String -->
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
-
-  <!--
 
   <repositorymanager>
     <entry>
@@ -10,8 +7,8 @@
       <description language='English'>Default commandset for Android by adb</description>
       <description language='German'>Standard Kommandos für Android über adb</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/android_adb/CODESET_android_adb_DEFAULT.xml</local>
@@ -28,33 +25,36 @@
     </entry>
   </repositorymanager>
 
-  WikiDoc:Doc
-  WikiDoc:Context:Codesets
-  WikiDoc:Page:Userdescription codeset Android_adb_Default
-  WikiDoc:TOCTitle:android_adb_DEFAULT
 
-  = Android Default =
+<!--
 
-  This codeset defines the available commands for the android_adb interfaces. These are generic commands. For a full list of commands you have to have a look into the codeset files
-  Remarks: Amazon firetv has some variations, so there is a separate codeset for it
+WikiDoc:Doc
+WikiDoc:Context:Codesets
+WikiDoc:Page:Userdescription codeset Android_adb_Default
+WikiDoc:TOCTitle:android_adb_DEFAULT
 
-  Key Features: Provides: "power_on", "power_off", "power_toogle", "reboot"
+= Android Default =
 
-  Special commands:
-  *startapp: This starts an app on the android device. The appname must be given as regex strings to identify the App on the device. This sounds more complicated than it is.
-  The application name has to be provided as a regex string (see below) in the "startapp" parameter
-  some examples:
-  ^(?=.*netflix).*$           :  This will start an app on the android device which has the text "Netflix" in its name
-  ^(?=.*youtube)(?=.*tv).*$   :  This will start an app on the android device which has the text "Youtube" and the text "tv" in its name
-  *closeapp: This stops an app on the android device. Same logic as "startapp", but the application name has to be passed n the "stopapp" argument
+This codeset defines the available commands for the android_adb interfaces. These are generic commands. For a full list of commands you have to have a look into the codeset files
+Remarks: Amazon firetv has some variations, so there is a separate codeset for it
 
-  For startapp and closeapp, your android device need to have android version 7.1 or higher
+Key Features: Provides: "power_on", "power_off", "power_toogle", "reboot"
 
-  *startapp_oldapi: ORCA will try to identify the right code to start an app. If this fails, you can still use the fallback and provide the full intent manually
-  *closeapp_oldapi: same as startapp_oldapi
+Special commands:
+*startapp: This starts an app on the android device. The appname must be given as regex strings to identify the App on the device. This sounds more complicated than it is.
+The application name has to be provided as a regex string (see below) in the "startapp" parameter
+some examples:
+^(?=.*netflix).*$           :  This will start an app on the android device which has the text "Netflix" in its name
+^(?=.*youtube)(?=.*tv).*$   :  This will start an app on the android device which has the text "Youtube" and the text "tv" in its name
+*closeapp: This stops an app on the android device. Same logic as "startapp", but the application name has to be passed n the "stopapp" argument
 
-  WikiDoc:End
-  -->
+For startapp and closeapp, your android device need to have android version 7.1 or higher
+
+*startapp_oldapi: ORCA will try to identify the right code to start an app. If this fails, you can still use the fallback and provide the full intent manually
+*closeapp_oldapi: same as startapp_oldapi
+
+WikiDoc:End
+-->
 
   <!-- KEYCODE_DPAD_CENTER /  enter=66-->
   <action string="codeset" name='ok'            waitforresponse='0' cmd='Shell' params="input keyevent 23" />

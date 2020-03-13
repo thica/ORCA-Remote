@@ -27,7 +27,7 @@ from ORCA.utils.LogError        import LogError
 from ORCA.utils.wait.StartWait  import StartWait
 from ORCA.utils.wait.StopWait   import StopWait
 from ORCA.vars.Replace          import ReplaceVars
-from ORCA.utils.TypeConvert     import ToLong
+from ORCA.utils.TypeConvert     import ToInt
 from ORCA.actions.ReturnCode    import eReturnCode
 
 import ORCA.Globals as Globals
@@ -82,19 +82,19 @@ class cEventActionsGuiInput(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(u'ShowProgressBar',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'ShowProgressBar',oAction=oAction)
 
         uTitle:str   = ReplaceVars(oAction.dActionPars.get("title",""))
         uMessage:str = ReplaceVars(oAction.dActionPars.get("message",""))
         uCurrent     = ReplaceVars(oAction.dActionPars.get("current",""))
-        lCurrent:int = ToLong(uCurrent)
+        iCurrent:int = ToInt(uCurrent)
         uMax:str     = ReplaceVars(oAction.dActionPars.get("max",""))
-        lMax:int     = ToLong(uMax)
+        iMax:int     = ToInt(uMax)
         self.oEventDispatcher.bDoNext = False
 
-        if uTitle!=u'' and  lMax!=0:
+        if uTitle!=u'' and  iMax!=0:
             oProgressBar=cProgressBar()
-            oProgressBar.Show(uTitle,uMessage,lMax)
+            oProgressBar.Show(uTitle=uTitle,uMessage=uMessage,iMax=iMax)
             self.oEventDispatcher.aProgressBars.append(oProgressBar)
             return eReturnCode.Success
 
@@ -105,10 +105,10 @@ class cEventActionsGuiInput(cEventActionBase):
         oProgressBar=self.oEventDispatcher.aProgressBars[-1]
 
         if uTitle==u'' and  uCurrent!='':
-            oProgressBar.Update(lCurrent,uMessage)
+            oProgressBar.Update(iCurrent,uMessage)
             return eReturnCode.Success
 
-        if uTitle==u'' and uMessage==u'' and lCurrent==0:
+        if uTitle==u'' and uMessage==u'' and iCurrent==0:
             oProgressBar.ClosePopup()
             self.oEventDispatcher.aProgressBars.pop()
             return eReturnCode.Success
@@ -146,9 +146,9 @@ class cEventActionsGuiInput(cEventActionBase):
         """
 
         self.oEventDispatcher.bDoNext = False
-        self.oEventDispatcher.LogAction(u'ShowInputField: DestVar:',oAction)
-        uVarName:str    = oAction.dActionPars.get("varname","")
-        self.oInputKeyboard=ShowKeyBoard(uVarName,None)
+        self.oEventDispatcher.LogAction(uTxt=u'ShowInputField: DestVar:',oAction=oAction)
+        uVarName:str = oAction.dActionPars.get("varname","")
+        self.oInputKeyboard = ShowKeyBoard(uDestVar=uVarName,oFktNotify=None)
         return eReturnCode.Nothing
 
     def ExecuteActionShowQuestion(self,oAction:cAction) -> eReturnCode:
@@ -189,12 +189,12 @@ class cEventActionsGuiInput(cEventActionBase):
 
         A short example:
         <div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
-        <action name="My Qustion" string="showquestion" title="Mytitle" message="MyMessage" actionyes="myYesAction" actionno="myNoAction"/>
+        <action name="My Question" string="showquestion" title="Mytitle" message="MyMessage" actionyes="myYesAction" actionno="myNoAction"/>
         </syntaxhighlight></div>
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(u'ShowQuestion',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'ShowQuestion',oAction=oAction)
 
         oAction.uTitle     = ReplaceVars(oAction.dActionPars.get("title",""))
         oAction.uMessage   = ReplaceVars(oAction.dActionPars.get("message",""))
@@ -236,5 +236,5 @@ class cEventActionsGuiInput(cEventActionBase):
     # noinspection PyMethodMayBeStatic
     def __fktExecuteActionShowQuestionOption(self,uActionName:str) -> None:
         if not uActionName==u'':
-            aActions = Globals.oEvents.CreateSimpleActionList([{'name': 'ShowQuestionTask', 'string': 'call', 'actionname': uActionName}])
+            aActions = Globals.oEvents.CreateSimpleActionList(aActions=[{'name': 'ShowQuestionTask', 'string': 'call', 'actionname': uActionName}])
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions, oParentWidget=None)

@@ -111,7 +111,7 @@ class cEventActionsVarControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(u'SetVar',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'SetVar',oAction=oAction)
         uVarName:str    = ReplaceVars(oAction.dActionPars.get("varname",""))
         uVarValue:str   = ReplaceVars(oAction.dActionPars.get("varvalue",""))
         uVarContext:str = ReplaceVars(oAction.dActionPars.get("varcontext",""))
@@ -130,12 +130,12 @@ class cEventActionsVarControl(cEventActionBase):
             definitionname: Name of the definition
         """
 
-        uVarName:str       = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uVarValue:str      = ReplaceVars(oAction.dActionPars.get("varvalue",""))
-        uDefinitionName:str= ReplaceVars(oAction.dActionPars.get("definitionname",""))
+        uVarName:str        = ReplaceVars(oAction.dActionPars.get("varname",""))
+        uVarValue:str       = ReplaceVars(oAction.dActionPars.get("varvalue",""))
+        uDefinitionName:str = ReplaceVars(oAction.dActionPars.get("definitionname",""))
         oDef:cDefinition
 
-        self.oEventDispatcher.LogAction(u'SetDefinitionVar',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'SetDefinitionVar',oAction=oAction)
         if uDefinitionName=="":
             oDef=Globals.oDefinitions[0]
         else:
@@ -148,7 +148,7 @@ class cEventActionsVarControl(cEventActionBase):
                     del oDef.oDefinitionVars[uVarName]
             return eReturnCode.Nothing
         else:
-            LogError(uMsg=u'Action: SetDefinitionVar: Can''t find Definition:'+uDefinitionName )
+            LogError(uMsg=u'Action: SetDefinitionVar: Can''t find definition:'+uDefinitionName )
         return eReturnCode.Error
 
     def ExecuteActionModifyVar(self,oAction:cAction) -> eReturnCode:
@@ -309,14 +309,21 @@ class cEventActionsVarControl(cEventActionBase):
         WikiDoc:End
         """
 
-
         uVarName:str       = ReplaceVars(oAction.dActionPars.get("varname",""))
         uParameter1:str    = oAction.dActionPars.get("parameter1","")
         uParameter2:str    = oAction.dActionPars.get("parameter2","")
         uOperator:str      = ReplaceVars(oAction.dActionPars.get("operator",""))
         bNoVarDetails:bool = False
-        iLevel: int
-        aVars: List[str]
+        iLevel:int
+        aVars:List[str]
+        uLast:str
+        uMax:str
+        uOldVar:str
+        uVarName:str
+        aVars:List[str]
+        uValue:str
+        uNewVarName:str
+        uTmp:str
 
         if uOperator==u'increase':
             Var_Increase(uVarName = uVarName,uStep = ReplaceVars(uParameter1), uMax = ReplaceVars(uParameter2))
@@ -345,10 +352,10 @@ class cEventActionsVarControl(cEventActionBase):
             Var_Trim(uVarName = uVarName)
         elif uOperator==u'fromvar':
             uOldVar=GetVar(uVarName = uVarName)
-            Var_FromVar(uVarName = uVarName, uContext=ReplaceVars(uParameter1))
+            Var_FromVar(uVarName = uVarName, uContext = ReplaceVars(uParameter1))
             Logger.debug(u'FromVar: '+uVarName+"="+GetVar(uVarName = uVarName)+ u" ["+uOldVar+u"]")
         elif uOperator==u'tovar':
-            uVarName       = oAction.dActionPars.get("varname","")
+            uVarName = oAction.dActionPars.get("varname","")
             Var_ToVar(uVarName = uVarName, uNewVarName = uParameter1)
             Logger.debug(u'ToVar: '+uVarName+"="+uParameter1)
         elif uOperator==u'concatenate':
@@ -368,29 +375,28 @@ class cEventActionsVarControl(cEventActionBase):
         elif uOperator == u'stringtohexstring':
             Var_StringToHexString(uVarName = uVarName)
         elif uOperator==u'load':
-            Var_Load(uVarName, ReplaceVars(uParameter1),ReplaceVars(uParameter2))
+            Var_Load(uVarName=uVarName, uDefault=ReplaceVars(uParameter1),uPrefix=ReplaceVars(uParameter2))
         elif uOperator==u'save':
-            Var_Save(uVarName,ReplaceVars(uParameter1))
+            Var_Save(uVarName=uVarName,uPrefix=ReplaceVars(uParameter1))
         elif uOperator==u'addtoarray':
             iLevel = uVarName.count('[')
-
-            aVars = sorted(Var_GetArray(uVarName = uVarName, iLevel = iLevel))
-            uValue:str      = ReplaceVars(uParameter1)
+            aVars  = sorted(Var_GetArray(uVarName = uVarName, iLevel = iLevel))
+            uValue = ReplaceVars(uParameter1)
             if uParameter2=="1":
                 for uTmp in aVars:
                     if GetVar(uVarName = uTmp)==uValue:
                         return eReturnCode.Nothing
 
-            uMax:str = "1"
+            uMax = "1"
             if len(aVars):
                 uLast = aVars[-1]
-                uMax   = uLast[uLast.rfind("[")+1:][:-1]
+                uMax  = uLast[uLast.rfind("[")+1:][:-1]
                 if ToFloat2(uMax):
                     uMax=str(ToInt(uMax)+1)
                 else:
                     Logger.warning(u'addtoarray:'+uVarName+" Array contains non numeric indices")
 
-            uNewVarName:str=uVarName[:-2]+"["+uMax+"]"
+            uNewVarName = uVarName[:-2]+"["+uMax+"]"
             SetVar(uVarName = uNewVarName, oVarValue = uValue)
             Logger.debug(u'addtoarray:'+uNewVarName+"="+uValue)
         elif uOperator==u'removefromarray':
@@ -414,9 +420,9 @@ class cEventActionsVarControl(cEventActionBase):
             LogError(uMsg=u'Action: ModifyVar: Wrong modifier:'+uOperator )
             return eReturnCode.Error
         if bNoVarDetails:
-            self.oEventDispatcher.LogAction(u'ModifyVar',oAction)
+            self.oEventDispatcher.LogAction(uTxt=u'ModifyVar',oAction=oAction)
         else:
-            self.oEventDispatcher.LogAction(u'ModifyVar',oAction,"Result:"+GetVar(uVarName = uVarName))
+            self.oEventDispatcher.LogAction(uTxt=u'ModifyVar',oAction=oAction,uAddText="Result:"+GetVar(uVarName = uVarName))
 
         return eReturnCode.Nothing
 
@@ -468,32 +474,34 @@ class cEventActionsVarControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(u'AddVarLink',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'AddVarLink',oAction=oAction)
 
         uLinkType:str      = oAction.dActionPars.get("linktype","")
         uVarName:str       = ReplaceVars(oAction.dActionPars.get("varname",""))
         uDelete:str        = ReplaceVars(oAction.dActionPars.get("delete",""))
+        uActionName:str
+        uWidgetName:str
+        vCmd:Union[List[Dict[str,str]],str] = ""
 
-        uCmd:Union[List[Dict],str] = ""
         if uLinkType=='widget':
-            uWidgetName:str    = ReplaceVars(oAction.dActionPars.get("widgetname",""))
-            #uCmd           = '{"string":"updatewidget","widgetname":"%s"}' % (uWidgetName)
-            uCmd:List[Dict] = [{"name":"Check if widget exists on current page (varlink)","string":"getwidgetattribute","widgetname":uWidgetName,"attributename":"exists","retvar":"TMPWIDGETEXISTS"},
+            uWidgetName = ReplaceVars(oAction.dActionPars.get("widgetname",""))
+            vCmd =            [
+                               {"name":"Check if widget exists on current page (varlink)","string":"getwidgetattribute","widgetname":uWidgetName,"attributename":"exists","retvar":"TMPWIDGETEXISTS"},
                                {"name":"Update If Exists (varlink)"                      ,"string":"updatewidget", "widgetname":uWidgetName,"condition":"$var(TMPWIDGETEXISTS)==1"}
                               ]
         elif uLinkType=='call':
-            uActionName:str     = ReplaceVars(oAction.dActionPars.get("actionname",""))
-            uCmd:str            = '{"string":"call %s"}' % uActionName
+            uActionName     = ReplaceVars(oAction.dActionPars.get("actionname",""))
+            vCmd            = '{"string":"call %s"}' % uActionName
         elif uLinkType=='action':
-            uCmd:str            = ReplaceVars(oAction.dActionPars.get("parameters",""))
+            vCmd            = ReplaceVars(oAction.dActionPars.get("parameters",""))
 
-        if not uCmd:
+        if not vCmd:
             return eReturnCode.Error
 
         if not uDelete:
-            SetVarLink(uVarName=uVarName,oActions=uCmd)
+            SetVarLink(uVarName=uVarName,oActions=vCmd)
         else:
-            DelVarLink(uVarName=uVarName,oActions=uCmd)
+            DelVarLink(uVarName=uVarName,oActions=vCmd)
         return eReturnCode.Nothing
 
     def ExecuteActionForIn(self,oAction:cAction) -> eReturnCode:
@@ -568,15 +576,14 @@ class cEventActionsVarControl(cEventActionBase):
 
         WikiDoc:End
         """
-        self.oEventDispatcher.LogAction(u'ForIn',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'ForIn',oAction=oAction)
 
-        uVarName:str    = ReplaceVars(oAction.dActionPars.get("varname",""))
-        iLevel:int      = ToInt(oAction.dActionPars.get("level","1"))
-        uActionName:str = ReplaceVars(oAction.dActionPars.get("actionname",""))
-        uBreakVar:str   = ReplaceVars(oAction.dActionPars.get("breakvar",""))
-        aActions:List[cAction] = []
-
-        aVars:List[str] = sorted(Var_GetArray(uVarName = uVarName,iLevel = iLevel))
+        uVarName:str            = ReplaceVars(oAction.dActionPars.get("varname",""))
+        iLevel:int              = ToInt(oAction.dActionPars.get("level","1"))
+        uActionName:str         = ReplaceVars(oAction.dActionPars.get("actionname",""))
+        uBreakVar:str           = ReplaceVars(oAction.dActionPars.get("breakvar",""))
+        aActions:List[cAction]  = []
+        aVars:List[str]         = sorted(Var_GetArray(uVarName = uVarName,iLevel = iLevel))
 
         SetVar(uVarName = uBreakVar, oVarValue = "0")
 
@@ -596,14 +603,16 @@ class cEventActionsVarControl(cEventActionBase):
                 uVarIndex = uVar[iPosStart+1:iPosEnd]
 
             if uBreakVar == u'':
-                self.oEventDispatcher.AddToSimpleActionList(aActions,[{'name':'Call ForIn Action',
+                self.oEventDispatcher.AddToSimpleActionList(aActionList=aActions,
+                                                            aActions=[{'name':'Call ForIn Action',
                                                                        'string':'call','actionname':uActionName,
                                                                        "forin_value":GetVar(uVarName = uVar),
                                                                        "forin_var":uVar,
                                                                        "forin_varcore":uVarCore,
                                                                        "forin_index":uVarIndex,}])
             else:
-                self.oEventDispatcher.AddToSimpleActionList(aActions,[{'name':'Call ForIn Action',
+                self.oEventDispatcher.AddToSimpleActionList(aActionList=aActions,
+                                                            aActions=[{'name':'Call ForIn Action',
                                                                        'string':'call','actionname':uActionName,
                                                                        "forin_value":GetVar(uVarName = uVar),
                                                                        "forin_var":uVar,

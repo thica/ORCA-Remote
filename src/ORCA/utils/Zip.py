@@ -89,7 +89,7 @@ class cZipFile(cFileName):
         uRoot:str
         uName:str
         oFn:cFileName
-        oFn:cPath
+        # oFn:cPath
 
         try:
 

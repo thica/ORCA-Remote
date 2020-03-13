@@ -31,8 +31,8 @@ from ORCA.scripttemplates.Template_Keyhandler import cKeyhandlerTemplate
       <description language='English'>Script to translate keycodes to symbolic names</description>
       <description language='German'>Script keycodes in symbolische Namen to ändern </description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -70,7 +70,7 @@ class cScript(cKeyhandlerTemplate):
     """
 
     def __init__(self):
-        cKeyhandlerTemplate.__init__(self)
+        super().__init__()
         self.uSubType           = u'SYSTEM'
         self.uSortOrder         = u'first'
         self.uIniFileLocation   = u'none'
@@ -92,7 +92,7 @@ class cScript(cKeyhandlerTemplate):
                                 }
 
     def HandleKey(self,**kwargs) -> Dict:
-        cKeyhandlerTemplate.HandleKey(self, **kwargs)
+        super().HandleKey(**kwargs)
 
         uKey:str     = kwargs.get("key",0)
         uKeyNew:str = self.dTranslation.get(uKey,uKey)

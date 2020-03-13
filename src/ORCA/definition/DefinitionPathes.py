@@ -27,7 +27,7 @@ __all__ = ['cDefinitionPathes']
 
 class cDefinitionPathes:
     """ Class , which is a representation of all pathes of a definition """
-    def __init__(self, uDefinitionName:str, uDefinitionPathName:str=u"") -> None:
+    def __init__(self, *,uDefinitionName:str, uDefinitionPathName:str=u"") -> None:
         uAdd:str
         self.oPathDefinition:cPath
         self.oPathDefinitionSkinElements:cPath
@@ -82,6 +82,6 @@ class cDefinitionPathes:
                     self.oPathDefinitionSkinElements = Globals.oPathWizardTemplates +(Globals.oDefinitions[uDefinitionName].oDefinitionVars["definition_templatename_mediaplayer_wizard"]+"/elements/" + "skin_default")
                     SetVar("MEDIATEMPLATESKINCONTEXT", "skin_default")
 
-
     def LanguageChange(self) -> None:
         self.oFnDefinitionLanguage            = cFileName(self.oPathDefinition + (u'languages/' + Globals.uLanguage)) + u'strings.xml'
+        return None

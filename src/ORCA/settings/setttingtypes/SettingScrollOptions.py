@@ -96,7 +96,7 @@ class ScrollOptionsPopUp:
             self.value=self.value[:-3]
 
         self.bStopVarTrigger = False
-        Globals.oNotifications.RegisterNotification("on_key",fNotifyFunction=self.ClosePopUpbyESC,uDescription= "Close Settings Popup",aValueLinks=[{"in":"key","out":"key"}])
+        Globals.oNotifications.RegisterNotification(uNotification="on_key",fNotifyFunction=self.ClosePopUpbyESC,uDescription= "Close Settings Popup",aValueLinks=[{"in":"key","out":"key"}])
 
     def CreatePopup(self, uValue, fktButttonSelect, fktTextInputSelect):
 
@@ -226,7 +226,7 @@ class SettingScrollOptions(SettingOptions):
     def __init__(self, **kwargs):
         self.bInitComplete=False
         self.oScrollOptionsPopup=ScrollOptionsPopUp(**kwargs)
-        super(SettingScrollOptions, self).__init__(**RemoveNoClassArgs(kwargs,SettingOptions))
+        super(SettingScrollOptions, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=SettingOptions))
         self.bInitComplete=True
 
     def _create_popup(self, instance) -> None:

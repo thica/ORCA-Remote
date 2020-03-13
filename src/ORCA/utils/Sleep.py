@@ -24,8 +24,8 @@ from time                   import sleep
 
 __all__ = ['fSleep']
 
-def fSleep(fSeconds:float,bTick:bool=False) -> None:
-    """ sleeps for a given tim in milliseconds """
+def fSleep(*,fSeconds:float,bTick:bool=False) -> None:
+    """ sleeps for a given time in seconds """
     sleep(fSeconds)
     if bTick:
         pass

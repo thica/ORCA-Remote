@@ -21,13 +21,13 @@
       <action name="Set $dvar(definition_alias_mediaplayer_template) Power Off Action (MPT)" string="setwidgetattribute" widgetname="Button Power Off" attributename="action" attributevalue="FKT SwitchOff $dvar(definition_alias_mediaplayer_template) Force" ignoremissing="1"/>
       <action name="Set Gestures for Template" string="call Set Gestures $dvar(definition_alias_mediaplayer_template)" />
     <action name="endif" string="endif" />
-    <action name="Dont do anything on first app start/ interfaces might not be configured" string="if $var(STARTCOUNT)>1"/>
+    <action1 name="[disabled] Dont do anything on first app start/ interfaces might not be configured" string="if $var(STARTCOUNT)>1"/>
       <action name="Set Triggers"         string="call Set Trigger $dvar(definition_alias_mediaplayer_template)" />
       <action name="Set Return Page"      string="setvar PAGEWAITRETURN=Page_Device_$dvar(definition_alias_mediaplayer_template)" />
       <action name="Wait to be ready"     string="call FKT WaitForReady_$dvar(definition_alias_mediaplayer_template)" />
       <action name="Get the Volume"       string="call FKT GetVolume_$dvar(definition_alias_mediaplayer_template)" condition="$var(DEVICEISONLINE)!=FALSE"/>
       <action name="Select Input Channel" string="call FKT Send Switch Channel $dvar(definition_alias_mediaplayer_template)" condition="$var(DEVICEISONLINE)!=FALSE"/>
-    <action name="endif (Dont do anything on first app start)" string="endif"/>
+    <action1 name="[disabled] endif (Dont do anything on first app start)" string="endif"/>
     <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_template) ends here" />
   </action>
 

@@ -129,18 +129,15 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
         """ Reads further Widget attributes from a xml node """
         bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
-            self.oFnPictureNormal           = cFileName(u'').ImportFullPath(GetXMLTextAttributeVar(oXMLNode,u'picturenormal',    False,u''))
-            self.oFnPictureButton           = cFileName(u'').ImportFullPath(GetXMLTextAttributeVar(oXMLNode,u'picturebutton',    False,u''))
-
-            self.uMin                       = GetXMLTextAttribute(oXMLNode,u'mindatavalue',      False,u'0.0')
-            self.uMax                       = GetXMLTextAttribute(oXMLNode,u'maxdatavalue',      False,u'100.0')
-            self.uDestVar                   = GetXMLTextAttribute(oXMLNode,u'destvar',           False,self.uDestVar)
-            #roundpos: the position, the  number should be rounded
-            self.iRoundPos                  = GetXMLIntAttribute(oXMLNode,u'roundpos', False,0)
-            self.uDeviceOrientation         = GetXMLTextAttribute(oXMLNode,u'orientation',        False,self.uDeviceOrientation)
-            self.bDiscardMoves              = GetXMLBoolAttributeVar(oXMLNode,u'discardmoves',    False,False)
+            self.oFnPictureNormal           = cFileName(u'').ImportFullPath(uFnFullName=GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'picturenormal',bMandatory= False,uDefault=u''))
+            self.oFnPictureButton           = cFileName(u'').ImportFullPath(uFnFullName=GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'picturebutton',bMandatory= False,uDefault=u''))
+            self.uMin                       = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag=u'mindatavalue', bMandatory=False, vDefault=u'0.0')
+            self.uMax                       = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag=u'maxdatavalue', bMandatory=False, vDefault=u'100.0')
+            self.uDestVar                   = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag=u'destvar',      bMandatory=False, vDefault=self.uDestVar)
+            self.iRoundPos                  = GetXMLIntAttribute(oXMLNode=oXMLNode,     uTag=u'roundpos',     bMandatory=False, iDefault=0)             #roundpos: the position, the  number should be rounded
+            self.uDeviceOrientation         = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag=u'orientation',  bMandatory=False, vDefault=self.uDeviceOrientation)
+            self.bDiscardMoves              = GetXMLBoolAttributeVar(oXMLNode=oXMLNode, uTag=u'discardmoves', bMandatory=False, bDefault=False)
             self.fValue                     = self.fMin
-
         return bRet
 
     def Create(self, oParent: Widget) -> bool:
@@ -152,8 +149,8 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
             self.AddArg('max',              self.fMax)
             self.AddArg('orientation',      self.uDeviceOrientation)
             self.AddArg('value',            self.fMin)
-            self.AddArg('background_pic',   ToAtlas(self.oFnPictureNormal))
-            self.AddArg('button_pic',       ToAtlas(self.oFnPictureButton))
+            self.AddArg('background_pic',   ToAtlas(oFileName=self.oFnPictureNormal))
+            self.AddArg('button_pic',       ToAtlas(oFileName=self.oFnPictureButton))
             if self.CreateBase(Parent=oParent, Class=cSliderEx):
                 self.fDataRange=abs(self.fMax-self.fMin)
                 self.oObject.bind(on_slider_moved=self.OnNotifyChange)

@@ -25,7 +25,11 @@ from typing                 import List
 from typing                 import Tuple
 from typing                 import Dict
 
-from xml.etree.ElementTree  import ElementTree,ParseError, Element, SubElement, fromstring
+from xml.etree.ElementTree  import ParseError
+from xml.etree.ElementTree  import Element
+
+from xml.etree.ElementTree  import SubElement
+
 from time import sleep
 import codecs
 
@@ -52,6 +56,9 @@ from ORCA.utils.TypeConvert import ToUnicode
 from ORCA.utils.FileName    import cFileName
 from ORCA.utils.XML         import GetXMLTextAttribute
 from ORCA.utils.XML         import XMLPrettify
+from ORCA.utils.XML         import LoadXMLString
+from ORCA.utils.XML         import LoadXMLFile
+from ORCA.utils.XML         import WriteXMLFile
 from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
 from ORCA.ui.BasePopup      import cBasePopup,SettingSpacer
 import ORCA.Globals as Globals
@@ -97,9 +104,9 @@ class cITachIRDB_Editor(cBasePopup):
     def On_Save(self, oButton:Button):
         """ saves the Codeset file """
         try:
-            oRoot = ElementTree(fromstring(self.oXMLText.text))
+            oRoot:Element = LoadXMLString(uXML=self.oXMLText.text)
             oFilename=cFileName(Globals.oPathCodesets) +  oDBSelector.oCodesetName.text
-            oRoot.write(oFilename.string, encoding="UTF-8",xml_declaration='<?xml version="1.0" encoding="UTF-8"?>')
+            WriteXMLFile(oFile=oFilename,oElem=oRoot)
         except Exception as e:
             uMsg=LogError(uMsg=u'IRDB: Error Writing iTach codeset file',oException=e)
             ShowErrorPopUp(uMessage=uMsg)
@@ -169,7 +176,7 @@ class ITachIRDB(cBasePopup):
         self.bStopWait:bool                                     = False
         self.bStopWait:bool                                     = False
         self.dTranslations:Dict                                 = {}
-        self.IRDBInterface:Union[IRDBInterface:None]            = None
+        self.IRDBInterface:Union[IRDBInterface,None]            = None
         self.oBrandsSelector:Union[cITachIRDB_Selector,None]    = None
         self.oBtnBrands:Union[Button,None]                      = None
         self.oBtnModels:Union[Button,None]                      = None
@@ -207,17 +214,17 @@ class ITachIRDB(cBasePopup):
 
         for uFile in aFiles2:
             oFile:cFileName = cFileName(Globals.oPathCodesets) + uFile
-            oXMLCodeset:Element = ElementTree(file=oFile.string).getroot()
+            oXMLCodeset:Element = LoadXMLFile(oFile=oFile)
             oXMLCodes:List[Element] = oXMLCodeset.findall('code')
             for oXMLCode in oXMLCodes:
-                uCmd = GetXMLTextAttribute(oXMLCode,"cmd",False,"")
+                uCmd = GetXMLTextAttribute(oXMLNode=oXMLCode,uTag="cmd",bMandatory=False,vDefault="")
                 if uCmd.startswith("sendir,"):
                     uRepeat,uCmd=ITach2CCF(uCmd)
                     oXMLCode.set("cmd_ccf", uCmd)
                     oXMLCode.set("repeatcount", uRepeat)
                     del oXMLCode.attrib["cmd"]
             uFileName=oFile.string.replace("_iTach_","_infrared_ccf_")
-            uFinal=ToUnicode(XMLPrettify(oXMLCodeset))
+            uFinal=ToUnicode(XMLPrettify(oElem=oXMLCodeset))
             uFinal=uFinal.replace(u'<?xml version="1.0"?>',u'<?xml version="1.0" encoding="UTF-8"?>')
             with codecs.open(uFileName, 'w', 'utf-8') as oOutfile:
                 oOutfile.write(uFinal)
@@ -328,7 +335,7 @@ class ITachIRDB(cBasePopup):
     def On_BtnBrands(self,oButton:Button) -> None:
         """ After the brands button has been pressed """
         if self.oBrandsSelector is None:
-            self.oProgressBar.Show("$lvar(SCRIPT_TOOLS_IRDBITACH_6)","$lvar(SCRIPT_TOOLS_IRDBITACH_12)",0)
+            self.oProgressBar.Show(uTitle="$lvar(SCRIPT_TOOLS_IRDBITACH_6)",uMessage="$lvar(SCRIPT_TOOLS_IRDBITACH_12)",iMax=0)
         Clock.schedule_once(self.On_BtnBrands_Load,0)
 
     # noinspection PyUnusedLocal
@@ -373,7 +380,7 @@ class ITachIRDB(cBasePopup):
                     self.uOldBrand=self.oTextBrands.text
 
                 self.oSelector=cITachIRDB_Selector()
-                self.oSelector.Start("$lvar(668)",self.aTypes,self.On_BtnTypesSelected)
+                self.oSelector.Start("$lvar(SCRIPT_TOOLS_IRDBITACH_8)",self.aTypes,self.On_BtnTypesSelected)
         except Exception as e:
             uMsg=LogError(uMsg=u"Can''t load types",oException=e)
             ShowErrorPopUp(uMessage=uMsg)
@@ -395,10 +402,10 @@ class ITachIRDB(cBasePopup):
                     uBrand:str=self.GetProperName(self.oBtnBrands.oDBRef.uLinks[0])
                     uType:str=self.GetProperName(self.oBtnTypes.oDBRef.uLinks[0])
                     self.IRDBInterface.Login()
-                    self.aModels:List[str] = self.IRDBInterface.GetModels(uBrand,uType)
+                    self.aModels = self.IRDBInterface.GetModels(uBrand,uType)
                     self.IRDBInterface.Logout()
-                    self.uOldType:str = self.oTextTypes.text
-                self.oSelector:cITachIRDB_Selector = cITachIRDB_Selector()
+                    self.uOldType = self.oTextTypes.text
+                self.oSelector = cITachIRDB_Selector()
                 self.oSelector.Start("$lvar(SCRIPT_TOOLS_IRDBITACH_8)",self.aModels,self.On_BtnModelsSelected)
         except Exception as e:
             ShowErrorPopUp(uMessage=LogError(uMsg=u"Can''t load models",oException=e))
@@ -512,12 +519,12 @@ class ITachIRDB(cBasePopup):
             oFnTranslation:cFileName = cFileName(Globals.oPathResources + u"irdbtranslation") + u"itach2orca.xml"
             try:
                 Logger.debug (u'IRDB: Loading Translation Table:'+oFnTranslation.string)
-                oET_Root:Element = ElementTree(file=oFnTranslation.string).getroot()
+                oET_Root:Element = LoadXMLFile(oFile=oFnTranslation)
                 #oSets=oET_Root.findall('set')
                 for oSet in oET_Root:
                     for oCommand in oSet.findall('action'):
-                        uFrom:str = GetXMLTextAttribute(oCommand,u'from',True,'')
-                        uTo:str    = GetXMLTextAttribute(oCommand,u'to',True,'')
+                        uFrom:str = GetXMLTextAttribute(oXMLNode=oCommand,uTag=u'from',bMandatory=True,vDefault='')
+                        uTo:str    = GetXMLTextAttribute(oXMLNode=oCommand,uTag=u'to',bMandatory=True,vDefault='')
                         self.dTranslations[uFrom]=uTo
             except ParseError as e:
                 ShowErrorPopUp(uMessage=LogError(uMsg=u'IRDB: Error:Loading Translations file',oException=e))
@@ -525,10 +532,10 @@ class ITachIRDB(cBasePopup):
     ''' Todo : check / remove '''
     def Save_As_iTach(self,oSet:List[cIRCode]) -> None:
         oRoot:Element
-        oCodesetCode:SubElement()
+        oCodesetCode:Element
         oFunction:cIRCode
         uFilename:str       = Globals.oPathCodesets.string + "/iTach/" + self.oCodesetName.text
-        oFilename:cFileName = cFileName().ImportFullPath(uFilename.replace("_XXXXX_","_iTach_"))
+        oFilename:cFileName = cFileName().ImportFullPath(uFnFullName=uFilename.replace("_XXXXX_","_iTach_"))
         try:
             oRoot = Element("codeset")
             for oFunction in oSet:
@@ -540,7 +547,7 @@ class ITachIRDB(cBasePopup):
                 uString=uString.replace("\n","")
                 uString=uString.replace("\r","")
                 oCodesetCode.set("cmd", uString)
-            uFinal:str=XMLPrettify(oRoot)
+            uFinal:str=XMLPrettify(oElem=oRoot)
             uFinal=uFinal.replace('<?xml version="1.0"?>','<?xml version="1.0" encoding="UTF-8"?>')
             oFile = open(oFilename.string, 'w')
             oFile.write(uFinal)
@@ -559,7 +566,7 @@ class ITachIRDB(cBasePopup):
         uString:str
 
         uFilename:str = Globals.oPathCodesets.string + "/infrared_ccf/" + self.oCodesetName.text
-        oFn:cFileName = cFileName().ImportFullPath(uFilename.replace("_XXXXX_","_infrared_ccf_"))
+        oFn:cFileName = cFileName().ImportFullPath(uFnFullName=uFilename.replace("_XXXXX_","_infrared_ccf_"))
         try:
             oRoot = Element("codeset")
             oRootToUse=oRoot
@@ -587,7 +594,7 @@ class ITachIRDB(cBasePopup):
                     else:
                         if oFunction.uCode1!='':
                             oCodesetCode.set("cmd", oFunction.uCode1)
-            uFinal:str = XMLPrettify(oRoot)
+            uFinal:str = XMLPrettify(oElem=oRoot)
             uFinal=uFinal.replace('<?xml version="1.0"? >','<?xml version="1.0" encoding="UTF-8"?>')
             uFinal=uFinal.replace('{&amp;REPEAT&amp;:{&amp;REPEATCMD&amp;:&amp;key_&amp;,&amp;REPEATVAR&amp;:&amp;$cvar(CHANNELNUM)&amp;}}','{"REPEAT":{"REPEATCMD":"key_","REPEATVAR":"$cvar(CHANNELNUM)"}}')
             oFile = open(oFn.string, 'w')

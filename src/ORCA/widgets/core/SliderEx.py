@@ -49,12 +49,12 @@ class cSliderEx(Slider):
         self.oBorderImage:BorderImage
         uText:str
 
-        super().__init__(**RemoveNoClassArgs(kwargs,Slider))
+        super().__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=Slider))
         self.register_event_type('on_slider_moved')
         self.canvas.clear()
         if self.orientation==u'horizontal':
             fGap                     = (self.height - sp(32))/2
-            self.x                   = self.x + fGap
+            self.x                  += fGap
             self.fBackGroundSize     = self.height / 4 - fGap * 2
             tKnobPos                 = (self.value_pos[0] - (self.height/2), self.value_pos[1] )
             tKnobSize                = (self.height, self.height)
@@ -64,7 +64,7 @@ class cSliderEx(Slider):
             self.canvas.add(self.oBorderImage)
         else:
             fGap                    = (self.width - sp(32))/2
-            self.y                  = self.y + fGap
+            self.y                 += fGap
             self.height             = self.height - fGap * 2
             self.fBackGroundSize    = self.width/4
             tKnobPos                = (self.value_pos[0] , self.value_pos[1] - (self.width/2))
@@ -77,7 +77,7 @@ class cSliderEx(Slider):
         self.canvas.add(self.oKnob)
         uText=kwargs.get('text')
         if uText:
-            self.oText=Label(**RemoveNoClassArgs(kwargs,Label))
+            self.oText=Label(**RemoveNoClassArgs(dInArgs=kwargs,oObject=Label))
             self.oText.pos=tKnobPos
             self.oText.size=tKnobSize
             self.add_widget(self.oText)

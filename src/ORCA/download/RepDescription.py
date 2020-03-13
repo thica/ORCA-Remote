@@ -36,14 +36,14 @@ class cRepDescription:
     def __init__(self):
         self.dDescriptions:Dict[str]={'English': ''}
 
-    def ParseFromXMLNode(self,oXMLEntry:Element) -> None:
+    def ParseFromXMLNode(self,*,oXMLEntry:Element) -> None:
         """ Parses an xms string into object vars """
         oXMLDescriptions:Element = oXMLEntry.findall('description')
         for oXMLDescription in oXMLDescriptions:
-            uLanguage:str = GetXMLTextAttribute(oXMLDescription,'language',False,'English')
-            self.dDescriptions[uLanguage]=GetXMLTextValue(oXMLDescription, '', False, '')
+            uLanguage:str = GetXMLTextAttribute(oXMLNode=oXMLDescription,uTag='language',bMandatory=False,vDefault='English')
+            self.dDescriptions[uLanguage]=GetXMLTextValue(oXMLNode=oXMLDescription, uTag='', bMandatory=False, vDefault='')
 
-    def WriteToXMLNode(self,oXMLNode:Element) -> None:
+    def WriteToXMLNode(self,*,oXMLNode:Element) -> None:
         """ writes object vars to an xml node """
         for uKey in self.dDescriptions:
             oVal:Element = SubElement(oXMLNode,'description')

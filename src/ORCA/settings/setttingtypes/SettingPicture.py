@@ -41,14 +41,14 @@ class SettingPicture(SettingFile):
     def __init__(self, **kwargs):
 
         self.oLayout:FloatLayout = FloatLayout(size_hint=(1, 1))
-        super(SettingPicture, self).__init__(**RemoveNoClassArgs(kwargs,SettingFile))
+        super(SettingPicture, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=SettingFile))
         oFnPic:cFileName = cFileName()
 
         try:
-            oFnPic              = cFileName().ImportFullPath(self.value)
-            self.oPic:Image     = Image(source=UnEscapeUnicode(ToAtlas(oFnPic)),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
+            oFnPic              = cFileName().ImportFullPath(uFnFullName=self.value)
+            self.oPic:Image     = Image(source=UnEscapeUnicode(ToAtlas(oFileName=oFnPic)),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
             oFnBack:cFileName   = cFileName(Globals.oPathResources + "pics") + "imagepicker_background.png"
-            self.oBack:Image    = Image(source=ToAtlas(oFnBack),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
+            self.oBack:Image    = Image(source=ToAtlas(oFileName=oFnBack),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
             self.oLayout.add_widget(self.oBack)
             self.oLayout.add_widget(self.oPic)
             self.add_widget(self.oLayout)
@@ -66,6 +66,6 @@ class SettingPicture(SettingFile):
         """ displays the folder """
 
         SettingFile._validate(self,instance)
-        self.oPic.source=ToAtlas(cFileName('').ImportFullPath(self.value))
+        self.oPic.source=ToAtlas(oFileName=cFileName('').ImportFullPath(uFnFullName=self.value))
         self.content.children[1].text=''
 

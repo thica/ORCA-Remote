@@ -28,7 +28,6 @@ from kivy.logger                    import  Logger
 from ORCA.ScreenPage                import cScreenPage
 from ORCA.vars.Access               import SetVar
 from ORCA.vars.Access               import GetVar
-from ORCA.utils.LogError            import LogError
 from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
 
 import ORCA.Globals as Globals
@@ -55,7 +54,7 @@ class cScreenPages(dict):
         self.clear()
         self.aPageHistory.clear()
 
-    def AddPageFromXmlNode(self,oXMLPage:Element) -> None:
+    def AddPageFromXmlNode(self,*,oXMLPage:Element) -> None:
         """ Creates the Page Object, Parses the content and add it to the page list """
         oTmpScreenPage:cScreenPage = cScreenPage()
         oTmpScreenPage.InitPageFromXmlNode(oXMLNode=oXMLPage)
@@ -75,7 +74,7 @@ class cScreenPages(dict):
         """ returns the  current) page """
         return self.get(GetVar("CURRENTPAGE"))
 
-    def AppendToPageQueue(self,oPage:cScreenPage) -> None:
+    def AppendToPageQueue(self,*,oPage:cScreenPage) -> None:
         """  Appends a Page to the list of last shown pages"""
         if GetVar(uVarName = u'FIRSTPAGE') == u'':
             SetVar(uVarName = u'FIRSTPAGE', oVarValue = oPage.uPageName)
@@ -95,7 +94,7 @@ class cScreenPages(dict):
         if len(self.aPageHistory)>1:
             SetVar(uVarName = u'LASTPAGE', oVarValue = self.aPageHistory[-2].uPageName)
 
-    def CreatePages(self,uPageName:str) -> None:
+    def CreatePages(self,*,uPageName:str) -> None:
         """ Create all pages of all definitions or start the timer to create the next page """
 
         aActions:List[cAction]
@@ -104,19 +103,19 @@ class cScreenPages(dict):
         if Globals.bInitPagesAtStart or uPageName!="":
             if uPageName=="nextpage":
                 if not self.CreateNextPage():
-                    aActions=Globals.oEvents.CreateSimpleActionList([{'string':'definetimer','timername':'scheduled page creation','switch':'off'}])
+                    aActions=Globals.oEvents.CreateSimpleActionList(aActions=[{'string':'definetimer','timername':'scheduled page creation','switch':'off'}])
                     Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
                 return
             if uPageName=="":
                 # Scheduling Creating the pages
-                aActions=Globals.oEvents.CreateSimpleActionList([{'string':'showsplashtext','maintext':'$lvar(410)'}])
+                aActions=Globals.oEvents.CreateSimpleActionList(aActions=[{'string':'showsplashtext','maintext':'$lvar(410)'}])
 
                 for uPageName in self:
                     SetVar(uVarName = "PAGESTARTCOUNT_"+uPageName, oVarValue = "0")
                     if not uPageName=="Page_Settings":
-                        Globals.oEvents.AddToSimpleActionList(aActions,[{'string':'showsplashtext','subtext':uPageName},
-                                                                                 {'string':'createpages','pagename':uPageName}
-                                                                                ])
+                        Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showsplashtext','subtext':uPageName},
+                                                                                             {'string':'createpages','pagename':uPageName}
+                                                                                            ])
 
                 Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
             else:
@@ -124,10 +123,10 @@ class cScreenPages(dict):
                 self[uPageName].Create()
         else:
             if Globals.fDelayedPageInitInterval>0:
-                aActions=Globals.oEvents.CreateSimpleActionList([{'name':'Add timer for delayed/scheduled page creations','string':'definetimer','timername':'scheduled page creation','interval':str(Globals.fDelayedPageInitInterval),'switch':'on','actionname':'createnextpage'}])
+                aActions=Globals.oEvents.CreateSimpleActionList(aActions=[{'name':'Add timer for delayed/scheduled page creations','string':'definetimer','timername':'scheduled page creation','interval':str(Globals.fDelayedPageInitInterval),'switch':'on','actionname':'createnextpage'}])
                 Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
-    def CreatePage(self,uPageName:str) -> None:
+    def CreatePage(self,*,uPageName:str) -> None:
         """ Will be used by EventDispatcher in case pages will not be created at startup """
 
         if uPageName==u'':

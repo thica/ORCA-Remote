@@ -49,7 +49,7 @@ def Android_GetDataDir() -> cPath:
 
     uUserDataDir:str = OS_GetUserDownloadsDataPath()
     try:
-        uUserDataDir:str = Globals.oApp.user_data_dir
+        uUserDataDir = Globals.oApp.user_data_dir
     except:
         pass
 
@@ -73,10 +73,10 @@ def Android_GetDataDir() -> cPath:
                 # lets copy the files outside of the Android App folder to make them accessable to users
                 oTmpSrcDir:cPath = oTestDir +"actions"
                 oTmpDstDir:cPath = oPreferredUserDataPath+"actions"
-                oTmpSrcDir.Copy(oTmpDstDir)
-                oTmpSrcDir:cPath = oTestDir +"languages"
-                oTmpDstDir:cPath = oPreferredUserDataPath+"languages"
-                oTmpSrcDir.Copy(oTmpDstDir)
+                oTmpSrcDir.Copy(oDest=oTmpDstDir)
+                oTmpSrcDir = oTestDir +"languages"
+                oTmpDstDir = oPreferredUserDataPath+"languages"
+                oTmpSrcDir.Copy(oDest=oTmpDstDir)
                 return oPreferredUserDataPath
             return oTestDir
 

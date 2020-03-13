@@ -20,7 +20,7 @@
 """
 
 from typing                                     import List
-from typing                                     import Union
+from typing                                     import Optional
 from typing                                     import Tuple
 
 
@@ -50,8 +50,8 @@ class cDownLoad_Settings(EventDispatcher):
     """ Reprensation of the settings tab """
     def __init__(self, *args, **kwargs):
         super(cDownLoad_Settings, self).__init__(*args, **kwargs)
-        self.aSubReps:List[Tuple]                         = Globals.aRepNames
-        self.oSetting:Union[KivySettings,None]          = None
+        self.aSubReps:List[Tuple]                       = Globals.aRepNames
+        self.oSetting:Optional[KivySettings]            = None
         # aQueue = queue of all repository items to load (just for reference, names only)
         self.aQueue:List[str]                           = []
         # aItemQueue = queue of all files to load (full json string)
@@ -59,12 +59,12 @@ class cDownLoad_Settings(EventDispatcher):
         self.uLast:str                                  = u''
         self.bForce:bool                                = False
 
-    def LoadDirect(self,uDirect:str, bForce:bool) -> None:
+    def LoadDirect(self,*,uDirect:str, bForce:bool) -> None:
         """ Directly loads a Resources """
         self.bForce  = bForce
         self.On_ConfigChange(None, None, '', 'button_add_resource', uDirect)
 
-    def UpdateAllInstalledRepositories(self,bForce:bool) -> None:
+    def UpdateAllInstalledRepositories(self,*,bForce:bool) -> None:
         """ Update all installed repositories """
 
         del self.aQueue[:]
@@ -74,10 +74,10 @@ class cDownLoad_Settings(EventDispatcher):
         for oInstalledRepKey in Globals.dInstalledReps:
             Logger.debug("Schedule to update "+oInstalledRepKey)
             oInstalledRep=Globals.dInstalledReps[oInstalledRepKey]
-            self.CreateDownloadQueueForRepositoryItem(oInstalledRep.uType,oInstalledRep.uName)
+            self.CreateDownloadQueueForRepositoryItem(uRepType=oInstalledRep.uType,uRepName=oInstalledRep.uName)
         self.DownloadDownloadQueue()
 
-    def ConfigDownLoadSettings(self,oSetting:KivySettings) -> KivySettings:
+    def ConfigDownLoadSettings(self,*,oSetting:KivySettings) -> KivySettings:
         """  Creates the settings tab for download """
         self.oSetting               = oSetting
         self.bForce                 = False
@@ -122,14 +122,14 @@ class cDownLoad_Settings(EventDispatcher):
         return oSetting
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
-    def On_SettingsClose(self,instance) -> bool:
+    def On_SettingsClose(self,oSetting:KivySettings) -> bool:
         """ Called when the setting is called """
-        Globals.oNotifications.SendNotification('closesetting_download')
+        Globals.oNotifications.SendNotification(uNotification='closesetting_download')
         oRepository.CancelLoading()
         Clock.schedule_once(Globals.oApp.fdo_config_change_load_definition,0.2)
         return True
 
-    def LoadRepositoryDirectory(self, bDoNotExecute:bool) -> List[cAction]:
+    def LoadRepositoryDirectory(self,*,bDoNotExecute:bool) -> List[cAction]:
         """ Loads the directory of a repository """
         aActions:List[cAction] = []
         if len(oRepository.aRepEntries)==0:
@@ -137,13 +137,13 @@ class cDownLoad_Settings(EventDispatcher):
                 uRepKey=u'repository_state'+str(i)
                 uRepUrl=Globals.aRepositories[i]
                 if not uRepUrl=='':
-                    if Config_GetDefault_Str(Globals.oOrcaConfigParser, u'ORCA', uRepKey, '0')!= '0':
+                    if Config_GetDefault_Str(oConfig=Globals.oOrcaConfigParser, uSection=u'ORCA', uOption=uRepKey, vDefaultValue='0')!= '0':
                         oRepository.Init()
-                        aActions+= oRepository.LoadAllSubReps(ReplaceVars(uRepUrl),self.aSubReps, bDoNotExecute)
+                        aActions+= oRepository.LoadAllSubReps(uPath=ReplaceVars(uRepUrl),aSubReps=self.aSubReps, bDoNotExecute=bDoNotExecute)
         return aActions
 
     # noinspection PyUnusedLocal
-    def On_ConfigChange(self,oSettings:Union[KivySettings,None], oConfig, uSection:str, uKey:str, uValue:str) -> bool:
+    def On_ConfigChange(self,oSettings:Optional[KivySettings], oConfig, uSection:str, uKey:str, uValue:str) -> bool:
         """ Handles a change of a setting element """
 
         if uKey==u'button_load_resources':
@@ -153,7 +153,7 @@ class cDownLoad_Settings(EventDispatcher):
             uTmp,uRepType,uRepName=uValue.split(':')
             del self.aQueue[:]
             del self.aItemQueue[:]
-            self.CreateDownloadQueueForRepositoryItem(uRepType,uRepName)
+            self.CreateDownloadQueueForRepositoryItem(uRepType=uRepType,uRepName=uRepName)
             self.DownloadDownloadQueue()
 
         elif uKey.startswith(u'repository_state'):
@@ -179,8 +179,8 @@ class cDownLoad_Settings(EventDispatcher):
             if uRep.startswith("definitions"):
                 bDoRestart=True
 
-        aActions:List[cAction]=oEvents.CreateSimpleActionList([{'string':'setvar','varname':'DOWNLOADERROR','varvalue':'0'},
-                                                               {'string':'showprogressbar','title':'$lvar(5015)','message':'Load File','max':'100'}])
+        aActions:List[cAction]=oEvents.CreateSimpleActionList(aActions=[{'string':'setvar','varname':'DOWNLOADERROR','varvalue':'0'},
+                                                                        {'string':'showprogressbar','title':'$lvar(5015)','message':'Load File','max':'100'}])
 
         for uItem in self.aItemQueue:
             uType:str=ToDic(uItem)['Type']
@@ -191,24 +191,24 @@ class cDownLoad_Settings(EventDispatcher):
                     break
 
             uName:str='%s: %s' % (uPrettyRepName,ToDic(uItem)['Name'])
-            oEvents.AddToSimpleActionList(aActions,[{'string':'showprogressbar','message':uName,'current':'0'},
-                                                    {'string':'loadresource','resourcereference':uItem,'condition':"$var(DOWNLOADERROR)==0"}])
+            oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showprogressbar','message':uName,'current':'0'},
+                                                                         {'string':'loadresource','resourcereference':uItem,'condition':"$var(DOWNLOADERROR)==0"}])
 
-        oEvents.AddToSimpleActionList(aActions,[{'string':'showprogressbar'},
-                                                {'string':'showquestion','title':'$lvar(595)','message':'$lvar(698)','actionyes':'dummy','condition':'$var(DOWNLOADERROR)==1'}])
+        oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showprogressbar'},
+                                                                     {'string':'showquestion','title':'$lvar(595)','message':'$lvar(698)','actionyes':'dummy','condition':'$var(DOWNLOADERROR)==1'}])
 
         if bDoRefresh and not bDoRestart:
-            oEvents.AddToSimpleActionList(aActions,[{'string':'updatewidget','widgetname':'SettingsDownload'}])
+            oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'updatewidget','widgetname':'SettingsDownload'}])
 
         if bDoRestart:
-            oEvents.AddToSimpleActionList(aActions,[{'string':'restartafterdefinitiondownload','condition':'$var(DOWNLOADERROR)==0'}])
+            oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'restartafterdefinitiondownload','condition':'$var(DOWNLOADERROR)==0'}])
 
         #Execute the Queue
         StopWait()
         oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
-    def CreateDownloadQueueForRepositoryItem(self,uRepType:str,uRepName:str) -> None:
-        """ we need to prevent an endless recursion on dependencies, so we need to track, what we allready have """
+    def CreateDownloadQueueForRepositoryItem(self,*,uRepType:str,uRepName:str) -> None:
+        """ we need to prevent an endless recursion on dependencies, so we need to track, what we already have """
 
         oDownLoadObject:cDownLoadObject = cDownLoadObject()
         uRef:str                        = uRepType+uRepName
@@ -216,12 +216,12 @@ class cDownLoad_Settings(EventDispatcher):
         if not uRef in self.aQueue:
             self.aQueue.append(uRef)
             aSubList:List = [oEntries for oEntries in oRepository.aRepEntries    if oEntries.uRepType == uRepType]
-            aEntry        = [oEntries for oEntries in aSubList                   if oEntries.uName == uRepName]
+            aEntry:List   = [oEntries for oEntries in aSubList                   if oEntries.uName == uRepName]
 
             if len(aEntry)>0:
                 oEntry=aEntry[0]
 
-                iInstalledVersion:int = GetInstalledVersion(uRepType,uRepName)
+                iInstalledVersion:int = GetInstalledVersion(uType=uRepType,uName=uRepName)
 
                 if (oEntry.iVersion > iInstalledVersion) or self.bForce:
                     for oSource in oEntry.aSources:
@@ -238,7 +238,7 @@ class cDownLoad_Settings(EventDispatcher):
                             self.aItemQueue.append(uString)
 
                     for oDependency in oEntry.aDependencies:
-                        self.CreateDownloadQueueForRepositoryItem(oDependency.uType,oDependency.uName)
+                        self.CreateDownloadQueueForRepositoryItem(uRepType=oDependency.uType,uRepName=oDependency.uName)
                 else:
                     Logger.info('Skipping download of repository type:%s Resource:%s, Resource version [%d] not newer than installed version [%d]' % (uRepType,uRepName,oEntry.iVersion,iInstalledVersion))
 
@@ -246,7 +246,7 @@ class cDownLoad_Settings(EventDispatcher):
                 LogError(uMsg="can\'t find Resource in Resourcelist: [%s] %s" %( uRepType,uRepName))
                 ShowErrorPopUp(uMessage="can\'t find Resource in Resourcelist: [%s] %s" %( uRepType,uRepName))
 
-def GetInstalledVersion(uType:str,uName:str) -> int:
+def GetInstalledVersion(*,uType:str,uName:str) -> int:
     """ Gets the installed version of a repository element """
     uKey:str    = '%s:%s'%(uType,uName)
     oRep        = Globals.dInstalledReps.get(uKey)

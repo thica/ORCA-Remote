@@ -446,6 +446,21 @@
     <action name="ShowSecondCaption" string="updatewidget" widgetname="*" option="second" />
     <action name="HideSecondCaption" string="updatewidget" widgetname="*"  />
 
+    <action name="FKT_ORCASHOWLICENSE">
+       <action name="set filename" string="setvar SHOWFILE=$var(LICENSEFILE)" />
+       <action name="showfile"     string="showpage Page_ShowFile" />
+    </action>
+
+  <action name="FKT_ORCASHOWLOGFILE">
+    <action name="set filename" string="setvar SHOWFILE=$var(LOGFILE)" />
+    <action name="showfile"     string="showpage Page_ShowFile" />
+  </action>
+
+  <action name="FKT_ORCASHOWCREDITS">
+    <action name="set filename" string="setvar SHOWFILE=$var(CREDITSFILE)" />
+    <action name="showfile"     string="showpage Page_ShowFile" />
+  </action>
+
 </includes>
 
 

@@ -72,12 +72,12 @@ class cWidgetBaseAction(cWidgetBaseBase):
     def ParseXMLBaseNode (self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
 
         try:
-            self.uActionName          = GetXMLTextAttribute(oXMLNode,u'action',False,u'')
-            self.uActionNameDoubleTap = GetXMLTextAttribute(oXMLNode,u'actiondoubletap',False,u'')
-            self.uActionNameLongTap   = GetXMLTextAttribute(oXMLNode,u'actionlongtap',False,u'')
-            self.uActionNameDownOnly  = GetXMLTextAttribute(oXMLNode,u'actiondownonly',False,u'')
-            self.uActionNameUpOnly    = GetXMLTextAttribute(oXMLNode,u'actionuponly',False,u'')
-            uActionPars:str           = GetXMLTextAttribute(oXMLNode,u'actionpars',False,u'{}')
+            self.uActionName          = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'action',           bMandatory=False,vDefault=u'')
+            self.uActionNameDoubleTap = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actiondoubletap',  bMandatory=False,vDefault=u'')
+            self.uActionNameLongTap   = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actionlongtap',    bMandatory=False,vDefault=u'')
+            self.uActionNameDownOnly  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actiondownonly',   bMandatory=False,vDefault=u'')
+            self.uActionNameUpOnly    = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actionuponly',     bMandatory=False,vDefault=u'')
+            uActionPars:str           = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actionpars',       bMandatory=False,vDefault=u'{}')
             if uActionPars.startswith("$var("):
                 uActionPars=ReplaceVars(uActionPars)
 
@@ -113,7 +113,7 @@ class cWidgetBaseAction(cWidgetBaseBase):
     def On_Button_Down(self,instance:Widget) -> None:
 
         if self.bIsEnabled:
-            Globals.oSound.PlaySound(u'click')
+            Globals.oSound.PlaySound(uSoundName=u'click')
             OS_Vibrate()
 
             if hasattr(instance,'uTapType'):
@@ -179,12 +179,12 @@ class cWidgetBaseAction(cWidgetBaseBase):
         for uUseActionName in aUseActionName:
             aActionsTest:List[cAction] = Globals.oActions.GetActionList(uActionName = uUseActionName, bNoCopy = True)
             if aActionsTest:
-                Globals.oEvents.AddToSimpleActionList(aActions,[{'string':'call'}])
+                Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'call'}])
                 aActions[-1].dActionPars=self.dActionPars
                 aActions[-1].dActionPars['actionname']=uUseActionName
                 Logger.debug (u'WidgetBaseAction: [%s] Action queued for Object [%s] [%s]' % (self.uTapType,self.uName,uUseActionName))
             else:
-                Globals.oEvents.AddToSimpleActionList(aActions,[{'string':uUseActionName}])
+                Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':uUseActionName}])
                 aActions[-1].dActionPars=self.dActionPars
         if len(aActions)>0:
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=self)

@@ -58,8 +58,8 @@ else:
       <description language='English'>Tool to write the repository (internal tool)</description>
       <description language='German'>Tool um ein repository zu schreiben (internes Tool)</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -97,7 +97,7 @@ class cScript(cToolsTemplate):
 
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript:cScript):
-            cBaseScriptSettings.__init__(self,oScript)
+            super().__init__(oScript)
             self.aIniSettings.uHost           = oScript.oEnvParameter.uFTPServer
             self.aIniSettings.uUser           = oScript.oEnvParameter.uFTPUser
             self.aIniSettings.uPassword       = oScript.oEnvParameter.uFTPPassword
@@ -140,7 +140,7 @@ class cScript(cToolsTemplate):
         :param str uScriptFile: The file of the script (to be passed to all scripts)
         """
 
-        cToolsTemplate.Init(self, uObjectName, uScriptFile)
+        super().Init(uObjectName= uObjectName, oFnObject=uScriptFile)
         self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
@@ -152,7 +152,7 @@ class cScript(cToolsTemplate):
             self.StartRepositoryManager(self, *args, **kwargs)
 
     def StartRepositoryManager(self, *args, **kwargs) -> None:
-        oSetting:cBaseScriptSettings  = self.GetSettingObjectForConfigName(self.uConfigName)
+        oSetting:cBaseScriptSettings  = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
         SetVar(uVarName=u'REPOSITORYWWWPATH',  oVarValue=oSetting.aIniSettings.uWWWServerPath)
         SetVar(uVarName=u"REPMAN_FTPSERVER",   oVarValue=oSetting.aIniSettings.uHost)
         SetVar(uVarName=u"REPMAN_FTPPATH",     oVarValue=oSetting.aIniSettings.uFTPPath)
@@ -173,8 +173,8 @@ class cScript(cToolsTemplate):
 
     def Register(self, *args, **kwargs) -> Dict:
         cToolsTemplate.Register(self,*args, **kwargs)
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTREPOSITORYMANAGER", fNotifyFunction=self.StartRepositoryManager,   uDescription="Script Repository Manager")
-        Globals.oNotifications.RegisterNotification("CREATEREPOSITORYVARARRAY",     fNotifyFunction=self.CreateRepositoryVarArray, uDescription="Script Repository Manager")
+        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTREPOSITORYMANAGER", fNotifyFunction=self.StartRepositoryManager,   uDescription="Script Repository Manager")
+        Globals.oNotifications.RegisterNotification(uNotification="CREATEREPOSITORYVARARRAY",     fNotifyFunction=self.CreateRepositoryVarArray, uDescription="Script Repository Manager")
 
         oScriptSettingPlugin:cScriptSettingPlugin = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName

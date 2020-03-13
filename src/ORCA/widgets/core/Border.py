@@ -38,7 +38,7 @@ class cBorder(Widget):
         self.aBackGroundColor:List[float]                   = kwargs.get('background_color',[0.5,0.5,0.5,1.0])
         self.fLineWidth:float                               = float(kwargs.get('linewidth','1.0'))
         self.oLine:Union[Line,None]                         = None
-        super(cBorder, self).__init__(**RemoveNoClassArgs(kwargs,cBorder))
+        super(cBorder, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=cBorder))
         # create the graphics
         self.Create_Border()
         self.bind(pos=self.update_graphics_pos,size=self.update_graphics_size)
@@ -49,7 +49,7 @@ class cBorder(Widget):
         with self.canvas:
             Color(self.aBackGroundColor[0],self.aBackGroundColor[1], self.aBackGroundColor[2],self.aBackGroundColor[3])
             # noinspection PyArgumentList
-            self.oLine:Line = Line(points=[self.pos[0],self.pos[1], self.pos[0]+self.width, self.pos[1],self.pos[0]+self.width,self.pos[1]+self.height,self.pos[0],self.pos[1]+self.height], close=True, width=self.fLineWidth, cap="none")
+            self.oLine = Line(points=[self.pos[0],self.pos[1], self.pos[0]+self.width, self.pos[1],self.pos[0]+self.width,self.pos[1]+self.height,self.pos[0],self.pos[1]+self.height], close=True, width=self.fLineWidth, cap="none")
             # self.oLine: Line = Line(rectangle=(self.pos[0], self.pos[1],self.width,self.height), width=self.fLineWidth)
 
     def update_graphics_pos(self, instance, value) -> None:

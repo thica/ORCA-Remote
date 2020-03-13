@@ -27,12 +27,12 @@ __all__ = ['SetDefinitionPathes',
            'RestoreDefinitionContext'
            ]
 
-def SetDefinitionPathes(uDefinitionName:str, uDefinitionPathName:str=u'') -> None:
+def SetDefinitionPathes(*,uDefinitionName:str, uDefinitionPathName:str=u'') -> None:
     """
-    Sets the definition pathes to a specific definition
+    Sets the definition path's to a specific definition
     """
     if not uDefinitionName in Globals.dDefinitionPathes:
-        oDefinitionPathes:cDefinitionPathes = cDefinitionPathes(uDefinitionName, uDefinitionPathName)
+        oDefinitionPathes:cDefinitionPathes = cDefinitionPathes(uDefinitionName=uDefinitionName, uDefinitionPathName=uDefinitionPathName)
         Globals.dDefinitionPathes[uDefinitionName] = oDefinitionPathes
 
     Globals.oDefinitionPathes = Globals.dDefinitionPathes[uDefinitionName]
@@ -41,19 +41,20 @@ def SetDefinitionPathes(uDefinitionName:str, uDefinitionPathName:str=u'') -> Non
     SetVar(uVarName=u'DEFINITIONFILENAME',              oVarValue=Globals.oDefinitionPathes.oFnDefinition.string)
     SetVar(uVarName=u'DEFINITIONNAME',                  oVarValue=Globals.uDefinitionName)
     SetVar(uVarName=u'DEFINITIONPATHSKINELEMENTS',      oVarValue=Globals.oDefinitionPathes.oPathDefinitionSkinElements.string)
+    return None
 
-
-def SetDefinitionContext(uDefinitionName:str, uDefinitionPathName:str=u'') -> None:
+def SetDefinitionContext(*,uDefinitionName:str, uDefinitionPathName:str=u'') -> None:
     """
     Changes the context (mainly the the definition pathes) to a specific definition
     """
     if Globals.uDefinitionContext != uDefinitionName:
         Globals.uDefinitionContext = uDefinitionName
-        SetDefinitionPathes(uDefinitionName, uDefinitionPathName)
-
+        SetDefinitionPathes(uDefinitionName=uDefinitionName, uDefinitionPathName=uDefinitionPathName)
+    return None
 
 def RestoreDefinitionContext() -> None:
     """
     Restores the context (mainly the the definition pathes) to the main definition
     """
-    SetDefinitionContext(Globals.uDefinitionName)
+    SetDefinitionContext(uDefinitionName=Globals.uDefinitionName)
+    return None

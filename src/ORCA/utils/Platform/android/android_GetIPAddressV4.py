@@ -36,29 +36,23 @@ from ORCA.utils.Platform.android.android_helper     import GetAndroidModule
 
 __all__ = ['GetIPAddressV4']
 
-def Int2IP(iIP_Num:int) -> str:
-    iOc1:int = int(iIP_Num / 16777216) % 256
-    iOc2:int = int(iIP_Num / 65536) % 256
-    iOc3:int = int(iIP_Num / 256) % 256
-    iOc4:int = int(iIP_Num) % 256
-    return '%d.%d.%d.%d' %(iOc4,iOc3,iOc2,iOc1)
-
 def GetIPAddressV4() -> str:
 
-    uIP = "127.0.0.0"
+    uIP:str = "127.0.0.0"
+    iIP:int
     try:
-        cContext             = GetAndroidModule("Context","android.content")
-        cPythonActivity      = GetAndroidModule("PythonActivity")
-        oPythonActivity      = cPythonActivity.mActivity
-        oWifiManager         = oPythonActivity.getSystemService(cContext.WIFI_SERVICE)
+        cContext        = GetAndroidModule("Context","android.content")
+        cPythonActivity = GetAndroidModule("PythonActivity")
+        oPythonActivity = cPythonActivity.mActivity
+        oWifiManager    = oPythonActivity.getSystemService(cContext.WIFI_SERVICE)
 
-        oIP = oWifiManager.getConnectionInfo()
-        iIP = oIP.getIpAddress()
-        uIP = Int2IP(int(iIP))
+        oIP             = oWifiManager.getConnectionInfo()
+        iIP             = oIP.getIpAddress()
+        uIP             = "%d.%d.%d.%d" % ( (iIP & 0xff), (iIP >> 8 & 0xff), (iIP >> 16 & 0xff), (iIP >> 24 & 0xff))
         # detach()
         Logger.debug("Found IPv4 Address:"+uIP)
 
     except Exception as e:
-        LogError(uMsg='GetGatewayV4:',oException=e)
+        LogError(uMsg='GetIPAddressV4:',oException=e)
 
     return uIP

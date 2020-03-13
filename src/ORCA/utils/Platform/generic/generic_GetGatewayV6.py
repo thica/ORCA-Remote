@@ -19,7 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from typing import List
+from typing import Dict
 from kivy import Logger
 
 try:
@@ -37,10 +37,11 @@ def GetGatewayV6() -> str:
 
     try:
         iInet_num = getattr(netifaces, uFamily)
-        aGateways:List = netifaces.gateways()
+        dGateways:Dict = netifaces.gateways()
         # noinspection PyTypeChecker
-        uIP  = aGateways['default'][iInet_num][0]
-    except Exception as e:
-        Logger.error("Error on GetGatewayV6:"+str(e))
+        uIP  = dGateways['default'][iInet_num][0]
+    except Exception:
+        # Logger.error("Error on GetGatewayV6:"+str(e))
+        pass
 
     return uIP

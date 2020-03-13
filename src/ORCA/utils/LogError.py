@@ -27,6 +27,12 @@ __all__ =['LogError','LogErrorSmall']
 
 
 def LogErrorSmall(*,uMsg:str, oException:Any=None) ->str:
+    """
+    Same as LogError , but without stacktrace
+    :param uMsg:
+    :param oException:
+    :return:
+    """
     return LogError(uMsg=uMsg, oException=oException, bTrackStack=False)
 
 def LogError(*,uMsg:str, oException:Any=None, bTrackStack:bool = False)-> str:

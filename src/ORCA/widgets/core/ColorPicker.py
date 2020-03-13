@@ -29,7 +29,7 @@ class cColorPicker(ColorPicker):
     """ Core Widget for a colorpicker """
     def __init__(self,**kwargs):
 
-        super().__init__(**RemoveNoClassArgs(kwargs,ColorPicker))
+        super().__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=ColorPicker))
         self.register_event_type('on_colorset')
         self.cFktTouchUp:Callable = self.wheel.on_touch_up
         self.wheel.on_touch_up=self.On_TouchUpColorWheel

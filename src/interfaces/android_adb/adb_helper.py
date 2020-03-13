@@ -20,7 +20,7 @@
 """
 from __future__  import annotations
 from typing      import List
-from typing      import Union
+from typing      import Optional
 
 import re
 
@@ -40,7 +40,7 @@ class cADB_Helper:
 
     def __init__(self):
         self.aGlobalRSA_KEYS:List               = []
-        self.oDevice:Union[AdbDeviceTcp,None]   = None
+        self.oDevice:Optional[AdbDeviceTcp]     = None
         self.uHost:str                          = ''
         self.Load_RSA_KEYS()
 
@@ -130,7 +130,7 @@ class cADB_Helper:
         return uIntent
 
     def Close(self) -> None:
-        self.oDevice.Close()
+        self.oDevice.close()
 
     # noinspection PyMethodMayBeStatic
     def FindPackageName(self,*,uAppList:str,uAppName:str) -> str:

@@ -23,10 +23,10 @@
 from typing import List
 from typing import Union
 
-from ORCA.interfaces.BaseInterface import cBaseInterFace
-from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
-from ORCA.Action import cAction
-from ORCA.utils.FileName import cFileName
+from ORCA.interfaces.BaseInterface          import cBaseInterFace
+from ORCA.interfaces.BaseInterfaceSettings  import cBaseInterFaceSettings
+from ORCA.Action                            import cAction
+from ORCA.utils.FileName                    import cFileName
 
 '''
 <root>
@@ -36,8 +36,8 @@ from ORCA.utils.FileName import cFileName
       <description language='English'>Base Interface Class for Infrared based Interfaces</description>
       <description language='German'>Basis Schnittstelle für Infrarot Schnittstellen</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/generic_infrared</local>
@@ -57,19 +57,19 @@ class cInterface(cBaseInterFace):
     class cInterFaceSettings(cBaseInterFaceSettings):
 
         def __init__(self,oInterFace:cBaseInterFace):
-            cBaseInterFaceSettings.__init__(self,oInterFace)
+            super().__init__(oInterFace)
 
         def ReadAction(self,oAction:cAction) -> None:
-            cBaseInterFaceSettings.ReadAction(self,oAction)
+            super().ReadAction(oAction)
             oAction.uCCF_Code    = oAction.dActionPars.get(u'cmd_ccf',u'')
             oAction.uRepeatCount = oAction.dActionPars.get(u'repeatcount',u'´1')
 
     def GetConfigCodesetList(self)  -> List[str]:
-        aRet:List[str]=cBaseInterFace.GetConfigCodesetList(self)
+        aRet:List[str]=super().GetConfigCodesetList()
         # adjust the codeset path to load infrared generic formats
         uTmpName:str=self.uObjectName
         self.uObjectName="infrared_ccf"
-        aRet+=cBaseInterFace.GetConfigCodesetList(self)
+        aRet+=super().GetConfigCodesetList()
         self.uObjectName=uTmpName
         return aRet
 
@@ -81,6 +81,6 @@ class cInterface(cBaseInterFace):
         if uRet is None:
             uTmpName=self.uObjectName
             self.uObjectName="infrared_ccf"
-            uRet = cBaseInterFace.FindCodesetFile(self,uFNCodeset)
+            uRet = super().FindCodesetFile(uFNCodeset)
             self.uObjectName=uTmpName
         return uRet

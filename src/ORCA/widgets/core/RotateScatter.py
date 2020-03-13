@@ -31,7 +31,7 @@ __all__ = ['cRotateScatter']
 class cRotateScatter(Scatter):
     """ base class for a rotate scatter """
     def __init__(self, **kwargs):
-        super().__init__(**RemoveNoClassArgs(kwargs,Scatter))
+        super().__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=Scatter))
         self.register_event_type('on_widget_turned')
         self.bInit:bool                 = False
         self.fTotalAngle:float          = 0.0
@@ -110,9 +110,9 @@ class cRotateScatter(Scatter):
             self.uDirection=u'left'
         else:
             self.uDirection=u'right'
-        self.fTotalAngle = self.fTotalAngle+fRad
-        self.iAngle      = int(degrees(self.fTotalAngle))*-1
-        anchor           = (self.xx+self.width/2,self.yy+self.height/2)
+        self.fTotalAngle += fRad
+        self.iAngle       = int(degrees(self.fTotalAngle))*-1
+        anchor            = (self.xx+self.width/2,self.yy+self.height/2)
 
         '''
         print 'Angle:',self.fTotalAngle

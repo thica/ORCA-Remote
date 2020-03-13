@@ -56,4 +56,10 @@ class cInterFaceResultParser(cResultParser):
 
         self.oAction      = oAction
         self.oSetting     = oSetting
-        return self.Parse(uResponse,oAction.uGetVar,oAction.uParseResultOption,oAction.uGlobalDestVar,oAction.uLocalDestVar,oAction.uParseResultTokenizeString)
+        return self.Parse(uResponse=uResponse,
+                          uGetVar=oAction.uGetVar,
+                          uParseResultOption=oAction.uParseResultOption,
+                          uGlobalDestVar=oAction.uGlobalDestVar,
+                          uLocalDestVar=oAction.uLocalDestVar,
+                          uTokenizeString=oAction.uParseResultTokenizeString,
+                          uParseResultFlags=oAction.uParseResultFlags)

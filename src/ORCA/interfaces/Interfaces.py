@@ -118,7 +118,7 @@ class cInterFaces:
 
         try:
             # noinspection PyDeprecation
-            oModule=Globals.oModuleLoader.LoadModule(oFnInterface,'cInterface' + "_" + uInterFaceName)
+            oModule=Globals.oModuleLoader.LoadModule(oFnModule=oFnInterface,uModuleName='cInterface' + "_" + uInterFaceName)
             self.dModules[uInterFaceName] = oModule
             oInterface: cBaseInterFace=oModule.GetClass('cInterface')()
             oInterface.Init(uInterFaceName, oFnInterface)
@@ -152,17 +152,17 @@ class cInterFaces:
             fPercentageStep:float=fSplashScreenPercentageRange/len(self.dUsedInterfaces)
 
             # Scheduling Register Interface
-            aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList([{'name':'Show Message the we register the interfaces','string':'showsplashtext','maintext':'$lvar(409)'}])
+            aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList(aActions=[{'name':'Show Message the we register the interfaces','string':'showsplashtext','maintext':'$lvar(409)'}])
 
             #for Interface
             for uInterFaceName in self.aInterfaceList:
                 for uKey in self.dUsedInterfaces:
                     uKey2=ReplaceVars(uKey)
                     if uKey2==uInterFaceName and uInterFaceName!=u'':
-                        fPercentage=fPercentage+fPercentageStep
-                        Globals.oEvents.AddToSimpleActionList(aActions,[{'name':'Update Percentage and Interface Name','string':'showsplashtext','subtext':uKey2,'percentage':str(fPercentage)},
-                                                                        {'name':'Register the Interface','string':'registerinterfaces','interfacename':uKey2}
-                                                                       ])
+                        fPercentage += fPercentageStep
+                        Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'name':'Update Percentage and Interface Name','string':'showsplashtext','subtext':uKey2,'percentage':str(fPercentage)},
+                                                                                             {'name':'Register the Interface','string':'registerinterfaces','interfacename':uKey2}
+                                                                                            ])
 
 
                         break
@@ -184,24 +184,24 @@ class cInterFaces:
                     oInterFace.oObjectConfig.LoadConfig()
                 for uConfigName in oInterFace.oObjectConfig.oConfigParser.sections():
                     if uConfigName != "DEVICE_DEFAULT":
-                        oSetting=oInterFace.GetSettingObjectForConfigName(uConfigName)
+                        oSetting=oInterFace.GetSettingObjectForConfigName(uConfigName=uConfigName)
                         if bForce:
                             oSetting.aIniSettings.uOldDiscoveredIP = ""
                         if oSetting.aIniSettings.uHost=="discover" and oSetting.aIniSettings.uOldDiscoveredIP  == "":
-                            Globals.oEvents.AddToSimpleActionList(aActions, [{'name': 'Discover single with gui', 'string': 'discover', 'interface': uInterFaceName, 'configname': uConfigName, 'gui': '1'}])
+                            Globals.oEvents.AddToSimpleActionList(aActionList=aActions, aActions=[{'name': 'Discover single with gui', 'string': 'discover', 'interface': uInterFaceName, 'configname': uConfigName, 'gui': '1'}])
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
             return eReturnCode.Success
         elif bGui:
             aActions=[]
             uAlias = Globals.oDefinitions.FindDefinitionAliasForInterfaceConfiguration(uInterFaceName=uInterFaceName, uConfigName=uConfigName)
             uDetail = "\n\n%s\n%s:%s" % (uAlias, uInterFaceName, uConfigName)
-            Globals.oEvents.AddToSimpleActionList(aActions, [{'name': 'And Discover', 'string': 'call DiscoverSingle', 'DISCOVERINTERFACE': uInterFaceName, 'DISCOVERCONFIG': uConfigName, 'DISCOVERDETAILS': uDetail, 'gui':'0'}])
+            Globals.oEvents.AddToSimpleActionList(aActionList=aActions, aActions=[{'name': 'And Discover', 'string': 'call DiscoverSingle', 'DISCOVERINTERFACE': uInterFaceName, 'DISCOVERCONFIG': uConfigName, 'DISCOVERDETAILS': uDetail, 'gui':'0'}])
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
             return eReturnCode.Success
         else:
             oInterFace = self.dInterfaces.get(uInterFaceName)
             if oInterFace:
-                oSetting = oInterFace.GetSettingObjectForConfigName(uConfigName)
+                oSetting = oInterFace.GetSettingObjectForConfigName(uConfigName=uConfigName)
                 if oSetting:
                     if oSetting.Discover():
                         return eReturnCode.Success

@@ -1,3 +1,5 @@
+
+
 from maxcube.device import MaxDevice
 from maxcube.device import MAX_ROOM
 

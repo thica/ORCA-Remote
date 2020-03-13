@@ -39,7 +39,7 @@ class cLabel(cOrcaButtonBehaviour,Label):
 
     def __init__(self, **kwargs):
 
-        Label.__init__(self,**RemoveNoClassArgs(kwargs,Label))
+        Label.__init__(self,**RemoveNoClassArgs(dInArgs=kwargs,oObject=Label))
         cOrcaButtonBehaviour.__init__(self,**kwargs)
 
         if 'background_color' in kwargs:

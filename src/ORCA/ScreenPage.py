@@ -19,6 +19,7 @@
 """
 
 from typing                         import Union
+from typing                         import Optional
 from typing                         import List
 from typing                         import Dict
 from typing                         import Callable
@@ -65,7 +66,7 @@ from ORCA.widgets.Switch            import cWidgetSwitch
 from ORCA.widgets.TextField         import cWidgetTextField
 from ORCA.widgets.TextInput         import cWidgetTextInput
 from ORCA.widgets.Video             import cWidgetVideo
-from ORCA.widgets.ScrollContainer   import cWidgetScrollContainer
+from ORCA.widgets.ScrollList   import cWidgetScrollList
 from ORCA.widgets.Border            import cWidgetBorder
 from ORCA.utils.FileName            import cFileName
 
@@ -87,8 +88,8 @@ class cScreenPage:
 
     def __init__(self):
         self.oWidgetBackGround:cWidgetBackGround               = cWidgetBackGround()
-        self.oWidgetPictureTransmit:Union[cWidgetPicture,None] = None
-        self.oWidgetPictureWait:Union[cWidgetPicture,None]     = None
+        self.oWidgetPictureTransmit:Optional[cWidgetPicture]   = None
+        self.oWidgetPictureWait:Optional[cWidgetPicture]       = None
         self.uHexBackGroundColor:str                           = u'#000000'
         self.uPageName:str                                     = u'NoName'
         #ordered array of widgets
@@ -119,7 +120,7 @@ class cScreenPage:
         self.uOrientation:str                                  = u''
 
         # Embedded kivy Screen Object
-        self.oScreen:Union[Screen,None]                        = None
+        self.oScreen:Optional[Screen]                        = None
 
         self.dFktsCreateWidget[eWidgetType.BackGround]       = self.AddWidgetFromXmlNode_BackGround, None
         self.dFktsCreateWidget[eWidgetType.TextField]        = self.AddWidgetFromXmlNode_Text, cWidgetTextField
@@ -138,36 +139,36 @@ class cScreenPage:
         self.dFktsCreateWidget[eWidgetType.ColorPicker]      = self.AddWidgetFromXmlNode_Class, cWidgetColorPicker
         self.dFktsCreateWidget[eWidgetType.Settings]         = self.AddWidgetFromXmlNode_Class, cWidgetSettings
         self.dFktsCreateWidget[eWidgetType.FileBrowser]      = self.AddWidgetFromXmlNode_Class, cWidgetFileBrowser
-        self.dFktsCreateWidget[eWidgetType.ScrollContainer]  = self.AddWidgetFromXmlNode_Class, cWidgetScrollContainer
+        self.dFktsCreateWidget[eWidgetType.ScrollList]       = self.AddWidgetFromXmlNode_Class, cWidgetScrollList
         self.dFktsCreateWidget[eWidgetType.Border]           = self.AddWidgetFromXmlNode_Class, cWidgetBorder
         self.dFktsCreateWidget[eWidgetType.NoWidget]         = self.AddWidgetFromXmlNode_None, None
         self.dFktsCreateWidget[eWidgetType.SkipWidget]       = self.AddWidgetFromXmlNode_Skip, None
 
-    def InitPageFromXmlNode(self,oXMLNode:Element) -> None:
+    def InitPageFromXmlNode(self,*,oXMLNode:Element) -> None:
         """ Get Page Definitions """
-        self.uPageName          = GetXMLTextAttribute(oXMLNode,u'name',True,u'')
+        self.uPageName          = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'')
         oRef:Element            = oXMLNode.find(u'page_parameter')
-        self.uDefaultInterface  = GetXMLTextValue(oRef,u'interface',False,u'')
-        self.uDefaultConfigName = GetXMLTextValue(oRef,u'configname',False,u'')
-        self.bIsPopUp           = GetXMLBoolValue(oRef,u'popup',False,False)
-        self.bPreventPreInit    = GetXMLBoolValue(oRef,u'preventpreinit',False,False)
+        self.uDefaultInterface  = GetXMLTextValue(oXMLNode=oRef,uTag=u'interface',bMandatory=False,vDefault=u'')
+        self.uDefaultConfigName = GetXMLTextValue(oXMLNode=oRef,uTag=u'configname',bMandatory=False,vDefault=u'')
+        self.bIsPopUp           = GetXMLBoolValue(oXMLNode=oRef,uTag=u'popup',bMandatory=False,bDefault=False)
+        self.bPreventPreInit    = GetXMLBoolValue(oXMLNode=oRef,uTag=u'preventpreinit',bMandatory=False,bDefault=False)
 
         # ToDo: this is temporary to validate some strange default value changes
         self.uDefaultInterface  = ReplaceVars(self.uDefaultInterface)
         self.uDefaultConfigName = ReplaceVars(self.uDefaultConfigName)
 
         #not used
-        self.uOrientation       = GetXMLTextValue(oRef,u'orientation',False,Globals.uDeviceOrientation)
+        self.uOrientation       = GetXMLTextValue(oXMLNode=oRef,uTag=u'orientation',bMandatory=False,vDefault=Globals.uDeviceOrientation)
 
         if not self.uDefaultInterface==u'':
             Globals.oInterFaces.dUsedInterfaces[ReplaceVars(self.uDefaultInterface)]=True
 
-    def AddPageElementsFromXmlNode(self,oXMLNode:Element) -> None:
+    def AddPageElementsFromXmlNode(self,*,oXMLNode:Element) -> None:
         """ Adds elements defined in an xml node"""
 
         self._AddElements(oXMLNode=oXMLNode, uAnchor=u'')
 
-    def LoadElement(self,uFnElement:str, uAnchor:str, oDefinition:cDefinition) -> bool:
+    def LoadElement(self,*,uFnElement:str, uAnchor:str, oDefinition:cDefinition) -> bool:
         """ Load an element at runtime to a page: the page must not be initalized
         :param str uFnElement: FileName of element to load
         :param str uAnchor: Target Anchor in Page to place the element into
@@ -182,7 +183,7 @@ class cScreenPage:
         oWidget:cWidgetBase
 
         try:
-            oFnElement=cFileName('').ImportFullPath(uFnElement)
+            oFnElement=cFileName('').ImportFullPath(uFnFullName=uFnElement)
             SetVar(uVarName = 'ORCA_INCLUDEFILE', oVarValue = oFnElement.string)
             if oDefinition is None:
                 oDef=self.oWidgetBackGround.oDef
@@ -190,7 +191,7 @@ class cScreenPage:
                 oDef=oDefinition
             uET_Data = CachedFile(oFileName=Globals.oFnElementIncludeWrapper)
             uET_Data = ReplaceDefVars(uET_Data,oDef.oDefinitionVars)
-            oET_Root = Orca_FromString(uET_Data,oDef,oFnElement.string)
+            oET_Root = Orca_FromString(uET_Data=uET_Data,oDef=oDef,uFileName=oFnElement.string)
             Orca_include(oET_Root,orca_et_loader)
             oWidget=self._AddElements(oXMLNode=oET_Root, uAnchor=uAnchor)
             if self.bIsInit:
@@ -201,7 +202,7 @@ class cScreenPage:
             ShowErrorPopUp(uMessage=LogError(uMsg="Can''t load element: %s:" % uFnElement,oException=e))
             return False
 
-    def ReplaceElement(self,uFnElement:str, uReplaceWidgetName:str,oDefinition:cDefinition) -> bool:
+    def ReplaceElement(self,*,uFnElement:str, uReplaceWidgetName:str,oDefinition:cDefinition) -> bool:
         """ Replaces an element at runtime in a page: the page must not be initalized
         :param str uFnElement: FileName of element to load
         :param str uReplaceWidgetName: The Widgetname to be replaced
@@ -216,7 +217,7 @@ class cScreenPage:
         oET_Root:Element
 
         try:
-            uFnFile=(cFileName(u'').ImportFullPath(uFnElement)).string
+            uFnFile=(cFileName(u'').ImportFullPath(uFnFullName=uFnElement)).string
             SetVar(uVarName = 'ORCA_INCLUDEFILE', oVarValue = uFnFile)
             if oDefinition is None:
                 oDef=self.oWidgetBackGround.oDef
@@ -224,7 +225,7 @@ class cScreenPage:
                 oDef=oDefinition
             uET_Data = CachedFile(oFileName=Globals.oFnElementIncludeWrapper)
             uET_Data = ReplaceDefVars(uET_Data,oDef.oDefinitionVars)
-            oET_Root = Orca_FromString(uET_Data,oDef,uFnFile)
+            oET_Root = Orca_FromString(uET_Data=uET_Data,oDef=oDef,uFileName=uFnFile)
             Orca_include(oET_Root,orca_et_loader)
             self._ReplaceElements(oXMLNode=oET_Root, uReplaceWidgetName=uReplaceWidgetName)
             return True
@@ -232,7 +233,7 @@ class cScreenPage:
             ShowErrorPopUp(uMessage=LogError(uMsg="Can''t load element (replace): %s (%s):" % (uFnElement, uFnFile),oException=e))
             return False
 
-    def _ReplaceElements(self,oXMLNode:Element, uReplaceWidgetName:str) -> None:
+    def _ReplaceElements(self,*,oXMLNode:Element, uReplaceWidgetName:str) -> None:
         # Get list of all 'root elements', if not nested
         oXMLWidget:Element
         for oXMLWidget in oXMLNode:
@@ -244,7 +245,7 @@ class cScreenPage:
             elif oXMLWidget.tag==u'page':
                 self._ReplaceElements(oXMLNode=oXMLWidget.find('elements'), uReplaceWidgetName=uReplaceWidgetName)
 
-    def _ReplaceWidgetFromXmlNode(self,oXMLNode:Element, uReplaceWidgetName:str) -> None:
+    def _ReplaceWidgetFromXmlNode(self,*,oXMLNode:Element, uReplaceWidgetName:str) -> None:
 
         # first find the org Widgets
         # if you will replace a widget, which is multiple on a page, the outcome is unpredictable
@@ -272,7 +273,7 @@ class cScreenPage:
 
         return
 
-    def RemoveWidget(self,oWidget:cWidgetBase) -> bool:
+    def RemoveWidget(self,*,oWidget:cWidgetBase) -> bool:
         """ Removes a widget from the page """
 
         self.dWidgets.pop(oWidget.uName)
@@ -281,7 +282,7 @@ class cScreenPage:
             oWidget.oObject.parent.remove_widget(oWidget.oObject)
         return True
 
-    def _AddElements(self,oXMLNode:Element, uAnchor:str) -> Union[cWidgetBase,None]:
+    def _AddElements(self,*,oXMLNode:Element, uAnchor:str) -> Union[cWidgetBase,None]:
         """
         Adds Elemenst to the Page
 
@@ -293,7 +294,7 @@ class cScreenPage:
         # Get list of all 'root elements', if not nested
         for oXMLWidget in oXMLNode:
             if oXMLWidget.tag==u'element':
-                oRet=self.AddWidgetFromXmlNode(oXMLWidget, uAnchor)
+                oRet=self.AddWidgetFromXmlNode(oXMLNode=oXMLWidget, uAnchor=uAnchor)
             elif oXMLWidget.tag==u'elements':
                 oRet=self._AddElements(oXMLNode=oXMLWidget, uAnchor=uAnchor)
             elif oXMLWidget.tag==u'page':
@@ -301,10 +302,10 @@ class cScreenPage:
 
         #Once we need to add the background
         if self.oWidgetBackGround.uName==u'noname':
-            self._AddBackGroundFromXmlNodes(oXMLNode)
+            self._AddBackGroundFromXmlNodes(oXMLWidgets=oXMLNode)
         return oRet
 
-    def _AddBackGroundFromXmlNodes(self,oXMLWidgets:Element) -> None:
+    def _AddBackGroundFromXmlNodes(self,*,oXMLWidgets:Element) -> None:
         # Find the Background widget in all defined widgets
         oXMLWidget:Element
         for oXMLWidget in oXMLWidgets.findall('element'):
@@ -313,7 +314,7 @@ class cScreenPage:
                 self.oWidgetBackGround.InitWidgetFromXml(oXMLWidget,self)
                 return
 
-    def AddWidgetFromXmlNode_Class(self, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
+    def AddWidgetFromXmlNode_Class(self,*,oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
 
         oTmpWidget:cWidgetBase=oClass()
         oTmpWidget.SaveLastWidgetPos()
@@ -331,7 +332,7 @@ class cScreenPage:
             self._AddElements(oXMLNode=oXMLNode, uAnchor=uAnchor)
         return oTmpWidget
 
-    def AddWidgetFromXmlNode_Anchor(self, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
+    def AddWidgetFromXmlNode_Anchor(self, *,oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
         oTmpAnchor:cWidgetBase = oClass()
         if oTmpAnchor.InitWidgetFromXml(oXMLNode,self, uAnchor):
             self.aWidgets.append(oTmpAnchor)
@@ -339,7 +340,7 @@ class cScreenPage:
             self._AddElements(oXMLNode=oXMLNode, uAnchor=oTmpAnchor.uName)
         return oTmpAnchor
 
-    def AddWidgetFromXmlNode_Text(self, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
+    def AddWidgetFromXmlNode_Text(self,*, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
         oTmpText:cWidgetTextField=oClass()
         if oTmpText.InitWidgetFromXml(oXMLNode,self, uAnchor):
             self.aWidgets.append(oTmpText)
@@ -353,19 +354,19 @@ class cScreenPage:
         return oTmpText
 
     # noinspection PyUnusedLocal
-    def AddWidgetFromXmlNode_BackGround(self, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
+    def AddWidgetFromXmlNode_BackGround(self,*, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
         return self._AddElements(oXMLNode=oXMLNode, uAnchor=u'')
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
-    def AddWidgetFromXmlNode_None(self, oXMLNode:Element, uAnchor:str, oClass:Callable)  -> cWidgetBase:
+    def AddWidgetFromXmlNode_None(self,*, oXMLNode:Element, uAnchor:str, oClass:Callable)  -> cWidgetBase:
         ShowErrorPopUp(uMessage=LogError(uMsg=u'AddWidget: Invalid Widget:'+tostring(oXMLNode)))
         return cWidgetBase()
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
-    def AddWidgetFromXmlNode_Skip(self, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
+    def AddWidgetFromXmlNode_Skip(self,*, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
         return cWidgetBase()
 
-    def AddWidgetFromXmlNode(self,oXMLNode:Element, uAnchor:str) -> Union[bool,cWidgetBase]:
+    def AddWidgetFromXmlNode(self,*,oXMLNode:Element, uAnchor:str) -> Union[bool,cWidgetBase]:
         # Parse a specific Widget from an xml definition
 
         oTmpWidget:cWidgetBase = cWidgetBase()
@@ -377,9 +378,9 @@ class cScreenPage:
             try:
                 return self.dFktsCreateWidget[oTmpWidget.eWidgetType][0](oXMLNode=oXMLNode,  uAnchor=uAnchor,oClass=self.dFktsCreateWidget[oTmpWidget.eWidgetType][1])
             except Exception as e:
-                LogError(uMsg="can't create widget:"+XMLPrettify(oXMLNode),oException=e)
+                LogError(uMsg="can't create widget:"+XMLPrettify(oElem=oXMLNode),oException=e)
         else:
-            Ret:Union[Dict,None] = Globals.oNotifications.SendNotification("UNKNOWNWIDGET",**{"SCREENPAGE":self,"XMLNODE":oXMLNode,"ANCHOR":uAnchor,"WIDGET":oTmpWidget})
+            Ret:Union[Dict,None] = Globals.oNotifications.SendNotification(uNotification="UNKNOWNWIDGET",**{"SCREENPAGE":self,"XMLNODE":oXMLNode,"ANCHOR":uAnchor,"WIDGET":oTmpWidget})
             if Ret is None:
                 Logger.error("Unknown Widget Type %s : Page: %s" % (oTmpWidget.uTypeString, self.uPageName))
                 return False
@@ -435,11 +436,11 @@ class cScreenPage:
             if oWidget.eWidgetType==eWidgetType.Settings:
                 oWidget.UpdateWidget()
 
-    def GetGestureAction(self,uGestureName:str):
+    def GetGestureAction(self,*,uGestureName:str):
         #return the gesture object to a given gesture name
         return self.dGestures.get(uGestureName)
 
-    def SetTransmitterPicture(self,uTransmitterPictureName:str) -> None:
+    def SetTransmitterPicture(self,*,uTransmitterPictureName:str) -> None:
         #Sets the to use transmitter picture for interface activities
         oWidget:cWidgetBase
         for oWidget in self.aWidgets:
@@ -447,7 +448,7 @@ class cScreenPage:
                 if oWidget.eWidgetType==eWidgetType.Picture:
                     self.oWidgetPictureTransmit = oWidget
 
-    def SetWaitPicture(self,uWaitPictureName:str) -> None:
+    def SetWaitPicture(self,*,uWaitPictureName:str) -> None:
         #Sets the to use wait picture for interface activities
         oWidget: cWidgetBase
         for oWidget in self.aWidgets:
@@ -462,7 +463,7 @@ class cScreenPage:
 
         # Fallback to prevent unstoppable apps
         if uKey == 'key_ESC':
-            self.iESCPressCount = self.iESCPressCount + 1
+            self.iESCPressCount += 1
             if self.iESCPressCount > 2:
                 StopWait()
                 aActions=Globals.oActions.GetActionList(uActionName = "askonexit", bNoCopy = False)

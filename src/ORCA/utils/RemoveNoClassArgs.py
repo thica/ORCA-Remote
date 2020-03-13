@@ -45,7 +45,7 @@ def all_members(aClass:Any) -> Dict:
     for someClass in mro: members.update(vars(someClass))
     return members
 
-def RemoveNoClassArgs(dInArgs:Dict, oObject:Any) -> Dict:
+def RemoveNoClassArgs(*,dInArgs:Dict, oObject:Any) -> Dict:
     """ In python3 it triggers an error, if we pass ORCA Args at __Init__ to Kivy Widgets
         so we remove them
     """

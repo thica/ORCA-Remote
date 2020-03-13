@@ -39,6 +39,6 @@ class cDownLoadObject:
     def ToString(self) -> str:
         """ Dumps the pars of the object """
         return json.dumps(self.dPars)
-    def FromString(self,uPars:str) -> None:
+    def FromString(self,*,uPars:str) -> None:
         """ loads the parameters from a json string """
         self.dPars=json.loads(uPars)

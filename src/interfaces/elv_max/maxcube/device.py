@@ -1,7 +1,3 @@
-import json
-
-
-
 MAX_CUBE = 0
 MAX_THERMOSTAT = 1
 MAX_THERMOSTAT_PLUS = 2
@@ -39,7 +35,8 @@ class MaxDevice:
         self.id = None
         self.typestring ="unknown"
         self.set_current_mode(MAX_DEVICE_MODE_UNKNOWN)
-
+        self.mode = "unknown"
+        self.current_mode = "unknown"
 
     def is_thermostat(self):
         return self.type in (MAX_THERMOSTAT, MAX_THERMOSTAT_PLUS)

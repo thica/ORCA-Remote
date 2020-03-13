@@ -53,8 +53,8 @@ else:
       <description language='English'>Tool to create the ORCA Wikipedia (internal tool)</description>
       <description language='German'>Tool um das ORCA Wikipedia zu schreiben (internes Tool)</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -96,7 +96,7 @@ class cScript(cToolsTemplate):
             :param oScript: cScript
             """
 
-            cBaseScriptSettings.__init__(self,oScript)
+            super().__init__(oScript)
             self.aIniSettings.uHost               = oScript.oEnvParameter.uWikiServer
             self.aIniSettings.uFTPPath            = oScript.oEnvParameter.uWikiPath
             self.aIniSettings.uUser               = oScript.oEnvParameter.uWikiUser
@@ -119,7 +119,7 @@ class cScript(cToolsTemplate):
             oParser.add_argument('--wikiapp',           default=GetEnvVar('ORCAWIKIAPP',"MEDIAWIKI"),                       action=cParserAction, oParameter=self, dest="uWikiApp",         help='Sets the target for the wiki files (MEDIAWIKI or GITWIKI)')
 
     def __init__(self):
-        cToolsTemplate.__init__(self)
+        super().__init__()
         self.uSubType        = u'WIKI'
         self.uSortOrder      = u'auto'
         self.uSettingSection = u'tools'
@@ -134,20 +134,20 @@ class cScript(cToolsTemplate):
         :param uScriptFile: The file of the script (to be passed to all scripts)
         """
 
-        cToolsTemplate.Init(self, uObjectName, uScriptFile)
+        super().Init(uObjectName= uObjectName,oFnObject= uScriptFile)
         self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
         return {}
 
     def RunScript(self, *args, **kwargs) -> None:
-        cToolsTemplate.RunScript(self,*args, **kwargs)
+        super().RunScript(*args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.WikiDoc(self, *args, **kwargs)
 
     # noinspection PyUnusedLocal
     def WikiDoc(self, *args, **kwargs) -> None:
-        oSetting                    = self.GetSettingObjectForConfigName(self.uConfigName)
+        oSetting                    = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
         dArgs                       = {"Host":              kwargs.get("Host",              oSetting.aIniSettings.uHost),
                                        "WikiPath":          kwargs.get("WikiPath",          oSetting.aIniSettings.uWikiPath),
                                        "User":              kwargs.get("WikiUser",          oSetting.aIniSettings.uUser),
@@ -160,8 +160,8 @@ class cScript(cToolsTemplate):
         Logger.debug(u'Wikidoc Finished')
 
     def Register(self, *args, **kwargs) -> None:
-        cToolsTemplate.Register(self,*args, **kwargs)
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTWIKIDOC", fNotifyFunction=self.WikiDoc,   uDescription="Script WikiDoc")
+        super().Register(*args, **kwargs)
+        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTWIKIDOC", fNotifyFunction=self.WikiDoc,   uDescription="Script WikiDoc")
 
         oScriptSettingPlugin:cScriptSettingPlugin = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName          = self.uObjectName

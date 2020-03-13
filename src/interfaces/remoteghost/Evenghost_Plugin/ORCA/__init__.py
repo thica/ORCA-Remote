@@ -51,6 +51,9 @@ import win32api
 import win32con
 
 class Text:
+    """
+    Helper class for receivin remote ghost commands
+    """
     def __init__(self):
         pass
 
@@ -92,6 +95,9 @@ class ServerHandler(asynchat.async_chat):
 
 
     def handle_close(self):
+        """
+        Closes the connection
+        """
         self.plugin.EndLastEvent()
         asynchat.async_chat.handle_close(self)
 
@@ -126,17 +132,29 @@ class ServerHandler(asynchat.async_chat):
 
 
     def initiate_close(self):
+        """
+        Closes the connection
+        """
         self.state = self.state1
         self.close()
 
     def respond_ok(self):
+        """
+        Give a OK response
+        """
         self.respond(u'RemoteGhost.OK')
     def respond_error(self):
+        """
+        Give an ERROR Response
+        """
         self.respond(u'RemoteGhost.ERROR')
     def respond(self, sMsg):
-
+        """
+        Give a the sMsg as a response
+        :param sMsg:
+        """
         try:
-            sMsg=sMsg+"[EOL]"
+            sMsg += "[EOL]"
             #print u"ORCA:",type(sMsg),u':',sMsg
             #print "ORCA:",eg.systemEncoding
             #asynchat.async_chat.push(self,sMsg.encode(eg.systemEncoding))

@@ -106,8 +106,8 @@ class cWidgetTextField(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBase
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        self.bIsClock  = GetXMLBoolAttribute(oXMLNode,u'clock',    False,False)
-        self.bIsDate   = GetXMLBoolAttribute(oXMLNode,u'date',    False,False)
+        self.bIsClock  = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'clock',  bMandatory=False,bDefault=False)
+        self.bIsDate   = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'date',   bMandatory=False,bDefault=False)
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def Create(self,oParent:Widget) -> bool:

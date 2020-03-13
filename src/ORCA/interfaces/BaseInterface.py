@@ -18,6 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from typing                                  import Union
+from typing                                  import Optional
+
 from typing                                  import List
 from typing                                  import Dict
 from typing                                  import Tuple
@@ -54,22 +56,23 @@ class cBaseInterFace(cBaseObject):
 
         super().__init__()
 
-        self.oObjectConfig:Union[cInterFaceConfig,None]                  = None
-        self.oObjectConfigDiscover:Union[cInterFaceConfigDiscover,None]  = None
+        self.oObjectConfig:Optional[cInterFaceConfig]                    = None
+        self.oObjectConfigDiscover:Optional[cInterFaceConfigDiscover]    = None
         self.uObjectType:str                                             = "interface"
 
         self.aDiscoverScriptsBlackList:List[str]                         = []
         self.aDiscoverScriptsWhiteList:List[str]                         = []
-        self.oAction:Union[cAction,None]                                 = None
+        self.oAction:Optional[cAction]                                   = None
+        self.iMaxTryCount:int                                            = 2
 
-    def Init(self,uObjectName:str,oFnObject:cFileName=None) -> None:
-        """ Initialisizes the Interface
+    def Init(self,uObjectName:str,oFnObject:Optional[cFileName]=None) -> None:
+        """ Initializes the Interface
 
         :param str uObjectName: unicode : Name of the interface
         :param cFileName oFnObject: The Filename of the interface
         """
 
-        super(cBaseInterFace, self).Init(uObjectName,oFnObject)
+        super().Init(uObjectName=uObjectName,oFnObject=oFnObject)
 
         self.oObjectConfig           = cInterFaceConfig(self)
         self.oObjectConfig.Init()
@@ -81,19 +84,20 @@ class cBaseInterFace(cBaseObject):
         Main entry function for performing an action. Handles repeating actions
 
         :param cAction oAction:
-        :return: 0 if successfull, 1 one exception error, -10 if codeset not found
+        :return: 0 if successful, 1 one exception error, -10 if codeset not found
         """
         uConfigName:str                     = oAction.dActionPars.get(u'configname',u'')
-        oSetting:cBaseInterFaceSettings     = self.GetSettingObjectForConfigName(uConfigName)
+        oSetting:cBaseInterFaceSettings     = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
         uCmdName:str                        = ReplaceVars(oAction.dActionPars.get('commandname',""))
-        uCmdNameLocal:str                   = oSetting.MakeLocalActionName(uCmdName)
-        aActions:List[cAction]                 = Globals.oActions.GetActionList(uActionName = uCmdNameLocal, bNoCopy = False)
+        uCmdNameLocal:str                   = oSetting.MakeLocalActionName(uActionName=uCmdName)
+        aActions:List[cAction]              = Globals.oActions.GetActionList(uActionName = uCmdNameLocal, bNoCopy = False)
+
         if aActions is None:
             self.ShowError(uMsg="Action not found:"+uCmdName,uParConfigName=uConfigName,uParAdd=oSetting.aIniSettings.uFNCodeset)
             return eReturnCode.NotFound
 
         for uKey in oAction.dCommandParameter:
-            oSetting.SetContextVar(uKey,oAction.dCommandParameter[uKey])
+            oSetting.SetContextVar(uVarName=uKey,uVarValue=oAction.dCommandParameter[uKey])
             SetVar(uVarName = uKey, oVarValue = oAction.dCommandParameter[uKey])
 
         aExecActions:List[cAction] = []
@@ -140,7 +144,7 @@ class cBaseInterFace(cBaseObject):
         Globals.oEvents.ExecuteActionsNewQueue(aExecActions, oAction.oParentWidget)
         return eReturnCode.Success
 
-    def SendCommand(self,oAction:cAction,oSetting:cBaseInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
+    def SendCommand(self,*,oAction:cAction,oSetting:cBaseInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
         """
         Template function
 
@@ -168,10 +172,10 @@ class cBaseInterFace(cBaseObject):
         uConfigName:str = ReplaceVars(oAction.dActionPars.get("configname",""))
 
         if uAction!=u'' or uRetVar!=u'':
-            self.ShowDebug(u'Adding Trigger:'+uTrigger,uConfigName)
+            self.ShowDebug(uMsg=u'Adding Trigger:'+uTrigger,uParConfigName=uConfigName)
         else:
-            self.ShowDebug(u'Delete Trigger:'+uTrigger,uConfigName)
-        oSetting=self.GetSettingObjectForConfigName(uConfigName)
+            self.ShowDebug(uMsg=u'Delete Trigger:'+uTrigger,uParConfigName=uConfigName)
+        oSetting=self.GetSettingObjectForConfigName(uConfigName=uConfigName)
 
         if uAction==u'' and uRetVar==u'':
             oSetting.DelTrigger(uTrigger)
@@ -183,7 +187,7 @@ class cBaseInterFace(cBaseObject):
         entry for the onpause event
 
         """
-        self.ShowInfo(u'OnPause')
+        self.ShowInfo(uMsg=u'OnPause')
 
         uSettingName:str
 
@@ -199,7 +203,7 @@ class cBaseInterFace(cBaseObject):
         entry for the onresume event
 
         """
-        self.ShowInfo(u'OnResume')
+        self.ShowInfo(uMsg=u'OnResume')
 
         uSettingName:str
 
@@ -277,7 +281,7 @@ class cBaseInterFace(cBaseObject):
                 aCodesetFiles.append(uFile)
         return aCodesetFiles
 
-    def CreateCodsetListJSONString(self) -> str:
+    def CreateCodesetListJSONString(self) -> str:
         """
         Creates a list of all codeset, suitable for the configuration JSON list
 

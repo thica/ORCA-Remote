@@ -37,11 +37,11 @@ class cEventScriptResultParser(cResultParser):
         self.uDebugContext: str  = "Action: % s , Script: %s:" % (oAction.uActionName,uScriptName)
         self.uContext: str       = oAction.uActionName + '/' + uScriptName
 
-    def ParseResult(self,uResponse: str, uParseOptions: str) -> Tuple[str,str]:
+    def ParseResult(self,*,uResponse: str, uParseOptions: str) -> Tuple[str,str]:
         """
         The parser function
 
-        :param string uResponse: The reponse to parse
+        :param string uResponse: The response to parse
         :param string uParseOptions: A string representing the parse options (string of a dict)
         :return: The result of the parsing
         """
@@ -52,6 +52,13 @@ class cEventScriptResultParser(cResultParser):
             uLocalDestVar: str                = dParseOptions.get('ldestvar',u'')
             uParseResultOption: str           = dParseOptions.get('parseoption',u'store')
             uParseResultTokenizeString: str   = dParseOptions.get('parsetoken',u':')
+            uParseResultFlags: str            = dParseOptions.get('parseflags', u'')
 
-            return self.Parse(uResponse,uGetVar,uParseResultOption,uGlobalDestVar,uLocalDestVar,uParseResultTokenizeString)
+            return self.Parse(uResponse=uResponse,
+                              uGetVar=uGetVar,
+                              uParseResultOption=uParseResultOption,
+                              uGlobalDestVar=uGlobalDestVar,
+                              uLocalDestVar=uLocalDestVar,
+                              uTokenizeString=uParseResultTokenizeString,
+                              uParseResultFlags=uParseResultFlags)
         return "",""

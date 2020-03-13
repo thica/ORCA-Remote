@@ -1,0 +1,15 @@
+#!/bin/bash
+
+python3 -m pip install  "future"
+python3 -m pip install  "plyer"
+python3 -m pip install  "rsa"
+python3 -m pip install  "pyasn1"
+python3 -m pip install  "wakeonlan"
+python3 -m pip install  "ws4py"
+python3 -m pip install  "httplib2"
+python3 -m pip install  "pycparser"
+python3 -m pip install  "mwclient"
+python3 -m pip install  "netifaces"
+python3 -m pip install  "pillow"
+python3 -m pip install  "demjson"
+python3 -m pip install  "telnetlib"

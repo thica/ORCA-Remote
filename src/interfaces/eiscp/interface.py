@@ -23,6 +23,7 @@ from __future__                            import annotations
 from typing                                import Dict
 from typing                                import List
 from typing                                import Tuple
+from typing                                import Optional
 from typing                                import Union
 from typing                                import cast
 from typing                                import TYPE_CHECKING
@@ -59,8 +60,8 @@ import ORCA.Globals as Globals
       <description language='English'>Onkyo EISCP Interface (LAN/IP)</description>
       <description language='German'>Onkyo EISCP Interface (LAN/IP)</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/eiscp</local>
@@ -86,8 +87,9 @@ class cInterface(cBaseInterFace):
 
     class cInterFaceSettings(cBaseInterFaceSettings):
         def __init__(self,oInterFace):
-            cBaseInterFaceSettings.__init__(self,oInterFace)
-            self.oSocket:Union[socket.socket,None]          = None
+            super().__init__(oInterFace)
+            #cBaseInterFaceSettings.__init__(self,oInterFace)
+            self.oSocket:Optional[socket.socket]            = None
             self.uMsg:str                                   = u''
             self.iBufferSize:int                            = 2048
 
@@ -104,12 +106,12 @@ class cInterface(cBaseInterFace):
             self.aIniSettings.uFNCodeset                    = u"CODESET_eiscp_ONKYO_AVR.xml"
             self.aIniSettings.fTimeOut                      = 2.0
             self.aIniSettings.iTimeToClose                  = -1
-            self.aIniSettings.uDiscoverScriptName           = u"discover_eiscp"
+            self.aIniSettings.uDiscoverScriptName           = u'discover_eiscp'
             self.aIniSettings.uParseResultOption            = u'store'
             self.aIniSettings.fDISCOVER_EISCP_timeout       = 2.0
-            self.aIniSettings.uDISCOVER_EISCP_models        = []
-            self.aIniSettings.uDISCOVER_UPNP_servicetypes   = "upnp:rootdevice"
-            self.aIniSettings.uDISCOVER_UPNP_manufacturer   = "Onkyo & Pioneer Corporation"
+            self.aIniSettings.uDISCOVER_EISCP_models        = u''
+            self.aIniSettings.uDISCOVER_UPNP_servicetypes   = u"upnp:rootdevice"
+            self.aIniSettings.uDISCOVER_UPNP_manufacturer   = u"Onkyo & Pioneer Corporation"
             self.oThread                                    = None
 
         def Connect(self) -> bool:
@@ -118,11 +120,12 @@ class cInterface(cBaseInterFace):
                 # Initiate Resultparser
                 self.oInterFace.ParseResult(cAction(),"",self)
 
-            if not cBaseInterFaceSettings.Connect(self):
+            # if not cBaseInterFaceSettings.Connect(self):
+            if not super().Connect():
                 return False
 
             if (self.aIniSettings.uHost=="") or (self.aIniSettings.uPort==u""):
-                self.ShowError(u'Cannot connect on empty host of port ')
+                self.ShowError(uMsg=u'Cannot connect on empty host of port ')
                 self.bOnError=True
                 return False
 
@@ -143,11 +146,11 @@ class cInterface(cBaseInterFace):
                 self.oThread.oParent = self
                 self.oThread.start()
             except socket.error as e:
-                self.ShowError(u'Cannot open socket:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
+                self.ShowError(uMsg=u'Cannot open socket:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.oSocket.close()
                 self.oSocket = None
             except Exception as e:
-                self.ShowError(u'Cannot open socket#2:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
+                self.ShowError(uMsg=u'Cannot open socket#2:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.bOnError=True
 
             if self.oSocket is None:
@@ -158,7 +161,7 @@ class cInterface(cBaseInterFace):
             return self.bIsConnected
 
         def Disconnect(self) -> bool:
-            if not cBaseInterFaceSettings.Disconnect(self):
+            if not super().Disconnect():
                 return False
 
             if self.oThread:
@@ -202,10 +205,10 @@ class cInterface(cBaseInterFace):
                 # struct.unpack doesnt not work reliable on all Android Platform processors
                 # byHeaderRet, iHeaderSize, iDataSize, iVersionRet = unpack('!4sIIBxxx', byResponseIn[0:self.iHeaderSize])
                 if byHeaderRet != self.bHeader:
-                    self.ShowDebug(u'Received packet not ISCP: '+ToUnicode(byHeaderRet))
+                    self.ShowDebug(uMsg=u'Received packet not ISCP: '+ToUnicode(byHeaderRet))
                     return u'',''
                 if iVersionRet != self.iVersion:
-                    self.ShowDebug(u'ISCP version not supported: '+ToUnicode(iVersionRet))
+                    self.ShowDebug(uMsg=u'ISCP version not supported: '+ToUnicode(iVersionRet))
                     return u'',''
                 if len(byResponseIn)==16:
                     byResponse=self.Helper_ReceiveAll(self.oSocket,iDataSize)
@@ -220,10 +223,10 @@ class cInterface(cBaseInterFace):
                     uParameter      = uMessage[5:iMessageSize]
                     return uCommand,uParameter
                 else:
-                    self.ShowDebug(u'Got empty response: '+ToUnicode(byResponseIn))
+                    self.ShowDebug(uMsg=u'Got empty response: '+ToUnicode(byResponseIn))
                     return "", ""
             except Exception as e:
-                self.ShowError(u'Cannot parse response:'+ToUnicode(byResponse)+":"+ToUnicode(byResponseIn),e)
+                self.ShowError(uMsg=u'Cannot parse response:'+ToUnicode(byResponse)+":"+ToUnicode(byResponseIn),oException=e)
                 return u'',''
 
         def Helper_ReceiveAll(self, oSocket:socket.socket, iSize:int) -> bytes:
@@ -239,12 +242,12 @@ class cInterface(cBaseInterFace):
                     byPacket = oSocket.recv(iMissing)
                     if not byPacket:
                         if len(byData)>0:
-                            self.ShowError("Can't get complete response 1 ({}) ({})".format(iMissing,byData) )
+                            self.ShowError(uMsg="Can''t get complete response 1 ({0}) ({1!r})".format(iMissing,byData) )
                         return byData
                     byData += byPacket
                 return byData
             except Exception as e:
-                self.ShowError(u"ReceiveAll:Can't receive response 2",e)
+                self.ShowError(uMsg=u"ReceiveAll:Can't receive response 2",oException=e)
                 return byData
 
         def Receive(self):
@@ -276,9 +279,9 @@ class cInterface(cBaseInterFace):
                             i:int = 0
                             while self.bBusy:
                                 sleep(0.01)
-                                i = i + 1
+                                i += 1
                                 if i > 200:
-                                    oParent.ShowError("Busy Time Out")
+                                    oParent.ShowError(uMsg="Busy Time Out")
                                     self.bBusy = False
                             self.bBusy = True
 
@@ -332,7 +335,7 @@ class cInterface(cBaseInterFace):
                                     elif uCommand==u'IFA':
                                         oParent.oInterFace.Split_IFA(oTmpAction,uResponse,oParent)
                                     elif uCommand==u'IFV':
-                                         oParent.oInterFace.Split_IFV(oTmpAction,uResponse,oParent)
+                                        oParent.oInterFace.Split_IFV(oTmpAction,uResponse,oParent)
                                     elif uCommand==u'MVL' or uCommand==u'CTL' or uCommand==u'SWL':
                                         if uResponse!=u'N/A':
                                             uResponse=str(int(uResponse, 16))
@@ -354,43 +357,43 @@ class cInterface(cBaseInterFace):
                                 oActionTrigger=oParent.GetTrigger(uCommand)
 
                                 if oActionTrigger:
-                                    oParent.ShowInfo(u'Calling Trigger for:' + uCommand)
+                                    oParent.ShowInfo(uMsg=u'Calling Trigger for:' + uCommand)
                                     oParent.CallTrigger(oActionTrigger,uResponse)
                                 else:
                                     if not uCommand==oParent.uMsg[:3]:
                                         if not uCommand==u'LTN':
                                             if not uCommand==u'':
                                                 if not uCommand+ ':'+uResponse=="NST:p--":
-                                                    oParent.ShowDebug(u'Discard message:'+uCommand+ ':'+uResponse+': Looking for ('+oParent.uMsg[:3]+')')
+                                                    oParent.ShowDebug(uMsg=u'Discard message:'+uCommand+ ':'+uResponse+': Looking for ('+oParent.uMsg[:3]+')')
 #                               self.uMsg=''
                                 # We do not need to wait for an response anymore
                                 StartWait(0)
                             else:
                                 Logger.warning("Onkyo close request")
                                 oParent.Disconnect()
-                                oParent.Conncet()
+                                oParent.Connect()
                             self.bBusy = False
 
 
             except Exception as e:
-                self.ShowError(u'Receive:Error Receiving Response:',e)
+                self.ShowError(uMsg=u'Receive:Error Receiving Response:',oException=e)
                 self.bIsConnected = False
                 self.bBusy = False
             try:
                 if self.oSocket is not None:
-                    self.ShowDebug(u'Closing socket in Thread')
+                    self.ShowDebug(uMsg=u'Closing socket in Thread')
                     self.oSocket.close()
                     self.oSocket = None
             except Exception as e:
-                self.ShowError(u'Error closing socket in Thread',e)
+                self.ShowError(uMsg=u'Error closing socket in Thread',oException=e)
 
     def __init__(self):
-        cBaseInterFace.__init__(self)
+        super().__init__()
 
         cInterFaceSettings=cInterface.cInterFaceSettings
 
         self.dSettings:Dict[cInterFaceSettings]     = {}
-        self.oSetting:Union[cInterFaceSettings,None]= None
+        self.oSetting:Optional[cInterFaceSettings]  = None
         self.uResponse:str                          = u''
         self.iBufferSize:int                        = 2048
         self.iWaitMs:int                            = 2000
@@ -403,10 +406,10 @@ class cInterface(cBaseInterFace):
         self.dLMD_Text:Dict[str,str]                = {}
         self.cDeviceSettings                        = None
         self.InitLVM()
-        self.aDiscoverScriptsBlackList:List         = ["iTach (Global Cache)","Keene Kira","ELVMAX","Enigma Discover"]
+        self.aDiscoverScriptsBlackList:List         = ["iTach (Global Cache)","Keene Kira","ELVMAX","Enigma"]
 
-    def Init(self, uObjectName:str, oFnObject:Union[cFileName,None]=None) -> None:
-        cBaseInterFace.Init(self,uObjectName, oFnObject)
+    def Init(self, uObjectName:str, oFnObject:Optional[cFileName]=None) -> None:
+        super().Init(uObjectName= uObjectName,oFnObject=oFnObject)
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
@@ -421,11 +424,11 @@ class cInterface(cBaseInterFace):
             self.cDeviceSettings = cDeviceSettings
         else:
             oFnDeviceSettings = cFileName(self.oPathMyCode) + u'DeviceSettings.py'
-            oModule = Globals.oModuleLoader.LoadModule(oFnDeviceSettings, 'DeviceSettings')
+            oModule = Globals.oModuleLoader.LoadModule(oFnModule=oFnDeviceSettings,uModuleName='DeviceSettings')
             self.cDeviceSettings = oModule.GetClass("cDeviceSettings")
 
     def DeInit(self, **kwargs) -> None:
-        cBaseInterFace.DeInit(self,**kwargs)
+        super().DeInit(**kwargs)
         for uSettingName in self.dSettings:
             self.dSettings[uSettingName].DeInit()
 
@@ -436,10 +439,10 @@ class cInterface(cBaseInterFace):
         uCmd:str=oAction.dActionPars.get("commandname",'')
         if uCmd=='favorite pgup' or uCmd=='favorite pgdn':
             self.NLSPage(oAction,uCmd)
-        return cBaseInterFace.DoAction(self,oAction)
+        return super().DoAction(oAction=oAction)
 
     def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
-        cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+        super().SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=uRetVar,bNoLogOut=bNoLogOut)
 
         uTst:str
         uFormat:str
@@ -481,7 +484,7 @@ class cInterface(cBaseInterFace):
                 self.dDeviceSettings[uKey].WriteVars(uVarPrefix=uRetVar, oAction=oAction)
 
         #Logger.info (u'Interface '+self.uObjectName+': Sending Command: '+sCommand + ' to '+oSetting.sHost+':'+oSetting.sPort)
-        while iTryCount<2:
+        while iTryCount<self.iMaxTryCount:
             iTryCount+=1
             oSetting.Connect()
 
@@ -490,7 +493,7 @@ class cInterface(cBaseInterFace):
                     oAction.uGetVar         = ReplaceVars(oAction.uGetVar,self.uObjectName+'/'+oSetting.uConfigName)
                     oAction.uGetVar         = ReplaceVars(oAction.uGetVar)
 
-                    self.ShowInfo (u'Sending Command: '+uMsg + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
+                    self.ShowInfo (uMsg=u'Sending Command: '+uMsg + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,uParConfigName=oSetting.uConfigName)
                     byMsg:bytes = oSetting.CreateEISPHeader(uMsg)
                     if oAction.bWaitForResponse:
                         #All response comes to receiver thread, so we should hold the queue until vars are set
@@ -508,8 +511,8 @@ class cInterface(cBaseInterFace):
                     if not uRetVar==u'':
                         SetVar(uVarName = uRetVar, oVarValue = u"Error")
             else:
-                if iTryCount==2:
-                    self.ShowWarning(u'Nothing done,not connected! ->[%s]' % oAction.uActionName, oSetting.uConfigName)
+                if iTryCount==self.iMaxTryCount:
+                    self.ShowWarning(uMsg=u'Nothing done,not connected! ->[%s]' % oAction.uActionName, uParConfigName=oSetting.uConfigName)
                 if uRetVar:
                     SetVar(uVarName = uRetVar, oVarValue = u"?")
 
@@ -518,7 +521,7 @@ class cInterface(cBaseInterFace):
 
     def NLSPage(self,oAction:cAction,uCmd:str) -> None:
 
-        oSetting:cInterface.cInterFaceSettings=self.GetSettingObjectForConfigName(oAction.dActionPars.get(u'configname',u''))
+        oSetting:cInterface.cInterFaceSettings=self.GetSettingObjectForConfigName(uConfigName=oAction.dActionPars.get(u'configname',u''))
         iSteps:int
 
         if uCmd=='favorite pgup':
@@ -529,7 +532,7 @@ class cInterface(cBaseInterFace):
             if iSteps==0:
                 iSteps=1
 
-        oSetting.SetContextVar("PAGESIZE"," " * abs(iSteps))
+        oSetting.SetContextVar(uVarName="PAGESIZE",uVarValue=" " * abs(iSteps))
         Logger.debug('Cmd:'+uCmd+" count:"+str(self.iCntNLS)+" Pos:"+str(self.iCursorPos)+ " Steps:"+str(iSteps))
 
     def Split_IFA(self,oAction:cAction,uResponse:str,oSetting:cInterFaceSettings) -> None:
@@ -690,13 +693,13 @@ class cInterface(cBaseInterFace):
                         if bHex:
                             f.write( binascii.a2b_hex(self.uPictureData))
                         else:
-                            f.write(cast(self.uPictureData,bytes))
+                            f.write(cast(bytes,self.uPictureData))
                         f.close()
                         oSetting.oResultParser.SetVar2(oFileName.string, oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing MediaPicture')
                         SetVar(uVarName = u'NJAPIC', oVarValue = oFileName.string)
                         return u"NJA",oFileName.string
                     else:
-                        self.ShowWarning(u'Skipping empty picture:', oSetting.uConfigName)
+                        self.ShowWarning(uMsg=u'Skipping empty picture:', uParConfigName=oSetting.uConfigName)
                         return u'', u''
 
                 except Exception as e:
@@ -728,7 +731,7 @@ class cInterface(cBaseInterFace):
             if uHeader:
                 uPictureType = uHeader.split("/")[-1]
             else:
-                self.ShowWarning("Invaid URL/Content Type when pulling picture from device:"+str(uHeader),oSetting.uConfigName)
+                self.ShowWarning(uMsg="Invaid URL/Content Type when pulling picture from device:"+str(uHeader),uParConfigName=oSetting.uConfigName)
                 uPictureType = uUrl.split(".")[-1]
 
             uPictureType = "."+uPictureType

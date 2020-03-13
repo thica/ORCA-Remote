@@ -29,7 +29,7 @@
     <action name="Add Template Installationshint" string="call FKT_AddTemplateInstallationsHint $dvar(definition_alias_mediaplayer_wizard)" />
 
     <action1 name="test" string="sendcommand getavailableresolutions"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
-    <action name="testxxxxxxxxxxxxxxxxx" string="sendcommand getfavorites"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" gdestvar="kodifavs" />
+    <action1 name="testxxxxxxxxxxxxxxxxx" string="sendcommand getfavorites"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" gdestvar="kodifavs" />
 
 
   </pagestartaction>

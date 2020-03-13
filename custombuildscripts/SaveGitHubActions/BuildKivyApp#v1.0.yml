@@ -1,0 +1,694 @@
+name: Kivy Application Packager
+
+on: push
+
+jobs:
+  Build_Kivy_App_Android:
+    runs-on: ubuntu-18.04
+    steps:
+    
+    # get the sources to build to folder githubsources
+    - name: 'Checkout the sources to local folder githubsources'
+      uses:  actions/checkout@v2-beta
+      with:
+        path: 'githubsources'
+        fetch-depth: 1
+
+    - name: 'lets parse the settings'
+      uses: zweitag/github-actions/global-variables@master
+      with:
+        file: 'githubsources/custombuildscripts/settings.txt'
+
+    - name: 'Stop if we do not want to build this OS release'
+      if: env.BUILD_ANDROID=='0'
+      run: exit 1
+
+    # We download the Build Repo (to have the scripts and buildozer snapshot)
+    - name: 'Download KivyActionsBuild Repo (Git Clone)'
+      # run: git clone --depth 1 https://github.com/thica/KivyGitActionsBuild
+      run: | 
+             git clone --depth 1 https://github.com/busterpunk/ActionsParent
+             mv  ActionsParent KivyGitActionsBuild
+
+
+    # we do not install python that way, as it breaks the build process
+    # I have no clue where it is installed to
+    # - name: 'Install Python 3.7.5'
+    #   uses: actions/setup-python@v1
+    #   with:
+    #     python-version: 3.7.5
+    
+    # We need Python3 the default interpreter, as eg: buildozer expect python 3 under /usr/bin/python
+    # but the runner have python 2 installed there 
+    - name: 'Make Python3 the default'
+      working-directory: /usr/bin
+      run: sudo mv /usr/bin/python /usr/bin/python2org && 
+           sudo ln -s python3 python
+
+    - name: 'Install some Helpers (tree)'
+      run: sudo apt install tree
+
+    - name: 'Install some Helpers (rpl)'
+      run: sudo apt install rpl
+
+
+    # some steps to install buildozer 
+    # We us a snapshot, as buildozer does not ave proper versioning  
+    - name: 'Buildozer: Install dependencies (the undocumented ones)'
+      run: pip3 install setuptools
+
+    - name: 'Buildozer: unzip snapshot'
+      run: |
+            7z x "KivyGitActionsBuild/snapshots/buildozer.zip"
+            mv "buildozer-master" "buildozer"
+
+    - name: 'Buildozer: Install'
+      working-directory: "buildozer"
+      run: |
+            python setup.py build
+            sudo pip install -e .
+            echo "::add-path::/home/runner/.local/bin"
+
+
+    - name: 'Install dependencies #1 (update)'
+      run: 
+        # sudo apt update
+        ls
+
+    # some of the dependencies should be in the runner image, but it doesn't cost time to 
+    # request to install them again, as apt will skip it, if allready there
+
+    - name: 'Install dependencies Git (should be there)'
+      run: sudo apt install -y git 
+
+    - name: 'Install dependencies Zip'
+      run: sudo apt install -y zip
+
+    - name: 'Install dependencies Unzip'
+      run: sudo apt install -y unzip 
+
+    - name: 'Install dependencies  openjdk-8-jdk'
+      run: sudo apt install -y openjdk-8-jdk
+
+    - name: 'Install dependencies python3-pip'
+      run: sudo apt install -y python3-pip
+
+    - name: 'Install dependencies autoconf'
+      run: sudo apt install -y autoconf
+
+    - name: 'Install dependencies libtool'
+      run: sudo apt install -y libtool
+
+    - name: 'Install dependencies pkg-config'
+      run: sudo apt install -y pkg-config
+
+    - name: 'Install dependencies zlib1g-dev'
+      run: sudo apt install -y zlib1g-dev
+
+    - name: 'Install dependencies libncurses5-dev'
+      run: sudo apt install -y libncurses5-dev
+
+    - name: 'Install dependencies libtinfo5'
+      run: sudo apt install -y libtinfo5
+
+    - name: 'Install dependencies python3-venv'
+      run: sudo apt install -y python3-venv
+
+    - name: 'Install dependencies cmake'
+      run: sudo apt install -y cmake
+
+     
+
+    # same as last step
+    - name: 'Install dependencies #3 (cython,virtualenv, ..)'
+      run: pip3 install --user --upgrade cython==0.29.10 virtualenv
+
+    # - name: 'Install GStreamer (if Required)'
+    #  if: env.USE_GSTREAMER=='1'
+    #  run: 
+
+    # This folder we use as the working folder for buildozer
+    - name: 'Create target folder (the buildozer build folder)'
+      run: mkdir buildsources
+
+    # we look to find a custom prepare sources script in  githubsources/custombuildscripts/android/prepare_sources.sh
+    # if yes, this will be executed, and it should place the final sources in buildsources
+    # if no custom script is available, then it will just copy the githubsources to the buildsources
+    - name: 'Prepare/Copy sources (Make the script excutable)'
+      run: chmod +x KivyGitActionsBuild/scripts/android/prepare_sources.sh
+
+    - name: 'Prepare/Copy sources (Run the script)'
+      run: sh KivyGitActionsBuild/scripts/android/prepare_sources.sh
+ 
+    - name: 'Copy buildozer.spec file to target folder (root)'
+      run: cp githubsources/custombuildscripts/buildozer.spec buildsources/buildozer.spec
+
+    # - name: 'Adjust spec file'
+    #  run: export MYHOME=$(pwd) &&
+    #       rpl HOME "$MYHOME" buildsources/buildozer.spec 
+
+    # - name: Cache App Buildozer Folder
+    #  id: cache-App-Buildozer
+    #  uses: actions/cache@v1
+    #  with:
+    #    path: buildsources/.buildozer
+    #    key: ${{ runner.os }}-App-Buildozer
+
+    # - name: Cache SDK Buildozer Folder
+    #   id: cache-SDK-Buildozer
+    #   uses: actions/cache@v1
+    #   with:
+    #     path: .buildozer
+    #     key: ${{ runner.os }}-SDK-Buildozer
+
+
+    # we do download the sdk manually
+    # buildozer is buggy
+    # the preinstalled in the runner needs sudo
+    # buildozer doesn't work with sudo
+    
+    # - name: 'Download Android SDK'
+    #  run: mkdir android-sdk &&
+    #       cd android-sdk &&
+    #       wget http://dl.google.com/android/repository/sdk-tools-linux-4333796.zip &&
+    #       unzip -q sdk-tools-linux-4333796.zip &&
+    #       rm sdk-tools-linux-4333796.zip &&
+    #       cd ..
+
+    # - name: 'Check Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)'
+    #  run: yes | android-sdk/tools/bin/sdkmanager "build-tools;29.0.2"
+
+    - name: 'Run Buildozer First Time (this will fail (buildozer bug), but shown as succeed)'
+      #if: steps.cache-App-Buildozer.outputs.cache-hit != 'true'
+      working-directory: "buildsources"
+      run: buildozer -v android "$ANDROID_RELEASE"
+      continue-on-error: True
+
+    - name: 'Create Keystore'
+      run: | 
+             export P4A_RELEASE_KEYSTORE="$PWD/release-key.keystore"
+             export P4A_RELEASE_KEYSTORE_PASSWD=${{ env.secrets.P4A_RELEASE_KEYSTORE_PASSWD }}
+             export P4A_RELEASE_KEYALIAS_PASSWD=${{ env.secrets.P4A_RELEASE_KEYALIAS_PASSWD }}
+             export P4A_RELEASE_KEYALIAS=androidreleasekey
+
+    - name: 'Create Keystore #2'
+      run: | 
+             export P4A_RELEASE_KEYSTORE="$PWD/release-key.keystore"
+             export P4A_RELEASE_KEYSTORE_PASSWD=mypasswort
+             export P4A_RELEASE_KEYALIAS_PASSWD=mypasswort
+             export P4A_RELEASE_KEYALIAS=androidreleasekey
+             keytool -genkey -v -keystore "$P4A_RELEASE_KEYSTORE" -alias "$P4A_RELEASE_KEYALIAS" -keyalg RSA -keysize 2048 -validity 10000 -storepass "$P4A_RELEASE_KEYSTORE_PASSWD" -keypass "$P4A_RELEASE_KEYALIAS_PASSWD" -dname "CN=$ANDROID_KEYSTORE_CN, OU=$ANDROID_KEYSTORE_OU, O=$ANDROID_KEYSTORE_O, L=$ANDROID_KEYSTORE_L, S=$ANDROID_KEYSTORE_S, C=$ANDROID_KEYSTORE_C"
+
+
+     # Buildozer installs ths SDK to /home/runner^
+    - name: 'Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)'
+      #if: steps.cache-SDK-Buildozer.outputs.cache-hit != 'true'
+      run: yes | /home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager "build-tools;29.0.2"
+
+    - name: 'Remove the old buildozer app build folder'
+      #if: steps.cache-App-Buildozer.outputs.cache-hit != 'true'
+      working-directory: buildsources
+      run: rm -r -f .buildozer
+
+    - name: 'Run buildozer second time (this should work)'
+      working-directory: buildsources
+      run: buildozer -v android "$ANDROID_RELEASE"
+
+    # we have some troubles to pass the found apk as a variable to the upload routine 
+    # so we rename it to a stiic filename
+    - name: 'Store output filename'
+      run: | 
+             export BUILD_APK=$(find buildsources/bin/ -type f -name "*.apk")
+             export
+             echo "Found filename $BUILD_APK"
+             mv "$BUILD_APK" "buildsources/bin/KivyApp_Android.apk"
+
+    - name: 'Adjust/rename binary (Run the script)'
+      run: sh KivyGitActionsBuild/scripts/android/prepare_bin.sh
+
+    - name: 'Upload Binary'
+      if: env.UPLOAD_AS_ARTIFACT=='1'
+      uses: actions/upload-artifact@v1
+      with:
+        name: KivyAndroidApp
+        # path: ${{env.BUILD_APK}}
+        path: "buildsources/bin/KivyApp_Android.apk"
+
+
+  Build_Kivy_App_Windows:
+    runs-on: windows-latest
+    steps:
+
+    # get the sources to build to folder githubsources
+    - name: 'Checkout the sources to local folder githubsources'
+      uses:  actions/checkout@v2-beta
+      with:
+        path: 'githubsources'
+        fetch-depth: 1
+
+    - name: 'lets parse the settings'
+      uses: zweitag/github-actions/global-variables@master
+      with:
+        file: 'githubsources/custombuildscripts/settings.txt'
+
+    - name: 'Stop if we do not want to build this OS release'
+      if: env.BUILD_WINDOWS=='0'
+      run: exit 1
+
+    # We download the Build Repo (to have the scripts and buildozer snapshot)
+    - name: 'Download KivyActionsBuild Repo (Git Clone)'
+      # run: git clone --depth 1 https://github.com/thica/KivyGitActionsBuild
+      run: | 
+             git clone --depth 1 https://github.com/busterpunk/ActionsParent
+             Rename-Item  ActionsParent KivyGitActionsBuild
+
+
+    - name: 'Get Folder content'
+      continue-on-error: True
+      run: | 
+            Get-ChildItem -Recurse -Force -ErrorAction SilentlyContinue
+
+
+
+    #we install python 3 manually as the container python clashes with some other option
+    - name: 'Install Python Version 3.7.4'
+      continue-on-error: True
+      run: | 
+            mkdir Python
+            Start-Process -NoNewWindow -FilePath "KivyGitActionsBuild\\snapshots\\python-3.7.4-amd64.exe" -ArgumentList "/quiet","InstallAllUsers=1","PrependPath=1", "Include_test=0", "TargetDir=Python"
+
+            
+    - name: 'Check version'
+      continue-on-error: True
+      run: | 
+             & Python\\python -V
+             & Python\\python3 -V
+
+    - name: 'Install Kivy Dependencies Upgrade pip'
+      run: pip3 install --upgrade pip
+
+    - name: 'Install/Upgrade Kivy Dependencies wheel Version 0.33.6'
+      run: pip3 install --upgrade wheel==0.33.6 
+
+    - name: 'Install/Upgrade Kivy Dependencies setuptools Version 40.6.2'
+      run: pip3 install --upgrade setuptools==40.6.2
+
+    - name: 'Install Kivy Dependencies Upgrade virtualenv Version 16.7.8'
+      run: pip3 install --upgrade virtualenv==16.7.8
+
+    - name: 'Install Kivy Dependencies docutils Version 0.15.2'
+      run: pip3 install docutils==0.15.2
+
+    - name: 'Install Kivy Dependencies pygments Version 2.5.2'
+      run: pip3 install pygments==2.5.2
+
+    - name: 'Install Kivy Dependencies pypiwin32 Version 223'
+      run: pip3 install pypiwin32==223 pywin32==227
+
+    - name: 'Install Kivy Dependencies kivy_deps.sdl2 Version 0.1.22'
+      run: pip3 install kivy_deps.sdl2===0.1.22
+
+    - name: 'Install Kivy Dependencies kivy_deps.glew'
+      run: pip3 install docutils kivy_deps.glew==0.1.12
+
+    - name: 'Install Kivy Dependencies kivy_deps.angle'
+      run: pip3 install kivy_deps.angle==0.1.9
+
+    # verify if we need this
+    - name: 'Install ffpyplayer Version 4.3.0'
+      run: pip3 install ffpyplayer==4.3.0
+
+    - name: 'Install GStreamer Version 0.1.17'
+      run: pip3 install kivy_deps.gstreamer==0.1.17
+
+    # - name: 'Install further dependencies sdl2 (verify)'
+    #  run: sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+
+
+    - name: 'Create config files'
+      run: | 
+            mkdir C:\\Users\\runneradmin\\.kivy
+            copy KivyGitActionsBuild\\snapshots\\config.ini C:\\Users\\runneradmin\\.kivy\config.ini
+
+    - name: 'Install Kivy'
+      run: pip3 install kivy==${{env.KIVY_VERSION}}
+
+    - name: 'Install OpenCv (for testing)'
+      run: pip3 install opencv-python
+
+ 
+    - name: 'Install pyinstaller'
+      run:  pip3 install pyinstaller==3.5
+
+    # This folder we use as the working folder for pyinstaller
+    - name: 'Create target folder (the pyinstaller build folder)'
+      run: mkdir "buildsources"
+
+
+    # we look to find a custom prepare sources script in  githubsources/custombuildscripts/android/prepare_sources.sh
+    # if yes, this will be executed, and it should place the final sources in buildsources
+    # if not custom script is available, the it will just copy the githunbsources to the buildsources
+    - name: 'Prepare/Copy sources'
+      run: KivyGitActionsBuild\\scripts\\windows\\prepare_sources.cmd
+ 
+      
+    - name: 'Copy windows.spec file to target folder (root)'
+      run: copy githubsources\\custombuildscripts\\windows.spec buildsources\\windows.spec
+
+    #- name: 'Create default spec'
+    #  working-directory: "buildsources"
+    #  timeout-minutes: 5
+    #  run: | 
+    #        python -m PyInstaller --name myapp main.py
+    #        cmd /k dir /S/B/W
+
+    # - name: 'Upload SpecFile'
+    #   uses: actions/upload-artifact@v1
+    #  with:
+    #    name: pyinstaller spec files
+    #    path: "buildsources\\myapp.spec"
+
+
+    - name: 'Create a default ini file to bypass pyinstaller error not having opengl 2 #1'
+      run: |
+             pip install kivy.deps.angle
+             set KIVY_GL_BACKEND=angle_sdl2
+             
+    - name: 'Run PyInstaller'
+      working-directory: buildsources
+      continue-on-error: True
+      timeout-minutes: 1
+      run: | 
+            set KIVY_GL_BACKEND=angle_sdl2
+            python -m PyInstaller --name KivyAppAndroid windows.spec
+            exit 1
+
+    # - name: 'Get Folder content'
+    #  continue-on-error: True
+    #  run: | 
+    #        Get-ChildItem -path $env:USERPROFILE -Recurse -Force -ErrorAction SilentlyContinue 
+    #        Get-ChildItem -Recurse -Force -ErrorAction SilentlyContinue
+            
+
+
+    - name: 'Run PyInstaller again'
+      working-directory: buildsources
+      timeout-minutes: 1
+      run: python -m PyInstaller --name KivyAppAndroid windows.spec
+
+    - name: 'Verify'
+      continue-on-error: True
+      run: | 
+            Get-ChildItem -Recurse -Directory -Force -ErrorAction SilentlyContinue | Select-Object FullName
+
+
+    - name: 'Upload Exe'
+      uses: actions/upload-artifact@v1
+      with:
+        name: pyinstaller spec files
+        path: "buildsources\\myapp.exe"
+
+
+  Build_Kivy_App_OSX:
+    runs-on: macos-latest
+      
+    steps:
+
+    # get the sources to build 
+    - name: 'Checkout the sources to local folder githubsources'
+      uses:  actions/checkout@v2-beta
+      with:
+        # Here we clone the github repo
+        path: 'githubsources'
+        fetch-depth: 1
+
+    # lets parse the settings
+    - uses: zweitag/github-actions/global-variables@master
+      with:
+        file: 'githubsources/custombuildscripts/settings.txt'
+    
+    - name: 'Stop if we do not want to build this OS release'
+      if: env.BUILD_OSX=='0'
+      run: exit 1
+
+    - name: 'Download KivyActionsBuild Repo (Git Clone)'
+      # run: git clone --depth 1 https://github.com/thica/KivyGitActionsBuild
+      run: | 
+             git clone --depth 1 https://github.com/busterpunk/ActionsParent
+             mv  ActionsParent KivyGitActionsBuild
+
+    # We need homebrew
+    - name: 'Install Homebrew'
+      run: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+    - name: 'Install sdl'
+      run: brew install --build-bottle sdl2 sdl2_image sdl2_ttf sdl2_mixer
+
+    - name: 'Install Python 3'
+      run: brew install python3
+
+    - name: 'Install Cython'
+      run: pip3 install Cython==0.29.10
+
+    - name: 'Install Kivy'
+      run: pip3 install kivy==${{env.KIVY_VERSION}}
+
+    - name: 'Install PyInstaller'     
+      run: pip3 install pyinstaller
+
+    - name: 'Install GStreamer (if Required)'
+      if: env.USE_GSTREAMER=='1'
+      run: brew reinstall --build-bottle gstreamer gst-plugins-{base,good,bad,ugly}
+
+
+    # This folder we use as the working folder for buildozer
+    - name: 'Create target folder (the buildozer build folder)'
+      run: mkdir buildsources
+
+    # we look to find a custom prepare sources script in  githubsources/custombuildscripts/android/prepare_sources.sh
+    # if yes, this will be executed, and it should place the final sources in buildsources
+    # if not custom script is available, the it will just copy the githunbsources to the buildsources
+    - name: 'Prepare/Copy sources'
+      run: chmod +x KivyGitActionsBuild/scripts/osx/prepare_sources.sh
+           KivyGitActionsBuild/scripts/osx/prepare_sources.sh
+
+    - name: 'Copy pyinstaller.spec file to target folder (root)'
+      run: cp githubsources/custombuildscripts/osx.spec buildsources/osx.spec
+
+    - name: 'Init PyInstaller'
+      working-directory: "buildsources"
+      run:  python3 pyinstaller -y --clean --windowed --name touchtracer --exclude-module _tkinter --exclude-module Tkinter --exclude-module enchant --exclude-module twisted main.py
+      
+      
+      
+
+    # we have some troubles to pass the found APP as a variable to the upload routine 
+    # so we rename it to a static filename
+    - name: 'Store output filename'
+      run: | 
+             export BUILD_APP=$(find buildsources/bin/ -type f -name "*.APP")
+             export
+             echo "Found filename $BUILD_APP"
+             mv "$BUILD_APK" "buildsources/bin/KivyApp_OSX.APP"
+
+    - name: 'Adjust/rename binary (Run the script)'
+      run: sh KivyGitActionsBuild/scripts/OSX/prepare_bin.sh
+
+    - name: 'Upload Binary'
+      if: env.UPLOAD_AS_ARTIFACT=='1'
+      uses: actions/upload-artifact@v1
+      with:
+        name: KivyAndroidApp
+        # path: ${{env.BUILD_APK}}
+        path: "buildsources/bin/KivyApp_OSX.APP"
+
+
+
+  Build_Kivy_App_IOS:
+    runs-on: macos-latest
+      
+    steps:
+
+    # get the sources to build 
+    - name: 'Checkout the sources to local folder githubsources'
+      uses:  actions/checkout@v2-beta
+      with:
+        # Here we clone the github repo
+        path: 'githubsources'
+        fetch-depth: 1
+
+    # lets parse the settings
+    - uses: zweitag/github-actions/global-variables@master
+      with:
+        file: 'githubsources/custombuildscripts/settings.txt'
+    
+    - name: 'Stop if we do not want to build this OS release'
+      if: env.BUILD_IOS=='0'
+      run: exit 1
+
+    - name: 'Download KivyActionsBuild Repo (Git Clone)'
+      # run: git clone --depth 1 https://github.com/thica/KivyGitActionsBuild
+      run: | 
+             git clone --depth 1 https://github.com/busterpunk/ActionsParent
+             mv  ActionsParent KivyGitActionsBuild
+
+    - name: 'Install Homebrew'
+      run: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+    - name: 'Install dependencies #1'
+      run: brew install autoconf automake libtool pkg-config
+
+    - name: 'Install dependencies #2'
+      run: brew link libtool
+
+    - name: 'Install dependencies #3'
+      run: sudo easy_install pip
+
+    - name: 'Install dependencies #4'
+      run: sudo pip install Cython==0.29.10
+
+    - name: 'Clone Kivy'
+      run: git clone --depth 1 git://github.com/kivy/kivy-ios
+
+    - name: 'Build Kivy'
+      run: cd kivy-ios && ./toolchain.py build kivy
+
+
+  Build_Kivy_App_Debian:
+    runs-on: ubuntu-18.04
+    steps:
+    
+    # http://www.bitstream.io/packaging-and-distributing-a-kivy-application-on-linux.html
+    
+    # get the sources to build 
+    - name: 'Checkout the sources to local folder githubsources'
+      uses:  actions/checkout@v2-beta
+      with:
+        # Here we clone the github repo
+        path: 'githubsources'
+        fetch-depth: 1
+
+    - name: 'lets parse the settings'
+      uses: zweitag/github-actions/global-variables@master
+      with:
+        file: 'githubsources/custombuildscripts/settings.txt'
+
+ 
+    - name: 'Stop if we do not want to build this OS release'
+      if: env.BUILD_DEBIAN=='0'
+      run: exit 1
+
+    # We download the Build Repo (to have the scipts and buildozer snapshot)
+    - name: 'Download KivyActionsBuild Repo (Git Clone)'
+      # run: git clone --depth 1 https://github.com/thica/KivyGitActionsBuild
+      run: | 
+             git clone --depth 1 https://github.com/busterpunk/ActionsParent
+             mv  ActionsParent KivyGitActionsBuild
+
+    - name: 'Make Python3 the default'
+      working-directory: /usr/bin
+      run: sudo mv /usr/bin/python /usr/bin/python2org && 
+           sudo ln -s python3 python
+
+     #/usr/lib/python3.7
+
+    - name: 'Install some Helpers (tree)'
+      run: sudo apt install tree
+
+    - name: 'Install some Helpers (rpl)'
+      run: sudo apt install rpl
+
+
+    - name: 'scripts to verify'
+      run: |
+             set -euo pipefail
+             echo "Setting up kivy"
+
+             sudo apt-get install -y build-essential mercurial 
+             sudo apt-get install -y python-setuptools python-dev ffmpeg libsdl-image1.2-dev 
+             sudo apt-get install -y libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsmpeg-dev libsdl1.2-dev 
+             sudo apt-get install -y libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+
+             # Install packages necessary for creating .debs
+             sudo apt-get install -y devscripts lintian dh-make
+
+
+             # Bootstrap a current Python environment
+             ##sudo apt-get remove --purge -y python-virtualenv python-pip
+             ##sudo easy_install-2.7 -U pip
+             ##sudo pip2.7 install -U virtualenv
+
+
+    - name: 'Install dependencies #1 (wheel)'
+      run: pip install wheel
+           # python3 setup.py bdist_wheel
+
+    - name: 'Install dependencies #2 (cmake, , ...)'
+      run: sudo apt install -y git zip unzip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 python3-venv cmake
+
+    # same as last step
+    - name: 'Install dependencies #3 (cython,virtualenv, ..)'
+      run: pip3 install --user --upgrade cython==0.29.10 virtualenv
+
+    - name: 'Kivy: Install dependencies (the undocumented ones)'
+      run: pip3 install setuptools
+
+    - name: 'Install further dependencies pygame'
+      run: sudo apt-get install python-pygame python-opengl python-enchant python-dev build-essential libgl1-mesa-dev libgles2-mesa-dev zlib1g-dev
+
+    - name: 'Install further dependencies gst'
+      run: sudo apt-get install python-gst-1.0
+
+    - name: 'Install further dependencies gstreamer'
+      run: | 
+            sudo apt-get install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+            pkg-config --cflags --libs gstreamer-1.0
+
+    - name: 'Install further dependencies sdl2'
+      run: sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+
+    - name: 'Install stable version of Kivy'
+      # run: pip3 install kivy==${{env.KIVY_VERSION}}
+      run: |
+            export USE_SDL2=1
+            export USE_GSTREAMER=1
+            # sudo apt-get install python3-kivy==${{env.KIVY_VERSION}}
+            pip3 install kivy==${{env.KIVY_VERSION}}
+
+    # Install a couple of dependencies for KivyCatalog
+    - name: 'Install a couple of dependencies for KivyCatalog'
+      run: pip3 install pygments docutils
+
+    - name: 'Undocumented Requirement xsel'
+      run: sudo apt-get install xclip xsel
+
+    - name: 'Setting up pyinstaller'
+      run: pip3 install pyinstaller
+      
+    # - name: 'Setting up pyinstaller'
+    #  continue-on-error: True
+    #  run: pip install pyinstaller
+
+    # - name: 'Verify pyinstaller'
+    #  run: tree -a -f /
+
+      
+    # This folder we use as the working folder for buildozer
+    - name: 'Create target folder (the buildozer build folder)'
+      run: mkdir buildsources
+
+    # we look to find a custom prepare sources script in  githubsources/custombuildscripts/debian/prepare_sources.sh
+    # if yes, this will be executed, and it should place the final sources in buildsources
+    # if not custom script is available, the it will just copy the githunbsources to the buildsources
+    - name: 'Prepare/Copy sources (Make the script excutable)'
+      run: chmod +x KivyGitActionsBuild/scripts/debian/prepare_sources.sh
+
+    - name: 'Prepare/Copy sources (Run the script)'
+      run: sh KivyGitActionsBuild/scripts/debian/prepare_sources.sh
+ 
+    - name: 'Copy buildozer.spec file to target folder (root)'
+      run: cp githubsources/custombuildscripts/debian.spec buildsources/debian.spec
+
+    - name: 'Setting up pyinstaller'
+      working-directory: buildsources
+      run: /home/runner/.local/bin/pyinstaller debian.spec --clean

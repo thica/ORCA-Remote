@@ -21,12 +21,11 @@
 """
 
 from __future__                     import annotations
-from typing                         import Union
+from typing                         import Optional
 from typing                         import Dict
 from typing                         import List
 import socket
 
-from kivy.logger                    import Logger
 from ORCA.vars.Replace              import ReplaceVars
 from ORCA.utils.FileName            import cFileName
 from ORCA.utils.TypeConvert         import ToInt
@@ -45,8 +44,8 @@ import ORCA.Globals as Globals
       <description language='English'>Sends commands to iTach devices to submit IR comands</description>
       <description language='German'>Sendet Befehle zu iTach Geräten um IR Befehle zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/iTach</local>
@@ -71,14 +70,18 @@ import ORCA.Globals as Globals
 </root>
 '''
 
-oBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass("cInterface")
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from interfaces.generic_infrared.interface import cInterface as cBaseInterFaceInfrared
+else:
+    cBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass("cInterface")
 
-class cInterface(oBaseInterFaceInfrared):
+class cInterface(cBaseInterFaceInfrared):
 
-    class cInterFaceSettings(oBaseInterFaceInfrared.cInterFaceSettings):
+    class cInterFaceSettings(cBaseInterFaceInfrared.cInterFaceSettings):
         def __init__(self,oInterFace:cInterface):
-            oBaseInterFaceInfrared.cInterFaceSettings.__init__(self,oInterFace)
-            self.oSocket:Union[socket.socket,None]     = None
+            super().__init__(oInterFace)
+            self.oSocket:Optional[socket.socket]       = None
             self.aIniSettings.uHost                    = u"discover"
             self.aIniSettings.uPort                    = u"4998"
             self.aIniSettings.iModule                  = 3
@@ -89,7 +92,7 @@ class cInterface(oBaseInterFaceInfrared):
 
         def Connect(self) -> bool:
 
-            if not oBaseInterFaceInfrared.cInterFaceSettings.Connect(self):
+            if not super().Connect():
                 return False
 
             if self.aIniSettings.uHost=='':
@@ -112,31 +115,33 @@ class cInterface(oBaseInterFaceInfrared):
                         continue
                     break
                 if self.oSocket is None:
-                    self.ShowError(u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
+                    self.ShowError(uMsg=u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                     self.bOnError=True
                     return False
                 self.bIsConnected = True
                 return True
 
             except Exception as e:
-                self.ShowError(u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
+                self.ShowError(uMsg=u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.bOnError=True
                 return False
 
         def Disconnect(self) -> bool:
-            if not oBaseInterFaceInfrared.cInterFaceSettings.Disconnect(self):
+            if not super().Disconnect():
                 return False
             try:
                 self.oSocket.close()
                 self.bOnError = False
+                return True
             except Exception as e:
-                self.ShowError(u'can\'t Disconnect'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
+                self.ShowError(uMsg=u'can\'t Disconnect'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                return False
 
     def __init__(self):
         cInterFaceSettings = self.cInterFaceSettings
-        oBaseInterFaceInfrared.__init__(self)
+        super().__init__()
         self.dSettings:Dict                             = {}
-        self.oSetting:Union[cInterFaceSettings,None]    = None
+        self.oSetting:Optional[cInterFaceSettings]      = None
         self.iBufferSize:int                            = 1024
         # this starts discover in background
         Globals.oScripts.LoadScript("discover_itach")
@@ -144,7 +149,7 @@ class cInterface(oBaseInterFaceInfrared):
 
     def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
 
-        oBaseInterFaceInfrared.Init(self,uObjectName, oFnObject)
+        super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
@@ -155,7 +160,7 @@ class cInterface(oBaseInterFaceInfrared):
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
     def DeInit(self, **kwargs) -> None:
-        oBaseInterFaceInfrared.DeInit(self,**kwargs)
+        super().DeInit(**kwargs)
         for uSettingName in self.dSettings:
             self.dSettings[uSettingName].DeInit()
 
@@ -166,7 +171,7 @@ class cInterface(oBaseInterFaceInfrared):
                 }
 
     def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
-        oBaseInterFaceInfrared.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+        super().SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=uRetVar,bNoLogOut=bNoLogOut)
         eRet:eReturnCode = eReturnCode.Error
 
         if oAction.uCCF_Code:
@@ -176,7 +181,7 @@ class cInterface(oBaseInterFaceInfrared):
 
         uCmd:str=ReplaceVars(oAction.uCmd,self.uObjectName+u'/'+oSetting.uConfigName)
         uCmd=ReplaceVars(uCmd)
-        self.ShowInfo(u'Sending Command: '+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
+        self.ShowInfo(uMsg=u'Sending Command: '+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort)
 
         oSetting.Connect()
         if oSetting.bIsConnected:
@@ -184,14 +189,13 @@ class cInterface(oBaseInterFaceInfrared):
             try:
                 oSetting.oSocket.sendall(ToBytes(uMsg))
                 byResponse = oSetting.oSocket.recv(self.iBufferSize)
-                Logger.debug(u'Interface '+self.uObjectName+': resonse:'+ToUnicode(byResponse))
-                self.ShowDebug(u'Response'+self.sResponse,oSetting.uConfigName)
+                self.ShowDebug(uMsg=u'Response'+ToUnicode(byResponse),uParConfigName=oSetting.uConfigName)
                 if 'completeir' in ToUnicode(byResponse):
                     eRet = eReturnCode.Success
                 else:
                     eRet = eReturnCode.Error
             except Exception as e:
-                self.ShowError(u'can\'t Send Message',u'',e)
+                self.ShowError(uMsg=u'can\'t Send Message',uParConfigName=u'',oException=e)
                 eRet = eReturnCode.Error
 
         self.CloseSettingConnection(oSetting=oSetting, bNoLogOut=bNoLogOut)
@@ -202,8 +206,8 @@ iSeq = 0
 def CCF2ITach(uCCFString:str,iRepeatCount:int) -> str:
     global iSeq
     uDelimiter:str   = u' '
-    iSeq             = iSeq +1
-    aArray:List       = uCCFString.split(uDelimiter)
+    iSeq            += 1
+    aArray:List      = uCCFString.split(uDelimiter)
     # iNumElements = len(aArray)
     iFreqVal:int     = int(aArray[1],16)
     iFreq:int        = int((((41450 / iFreqVal) + 5) / 10) * 1000)

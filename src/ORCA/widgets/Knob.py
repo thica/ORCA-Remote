@@ -139,15 +139,15 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         """ Reads further Widget attributes from a xml node """
         bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
-            self.oFnPictureNormal           = cFileName("").ImportFullPath(GetXMLTextAttributeVar(oXMLNode,u'picturenormal',    False,u''))
-            self.fMin                       = GetXMLFloatAttributeVar(oXMLNode,u'mindatavalue',    False,0.0)
-            self.fMax                       = GetXMLFloatAttributeVar(oXMLNode,u'maxdatavalue',    False,100.0)
-            self.iLeftBoundaryAngle         = GetXMLIntAttributeVar(oXMLNode,u'leftboundaryangle', False,0)
-            self.iRightBoundaryAngle        = GetXMLIntAttributeVar(oXMLNode,u'rightboundaryangle', False,0)
-            self.uDestVar                   = GetXMLTextAttribute(oXMLNode,u'destvar',    False,u'knob')
-            self.bDiscardMoves              = GetXMLBoolAttributeVar(oXMLNode,u'discardmoves',    False,False)
+            self.oFnPictureNormal           = cFileName("").ImportFullPath(uFnFullName=GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'picturenormal',bMandatory=False,uDefault=u''))
+            self.fMin                       = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'mindatavalue',    bMandatory=False,fDefault=0.0)
+            self.fMax                       = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'maxdatavalue',    bMandatory=False,fDefault=100.0)
+            self.iLeftBoundaryAngle         = GetXMLIntAttributeVar(oXMLNode=oXMLNode,uTag=u'leftboundaryangle', bMandatory=False,iDefault=0)
+            self.iRightBoundaryAngle        = GetXMLIntAttributeVar(oXMLNode=oXMLNode,uTag=u'rightboundaryangle', bMandatory=False,iDefault=0)
+            self.uDestVar                   = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'destvar',    bMandatory=False,vDefault=u'knob')
+            self.bDiscardMoves              = GetXMLBoolAttributeVar(oXMLNode=oXMLNode,uTag=u'discardmoves',bMandatory=False,bDefault=False)
             #roundpos: the position, the  number should be rounded
-            self.iRoundPos                  = GetXMLIntAttribute(oXMLNode,u'roundpos', False,0)
+            self.iRoundPos                  = GetXMLIntAttribute(oXMLNode=oXMLNode,uTag=u'roundpos', bMandatory=False,iDefault=0)
             self.fValue                     = 0.0
             self.fOldValue                  = 10000.23445
             self.iAbsAngle                  = 0
@@ -157,7 +157,7 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         """ creates the Widget """
         self.AddArg('allow_stretch',True)
         self.AddArg('keep_ratio',False)
-        self.AddArg('source',ToAtlas(self.oFnPictureNormal))
+        self.AddArg('source',ToAtlas(oFileName=self.oFnPictureNormal))
         self.CreateBase(Parent=oParent,Class=Image)
         self.oObjectPicture             = self.oObject
         self.AddArg('do_scale',False)
@@ -186,9 +186,9 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
                 self.iRange=abs(self.iLeftBoundaryAngle)
 
             if self.iRightBoundaryAngle>0:
-                self.iRange=self.iRange+self.iRightBoundaryAngle
+                self.iRange += self.iRightBoundaryAngle
             else:
-                self.iRange=self.iRange+abs(self.iRightBoundaryAngle)
+                self.iRange += abs(self.iRightBoundaryAngle)
 
             self.oObject.iLeftBoundaryAngle=self.iLeftBoundaryAngle
             self.oObject.iRightBoundaryAngle=self.iRightBoundaryAngle

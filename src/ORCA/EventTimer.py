@@ -40,17 +40,17 @@ __all__ = ['cCustomTimer', 'cAllTimer']
 class cAllTimer:
     """ Object for all event timer """
     aCustomTimer:Dict[str,cCustomTimer] = {}
-    def HasTimer(self,uTimerName:str) -> bool:
+    def HasTimer(self,*,uTimerName:str) -> bool:
         """ returns, if a timer exists"""
         return cAllTimer.aCustomTimer.get(uTimerName) is not None
 
-    def AddTimer(self,uTimerName:str,oTimer:cCustomTimer) -> None:
+    def AddTimer(self,*,uTimerName:str,oTimer:cCustomTimer) -> None:
         """ Adds a timer object """
         cAllTimer.aCustomTimer[uTimerName]=oTimer
 
-    def DeleteTimer(self,uTimerName:str) -> None:
+    def DeleteTimer(self,*,uTimerName:str) -> None:
         """ Deletes a timer objects"""
-        if self.HasTimer(uTimerName):
+        if self.HasTimer(uTimerName=uTimerName):
             cAllTimer.aCustomTimer[uTimerName].StopTimer()
             del cAllTimer.aCustomTimer[uTimerName]
 
@@ -88,7 +88,7 @@ class cCustomTimer:
 
         aActions:List[cAction]=Globals.oActions.GetActionList(uActionName = self.uActionName, bNoCopy = False)
         if aActions is None:
-            aActions = Globals.oEvents.CreateSimpleActionList([{'string': self.uActionName, 'name': self.uActionName, "force":True}])
+            aActions = Globals.oEvents.CreateSimpleActionList(aActions=[{'string': self.uActionName, 'name': self.uActionName, "force":True}])
 
         #Globals.oEvents.ExecuteActions(aActions=aActions, oParentWidget=None)
         Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions, oParentWidget=None, bForce=self.bDoOnPause)

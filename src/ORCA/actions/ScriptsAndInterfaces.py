@@ -34,6 +34,7 @@ from ORCA.vars.Replace              import ReplaceVars
 from ORCA.vars.Access               import SetVar
 from ORCA.Action                    import cAction
 from ORCA.interfaces.BaseInterface  import cBaseInterFace
+from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
 from ORCA.actions.ReturnCode        import eReturnCode
 
 import ORCA.Globals as Globals
@@ -72,7 +73,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(u'RegisterScriptGroup:',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'RegisterScriptGroup:',oAction=oAction)
         uGroupName:str = oAction.dActionPars.get("groupname","")
         Globals.oScripts.RegisterScriptGroup(uGroupName)
         return eReturnCode.Nothing
@@ -112,13 +113,16 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         |parseoption
         |Option, how to parse the result (eg store, split,tokenize...)
         |-
+        |parseflags
+        |Flags for parser
+        |-
         |parsetoken
         |tokenize token to use
         |}</div>
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(u'RunScript:',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'RunScript:',oAction=oAction)
 
         uScriptName:str             = oAction.dActionPars.get("scriptname","")
         dParameters:Dict            = ToDic(ReplaceVars(oAction.dActionPars.get("commandparameter","{}")))
@@ -130,8 +134,8 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
 
             dResponse:Union[Dict,None] = Globals.oScripts.RunScript(uScriptName,**dParameters)
             if dResponse:
-                oResultParser = cEventScriptResultParser(oAction)
-                oResultParser.ParseResult(ToUnicode(dResponse), ToUnicode(oAction.dActionPars))
+                oResultParser:cEventScriptResultParser = cEventScriptResultParser(oAction)
+                oResultParser.ParseResult(uResponse=ToUnicode(dResponse), uParseOptions=ToUnicode(oAction.dActionPars))
         else:
             Logger.warning("Can't run script, parameter error:"+str(dParameters))
         return eReturnCode.Nothing
@@ -174,15 +178,17 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
 
         uInterFace:str
         uConfigName:str
+        uAction:str
+        uRetVar:str
 
-        uAction:str  = ReplaceVars(oAction.dActionPars.get("actionname",""))
-        uRetVar:str  = ReplaceVars(oAction.dActionPars.get("retvar",""))
-        uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction)
+        uAction = ReplaceVars(oAction.dActionPars.get("actionname",""))
+        uRetVar = ReplaceVars(oAction.dActionPars.get("retvar",""))
+        uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction=oAction)
 
         if uAction!=u'' or uRetVar!=u'':
-            self.oEventDispatcher.LogAction(u'Add Trigger',oAction,u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
+            self.oEventDispatcher.LogAction(uTxt=u'Add Trigger',oAction=oAction,uAddText=u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
         else:
-            self.oEventDispatcher.LogAction(u'Del Trigger',oAction,u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
+            self.oEventDispatcher.LogAction(uTxt=u'Del Trigger',oAction=oAction,uAddText=u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
 
         oInterface:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterFace)
         if oInterface:
@@ -232,6 +238,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         """
         uInterFace:str  = u''
         uConfigName:str = u''
+        uCommandName:str
 
         vCommandParameter:Union[str,Dict] = oAction.dActionPars.get("commandparameter","{}")
         if isinstance(vCommandParameter, str):
@@ -239,10 +246,10 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         if isinstance(vCommandParameter, dict):
             oAction.dCommandParameter  = ToDic(ReplaceVars(DictToUnicode(vCommandParameter)))
 
-        uCommandName:str               = ReplaceVars(oAction.dActionPars.get("commandname",""))
+        uCommandName = ReplaceVars(oAction.dActionPars.get("commandname",""))
 
         try:
-            uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction)
+            uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction=oAction)
 
             oInterface:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterFace)
             if oInterface:
@@ -291,8 +298,8 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         |The name of the config to discover. Only valid if you apply the interface name
         |-
         |gui
-        |If set to '1', amessage is shown and the DISCOVERFAILED variable will be set to TRUE or FALSE. In this case the LASTERRORCODE is invalid.
-         If gui set to 0, a silent discover is performed and the LASTERRORCoDE is set to '0' if successfull or '1' if failed.
+        |If set to '1', a message is shown and the DISCOVERFAILED variable will be set to TRUE or FALSE. In this case the LASTERRORCODE is invalid.
+         If gui set to 0, a silent discover is performed and the LASTERRORCoDE is set to '0' if successful or '1' if failed.
 
         |}</div>
         A short example:
@@ -303,7 +310,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         """
         uInterFace:str  = ReplaceVars(oAction.dActionPars.get(u'interface',''))
         uConfigName:str = ReplaceVars(oAction.dActionPars.get(u'configname',''))
-        bGui:bool        = ToBool(ReplaceVars(oAction.dActionPars.get(u'gui','0')))
+        bGui:bool       = ToBool(ReplaceVars(oAction.dActionPars.get(u'gui','0')))
         Logger.debug(u'Action: discover: Interface: %s Config: %s' % (uInterFace, uConfigName))
         return Globals.oInterFaces.DiscoverAll(uInterFaceName = uInterFace, uConfigName = uConfigName, bGui = bGui)
 
@@ -316,7 +323,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         WikiDoc:Page:Actions-Codeset
         WikiDoc:TOCTitle:codeset
         = codeset =
-        A helper action for interfaces. If an interface supports codesets, then all codeset actions will be executed by this action. The name is mandantory
+        A helper action for interfaces. If an interface supports codesets, then all codeset actions will be executed by this action. The name is mandatory
         Not for public use!
         <div style="overflow:auto; ">
         {| class="wikitable"
@@ -335,6 +342,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
 
         uInterFace:str  = u""
         uConfigName:str = u""
+        bNoLogOut:bool
 
         try:
             uInterFace  = oAction.dActionPars.get(u'interface')
@@ -342,13 +350,11 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
             oInterface:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterFace)
             if oInterface:
                 Logger.debug (u'Action: codeset: [%s] Interface: %s Config: %s' % (oAction.uActionName, uInterFace,uConfigName))
-                oSetting = oInterface.GetSettingObjectForConfigName(uConfigName)
+                oSetting:cBaseInterFaceSettings = oInterface.GetSettingObjectForConfigName(uConfigName=uConfigName)
                 bNoLogOut=ToBool(oAction.dActionPars.get('nologout','0'))
-
                 for uKey in oAction.dActionPars:
-                    oSetting.SetContextVar("codesetvar_"+uKey,oAction.dActionPars[uKey])
-
-                eRet:eReturnCode = oInterface.SendCommand(oAction,oSetting,oAction.uRetVar,bNoLogOut)
+                    oSetting.SetContextVar(uVarName="codesetvar_"+uKey,uVarValue=oAction.dActionPars[uKey])
+                eRet:eReturnCode = oInterface.SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=oAction.uRetVar,bNoLogOut=bNoLogOut)
                 SetVar(uVarName  = u'INTERFACEERRORCODE_'+uInterFace+u'_'+uConfigName, oVarValue = ToUnicode(eRet))
                 return eRet
         except Exception as e:

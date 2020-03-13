@@ -31,6 +31,7 @@ from kivy.uix.settings              import SettingsWithSidebar
 from kivy.uix.settings              import SettingsWithSpinner
 from kivy.clock                     import Clock
 from kivy.logger                    import Logger
+from ORCA.settings.SettingChanges   import OrcaConfigParser_On_Setting_Change
 from ORCA.settings.AppSettings      import BuildSettingsStringPowerStatus
 from ORCA.settings.setttingtypes.Public import RegisterSettingTypes
 from ORCA.utils.LogError            import LogError
@@ -41,7 +42,6 @@ from ORCA.vars.Actions              import Var_Invert
 from ORCA.widgets.FileViewer        import cWidgetFileViewer
 from ORCA.interfaces.BaseInterface  import cBaseInterFace
 from ORCA.scripts.BaseScript        import cBaseScript
-from ORCA.widgets.base.Base import cWidgetBase
 
 
 import ORCA.Globals as Globals
@@ -97,7 +97,7 @@ class cWidgetSettings(cWidgetFileViewer):
         self.oReAssignObject                    = None
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
-        self.uSettingsType  = GetXMLTextAttribute(oXMLNode,u'settingstype', False,u'interface')
+        self.uSettingsType  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'settingstype', bMandatory=False,vDefault=u'interface')
         self.oXMLNode       = oXMLNode
         bRet=super(cWidgetSettings, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
         if bRet:
@@ -165,7 +165,7 @@ class cWidgetSettings(cWidgetFileViewer):
             if self.uSettingsType==u'download':
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
                     self.oParent.add_widget(self.oObject)
-                    Globals.oDownLoadSettings.ConfigDownLoadSettings(self.oObject)
+                    Globals.oDownLoadSettings.ConfigDownLoadSettings(oSetting=self.oObject)
                     return True
                 return False
 
@@ -178,6 +178,7 @@ class cWidgetSettings(cWidgetFileViewer):
                     self.oParent.add_widget(self.oObject)
                     Globals.oWinOrcaSettings=oParent
                     self.oObject.bind(on_close=self.On_SettingsClose)
+                    self.oObject.bind(on_config_change=self.On_Orca_ConfigChange)
                     return True
                 return False
 
@@ -237,13 +238,13 @@ class cWidgetSettings(cWidgetFileViewer):
     # noinspection PyUnusedLocal
     def On_SettingsClose(self,instance:Settings) -> bool:
         """ Called, when the setting will be closed """
-        Globals.oNotifications.SendNotification('closesetting_'+self.uSettingsType)
+        Globals.oNotifications.SendNotification(uNotification='closesetting_'+self.uSettingsType)
         return True
 
     # noinspection PyUnusedLocal
     def On_SettingsDiscoverClose(self,instance:Settings) -> bool:
         """ Called, when the discover settings will be closed """
-        Globals.oNotifications.SendNotification('closesetting_'+self.uSettingsType)
+        Globals.oNotifications.SendNotification(uNotification='closesetting_'+self.uSettingsType)
         return True
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
@@ -254,6 +255,16 @@ class cWidgetSettings(cWidgetFileViewer):
                 SetVar(uVarName = key, oVarValue = str(random()))
             else:
                 SetVar(uVarName=key, oVarValue=value)
+
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def On_Orca_ConfigChange(self, settings:Settings,config:ConfigParser, section:str, key:str, value:str) -> None:
+        """ Called, when a setting has been changed, will set the associated var as well """
+        if value.startswith("button_"):
+            SetVar(uVarName = key, oVarValue = str(random()))
+        else:
+            SetVar(uVarName=key, oVarValue=value)
+        OrcaConfigParser_On_Setting_Change(config=config,section=section,key=key,value=value)
+
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def On_PowerStatus_ConfigChange(self, settings:Settings,config:ConfigParser, section:str, key:str, value:str) -> None:

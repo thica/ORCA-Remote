@@ -26,6 +26,7 @@ from xml.etree.ElementTree              import Element
 from kivy.uix.dropdown                  import DropDown
 
 from kivy.uix.widget                    import Widget
+from kivy.uix.button                    import Button
 from ORCA.widgets.helper.HexColor       import GetColorFromHex
 from ORCA.widgets.helper.HexColor       import aColorUndefined
 from ORCA.widgets.Button                import cWidgetButton
@@ -115,21 +116,21 @@ class cWidgetDropDown(cWidgetButton):
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
 
-        uCaption:str = GetXMLTextAttribute(oXMLNode, "caption",False,"")
+        uCaption:str = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag="caption",bMandatory=False,vDefault="")
         bRet:bool    = super().InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
         bDummy:bool
 
         oXMLNode.set("caption", uCaption)
 
         if bRet:
-            self.aFrameColor        = GetColorFromHex(GetXMLTextAttribute(oXMLNode,u'framecolor',False,u'$var(dimmed)'))
-            uFramewidth:str         = GetXMLTextAttribute(oXMLNode,u'framewidth',  False,str(int((self.oDef.iDefMaxX/self.fRationX)*0.02)))
+            self.aFrameColor        = GetColorFromHex(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'framecolor',bMandatory=False,vDefault=u'$var(dimmed)'))
+            uFramewidth:str         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'framewidth',  bMandatory=False,vDefault=str(int((self.oDef.iDefMaxX/self.fRationX)*0.03)))
             self.iFrameWidth,bDummy = self.CalculateWidth(uWidth=uFramewidth,iAnchorWidth=self.iWidth)
             self.iFrameWidth        = self.iFrameWidth / self.fRationX
-            self.aCaptions          = GetXMLTextAttribute(oXMLNode,u'captions', False,u'unknown').split(u',')
-            self.aActionNames       = GetXMLTextAttribute(oXMLNode,u'actions',  False,u'').split(u',')
+            self.aCaptions          = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'captions', bMandatory=False,vDefault=u'unknown').split(u',')
+            self.aActionNames       = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actions',  bMandatory=False,vDefault=u'').split(u',')
             self.aOrgActionNames    = copy(self.aActionNames)
-            self.bSorted            = GetXMLBoolAttribute(oXMLNode,u'sorted',   False,False)
+            self.bSorted            = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'sorted',   bMandatory=False,bDefault=False)
             self.oXMLNode           = oXMLNode
 
             # this is a little bit tricky
@@ -198,13 +199,13 @@ class cWidgetDropDown(cWidgetButton):
                     if (not oWidget.bIcon) and (not self.bIcon):
                         oWidget.oObject.font_size = self.oObject.font_size
 
-                    oWidget.uName                = "*DROPDOWNBUTTON*"+oWidget.uName
-                    oBtn                        = oWidget.oObject
-                    oWidget.oParent.remove_widget(oBtn)
-                    oBtn.size_hint_y            = None
-                    oBtn.unbind(on_q_release    = oWidget.On_Button_Up)
-                    oBtn.bind(on_q_release      = self.DropDownSelect)
-                    self.oObjectDropDown.add_widget(oBtn)
+                    oWidget.uName               = "*DROPDOWNBUTTON*"+oWidget.uName
+                    oKivyBtn:Button             = oWidget.oObject
+                    oWidget.oParent.remove_widget(oKivyBtn)
+                    oKivyBtn.size_hint_y            = None
+                    oKivyBtn.unbind(on_q_release    = oWidget.On_Button_Up)
+                    oKivyBtn.bind(on_q_release      = self.DropDownSelect)
+                    self.oObjectDropDown.add_widget(oKivyBtn)
                 self.oObject.bind(on_q_release  = self.OpenDropDown)
                 self.oObjectDropDown.bind(on_dismiss = self.CloseDropDown)
                 return True

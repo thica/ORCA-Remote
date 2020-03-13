@@ -38,8 +38,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to convert IR Files from iTach format to Kira Keene formats</description>
       <description language='German'>Tool um IR Dateien vom iTach Format zum Kira Keene Format zu konvertieren</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -82,14 +82,14 @@ class cScript(cToolsTemplate):
     """
 
     def __init__(self):
-        cToolsTemplate.__init__(self)
+        super().__init__()
         self.uSubType        = u'IR-CONVERTER'
         self.uSortOrder      = u'auto'
         self.uSettingSection = u'tools'
-        self.uSettingTitle   = u"iTach2Keene"
+        self.uSettingTitle   = u'iTach2Keene'
 
     def RunScript(self, *args, **kwargs) -> None:
-        cToolsTemplate.RunScript(self,*args, **kwargs)
+        super().RunScript(*args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.ShowPageItach2Keene(self, *args, **kwargs)
 
@@ -98,10 +98,10 @@ class cScript(cToolsTemplate):
         Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_ITach2Keene')
 
     def Register(self, *args, **kwargs) -> Dict:
-        cToolsTemplate.Register(self,*args, **kwargs)
-        Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED", fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools iTach2Keene")
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTITACH2KEENE", fNotifyFunction=self.ShowPageItach2Keene, uDescription="Script Tools iTach2Keene")
-        oScriptSettingPlugin = cScriptSettingPlugin()
+        super().Register(*args, **kwargs)
+        Globals.oNotifications.RegisterNotification(uNotification="DEFINITIONPAGESLOADED",  fNotifyFunction=self.LoadScriptPages,     uDescription="Script Tools iTach2Keene")
+        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTITACH2KEENE", fNotifyFunction=self.ShowPageItach2Keene, uDescription="Script Tools iTach2Keene")
+        oScriptSettingPlugin               = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "ORCA"
         oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
@@ -111,7 +111,7 @@ class cScript(cToolsTemplate):
 
         ''' If we press ESC on the iTach2Keene page, goto to the settings page '''
 
-        aActions:List[cAction]= Globals.oEvents.CreateSimpleActionList([{'name':'ESC Key Handler iTach2Keene','string':'registernotification','filterpagename':'Page_iTach2Keene','notification':'on_key_ESC','notifyaction':'gotosettingspage'}])
+        aActions:List[cAction]= Globals.oEvents.CreateSimpleActionList(aActions=[{'name':'ESC Key Handler iTach2Keene','string':'registernotification','filterpagename':'Page_iTach2Keene','notification':'on_key_ESC','notifyaction':'gotosettingspage'}])
         Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         return {}
 
@@ -120,4 +120,4 @@ class cScript(cToolsTemplate):
 
         if oDefinition.uName == Globals.uDefinitionName:
             if self.oFnXML.Exists():
-                oDefinition.LoadFurtherXmlFile(self.oFnXML)
+                oDefinition.LoadFurtherXmlFile(oFnXml=self.oFnXML)

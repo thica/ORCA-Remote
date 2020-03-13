@@ -40,13 +40,13 @@ class cProgressBar(cBasePopup):
 
     def __init__(self):
         super(cProgressBar, self).__init__()
-        self.oLabel:Union[Label:None]               = None
+        self.oLabel:Union[Label,None]               = None
         self.oProgressText:Union[Label,None]        = None
         self.oProgressBar:Union[ProgressBar,None]   = None
         self.iMax:int                               = 100
         self.bCancel:bool                           = False
 
-    def Show(self,uTitle:str,uMessage:str,iMax:int) -> Popup:
+    def Show(self,*,uTitle:str,uMessage:str,iMax:int) -> Popup:
         """ Shows the Popup """
         self.iMax           = iMax
         self.bCancel        = False

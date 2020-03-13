@@ -1,0 +1,317 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:References
+WikiDoc:Page:Resultparser-Overview
+WikiDoc:TOCTitle:Description how to work the result parser
+
+= The result parser =
+
+The result parser build in ORCA is a powerful instrument to parse responses in a generic way from results given to scripts and interfaces
+
+Result parser options are usual part of a codeset file or a definition / script setting
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Parameter
+! align="left" | Description
+|-
+|parseresult
+|Defines the way, a result should be parsed, could be:
+|* no: the result will be ignored
+|* store: the result be be stored in the given localdestvar/globaldestvar
+|* json: the result will ge parsed as a json response, which is similar to the dict parser option, with some special json handle tasks
+|* dict: the result will ge parsed as a dictionary response
+|* tokenize: the result will tokenized (foo:bar)
+|* xml: the result will be parsed as a xml response
+|-
+|getvar
+|The name, which should be parsed from the result: valid for
+|* json
+|* dict
+|* xml responses
+|If you need to parse more than one value from the result, then this is possible as well, to do so:
+|Add "L" (for list) to the parserflag option
+|Wrap double quotes around each getvar value und separate them by comma
+|ensure, that the number ldestvar and gdestvar values matches the number of values to be parsed
+|For structured results (json/dict/xml) you can/need to specify, which element you want to return (see parserflags)
+|New: You can use wildcards (* ?) in getvars
+|-
+|gdestvar
+|Global destination var: The is the variable name, the result is stored in
+|-
+|ldestvar
+|Local destination var: The is the local variable name, the result is stored in. Local means, that the script or interface context ist used and that it can reused by using the $cvar option.
+|-
+|tokenizestring
+|If the responses should be tokenized, this token should be used. Defaults to ":"
+|-
+|parserflag
+|Passes additional information, how to pass a result, flags can be combined, where meaningful
+|* "L" (list)  = More than one value should be parsed
+|* "A" (array) = The result should be parsed as an array, so an index will be added to the destvars (eg. myresult[0])
+|* "F" (first)= If the getvar is unique in the result structure, you do not need pass the whole structure, the parser returns the first item found
+|}</div>
+
+== Working with dict structures ==
+
+Some examples on a given structure:
+
+{
+  "destination_addresses":
+    [
+        "Philadelphia, PA, USA",
+        "Street without name"
+    ],
+  "origin_addresses":"New York, NY, USA",
+  "rows":
+    [
+        {
+          "elements":
+            [
+                {
+                    "distance":
+                    {
+                        "text": "94.6 mi",
+                        "value": 152193
+                    },
+                    "duration":
+                    {
+                        "text": "1 hour 44 mins",
+                        "value": 6227
+                    },
+                "status": "OK"
+                }
+             ]
+        }
+    ],
+    "status": "OK"
+}
+
+Remark: in the examples, we just use the gdestvar, the ldestvar would be similar
+
+getvar="destination_addresses" gdestvar="MyResult" parseoption="dict" parseflags=""
+would return MyResult="Philadelphia, PA, USA"
+
+getvar="destination_addresses" gdestvar="MyResult" parseoption="dict" parseflags="A"
+would return MyResult[0]="Philadelphia, PA, USA"
+             MyResult[1]="Street without name"
+
+getvar="text" gdestvar="MyResult" parseoption="dict" parseflags=""
+    would return MyResult=""
+    This value can't be found
+
+getvar="text" gdestvar="MyResult" parseoption="dict" parseflags="U"
+    would return MyResult="94.6 mi"
+    This is the first occurence of text
+
+getvar="rows,elements,duration,value" gdestvar="MyResult" parseoption="dict" parseflags=""
+    would return MyResult="6227"
+    This is the exact picked value
+
+getvar='"destination_addresses","rows,elements,duration,value"' gdestvar='"MyResult_Address","MyResult_Duration"' parseoption="dict" parseflags="L"
+    would return MyResult_Address="Philadelphia, PA, USA"
+                 MyResult_Duration="6227"
+
+getvar='"destination_addresses","value"' gdestvar='"MyResult_Address","MyResult_Duration"' parseoption="dict" parseflags="UL"
+    would return MyResult_Address="Philadelphia, PA, USA"
+                 MyResult_Duration="152193"
+    This is the first occurence of both items
+
+getvar='"destination_addresses","value"' gdestvar='"MyResult_Address","MyResult_Duration"' parseoption="dict" parseflags="ULA"
+    would return MyResult_Address[0]="Philadelphia, PA, USA"
+                 MyResult_Address[1]="Street without name"
+                 MyResult_Duration[0]="152193"
+                 MyResult_Duration[1]="6227"
+
+getvar='"destination_addresses","origin_addresses"' gdestvar='"MyResult_Address","MyResult_Origin"' parseoption="dict" parseflags="ULA"
+    would return MyResult_Address[0]="Philadelphia, PA, USA"
+                 MyResult_Address[1]="Street without name"
+                 MyResult_Origin[0]="New York, NY, USA"
+
+
+== Working with xml structures ==
+
+XML structures are converted to dict structures and then parsed as a dict. Attributes are handled as well, they get stored in an "attribute" dict branch.
+
+As an example I have give a compley xml structure and the resulting Dict structure
+
+  <?xml version="1.0"?>
+  <?xml-stylesheet href="catalog.xsl" type="text/xsl"?>
+  <!DOCTYPE catalog SYSTEM "catalog.dtd">
+  <catalog>
+     <product description="Cardigan Sweater" product_image="cardigan.jpg">
+        <catalog_item gender="Men's">
+           <item_number>QWZ5671</item_number>
+           <price>39.95</price>
+           <size description="Medium">
+              <color_swatch image="red_cardigan.jpg">Red</color_swatch>
+              <color_swatch image="burgundy_cardigan.jpg">Burgundy</color_swatch>
+           </size>
+           <size description="Large">
+              <color_swatch image="red_cardigan.jpg">Red</color_swatch>
+              <color_swatch image="burgundy_cardigan.jpg">Burgundy</color_swatch>
+           </size>
+        </catalog_item>
+        <catalog_item gender="Women's">
+           <item_number>RRX9856</item_number>
+           <price>42.50</price>
+           <size description="Small">
+              <color_swatch image="red_cardigan.jpg">Red</color_swatch>
+              <color_swatch image="navy_cardigan.jpg">Navy</color_swatch>
+              <color_swatch image="burgundy_cardigan.jpg">Burgundy</color_swatch>
+           </size>
+           <size description="Medium">
+              <color_swatch image="red_cardigan.jpg">Red</color_swatch>
+              <color_swatch image="navy_cardigan.jpg">Navy</color_swatch>
+              <color_swatch image="burgundy_cardigan.jpg">Burgundy</color_swatch>
+              <color_swatch image="black_cardigan.jpg">Black</color_swatch>
+           </size>
+           <size description="Large">
+              <color_swatch image="navy_cardigan.jpg">Navy</color_swatch>
+              <color_swatch image="black_cardigan.jpg">Black</color_swatch>
+           </size>
+           <size description="Extra Large">
+              <color_swatch image="burgundy_cardigan.jpg">Burgundy</color_swatch>
+              <color_swatch image="black_cardigan.jpg">Black</color_swatch>
+           </size>
+        </catalog_item>
+     </product>
+  </catalog>
+
+  This XML would be converted into the following dict to parse:
+
+   {
+    'catalog':
+    {
+     'product':
+     {
+      'attributes':
+      {
+       'description': 'Cardigan Sweater',
+       'description[0]': 'Cardigan Sweater',
+       'product_image': 'cardigan.jpg',
+       'product_image[0]': 'cardigan.jpg'
+      },
+      'catalog_item':
+      [
+       {
+        'attributes':
+        {
+         'gender': "Men's",
+         'gender[0]': "Men's"
+        },
+        'item_number': 'QWZ5671',
+        'price': '39.95',
+        'size':
+        [
+         {
+          'attributes':
+          {
+           'description': 'Medium',
+           'description[0]': 'Medium',
+           'image[0]': 'red_cardigan.jpg',
+           'image[1]': 'burgundy_cardigan.jpg'
+          },
+          'color_swatch':
+          [
+           'Red',
+           'Burgundy'
+          ]
+         },
+         {
+          'attributes':
+          {
+           'description': 'Large',
+           'description[0]': 'Large',
+           'image[0]': 'red_cardigan.jpg',
+           'image[1]': 'burgundy_cardigan.jpg'
+          },
+        'color_swatch':
+        [
+         'Red',
+         'Burgundy'
+        ]
+       }
+      ]
+     },
+     {
+      'attributes':
+      {
+       'gender': "Women's",
+       'gender[0]': "Women's"
+      },
+      'item_number': 'RRX9856',
+      'price': '42.50',
+      'size':
+      [
+       {
+        'attributes':
+        {
+         'description': 'Small',
+         'description[0]': 'Small',
+         'image[0]': 'red_cardigan.jpg',
+         'image[1]': 'navy_cardigan.jpg',
+         'image[2]': 'burgundy_cardigan.jpg'
+        },
+        'color_swatch':
+        [
+         'Red',
+         'Navy',
+         'Burgundy'
+        ]
+       },
+       {
+        'attributes':
+        {
+         'description': 'Medium',
+         'description[0]': 'Medium',
+         'image[0]': 'red_cardigan.jpg',
+         'image[1]': 'navy_cardigan.jpg',
+         'image[2]': 'burgundy_cardigan.jpg',
+         'image[3]': 'black_cardigan.jpg'
+        },
+        'color_swatch':
+        [
+         'Red',
+         'Navy',
+         'Burgundy',
+         'Black'
+        ]
+       },
+       {
+        'attributes':
+        {
+         'description': 'Large',
+         'description[0]': 'Large',
+         'image[0]': 'navy_cardigan.jpg',
+         'image[1]': 'black_cardigan.jpg'},
+         'color_swatch':
+         [
+          'Navy',
+          'Black'
+         ]
+        },
+        {
+         'attributes':
+         {
+          'description': 'Extra Large',
+          'description[0]': 'Extra Large',
+          'image[0]': 'burgundy_cardigan.jpg',
+          'image[1]': 'black_cardigan.jpg'
+         },
+         'color_swatch':
+         [
+          'Burgundy',
+          'Black'
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  }
+
+
+WikiDoc:End
+'''

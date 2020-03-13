@@ -20,6 +20,7 @@
 
 from typing                         import Dict
 from typing                         import List
+from typing                         import Optional
 from typing                         import Union
 
 from copy                           import copy
@@ -64,10 +65,10 @@ class cActions:
                 oFnActionFile=Globals.oFnActionFreshInstall
 
         try:
-            oET_Root = LoadXMLFile(oFnActionFile)
-            self.LoadActionsSub(oET_Root ,u'appstartactions',u'appstartaction',self.dActionsPageStart,oFnActionFile.string)
+            oET_Root = LoadXMLFile(oFile=oFnActionFile)
+            self.LoadActionsSub(oET_Root=oET_Root ,uSegmentTag=u'appstartactions',uListTag=u'appstartaction',dTargetDic=self.dActionsPageStart,uFileName=oFnActionFile.string)
             # just in case we have some sub commands (mainly in the fall back actions command set)
-            self.LoadActionsSub(oET_Root ,u'actions',u'action',self.dActionsCommands,oFnActionFile.string)
+            self.LoadActionsSub(oET_Root=oET_Root ,uSegmentTag=u'actions',uListTag= u'action',dTargetDic= self.dActionsCommands,uFileName=oFnActionFile.string)
 
         except Exception as e:
             ShowErrorPopUp(uTitle="LoadActionsAppStart: Fatal Error",uMessage=u'TheScreen: Fatal Error:Load Appstart Action XmlFile (%s)' % oFnActionFile.string,bAbort=True,oException=e)
@@ -78,7 +79,7 @@ class cActions:
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
     # noinspection PyMethodMayBeStatic,PyMethodMayBeStatic
-    def __ParseXMLActions(self, oXMLNode:Element, aActions:List[cAction],uFunctionName:str) -> None:
+    def __ParseXMLActions(self,*,oXMLNode:Element, aActions:List[cAction],uFunctionName:str) -> None:
         bFound:bool = False
         oXMLAction:List[Element]
         for oXMLAction in oXMLNode.findall('action'):
@@ -88,7 +89,7 @@ class cActions:
         if not bFound:
             aActions.append(cAction(pars=oXMLNode,functionname=uFunctionName))
 
-    def LoadActionsSub(self,oET_Root:Element,uSegmentTag:Union[str,None], uListTag:str,dTargetDic:Dict,uFileName:Union[str,cFileName]=u'') -> None:
+    def LoadActionsSub(self,*,oET_Root:Element,uSegmentTag:Optional[str], uListTag:str,dTargetDic:Dict,uFileName:Union[str,cFileName]=u'') -> None:
         """
             replaceoptions
             * appendtoexisting
@@ -109,12 +110,11 @@ class cActions:
             if oET_SegmentsStart is not None:
                 for oET_Includes in oET_SegmentsStart:
                     if oET_Includes.tag==u'includes':
-                        self.LoadActionsSub(oET_Includes,None, uListTag,dTargetDic,uFileName)
+                        self.LoadActionsSub(oET_Root=oET_Includes,uSegmentTag=None, uListTag=uListTag,dTargetDic=dTargetDic,uFileName=uFileName)
                     elif oET_Includes.tag==uListTag:
-                        uName=GetXMLTextAttribute(oET_Includes,'name',True,u'')
-                        uReplaceOption = GetXMLTextAttribute(oET_Includes,'replaceoption',False,u'appendtoexisting')
-
-                        uNewname       = GetXMLTextAttribute(oET_Includes,'newname',False,u'')
+                        uName           = GetXMLTextAttribute(oXMLNode=oET_Includes,uTag='name',            bMandatory=True, vDefault=u'')
+                        uReplaceOption  = GetXMLTextAttribute(oXMLNode=oET_Includes,uTag='replaceoption',   bMandatory=False,vDefault=u'appendtoexisting')
+                        uNewname        = GetXMLTextAttribute(oXMLNode=oET_Includes,uTag='newname',         bMandatory=False,vDefault=u'')
                         aActions        = []
                         bOldExist       = True
                         aActionsOrg     = dTargetDic.get(uName)
@@ -137,7 +137,7 @@ class cActions:
         except Exception as e:
             ShowErrorPopUp(uTitle="LoadActionsSub: Fatal Error",uMessage=u'TheScreen: Fatal Error:Load Action XmlFile:',bAbort=True,oException=e)
 
-    def Dump(self,uFilter:str) -> None:
+    def Dump(self,*,uFilter:str) -> None:
         """ Dumps all Actions """
 
         uActionName:str
@@ -146,30 +146,30 @@ class cActions:
         for uActionName in sorted(self.dActionsCommands):
             if uFilter == u"" or uFilter in uActionName:
                 aActions=self.dActionsCommands[uActionName]
-                self.DumpActions_Sub(uActionName,aActions)
+                self.DumpActions_Sub(uActionName=uActionName,aActions=aActions)
 
         for uActionName in sorted(self.dActionsPageStart):
             if uFilter == u"" or uFilter in uActionName:
                 aActions=self.dActionsPageStart[uActionName]
-                self.DumpActions_Sub(uActionName,aActions)
+                self.DumpActions_Sub(uActionName=uActionName,aActions=aActions)
 
         for uActionName in sorted(self.dActionsPageStop):
             if uFilter == u"" or uFilter in uActionName:
                 aActions=self.dActionsPageStop[uActionName]
-                self.DumpActions_Sub(uActionName,aActions)
+                self.DumpActions_Sub(uActionName=uActionName,aActions=aActions)
 
-    def DumpActions_Sub(self,uActionName:str,aActions:List[cAction]) -> None:
+    def DumpActions_Sub(self,*,uActionName:str,aActions:List[cAction]) -> None:
         """ Little helper for dumping actions """
 
         if len(aActions)==1 and uActionName==aActions[0].uActionName:
-            aActions[0].Dump(0)
+            aActions[0].Dump(iIndent=0)
         else:
             Logger.debug("Action:"+uActionName)
             for oAction in aActions:
                 # noinspection PyUnresolvedReferences
                 if oAction.iActionId==Globals.oActions.oActionType.EndIf:
                     self.iIndent-=2
-                oAction.Dump(4+self.iIndent)
+                oAction.Dump(iIndent=4+self.iIndent)
                 # noinspection PyUnresolvedReferences
                 if oAction.iActionId==Globals.oActions.oActionType.If:
                     self.iIndent+=2
@@ -179,31 +179,31 @@ class cActions:
         self.dActionsCommands[uActionName] = aActions
 
 
-    def GetActionList(self, uActionName, bNoCopy:bool) -> List[cAction]:
+    def GetActionList(self, *,uActionName, bNoCopy:bool) -> List[cAction]:
         """ Returns a (copy of an) action (list)  """
 
         if bNoCopy:
             return self.dActionsCommands.get(uActionName)
         else:
-            return self._CopyActonList(self.dActionsCommands,uActionName)
+            return self._CopyActonList(dActionList=self.dActionsCommands,uActionName=uActionName)
 
-    def GetPageStartActionList(self, uActionName, bNoCopy) -> List[cAction]:
+    def GetPageStartActionList(self,*, uActionName, bNoCopy) -> List[cAction]:
         """ Returns a (copy of an) action (list)  """
 
         if bNoCopy:
             return self.dActionsPageStart.get(uActionName)
         else:
-            return self._CopyActonList(self.dActionsPageStart,uActionName)
+            return self._CopyActonList(dActionList=self.dActionsPageStart,uActionName=uActionName)
 
-    def GetPageStopActionList(self, uActionName, bNoCopy) -> List[cAction]:
+    def GetPageStopActionList(self,*, uActionName, bNoCopy) -> List[cAction]:
         """ Returns a (copy of an) action (list)  """
         if bNoCopy:
             return self.dActionsPageStop.get(uActionName)
         else:
-            return self._CopyActonList(self.dActionsPageStop,uActionName)
+            return self._CopyActonList(dActionList=self.dActionsPageStop,uActionName=uActionName)
 
     @staticmethod
-    def _CopyActonList(dActionList:Dict, uActionName:str) -> Union[List[cAction],None]:
+    def _CopyActonList(*,dActionList:Dict, uActionName:str) -> Optional[List[cAction]]:
         """ Creates a copy of an action list  """
         aList:List[cAction] = dActionList.get(uActionName)
         if aList is None:

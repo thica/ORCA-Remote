@@ -71,7 +71,7 @@ class cScrollableLabelLarge(Widget):
             if k not in ["size_hint","size","pos","pos_hint"]:
                 kwargsInner[k]=kwargs[k]
         self.oScrollableLabelLargeInner=cScrollableLabelLargeInner(**kwargsInner)
-        super(self.__class__, self).__init__(**RemoveNoClassArgs(kwargs,Widget))
+        super(self.__class__, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=Widget))
 
         self.oBackGround         = None
         if "background_color" in kwargs:
@@ -124,7 +124,7 @@ class cLineLayoutBase(BoxLayout):
     text = StringProperty("")
     font_size = NumericProperty(0)
     def __init__(self, **kwargs):
-        super(self.__class__,self).__init__(**RemoveNoClassArgs(kwargs,BoxLayout))
+        super(self.__class__,self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=BoxLayout))
         self.oLabel         = cLabel(**self.oScrollableLabelLargeInner.kwFontArgs)
         if self.oScrollableLabelLargeInner.oOrcaWidget is not None:
             self.oLabel.oOrcaWidget = self.oScrollableLabelLargeInner.oOrcaWidget
@@ -193,9 +193,9 @@ class cScrollableLabelLargeInner(RecycleView):
         self.bNoXScroll = kwargs.get("noxscroll",False)
         self.bMarkup = kwargs.get("markup", False)
         #A dummy label to get th width a the larges character
-        self.oLabel = Label(**RemoveNoClassArgs(self.kwFontArgs,Label))
+        self.oLabel = Label(**RemoveNoClassArgs(dInArgs=self.kwFontArgs,oObject=Label))
 
-        super(self.__class__, self).__init__(**RemoveNoClassArgs(kwargs,RecycleView))
+        super(self.__class__, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=RecycleView))
         # This manages the distance between lines
         self.layout_manager.default_size = (None,self.oLabel._label.get_extents('W')[1])
         #self.layout_manager.default_size = (None, self.fFontSize*1.1)

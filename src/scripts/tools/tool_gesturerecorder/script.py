@@ -28,6 +28,15 @@ from ORCA.Action                            import cAction
 
 import ORCA.Globals as Globals
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.definition.Definition import cDefinition
+else:
+    from typing import TypeVar
+    cDefinition = TypeVar("cDefinition")
+
+
+
 '''
 <root>
   <repositorymanager>
@@ -36,8 +45,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to record gestures</description>
       <description language='German'>Tool um Gesten aufzuzeichnen</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -80,7 +89,7 @@ class cScript(cToolsTemplate):
     """
 
     def __init__(self):
-        cToolsTemplate.__init__(self)
+        super().__init__()
         self.uSubType           = u'GESTURERECORCER'
         self.uSortOrder         = u'auto'
         self.uSettingSection    = u'tools'
@@ -92,14 +101,14 @@ class cScript(cToolsTemplate):
         Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_GestureRecorder')
 
     def RunScript(self, *args, **kwargs)  -> None:
-        cToolsTemplate.RunScript(self, *args, **kwargs)
+        super().RunScript(*args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.ShowPageGestureRecorder(self, *args, **kwargs)
 
     def Register(self, *args, **kwargs) -> Dict:
-        cToolsTemplate.Register(self,*args, **kwargs)
-        Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED", fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools GestureRecorder")
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTGESTURERECORDER", fNotifyFunction=self.ShowPageGestureRecorder, uDescription="Script Tools GestureRecorder")
+        super().Register(*args, **kwargs)
+        Globals.oNotifications.RegisterNotification(uNotification="DEFINITIONPAGESLOADED",      fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools GestureRecorder")
+        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTGESTURERECORDER", fNotifyFunction=self.ShowPageGestureRecorder, uDescription="Script Tools GestureRecorder")
         oScriptSettingPlugin:cScriptSettingPlugin = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName
         oScriptSettingPlugin.uSettingName  = "ORCA"
@@ -111,15 +120,15 @@ class cScript(cToolsTemplate):
         ''' If we press ESC on the Gestureboard page, goto to the settings page
             If we press the close button on the interface-settings page, goto to the settings page '''
 
-        aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList([{'name':'ESC Key Handler Gestureboard','string':'registernotification','filterpagename':'Page_GestureRecorder','notification':'on_key_ESC','notifyaction':'gotosettingspage'},
-                                                 {'name':'Button Close Gestureboard Key Handler Settings','string':'registernotification','filterpagename':'Page_GestureRecorder','notification':'closesetting_gesturerecorder','notifyaction':'gotosettingspage'}])
+        aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList(aActions=[{'name':'ESC Key Handler Gestureboard','string':'registernotification','filterpagename':'Page_GestureRecorder','notification':'on_key_ESC','notifyaction':'gotosettingspage'},
+                                                                                {'name':'Button Close Gestureboard Key Handler Settings','string':'registernotification','filterpagename':'Page_GestureRecorder','notification':'closesetting_gesturerecorder','notifyaction':'gotosettingspage'}])
         Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         return {}
 
     # noinspection PyUnusedLocal
     def LoadScriptPages(self,*args,**kwargs) -> None:
-        oDefinition = kwargs.get("definition")
+        oDefinition:cDefinition = kwargs.get("definition")
 
         if oDefinition.uName == Globals.uDefinitionName:
             if self.oFnXML.Exists():
-                oDefinition.LoadFurtherXmlFile(self.oFnXML)
+                oDefinition.LoadFurtherXmlFile(oFnXml=self.oFnXML)

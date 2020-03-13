@@ -26,6 +26,8 @@ from typing                                 import List
 from typing                                 import Union
 from typing                                 import Tuple
 from typing                                 import Callable
+from typing                                 import Optional
+
 
 import threading
 import socket
@@ -33,15 +35,14 @@ import socket
 from time                                   import sleep
 from xml.etree.ElementTree                  import Element
 
-from kivy.logger                            import Logger
 from kivy.network.urlrequest                import UrlRequest
 from kivy.uix.button                        import Button
-from xml.etree.ElementTree                  import fromstring
 
 from ORCA.scripttemplates.Template_Discover_Scan import cDiscoverScriptTemplate_Scan
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
-from ORCA.vars.QueryDict                    import QueryDict
+from ORCA.vars.QueryDict                    import TypedQueryDict
 from ORCA.utils.XML                         import GetXMLTextValue
+from ORCA.utils.XML                         import LoadXMLString
 
 
 '''
@@ -52,8 +53,8 @@ from ORCA.utils.XML                         import GetXMLTextValue
       <description language='English'>Discover Enigma Receiver via the webinterface</description>
       <description language='German'>Erkennt Enigma Reveiver mittels des Web Interfaces</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_enigma</local>
@@ -94,7 +95,7 @@ class cScript(cDiscoverScriptTemplate_Scan):
     """
 
     def __init__(self):
-        cDiscoverScriptTemplate_Scan.__init__(self)
+        super().__init__()
         self.uSubType:str                       = u'Enigma'
         self.iPort:int                          = 80
         self.bStopWait:bool                     = False
@@ -104,7 +105,7 @@ class cScript(cDiscoverScriptTemplate_Scan):
         return ['$lvar(5029)','$lvar(5035)','$lvar(6002)','$lvar(5031)']
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
-        dDevice:QueryDict = oButton.dDevice
+        dDevice:TypedQueryDict = oButton.dDevice
         uText:str = u"$lvar(5029): %s \n" \
                     u"$lvar(5035): %s \n" \
                     u"$lvar(6002): %s \n"\
@@ -113,27 +114,26 @@ class cScript(cDiscoverScriptTemplate_Scan):
         ShowMessagePopUp(uMessage=uText)
 
     # noinspection PyMethodMayBeStatic
-    def CreateReturnDict(self,dResult:Union[QueryDict,None]) -> Dict:
+    def CreateReturnDict(self,dResult:Optional[TypedQueryDict]) -> Dict:
         if dResult is not None:
-            uHost:str      = dResult["ip"]
-            iPort:int      = dResult["port"]
-            uModel:str     = dResult["model"]
-            uHostName:str  = dResult["hostname"]
-            uIPVersion:str = dResult["ipversion"]
-            return {'Host':uHost,'Port':iPort,'Model':uModel,'Hostname':uHostName,"IPVersion":uIPVersion ,'Exception':None}
+            uHost:str      = dResult.uIP
+            uPort:str      = str(dResult.iPort)
+            uModel:str     = dResult.uModel
+            uHostName:str  = dResult.uHostName
+            uIPVersion:str = dResult.uIPVersion
+            return {'Host':uHost,'Port':uPort,'Model':uModel,'Hostname':uHostName,"IPVersion":uIPVersion ,'Exception':None}
         return {'Host':'','Port':0,'Model':'','Hostname':'',"IPVersion":'' ,'Exception':None}
 
     # noinspection PyMethodMayBeStatic
-    def ParseResult(self,dResult:QueryDict) -> Tuple[str,QueryDict,List]:
-        dDevice:QueryDict       = QueryDict()
-        dDevice.uFoundIP        = dResult["ip"]
-        dDevice.uFoundPort      = str(dResult["port"])
-        dDevice.uFoundModel     = dResult["model"]
-        dDevice.uFoundHostName  = dResult["hostname"]
+    def ParseResult(self,dResult:TypedQueryDict) -> Tuple[str,TypedQueryDict,List]:
+        dDevice:TypedQueryDict  = TypedQueryDict()
+        dDevice.uFoundIP        = dResult.uIP
+        dDevice.uFoundPort      = str(dResult.iPort)
+        dDevice.uFoundModel     = dResult.uModel
+        dDevice.uFoundHostName  = dResult.uHostName
 
         uTageLine:str     = dDevice.uFoundIP + dDevice.uFoundModel
-        aLine:List        = [dDevice.uFoundIP, dDevice.uFoundHostName, dDevice.uFoundPort, dDevice.uFoundMode]
-        Logger.info(u'Bingo: Discovered Enigma device %s' % dDevice.uFoundIP)
+        aLine:List        = [dDevice.uFoundIP, dDevice.uFoundHostName, dDevice.uFoundPort, dDevice.uFoundModel]
         return uTageLine,dDevice,aLine
 
     # noinspection PyMethodMayBeStatic
@@ -159,7 +159,7 @@ class cThread_CheckIP(threading.Thread):
         self.SendCommand()
 
     def SendCommand(self) -> None:
-        dResult:QueryDict = QueryDict()
+
         self.bStopWait      = False
         uUrlFull:str = "http://"+self.uIP+"/web/about"
         try:
@@ -168,9 +168,9 @@ class cThread_CheckIP(threading.Thread):
             if self.oReq.resp_status is not None:
                 uResult:str = self.oReq.result
                 if "<e2abouts>" in uResult:
-                    oXmlRoot:Element    = fromstring(uResult)
+                    oXmlRoot:Element    = LoadXMLString(uXML=uResult)
                     oXmlAbout:Element   = oXmlRoot.find("e2about")
-                    uModel:str          = GetXMLTextValue(oXmlAbout, "e2model", False, "Enigma")
+                    uModel:str          = GetXMLTextValue(oXMLNode=oXmlAbout, uTag="e2model", bMandatory=False, vDefault="Enigma")
                     uFoundHostName:str  = ""
                     try:
                         uFoundHostName = socket.gethostbyaddr(self.uIP)[0]
@@ -178,12 +178,14 @@ class cThread_CheckIP(threading.Thread):
                         # Logger.error("Cant get Hostname:"+oRet.uFoundIP+" "+str(e))
                         pass
 
-                    dResult.ip          = self.uIP
-                    dResult.port        = 80
-                    dResult.model       = uModel
-                    dResult.ipversion   = "IPv4"
-                    dResult.hostname    = uFoundHostName
+                    dResult:TypedQueryDict = TypedQueryDict()
+                    dResult.uIP          = self.uIP
+                    dResult.iPort        = 80
+                    dResult.uModel       = uModel
+                    dResult.uIPVersion   = "IPv4"
+                    dResult.uHostName    = uFoundHostName
                     self.oCaller.aResults.append(dResult)
+                    self.oCaller.ShowInfo(uMsg=u'Discovered Enigma device (V4) %s' % dResult.uIP)
                     try:
                         uIP = ""
                         aIPs = socket.getaddrinfo(uFoundHostName,None)
@@ -192,12 +194,14 @@ class cThread_CheckIP(threading.Thread):
                             if ":" in uIP:
                                 break
                         if ":" in uIP:
-                            dResult.ip          = uIP
-                            dResult.port        = 80
-                            dResult.model       = uModel
-                            dResult.ipversion   = "IPv6"
-                            dResult.hostname    = uFoundHostName
+                            dResult:TypedQueryDict = TypedQueryDict()
+                            dResult.uIP          = uIP
+                            dResult.iPort        = 80
+                            dResult.uModel       = uModel
+                            dResult.uIPVersion   = "IPv6"
+                            dResult.uHostName    = uFoundHostName
                             self.oCaller.aResults.append(dResult)
+                            self.oCaller.ShowInfo(uMsg=u'Discovered Enigma device (V6) %s' % dResult.uIP)
                     except Exception:
                         pass
 

@@ -21,7 +21,7 @@
 """
 
 from __future__                             import annotations
-from typing                                 import Union
+from typing                                 import Optional
 from typing                                 import Dict
 
 import telnetlib
@@ -31,6 +31,7 @@ from ORCA.interfaces.BaseInterface          import cBaseInterFace
 from ORCA.interfaces.BaseInterfaceSettings  import cBaseInterFaceSettings
 from ORCA.utils.TypeConvert                 import ToUnicode
 from ORCA.utils.TypeConvert                 import ToBytes
+from ORCA.utils.TypeConvert                 import ToInt
 from ORCA.utils.wait.StartWait              import StartWait
 from ORCA.vars.Access                       import SetVar
 from ORCA.vars.Replace                      import ReplaceVars
@@ -46,8 +47,8 @@ from ORCA.actions.ReturnCode                import eReturnCode
       <description language='English'>Interface to send telnet commands</description>
       <description language='German'>Interface um Telnet Kommandos zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/telnet</local>
@@ -72,10 +73,10 @@ class cInterface(cBaseInterFace):
 
     class cInterFaceSettings(cBaseInterFaceSettings):
         def __init__(self,oInterFace:cInterface):
-            cBaseInterFaceSettings.__init__(self,oInterFace)
+            super().__init__(oInterFace)
             self.bStopThreadEvent:bool                    = False
-            self.oTelnet:Union[telnetlib.Telnet,None]     = None
-            self.oThread                                  = None
+            self.oTelnet:Optional[telnetlib.Telnet]       = None
+            self.oThread:Optional[Thread]                 = None
             self.uRetVar:str                              = u''
             self.uResponse:str                            = u''
             self.aIniSettings.fTimeOut                    = 2.0
@@ -92,7 +93,7 @@ class cInterface(cBaseInterFace):
             self.aIniSettings.uDISCOVER_UPNP_servicetypes = "upnp:rootdevice"
 
         def ReadConfigFromIniFile(self,uConfigName:str) -> None:
-            cBaseInterFaceSettings.ReadConfigFromIniFile(self,uConfigName)
+            super().ReadConfigFromIniFile(uConfigName=uConfigName)
             self.aIniSettings.uResultEndString           = self.aIniSettings.uResultEndString.replace('[LF]','\n')
             self.aIniSettings.uResultEndString           = self.aIniSettings.uResultEndString.replace('[CR]','\r')
             return
@@ -101,60 +102,60 @@ class cInterface(cBaseInterFace):
 
             if command == telnetlib.DO and option == b"\x18":
                 # Promise we'll send a terminal type
-                oSocket.send(ToBytes("%s%s\x18" % (telnetlib.IAC, telnetlib.WILL)))
+                oSocket.send(ToBytes("%s%s\x18" % (ToUnicode(telnetlib.IAC), ToUnicode(telnetlib.WILL))))
             elif command == telnetlib.DO and option == b"\x01":
                 # Pinky swear we'll echo
-                oSocket.send(ToBytes("%s%s\x01" % (telnetlib.IAC, telnetlib.WILL)))
+                oSocket.send(ToBytes("%s%s\x01" % (ToUnicode(telnetlib.IAC), ToUnicode(telnetlib.WILL))))
             elif command == telnetlib.DO and option == b"\x1f":
                 # And we should probably tell the server we will send our window
                 # size
-                oSocket.send(ToBytes("%s%s\x1f" % (telnetlib.IAC, telnetlib.WILL)))
+                oSocket.send(ToBytes("%s%s\x1f" % (ToUnicode(telnetlib.IAC), ToUnicode(telnetlib.WILL))))
             elif command == telnetlib.DO and option == b"\x20":
                 # Tell the server to sod off, we won't send the terminal speed
-                oSocket.send(ToBytes("%s%s\x20" % (telnetlib.IAC, telnetlib.WONT)))
+                oSocket.send(ToBytes("%s%s\x20" % (ToUnicode(telnetlib.IAC), ToUnicode(telnetlib.WONT))))
             elif command == telnetlib.DO and option == b"\x23":
                 # Tell the server to sod off, we won't send an x-display terminal
-                oSocket.send(ToBytes("%s%s\x23" % (telnetlib.IAC, telnetlib.WONT)))
+                oSocket.send(ToBytes("%s%s\x23" % (ToUnicode(telnetlib.IAC), ToUnicode(telnetlib.WONT))))
             elif command == telnetlib.DO and option == b"\x27":
                 # We will send the environment, though, since it might have nethack
                 # specific options in it.
-                oSocket.send(ToBytes("%s%s\x27" % (telnetlib.IAC, telnetlib.WILL)))
+                oSocket.send(ToBytes("%s%s\x27" % (ToUnicode(telnetlib.IAC), ToUnicode(telnetlib.WILL))))
             elif self.oTelnet.rawq.startswith(b"\xff\xfa\x27\x01\xff\xf0\xff\xfa"):
                # set a dummy environment
                # and set the terminal
 
                 oSocket.send(ToBytes("%s%s\x27\x00%s%s%s" %
-                            (telnetlib.IAC,
-                             telnetlib.SB,
+                            (ToUnicode(telnetlib.IAC),
+                             ToUnicode(telnetlib.SB),
                              '\x00"OPTIONS"\x01"%s"' % "",
-                             telnetlib.IAC,
-                             telnetlib.SE)))
+                             ToUnicode(telnetlib.IAC),
+                             ToUnicode(telnetlib.SE))))
 
                 self.aIniSettings.uTerminalType = "linux"
 
                 oSocket.send(ToBytes("%s%s\x18\x00%s%s%s" %
-                            (telnetlib.IAC,
-                             telnetlib.SB,
+                            (ToUnicode(telnetlib.IAC),
+                             ToUnicode(telnetlib.SB),
                              self.aIniSettings.uTerminalType,
-                             telnetlib.IAC,
-                             telnetlib.SE)))
+                             ToUnicode(telnetlib.IAC),
+                             ToUnicode(telnetlib.SE))))
 
                 # "xterm",
 
             else:
-                oSocket.send(ToBytes("%s%s%s" % (telnetlib.IAC, telnetlib.WONT,option)))
+                oSocket.send(ToBytes("%s%s%s" % (ToUnicode(telnetlib.IAC), ToUnicode(telnetlib.WONT),option)))
 
         def Connect(self) -> bool:
 
             oSocket:socket.socket
 
-            if not cBaseInterFaceSettings.Connect(self):
+            if not super().Connect():
                 return False
 
             try:
                 try:
-                    self.ShowDebug(u'Connecting to %s:%s with user: [%s] , password: [%s]' % (str(self.aIniSettings.uHost) ,str(self.aIniSettings.uPort),self.aIniSettings.uUser,self.aIniSettings.uPassword))
-                    self.oTelnet = telnetlib.Telnet(ToBytes(self.aIniSettings.uHost),str(self.aIniSettings.uPort),self.aIniSettings.fTimeOut)
+                    self.ShowDebug(uMsg=u'Connecting to %s:%s with user: [%s] , password: [%s]' % (str(self.aIniSettings.uHost) ,str(self.aIniSettings.uPort),self.aIniSettings.uUser,self.aIniSettings.uPassword))
+                    self.oTelnet = telnetlib.Telnet(ToBytes(self.aIniSettings.uHost),ToInt(self.aIniSettings.uPort),self.aIniSettings.fTimeOut)
 
                     oSocket = self.oTelnet.get_socket()
                     oSocket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 2048)
@@ -166,21 +167,21 @@ class cInterface(cBaseInterFace):
 
                     if not self.aIniSettings.uUser==u'':
                         self.oTelnet.read_until(ToBytes("login: "),2)
-                        self.ShowDebug(u'Sending Username')
+                        self.ShowDebug(uMsg=u'Sending Username')
                         self.oTelnet.write(ToBytes(self.aIniSettings.uUser + "\n"))
                         if not self.aIniSettings.uPassword==u'':
                             self.oTelnet.read_until(ToBytes("assword: "),5)
-                            self.ShowDebug(u'Sending Password')
+                            self.ShowDebug(uMsg=u'Sending Password')
                             self.oTelnet.write(ToBytes(self.aIniSettings.uPassword + "\n"))
                 except socket.gaierror as e:
-                    self.ShowError(u'Cannot open telnet session:'+self.aIniSettings.uHost,e)
+                    self.ShowError(uMsg=u'Cannot open telnet session:'+self.aIniSettings.uHost,oException=e)
                     self.bOnError=True
                     return False
                 except socket.error as e:
-                    self.ShowError(u'Connection refused:'+self.aIniSettings.uHost,e)
+                    self.ShowError(uMsg=u'Connection refused:'+self.aIniSettings.uHost,oException=e)
                     self.bOnError=True
                     return False
-                self.ShowDebug(u'Connected!')
+                self.ShowDebug(uMsg=u'Connected!')
 
                 if self.oThread:
                     self.bStopThreadEvent = True
@@ -193,14 +194,14 @@ class cInterface(cBaseInterFace):
 
                 self.bIsConnected =True
             except Exception as e:
-                self.ShowError(u'Cannot open socket #2:'+self.aIniSettings.uHost,e)
+                self.ShowError(uMsg=u'Cannot open socket #2:'+self.aIniSettings.uHost,oException=e)
                 self.bOnError=True
                 return False
             return True
 
         def Disconnect(self) -> bool:
 
-            if not cBaseInterFaceSettings.Disconnect(self):
+            if not super().Disconnect():
                 return False
             self.bStopThreadEvent=True
             if self.oThread:
@@ -210,21 +211,22 @@ class cInterface(cBaseInterFace):
             return True
 
         def Receive(self) -> None:
-            #Main Listening Thread to receice Telnet messages
+            #Main Listening Thread to receive Telnet messages
 
             #Loop until closed by external flag
             try:
                 while not self.bStopThreadEvent:
                     if self.oTelnet is not None:
                         self.uResponse=u''
+                        bResponse:bytes
                         if not self.aIniSettings.uResultEndString==u'':
-                            self.uResponse= self.oTelnet.read_until(ToBytes(self.aIniSettings.uResultEndString),10)
+                            bResponse= self.oTelnet.read_until(ToBytes(self.aIniSettings.uResultEndString),10)
                         else:
-                            self.uResponse= self.oTelnet.read_eager()
-                        self.uResponse=ToUnicode(self.uResponse)
+                            bResponse= self.oTelnet.read_eager()
+                        self.uResponse=ToUnicode(bResponse)
                         if not self.uResponse==u'':
-                            uCmd,uRetVal=self.oInterFace.ParseResult(self.oAction,self.uResponse,self)
-                            self.ShowDebug(u'Parsed Resonse:'+uRetVal)
+                            uCmd,uRetVal=self.oInterFace.ParseResult(oAction=self.oAction,uResponse=self.uResponse,oSetting=self)
+                            self.ShowDebug(uMsg=u'Parsed Resonse:'+uRetVal)
                             if not self.uRetVar==u'':
                                 SetVar(uVarName = self.uRetVar, oVarValue =  uRetVal)
                             # we have a notification issued by the device, so lets have a look, if we have a trigger assigned to it
@@ -232,10 +234,10 @@ class cInterface(cBaseInterFace):
                             if oActionTrigger is not None:
                                 self.CallTrigger(oActionTrigger,uRetVal)
                             else:
-                                self.ShowDebug(u'Discard message:'+uRetVal+":"+self.uResponse)
+                                self.ShowDebug(uMsg=u'Discard message:'+uRetVal+":"+self.uResponse)
                             StartWait(0)
             except Exception as e:
-                self.ShowError(u'Error Receiving Response:',e)
+                self.ShowError(uMsg=u'Error Receiving Response:',oException=e)
                 self.bIsConnected=False
 
 
@@ -243,19 +245,19 @@ class cInterface(cBaseInterFace):
                 self.oTelnet.write(ToBytes("exit\n"))
                 self.oTelnet.close()
             except Exception as e:
-                self.ShowError(u'Error closing socket in Thread',e)
+                self.ShowError(uMsg=u'Error closing socket in Thread',oException=e)
 
 
     def __init__(self):
         cInterFaceSettings = self.cInterFaceSettings
-        cBaseInterFace.__init__(self)
+        super().__init__()
         self.dSettings:Dict                             = {}
-        self.oSetting:Union[cInterFaceSettings,None]    = None
+        self.oSetting:Optional[cInterFaceSettings]      = None
         self.uResponse                                  = u''
         self.iWaitMs:int                                = 2000
 
-    def Init(self, uObjectName: str, oFnObject: Union[cFileName,None] = None) -> None:
-        cBaseInterFace.Init(self, uObjectName, oFnObject)
+    def Init(self, uObjectName: str, oFnObject: Optional[cFileName] = None) -> None:
+        super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
@@ -270,18 +272,18 @@ class cInterface(cBaseInterFace):
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
     def DeInit(self, **kwargs) -> None:
-        cBaseInterFace.DeInit(self,**kwargs)
+        super().DeInit(**kwargs)
         for uSettingName in self.dSettings:
             self.dSettings[uSettingName].DeInit()
 
     def GetConfigJSON(self) -> Dict:
-        cBaseInterFace.GetConfigJSON(self)
+        super().GetConfigJSON()
         return {"TerminalType":    {"active": "enabled", "order": 8, "type": "string", "title": "$lvar(IFACE_TELNET_3)", "desc": "$lvar(IFACE_TELNET_4)", "section": "$var(ObjectConfigSection)", "key": "TerminalType",    "default":"" },
                 "ResultEndString": {"active": "enabled", "order": 9, "type": "string", "title": "$lvar(IFACE_TELNET_1)", "desc": "$lvar(IFACE_TELNET_2)", "section": "$var(ObjectConfigSection)", "key": "ResultEndString", "default": "[LF]"},
                 }
 
     def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
-        cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+        super().SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=uRetVar,bNoLogOut=bNoLogOut)
 
         iTryCount:int     = 0
         eRet:eReturnCode  = eReturnCode.Error
@@ -298,13 +300,13 @@ class cInterface(cBaseInterFace):
         uMsg=ReplaceVars(uMsg)
 
         #Logger.info ('Interface '+self.uObjectName+': Sending Command: '+sCommand + ' to '+oSetting.sHost+':'+oSetting.sPort)
-        while iTryCount<2:
+        while iTryCount<self.iMaxTryCount:
             iTryCount+=1
             oSetting.Connect()
             if oSetting.bIsConnected:
                 #time.sleep(2)
                 try:
-                    self.ShowInfo(u'Sending Command: "'+uMsg + u'" to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
+                    self.ShowInfo(uMsg=u'Sending Command: "'+uMsg + u'" to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,uParConfigName=oSetting.uConfigName)
                     uMsg=uMsg.replace('\\n','\n')
                     uMsg=uMsg.replace('\\r','\r')
                     byMsg=ToBytes(uMsg)

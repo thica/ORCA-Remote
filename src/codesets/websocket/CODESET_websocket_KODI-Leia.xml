@@ -8,8 +8,8 @@
       <description language='English'>KODI command set using JSON (Leia)</description>
       <description language='German'>KODI Befehlssatz über JSON (Leia) </description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -159,7 +159,7 @@
   <action string="codeset" name="audiochannel_next" waitforresponse='0' cmd='{ "jsonrpc": "2.0", "method":"Input.ExecuteAction", "params": { "action": "audionextlanguage" },"id":"$cvar(KODI_ID)"}' />
   <action string="codeset" name='closeapp' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Application.Quit","id":"$cvar(KODI_ID)"}' />
   <action string="codeset" name='power_off' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Application.Quit","id":"$cvar(KODI_ID)"}' />
-  <action string="codeset" name='getplayerid' waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"Player.GetActivePlayers","id":"$cvar(KODI_ID)"}' ldestvar='playerid' getvar='result,dummy,playerid' />
+  <action string="codeset" name='getplayerid' waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"Player.GetActivePlayers","id":"$cvar(KODI_ID)"}' ldestvar='playerid' getvar='playerid' parseflags="U" />
   <action string="codeset" name='ping' waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"JSONRPC.Ping","id":"$cvar(KODI_ID)"}' />
   <action string="codeset" name='getmutestatus' waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"Application.GetProperties","params": { "properties": [ "muted" ] },"id":"$cvar(KODI_ID)"}' ldestvar='mutestatus' getvar='result,muted' />
   <action string="codeset" name='getmoviegenreid' waitforresponse='1' cmd='{"jsonrpc": "2.0", "method": "VideoLibrary.GetGenres", "params": {"type": "movie"},"id":"$cvar(KODI_ID)"}' ldestvar='moviegenreid' getvar='result,genres,[label=$cvar(genre),genreid]' />
@@ -251,9 +251,9 @@
   <action string="codeset" name='key_-' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "-" },"id":"$cvar(KODI_ID)"}'/>
   <action string="codeset" name='key_+' waitforresponse='0' cmd='{"jsonrpc":"2.0","method":"Input.SendText", "params": { "text": "+" },"id":"$cvar(KODI_ID)"}'/>
 
-  <action string="codeset" name='getmoviedetails'              waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"VideoLibrary.GetMovieDetails", "params": { "movieid":$var(kodi_movieid), "properties": ["originaltitle"]},"id":"$cvar(KODI_ID)"}' gdestvar='"kodi_title","kodi_originaltitle"' getvar='ORCAMULTI"result,moviedetails,label","result,moviedetails,originaltitle"' />
+  <action string="codeset" name='getmoviedetails'              waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"VideoLibrary.GetMovieDetails", "params": { "movieid":$var(kodi_movieid), "properties": ["originaltitle"]},"id":"$cvar(KODI_ID)"}' gdestvar='"kodi_title","kodi_originaltitle"' getvar='"result,moviedetails,label","result,moviedetails,originaltitle"' parseflags='L'/>
 
-  <action string="codeset" name='getfavorites'              waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"Favourites.GetFavourites", "params": { "media"}' gdestvar='"kodi_favorite"' getvar='"result,moviedetails,title"' />
+  <action string="codeset" name='getfavorites'              waitforresponse='1' cmd='{"jsonrpc":"2.0","method":"Favourites.GetFavourites"' gdestvar='"kodi_favorite"' getvar='"title"' parseflags='UA'  />
 
 
 
@@ -265,10 +265,10 @@
   <action string="codeset" name='On_Volume_Changed'       waitforresponse='0' cmd='Application.OnVolumeChanged' ldestvar='volume'           gdestvar='mainvolume' getvar='params,data,volume' />
   <action string="codeset" name='Playlist_On_Clear'       waitforresponse='0' cmd='Playlist.OnClear' />
   <action string="codeset" name='Playlist_On_Add'         waitforresponse='0' cmd='Playlist.OnAdd'              ldestvar='title'            gdestvar='kodititle' getvar='params,data,item,title' />
-  <action string="codeset" name='Player_On_Play'          waitforresponse='0' cmd='Player.OnPlay'               ldestvar='"id","type"'      gdestvar='"kodi_id","kodi_type"' getvar='ORCAMULTI"params,data,item,id","params,data,item,type"' />
+  <action string="codeset" name='Player_On_Play'          waitforresponse='0' cmd='Player.OnPlay'               ldestvar='"id","type"'      gdestvar='"kodi_id","kodi_type"' getvar='"params,data,item,id","params,data,item,type"' parseflags='L'/>
   <action string="codeset" name='Player_On_SpeedChanged'  waitforresponse='0' cmd='Player.OnSpeedChanged'       ldestvar='speed'            gdestvar='kodispeed' getvar='params,data,player,speed' />
-  <action string="codeset" name='Player_On_Stop'          waitforresponse='0' cmd='Player.OnStop'               ldestvar='"id","type"'      gdestvar='"kodi_id","kodi_type"' getvar='ORCAMULTI"params,data,item,id","params,data,item,type"' />
-  <action string="codeset" name='Player_On_Pause'         waitforresponse='0' cmd='Player.OnPause'              ldestvar='"id","type"'      gdestvar='"kodi_id","kodi_type"' getvar='ORCAMULTI"params,data,item,id","params,data,item,type"' />
+  <action string="codeset" name='Player_On_Stop'          waitforresponse='0' cmd='Player.OnStop'               ldestvar='"id","type"'      gdestvar='"kodi_id","kodi_type"' getvar='"params,data,item,id","params,data,item,type"' parseflags='L'/>
+  <action string="codeset" name='Player_On_Pause'         waitforresponse='0' cmd='Player.OnPause'              ldestvar='"id","type"'      gdestvar='"kodi_id","kodi_type"' getvar='"params,data,item,id","params,data,item,type"' parseflags='L'/>
 
   <!-- skin.togglesetting -->
 

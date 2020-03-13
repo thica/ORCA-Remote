@@ -4,5 +4,5 @@
      <string id="SCRIPT_TOOLS_GESTURERECORDER_2">Zeichne eigene Gesten auf</string>
      <string id="SCRIPT_TOOLS_GESTURERECORDER_3">Gesten aufzeichnen</string>
      <string id="SCRIPT_TOOLS_GESTURERECORDER_4">Gesten</string>
-     <string id="SCRIPT_TOOLS_GESTURERECORDER_5">Die Gesten werden in der Datei 'gestures.log' im ORCA Verzeichnis gespeichert</string>
+     <string id="SCRIPT_TOOLS_GESTURERECORDER_5">Die Gesten werden in der Datei 'gestures.log' im Download Verzeichnis gespeichert</string>
 </strings>

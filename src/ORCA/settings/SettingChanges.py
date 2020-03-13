@@ -27,7 +27,6 @@ from ORCA.ui.ShowErrorPopUp             import ShowMessagePopUp
 from ORCA.utils.Atlas                   import ClearAtlas
 from ORCA.utils.TypeConvert             import ToInt
 from ORCA.vars.Access                   import SetVar
-from ORCA.vars.Replace                  import ReplaceVars
 
 import ORCA.Globals as Globals
 
@@ -48,7 +47,7 @@ def OrcaConfigParser_On_Setting_Change(config:kivyConfig, section:str, key:str, 
             ClearAtlas()
         elif uKey == u"button_notification":
             uNotification = uValue.split("_")[-1]
-            Globals.oNotifications.SendNotification(uNotification,**{"key":uKey,"value":uValue})
+            Globals.oNotifications.SendNotification(uNotification=uNotification,**{"key":uKey,"value":uValue})
         elif uKey == u'button_discover_rediscover':
             if uValue == u'button_discover_rediscover':
                 Globals.oInterFaces.DiscoverAll()
@@ -58,34 +57,23 @@ def OrcaConfigParser_On_Setting_Change(config:kivyConfig, section:str, key:str, 
             from ORCA.utils.Discover import cDiscover_List
             Globals.oApp.oDiscoverList = cDiscover_List()
             Globals.oApp.oDiscoverList.ShowList()
-        elif uKey == u'button_getonline':
-            Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_Settings_Download')
         elif uKey == u'button_installed_reps':
-            Globals.oDownLoadSettings.LoadDirect(uValue, True)
+            Globals.oDownLoadSettings.LoadDirect(uDirect=uValue, bForce=True)
         elif uKey == u'button_show_installationhint':
-            Var_DeleteCookie('SHOWINSTALLATIONHINT', Globals.uDefinitionName)
-            Globals.oTheScreen.AddActionToQueue([{'string': 'call', 'actionname': 'Fkt ShowInstallationHint'}])
-        elif uKey == u'button_show_licensefile':
-            SetVar(uVarName="SHOWFILE", oVarValue=ReplaceVars("$var(LICENSEFILE)"))
-            Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_ShowFile')
-        elif uKey == u'button_show_credits':
-            SetVar(uVarName="SHOWFILE", oVarValue=ReplaceVars("$var(CREDITSFILE)"))
-            Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_ShowFile')
-        elif uKey == u'button_show_logfile':
-            SetVar(uVarName="SHOWFILE", oVarValue=ReplaceVars("$var(LOGFILE)"))
-            Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_ShowFile')
+            Var_DeleteCookie(uVarName='SHOWINSTALLATIONHINT', uPrefix=Globals.uDefinitionName)
+            Globals.oTheScreen.AddActionToQueue(aActions=[{'string': 'call', 'actionname': 'Fkt ShowInstallationHint'}])
         elif uKey == u'button_show_powerstati':
             Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_PowerStati')
         elif uKey == u'button_updateallreps':
-            Globals.oDownLoadSettings.UpdateAllInstalledRepositories(True)
+            Globals.oDownLoadSettings.UpdateAllInstalledRepositories(bForce=True)
         elif uKey == u'showborders':
             Globals.bShowBorders=not Globals.bShowBorders
-            Globals.oTheScreen.AddActionToQueue([{'string': 'updatewidget *@*'}])
+            Globals.oTheScreen.AddActionToQueue(aActions=[{'string': 'updatewidget *@*'}])
         elif uKey == u'language':
             # Changes the languages, reloads all strings and reloads the settings dialog
             Globals.uLanguage = uValue
             Globals.oApp.InitPathes()
-            Globals.oNotifications.SendNotification("on_language_change")
+            Globals.oNotifications.SendNotification(uNotification="on_language_change")
         elif uKey == u'locales':
             Globals.uLocalesName = uValue
             Globals.oTheScreen.LoadLocales()
@@ -138,19 +126,16 @@ def OrcaConfigParser_On_Setting_Change(config:kivyConfig, section:str, key:str, 
                 ShowMessagePopUp(uMessage=u'$lvar(5011)')
         elif uKey.startswith(u'soundvolume_'):
             uSoundName = uKey[12:]
-            Globals.oSound.SetSoundVolume(uSoundName, ToInt(uValue))
-            Globals.oSound.PlaySound(uSoundName)
+            Globals.oSound.SetSoundVolume(uSoundName=uSoundName,iValue=ToInt(uValue))
+            Globals.oSound.PlaySound(uSoundName=uSoundName)
         elif uKey == u'button_changedefinitionsetting':
             Globals.uDefinitionToConfigure = uValue[7:]
             Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_DefinitionSettings')
+            if uKey in Globals.oDefinitions.aDefinitionSettingVars:
+                SetVar(uVarName = uKey, oVarValue = uValue)
         else:
-            ShowMessagePopUp(uMessage=u'$lvar(5011)')
-
-        # todo: check , if this required anymore
-    elif uSection == Globals.uDefinitionName:
-        if uKey in Globals.oDefinitions.aDefinitionSettingVars:
-            SetVar(uVarName = uKey, oVarValue = uValue)
-        ShowMessagePopUp(uMessage=u'$lvar(5011)')
+            pass
+            # ShowMessagePopUp(uMessage=u'$lvar(5011)')
 
 
 

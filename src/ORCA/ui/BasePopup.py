@@ -58,7 +58,7 @@ def IsPopupActive() -> bool:
     return not len(cBasePopup.aPopUps) == 0
 
 
-def CloseActivePopup(oPopUp:Union[Popup,None]=None, bTriggeredByESCKey:bool=False) -> None:
+def CloseActivePopup(*,oPopUp:Union[Popup,None]=None, bTriggeredByESCKey:bool=False) -> None:
     """ closes the latest popup """
     if oPopUp is None:
         if not len(cBasePopup.aPopUps) == 0:

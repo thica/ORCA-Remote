@@ -116,7 +116,7 @@ class cInterFaceConfigDiscover:
 
     def CheckDiscover(self,uSection:str)  -> None:
 
-        self.oInterFace.ShowDebug(u'Testing to discover settings')
+        self.oInterFace.ShowDebug(uMsg=u'Testing to discover settings')
         oSetting:cBaseInterFaceSettings = self.oInterFace.GetSettingObjectForConfigName(uConfigName=uSection)
         uDiscoverScriptName:str = oSetting.aIniSettings.uDiscoverScriptName
         dParams:Dict[str,str] = {}
@@ -142,7 +142,7 @@ class cInterFaceConfigDiscover:
     # noinspection PyMethodMayBeStatic
     def ShowSettingsDiscover(self) -> None:
         """ Shows the settings page """
-        Globals.oTheScreen.AddActionToQueue([{'string': 'updatewidget', 'widgetname': 'Interfacesettings_discover'}])
+        Globals.oTheScreen.AddActionToQueue(aActions=[{'string': 'updatewidget', 'widgetname': 'Interfacesettings_discover'}])
 
     # noinspection PyUnusedLocal
     def CreateSettingJsonCombined(self, **kwargs) -> Dict[str,Dict]:

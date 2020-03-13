@@ -97,7 +97,7 @@ class cRepositoryManager:
         del self.aRepManagerEntries[:]
         self.aFiles=(self.oPathRepSource + 'repositories/orca-remote/repositories/others').GetFileList(bSubDirs = False, bFullPath = True)
         for uFn in self.aFiles:
-            oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(uFn)
+            oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFileName=uFn)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
                     self.aRepManagerEntries.append(oRepManagerEntry)
@@ -112,7 +112,7 @@ class cRepositoryManager:
         aFontsFolders:List[str] = Globals.oPathFonts.GetFolderList(bFullPath=True)
         for uFontFolder in aFontsFolders:
             oFnFontDefinition:cFileName = cFileName(cPath(uFontFolder)) + "fonts.xml"
-            oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFnFontDefinition)
+            oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFileName=oFnFontDefinition)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
                     self.aRepManagerEntries.append(oRepManagerEntry)
@@ -127,7 +127,7 @@ class cRepositoryManager:
         self.aFiles=Globals.oPathCodesets.GetFileList(bSubDirs = True, bFullPath = True)
         for uFn in self.aFiles:
             if uFn.lower().endswith('.xml'):
-                oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(uFn)
+                oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=uFn)
                 if oRepManagerEntry.ParseFromXML():
                     if not oRepManagerEntry.oRepEntry.bSkip:
                         self.aRepManagerEntries.append(oRepManagerEntry)
@@ -141,7 +141,7 @@ class cRepositoryManager:
         del self.aRepManagerEntries[:]
         for uSound in Globals.oSound.aSoundsList:
             oFnSound:cFileName = cFileName(Globals.oPathSoundsRoot + uSound) +"sounds.xml"
-            oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFnSound)
+            oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFileName=oFnSound)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
                     self.aRepManagerEntries.append(oRepManagerEntry)
@@ -154,8 +154,8 @@ class cRepositoryManager:
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
         for uDefinitionName in Globals.aDefinitionList:
-            oFnFile:cFileName=cFileName().ImportFullPath('%s/definitions/%s/definition.xml' % (Globals.oPathRoot.string, uDefinitionName))
-            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFnFile)
+            oFnFile:cFileName=cFileName().ImportFullPath(uFnFullName='%s/definitions/%s/definition.xml' % (Globals.oPathRoot.string, uDefinitionName))
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFnFile)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
                     self.aRepManagerEntries.append(oRepManagerEntry)
@@ -168,8 +168,8 @@ class cRepositoryManager:
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
         for uLanguage in Globals.aLanguageList:
-            oFn:cFileName=cFileName().ImportFullPath('%s/languages/%s/strings.xml' % (Globals.oPathRoot.string, uLanguage))
-            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
+            oFn:cFileName=cFileName().ImportFullPath(uFnFullName='%s/languages/%s/strings.xml' % (Globals.oPathRoot.string, uLanguage))
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
                     self.aRepManagerEntries.append(oRepManagerEntry)
@@ -182,8 +182,8 @@ class cRepositoryManager:
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
         for uInterFaceName in Globals.oInterFaces.aInterfaceList:
-            oFn:cFileName=cFileName().ImportFullPath('%s/interfaces/%s/interface.py' % (Globals.oPathRoot.string, uInterFaceName))
-            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
+            oFn:cFileName=cFileName().ImportFullPath(uFnFullName='%s/interfaces/%s/interface.py' % (Globals.oPathRoot.string, uInterFaceName))
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
             if oRepManagerEntry.ParseFromSourceFile():
                 if not oRepManagerEntry.oRepEntry.bSkip:
                     self.aRepManagerEntries.append(oRepManagerEntry)
@@ -197,7 +197,7 @@ class cRepositoryManager:
         del self.aRepManagerEntries[:]
         for uScriptName in Globals.oScripts.dScriptPathList:
             oFn:cFileName=cFileName(Globals.oScripts.dScriptPathList[uScriptName])+'script.py'
-            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
             if oRepManagerEntry.ParseFromSourceFile():
                 if not oRepManagerEntry.oRepEntry.bSkip:
                     self.aRepManagerEntries.append(oRepManagerEntry)
@@ -210,8 +210,8 @@ class cRepositoryManager:
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
         for uSkinName in Globals.aSkinList:
-            oFn:cFileName=cFileName().ImportFullPath('%s/skins/%s/skin.xml' % (Globals.oPathRoot.string, uSkinName))
-            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
+            oFn:cFileName=cFileName().ImportFullPath(uFnFullName='%s/skins/%s/skin.xml' % (Globals.oPathRoot.string, uSkinName))
+            oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
                     self.aRepManagerEntries.append(oRepManagerEntry)
@@ -228,7 +228,7 @@ class cRepositoryManager:
             aDirsSub:List[str]=(Globals.oPathRoot + (u'wizard templates/' + uDirName)).GetFolderList()
             for uDirsSub in aDirsSub:
                 oFn:cFileName=cFileName(Globals.oPathRoot + (u'wizard templates/' + uDirName + "/" + uDirsSub)) +  (uDirsSub + ".xml")
-                oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFn)
+                oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
                 if oRepManagerEntry.ParseFromXML():
                     if not oRepManagerEntry.oRepEntry.bSkip:
                         self.aRepManagerEntries.append(oRepManagerEntry)
@@ -241,6 +241,7 @@ class cRepositoryManager:
 
         oVal:Element
         uContent:str
+        uRoot:str
 
         oPath:cPath= Globals.oPathTmp + "RepManager"
         oPath.Create()
@@ -263,24 +264,24 @@ class cRepositoryManager:
         for oEntry in self.aRepManagerEntries:
             Logger.debug ('Saving Repository-Entry [%s]' % oEntry.oFnEntry.string)
 
-            oEntry.oRepEntry.WriteToXMLNode(oXMLEntries)
+            oEntry.oRepEntry.WriteToXMLNode(oXMLNode=oXMLEntries)
             for oSource in oEntry.oRepEntry.aSources:
-                bZipParentDir:bool = cPath.CheckIsDir(oSource.uLocal)
+                bZipParentDir:bool = cPath.CheckIsDir(uCheckName=oSource.uLocal)
                 # Create according Zip
                 if bZipParentDir:
                     uUpper:str          = os.path.basename(oSource.uSourceFile)
                     uFinalPath:str      = uType
-                    oDest:cFileName     = cFileName().ImportFullPath('%s/RepManager/repositories/%s/%s' % (Globals.oPathTmp.string, uFinalPath, uUpper))
+                    oDest:cFileName     = cFileName().ImportFullPath(uFnFullName='%s/RepManager/repositories/%s/%s' % (Globals.oPathTmp.string, uFinalPath, uUpper))
                     uUpper1:str         = os.path.split(os.path.abspath(oSource.uLocal))[0]
-                    uRoot:str           = AdjustPathToOs(ReplaceVars(uUpper1)+'/')
+                    uRoot           = AdjustPathToOs(uPath=ReplaceVars(uUpper1)+'/')
                     self.aZipFiles.append({'filename':oSource.uLocal,'dstfilename':oDest.string, 'removepath':uRoot, 'skipfiles':ToUnicode(oEntry.oRepEntry.aSkipFileNames)})
                 else:
-                    uDest:str = AdjustPathToOs('%s/RepManager/repositories/%s/%s.zip' % (Globals.oPathTmp.string, uType, os.path.splitext(os.path.basename(oSource.uLocal))[0]))
-                    uRoot:str = AdjustPathToOs(Globals.oPathRoot.string + "/" + oSource.uTargetPath)
+                    uDest:str = AdjustPathToOs(uPath='%s/RepManager/repositories/%s/%s.zip' % (Globals.oPathTmp.string, uType, os.path.splitext(os.path.basename(oSource.uLocal))[0]))
+                    uRoot = AdjustPathToOs(uPath=Globals.oPathRoot.string + "/" + oSource.uTargetPath)
                     self.aZipFiles.append({'filename':oSource.uLocal,'dstfilename':uDest, 'removepath':uRoot})
 
         oFSFile     = open(oFnXml.string, 'w')
-        uContent    = XMLPrettify(oXMLRoot)
+        uContent    = XMLPrettify(oElem=oXMLRoot)
         uContent    = ReplaceVars(uContent)
         oFSFile.write(EscapeUnicode(uContent))
         oFSFile.close()
@@ -288,7 +289,7 @@ class cRepositoryManager:
     def CreateRepository(self) -> None:
         self.CreateZipVarArray()
         SetVar(uVarName="REPMAN_BASELOCALDIR", oVarValue=(Globals.oPathTmp + "RepManager").string)
-        Globals.oTheScreen.AddActionToQueue([{'string': 'call Create Repository'}])
+        Globals.oTheScreen.AddActionToQueue(aActions=[{'string': 'call Create Repository'}])
         return
 
     def CreateZipVarArray(self) -> None:
@@ -312,7 +313,7 @@ class cRepositoryManager:
             else:
                 SetVar(uVarName="REPMAN_ZIPTYPE[" + uIndex,oVarValue= "file")
 
-            i=i+1
+            i += 1
 
     # noinspection PyMethodMayBeStatic
     def CreateRepVarArray(self,uBaseLocalDir:str) -> None:
@@ -325,4 +326,4 @@ class cRepositoryManager:
         for uLocalFile in aLocalFiles:
             uIndex:str = str(i) + "]"
             SetVar(uVarName="REPMAN_LOCALFILENAMES[" + uIndex ,oVarValue=uLocalFile)
-            i=i+1
+            i += 1

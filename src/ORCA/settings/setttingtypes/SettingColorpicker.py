@@ -34,7 +34,7 @@ __all__ = ['SettingColorPicker']
 class SettingColorPicker(SettingNumeric):
     """ A colorpicker settings """
     def __init__(self, **kwargs):
-        super(SettingColorPicker, self).__init__(**RemoveNoClassArgs(kwargs,SettingNumeric))
+        super(SettingColorPicker, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=SettingNumeric))
         self.newvalue = u''
         self.oColorpicker:Union[ColorPicker,None] = None
 

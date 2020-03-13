@@ -40,7 +40,7 @@ class cTouchRectangle(cOrcaButtonBehaviour,Widget):
         self.aBackGroundColor:List=[]
 
         cOrcaButtonBehaviour.__init__(self,**kwargs)
-        Widget.__init__(self,**RemoveNoClassArgs(kwargs,Widget))
+        Widget.__init__(self,**RemoveNoClassArgs(dInArgs=kwargs,oObject=Widget))
 
         if 'background_color' in kwargs:
             self.background_color=kwargs['background_color']

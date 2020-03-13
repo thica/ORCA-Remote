@@ -2,7 +2,7 @@
 <!--$Revision$ -->
 <strings>
     <!--Custom Strings -->
-    <string id="enigma2_10000">Sie müssen die IP - Adresse des Receivers unter Einstellungen->Interfaces/Schnittstellen->url->ENIGMA2 eintragen. Falls Ihr Receiver Wake On Lan unterstützt dann müssen Sie die MAC Adresse des Receivers unter Einstellungen->Interfaces/Schnittstellen->wake_on_lan->ENIGMA2 eintragen</string>
+    <string id="enigma2_10000">Enigma2-Webinterface benötigt! Dieses Template unterstützt Discover des Enigma Receivers. Falls dieses nicht klappt, müssen Sie die IP - Adresse des Receivers unter Einstellungen->Interfaces/Schnittstellen->url->ENIGMA2 eintragen. Falls Ihr Receiver Wake On Lan unterstützt dann müssen Sie die MAC Adresse des Receivers unter Einstellungen->Interfaces/Schnittstellen->wake_on_lan->ENIGMA2 eintragen</string>
     <string id="enigma2_10001">Root Access Interface</string>
     <string id="enigma2_10002">Root Access Interface für das Gerät</string>
     <string id="enigma2_10003">Root Access Konfiguration</string>
@@ -11,4 +11,7 @@
     <string id="enigma2_10006">Hole Daten vom Gerät</string>
     <string id="enigma2_10011">Bouquet neuladen</string>
     <string id="enigma2_10012">Bouquets von Enigma neu laden</string>
+    <string id="enigma2_10014">Film löschen?</string>
+    <string id="enigma2_10015">Möchtest du diesen Film löschen: </string>
+
 </strings>

@@ -87,7 +87,7 @@ class cWidgetPicture(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
 
         """ Reads further Widget attributes from a xml node """
         bRet:bool = self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
-        self.SetPictureNormal (GetXMLTextAttribute(oXMLNode,u'picturenormal',    False,u''))
+        self.SetPictureNormal (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'picturenormal',bMandatory=False,vDefault=u''))
         return bRet
 
     def SetPictureNormal(self,uFnPictureNormal:str,bClearCache:bool=False) -> bool:
@@ -97,18 +97,17 @@ class cWidgetPicture(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
             uNewDefinitionContext:str=u''
 
             if "DEFINITIONPATH[" in uFnPictureNormal:
-                uNewDefinitionContext,uFnPictureNormal=GetSetDefinitionName(uFnPictureNormal)
+                uNewDefinitionContext,uFnPictureNormal=GetSetDefinitionName(uText=uFnPictureNormal)
             elif Globals.uDefinitionContext!=self.uDefinitionContext:
                 uNewDefinitionContext = self.uDefinitionContext
-                SetDefinitionContext(uNewDefinitionContext)
+                SetDefinitionContext(uDefinitionName=uNewDefinitionContext)
             self.uFnPictureNormalVar    = uFnPictureNormal
-            self.oFnPictureNormal     = self.oFnPictureNormal.Clear().ImportFullPath(ReplaceVars(uFnPictureNormal))
-
+            self.oFnPictureNormal     = self.oFnPictureNormal.Clear().ImportFullPath(uFnFullName=ReplaceVars(uFnPictureNormal))
             if self.oObject:
-                self.oObject.source   =  ToAtlas(self.oFnPictureNormal)
+                self.oObject.source   =  ToAtlas(oFileName=self.oFnPictureNormal)
                 if bClearCache:
-                    self.oObject.reload()
-
+                    if self.oObject._coreimage.filename is not None:
+                        self.oObject.reload()
             if uNewDefinitionContext != '':
                 RestoreDefinitionContext()
         except Exception as e:
@@ -121,7 +120,7 @@ class cWidgetPicture(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         """ creates the Widget """
         self.AddArg('allow_stretch',True)
         self.AddArg('keep_ratio',False)
-        self.AddArg('source',ToAtlas(self.oFnPictureNormal))
+        self.AddArg('source',ToAtlas(oFileName=self.oFnPictureNormal))
 
         if self.CreateBase(Parent=oParent, Class=cTouchImage):
             if self.uActionName !=u'' or self.uActionNameDoubleTap !=u'' :

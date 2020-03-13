@@ -34,7 +34,7 @@ import ORCA.Globals as Globals
 
 __all__ = ['ToAtlas','CreateAtlas','ClearAtlas']
 
-def ToAtlas(oFileName: cFileName) -> str:
+def ToAtlas(*,oFileName: cFileName) -> str:
     """
     checks if a a picture is already available in a atlas file
 
@@ -43,6 +43,8 @@ def ToAtlas(oFileName: cFileName) -> str:
     """
     uRetFileName: str       = oFileName.string
     oFnSkinPic: cFileName   = Globals.oTheScreen.oSkin.dSkinPics.get(uRetFileName)
+    oFn:cFileName
+
     if not oFnSkinPic is None:
         uRetFileName = oFnSkinPic.string
 
@@ -52,9 +54,9 @@ def ToAtlas(oFileName: cFileName) -> str:
     uKey: str = os.path.splitext(os.path.basename(uRetFileName))[0]
 
     if uRetFileName.startswith(Globals.oPathSkin.string):
-        oFn: cFileName = Globals.oFnAtlasSkin
+        oFn = Globals.oFnAtlasSkin
     elif uRetFileName.startswith(Globals.oDefinitionPathes.oPathDefinition.string):
-        oFn: cFileName = Globals.oDefinitionPathes.oFnDefinitionAtlas
+        oFn = Globals.oDefinitionPathes.oFnDefinitionAtlas
     else:
         return uRetFileName
 
@@ -66,7 +68,7 @@ def ToAtlas(oFileName: cFileName) -> str:
 
     return uRetFileName
 
-def CreateAtlas(oPicPath: cPath,oAtlasFile: cFileName,uDebugMsg: str) -> None:
+def CreateAtlas(*,oPicPath: cPath,oAtlasFile: cFileName,uDebugMsg: str) -> None:
     """
     creates an atlas file from all picture files in a folder
 
@@ -97,11 +99,12 @@ def CreateAtlas(oPicPath: cPath,oAtlasFile: cFileName,uDebugMsg: str) -> None:
                     if uFileName.find(Globals.oPathSkin.string + u'/atlas/')==-1:
                         aPicFiles.append(uFileName)
             try:
-                Atlas.create(oAtlasFile[:-6],aPicFiles,1024)
-            except Exception:
+                Atlas.create(oAtlasFile.string[:-6],aPicFiles,1024)
+            except Exception as e:
+                LogError(uMsg=u'Error creating Atlas File (1):', oException=e)
                 pass
     except Exception as e:
-        LogError(uMsg=u'Error creating Atlas File:',oException=e)
+        LogError(uMsg=u'Error creating Atlas File (2):',oException=e)
 
 def ClearAtlas() -> None:
     """ deletes all atlas files """

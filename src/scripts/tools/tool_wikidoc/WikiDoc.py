@@ -71,7 +71,7 @@ class cWikiPage:
             Logger.debug("Reading File:"+oFileName.string)
         try:
             if oFileName.Exists():
-                uContent=LoadFile(oFileName)
+                uContent=LoadFile(oFileName=oFileName)
                 aContent=uContent.split("\n")
                 bFound = False
                 for  i,uLine in enumerate(aContent):
@@ -160,7 +160,7 @@ class cWikiPage:
                     uTocType=aParts[-2]
                     uSortType=aParts[-1]
 
-                aTocs=dTocs.get(uContext)
+                aTocs = dTocs.get(uContext)
                 if aTocs:
                     if uSortType=="sorted":
                         aTocs=sorted(aTocs, key=lambda entry: entry.uTocTitle)
@@ -188,7 +188,7 @@ class cWikiPage:
             iIndex = -1
             for uLine in self.uContent:
                 # replace the git links to files in the git repo
-                iIndex = iIndex +1
+                iIndex += 1
                 iPos = uLine.find("[[File:")
                 if iPos>=0:
                     uFileName = uLine[iPos+7:uLine.find("|",iPos+1)]
@@ -260,7 +260,7 @@ class cWikiDoc:
         for uFile in aFiles:
             if "wikidoc" in uFile:
                 if uFile.endswith(tFilter):
-                    oFile:cFileName = cFileName(u'').ImportFullPath(uFile)
+                    oFile:cFileName = cFileName(u'').ImportFullPath(uFnFullName=uFile)
                     self.dImageFileList[oFile.string]       = oFile
                     self.dImageFileListBase[oFile.basename] = oFile
 
@@ -297,7 +297,7 @@ class cWikiDoc:
             for oPage in self.aDocs:
                 if oPage.uPage:
                     oPage.WriteWiki(oSite)
-                    fSleep(1.0)
+                    fSleep(fSeconds=1.0)
 
         except Exception as e:
             Logger.error("Error writing page:"+str(e))
@@ -313,7 +313,7 @@ class cWikiDoc:
         """ adds all files in a folder to the list of sources """
         aFiles=oPath.GetFileList(bSubDirs=bSubDirs,bFullPath=True)
         for uFile in aFiles:
-            oFile=cFileName(u'').ImportFullPath(uFile)
+            oFile=cFileName(u'').ImportFullPath(uFnFullName=uFile)
             if oFile.string.endswith(".py") or oFile.string.endswith(".txt"):
                 self.dFileList[oFile.string]=oFile
 
@@ -340,8 +340,8 @@ class cWikiDoc:
             for uFile in aFiles:
                 if uFile.endswith(".md"):
                     oSourceFileName:cFileName = cFileName()
-                    oSourceFileName.ImportFullPath(uFile)
-                    oSourceFileName.Copy(self.oWikiTargetFolder)
+                    oSourceFileName.ImportFullPath(uFnFullName=uFile)
+                    oSourceFileName.Copy(oNewFile=self.oWikiTargetFolder)
 
 
     def WriteDocs(self) -> None:

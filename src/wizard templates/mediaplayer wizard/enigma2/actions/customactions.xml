@@ -28,6 +28,7 @@
 
     <action name="$dvar(definition_alias_mediaplayer_template)_updatebouquet" >
           <action name="show hourglass" string="showpage Page_Wait" effect="no" />
+          <action name="Load Settings from Enigma by sending something (Enigma)" string="sendcommand getvolume" retvar="dummy" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
           <action name='Assign the channels from enigma' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_template)","force":"0","logopackfoldername":"$var($dvar(definition_alias_tvfavorites_template)_logopackfoldername)"}' />
           <action name="Return to last page" string="call gotolastpage" />
           <action name="Load TV Pictures" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var($dvar(definition_alias_tvfavorites_template)_bouquet)" />
@@ -37,12 +38,13 @@
 
       <action name="$dvar(definition_alias_mediaplayer_template)_updatebouquet_force" >
           <action name="show hourglass" string="showpage Page_Wait" effect="no" />
+          <action name="Load Settings from Enigma by sending something (Enigma)" string="sendcommand getvolume" retvar="dummy" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
           <action name='Assign the channels from enigma' string="runscript"  scriptname="helper_enigma" commandparameter='{"cmd_type":"assign_channels","interface":"$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)","configname":"$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)","definitionalias":"$dvar(definition_alias_tvfavorites_template)","force":"1","logopackfoldername":"$var($dvar(definition_alias_tvfavorites_template)_logopackfoldername)"}' />
           <action name="Return to last page" string="call gotolastpage" />
           <action name="Load TV Pictures" string="call $dvar(definition_alias_tvfavorites_template)_switchbouquet" BOUQUETNUM="$var($dvar(definition_alias_tvfavorites_template)_bouquet)" />
           <action name="Check if widget exists on current page" string="getwidgetattribute" widgetname="DropDown_Bouquets" attributename="exists" retvar="TMPWIDGETEXISTS" />
           <action name="update the bouquet drop down" string="updatewidget DropDown_Bouquets" condition="$var(TMPWIDGETEXISTS)=1" />
-          <action name="Apply Language to all widgets"            string="updatewidget" widgetname="*@*"/>
+          <action name="update all widgets to reach the logos as well"  string="updatewidget" widgetname="*@*"/>
     </action>
 
 
@@ -62,19 +64,19 @@
     </action>
 
     <action name="FKT_Enigma_PlayRecordings">
-        <action name="Create Var Reference part1" string="setvar MOVIEREFERENCE=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_url_reference[$par(CONTAINERVARINDEX)])"  />
+        <action name="Create Var Reference part1" string="setvar MOVIEREFERENCE=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_url_reference[$par(SCROLLLISTVARINDEX)])"  />
         <action name="Create Var Reference part2" string="modifyvar" varname="MOVIEREFERENCE" operator="fromvar"  />
         <action name="Play Recording" string="sendcommand playrecording" commandparameter='{"moviefilename":"$var(MOVIEREFERENCE)"}' interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)"   configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" />
     </action>
 
     <action name="FKT_Enigma_DeleteMovie">
-        <action name="Create Var Reference part1" string="setvar MOVIEREFERENCE=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_url_reference[$par(CONTAINERVARINDEX)])"  />
+        <action name="Create Var Reference part1" string="setvar MOVIEREFERENCE=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_url_reference[$par(SCROLLLISTVARINDEX)])"  />
         <action name="Create Var Reference part2" string="modifyvar" varname="MOVIEREFERENCE" operator="fromvar"  />
-        <action name="Create Var Title part1" string="setvar MOVIETITLE=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_title[$par(CONTAINERVARINDEX)])"  />
+        <action name="Create Var Title part1" string="setvar MOVIETITLE=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_title[$par(SCROLLLISTVARINDEX)])"  />
         <action name="Create Var Title part2" string="modifyvar" varname="MOVIETITLE" operator="fromvar"  />
-        <action name="Create Var FileName part1" string="setvar MOVIEFILENAME=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_url_filename[$par(CONTAINERVARINDEX)])"  />
+        <action name="Create Var FileName part1" string="setvar MOVIEFILENAME=$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_url_filename[$par(SCROLLLISTVARINDEX)])"  />
         <action name="Create Var FileName part2" string="modifyvar" varname="MOVIEREFERENCE" operator="fromvar"  />
-        <action name="askonexit" string="showquestion" title="Delete Movie" message="Do you want to delete movie $var(MOVIETITLE)?" actionyes="FKT_Enigma_DeleteMovieDo" actionno="dummy"/>
+        <action name="askonexit" string="showquestion" title="$lvar(enigma2_10014)" message="$lvar(enigma2_10015) $var(MOVIETITLE)?" actionyes="FKT_Enigma_DeleteMovieDo" actionno="dummy"/>
     </action>
 
     <action name="FKT_Enigma_DeleteMovieDo">

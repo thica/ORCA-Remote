@@ -20,7 +20,7 @@
 
 from typing                 import Dict
 from typing                 import List
-from typing                 import Union
+from typing                 import Optional
 
 import gc
 import traceback
@@ -81,19 +81,19 @@ class cTheScreen(EventDispatcher):
         self.iBlockAskCount:int                     = 0
         self.iRotateCount:int                       = 0
         self.dPopups:Dict[str,Widget]               = {}
-        self.oCurrentPage:Union[cScreenPage,None]   = None
+        self.oCurrentPage:Optional[cScreenPage]     = None
         self.oFonts:cFonts                          = cFonts()
-        self.oGdb:Union[GestureDatabase,None]       = None
+        self.oGdb:Optional[GestureDatabase]         = None
         self.dGestures:Dict[str,cGesture]           = {}
         self.iLastWidgetPage:int                    = 0
-        self.oPopupPage:Union[cScreenPage,None]     = None
-        self.oPopup:Union[cScreenPage,None]         = None
+        self.oPopupPage:Optional[cScreenPage]       = None
+        self.oPopup:Optional[cScreenPage]           = None
         self.oRootSM:ScreenManager                  = ScreenManager()
         self.oScreenPages:cScreenPages              = cScreenPages()
         self.oSkin:cSkin                            = cSkin()
         self.oSplashBackground:Screen               = Screen(name="SPLASH")
-        self.oSplashLogger:Union[Label,None]        = None
-        self.oSplashLogger2:Union[Label,None]       = None
+        self.oSplashLogger:Optional[Label]          = None
+        self.oSplashLogger2:Optional[Label]         = None
         self.uCurrentEffect:str                     = u''
         self.uCurrentEffectDirection:str            = u''
         self.uCurrentPageName:str                   = u''
@@ -160,7 +160,7 @@ class cTheScreen(EventDispatcher):
             Clock.schedule_once(partial(self.ShowPage,uPageName),0)
             return eReturnCode.Nothing
 
-    def ShowPageGetPageStartActions(self,uPageName:str='Page_None') -> List[cAction]:
+    def ShowPageGetPageStartActions(self,*,uPageName:str='Page_None') -> List[cAction]:
         """ Returns the pagestartactions for a specific page """
         aActions:List[cAction] = Globals.oActions.GetPageStartActionList(uActionName=uPageName, bNoCopy=False)
         oPage:cScreenPage      = self.oScreenPages.get(uPageName)
@@ -168,14 +168,14 @@ class cTheScreen(EventDispatcher):
             oPage.Create()
         return aActions
 
-    def ShowPageGetPageStopActions(self, uPageName:str = u'')  -> List[cAction]:
+    def ShowPageGetPageStopActions(self, *,uPageName:str = u'')  -> List[cAction]:
         """ Returns the pagestopactions for a specific page """
         if uPageName==u'':
             if self.oCurrentPage:
                 uPageName=self.oCurrentPage.uPageName
         return Globals.oActions.GetPageStopActionList(uActionName = uPageName, bNoCopy = False)
 
-    def _ShowPage(self,uPageName:str = 'Page_None') -> bool:
+    def _ShowPage(self,*,uPageName:str = 'Page_None') -> bool:
         oPage:cScreenPage
         uPageName:str
         try:
@@ -191,7 +191,7 @@ class cTheScreen(EventDispatcher):
             else:
                 self.oCurrentPage = oPage
 
-            self.oScreenPages.CreatePage(u'')
+            self.oScreenPages.CreatePage(uPageName=u'')
             Var_Increase(uVarName = "PAGESTARTCOUNT_"+oPage.uPageName)
             if self.oPopupPage:
                 if self.oPopupPage.oScreen in self.oRootSM.current_screen.children:
@@ -215,9 +215,9 @@ class cTheScreen(EventDispatcher):
             if self.uFirstPageName==u'':
                 self.uFirstPageName=uPageName
 
-            self.oScreenPages.AppendToPageQueue(oPage)
+            self.oScreenPages.AppendToPageQueue(oPage=oPage)
 
-            oPage.SetTransmitterPicture(self.uDefaultTransmitterPictureName)
+            oPage.SetTransmitterPicture(uTransmitterPictureName=self.uDefaultTransmitterPictureName)
             oPage.SetWaitPicture(uWaitPictureName=self.uDefaultWaitPictureName)
             return True
 
@@ -233,7 +233,7 @@ class cTheScreen(EventDispatcher):
             ShowErrorPopUp(uMessage=uMsg)
             return False
 
-    def IsPopup(self,uPageName:Union[str,None]=None) -> bool:
+    def IsPopup(self,*,uPageName:Optional[str]=None) -> bool:
         """ Detects/returns, if a page is a popup page """
         oPage:cScreenPage
         uPageNameOrg:str=uPageName
@@ -263,7 +263,7 @@ class cTheScreen(EventDispatcher):
         if Percentage==0:
             self.bIntransition      = True
 
-    def SetPageEffectDirection(self,uDirection:str='fade') -> bool:
+    def SetPageEffectDirection(self,*,uDirection:str='fade') -> bool:
         """ Sets the Page effect direction (in case , the effect has an direction) """
         self.uCurrentEffectDirection = uDirection
 
@@ -277,7 +277,7 @@ class cTheScreen(EventDispatcher):
             ShowErrorPopUp(uMessage=uMsg)
             return False
 
-    def SetPageEffect(self,uEffect:str) -> bool:
+    def SetPageEffect(self,*,uEffect:str) -> bool:
         """ Sets the page effect for showing a page """
         self.uCurrentEffect = uEffect
         try:
@@ -321,14 +321,14 @@ class cTheScreen(EventDispatcher):
             ShowErrorPopUp(uMessage=LogError(uMsg=u'TheScreen: Can not set page effect:' + uEffect,oException=e))
             return False
 
-    def AddActionShowPageToQueue(self,uPageName:str) -> None:
+    def AddActionShowPageToQueue(self,*,uPageName:str) -> None:
         """ Convinient function to show a page by the scheduler """
-        self.AddActionToQueue([{'string':'showpage','pagename':uPageName}])
+        self.AddActionToQueue(aActions= [{'string':'showpage','pagename':uPageName}])
 
     # noinspection PyMethodMayBeStatic
-    def AddActionToQueue(self,aActions:List[cAction], bNewQueue:bool=False) -> None:
+    def AddActionToQueue(self,*,aActions:List[cAction], bNewQueue:bool=False) -> None:
         """ Adds Actions to the scheduler """
-        aTmpActions=Globals.oEvents.CreateSimpleActionList(aActions)
+        aTmpActions=Globals.oEvents.CreateSimpleActionList(aActions=aActions)
         if bNewQueue:
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aTmpActions,oParentWidget=None)
         else:
@@ -339,7 +339,7 @@ class cTheScreen(EventDispatcher):
         for uPageName in self.oScreenPages:
             self.oScreenPages[uPageName].UpdateSetupWidgets()
 
-    def FindWidgets(self,uPageName:str,uWidgetName:str,bIgnoreError:bool=False) -> List[cWidgetBase]:
+    def FindWidgets(self,*,uPageName:str,uWidgetName:str,bIgnoreError:bool=False) -> List[cWidgetBase]:
         """ Find a set widgets with a given name """
         uWidgetNameRep:str
         uPageNameRep:str
@@ -395,7 +395,7 @@ class cTheScreen(EventDispatcher):
         """ returns, if the Gui is Blocked"""
         if self.iBlockCount>0:
             Logger.debug("GUI action ignored, GUI is locked")
-            self.iBlockAskCount=self.iBlockAskCount+1
+            self.iBlockAskCount += 1
         else:
             self.iBlockAskCount = 0
 
@@ -405,12 +405,12 @@ class cTheScreen(EventDispatcher):
             self.iBlockAskCount = 0
         return self.iBlockCount>0
 
-    def BlockGui(self,bStatus:bool) -> None:
+    def BlockGui(self,*,bStatus:bool) -> None:
         """ Blocks or unblocks the Gui"""
         if bStatus:
-            self.iBlockCount=self.iBlockCount+1
+            self.iBlockCount += 1
         else:
-            self.iBlockCount = self.iBlockCount - 1
+            self.iBlockCount -= 1
         if self.iBlockCount<0:
             Logger.warning("Unlocking mismatch, unlocking unlocked GUI")
             self.iBlockCount = 0
@@ -420,7 +420,7 @@ class cTheScreen(EventDispatcher):
         """ To detect, if we still have a down touch if we missed the touch_up message so we do not want endless repeat """
         self.uLastTouchType  = etype
 
-    def DumpPages(self, uFilter:str='') -> None:
+    def DumpPages(self,*, uFilter:str='') -> None:
         """ Dumps the names of all pages to the log file"""
         Logger.error(u'Available Pages:')
         for uKey in sorted(self.oScreenPages):

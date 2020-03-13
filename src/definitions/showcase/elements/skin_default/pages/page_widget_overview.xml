@@ -34,7 +34,7 @@
       </element>
 
       <element name='Frame top' type='ANCHOR' posy='%66.7' height="of:width:self:*0.27" >
-        <element name="Dropdown" type="DROPDOWN" fontsize='%h50'  caption='$lvar(showcase_10016)'  captions='Option 1,Option 2,Option 3,Option 4' actions=',,,' htextalign='center' vtextalign='middle' picturenormal="button wide*" framecolor='$var(dimmed)' framewidth='20'/>
+        <element name="Dropdown" type="DROPDOWN" fontsize='%h50'  caption='$lvar(showcase_10016)'  captions='Option 1,Option 2,Option 3,Option 4' actions=',,,' htextalign='center' vtextalign='middle' picturenormal="button wide*" framecolor='$var(dimmed)' framewidth='d100:50'/>
         <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="%40" fontsize='%h90'  caption='$lvar(showcase_10016)' htextalign='center' vtextalign='middle' />
       </element>
 
@@ -43,9 +43,9 @@
         <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="%40" fontsize='%h90'  caption='Slider' htextalign='center' vtextalign='middle' />
       </element>
 
-      <element name='Frame top' type='ANCHOR' posy='bottom' height="of:width:self:*0.40" >
-        <element name='Picture HTPC' type='PICTURE' picturenormal='device htpc' />
-        <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10006)' htextalign='center' vtextalign='middle' />
+      <element name='Frame top' type='ANCHOR' posy='bottom' height="of:width:self:*0.27" >
+        <element name='Button Show FileViewer' type='BUTTON' fontsize='%h50' height='of:width:self:*0.27' caption='$lvar(showcase_10040)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" action="Show Page" actionpars='{"pagename":"Page_FileBrowser"}'/>
+        <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10041)' htextalign='center' vtextalign='middle' />
       </element>
     </element>
 
@@ -66,8 +66,14 @@
         <element name="Circle Changeable" type="CIRCLE" posy="top" height="of:width:self"  backgroundcolor='$var(RECTANGLECOLOR)' />
     </element>
 
+    <element name='Anchor Left5' posx="%45" type='ANCHOR' posy='of:top:GroupButton3' width='%15' height="of:width:self:*0.40" >
+      <element name='Picture HTPC' type='PICTURE' picturenormal='device htpc' />
+      <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10006)' htextalign='center' vtextalign='middle' />
+    </element>
 
-    <element name='Frame colorpicker' type='ANCHOR' posx="of:left:Anchor Left2" posy='%90' width='%42' height="%55" >
+
+
+  <element name='Frame colorpicker' type='ANCHOR' posx="of:left:Anchor Left2" posy='%90' width='%42' height="%55" >
       <element name="Frame"      type="PICTURE"    picturenormal="background boxes" />
       <element name="ColorPicker" type="COLORPICKER" action="Set rectangle1 color by Widget" destvar="RECTANGLECOLOR"/>
       <element name="Label" type="TEXTFIELD"  posy="of:bottom:last" height="of:height:Label1" fontsize='%h90'  caption='$lvar(showcase_10017)' htextalign='center' vtextalign='middle' />

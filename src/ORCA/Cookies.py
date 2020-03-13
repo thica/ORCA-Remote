@@ -40,7 +40,7 @@ this = sys.modules[__name__]
 this.rPatternCookie  =r"\$cookie\(([\|\w\s\[\]\-\+_]+)\)"
 
 
-def NormalizeFileName(uFileName:str) -> str:
+def NormalizeFileName(*,uFileName:str) -> str:
     """
     Removes all invalid characters in a filename
 
@@ -51,10 +51,10 @@ def NormalizeFileName(uFileName:str) -> str:
     uNew="".join(x for x in uFileName if x.isalnum())
     return uNew
 
-def Var_Save(uVarName:str,uPrefix:str) -> None:
+def Var_Save(*,uVarName:str,uPrefix:str) -> None:
     """ Saves a var to a cookie """
     uValue:str      = GetVar(uVarName = uVarName)
-    oFN:cFileName   = CookieName(uVarName,u'var_'+uPrefix)
+    oFN:cFileName   = CookieName(uVarName=uVarName,uPrefix=u'var_'+uPrefix)
     try:
         oFile = open(oFN.string, 'w')
         oFile.write(uValue)
@@ -62,9 +62,9 @@ def Var_Save(uVarName:str,uPrefix:str) -> None:
     except Exception as e:
         LogError(uMsg=u'Var_Save: can\'t safe var',oException=e)
 
-def Var_Load(uVarName:str, uDefault:str,uPrefix:str) -> str:
+def Var_Load(*,uVarName:str, uDefault:str,uPrefix:str) -> str:
     """ loads a var from a cookie """
-    oFN:cFileName   = CookieName(uVarName,u'var_'+uPrefix)
+    oFN:cFileName   = CookieName(uVarName=uVarName,uPrefix=u'var_'+uPrefix)
     uVarValue:str   = uDefault
     if oFN.Exists():
         try:
@@ -76,13 +76,13 @@ def Var_Load(uVarName:str, uDefault:str,uPrefix:str) -> str:
     SetVar(uVarName = uVarName, oVarValue = uVarValue)
     return uVarValue
 
-def Var_DeleteCookie(uVarName:str, uPrefix:str) -> None:
+def Var_DeleteCookie(*,uVarName:str, uPrefix:str) -> None:
     """ deletes a cookiefile """
-    CookieName(uVarName,u'var_'+uPrefix).Delete()
+    CookieName(uVarName=uVarName,uPrefix=u'var_'+uPrefix).Delete()
 
-def CookieName(uVarName:str,uPrefix:str) -> cFileName:
+def CookieName(*,uVarName:str,uPrefix:str) -> cFileName:
     """ creates a cookie filename """
-    oFnCookie:cFileName = cFileName(Globals.oPathCookie) + (uPrefix + "_" + NormalizeFileName(uVarName) + ".cok")
+    oFnCookie:cFileName = cFileName(Globals.oPathCookie) + (uPrefix + "_" + NormalizeFileName(uFileName=uVarName) + ".cok")
     return oFnCookie
 
 
@@ -96,7 +96,7 @@ def GetCookieValue(uOrgIn:str) -> str:
         uVarName:str=oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
         if "|" in uVarName:
             uVarName,uDefault=uVarName.split('|')
-        uRet=Var_Load(uVarName,uDefault,u'')
+        uRet=Var_Load(uVarName=uVarName,uDefault=uDefault,uPrefix=u'')
         uRet=uOrgIn[:oMatch.regs[0][0]]+uRet+uOrgIn[oMatch.regs[0][1]:]
     return uRet
 

@@ -122,17 +122,17 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
         """ Reads further Widget attributes from a xml node """
         bRet:bool =self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
-            self.SetPictureNormal   (GetXMLTextAttribute(oXMLNode,u'picturenormal',     False,u''))
-            self.SetPicturePressed  (GetXMLTextAttribute(oXMLNode,u'picturepressed',    False,u''))
+            self.SetPictureNormal   (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'picturenormal',  bMandatory=False, vDefault=u''))
+            self.SetPicturePressed  (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'picturepressed', bMandatory=False, vDefault=u''))
             #self.SetPictureDisabled (GetXMLTextAttribute(oXMLNode,u'picturedisabled',    False,u''))
-            self.bAutoHide  = GetXMLBoolAttribute(oXMLNode,u'autohide',False,False)
+            self.bAutoHide  = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'autohide',bMandatory=False,bDefault=False)
             if self.bAutoHide:
                 if self.uCaption == u'':
                     self.EnableWidget(bEnable=False)
             if not self.oFnButtonPictureNormal.string.rfind('*')==-1:
                 if self.oFnButtonPicturePressed.IsEmpty():
-                    self.oFnButtonPicturePressed.ImportFullPath(self.oFnButtonPictureNormal.string.replace(u'*',u' pressed'))
-                self.oFnButtonPictureNormal.ImportFullPath(self.oFnButtonPictureNormal.string.replace(u'*',u' normal'))
+                    self.oFnButtonPicturePressed.ImportFullPath(uFnFullName=self.oFnButtonPictureNormal.string.replace(u'*',u' pressed'))
+                self.oFnButtonPictureNormal.ImportFullPath(uFnFullName=self.oFnButtonPictureNormal.string.replace(u'*',u' normal'))
 
         return bRet
 
@@ -140,9 +140,9 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
     def SetPictureNormal(self,uPictureNormal:str,bClearCache:bool=False) -> bool:
         """ sets the unpressed picture """
         if uPictureNormal!='':
-            self.oFnButtonPictureNormal.ImportFullPath(uPictureNormal)
+            self.oFnButtonPictureNormal.ImportFullPath(uFnFullName=uPictureNormal)
         if self.oObject:
-            self.oObject.background_normal  =  ToAtlas(self.oFnButtonPictureNormal)
+            self.oObject.background_normal  =  ToAtlas(oFileName=self.oFnButtonPictureNormal)
             # self.SetCaption(self.uCaption)
         return True
 
@@ -150,10 +150,10 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
         """ sets the pressed picture """
 
         if uPicturePressed!='':
-            self.oFnButtonPicturePressed.ImportFullPath(uPicturePressed)
+            self.oFnButtonPicturePressed.ImportFullPath(uFnFullName=uPicturePressed)
 
         if self.oObject:
-            self.oObject.background_down = ToAtlas(self.oFnButtonPicturePressed)
+            self.oObject.background_down = ToAtlas(oFileName=self.oFnButtonPicturePressed)
         return True
 
     def Create(self,oParent:Widget) -> bool:
@@ -161,9 +161,9 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
         try:
             if not self.oFnButtonPictureNormal.IsEmpty():
                 self.AddArg('border',               (0,0,0,0))
-                self.AddArg('background_normal',    ToAtlas(self.oFnButtonPictureNormal))
+                self.AddArg('background_normal',    ToAtlas(oFileName=self.oFnButtonPictureNormal))
                 if not self.oFnButtonPicturePressed.IsEmpty():
-                    self.AddArg('background_down',  ToAtlas(self.oFnButtonPicturePressed))
+                    self.AddArg('background_down',  ToAtlas(oFileName=self.oFnButtonPicturePressed))
 
             if self.uActionNameUpOnly:
                 self.AddArg('forceup', '1')

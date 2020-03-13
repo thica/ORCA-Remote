@@ -21,6 +21,7 @@ from typing                             import List
 from typing                             import Dict
 from typing                             import Tuple
 from typing                             import Union
+from typing                             import Optional
 from typing                             import Callable
 
 import                                  logging
@@ -91,13 +92,13 @@ class cEvents:
         self.oAllTimer:cAllTimer                     = cAllTimer()
 
         for oEventActions in self.aEventActions:
-            self.RegisterEventActions(oEventActions)
+            self.RegisterEventActions(oEventActions=oEventActions)
 
 
 
-    def RegisterEventActions(self,oEventActions:cEventActionBase) -> None:
+    def RegisterEventActions(self,*,oEventActions:cEventActionBase) -> None:
         """ register all actions managed by the eventdispatcher """
-        aFuncs=dir(oEventActions)
+        aFuncs:List[str]=dir(oEventActions)
         for uFuncName in aFuncs:
             if uFuncName.startswith('ExecuteAction'):
                 uName:str = uFuncName[13:]
@@ -118,35 +119,35 @@ class cEvents:
         ResumeQueue()
         Clock.schedule_once(partial(GetActiveQueue().WorkOnQueue,self.bForceState),0)
 
-    def ExecuteActionsNewQueue(self,aActions:List[cAction], oParentWidget:Union[cWidgetBase,None], bForce:bool=False) -> Union[bool,None]:
+    def ExecuteActionsNewQueue(self,aActions:List[cAction], oParentWidget:Optional[cWidgetBase], bForce:bool=False) -> Union[bool,None]:
         """ Execute all actions in a new queue, new queue will atomatic appended to the queue stack"""
         oQueue:cQueue           = GetNewQueue()
         oQueue.bForceState      = bForce
         bRet:Union[bool,None]   = self._ExecuteActions(aActions=aActions,oParentWidget=oParentWidget)
         return bRet
 
-    def ExecuteActions(self,aActions:List[cAction], oParentWidget:Union[cWidgetBase,None]) -> None:
+    def ExecuteActions(self,*,aActions:List[cAction], oParentWidget:Optional[cWidgetBase]) -> None:
         """ execute actions by either adding multiple actions to a new queue, or appending a single action to the existing queue """
         if len(aActions) > 1:
-            self.ExecuteActionsNewQueue(aActions, oParentWidget)
+            self.ExecuteActionsNewQueue(aActions=aActions, oParentWidget=oParentWidget)
         else:
-            self._ExecuteActions(aActions, oParentWidget)
+            self._ExecuteActions(aActions=aActions,oParentWidget=oParentWidget)
 
     # noinspection PyMethodMayBeStatic
-    def _ExecuteActions(self,aActions:List[cAction], oParentWidget:cWidgetBase) -> Union[int,None]:
+    def _ExecuteActions(self,*,aActions:List[cAction], oParentWidget:cWidgetBase) -> Union[int,None]:
         """ This functions just adds the action commands to the queue and calls the scheduler at the end """
 
         oQueue:cQueue     = GetActiveQueue()
         bForceState:bool  = oQueue.bForceState
-        oQueue.AddActions(aActions, oParentWidget)
+        oQueue.AddActions(aActions=aActions, oParentWidget=oParentWidget)
 
         if not bForceState:
             Clock.schedule_once(partial(oQueue.WorkOnQueue,oQueue.bForceState), 0)
         else:
-            return oQueue.WorkOnQueue(oQueue.bForceState)
+            return oQueue.WorkOnQueue(bForce=oQueue.bForceState)
 
     # noinspection PyMethodMayBeStatic
-    def GetTargetInterfaceAndConfig(self,oAction:cAction) -> Tuple[str,str]:
+    def GetTargetInterfaceAndConfig(self,*,oAction:cAction) -> Tuple[str,str]:
         """
         Gets the interface and config for an sendcommand action
         If interfaces has not been set, we set the page defaults
@@ -206,7 +207,7 @@ class cEvents:
         return uToUseInterFace,uToUseConfigName
 
 
-    def CopyActionPars(self, dSource:Dict, dTarget:Dict, uReplaceOption:str, bIgnoreHiddenWords=False) -> None:
+    def CopyActionPars(self,*, dSource:Dict, dTarget:Dict, uReplaceOption:str, bIgnoreHiddenWords=False) -> None:
         """
             Copies the action pars
             uReplaceOption
@@ -231,8 +232,8 @@ class cEvents:
                     dTarget[uKey]=dSource[uKey]
 
 
-    def CreateDebugLine(self,oAction:cAction, uTxt:str) ->str:
-        """ Creates a debugline for the logger """
+    def CreateDebugLine(self,*,oAction:cAction, uTxt:str) ->str:
+        """ Creates a debug line for the logger """
 
         if uTxt:
             uTemp=u'Action QL%d: (%s) | %s | %s' % (GetQueueLen(),oAction.uActionName,uTxt,oAction.dActionPars.get('string',''))
@@ -250,12 +251,12 @@ class cEvents:
                 uTemp+=u'| %s:%s' % (uKey,uValue)
         return uTemp
 
-    def LogAction(self,uTxt:str,oAction:cAction,uAddText:str='') -> None:
+    def LogAction(self,*,uTxt:str,oAction:cAction,uAddText:str='') -> None:
         """ Logs an action """
 
         if Logger.getEffectiveLevel()!=logging.DEBUG:
             return
-        uTemp=self.CreateDebugLine(oAction,uTxt=uTxt)
+        uTemp=self.CreateDebugLine(oAction=oAction,uTxt=uTxt)
 
         if uAddText:
             uTemp+=u"| "+uAddText
@@ -268,14 +269,14 @@ class cEvents:
             except Exception as e:
                 Logger.error ("Cant Create Debugline:"+str(e))
 
-    def CreateSimpleActionList(self,aActions:List[Dict]) -> List[cAction]:
+    def CreateSimpleActionList(self,*,aActions:List[Dict]) -> List[cAction]:
         """ Creates a simple action list from an array of action """
         aTmpActions  = []
-        self.AddToSimpleActionList(aTmpActions,aActions)
+        self.AddToSimpleActionList(aActionList=aTmpActions,aActions=aActions)
         return aTmpActions
 
     # noinspection PyMethodMayBeStatic
-    def AddToSimpleActionList(self,aActionList:List[cAction],aActions:List[Dict]) -> None:
+    def AddToSimpleActionList(self,*,aActionList:List[cAction],aActions:List[Dict]) -> None:
         """ Adds a set actions to the action list """
         for dAction in aActions:
-            aActionList.append(CreateActionForSimpleActionList(dAction))
+            aActionList.append(CreateActionForSimpleActionList(dAction=dAction))

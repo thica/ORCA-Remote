@@ -21,11 +21,12 @@
 from typing                         import Any
 from typing                         import List
 from typing                         import Dict
+from typing                         import Union
 
 from xml.etree.ElementTree          import Element
 from kivy.core.audio                import SoundLoader
 from kivy.logger                    import Logger
-
+from kivy.config                    import ConfigParser
 from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
 from ORCA.utils.LogError            import LogError
 from ORCA.utils.XML                 import GetXMLTextAttribute
@@ -34,6 +35,7 @@ from ORCA.utils.TypeConvert         import ToFloat
 from ORCA.utils.Platform            import OS_RegisterSoundProvider
 from ORCA.utils.ConfigHelpers       import Config_GetDefault_Int
 from ORCA.utils.FileName            import cFileName
+
 
 import ORCA.Globals as Globals
 
@@ -64,12 +66,12 @@ class cSound:
         """ Loads the sound description (tunes) """
         try:
             Logger.debug (u'TheScreen: Loading Sounds')
-            oET_Root:Element = LoadXMLFile(Globals.oFnSoundsXml)
+            oET_Root:Element = LoadXMLFile(oFile=Globals.oFnSoundsXml)
 
             if oET_Root is not None:
                 for oXMLSound in oET_Root.findall('sound'):
-                    uSoundName:str      = GetXMLTextAttribute(oXMLSound,u'name',False,u'')
-                    oFnSound:cFileName  = cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLSound,u'file',False,u''))
+                    uSoundName:str      = GetXMLTextAttribute(oXMLNode=oXMLSound,uTag=u'name',bMandatory=False,vDefault=u'')
+                    oFnSound:cFileName  = cFileName('').ImportFullPath(uFnFullName=GetXMLTextAttribute(oXMLNode=oXMLSound,uTag=u'file',bMandatory=False,vDefault=u''))
                     if uSoundName in self.aSounds:
                         self.aSounds[uSoundName][0]=oFnSound
                     else:
@@ -77,24 +79,32 @@ class cSound:
         except Exception as e:
             ShowErrorPopUp(uMessage=LogError(uMsg=u'TheScreen:  LoadSoundDescription: can\'t load SoundDescription',oException=e))
 
-    def ReadSoundVolumesFromConfig(self,oConfig):
+    def ReadSoundVolumesFromConfig(self,*,oConfig:ConfigParser) -> None:
+        """
+        Reads the sound volumes from the given configparser
+        """
         for uSoundName in self.aSounds:
-            self.SetSoundVolume(uSoundName,Config_GetDefault_Int(oConfig, u'ORCA', u'soundvolume_' + uSoundName, u'100'))
+            self.SetSoundVolume(uSoundName=uSoundName,iValue=Config_GetDefault_Int(oConfig=oConfig, uSection=u'ORCA', uOption=u'soundvolume_' + uSoundName, uDefaultValue=u'100'))
 
-    def SetSoundVolume(self,uSoundName,iValue):
+    def SetSoundVolume(self,*,uSoundName:str,iValue:int):
         self.aSounds[uSoundName][1] = iValue
 
-    def PlaySound(self,uSoundName, fSoundVolume=-1):
-
+    def PlaySound(self,*,uSoundName:str, vSoundVolume:Union[float,str]=-1.0):
         """ plays a given sound with a given volume """
+        iSoundVolume:int
+        fVolume:float
+        vVolume:Union[str,float]
+        aTup:List
+        oFnSound:cFileName
+
         try:
-            oTup = self.aSounds.get(uSoundName)
-            fVolume = fSoundVolume
-            if oTup:
-                oFnSound  = oTup[0]
-                iSoundVolume = oTup[1]
+            aTup = self.aSounds.get(uSoundName)
+            vVolume = vSoundVolume
+            if aTup:
+                oFnSound  = aTup[0]
+                iSoundVolume = aTup[1]
             else:
-                oFnSound=cFileName('').ImportFullPath(uSoundName)
+                oFnSound=cFileName('').ImportFullPath(uFnFullName=uSoundName)
                 iSoundVolume=100
 
             if oFnSound and not oFnSound.IsEmpty():
@@ -107,17 +117,17 @@ class cSound:
                     if oSound.state != 'stop':
                         oSound.stop()
 
-                    if isinstance(fSoundVolume, str):
-                        if fSoundVolume!=u'':
-                            fVolume=ToFloat(fSoundVolume)
+                    if isinstance(vSoundVolume, str):
+                        if vSoundVolume!=u'':
+                            vVolume = ToFloat(vSoundVolume)
 
-                    if not fVolume==-1 and not fVolume==u'':
-                        fVolume=fVolume*(iSoundVolume/100.0)
+                    if not vVolume==-1.0 and not vVolume==u'':
+                        fVolume = vVolume*(iSoundVolume/100.0)
                     else:
-                        fVolume=iSoundVolume
+                        fVolume = iSoundVolume*1.0
 
-                    fVolume=fVolume /100.0
-                    oSound.volume=fVolume
+                    fVolume = fVolume /100.0
+                    oSound.volume = fVolume
 
                     if fVolume>0:
                         oSound.play()

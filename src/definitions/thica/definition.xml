@@ -376,7 +376,7 @@
         </interface>
         <interface name="url">
           <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_enigma2)">
-              <setting name="Host" parameter="192.168.1.154"/>
+              <settingold name="Host" parameter="192.168.1.154"/>
           </configuration>
           <!-- We allreday paired the bridge -->
           <configuration name ="DEVICE_$dvar(definition_alias_philips_hue)">
@@ -531,6 +531,11 @@
     <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdaction[13]"                    default='Show Page'  />
     <default var="$dvar(definition_alias_cmdfavorites_kodi2)_cmdparameter[13]"                 default='{"pagename":"Page_Device_$dvar(definition_alias_mediaplayer_panasonictvnet)_Popup"}' />
 
+
+    <default var="$dvar(definition_alias_firetv2)_DEVICEPICTURE"                               default="device firetv stick" />
+
+
+
     <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[1]"  default="Dimmer" />
     <default var="$dvar(definition_alias_philips_hue)_CONTROL_NAME[1]"  default="Decke" />
     <default var="$dvar(definition_alias_philips_hue)_CONTROL_TYPE[2]"  default="Dimmer" />
@@ -558,8 +563,8 @@
       <description language='English'>Personal definition from the developer, good to see, how ORCA is fully utilized</description>
       <description language='German'>Persönliche Definition des Enwicklers, hilfreich um zu sehen, wie ORCA genutzt wird</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/thica</local>

@@ -6,10 +6,10 @@
   </page_parameter>
   <elements>
     <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
-    <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%4" height="of:width:self" picturenormal="button wide*" action="gotosettingspage" fontsize='%40' caption="icon:close_window" />
+    <element name="Button Back" type="BUTTON" posx="right" posy="top" width="%4" height="of:width:self" picturenormal="button wide*" action="gotolastpage" fontsize='%40' caption="icon:close_window" />
     <element name="Anchor" type="ANCHOR" posx="center" posy="middle" width="%90" height="%90"  picturenormal='background boxes' >
-      <element name='Shadow' type='RECTANGLE' backgroundcolor='$var(shadow)' />
-      <element name="FileBrowser" type="FILEBROWSER"  />
+      <element name='Shadow' type='RECTANGLE' backgroundcolor='$var(black)' />
+      <element name="FileBrowser" type="FILEBROWSER"  action="gotolastpage" actioncancel="gotolastpage"/>
     </element>
   </elements>
 </page>

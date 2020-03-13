@@ -22,7 +22,8 @@
 
 from typing                     import Dict
 from typing                     import List
-from typing                     import Union
+from typing                     import Optional
+
 
 from kivy.logger                import Logger
 from ORCA.vars.Replace          import ReplaceVars
@@ -48,8 +49,8 @@ except Exception as e:
       <description language='English'>Send IR Commands on Android devices with IR tranmitter WIP</description>
       <description language='German'>Sendet IR Befehle auf Android Geräten mit eingebautem IR Sender WIP</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -71,57 +72,62 @@ except Exception as e:
 </root>
 '''
 
-oBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass("cInterface")
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from interfaces.generic_infrared.interface import cInterface as oBaseInterFaceInfrared
+else:
+    oBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass("cInterface")
 
 class cInterface(oBaseInterFaceInfrared):
 
     class cInterFaceSettings(oBaseInterFaceInfrared.cInterFaceSettings):
         def __init__(self,oInterFace):
-            oBaseInterFaceInfrared.cInterFaceSettings.__init__(self,oInterFace)
+            super().__init__(oInterFace)
             self.bIsConnected = False
             self.bOnError     = False
 
         def Connect(self) -> bool:
 
             self.bIsConnected = False
-            if not oBaseInterFaceInfrared.cInterFaceSettings.Connect(self):
+            if not super().Connect():
                 Logger.debug("ir_on_android: Connect cancelled by root class")
                 return False
             try:
                 if irblaster.exists():
-                    self.ShowDebug("Connected")
+                    self.ShowDebug(uMsg="Connected")
                     self.bIsConnected = True
                     return True
                 else:
-                    self.ShowDebug("No Ir-Blaster at device")
+                    self.ShowDebug(uMsg="No Ir-Blaster at device")
                     self.bIsConnected = False
 
             except Exception as ex:
-                self.ShowError(u'Cannot open IR Device',ex)
+                self.ShowError(uMsg=u'Cannot open IR Device',oException=ex)
                 self.bOnError=True
             return False
 
         def Disconnect(self) -> bool:
-            if oBaseInterFaceInfrared.cInterFaceSettings.Disconnect(self):
+            if super().Disconnect():
                 return False
+            return True
 
     def __init__(self):
-        oBaseInterFaceInfrared.__init__(self)
+        super().__init__()
         cInterFaceSettings=cInterface.cInterFaceSettings
         self.dSettings:Dict[cInterFaceSettings]     = {}
-        self.oSetting:Union[cInterFaceSettings,None]= None
+        self.oSetting:Optional[cInterFaceSettings]  = None
 
-    def Init(self, uObjectName:str, oFnObject:Union[cFileName,None]=None) -> None:
-        oBaseInterFaceInfrared.Init(self,uObjectName, oFnObject)
+    def Init(self, uObjectName:str, oFnObject:Optional[cFileName]=None) -> None:
+        super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
         self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
 
     def DeInit(self, **kwargs) -> None:
-        oBaseInterFaceInfrared.DeInit(self,**kwargs)
+        super().DeInit(**kwargs)
         for uSettingName in self.dSettings:
             self.dSettings[uSettingName].DeInit()
 
     def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
-        oBaseInterFaceInfrared.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+        super().SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=uRetVar,bNoLogOut=bNoLogOut)
 
         eRet:eReturnCode = eReturnCode.Error
 
@@ -132,7 +138,7 @@ class cInterface(oBaseInterFaceInfrared):
 
         uCmd:str=ReplaceVars(oAction.uCmd)
 
-        self.ShowInfo(u'Sending Command: '+uCmd + u' to '+oSetting.uConfigName)
+        self.ShowInfo(uMsg=u'Sending Command: '+uCmd + u' to '+oSetting.uConfigName)
 
         oSetting.Connect()
         if oSetting.bIsConnected:
@@ -141,7 +147,7 @@ class cInterface(oBaseInterFaceInfrared):
                 irblaster.transmit(oAction.oIRCode.iFrequency,oAction.oIRCode.aPattern)
                 eRet = eReturnCode.Success
             except Exception as ex:
-                self.ShowWarning(u'Can\'t send message: '+str(ex),oSetting.uConfigName)
+                self.ShowWarning(uMsg=u'Can\'t send message: '+str(ex))
         else:
             Logger.debug("Not Connected")
         return eRet
@@ -159,7 +165,7 @@ def CCfToAndroidIR(sCCFString:str,iRepeatCount:int) -> cIRCommand:
     aList:List = sCCFString.split(" ")
     iFrequency:int = int(aList[1], 16)
     aList=aList[3:]
-    iFrequency:int = ToInt(iFrequency * 0.241246)
+    iFrequency = ToInt(iFrequency * 0.241246)
     iPulses:int = int(1000000 / iFrequency)
     aPattern:List = []
     for uElem in aList:

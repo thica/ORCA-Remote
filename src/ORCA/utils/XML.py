@@ -24,6 +24,7 @@ from typing import Union
 from typing import Callable
 from typing import Tuple
 from typing import Any
+from typing import Optional
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -40,6 +41,8 @@ from xml.etree.ElementTree           import tostring
 from xml.etree.ElementTree           import Element
 from xml.etree.ElementTree           import TreeBuilder
 from xml.etree.ElementTree           import Comment
+from xml.etree.ElementTree           import XMLParser
+from xml.etree.ElementTree           import ElementTree as ET
 
 from kivy.logger                     import Logger
 
@@ -85,6 +88,8 @@ __all__ = ['XMLPrettify',
            'GetXMLBoolAttribute',
            'GetXMLBoolAttributeVar',
            'LoadXMLFile',
+           'LoadXMLString',
+           'WriteXMLFile',
            'SplitMax',
            'CommentedTreeBuilder'
           ]
@@ -115,19 +120,54 @@ class CommentedTreeBuilder(TreeBuilder):
         self.data(data)
         self.end(Comment)
 
-def LoadXMLFile(oFile:cFileName)-> Element:
+def LoadXMLFile(*,oFile:cFileName, oParser:Optional[XMLParser]=None, bNoCache=False)-> Element:
     """
     Loads a simple XML file to an Elementree Node without any manipulating
 
     :rtype: xml.etree.ElementTree.Element
     :param cFileName oFile: xml file to load
+    :param XMLParser oParser: Optional: Parser to use
+    :param bool bNoCache: Optional: Do not use cached files
     :return: Element tree element
     """
 
-    uRaw=CachedFile(oFileName=oFile)
-    return fromstring(uRaw)
+    if oParser is None:
+        if not bNoCache:
+            return fromstring(CachedFile(oFileName=oFile))
+        else:
+            return ET().parse(source=oFile.string)
+    else:
+        return ET().parse(source=oFile.string, parser=oParser)
 
-def XMLPrettify(oElem:Element)-> str:
+def LoadXMLString(*,uXML:str)-> Element:
+    """
+    Loads a simple XML string representation to an Elementree Node without any manipulating
+
+    :rtype: xml.etree.ElementTree.Element
+    :param str uXML: xml file to load
+    :return: Element tree element
+    """
+
+    return fromstring(uXML)
+
+def WriteXMLFile(*,oFile:cFileName,oElem:Element)-> bool:
+    """
+    Save an Element node to an xml file
+
+    :param cFileName oFile: xml file to save
+    :param Element oElem: XML Element to save
+    :return: Element tree element
+    """
+    try:
+        oET=ET(oElem)
+        oET.write(oFile.string, encoding="UTF-8",xml_declaration=True)
+        return True
+    except Exception as e:
+        LogError(uMsg='Can''t write XML File:'+oFile.string,oException=e)
+        return False
+
+
+def XMLPrettify(*,oElem:Element)-> str:
     """
     Return a pretty-printed XML string for the Element
 
@@ -136,11 +176,11 @@ def XMLPrettify(oElem:Element)-> str:
     """
 
     iNum:int
-    uRough_string = tostring(oElem, 'utf-8')
-    uReparsed = minidom.parseString(uRough_string)
-    uFinal=uReparsed.toprettyxml(indent="    ")
-    uFinal=uFinal.replace(">\n",">")
-    uFinal=uFinal.replace("\n\n","")
+    uRough_string:str           = tostring(oElem, 'utf-8')
+    oReparsed:minidom.Document  = minidom.parseString(uRough_string)
+    uFinal:str                  = oReparsed.toprettyxml(indent="    ")
+    uFinal                      = uFinal.replace(">\n",">")
+    uFinal                      = uFinal.replace("\n\n","")
     for iNum in range(10):
         uFinal = uFinal.replace("\n"+" "*iNum+"\n", "\n")
     return uFinal
@@ -152,7 +192,7 @@ def orca_et_loader(uFile:str, uParse:str, uEncoding:str="xml",oReplacementVars:c
     """
     if uFile.endswith('*'):
         aRet:List[str]   = []
-        oFn:cFileName    = cFileName("").ImportFullPath(uFile)
+        oFn:cFileName    = cFileName("").ImportFullPath(uFnFullName=uFile)
         oDir:cPath       = oFn.oPath
         uPattern:str     = oFn.string[len(oDir.string):]
         uPattern         = uPattern[1:-1]
@@ -174,7 +214,7 @@ def orca_et_loader(uFile:str, uParse:str, uEncoding:str="xml",oReplacementVars:c
         else:
             return aRet
     else:
-        oFn:cFileName = cFileName("").ImportFullPath(uFile)
+        oFn:cFileName = cFileName("").ImportFullPath(uFnFullName=uFile)
         if oFn.Exists():
             Logger.debug (u'XML: Loading XML Include:'+oFn.string)
             #uRaw= ElementInclude.default_loader(uFile2, "text", encoding)
@@ -186,7 +226,7 @@ def orca_et_loader(uFile:str, uParse:str, uEncoding:str="xml",oReplacementVars:c
             oRet=None
         return oRet
 
-def Orca_FromString(uET_Data:str, oDef:cDefinition, uFileName:str="Unknown") -> Union[Element,None]:
+def Orca_FromString(*,uET_Data:str, oDef:cDefinition, uFileName:str="Unknown") -> Union[Element,None]:
     """  reads xml from a string and sets the definition context vars
     :param str uET_Data: The string representinga xml
     :param cDefinition oDef: The definition, wehere the xml belomgs to
@@ -215,7 +255,7 @@ def Orca_FromString(uET_Data:str, oDef:cDefinition, uFileName:str="Unknown") -> 
     return None
 
 def Orca_include(oElem, pLoader: Callable,uFileName:str = "Unknown Filename")-> None:
-    """  heavyly customized loader for includes in xml files"""
+    """  heavily customized loader for includes in xml files"""
     uAlias = oElem.get('definitionalias')
     oDef = None
     if uAlias is not None:
@@ -262,7 +302,7 @@ def Orca_includesub(oElem:Element, pLoader: Callable,uOrgDefinitionContext: str,
                 if uParse == "xml":
                     uNewDefinitionContext = u''
                     if "DEFINITIONPATH[" in uHref:
-                        uNewDefinitionContext,uHref=GetSetDefinitionName(uHref)
+                        uNewDefinitionContext,uHref=GetSetDefinitionName(uText=uHref)
 
                     oTmpReplacementVars=e.get("definitionvars")
                     if oTmpReplacementVars is None:
@@ -286,11 +326,11 @@ def Orca_includesub(oElem:Element, pLoader: Callable,uOrgDefinitionContext: str,
                         if oDef:
                             oDef.oDefinitionVars=oTmpReplacementVars
 
-                    oFnHRefRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get(cFileName(u'').ImportFullPath(ReplaceVars(uHref)).string)
+                    oFnHRefRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get(cFileName(u'').ImportFullPath(uFnFullName=ReplaceVars(uHref)).string)
                     if oFnHRefRedirect is not None:
                         oFnHRef = oFnHRefRedirect
                     else:
-                        oFnHRef=cFileName(u'').ImportFullPath(ReplaceVars(uHref))
+                        oFnHRef=cFileName(u'').ImportFullPath(uFnFullName=ReplaceVars(uHref))
                     oNodes:Element = pLoader(oFnHRef.string, uParse,None,oReplacementVars)
 
                     if oNodes is not None:
@@ -305,7 +345,7 @@ def Orca_includesub(oElem:Element, pLoader: Callable,uOrgDefinitionContext: str,
                             oDef.oDefinitionVars=oSaveReplacementVars
 
                     if uNewDefinitionContext!=u'':
-                        SetDefinitionContext(uOrgDefinitionContext)
+                        SetDefinitionContext(uDefinitionName=uOrgDefinitionContext)
 
                     if isinstance(oNodes,list):
                         bFirst:bool = True
@@ -318,10 +358,10 @@ def Orca_includesub(oElem:Element, pLoader: Callable,uOrgDefinitionContext: str,
                                 bFirst=False
                             else:
                                 oElem.insert(i,oNode)
-                                i = i + 1
+                                i += 1
                     elif oNodes is None:
                         del oElem[i]
-                        i=i-1
+                        i -= 1
                     else:
                         oNodes = copy(oNodes)
                         if e.tail:
@@ -329,10 +369,10 @@ def Orca_includesub(oElem:Element, pLoader: Callable,uOrgDefinitionContext: str,
                         oElem[i] = oNodes
         else:
             Orca_includesub(e, pLoader,uOrgDefinitionContext,oDef,uFileName)
-        i = i + 1
+        i += 1
     return oElem
 
-def GetXMLTextValue(oXMLNode:Element,uTag:str,bMandantory:bool,vDefault:Any) -> str:
+def GetXMLTextValue(*,oXMLNode:Element,uTag:str,bMandatory:bool,vDefault:Any) -> str:
     """ Returns a string from a xml value """
 
     if oXMLNode is None:
@@ -345,7 +385,7 @@ def GetXMLTextValue(oXMLNode:Element,uTag:str,bMandantory:bool,vDefault:Any) -> 
     else:
         oObj=oXMLNode
     if oObj is None:
-        if bMandantory:
+        if bMandatory:
             ShowErrorPopUp(uMessage=LogError(uMsg=u'XML Error: Attribut [' + uTag + '] missing:'+tostring(oXMLNode)),bAbort=True)
         return vDefault
     uTmp=oObj.text
@@ -353,72 +393,72 @@ def GetXMLTextValue(oXMLNode:Element,uTag:str,bMandantory:bool,vDefault:Any) -> 
         uTmp=u''
     return uTmp
 
-def GetXMLIntValue(oXMLNode:Element,uTag:str,bMandantory:bool,iDefault:int) -> int:
+def GetXMLIntValue(*,oXMLNode:Element,uTag:str,bMandatory:bool,iDefault:int) -> int:
     """ Returns an integer from a xml value """
-    return ToInt(GetXMLTextValue(oXMLNode,uTag,bMandantory,iDefault))
+    return ToInt(GetXMLTextValue(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=iDefault))
 
-def GetXMLFloatValue(oXMLNode:Element,uTag:str,bMandantory:bool,fDefault:float) -> float:
+def GetXMLFloatValue(*,oXMLNode:Element,uTag:str,bMandatory:bool,fDefault:float) -> float:
     """ Returns a float from a xml value """
-    return ToInt(GetXMLTextValue(oXMLNode,uTag,bMandantory,fDefault))
+    return ToInt(GetXMLTextValue(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=fDefault))
 
-def GetXMLIntValueVar(oXMLNode:Element,uTag:str,bMandantory:bool,iDefault:int) -> int:
+def GetXMLIntValueVar(*,oXMLNode:Element,uTag:str,bMandatory:bool,iDefault:int) -> int:
     """ Returns an int from a xml value (given as var)"""
-    return ToInt(ReplaceVars(GetXMLTextValue(oXMLNode,uTag,bMandantory,ToUnicode(iDefault))))
+    return ToInt(ReplaceVars(GetXMLTextValue(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=ToUnicode(iDefault))))
 
-def GetXMLBoolValue(oXMLNode:Element,uTag:str,bMandantory:bool,bDefault:bool) -> bool:
+def GetXMLBoolValue(*,oXMLNode:Element,uTag:str,bMandatory:bool,bDefault:bool) -> bool:
     """ Returns a bool from a xml value """
-    return ToBool(GetXMLTextValue(oXMLNode,uTag,bMandantory,bDefault))
+    return ToBool(GetXMLTextValue(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=bDefault))
 
-def GetXMLBoolValueVar(oXMLNode:Element,uTag:str,bMandantory:bool,bDefault:bool) -> bool:
+def GetXMLBoolValueVar(*,oXMLNode:Element,uTag:str,bMandatory:bool,bDefault:bool) -> bool:
     """ Returns a bool from a xml value (given as var)"""
-    return ToBool(ReplaceVars(GetXMLTextValue(oXMLNode,uTag,bMandantory,ToUnicode(bDefault))))
+    return ToBool(ReplaceVars(GetXMLTextValue(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=ToUnicode(bDefault))))
 
-def GetXMLTextAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,vDefault:Any) -> str:
+def GetXMLTextAttribute(*,oXMLNode:Element,uTag:str,bMandatory:bool,vDefault:Any) -> str:
     """ Returns a string from a xml attribute"""
     if oXMLNode is None:
         return vDefault
     oObj:str=oXMLNode.get(uTag)
     if oObj is None:
-        if bMandantory:
+        if bMandatory:
             ShowErrorPopUp(uMessage=LogError(uMsg=u'XML Error: Attribut [' + uTag + '] missing'),bAbort=True)
         return vDefault
     # oObj=ToUnicode(oObj)
     return oObj
 
-def GetXMLTextAttributeVar(oXMLNode:Element,uTag:str,bMandantory:bool,uDefault:str) -> str:
+def GetXMLTextAttributeVar(*,oXMLNode:Element,uTag:str,bMandatory:bool,uDefault:str) -> str:
     """ Returns a string from a xml attribute (given as var)"""
-    return ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,uDefault))
+    return ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=uDefault))
 
-def GetXMLDicAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,dDefault:Dict) -> Dict:
+def GetXMLDicAttribute(*,oXMLNode:Element,uTag:str,bMandatory:bool,dDefault:Dict) -> Dict:
     """ Returns a dict from a xml attribute """
-    return ToDic(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,dDefault))
+    return ToDic(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=dDefault))
 
-#def GetXMLDicAttributeVar(oXMLNode,uTag,bMandantory,aDefault):
-#    return ToDic(ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,aDefault)))
+#def GetXMLDicAttributeVar(oXMLNode,uTag,bMandatory,aDefault):
+#    return ToDic(ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandatory,aDefault)))
 
-def GetXMLIntAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,iDefault:int) -> int:
+def GetXMLIntAttribute(*,oXMLNode:Element,uTag:str,bMandatory:bool,iDefault:int) -> int:
     """ Returns an integer from a xml attribute """
-    return ToInt(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,iDefault))
+    return ToInt(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=iDefault))
 
-def GetXMLIntAttributeVar(oXMLNode:Element,uTag:str,bMandantory:bool,iDefault:int) -> int:
+def GetXMLIntAttributeVar(*,oXMLNode:Element,uTag:str,bMandatory:bool,iDefault:int) -> int:
     """ Returns an integer from a xml attribute (given as var)"""
-    return ToInt(ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,ToUnicode(iDefault))))
+    return ToInt(ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=ToUnicode(iDefault))))
 
-def GetXMLFloatAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,fDefault:float) -> float:
+def GetXMLFloatAttribute(*,oXMLNode:Element,uTag:str,bMandatory:bool,fDefault:float) -> float:
     """ Returns an float from a xml attribute """
-    return ToFloat(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,fDefault))
+    return ToFloat(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=fDefault))
 
-def GetXMLFloatAttributeVar(oXMLNode:Element,uTag:str,bMandantory:bool,fDefault:float) -> float:
+def GetXMLFloatAttributeVar(*,oXMLNode:Element,uTag:str,bMandatory:bool,fDefault:float) -> float:
     """ Returns an float from a xml attribute (given as var)"""
-    return ToFloat(ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,ToUnicode(fDefault))))
+    return ToFloat(ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=ToUnicode(fDefault))))
 
-def GetXMLBoolAttribute(oXMLNode:Element,uTag:str,bMandantory:bool,bDefault:bool) -> bool:
+def GetXMLBoolAttribute(*,oXMLNode:Element,uTag:str,bMandatory:bool,bDefault:bool) -> bool:
     """ Returns an bool from a xml attribute """
-    return ToBool(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,bDefault))
+    return ToBool(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=bDefault))
 
-def GetXMLBoolAttributeVar(oXMLNode:Element,uTag:str,bMandantory:bool,bDefault:bool) -> bool:
+def GetXMLBoolAttributeVar(*,oXMLNode:Element,uTag:str,bMandatory:bool,bDefault:bool) -> bool:
     """ Returns an bool from a xml attribute (given as var) """
-    return ToBool(ReplaceVars(GetXMLTextAttribute(oXMLNode,uTag,bMandantory,ToUnicode(bDefault))))
+    return ToBool(ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=uTag,bMandatory=bMandatory,vDefault=ToUnicode(bDefault))))
 
 def SplitMax(uPar:str) -> Tuple[float,float]:
     """splits an xml value in the format aa:bb into a tuple

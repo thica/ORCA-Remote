@@ -21,7 +21,7 @@
 from typing             import Dict
 from typing             import List
 from typing             import Callable
-from typing             import Union
+from typing             import Optional
 
 from copy               import copy
 from kivy.logger        import Logger
@@ -37,8 +37,18 @@ class cNotifications:
         self.dNotificationsHash:Dict[int,Dict] = {}
         self.dFilterPageNames:Dict[str,int]    = {}
 
-    def RegisterNotification(self, uNotification:str, fNotifyFunction:Callable, uDescription:str="", bQuiet:bool=False, aValueLinks:Union[None,List[Dict]]=None, **kwargs) -> int:
+    def RegisterNotification(self,*, uNotification:str, fNotifyFunction:Callable, uDescription:str="", bQuiet:bool=False, aValueLinks:Optional[List[Dict]]=None, **kwargs) -> int:
+        """
+        Registers a notificatio
 
+        :param uNotification: The notification name
+        :param fNotifyFunction: The function to be called, if the notification is triggered
+        :param uDescription: A notification description(for debugging pirposes)
+        :param bQuiet: Flag, if true, no debug message will be triggered on notification
+        :param aValueLinks: Dict of chained values to passed through chained notification
+        :param kwargs: args to pass through the notification
+        :return:
+        """
         if aValueLinks is None:
             aValueLinks = []
 
@@ -62,9 +72,9 @@ class cNotifications:
 
         return iHash
 
-    def UnRegisterNotification_ByHash(self,iHash:int) -> None:
+    def UnRegisterNotification_ByHash(self,*,iHash:int) -> None:
 
-        dEntry:Dict = self.dNotificationsHash.get(iHash,None)
+        dEntry:Optional[Dict] = self.dNotificationsHash.get(iHash,None)
 
         if dEntry is not None:
             uNotification:str            = dEntry["args"]["notification"]
@@ -78,8 +88,8 @@ class cNotifications:
         else:
             Logger.error("Tried to Degister notification with wrong hash")
 
-    def SendNotification(self,uNotification:str, **kwargs) -> Dict:
-        dRet = {}
+    def SendNotification(self,*,uNotification:str, **kwargs) -> Dict:
+        dRet:Dict = {}
 
         # Format for dValueLinks
         # [{"out":"name","in":"name"}]

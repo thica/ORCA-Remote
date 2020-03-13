@@ -22,11 +22,7 @@
 from typing import List
 from typing import Dict
 from kivy import Logger
-
-try:
-    import netifaces
-except Exception as ex:
-    Logger.error("Can't load netifaces:"+str(ex))
+import ORCA.Globals as Globals
 
 __all__ = ['GetSubnetV4']
 
@@ -34,35 +30,46 @@ def GetSubnetV4() -> str:
 
     uPreferredAdapter:str = u'eth0'
     uInet_Type:str        = u'AF_INET'
-    uRet:str              = u'255.255.255.0'
+    uRet:str              = u'192.168.1.255'
     aFound:List[Dict]     = []
+    bLoaded:bool          = False
     dFound:Dict
     iInet_num:int
 
     try:
-        iInet_num = getattr(netifaces, uInet_Type)
-        aInterfaces:List = netifaces.interfaces()
+        try:
+            import netifaces
+            bLoaded = True
+        except Exception as ex:
+            Logger.error("GetSubnetV4: Can't load netifaces, using fallback:"+str(ex))
 
-        for uNetiface in aInterfaces:
-            dNetInfo:Dict    = netifaces.ifaddresses(uNetiface)
-            aNetDetails:List = dNetInfo.get(iInet_num)
-            if aNetDetails is not None and len(aNetDetails)>0:
-                dNetDetails:Dict = aNetDetails[0]
-                aFound.append(dNetDetails)
-                if uNetiface == uPreferredAdapter:
-                    aFound = [dNetDetails]
+        if bLoaded:
+            # noinspection PyUnboundLocalVariable
+            iInet_num = getattr(netifaces, uInet_Type)
+            aInterfaces:List = netifaces.interfaces()
+
+            for uNetiface in aInterfaces:
+                dNetInfo:Dict    = netifaces.ifaddresses(uNetiface)
+                aNetDetails:List = dNetInfo.get(iInet_num)
+                if aNetDetails is not None and len(aNetDetails)>0:
+                    dNetDetails:Dict = aNetDetails[0]
+                    aFound.append(dNetDetails)
+                    if uNetiface == uPreferredAdapter:
+                        aFound = [dNetDetails]
+                        break
+
+            # we prefer a local subnet if given
+            if len(aFound)>0:
+                uRet = aFound[-1]['broadcast']
+
+            for dFound in aFound:
+                if dFound["addr"].startswith("192"):
+                    uRet=dFound['broadcast']
                     break
-
-        # we prefer a local subnet if given
-        if len(aFound)>0:
-            uRet = aFound[-1]['broadcast']
-
-        for dFound in aFound:
-            if dFound["addr"].startswith("192"):
-                uRet=dFound['broadcast']
-
+        else:
+            # Fallback on all platforms, if netifaces doesn't work
+            aIPV4:List=Globals.uIPAddressV4.split(".")
+            uRet  = aIPV4[0] + '.' + aIPV4[1] + '.' + aIPV4[2] + '.255'
     except Exception as e:
         Logger.error("Error on GetSubnetV4:"+str(e))
-
-
     return uRet

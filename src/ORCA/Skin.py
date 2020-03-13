@@ -65,37 +65,37 @@ class cSkin:
         Globals.oTheScreen.AddGlobalVars()
 
         try:
-            oET_Root = LoadXMLFile(Globals.oFnSkinXml)
+            oET_Root = LoadXMLFile(oFile=Globals.oFnSkinXml)
             if oET_Root is not None:
                 Logger.debug (u'TheScreen: Loading Skin Description (pics)')
                 oXMLPics = oET_Root.find('pics')
                 if oXMLPics is not None:
                     for oXMLPic in oXMLPics.findall('pic'):
-                        uPicName  = GetXMLTextAttribute(oXMLPic,u'name',False,u'')
-                        self.dSkinPics[uPicName]= cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLPic,u'file',False,u''))
+                        uPicName = GetXMLTextAttribute(oXMLNode=oXMLPic,uTag=u'name',bMandatory=False, vDefault=u'')
+                        self.dSkinPics[uPicName]= cFileName('').ImportFullPath(uFnFullName=GetXMLTextAttribute(oXMLNode=oXMLPic,uTag=u'file',bMandatory=False,vDefault=u''))
 
                 Logger.debug (u'TheScreen: Loading Skin Description (colors)')
                 oXMLColors = oET_Root.find('colors')
                 if oXMLColors is not None:
                     for oXMLColor in oXMLColors.findall('color'):
-                        uColorName  = GetXMLTextAttribute(oXMLColor,u'name',True,u'black')
-                        uColor      = GetXMLTextValue(oXMLColor,'',True,u'#000000ff')
+                        uColorName  = GetXMLTextAttribute(oXMLNode=oXMLColor,uTag=u'name',bMandatory=True,vDefault=u'black')
+                        uColor      = GetXMLTextValue(oXMLNode=oXMLColor,    uTag='',     bMandatory=True,vDefault=u'#000000ff')
                         SetVar(uVarName = uColorName, oVarValue = uColor)
 
                 Logger.debug (u'TheScreen: Loading Skin Description (redirects)')
                 oXMLRedirects = oET_Root.find('redirects')
                 if oXMLRedirects is not None:
                     for oXMLRedirect in oXMLRedirects.findall('redirect'):
-                        oFrom:cFileName   = cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLRedirect,u'from',True,u''))
-                        oTo:cFileName     = cFileName('').ImportFullPath(GetXMLTextAttribute(oXMLRedirect,u'to',True,u''))
+                        oFrom:cFileName   = cFileName('').ImportFullPath(uFnFullName=GetXMLTextAttribute(oXMLNode=oXMLRedirect,uTag=u'from',bMandatory=True,vDefault=u''))
+                        oTo:cFileName     = cFileName('').ImportFullPath(uFnFullName=GetXMLTextAttribute(oXMLNode=oXMLRedirect,uTag=u'to',  bMandatory=True,vDefault=u''))
                         self.dSkinRedirects[oFrom.string]=oTo
 
                 Logger.debug (u'TheScreen: Loading Skin Description (attributes)')
                 oXMLAtts = oET_Root.find('attributes')
                 if oXMLAtts is not None:
                     for oXMLAtt in oXMLAtts.findall('attribute'):
-                        uAttName = GetXMLTextAttribute(oXMLAtt,u'name',False,u'')
-                        uAtt     = ReplaceVars(GetXMLTextAttribute(oXMLAtt,u'att',False,u''))
+                        uAttName = GetXMLTextAttribute(oXMLNode=oXMLAtt,uTag=u'name',bMandatory=False,vDefault=u'')
+                        uAtt     = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLAtt,uTag=u'att',bMandatory=False,vDefault=u''))
                         self.dSkinAttributes[uAttName]=uAtt
                         SetVar(uVarName = uAttName, oVarValue = uAtt)
 
@@ -116,11 +116,11 @@ class cSkin:
             oPathSkinAtlas:cPath = Globals.oPathSkin + 'atlas'
             oPathSkinAtlas.Create()
             Globals.oFnAtlasSkin = cFileName(oPathSkinAtlas) + "skin.atlas"
-            CreateAtlas(Globals.oPathSkin+"pics", Globals.oFnAtlasSkin, u'Create Skin Atlas Files')
+            CreateAtlas(oPicPath=Globals.oPathSkin+"pics", oAtlasFile=Globals.oFnAtlasSkin, uDebugMsg=u'Create Skin Atlas Files')
 
             Globals.oTheScreen.LoadAtlas()
-            Globals.oTheScreen.oFonts.ParseFontFromXMLNode(oET_Root)
-            Globals.oTheScreen.oFonts.ParseIconsFromXMLNode(oET_Root)
+            Globals.oTheScreen.oFonts.ParseFontFromXMLNode(oXMLNode=oET_Root)
+            Globals.oTheScreen.oFonts.ParseIconsFromXMLNode(oXMLNode=oET_Root)
 
         except Exception as e:
             ShowErrorPopUp(uMessage=LogError(uMsg=u'TheScreen:  __LoadSkinDescription: can\'t load SkinDescription',oException=e))

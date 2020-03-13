@@ -39,7 +39,7 @@ def GetMACAddress() -> List:
         cPythonActivity      = GetAndroidModule("PythonActivity")
         oPythonActivity      = cPythonActivity.mActivity
         oWifiManager         = oPythonActivity.getSystemService(cContext.WIFI_SERVICE)
-        uRetColon:str        = oWifiManager.getConnectionInfo().getMacAddress()
+        uRetColon            = oWifiManager.getConnectionInfo().getMacAddress()
         uRetDash             = uRetColon.replace(":","-")
     except Exception as e:
         Logger.error("Error on GetMACAdress:"+str(e))

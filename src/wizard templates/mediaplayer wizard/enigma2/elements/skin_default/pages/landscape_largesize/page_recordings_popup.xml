@@ -12,7 +12,7 @@
     <element name='Anchor Top' type='ANCHOR' posx='center' posy='%8' height='%1' width="%90" />
     <element name='Anchor1' type='ANCHOR' posy='of:bottom:Anchor Top' posx='of:left:Anchor Top' width='of:width:Anchor Top' height='%90' >
       <elements>
-        <element name="$dvar(definition_alias_mediaplayer_template)_MovieList" type="SCROLLCONTAINER" picturenormal="background boxes" container="$dvar(definition_alias_mediaplayer_template)_container_movielist" rowheight="%25"  />
+        <element name="$dvar(definition_alias_mediaplayer_template)_MovieList" type="SCROLLLIST" picturenormal="background boxes" container="$dvar(definition_alias_mediaplayer_template)_container_movielist" rowheight="%25"  />
         <element name='Anchor1 Inner' type='ANCHOR'  height='%25' >
            <element name='Anchor Left Edge' type='ANCHOR'  posx="left" width="%1" />
            <element name="Title"         type="TEXTFIELD" posx="of:right:Anchor Left Edge"  posy="top"              height="%30"   width="%74"            container="$dvar(definition_alias_mediaplayer_template)_container_movielist" fontsize='%h50'  htextalign="left" vtextalign="middle"   caption="$var($dvar(definition_alias_mediaplayer_template)_enigmamovie_title[])"  bold="1"/>

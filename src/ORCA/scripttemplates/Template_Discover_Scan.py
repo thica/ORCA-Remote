@@ -37,7 +37,7 @@ from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
 from ORCA.utils.LogError                    import LogErrorSmall
 from ORCA.utils.TypeConvert                 import ToFloat
 from ORCA.utils.TypeConvert                 import ToBool
-from ORCA.vars.QueryDict                    import QueryDict
+from ORCA.vars.QueryDict                    import TypedQueryDict
 from ORCA.utils.FileName                    import cFileName
 from ORCA.utils.Network                     import Ping
 
@@ -55,7 +55,7 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
         cDiscoverScriptTemplate.__init__(self)
         self.uSubType:str                       = u''
         self.iPort:int                          = 80
-        self.aResults:List[QueryDict]           = []
+        self.aResults:List[TypedQueryDict]      = []
         self.aThreads:List[threading.Thread]    = []
         self.uNothingFoundMessage               = u'Discover - Networkcan: Could not find a device on the network'
 
@@ -71,8 +71,8 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
 
     def ListDiscover(self) -> None:
         dArgs:Dict = {"onlyonce": 0}
-        dDevice:QueryDict
-        dResult: QueryDict
+        dDevice: TypedQueryDict
+        dResult: TypedQueryDict
         self.Discover(**dArgs)
 
         try:
@@ -121,12 +121,12 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
         Logger.error("You must implement CreateDiscoverList_ShowDetails")
-        dDevice:QueryDict = oButton.dDevice
-        uText:str = u"$lvar(5029): %s \n" % dDevice.sFoundIP
+        dDevice:TypedQueryDict = oButton.dDevice
+        uText:str = u"$lvar(5029): %s \n" % dDevice.uFoundIP
         ShowMessagePopUp(uMessage=uText)
 
     # noinspection PyMethodMayBeStatic
-    def CreateReturnDict(self,dResult:Union[QueryDict,None]) -> Dict:
+    def CreateReturnDict(self,dResult:Union[TypedQueryDict,None]) -> Dict:
         Logger.error("You must implement CreateReturnDict")
         uHost: str = u""
         if dResult is not None:
@@ -134,13 +134,13 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
         return {'Host': uHost,'Exception': None}
 
     # noinspection PyMethodMayBeStatic
-    def ParseResult(self,dResult:QueryDict) -> Tuple[str,QueryDict,List]:
+    def ParseResult(self,dResult:TypedQueryDict) -> Tuple[str,TypedQueryDict,List]:
         Logger.error("You must implement ParseResult")
-        dDevice:QueryDict = QueryDict()
-        dDevice.sFoundIP  = dResult["uIP"]
-        uTageLine:str     = dDevice.sFoundIP
-        aLine:List        = [dDevice.sFoundIP]
-        Logger.info(u'Bingo: Discovered Enigma device %s:%s' % (dDevice.uFoundModel, dDevice.sFoundIP))
+        dDevice:TypedQueryDict = TypedQueryDict()
+        dDevice.uFoundIP        = dResult["uIP"]
+        uTageLine:str           = dDevice.uFoundIP
+        aLine:List              = [dDevice.uFoundIP]
+        Logger.info(u'Bingo: Discovered device %s:%s' % (dDevice.uFoundModel, dDevice.uFoundIP))
         return uTageLine,dDevice,aLine
 
     @classmethod
@@ -173,9 +173,9 @@ class cThread_CheckIP(threading.Thread):
         self.SendCommand()
 
     def SendCommand(self) -> None:
-        dResult:QueryDict = QueryDict()
+        dResult:TypedQueryDict = TypedQueryDict()
         try:
-            if Ping(self.uIP):
+            if Ping(uHostname=self.uIP):
                 dResult.uIP          = self.uIP
                 self.oCaller.aResults.append(dResult)
         except Exception as e:

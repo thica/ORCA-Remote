@@ -32,7 +32,7 @@
           <setting name="TimeToClose" parameter="2"/>
           <setting name="FNCodeset" parameter="CODESET_url_PHILIPS HUE.xml"/>
           <setting name="DiscoverScriptName" parameter="discover_upnp"/>
-          <setting name="DISCOVER_UPNP_manufacturer" parameter="Royal Philips Electronics"/>
+          <settingold name="DISCOVER_UPNP_manufacturer" parameter="Royal Philips Electronics"/>
           <setting name="DISCOVER_UPNP_models" parameter='["Philips hue bridge*"]'/>
           <setting name="SaveDiscoveredIP" parameter="1"/>
           <setting name="OldDiscoveredIP" parameter=""/>
@@ -88,8 +88,8 @@
       <description language='English'>Philips Hue Light Control via LAN conrol</description>
       <description language='German'>Philips Hue Lich Fernbedienung über LAN</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/philips hue</local>

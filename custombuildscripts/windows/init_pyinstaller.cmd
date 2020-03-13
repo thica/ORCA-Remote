@@ -106,7 +106,7 @@ call "%SOURCEDIR%\custombuildscripts\windows\install_modules.cmd"
 echo Copy windows.spec file to target folder (root)
 copy %SOURCEDIR%\custombuildscripts\windows\windows.spec %BUILDDIR%\windows.spec >> %LOGFILE%
 
-echo Delete __pychache__ forlder those might confuse pyinstaller
+echo Delete __pychache__ folder those might confuse pyinstaller
 cd %TARGETDIR%
 python3 -c "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
 

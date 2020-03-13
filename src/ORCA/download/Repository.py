@@ -57,36 +57,36 @@ class cRepository(EventDispatcher):
     """
     def __init__(self, *args, **kwargs):
         super(cRepository, self).__init__(*args, **kwargs)
-        self.uRepType:str                   = u''
-        self.uName:str                      = u''
-        self.uDescription:str               = u''
-        self.aRepEntries:List[cRepEntry]    = []
-        self.oPath:Union[cPath,None]        = None
-        self.uUrl:str                       = u''
-        self.uDest:str                      = u''
-        self.aDownloads:List                = []
-        self.oDownloader:cLoadOnlineResource= cLoadOnlineResource(oRepository=self)
-        self.bCancel:bool                   = False
-        self.uVersion:str                   = ''
+        self.uRepType:str                       = u''
+        self.uName:str                          = u''
+        self.uDescription:str                   = u''
+        self.aRepEntries:List[cRepEntry]        = []
+        self.oPath:Union[cPath,None]            = None
+        self.uUrl:str                           = u''
+        self.uDest:str                          = u''
+        self.aDownloads:List                    = []
+        self.oDownloader:cLoadOnlineResource    = cLoadOnlineResource(oRepository=self)
+        self.bCancel:bool                       = False
+        self.uVersion:str                       = u''
 
     def Init(self):
         """ Inits the Objects """
         del self.aRepEntries[:]
         del self.aDownloads[:]
 
-    def ParseFromXMLNode(self,oXMLNode:Element) -> None:
-        """ Parses an xms string into object vars """
+    def ParseFromXMLNode(self,*,oXMLNode:Element) -> None:
+        """ Parses an xml string into object vars """
         oXMLEntries:Element
 
         try:
-            self.uDescription   = GetXMLTextValue(oXMLNode,u'description',True,u'')
-            self.uVersion       = GetXMLTextValue(oXMLNode,u'version',False,u'unknown')
-            self.uRepType       = GetXMLTextValue(oXMLNode,u'type',False,u'unknown')
+            self.uDescription   = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'description',bMandatory=True, vDefault=u'')
+            self.uVersion       = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'version',    bMandatory=False,vDefault=u'unknown')
+            self.uRepType       = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'type',       bMandatory=False,vDefault=u'unknown')
             oXMLEntries =  oXMLNode.find(u'entries')
             if not oXMLEntries is None:
                 for oXMLEntry in oXMLEntries.findall(u'entry'):
                     oRepEntry:cRepEntry=cRepEntry()
-                    oRepEntry.ParseFromXMLNode(oXMLEntry)
+                    oRepEntry.ParseFromXMLNode(oXMLEntry=oXMLEntry)
                     if not oRepEntry.bSkip:
                         oRepEntry.uRepType = self.uRepType
                         oRepEntry.uUrl = self.uUrl
@@ -97,7 +97,7 @@ class cRepository(EventDispatcher):
         except Exception as e:
             LogError(uMsg=u'Can\'t parse repository:'+self.uUrl,oException=e)
 
-    def WriteToXMLNode(self,uType:str) -> None:
+    def WriteToXMLNode(self,*,uType:str) -> None:
         """ writes object vars to an xml node """
 
         oXMLRoot:Element
@@ -113,10 +113,10 @@ class cRepository(EventDispatcher):
 
         oXMLEntries = SubElement(oXMLRoot,'entries')
         for oRepEntry in self.aRepEntries:
-            oRepEntry.WriteToXMLNode(oXMLEntries)
+            oRepEntry.WriteToXMLNode(oXMLNode=oXMLEntries)
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
-    def LoadAllSubReps(self,uPath:str,aSubReps:List,bDoNotExecute:bool) -> List:
+    def LoadAllSubReps(self,*,uPath:str,aSubReps:List,bDoNotExecute:bool) -> List:
         """ Load all sub reposities (dependencies) """
 
         Logger.debug('Repository: Request to download reposity description: [%s]' % uPath)
@@ -129,8 +129,8 @@ class cRepository(EventDispatcher):
         oEvents:cEvents                 = Globals.oEvents
         oDownLoadObject:cDownLoadObject = cDownLoadObject()
 
-        aActions:List[cAction] = oEvents.CreateSimpleActionList([{'string':'setvar','varname':'DOWNLOADERROR','varvalue':'0'},
-                                                 {'string':'showprogressbar','title':'$lvar(5015)','message':uPath,'max':'100'}])
+        aActions:List[cAction] = oEvents.CreateSimpleActionList(aActions=[{'string':'setvar','varname':'DOWNLOADERROR','varvalue':'0'},
+                                                                          {'string':'showprogressbar','title':'$lvar(5015)','message':uPath,'max':'100'}])
         for uSubRep in aSubReps:
             uRepType                            = uSubRep[1]
             uRepPrettyName                      = uSubRep[0]
@@ -141,16 +141,16 @@ class cRepository(EventDispatcher):
             oDownLoadObject.dPars['Finalize']   = "REPOSITORY XML"
             oDownLoadObject.dPars['PrettyName'] = uRepPrettyName
 
-            oEvents.AddToSimpleActionList(aActions,[{'string':'showprogressbar','message':uUrl,'current':'0'},
-                                                    {'string':'loadresource','resourcereference':oDownLoadObject.ToString(),'condition':"$var(DOWNLOADERROR)==0"}])
+            oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showprogressbar','message':uUrl,'current':'0'},
+                                                                         {'string':'loadresource','resourcereference':oDownLoadObject.ToString(),'condition':"$var(DOWNLOADERROR)==0"}])
 
 
-        oEvents.AddToSimpleActionList(aActions,[{'string':'showprogressbar'}])
+        oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showprogressbar'}])
 
         if bDoRefresh:
-            oEvents.AddToSimpleActionList(aActions,[{'string':'updatewidget','widgetname':'SettingsDownload'}])
+            oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'updatewidget','widgetname':'SettingsDownload'}])
 
-        oEvents.AddToSimpleActionList(aActions,[{'string':'showquestion','title':'$lvar(595)','message':'$lvar(698)','actionyes':'dummy','condition':'$var(DOWNLOADERROR)==1'}])
+        oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showquestion','title':'$lvar(595)','message':'$lvar(698)','actionyes':'dummy','condition':'$var(DOWNLOADERROR)==1'}])
 
         #Execute the Queue
         oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
@@ -163,4 +163,4 @@ class cRepository(EventDispatcher):
         SetVar(uVarName = "DOWNLOADERROR", oVarValue = "1")
 
 
-oRepository = cRepository()
+oRepository:cRepository = cRepository()

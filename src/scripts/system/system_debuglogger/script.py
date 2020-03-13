@@ -34,8 +34,8 @@ from ORCA.scripttemplates.Template_System import cSystemTemplate
       <description language='English'>Script to add timestamps to the logfile</description>
       <description language='German'>Script um einen Zeitstempel zum Logfile hinzuzufügen</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -109,7 +109,7 @@ class cScript(cSystemTemplate):
     """
 
     def __init__(self):
-        cSystemTemplate.__init__(self)
+        super().__init__()
         self.uSubType           = u'DEBUG'
         self.uSortOrder         = u'last'
         self.oLoggerPatch       = None

@@ -33,7 +33,7 @@ class SettingButtons(SettingItem):
     def __init__(self, **kwargs):
         self.register_event_type('on_release')
         # by purpose: we super to the settingitem directly, as SettingItem tries to read a non existing section
-        super(SettingItem, self).__init__(**RemoveNoClassArgs(kwargs,SettingItem))
+        super(SettingItem, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=SettingItem))
         self.dKwArgs:Dict                                       = kwargs
         self.aOptions                                           = kwargs.get('buttonoptions',None)
         self.iButton:int                                        = 0
@@ -47,7 +47,7 @@ class SettingButtons(SettingItem):
             oButton.iOrder = i
             self.add_widget(oButton)
             oButton.bind (on_release=self.On_ButtonPressed)
-            i=i+1
+            i += 1
     def set_value(self, section, key, value) -> None:
         """ set_value normally reads the configparser values and runs on an error to do nothing here """
         return

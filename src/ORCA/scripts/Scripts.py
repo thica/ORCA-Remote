@@ -49,7 +49,7 @@ class cScripts:
     def __init__(self):
         self.aScriptNameList:List[str]                              = [] # list of all names of all scripts
         self.aScriptNameListWithConfig:List[str]                    = [] # list of all names of all scripts, which have configs
-        self.dScriptPathList:Dict[str:cFileName]                    = {} # dict of all script pathes of all scripts
+        self.dScriptPathList:Dict[str,cPath]                        = {} # dict of all script pathes of all scripts
         self.dScripts:Dict[str,cBaseScript]                         = {} # dict of all scripts
         self.dModules:Dict[str,Any]                                 = {} # dict of all python modules for all scripts
         self.dScriptSettingPlugins:Dict[str,cScriptSettingPlugin]   = {} # dict of all settings to pulled into the various setting pages (optional)
@@ -135,7 +135,7 @@ class cScripts:
             return None
 
         try:
-            oModule=Globals.oModuleLoader.LoadModule(oFnScript,'cScript'+"_"+uScriptName)
+            oModule=Globals.oModuleLoader.LoadModule(oFnModule=oFnScript,uModuleName='cScript'+"_"+uScriptName)
             self.dModules[uScriptName] = oModule
             oScript:cBaseScript = oModule.GetClass('cScript')()
             oScript.Init(uScriptName, oFnScript)

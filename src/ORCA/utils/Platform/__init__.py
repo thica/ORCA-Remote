@@ -21,7 +21,7 @@
 
 from typing                 import Dict
 from typing                 import List
-from typing                 import Any
+from typing                 import cast
 from typing                 import Callable
 
 from importlib              import import_module
@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from ORCA.utils.Path import cPath
 else:
     from typing import TypeVar
-    cPath=TypeVar("cPath")
+    cPath = TypeVar("cPath")
 
 __all__ = ['OS_ToPath',
            'OS_SystemIsOnline',
@@ -61,17 +61,27 @@ __all__ = ['OS_ToPath',
            'OS_GetIPAddressV6',
            'OS_GetSubnetV4',
            'OS_GetSubnetV6',
-           'OS_GetMACAddress'
+           'OS_GetMACAddress',
+           'OS_GetDrives'
           ]
 
 # noinspection PyUnusedLocal
 def FunctionDummy(**kwargs):
+    """
+    Dummy function in case, nothing is found
+    :param kwargs:
+    :return: None
+    """
     return None
 
 dFunctionCache:Dict[str,Callable]={}
 
 def GetFunction(uFunctionName:str) -> Callable:
+    """
 
+    :param uFunctionName:
+    :return:
+    """
     oFunction: Callable
     uModule:   str
 
@@ -103,89 +113,143 @@ def GetFunction(uFunctionName:str) -> Callable:
 
 def OS_CheckPermissions() -> bool:
     """  check and retrieve requiered permissions """
-    return GetFunction("CheckPermissions")()
+    return cast(bool,GetFunction("CheckPermissions")())
 
 def OS_RequestPermissions() -> bool:
     """  Requests permissions from OS """
-    return GetFunction("RequestPermissions")()
+    return cast(bool,GetFunction("RequestPermissions")())
 
 def OS_Platform() -> str:
+    """
+    Gets the current platform. Abstraction of the kivy platform function
+    :return: A string, representing the platform
+    """
     return platform
 
 def OS_ToPath(uPath:str) -> str:
     """ converts a path to a valid os specific path string """
-    return GetFunction("ToPath")(uPath)
+    return cast(str,GetFunction("ToPath")(uPath))
 
 def OS_Ping(uHostname:str) -> bool:
     """ executes an ping statement """
-    return GetFunction("Ping")(uHostname)
+    return cast(bool,GetFunction("Ping")(uHostname))
 
 def OS_GetUserDataPath() -> cPath:
     """ Gets the path to the user folder (This might NOT be the OS User Folder"""
-    return GetFunction("GetUserDataPath")()
+    return cast(cPath,GetFunction("GetUserDataPath")())
 
 def OS_GetUserDownloadsDataPath() -> cPath:
     """ Gets the path to the user downloads folder """
-    return GetFunction("GetUserDownloadsDataPath")()
+    return cast(cPath,GetFunction("GetUserDownloadsDataPath")())
 
 def OS_GetSystemUserPath() -> cPath:
     """ Gets the path to the system user folder """
-    return GetFunction("GetSystemUserPath")()
+    return cast(cPath,GetFunction("GetSystemUserPath")())
 
 def OS_GetInstallationDataPath() -> cPath:
     """ Gets the path to the folder, where the installler places the Orca Files"""
-    return GetFunction("GetInstallationDataPath")()
+    return cast(cPath,GetFunction("GetInstallationDataPath")())
 
 def OS_Vibrate(fDuration:float=0.05) -> bool:
     """ Vibrates a device """
-    return GetFunction("Vibrate")(fDuration)
+    return cast(bool,GetFunction("Vibrate")(fDuration))
 
 def OS_GetDefaultNetworkCheckMode() -> str:
     """ returns the default way for an OS hpw to check if a device is online"""
-    return GetFunction("GetDefaultNetworkCheckMode")()
+    return cast(str,GetFunction("GetDefaultNetworkCheckMode")())
 
 def OS_GetDefaultStretchMode() -> str:
     """ Stretchmode: could be "STRETCH" or "CENTER" or "TOPLEFT" or "RESIZE" """
-    return GetFunction("GetDefaultStretchMode")()
+    return cast(str,GetFunction("GetDefaultStretchMode")())
 
 def OS_GetLocale() -> str:
-    return GetFunction("GetLocale")()
+    """
+    Returns the current locale
+    :return: the locale string
+    """
+    return cast(str,GetFunction("GetLocale")())
 
-def OS_GetRotationObject() -> Any:
+def OS_GetRotationObject() -> Callable:
     """ returns the os-specific object to perform rotation tasks"""
-    return GetFunction("cRotation")()
+    return cast(Callable,GetFunction("cRotation")())
 
 def OS_SystemIsOnline() -> bool:
     """
     verifies, if the system has a network connection by system APIs (not by ping)
     returns true, if OS doesn't support it
     """
-    return GetFunction("SystemIsOnline")()
+    return cast(bool,GetFunction("SystemIsOnline")())
 
 def OS_RegisterSoundProvider() -> None:
-    return GetFunction("RegisterSoundProvider")()
+    """
+    Registers the sound provider
+    Sound provider must be registered as the kivy team has remove the capabilities to play mp3 files
+    :return:
+    """
+    GetFunction("RegisterSoundProvider")()
+    return None
 
 def OS_GetWindowSize() -> None:
+    """
+    Detects the current windows sizes and stores it in the Global structure
+    """
     Globals.iAppWidth  = kivy.core.window.Window.size[0]
     Globals.iAppHeight = kivy.core.window.Window.size[1]
+    return None
 
 def OS_GetIPAddressV4() -> str:
-    return GetFunction("GetIPAddressV4")()
+    """
+    Gets the V4 IP Address
+    :return: a string representing the IP Address eg 192.168.1.100
+    """
+    return cast(str,GetFunction("GetIPAddressV4")())
 
 def OS_GetSubnetV4() -> str:
-    return GetFunction("GetSubnetV4")()
+    """
+    Gets the V4 Subnet
+    :return: a string representing the subnet
+    """
+    return cast(str,GetFunction("GetSubnetV4")())
 
 def OS_GetGatewayV4() -> str:
-    return GetFunction("GetGatewayV4")()
+    """
+    Gets the V4 Gateway
+    :return: a string representing the gateway
+    """
+    return cast(str,GetFunction("GetGatewayV4")())
 
 def OS_GetIPAddressV6() -> str:
-    return GetFunction("GetIPAddressV6")()
+    """
+    Gets the V6 IP Address
+    :return: a string representing the IP Address
+    """
+    return cast(str,GetFunction("GetIPAddressV6")())
 
 def OS_GetSubnetV6() -> str:
-    return GetFunction("GetSubnetV6")()
+    """
+    Gets the V6 Gateway
+    :return: a string representing the gateway
+    """
+    return cast(str,GetFunction("GetSubnetV6")())
 
 def OS_GetGatewayV6() -> str:
-    return GetFunction("GetGatewayV6")()
+    """
+    Gets the V6 Gateway. This is from a network view rubbish
+    :return: a string representing the gateway
+    """
+    return cast(str,GetFunction("GetGatewayV6")())
 
-def OS_GetMACAddress() -> List:
-    return GetFunction("GetMACAddress")()
+def OS_GetMACAddress() -> List[str]:
+    """
+    Gets the Mac address of the device
+    :return: A list, with both type of mac addresses (colon and dash separated)
+    """
+    return cast(List[str],GetFunction("GetMACAddress")())
+
+def OS_GetDrives() -> List[str]:
+    """
+    gets a list of local drives (drive letters on windows, /mnt and /media folder on Linux
+    :return: A list of drives
+    """
+    return cast(List[str],GetFunction("GetDrives")())
+

@@ -21,7 +21,7 @@
 """
 
 from __future__                             import annotations
-from typing                                 import Union
+from typing                                 import Optional
 from typing                                 import Dict
 from typing                                 import cast
 from ORCA.Action                            import cAction
@@ -41,8 +41,8 @@ import ORCA.Globals as Globals
       <description language='English'>Interface to show videos and streams (experimental)</description>
       <description language='German'>Interface um Videos und Streams anzuzeigen (experimental)</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/orca_video</local>
@@ -62,13 +62,13 @@ class cInterface(cBaseInterFace):
 
     class cInterFaceSettings(cBaseInterFaceSettings):
         def __init__(self,oInterFace:cInterface):
-            cBaseInterFaceSettings.__init__(self,oInterFace)
-            self.oWidgetPlayer:Union[cWidgetVideo,None]    = None
+            super().__init__(oInterFace)
+            self.oWidgetPlayer:Optional[cWidgetVideo]      = None
             self.aIniSettings.uParseResultOption           = u'tokenize'
             self.aIniSettings.uParseResultTokenizeString   = u':'
 
         def ReadConfigFromIniFile(self,uConfigName:str) -> None:
-            cBaseInterFaceSettings.ReadConfigFromIniFile(self,uConfigName)
+            super().ReadConfigFromIniFile(uConfigName=uConfigName)
             self.aIniSettings.uParseResultOption           = u'tokenize'
             self.aIniSettings.uParseResultTokenizeString   = u':'
             self.aIniSettings.uStream                      = ReplaceVars(self.aIniSettings.uStream)
@@ -77,7 +77,7 @@ class cInterface(cBaseInterFace):
 
         def Connect(self) -> bool:
 
-            if not cBaseInterFaceSettings.Connect(self):
+            if not super().Connect():
                 return False
             try:
                 aWidgetPlayer = Globals.oTheScreen.FindWidgets(uPageName = self.oAction.oParentWidget.oParentScreenPage.uPageName, uWidgetName = self.aIniSettings.uWidgetName)
@@ -88,17 +88,17 @@ class cInterface(cBaseInterFace):
                     self.oWidgetPlayer.Connect(self)
                     return True
                 else:
-                    self.ShowError(u'Cannot Find Widget')
+                    self.ShowError(uMsg=u'Cannot Find Widget')
                     self.bOnError=True
                     return False
 
             except Exception as e:
-                self.ShowError(u'Cannot Find Widget',e)
+                self.ShowError(uMsg=u'Cannot Find Widget',oException=e)
                 self.bOnError=True
                 return False
 
         def Disconnect(self) -> bool:
-            if not cBaseInterFaceSettings.Disconnect(self):
+            if not super().Disconnect():
                 return False
             if self.oWidgetPlayer is not None:
                 self.oWidgetPlayer.Connect(None)
@@ -113,30 +113,30 @@ class cInterface(cBaseInterFace):
 
             try:
                 uCommand,uRetVal=self.oInterFace.ParseResult(self.oAction,uResponse,self)
-                self.ShowDebug(u'Parsed Responses:'+uCommand+u':'+uRetVal)
+                self.ShowDebug(uMsg=u'Parsed Responses:'+uCommand+u':'+uRetVal)
 
                 oActionTrigger=self.GetTrigger(uCommand)
                 if oActionTrigger is not None:
                     self.CallTrigger(oActionTrigger,uResponse)
                 else:
-                    self.ShowDebug(u'Discard message:'+uCommand +':'+uResponse )
+                    self.ShowDebug(uMsg=u'Discard message:'+uCommand +':'+uResponse )
             except Exception as e:
-                self.ShowError(u'Error Receiving Response',e)
+                self.ShowError(uMsg=u'Error Receiving Response',oException=e)
 
     def __init__(self):
         cInterFaceSettings = self.cInterFaceSettings
-        cBaseInterFace.__init__(self)
+        super().__init__()
         self.dSettings:Dict                             = {}
-        self.oSetting:Union[cInterFaceSettings,None]   = None
+        self.oSetting:Optional[cInterFaceSettings]      = None
 
     def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
-        cBaseInterFace.Init(self, uObjectName, oFnObject)
+        super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
         self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
         self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
         self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
 
     def DeInit(self, **kwargs) -> None:
-        cBaseInterFace.DeInit(self,**kwargs)
+        super().DeInit(**kwargs)
         for uSettingName in self.dSettings:
             self.dSettings[uSettingName].DeInit()
 
@@ -146,13 +146,13 @@ class cInterface(cBaseInterFace):
                }
 
     def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
-        cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+        super().SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=uRetVar,bNoLogOut=bNoLogOut)
 
         uCmd:str
         uCmd=ReplaceVars(oAction.uCmd)
         uCmd=ReplaceVars(uCmd,self.uObjectName+'/'+oSetting.uConfigName)
 
-        self.ShowInfo(u'Sending Command: %s to %s (%s:%s)' % (uCmd,oSetting.aIniSettings.uWidgetName,oSetting.uConfigName,oSetting.aIniSettings.uStream))
+        self.ShowInfo(uMsg=u'Sending Command: %s to %s (%s:%s)' % (uCmd,oSetting.aIniSettings.uWidgetName,oSetting.uConfigName,oSetting.aIniSettings.uStream))
         oSetting.Connect()
 
         eRet:eReturnCode=eReturnCode.Error

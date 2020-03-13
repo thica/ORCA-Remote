@@ -20,6 +20,7 @@
 
 from typing                         import List
 from typing                         import Dict
+import json
 
 from kivy.logger                    import Logger
 
@@ -59,7 +60,7 @@ class cEventActionsSettings(cEventActionBase):
         * a set of settings which are identified by the title of the section
         * all settings of a definition
 
-        This function is usefull, when you import a definition with it's settings, but not all settings apply to the parent setting. Remarks: Using this function will replace all variable names in the settings at this time.
+        This function is useful, when you import a definition with it's settings, but not all settings apply to the parent setting. Remarks: Using this function will replace all variable names in the settings at this time.
 
         <div style="overflow:auto; ">
         {| class="wikitable"
@@ -81,7 +82,7 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(u'RemoveDefinitionSetting',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'RemoveDefinitionSetting',oAction=oAction)
         uDefinitionName:str = ReplaceVars(oAction.dActionPars.get("definitionname",""))
         uSettingVar:str     = ReplaceVars(oAction.dActionPars.get("settingname",""))
         uSettingVarOrg :str = oAction.dActionPars.get("settingname","")
@@ -95,7 +96,6 @@ class cEventActionsSettings(cEventActionBase):
             elif self.RemoveSettingSection(uSettingVarOrg,oDef):
                 bFound=True
             else:
-                import json
                 for uVisSection in oDef.dDefinitionSettingsJSON:
                     aDefinitionSettingsJSON:List[Dict]  = json.loads(ReplaceVars(oDef.dDefinitionSettingsJSON[uVisSection]))
                     aDefinitionSettingsJSON2:List[Dict] = json.loads(ReplaceVars(oDef.dDefinitionSettingsJSON[uVisSection]))
@@ -186,13 +186,13 @@ class cEventActionsSettings(cEventActionBase):
         """
 
         self.oEventDispatcher.aHiddenKeyWords.remove('configname')
-        self.oEventDispatcher.LogAction(u'SaveInterfaceSetting',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'SaveInterfaceSetting',oAction=oAction)
         self.oEventDispatcher.aHiddenKeyWords.append('configname')
 
-        uInterfaceName:str       = ReplaceVars(oAction.dActionPars.get("interfacename",""))
-        uConfigName:str          = ReplaceVars(oAction.dActionPars.get("configname",""))
-        uVarName:str             = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uVarValue:str            = ReplaceVars(oAction.dActionPars.get("varvalue",""))
+        uInterfaceName:str = ReplaceVars(oAction.dActionPars.get("interfacename",""))
+        uConfigName:str    = ReplaceVars(oAction.dActionPars.get("configname"   ,""))
+        uVarName:str       = ReplaceVars(oAction.dActionPars.get("varname"      ,""))
+        uVarValue:str      = ReplaceVars(oAction.dActionPars.get("varvalue"     ,""))
 
         oInterFace:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
         if oInterFace is None:
@@ -240,7 +240,7 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(u'GetInterfaceSetting',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'GetInterfaceSetting',oAction=oAction)
 
         uInterfaceName:str       = ReplaceVars(oAction.dActionPars.get("interfacename",""))
         uConfigName:str          = ReplaceVars(oAction.dActionPars.get("configname",""))
@@ -256,8 +256,7 @@ class cEventActionsSettings(cEventActionBase):
             LogError(uMsg=u'Action: Get Interface Setting failed: Interface: %s  Interface not found!' % uInterfaceName)
             return eReturnCode.Error
 
-        SetVar(uVarName = uRetVar, oVarValue = oInterFace.oObjectConfig.GetSettingParFromIni(uConfigName,uVarName))
-
+        SetVar(uVarName = uRetVar, oVarValue = oInterFace.oObjectConfig.GetSettingParFromIni(uSectionName=uConfigName,uVarName=uVarName))
         return eReturnCode.Success
 
     def ExecuteActionGetSaveOrcaSetting(self,oAction:cAction) -> eReturnCode:
@@ -296,7 +295,7 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(u'GetSaveOrcaSetting',oAction)
+        self.oEventDispatcher.LogAction(uTxt=u'GetSaveOrcaSetting',oAction=oAction)
         uConfigType:str          = ReplaceVars(oAction.dActionPars.get("configtype",""))
         uVarName:str             = ReplaceVars(oAction.dActionPars.get("varname",""))
         uVarValue:str            = oAction.dActionPars.get("varvalue","")

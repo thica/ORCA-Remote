@@ -36,6 +36,7 @@ from ORCA.widgets.core.TouchRectangle       import cTouchRectangle
 from ORCA.widgets.core.ButtonBehaviour      import simplegesture
 from ORCA.widgets.base.Base                 import cWidgetBase
 from ORCA.ScreenPage                        import cScreenPage
+from ORCA.utils.TypeConvert                 import ToUnicode
 
 import ORCA.Globals as Globals
 
@@ -47,8 +48,8 @@ import ORCA.Globals as Globals
       <description language='English'>Additional Widget to record gestures</description>
       <description language='German'>Zusätzliches Widgets um Gesten aufzuzeichnen</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -111,7 +112,7 @@ class cGestureBoard(cTouchRectangle):
         uLogName:str=Globals.oFnGestureLog.string
 
         oLogFile = open(uLogName, 'a')
-        oLogFile.write('Gesturecode:'+self.gdb.gesture_to_str(g)+'\n')
+        oLogFile.write('Gesturecode:'+ToUnicode(self.gdb.gesture_to_str(g))+'\n')
         oLogFile.close()
         return True
 
@@ -181,14 +182,14 @@ class cScript(cSystemTemplate):
     """
 
     def __init__(self):
-        cSystemTemplate.__init__(self)
+        super().__init__()
         self.uSubType           = u'WIDGET'
         self.uSortOrder         = u'auto'
         self.uIniFileLocation   = u'none'
 
 
     def RunScript(self, *args, **kwargs) -> None:
-        Globals.oNotifications.RegisterNotification("UNKNOWNWIDGET",fNotifyFunction=self.AddWidgetFromXmlNode,uDescription="Script Widget GestureRecorder")
+        Globals.oNotifications.RegisterNotification(uNotification="UNKNOWNWIDGET",fNotifyFunction=self.AddWidgetFromXmlNode,uDescription="Script Widget GestureRecorder")
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def AddWidgetFromXmlNode(self,*args,**kwargs) -> Union[Dict,None]:

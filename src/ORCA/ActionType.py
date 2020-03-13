@@ -104,38 +104,6 @@ class cActionType:
     Redirect:int
     SetReturnCode:int
     WaitForConnectivity:int
-    CheckOnSleep:int
-    CheckPermissions:int
-    CheckToRotate:int
-    CreatePages:int
-    DownLoadDefinition:int
-    ExecuteFTPCommand:int
-    GetUsedDefinitions:int
-    InitInterfaceSettings:int
-    LoadDefinition:int
-    LoadDefinitionActions:int
-    LoadDefinitionFonts:int
-    LoadDefinitionGestures:int
-    LoadDefinitionLanguages:int
-    LoadDefinitionParameter:int
-    LoadDefinitionSettings:int
-    LoadLanguages:int
-    LoadRepositoryContent:int
-    LoadResource:int
-    LoadSkin:int
-    LoadSounds:int
-    ParseDefinitionXML:int
-    RegisterFonts:int
-    RegisterInterfaces:int
-    RepositoryUpdate:int
-    RestartAfterDefinitionDownload:int
-    RestartAfterRepositoryUpdate:int
-    ResumeInterfaces:int
-    ResumeOnSleep:int
-    ResumeScripts:int
-    ShowSplashText:int
-    SleepInterfaces:int
-    SleepScripts:int
     RegisterNotification:int
     RegisterNotification_sub:int
     SendNotification:int

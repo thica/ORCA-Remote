@@ -25,12 +25,13 @@ from typing import Any
 from typing import Union
 
 
-oLinkPar:Union[str,List[Dict]] = ""
+cLinkPar = Union[str,List[Dict]]
+oLinkPar:cLinkPar = ""
 
-dUserVars:Dict[str,Any]             = {}
-dUserVarLinks:Dict[str,oLinkPar]    = {}
-dDefVars:Dict[str,str]              = {}
-uRepContext:str                     = u''
+dUserVars:Dict[str,Any]                     = {}
+dUserVarLinks:Dict[str,List[cLinkPar]]      = {}
+dDefVars:Dict[str,str]                      = {}
+uRepContext:str                             = u''
 
 
 def InitSystemVars() -> None:

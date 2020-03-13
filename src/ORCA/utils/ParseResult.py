@@ -28,18 +28,16 @@ import  token
 from    io import StringIO
 import  json
 
-from    xml.etree.ElementTree   import ElementTree
-from    xml.etree.ElementTree   import fromstring
-
 from    kivy.logger             import Logger
 from    ORCA.utils.LogError     import LogError
 from    ORCA.utils.TypeConvert  import ToList
 from    ORCA.utils.TypeConvert  import ToUnicode
-from    ORCA.utils.XML          import GetXMLTextValue
+from    ORCA.utils.TypeConvert  import ToDic
+from    ORCA.utils.TypeConvert  import XMLToDic
+from    ORCA.utils.ParseDict    import ParseDictKeyTree
+from    ORCA.utils.ParseDict    import ParseDictAny
 from    ORCA.vars.Replace       import ReplaceVars
 from    ORCA.vars.Access        import SetVar
-from    ORCA.vars.Helpers       import UnSplit
-
 
 class cResultParser:
     """ Object to parse results """
@@ -52,14 +50,14 @@ class cResultParser:
         self.uGlobalParseResultOption:str   = u''
         self.uGlobalTokenizeString:str      = u''
 
-    def Parse(self,uResponse:str,uGetVar:str,uParseResultOption:str,uGlobalDestVar:str,uLocalDestVar:str=u'',uTokenizeString:str=u'')->Tuple[str,str]:
+    def Parse(self,*,uResponse:str,uGetVar:str,uParseResultOption:str,uGlobalDestVar:str,uLocalDestVar:str=u'',uTokenizeString:str=u'',uParseResultFlags:str=u'')->Tuple[str,str]:
         """ The Main Parse Function """
         self.uGlobalDestVar         = uGlobalDestVar
         self.uLocalDestVar          = uLocalDestVar
         self.uGlobalTokenizeString  = uTokenizeString
 
-        if uGetVar.startswith('ORCAMULTI'):
-            aTmpGetVar:List        = ToList(uGetVar[9:])
+        if u'L' in uParseResultFlags:
+            aTmpGetVar:List        = ToList(uGetVar)
             aTmpLocalDestVar:List  = ToList(uLocalDestVar)
             aTmpGlobalDestVar:List = ToList(uGlobalDestVar)
             uRet1:str=''
@@ -69,11 +67,11 @@ class cResultParser:
                     self.uLocalDestVar = aTmpLocalDestVar[iIndex]
                 if iIndex < len(aTmpGlobalDestVar):
                     self.uGlobalDestVar = aTmpGlobalDestVar[iIndex]
-                uRet1,uRet2 = self.ParseSingle(uResponse,uGetVar,uParseResultOption,uTokenizeString)
+                uRet1,uRet2 = self.ParseSingle(uResponse=uResponse,uGetVar=uGetVar,uParseResultOption=uParseResultOption,uTokenizeString=uTokenizeString,uParseResultFlags=uParseResultFlags)
                 self.uLocalDestVar          = uLocalDestVar
                 self.uGlobalTokenizeString  = uTokenizeString
             return uRet1,uRet2
-        return self.ParseSingle(uResponse,uGetVar,uParseResultOption,uTokenizeString)
+        return self.ParseSingle(uResponse=uResponse,uGetVar=uGetVar,uParseResultOption=uParseResultOption,uTokenizeString=uTokenizeString,uParseResultFlags=uParseResultFlags)
 
     def _SetVar(self,uValue:str,uDebugMessage:str,uAddName:str=u'')->None:
         """ Sets the vars, which contains the parse results """
@@ -94,29 +92,34 @@ class cResultParser:
         self.uLocalDestVar          = uLocalDestVar
         return self._SetVar(uValue=uValue,uDebugMessage=uDebugMessage,uAddName=uAddName)
 
-    def ParseSingle(self,uResponse:str,uGetVar:str,uParseResultOption:str, uTokenizeString:str=u'')->Tuple:
+    def ParseSingle(self,*,uResponse:str,uGetVar:str,uParseResultOption:str, uTokenizeString:str=u'', uParseResultFlags=u'')->Tuple:
         """ Parses a single result """
 
         if uParseResultOption == '':
             uParseResultOption = self.uGlobalParseResultOption
 
+        self.ShowDebug(u'Response: '+ToUnicode(uResponse))
+
         if uParseResultOption == u'no' or uParseResultOption == u'':
             return u'',u''
 
-        self.ShowDebug(u'Response: '+ToUnicode(uResponse))
+        if uParseResultOption != u'store' and uGetVar=="":
+            return u'',u''
+
         try:
             if uParseResultOption == u'store':
                 return self._Parse_Store(uResponse)
-            if uParseResultOption == u'json':
-                return self._Parse_Json(uResponse,uGetVar)
-            if uParseResultOption == u'tokenize':
+            elif uParseResultOption == u'json':
+                if uGetVar:
+                    return self._Parse_Json(uResponse,uGetVar,uParseResultFlags)
+            elif uParseResultOption == u'tokenize':
                 return self._Parse_Tokenize(uResponse,uGetVar,uTokenizeString)
-            if uParseResultOption == u'xml':
-                return self._Parse_XML(uResponse,uGetVar)
-            if uParseResultOption == u'dict':
-                return self._Parse_Dict(uResponse,uGetVar)
+            elif uParseResultOption == u'xml':
+                return self._Parse_XML(uResponse,uGetVar,uParseResultFlags)
+            elif uParseResultOption == u'dict':
+                return self._Parse_Dict(uResponse,uGetVar,uParseResultFlags)
         except Exception as e:
-            self.ShowError(u'can\'t Parse Result',oException=e)
+            self.ShowError(u'Can\'t parse result',oException=e)
             return u'',u''
         return u'',u''
 
@@ -142,7 +145,6 @@ class cResultParser:
                     uResponse:str   = tResp[1]
                     uCmd:str        = tResp[0]
                     self._SetVar(uResponse,u'Tokenized one result',uCmd)
-
                 elif len(tResp)>2:
                     i:int = 1
                     while i < len(tResp):
@@ -154,32 +156,14 @@ class cResultParser:
                     self._SetVar(uResponse,u'No Tokens found, storing result')
         return uCmd,uResponse
 
-    def ParseResult_JsonHeader(self,uResponse:str)->Tuple:
-        """ Parses a json header """
-        try:
-            tJsonResponse:Dict = json.loads(uResponse)
-            uID:str
-            uMethod:str = tJsonResponse.get(u'method')
-            if uMethod is None:
-                uMethod = u''
-            uID=tJsonResponse.get(u'id')
-            if uID is None:
-                uID = u''
-            return uMethod,uID
-        except Exception as e:
-            self.ShowError(u'Invalid JSON Response Header:'+uResponse,oException=e)
-            return u'',u''
-
-    def _Parse_Json(self,uOrgResponse:str,uGetVar:str)->Tuple:
+    def _Parse_Json(self,uResponse:str,uGetVar:str,uParseResultFlags:str)->Tuple:
         """ parses the result a json """
-        uResponse:str       = ToUnicode(uOrgResponse)
-        uResponse2:str      = ToUnicode(uOrgResponse)
+        uResponse:str       = ToUnicode(uResponse)
         tJsonResponse:Dict  = {}
-        aGetVars:List
 
         try:
             tJsonResponse = json.loads(uResponse)
-        except Exception:
+        except Exception as e:
             uResponse=fixLazyJsonWithComments(uResponse)
             try:
                 tJsonResponse = json.loads(uResponse)
@@ -188,117 +172,52 @@ class cResultParser:
                     uResponse     = uResponse.replace("u'", '"')
                     uResponse     = uResponse.replace("'", '"')
                     tJsonResponse = json.loads(uResponse)
+        return self._Parse_Dict(uResponse=tJsonResponse,uGetVar=uGetVar,uParseResultFlags=uParseResultFlags)
 
-        aGetVars = uGetVar.split(',')
-        iIndex:int   = 0
-        UnSplit(aGetVars)
-        vResult:Any = tJsonResponse
-
-        if uGetVar == u'':
-            return u'',u''
-        for uVar in aGetVars:
-            self.ShowDebug(u'Parsing Vartoken:' + uVar + " in:"+uResponse)
-            iIndex = iIndex+1
-            # we split [aa=bb,ccc}
-            uVar = uVar.split(',')
-            #and remove the brackets
-            if len(uVar)>1:
-                if uVar[0].startswith(u'['):
-                    uVar[0] = uVar[0][1:]
-                if uVar[1].endswith(u']'):
-                    uVar[1] = uVar[1][:-1]
-            #If we got a dict
-            if isinstance(vResult,dict):
-                self.ShowDebug(u'Parsing Result as Dict')
-                # and should only receive one value, its simple, we do it
-                if len(uVar) == 1:
-                    vResult = vResult.get(uVar[0])
-                # If we have to pull a specific value from a dict, than use the specific one (Not Testet: ToDo: Needs to reworked as soon as i got an example)
-                else:
-                    vResult = vResult.get(uVar[1])
-            #If we got a list
-            elif isinstance(vResult,list):
-                self.ShowDebug(u'Parsing Result as List')
-                #if we need nothing special, then use the first one
-                if len(uVar) == 1:
-                    if len(vResult) > 0:
-                        vResult = vResult[0]
-                        self.ShowDebug(u'Parsing result as list, pulling first element:' + uResponse)
-                else:
-                    self.ShowDebug(u'Parsing result as list: pulling given Value')
-                    #now it gets complicated
-                    # Lets split the first part (xxx=yyy
-                    lTmp:List=uVar[0].split('=')
-                    if len(lTmp) == 2:
-                        for vTmpResult in vResult:
-                            if isinstance(vTmpResult,dict):
-                                uFinalResult:str = u''
-                                bFound:bool       = False
-                                for uKey, uValue in vTmpResult.items():
-                                    if uKey == uVar[1]:
-                                        uFinalResult = uValue
-                                    if uKey == lTmp[0]:
-                                        if uValue == lTmp[1]:
-                                            bFound = True
-                                if bFound:
-                                    vResult = uFinalResult
-                                    break
-                        #sResult=sResult.get(lTmp[1])
-                    else:
-                        vResult = vResult[0]
-            if iIndex == len(aGetVars):
-                if not isinstance(vResult, str):
-                    vResult = ToUnicode(vResult)
-                if isinstance(vResult, str):
-                    self._SetVar(vResult,u'JSON:Storing Value')
-                    return uVar,vResult
-                else:
-                    self.ShowError(u'Incomplete parse options')
-                    self._SetVar(uResponse2,u'Storing incomplete Value')
-                    return uVar,uResponse2
-        return u'',u''
-
-    def _Parse_Dict(self,uResponse:Any,uGetVar:str)->Tuple:
+    def _Parse_Dict(self,uResponse:Any,uGetVar:str,uParseResultFlags:str)->Tuple:
         """ parses the result as dict """
-        uResult:str
+        uResult:str = u''
+        aResult:List
+        if not isinstance(uResponse,dict):
+            uResponse = ToDic(uResponse)
         if isinstance(uResponse,dict):
-            uResult = uResponse.get(uGetVar)
-            if uResult is not None:
-                uResult = ToUnicode(uResult)
-                self._SetVar(uResult,u'Dictionary value')
-                return uGetVar,uResult
+            if "U" in uParseResultFlags:
+                aResult = ParseDictAny(vObj=uResponse,uSearchKey=uGetVar)
+            else:
+                aResult = ParseDictKeyTree(vObj=uResponse, aKeys=ToList(uGetVar))
+
+            if aResult:
+                if not "A" in uParseResultFlags:
+                    uResult = ToUnicode(aResult[0])
+                    self._SetVar(uResult,u'Dictionary value')
+                else:
+                    iIndex = 0
+                    uLocalDestVar  = self.uLocalDestVar
+                    uGlobalDestVar = self.uGlobalDestVar
+                    for uResult in aResult:
+                        if uLocalDestVar:
+                            self.uLocalDestVar = uLocalDestVar + "[%d]" % iIndex
+                        if uGlobalDestVar:
+                            self.uGlobalDestVar = uGlobalDestVar + "[%d]" % iIndex
+                        self._SetVar(uResult, u'Dictionary value')
+                        iIndex += 1
+                    self.uLocalDestVar  = uLocalDestVar
+                    self.uGlobalDestVar = uGlobalDestVar
+            else:
+                self._SetVar(uResult, u'Dictionary value')
+            return uGetVar,uResult
         else:
-            self.ShowDebug(u'Warning: can''t parse nondict as dict:' + ToUnicode(uResponse))
+            self.ShowDebug(u'Warning: can''t parse none dict as dict:' + ToUnicode(uResponse))
         return u'',u''
 
-    def _Parse_XML(self,uResponse:str,uGetVar:str)->Tuple:
+    def _Parse_XML(self,uResponse:str,uGetVar:str,uParseResultFlags:str)->Tuple:
         """ parses the result as xml """
 
         if uResponse == u'':
             return u'', u''
 
-
-        aGetVars:List    = uGetVar.split(',')
-        uResult:str     = uResponse
-        iIndex:int      = 0
-        UnSplit(aGetVars)
-
-        if uGetVar == u'':
-            return u'',u''
-        oNode = ElementTree(fromstring(uResult))
-        for uVar in aGetVars:
-            self.ShowDebug(u'Parsing Vartoken:' + uVar + " in:"+uResponse)
-            iIndex = iIndex+1
-            if iIndex != len(aGetVars):
-                oNode = oNode.find(uVar)
-                if oNode is None:
-                    self.ShowError(u'can\'t Find xml Value')
-                    return u'',u''
-            else:
-                uResult = GetXMLTextValue(oNode,uVar,False,u'notfound')
-                self._SetVar(uResult,u'Storing Value')
-                return uVar,uResult
-        return u'',u''
+        dResponse = XMLToDic(uResponse)
+        return self._Parse_Dict(uResponse=dResponse,uGetVar=uGetVar,uParseResultFlags=uParseResultFlags)
 
     def ShowDebug(self,uMsg:str) ->str:
         """ Creates a parser debug message """
@@ -339,7 +258,7 @@ def fixLazyJsonWithComments (in_text):
 
     sline_comment = False
     mline_comment = False
-    last_token = ''
+    last_token    = ''
 
     for tokid, tokval, _, _, _ in tokengen:
         # ignore single line and multi line comments

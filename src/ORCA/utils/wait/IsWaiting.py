@@ -31,7 +31,7 @@ def IsWaiting() -> bool:
     """
 
     if ORCA.utils.wait.Globals.bOnPause:
-        fSleep(0.001)
+        fSleep(fSeconds=0.001)
         return True
 
     ORCA.utils.wait.Globals.oWaitLock.acquire()
@@ -44,6 +44,6 @@ def IsWaiting() -> bool:
         ORCA.utils.wait.Globals.oWaitEndTime = ORCA.utils.wait.Globals.oWaitZeroTime
         ORCA.utils.wait.Globals.oWaitLock.release()
         return False
-    fSleep(0.01)
+    fSleep(fSeconds=0.01)
     ORCA.utils.wait.Globals.oWaitLock.release()
     return True

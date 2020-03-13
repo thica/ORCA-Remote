@@ -67,8 +67,8 @@ The interface reduces matches / results from the discover results using the ...
 * discoverprettyname
 * discovermodels
 * discovermanufacturer
-... settings. Blanck option will not be used. You could eg use the pretty name just to match a specific device, or just the manufacturer name to match all devices in the network of this manufacturer.
-Discover uses the upnp discover protocoll
+... settings. Blank option will not be used. You could eg use the pretty name just to match a specific device, or just the manufacturer name to match all devices in the network of this manufacturer.
+Discover uses the upnp discover protocol
 
 You need to define the codeset filename, which contains the command set for your device
 
@@ -77,10 +77,8 @@ A  codeset file could look like that (shortened version):
 <div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
 <?xml version="1.0" encoding="UTF-8"?>
 <codeset>
-  <code action='getdeviceinfo'    type="string" waitforresponse='1' requesttype='GET'  cmd=''                   headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip"}' parseoption='xml' ldestvar='"MANUFACTURER","MODELNAME"' getvar='ORCAMULTI"{urn:schemas-upnp-org:device-1-0}device,{urn:schemas-upnp-org:device-1-0}manufacturer","{urn:schemas-upnp-org:device-1-0}device,{urn:schemas-upnp-org:device-1-0}modelName"' />
   <code action="setparamsvars"     waitforresponse='0' type="action" string="setvar" par1="loeweparams" par2='&lt;?xml version="1.0" encoding="utf-8"?> &lt;v:Envelope xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:d="http://www.w3.org/2001/XMLSchema" xmlns:c="http://schemas.xmlsoap.org/soap/encoding/" xmlns:v="http://schemas.xmlsoap.org/soap/envelope/" xmlns:n0="urn:loewe.de:RemoteTV:Tablet"> &lt;v:Header /> &lt;v:Body> '  />
   <code action="setloeweheaders"   waitforresponse='0' type="action" string="setvar" par1="loeweheader" par2='"Content-length":"$cvar(datalenght)","Content-type":"text/xml;charset=utf-8","Connection":"close", "Accept-Encoding":"gzip"' preaction='setparamsvars' />
-  <code action='logon'            type="soap" waitforresponse='1' requesttype='POST' cmd='/loewe_tablet_0001' headers='{$var(loeweheader),"SOAPAction": "RequestAccess"}' params='$var(loeweparams) &lt;n0:RequestAccess> &lt;fcid&gt;91827364&lt;/fcid&gt;  &lt;ClientId&gt;?&lt;/ClientId&gt; &lt;DeviceType>ORCA Remote Device&lt;/DeviceType> &lt;DeviceName>ORCA&lt;/DeviceName> &lt;DeviceUUID>$var(MAC_ADDRESS_COLON)&lt;/DeviceUUID> &lt;RequesterName>SoapUI&lt;/RequesterName>&lt;/n0:RequestAccess>&lt;/v:Body>&lt;/v:Envelope>' parseoption='xml' ldestvar='"FCID","CLIENTID"' getvar='ORCAMULTI"{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}RequestAccessResponse,{urn:loewe.de:RemoteTV:Tablet}fcid","{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}RequestAccessResponse,{urn:loewe.de:RemoteTV:Tablet}ClientId"' preaction='setloeweheaders' />
 
   <code action='info'             type="soap" waitforresponse='0' requesttype='POST' cmd='/loewe_tablet_0001' headers='{$var(loeweheader),"SOAPAction": "InjectRCKey"}' params='$var(loeweparams)&lt;n0:InjectRCKey&gt; &lt;fcid&gt;$cvar(FCID)&lt;/fcid&gt; &lt;ClientId&gt;$cvar(CLIENTID)&lt;/ClientId&gt; &lt;n0:InputEventSequence i:type="n0:InputEventSequence"&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="press" value="79" />&gt;&lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="release" value="79" />&gt;&lt;/n0:InputEventSequence>&lt;/n0:InjectRCKey>&lt;/v:Body>&lt;/v:Envelope>' />
   <code action="key_1"            type="soap" waitforresponse='0' requesttype='POST' cmd='/loewe_tablet_0001' headers='{$var(loeweheader),"SOAPAction": "InjectRCKey"}' params='$var(loeweparams)&lt;n0:InjectRCKey&gt; &lt;fcid&gt;$cvar(FCID)&lt;/fcid&gt; &lt;ClientId&gt;$cvar(CLIENTID)&lt;/ClientId&gt; &lt;n0:InputEventSequence i:type="n0:InputEventSequence"&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="press" value="1" />&gt; &lt;n0:RCKeyEvent i:type="n0:RCKeyEvent" alphabet="l2700" mode="release" value="1" />&gt; &lt;/n0:InputEventSequence>&lt;/n0:InjectRCKey>&lt;/v:Body>&lt;/v:Envelope>' />

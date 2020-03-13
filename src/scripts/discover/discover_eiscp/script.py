@@ -30,24 +30,22 @@ from typing import Dict
 from typing import List
 from typing import Union
 from typing import Tuple
-
+from typing import Optional
 
 from struct                                 import pack
-
-from kivy.logger                            import Logger
 from kivy.uix.button                        import Button
 
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
-from ORCA.utils.LogError                    import LogError
+from ORCA.utils.FileName                    import cFileName
+from ORCA.utils.TypeConvert                 import ToBool
+from ORCA.utils.TypeConvert                 import ToBytes
 from ORCA.utils.TypeConvert                 import ToFloat
 from ORCA.utils.TypeConvert                 import ToList
 from ORCA.utils.TypeConvert                 import ToUnicode
-from ORCA.utils.TypeConvert                 import ToBytes
-from ORCA.utils.TypeConvert                 import ToBool
-from ORCA.vars.QueryDict                    import QueryDict
-from ORCA.utils.FileName                    import cFileName
+from ORCA.utils.Wildcard                    import MatchWildCard
+from ORCA.vars.QueryDict                    import TypedQueryDict
 
 import ORCA.Globals as Globals
 
@@ -59,8 +57,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover EISCP/Onkyo devices</description>
       <description language='German'>Erkennt sucht EISCP/Onkyo Geräte über upnp</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_eiscp</local>
@@ -103,15 +101,15 @@ class cScript(cDiscoverScriptTemplate):
     """
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript:cScript):
-            cBaseScriptSettings.__init__(self,oScript)
+            super().__init__(oScript)
             self.aIniSettings.fTimeOut = 10.0
 
     def __init__(self):
-        cDiscoverScriptTemplate.__init__(self)
+        super().__init__()
         self.uSubType:str                       = u'EISCP (Onkyo)'
-        self.aResults:List[QueryDict]           = []
+        self.aResults:List[TypedQueryDict]      = []
         self.aThreads:List[threading.Thread]    = []
-        self.dReq:QueryDict                     = QueryDict()
+        self.dReq:TypedQueryDict                = TypedQueryDict()
         self.bOnlyOnce:bool                     = True
         self.uIPVersion:str                     = u'Auto'
 
@@ -123,7 +121,7 @@ class cScript(cDiscoverScriptTemplate):
         :param cFileName oFnScript: The file of the script (to be passed to all scripts)
         """
 
-        cDiscoverScriptTemplate.Init(self, uObjectName, oFnScript)
+        super().Init(uObjectName=uObjectName,oFnObject=oFnScript)
         self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
     def GetHeaderLabels(self) -> List[str]:
@@ -133,28 +131,28 @@ class cScript(cDiscoverScriptTemplate):
         dArgs:Dict              = {"onlyonce": 0,
                                    "ipversion": "All"}
 
-        dDevices:Dict[str,QueryDict] = {}
-        dDevice:QueryDict
+        dDevices:Dict[str,TypedQueryDict] = {}
+        dDevice:TypedQueryDict
 
         self.Discover(**dArgs)
 
         for dDevice in self.aResults:
-            uTageLine:str = dDevice.sFoundIP + dDevice.uFoundModel + dDevice.uFoundIdentifier
+            uTageLine:str = dDevice.uFoundIP + dDevice.uFoundModel + dDevice.uFoundIdentifier
             if dDevices.get(uTageLine) is None:
                dDevices[uTageLine]=dDevice
-               self.AddLine([dDevice.sFoundIP, dDevice.uFoundPort, dDevice.uFoundModel, dDevice.uFoundIdentifier], dDevice)
+               self.AddLine([dDevice.uFoundIP, dDevice.uFoundPort, dDevice.uFoundModel, dDevice.uFoundIdentifier], dDevice)
         return
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
 
-        dDevice:QueryDict = oButton.dDevice
+        dDevice:TypedQueryDict = oButton.dDevice
 
         uText:str = u"$lvar(5029): %s \n"\
                     u"$lvar(6002): %s \n"\
                     u"$lvar(5031): %s \n"\
                     u"$lvar(5032): %s \n"\
                     u"\n"\
-                    u"%s" % (dDevice.sFoundIP,dDevice.uFoundPort,dDevice.uFoundModel,dDevice.uFoundIdentifier,dDevice.uData)
+                    u"%s" % (dDevice.uFoundIP,dDevice.uFoundPort,dDevice.uFoundModel,dDevice.uFoundIdentifier,dDevice.uData)
 
         ShowMessagePopUp(uMessage=uText)
 
@@ -169,17 +167,18 @@ class cScript(cDiscoverScriptTemplate):
         bOnlyOnce:bool                  = ToBool(kwargs.get('onlyonce',"1"))
         uIPVersion:str                  = kwargs.get('ipversion',"IPv4Only")
 
-        Logger.debug (u'Try to discover Onkyo device by EISCP:  Models: %s ' % self.dReq.uModels)
+        self.ShowDebug(uMsg=u'Try to discover Onkyo device by EISCP:  Models: %s ' % self.dReq.uModels)
         del self.aResults[:]
         del self.aThreads[:]
 
         try:
+            oThread:cThread_Discover_EISCP
             if uIPVersion == "IPv4Only" or uIPVersion == "All" or (uIPVersion == "Auto" and Globals.uIPAddressV6 == ""):
-                oThread:cThread_Discover_EISCP = cThread_Discover_EISCP(bOnlyOnce=bOnlyOnce,dReq=self.dReq,uIPVersion="IPv4Only", fTimeOut=fTimeOut, oCaller=self)
+                oThread = cThread_Discover_EISCP(bOnlyOnce=bOnlyOnce,dReq=self.dReq,uIPVersion="IPv4Only", fTimeOut=fTimeOut, oCaller=self)
                 self.aThreads.append(oThread)
                 self.aThreads[-1].start()
             if uIPVersion == "IPv6Only" or uIPVersion == "All" or (uIPVersion == "Auto" and Globals.uIPAddressV6 != ""):
-                oThread:cThread_Discover_EISCP = cThread_Discover_EISCP(bOnlyOnce=bOnlyOnce, dReq=self.dReq, uIPVersion="IPv6Only", fTimeOut=fTimeOut, oCaller=self)
+                oThread = cThread_Discover_EISCP(bOnlyOnce=bOnlyOnce, dReq=self.dReq, uIPVersion="IPv6Only", fTimeOut=fTimeOut, oCaller=self)
                 self.aThreads.append(oThread)
                 self.aThreads[-1].start()
 
@@ -187,13 +186,13 @@ class cScript(cDiscoverScriptTemplate):
                 oT.join()
 
             if len(self.aResults)>0:
-                return {'Model': self.aResults[0].uFoundModel, 'Host': self.aResults[0].sFoundIP,'Port': self.aResults[0].uFoundPort, 'Category': self.aResults[0].uFoundCategory, 'Exception': None}
+                return {'Model': self.aResults[0].uFoundModel, 'Host': self.aResults[0].uFoundIP,'Port': self.aResults[0].uFoundPort, 'Category': self.aResults[0].uFoundCategory, 'Exception': None}
             else:
-                Logger.warning(u'No device found Models: %s' % self.dReq.uModels)
+                self.ShowWarning(uMsg='No device found, Models: %s' % self.dReq.uModels)
             return  {'Model':'','Host':'','Port':'','Category':'','Exception':None}
 
         except Exception as e:
-            Logger.debug (u'No EISCP device found, possible timeout')
+            self.ShowDebug(uMsg=u'No EISCP device found, possible timeout')
             return {'Model':'','Host':'','Port':'','Category':'','Exception':e}
 
     @classmethod
@@ -207,13 +206,13 @@ class cScript(cDiscoverScriptTemplate):
 class cThread_Discover_EISCP(threading.Thread):
     oWaitLock = threading.Lock()
 
-    def __init__(self, bOnlyOnce:bool,dReq:QueryDict,uIPVersion:str, fTimeOut:float,oCaller:cScript):
+    def __init__(self, bOnlyOnce:bool,dReq:TypedQueryDict,uIPVersion:str, fTimeOut:float,oCaller:cScript):
         threading.Thread.__init__(self)
         self.bOnlyOnce:bool     = bOnlyOnce
         self.uIPVersion:str     = uIPVersion
         self.oCaller:cScript    = oCaller
         self.fTimeOut:float     = fTimeOut
-        self.dReq:QueryDict     = dReq
+        self.dReq:TypedQueryDict= dReq
         self.iOnkyoPort:int     = 60128
         self.rMatch     = r'''
                     !
@@ -242,15 +241,12 @@ class cThread_Discover_EISCP(threading.Thread):
         iReserved:int       = 0
         iHeaderSize:int     = 16
         iVersion:int        = 0
-
         bHeaderSize:bytes   = iHeaderSize.to_bytes(4, byteorder='big')
         bDataSize:bytes     = iDataSize.to_bytes(4, byteorder='big')
         bVersion:bytes      = iVersion.to_bytes(1, byteorder='big')
         bReserved:bytes     = iReserved.to_bytes(3, byteorder='big')
         bMessage:bytes      = b'ISCP'+bHeaderSize+bDataSize+bVersion+bReserved+ToBytes(uMessage)
-
         return bMessage
-
 
     # noinspection PyMethodMayBeStatic
     def CreateEISPPacket(self, iscp_message:str) -> bytes:
@@ -274,11 +270,11 @@ class cThread_Discover_EISCP(threading.Thread):
 
         byData:bytes
         tSenderAddr:Tuple
-        oRet:QueryDict
+        oRet:TypedQueryDict
 
-        oSocket:Union[socket.socket,None] = None
+        oSocket:Optional[socket.socket] = None
         try:
-            oSocket:socket.socket = self.SendDiscover()
+            oSocket = self.SendDiscover()
             if oSocket:
                 # Parse all results
                 while True:
@@ -290,7 +286,7 @@ class cThread_Discover_EISCP(threading.Thread):
                         dRet = self.GetDeviceDetails(byData=byData,tSenderAddr=tSenderAddr)
                         self.CheckDeviceDetails(dRet=dRet)
                         if dRet.bFound:
-                            Logger.info(u'Bingo: Discovered device %s:%s at %s:' % (dRet.uFoundIdentifier, dRet.uFoundModel, dRet.sFoundIP))
+                            self.oCaller.ShowInfo(uMsg=u'Discovered device %s:%s at %s:' % (dRet.uFoundIdentifier, dRet.uFoundModel, dRet.uFoundIP))
                             cThread_Discover_EISCP.oWaitLock.acquire()
                             self.oCaller.aResults.append(dRet)
                             cThread_Discover_EISCP.oWaitLock.release()
@@ -303,7 +299,7 @@ class cThread_Discover_EISCP(threading.Thread):
             return
 
         except Exception as e:
-            LogError(uMsg=u'Error on discover EISCP (%s)' % self.uIPVersion, oException=e)
+            self.oCaller.ShowError(uMsg=u'Error on discover EISCP (%s)' % self.uIPVersion, oException=e)
             if oSocket:
                 oSocket.close()
             return
@@ -334,10 +330,10 @@ class cThread_Discover_EISCP(threading.Thread):
 
         return None
 
-    def GetDeviceDetails(self,byData:bytes,tSenderAddr:Tuple) -> QueryDict:
-        dRet:QueryDict           = QueryDict()
+    def GetDeviceDetails(self,byData:bytes,tSenderAddr:Tuple) -> TypedQueryDict:
+        dRet:TypedQueryDict      = TypedQueryDict()
         dRet.bFound              = False
-        dRet.sFoundIP            = u""
+        dRet.uFoundIP            = u""
         dRet.uFoundPort          = u""
         dRet.uFoundModel         = u""
         dRet.uFoundIdentifier    = u""
@@ -349,7 +345,7 @@ class cThread_Discover_EISCP(threading.Thread):
         if uResponse.find('ECN') != -1:
             info = re.match(self.rMatch, uResponse.strip(), re.VERBOSE).groupdict()
             uResponse = uResponse[10:]
-            dRet.sFoundIP            = tSenderAddr[0]
+            dRet.uFoundIP            = tSenderAddr[0]
             dRet.uFoundPort          = ToUnicode(info['iscp_port'])
             dRet.uFoundModel         = info['model_name']
             dRet.uFoundIdentifier    = info['identifier']
@@ -358,20 +354,14 @@ class cThread_Discover_EISCP(threading.Thread):
             dRet.bFound              = True
         return dRet
 
-    def CheckDeviceDetails(self, dRet:QueryDict) -> None:
+    def CheckDeviceDetails(self, dRet:TypedQueryDict) -> None:
         if dRet.bFound:
             aModels:List[str] = ToList(self.dReq.uModels)
             if len(aModels) > 0:
                 dRet.bFound = False
                 for uModel in aModels:
-                    if uModel.endswith("*"):
-                        if uModel[:-1] == dRet.uFoundModel[:len(uModel) - 1]:
-                            dRet.bFound = True
-                            break
-                    else:
-                        if uModel.startswith("'") or uModel.startswith('"'):
-                            uModel = uModel[1:-1]
-                        if uModel == dRet.uFoundModel:
-                            dRet.bFound = True
-                            break
-
+                    if uModel.startswith("'") or uModel.startswith('"'):
+                        uModel = uModel[1:-2]
+                    if MatchWildCard(uValue=dRet.uFoundModel,uMatchWithWildCard=uModel):
+                        dRet.bFound = True
+                        break

@@ -31,7 +31,7 @@ __all__ = ['ShowErrorPopUp','ShowMessagePopUp']
 
 class cShowErrorPopUp(cRaiseQuestion):
     """ Class to show an error popup """
-    def ShowError(self,uTitle:str=u'',uMessage:str=u'',bAbort:bool=False,uTextContinue:str=u'',uTextQuit:str=u'',uStringDetails:str=u'') -> None:
+    def ShowError(self,*,uTitle:str=u'',uMessage:str=u'',bAbort:bool=False,uTextContinue:str=u'',uTextQuit:str=u'',uStringDetails:str=u'') -> None:
         """Show an Error Message as Popup
         :param str uTitle: Title for Popup
         :param str uMessage: Message to Show
@@ -76,13 +76,13 @@ def ShowErrorPopUp(*,uTitle:str='$lvar(5017)',uMessage:str=u'',bAbort:bool=False
     if uStringDetails==u'':
         uStringDetails = uTrace
 
-    Globals.oSound.PlaySound(u'error')
+    Globals.oSound.PlaySound(uSoundName=u'error')
     oShowErrorPopUp.ShowError(uTitle=uTitle, uMessage=uMessage, bAbort=bAbort, uTextContinue=uTextContinue, uTextQuit=uTextQuit,uStringDetails=uStringDetails)
     return oShowErrorPopUp
 
-def ShowMessagePopUp(uTitle:str=u'$lvar(5010)',uMessage:str=u'',uTextContinue:str=u'$lvar(5000)',uTextQuit:str=u'$lvar(5005)') -> cShowErrorPopUp:
+def ShowMessagePopUp(*,uTitle:str=u'$lvar(5010)',uMessage:str=u'',uTextContinue:str=u'$lvar(5000)',uTextQuit:str=u'$lvar(5005)') -> cShowErrorPopUp:
     """ Convinience function """
     oShowErrorPopUp:cShowErrorPopUp = cShowErrorPopUp()
-    Globals.oSound.PlaySound(u'message')
+    Globals.oSound.PlaySound(uSoundName=u'message')
     oShowErrorPopUp.ShowError(uTitle=uTitle, uMessage=uMessage, bAbort=False, uTextContinue=uTextContinue, uTextQuit=uTextQuit)
     return oShowErrorPopUp

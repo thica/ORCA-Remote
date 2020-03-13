@@ -47,7 +47,7 @@ class cKeyhandlerTemplate(cBaseScript):
 
     # noinspection PyUnusedLocal
     def UnRegister(self,*args,**kwargs) -> None:
-        Globals.oNotifications.UnRegisterNotification_ByHash(self.iHash)
+        Globals.oNotifications.UnRegisterNotification_ByHash(iHash=self.iHash)
         return None
 
     def HandleKey(self,**kwargs) -> Dict[str,str]:

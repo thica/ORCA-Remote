@@ -31,6 +31,11 @@ function PIP_INSTALL ()
 
 }
 
+# cd /media/Master/custombuildscripts/debian
+# ./init_pyinstaller.sh
+# exit 0
+
+
 
 # just to activate sudo
 sudo ls > /dev/null
@@ -58,12 +63,24 @@ export VERSION_ZIP="=3.0-11build1"
 export VERSION_UNZIP="=6.0-21ubuntu1"
 export VERSION_AUTOCONF="=2.69-11"
 export VERSION_LIBTOOL="=2.4.6-2"
-export VERSION_PKG_CONFIG="=0.29.1-0ubuntu2"
+export VERSION_PKG_CONFIG="=0.29.1*"
 export VERSION_ZLIB1G_DEV="=1:1.2.11.dfsg-0ubuntu2"
 export VERSION_LIBNCURSES5_DEV="=6.1-1ubuntu1.18.04"
 export VERSION_LIBTINFO5="=6.1-1ubuntu1.18.04"
 export VERSION_CMAKE="=3.10.2-1ubuntu2.18.04.1"
 export VERSION_LIBFFI_DEV="=3.2.1-8"
+
+export VERSION_GIT=""
+export VERSION_ZIP=""
+export VERSION_UNZIP=""
+export VERSION_ZLIB1G_DEV=""
+export VERSION_LIBNCURSES5_DEV=""
+export VERSION_LIBTINFO5=""
+export VERSION_CMAKE=""
+export VERSION_LIBFFI_DEV=""
+export VERSION_AUTOCONF=""
+export VERSION_LIBTOOL=""
+
 
 echo "Reading Secrets"
 echo "Reading Secrets" >> $LOGFILE
@@ -112,7 +129,7 @@ chmod +x "${SOURCEDIR}/custombuildscripts/android/prepare_sources.sh"
 echo "Copy buildozer.spec"
 echo "Copy buildozer.spec" >> "$LOGFILE"
 # Copy buildozer.spec file to target folder (root)'
-cp "${SOURCEDIR}/custombuildscripts/buildozer.spec" "${BUILDDIR}/buildozer.spec"  >> "$LOGFILE"
+cp "${SOURCEDIR}/custombuildscripts/android/buildozer.spec" "${BUILDDIR}/buildozer.spec"  >> "$LOGFILE"
 
 if [ "$FROMSCRATCH" == "1" ]
 then
@@ -182,7 +199,7 @@ then
   # Buildozer installs ths SDK to /home/kivy
   echo "Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)"
   echo "Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)" >> "$LOGFILE"
-  yes | "${HOME}/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" "build-tools;29.0.2" >> "$LOGFILE" 2>>"$LOGFILE"
+  yes|"${HOME}/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" "build-tools;29.0.2"  >> "$LOGFILE" 2>>"$LOGFILE"
 
   # 'Remove the old buildozer app build folder'
   cd "${BUILDDIR}"
@@ -191,7 +208,7 @@ fi
 
 echo "Remove any old Build"
 echo "Remove any old Build" >> "$LOGFILE"
-rm "${BUILDDIR}/bin/*.apk" >> "$LOGFILE" >/dev/null 2>dev/null
+rm "${BUILDDIR}/bin/*.apk" >> "$LOGFILE" >/dev/null 2>/dev/null
 
 
 echo "Run buildozer (this should work)"

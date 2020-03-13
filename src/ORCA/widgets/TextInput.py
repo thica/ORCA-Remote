@@ -81,7 +81,7 @@ class cWidgetTextInput(cWidgetTextField):
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet:bool = super(cWidgetTextInput, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
-        self.uDestVar = GetXMLTextAttribute(oXMLNode,u'destvar', False,u'inputstring')
+        self.uDestVar = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'destvar', bMandatory=False,vDefault=u'inputstring')
         uTmp:str = GetVar(uVarName = self.uDestVar)
         if uTmp:
             self.uCaption=uTmp
@@ -97,12 +97,12 @@ class cWidgetTextInput(cWidgetTextField):
     def On_Button_Up1(self,instance:Label) -> None:
         """ Shows the keyboard, when the textfield has been clicked """
         if not Globals.oTheScreen.GuiIsBlocked():
-            self.oInputKeyboard=ShowKeyBoard(self.uDestVar,self.On_Enter)
+            self.oInputKeyboard=ShowKeyBoard(uDestVar=self.uDestVar,oFktNotify=self.On_Enter)
     def On_Focus(self,instance:Union[Label,None], value) -> None:
         """ Shows the keyboard, when the textfield got the focus """
         if not Globals.oTheScreen.GuiIsBlocked():
             if self.oObject:
-                self.oInputKeyboard=ShowKeyBoard(self.uDestVar,self.On_Enter)
+                self.oInputKeyboard=ShowKeyBoard(uDestVar=self.uDestVar,oFktNotify=self.On_Enter)
     def On_Enter(self,uText:str) -> None:
         """ Accepts the user input """
         self.oObject.text=uText

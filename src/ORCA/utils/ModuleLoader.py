@@ -45,8 +45,8 @@ class cModule:
 
 class cModuleLoader:
     def __init__(self):
-        self.dModules:Dict[str:cModule] = {}
-    def LoadModule(self, oFnModule:cFileName, uModuleName:str) -> Union[cModule,None]:
+        self.dModules:Dict[str,cModule] = {}
+    def LoadModule(self,*, oFnModule:cFileName, uModuleName:str) -> Union[cModule,None]:
 
         if uModuleName in self.dModules:
             return self.dModules[uModuleName]

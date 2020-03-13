@@ -71,7 +71,7 @@ class cCheckPermissions(EventDispatcher):
             return
         if not self.bHasPermissions:
             Clock.schedule_once(self.StartNextThread, 0)
-            fSleep(0.6)
+            fSleep(fSeconds=0.6)
             return
         self.StopWait()
 

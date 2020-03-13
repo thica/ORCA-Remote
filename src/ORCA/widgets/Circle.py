@@ -84,16 +84,16 @@ class cWidgetCircle(cWidgetGeoClass):
         self.oGeoClass:Callable      = cTouchCircle
         self.fStartAngle:float       = 0.0
         self.fEndAngle:float         = 360.0
-        self.oFnPictureNormal = cFileName(u"")
+        self.oFnPictureNormal        = cFileName(u"")
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
-        self.oFnPictureNormal:cFileName = cFileName("").ImportFullPath(GetXMLTextAttributeVar(oXMLNode,u'picturenormal',    False,u''))
-        self.fStartAngle                = GetXMLFloatAttributeVar(oXMLNode,u'startangle',    False,0.0)
-        self.fEndAngle                  = GetXMLFloatAttributeVar(oXMLNode,u'stopangle',    False,0.0)
+        self.oFnPictureNormal           = cFileName("").ImportFullPath(uFnFullName=GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'picturenormal',bMandatory=False,uDefault=u''))
+        self.fStartAngle                = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'startangle', bMandatory=False, fDefault=0.0)
+        self.fEndAngle                  = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'stopangle',  bMandatory=False, fDefault=0.0)
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def Create(self,oParent:Widget) -> bool:
-        self.AddArg('source',       ToAtlas(self.oFnPictureNormal))
+        self.AddArg('source',       ToAtlas(oFileName=self.oFnPictureNormal))
         self.AddArg('angle_start',  self.fStartAngle)
         self.AddArg('angle_end',    self.fEndAngle)
         return super(cWidgetCircle, self).Create(oParent)

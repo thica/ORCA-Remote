@@ -58,7 +58,7 @@ class cWidgetFileBrowser(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
     WikiDoc:TOCTitle:FileBrowser
     = FILEBROWSER =
 
-    The button widget lets the user select a file or folder
+    The button widget lets the user select a file or folder. The result will be stored in the variable: "filebrowserfile". You should define a standard action which defines what to do, if something has been selected
 
     The following attributes are additional attributes to common widget attributes
     <div style="overflow:auto; ">
@@ -96,8 +96,8 @@ class cWidgetFileBrowser(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         self.oPathStart             = cPath(GetVar(uVarName = "filebrowserfile"))
-        self.uActionNameCancel      = GetXMLTextAttribute(oXMLNode,u'actioncancel',False,u'')
-        self.bDirSelect             = GetXMLBoolAttribute(oXMLNode,u'dirselect',False,False)
+        self.uActionNameCancel      = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actioncancel',bMandatory=False,vDefault=u'')
+        self.bDirSelect             = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'dirselect',   bMandatory=False,bDefault=False)
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def Create(self,oParent:Widget) -> bool:
@@ -118,7 +118,7 @@ class cWidgetFileBrowser(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         self.AddArg('dirselect',        self.bDirSelect)
 
         if not self.oPathStart.IsEmpty():
-            self.AddArg('path',         self.oPathStart.string)
+           self.AddArg('path',         self.oPathStart.string)
 
         if self.CreateBase(Parent=oParent, Class=FileBrowser):
             self.oParent.add_widget(self.oObject)
@@ -133,7 +133,6 @@ class cWidgetFileBrowser(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
             oItem = cPath(instance.selection[0])
             if self.bDirSelect and not oItem.IsDir():
                 return
-
             SetVar(uVarName = "filebrowserfile", oVarValue = oItem.string)
             self.On_Button_Up(instance)
             return

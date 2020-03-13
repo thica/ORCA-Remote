@@ -48,7 +48,7 @@ class cRaiseQuestion(cBasePopup):
         self.fktNo:Union[Callable,None]                 = None
         self.uStringDetails:str                         = ''
 
-    def RaiseQuestion(self,uTitle:str='',uMessage:str='',fktYes:Union[Callable,None]=None,fktNo:Union[Callable,None]=None,uStringYes:str='',uStringNo:str='',uStringDetails:str='') -> Popup:
+    def RaiseQuestion(self,*,uTitle:str='',uMessage:str='',fktYes:Union[Callable,None]=None,fktNo:Union[Callable,None]=None,uStringYes:str='',uStringNo:str='',uStringDetails:str='') -> Popup:
         """ Shows the question """
         oContent:BoxLayout  = BoxLayout(orientation='vertical', spacing='5dp')
         self.uMessage       = uMessage
@@ -109,10 +109,10 @@ class cRaiseQuestion(cBasePopup):
             return self.fktNo()
         return None
 
-def ShowQuestionPopUp(uTitle:str='',uMessage:str='',fktYes:Union[Callable,None]=None,fktNo:Union[Callable,None]=None,uStringYes:str='',uStringNo:str='', uSound:str=u'question'):
+def ShowQuestionPopUp(*,uTitle:str='',uMessage:str='',fktYes:Union[Callable,None]=None,fktNo:Union[Callable,None]=None,uStringYes:str='',uStringNo:str='', uSound:str=u'question'):
     """ all in a function """
-    Globals.oSound.PlaySound(uSound)
-    oRaiseQuestion      = cRaiseQuestion()
+    Globals.oSound.PlaySound(uSoundName=uSound)
+    oRaiseQuestion = cRaiseQuestion()
     oRaiseQuestion.RaiseQuestion(uTitle=uTitle, uMessage=uMessage, fktYes=fktYes, fktNo=fktNo, uStringYes=uStringYes, uStringNo=uStringNo)
     return oRaiseQuestion
 

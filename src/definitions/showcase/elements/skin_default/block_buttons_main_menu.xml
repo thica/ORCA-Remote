@@ -17,7 +17,7 @@
       <element name="Button ShowFile"                   type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_ShowFileDemo"}'     caption="File Viewer" />
       <element name="Button Icons"                      type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Icons"}'            caption="Icons" />
       <element name="Button International"              type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_International"}'    caption="International" />
-      <element name="Button ScrollContainer"            type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_ScrollContainer"}'  caption="Scrolling" />
+      <element name="Button ScrollList"                 type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_ScrollList"}'       caption="Scrolling" />
 
     </elements>
   </element>

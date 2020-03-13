@@ -97,15 +97,15 @@ class cBaseScript(cBaseObject):
     # noinspection PyMethodMayBeStatic
     def ShowSettings(self) -> None:
         """  shows the settings dialog """
-        Globals.oTheScreen.AddActionToQueue([{'string':'updatewidget','widgetname':'Scriptsettings'}])
+        Globals.oTheScreen.AddActionToQueue(aActions=[{'string':'updatewidget','widgetname':'Scriptsettings'}])
 
     def LoadActions(self) -> None:
         """ parses the definition specific actions """
         Logger.info (u'Loading Actions for script:'+self.uObjectName)
         if self.oFnAction.Exists():
             uET_Data = CachedFile(oFileName=self.oFnAction)
-            oET_Root:Element = Orca_FromString(uET_Data, None, self.oFnAction.string)
-            Globals.oActions.LoadActionsSub(oET_Root,u'actions',         u'action',          Globals.oActions.dActionsCommands,  self.oFnAction.string)
+            oET_Root:Element = Orca_FromString(uET_Data=uET_Data, oDef=None, uFileName=self.oFnAction.string)
+            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag=u'actions',uListTag=u'action',dTargetDic=Globals.oActions.dActionsCommands,uFileName=self.oFnAction.string)
 
     def GetNewSettingObject(self) -> cBaseScriptSettings:
         return self.cScriptSettings(self)

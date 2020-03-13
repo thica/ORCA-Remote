@@ -28,7 +28,7 @@ class SettingInfo(SettingString):
     """ A setting item, which just shows an information """
     def __init__(self, **kwargs):
         self.register_event_type('on_release')
-        super(SettingItem, self).__init__(**RemoveNoClassArgs(kwargs,SettingString))
+        super(SettingItem, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=SettingString))
         uValue:str = kwargs["info"]
         self.value = uValue
     def _create_popup(self, instance) -> None:

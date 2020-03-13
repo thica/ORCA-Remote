@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-from typing                         import Union
+from typing                         import Optional
 from typing                         import Dict
 from typing                         import List
 
@@ -57,28 +57,28 @@ class cFontDef:
         self.oFnItalic:cFileName              = cFileName(u'')
         self.oFnBoldItalic:cFileName          = cFileName(u'')
 
-    def ParseFontFromXMLNode(self,oXMLFont:Element) -> int:
+    def ParseFontFromXMLNode(self,*,oXMLNode:Element) -> int:
         """
         Parses a font definition from an xml node
 
         :return: The Number of fonts, defined in the XML
-        :param Element oXMLFont: An elementree xml node
+        :param oXMLNode: An elementree xml node
         """
 
         uFontStyle:str
-        self.uName = GetXMLTextValue(oXMLFont,u'name',True,u'NoName')
+        self.uName = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'NoName')
         iCount:int = 0
-        for oXMLSingleFont in oXMLFont.findall(u'file'):
-            iCount=iCount+1
-            uFontStyle = GetXMLTextAttribute(oXMLSingleFont,u'face',True,u'')
+        for oXMLSingleFont in oXMLNode.findall(u'file'):
+            iCount += 1
+            uFontStyle = GetXMLTextAttribute(oXMLNode=oXMLSingleFont,uTag=u'face',bMandatory=True,vDefault=u'')
             if uFontStyle==u'normal':
-                self.oFnNormal.ImportFullPath(oXMLSingleFont.text)
+                self.oFnNormal.ImportFullPath(uFnFullName=oXMLSingleFont.text)
             elif uFontStyle==u'bold':
-                self.oFnBold.ImportFullPath(oXMLSingleFont.text)
+                self.oFnBold.ImportFullPath(uFnFullName=oXMLSingleFont.text)
             elif uFontStyle==u'italic':
-                self.oFnItalic.ImportFullPath(oXMLSingleFont.text)
+                self.oFnItalic.ImportFullPath(uFnFullName=oXMLSingleFont.text)
             elif uFontStyle==u'bolditalic':
-                self.oFnBoldItalic.ImportFullPath(oXMLSingleFont.text)
+                self.oFnBoldItalic.ImportFullPath(uFnFullName=oXMLSingleFont.text)
             else:
                 ShowErrorPopUp(uMessage=LogError(uMsg=u'FontParser: Invalid Tag:'+uFontStyle))
         return iCount
@@ -86,7 +86,7 @@ class cFontDef:
     def Register(self) -> None:
         Logger.debug(u'Register Font: ' + self.oFnNormal)
 
-        uFnNormal:Union[str,None]      = self.oFnNormal.string
+        uFnNormal:Optional[str]        = self.oFnNormal.string
         uFnItalic:[str,None]           = self.oFnItalic.string
         uFnBold:[str,None]             = self.oFnBold.string
         uFnBoldItalic:[str,None]       = self.oFnBoldItalic.string
@@ -109,37 +109,37 @@ class cFonts:
         """ we do nothing by purpose  """
         pass
 
-    def ParseDirect(self,uFontName:str, uFontFileNormal:str) -> None:
+    def ParseDirect(self,*,uFontName:str, uFontFileNormal:str) -> None:
         oTmpFont:cFontDef   = cFontDef()
         oTmpFont.uName      = uFontName
-        oTmpFont.oFnNormal  = cFileName("").ImportFullPath(uFontFileNormal)
+        oTmpFont.oFnNormal  = cFileName("").ImportFullPath(uFnFullName=uFontFileNormal)
         self.dFonts[oTmpFont.uName] = oTmpFont
 
     # noinspection PyMethodMayBeStatic
-    def ParseIconsFromXMLNode(self,oET_Root:Element) -> None:
-        oXMLIcons:Element = oET_Root.find('icons')
+    def ParseIconsFromXMLNode(self,*,oXMLNode:Element) -> None:
+        oXMLIcons:Element = oXMLNode.find('icons')
         if oXMLIcons is not None:
             Logger.info(u'Loading Icons')
             for oXMLIcon in oXMLIcons.findall('icon'):
-                uIconName:str           = GetXMLTextAttribute(oXMLIcon, u'name', True, u'')
-                oFnIconFont:cFileName   = cFileName("").ImportFullPath(GetXMLTextAttribute(oXMLIcon, u'font', True, u''))
-                uIconChar:str           = GetXMLTextAttribute(oXMLIcon, u'char', True, u'')
+                uIconName:str           = GetXMLTextAttribute(oXMLNode=oXMLIcon,uTag=u'name',bMandatory=True, vDefault=u'')
+                oFnIconFont:cFileName   = cFileName("").ImportFullPath(uFnFullName=GetXMLTextAttribute(oXMLNode=oXMLIcon, uTag=u'font', bMandatory=True, vDefault=u''))
+                uIconChar:str           = GetXMLTextAttribute(oXMLNode=oXMLIcon, uTag=u'char', bMandatory=True, vDefault=u'')
                 uFontName:str           = oFnIconFont.basename
-                fIconScale:float        = GetXMLFloatAttribute(oXMLIcon, u'scale', False, 1)
+                fIconScale:float        = GetXMLFloatAttribute(oXMLNode=oXMLIcon, uTag=u'scale', bMandatory=False, fDefault=1.0)
                 Globals.dIcons[uIconName] = {"fontfile": oFnIconFont.string, "char": uIconChar, "fontname":uFontName, "scale":fIconScale}
                 Globals.oTheScreen.oFonts.ParseDirect(uFontName=uFontName, uFontFileNormal=oFnIconFont.string)
 
-    def ParseFontFromXMLNode(self,oET_Root:Element) -> int:
-        oXMLFonts:Element = oET_Root.find('fonts')
+    def ParseFontFromXMLNode(self,*,oXMLNode:Element) -> int:
+        oXMLFonts:Element = oXMLNode.find('fonts')
         iCount:int = 0
         if oXMLFonts is not None:
             for oXMLFont in oXMLFonts.findall('font'):
                 oTmpFont:cFontDef=cFontDef()
-                iCount = iCount + oTmpFont.ParseFontFromXMLNode(oXMLFont=oXMLFont)
+                iCount += oTmpFont.ParseFontFromXMLNode(oXMLNode=oXMLFont)
                 self.dFonts[oTmpFont.uName]=oTmpFont
         return iCount
 
-    def RegisterFonts(self,uFontName:str,fSplashScreenPercentageStartValue:float) -> None:
+    def RegisterFonts(self,*,uFontName:str,fSplashScreenPercentageStartValue:float) -> None:
         """ Register the a specific font, or schedules the registration of all fonts """
 
         fPercentage:float
@@ -154,17 +154,17 @@ class cFonts:
             fPercentageStep=fSplashScreenPercentageRange/len(self.dFonts)
 
             # Scheduling Loading Fonts
-            aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList([{'name':'Show Message the we register the fonts','string':'showsplashtext','maintext':'$lvar(417)'}])
+            aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList(aActions=[{'name':'Show Message the we register the fonts','string':'showsplashtext','maintext':'$lvar(417)'}])
 
             for uFontIndex in self.dFonts:
                 oFont=self.dFonts[uFontIndex]
-                fPercentage=fPercentage+fPercentageStep
+                fPercentage += fPercentageStep
                 if Logger.getEffectiveLevel() != logging.DEBUG:
                     aCommands = []
                 else:
                     aCommands = [{'name':'Update Percentage and Font Name','string':'showsplashtext','subtext':oFont.uName,'percentage':str(fPercentage)}]
                 aCommands.append({'name':'Register the Font','string':'registerfonts','fontname':oFont.uName})
-                Globals.oEvents.AddToSimpleActionList(aActions,aCommands)
+                Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=aCommands)
                 Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
         else:
             oFont=self.dFonts[uFontName]

@@ -29,14 +29,13 @@ from typing import Tuple
 
 import socket
 import select
-from kivy.logger                            import Logger
-from kivy.uix.button                        import Button
 
+from kivy.uix.button                        import Button
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
 from ORCA.utils.TypeConvert                 import ToFloat
-from ORCA.vars.QueryDict                    import QueryDict
+from ORCA.vars.QueryDict                    import TypedQueryDict
 from ORCA.utils.FileName                    import cFileName
 from ORCA.utils.TypeConvert                 import ToUnicode
 
@@ -51,8 +50,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover ELV MAX cubes</description>
       <description language='German'>Erkennt bwz. sucht ELV MAX Cubes</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_elvmax</local>
@@ -96,17 +95,17 @@ class cScript(cDiscoverScriptTemplate):
 
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript:cScript):
-            cBaseScriptSettings.__init__(self,oScript)
+            super().__init__(oScript)
             self.aIniSettings.fTimeOut                     = 5.0
 
     def __init__(self):
-        cDiscoverScriptTemplate.__init__(self)
-        self.uSubType:str               = u'ELVMAX'
-        self.uSerial:str                = u''
-        self.aResults:List[QueryDict]   = []
+        super().__init__()
+        self.uSubType:str                   = u'ELVMAX'
+        self.uSerial:str                    = u''
+        self.aResults:List[TypedQueryDict]  = []
 
     def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
-        cDiscoverScriptTemplate.Init(self, uObjectName, oFnScript)
+        super().Init(uObjectName= uObjectName, oFnObject=oFnScript)
         self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
     def GetHeaderLabels(self) -> List[str]:
@@ -114,22 +113,22 @@ class cScript(cDiscoverScriptTemplate):
 
     def ListDiscover(self):
 
-        dDevice: QueryDict
+        dDevice: TypedQueryDict
         dArgs:Dict = {}
 
         self.Discover(**dArgs)
         for dDevice in self.aResults:
-            self.AddLine([dDevice.sFoundIP,dDevice.uFoundSerial,dDevice.uFoundHostName],dDevice)
+            self.AddLine([dDevice.uFoundIP,dDevice.uFoundSerial,dDevice.uFoundHostName],dDevice)
 
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
 
-        dDevice:QueryDict = oButton.dDevice
+        dDevice:TypedQueryDict = oButton.dDevice
 
         uText=  u"$lvar(5029): %s \n" \
                 u"$lvar(5035): %s \n" \
                 u"$lvar(1063): %s \n" \
-                u"$lvar(SCRIPT_DISC_ELVMAX_1): %s " % (dDevice.sFoundIP,dDevice.uFoundHostName,dDevice.uFoundName,dDevice.uFoundSerial)
+                u"$lvar(SCRIPT_DISC_ELVMAX_1): %s " % (dDevice.uFoundIP,dDevice.uFoundHostName,dDevice.uFoundName,dDevice.uFoundSerial)
 
         ShowMessagePopUp(uMessage=uText)
 
@@ -150,7 +149,7 @@ class cScript(cDiscoverScriptTemplate):
         fTimeOut:float                           = ToFloat(kwargs.get('timeout', oSetting.aIniSettings.fTimeOut))
         del self.aResults[:]
 
-        Logger.debug (u'Try to discover ELV MAX device:  %s ' % uSerial)
+        self.ShowDebug (uMsg=u'Try to discover ELV MAX device:  %s ' % uSerial)
 
         try:
             oSendSocket:socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
@@ -189,30 +188,28 @@ class cScript(cDiscoverScriptTemplate):
                 oReceiveSocket.close()
 
             if len(self.aResults)>0:
-                return QueryDict([("Host", self.aResults[0].sFoundIP),("Hostname",self.aResults[0].uFoundHostName), ("Serial",self.aResults[0].uFoundSerial), ("Name",self.aResults[0].uFoundName)])
+                return TypedQueryDict([("Host", self.aResults[0].uFoundIP),("Hostname",self.aResults[0].uFoundHostName), ("Serial",self.aResults[0].uFoundSerial), ("Name",self.aResults[0].uFoundName)])
 
-        except Exception:
-            pass
+        except Exception as e:
+            self.ShowError(uMsg="Error on Discover",oException=e)
 
         if oSendSocket:
             oSendSocket.close()
         if oReceiveSocket:
             oReceiveSocket.close()
 
-        Logger.warning(u'No ELV MAX Cube found %s' % uSerial)
-        return QueryDict([("Host", ""), ("Hostname", ""), ("Serial", ""), ("Name", "")])
+        self.ShowWarning(uMsg=u'No ELV MAX Cube found %s' % uSerial)
+        return TypedQueryDict([("Host", ""), ("Hostname", ""), ("Serial", ""), ("Name", "")])
 
     # noinspection PyMethodMayBeStatic
-    def GetDeviceDetails(self,byData:bytes,tSenderAddr:Tuple) -> QueryDict:
+    def GetDeviceDetails(self,byData:bytes,tSenderAddr:Tuple) -> TypedQueryDict:
 
-        dRet:QueryDict           = QueryDict()
-        dRet.sFoundIP            = tSenderAddr[0]==10
-        dRet.uData               = ToUnicode(byData)
+        dRet:TypedQueryDict      = TypedQueryDict()
+        dRet.uFoundIP            = tSenderAddr[0] # ==10
+        dRet.uData               = ToUnicode(byData[:18])
         dRet.uFoundName          = byData[0:8].decode('utf-8')
         dRet.uFoundSerial        = byData[8:18].decode('utf-8')
-        dRet.uFoundHostName      = socket.gethostbyaddr(dRet.sFoundIP)[0]
+        dRet.uFoundHostName      = socket.gethostbyaddr(dRet.uFoundIP)[0]
         dRet.uIPVersion          = u"IPv4"
-
-        Logger.info(u'Bingo: Dicovered device %s:%s:%s at %s' % (dRet.uFoundName, dRet.uFoundHostName, dRet.uFoundSerial, dRet.sFoundIP))
-
+        self.ShowInfo(uMsg=u'Discovered device %s:%s:%s at %s' % (dRet.uFoundName, dRet.uFoundHostName, dRet.uFoundSerial, dRet.uFoundIP))
         return dRet

@@ -34,7 +34,7 @@ __all__ = ['SettingFile']
 
 class SettingFile(SettingPath):
     """ A setting item as file picker """
-    def _create_popup(self, instance):
+    def _create_popup(self, oFileBrowser):
         """ create popup layout """
         uRoot:str
         uName:str
@@ -44,6 +44,8 @@ class SettingFile(SettingPath):
         # create the filechooser
         uRoot, uName = split(self.value)
         uRoot = ReplaceVars(uRoot)
+        if uRoot == '':
+            uRoot = Globals.oPathRoot.string
         self.textinput = textinput = FileBrowser(select_string     = ReplaceVars('$lvar(563)'),
                                                  cancel_string     = ReplaceVars('$lvar(5009)'),
                                                  libraries_string  = ReplaceVars('$lvar(5018)'),
@@ -52,12 +54,13 @@ class SettingFile(SettingPath):
                                                  location_string   = ReplaceVars('$lvar(5021)'),
                                                  listview_string   = ReplaceVars('$lvar(5022)'),
                                                  iconview_string   = ReplaceVars('$lvar(5023)'),
-                                                 path              = uRoot, dirselect=False,
+                                                 path              = uRoot,
+                                                 dirselect         = False,
                                                  transition        = FadeTransition(),
                                                  size_hint         = (1, 1),
                                                  favorites         = [(Globals.oPathRoot.string, 'ORCA')],
                                                  show_fileinput    = False,
-                                                 show_filterinput  = False
+                                                 show_filterinput  = False,
                                                  )
 
         # construct the content
@@ -67,17 +70,24 @@ class SettingFile(SettingPath):
         # all done, open the popup !
         popup.open()
 
-    def _validate(self, instance:FileBrowser):
+    def _validate(self, oFileBrowser:FileBrowser):
         """ user selected something """
         uValue:str
-        if len(instance.selection)==0:
+        if len(oFileBrowser.selection)==0:
             self._dismiss()
             return
-        uValue=(cFileName().ImportFullPath(instance.selection[0])).string
+        uValue=(cFileName().ImportFullPath(uFnFullName=oFileBrowser.selection[0])).string
+        for uKey in Globals.oTheScreen.oSkin.dSkinPics:
+            if Globals.oTheScreen.oSkin.dSkinPics[uKey].string == uValue:
+                uValue = uKey
+                break
+
         uValue=uValue.replace(Globals.oPathSkin.string,                           '$var(SKINPATH)')
         uValue=uValue.replace(Globals.oPathResources.string,                      '$var(RESOURCEPATH')
         uValue=uValue.replace(Globals.oDefinitionPathes.oPathDefinition.string,   '$var(DEFINITIONPATH)')
+        uValue=uValue.replace(Globals.oPathTmp.string,                            '$var(TMPPATH)')
+        uValue=uValue.replace(Globals.oPathRoot.string,                           '$var(APPLICATIONPATH)')
         uValue=uValue.replace(str(Globals.iVersion),                              '$var(REPVERSION)')
         uValue=uValue.replace('\\',"/")
         self.value=uValue
-        super()._validate(instance)
+        self._dismiss()

@@ -39,7 +39,7 @@ else:
 
 class cObjectMonitoredSettings(cMonitoredSettings):
     def WriteVar(self,uName:str,vValue:Any) -> None:
-        self.oBaseSettings.SetContextVar("CONFIG_" + uName.upper()[1:], vValue)
+        self.oBaseSettings.SetContextVar(uVarName="CONFIG_" + uName.upper()[1:], uVarValue=vValue)
 
 class cBaseSettings:
     """ A base class for the script settings """
@@ -57,7 +57,7 @@ class cBaseSettings:
         self.uType:str                                          = u''
 
 
-    def SetContextVar(self,uVarName:str,uVarValue:str) -> None:
+    def SetContextVar(self,*,uVarName:str,uVarValue:str) -> None:
         """ Sets a var within the interface context
 
         :param str uVarName: The name of the var
@@ -65,7 +65,7 @@ class cBaseSettings:
         """
         SetVar(uVarName = uVarName, oVarValue = ToUnicode(uVarValue), uContext = self.oObject.uObjectName+u'/'+self.uConfigName)
 
-    def ReadConfigFromIniFile(self,uConfigName:str) -> None:
+    def ReadConfigFromIniFile(self,*,uConfigName:str) -> None:
         """
         Reads the object config file
 
@@ -88,7 +88,7 @@ class cBaseSettings:
             self.oObject.oObjectConfig.LoadConfig()
 
             if self.oObject.uObjectType == "interface":
-                SetVar(uVarName = u'InterfaceCodesetList',   oVarValue = self.oObject.CreateCodsetListJSONString())
+                SetVar(uVarName = u'InterfaceCodesetList',   oVarValue = self.oObject.CreateCodesetListJSONString())
             SetVar(uVarName = u'ObjectConfigSection', oVarValue = uConfigName)
             dIniDef:Dict[str,Dict] = self.oObject.oObjectConfig.CreateSettingJsonCombined(oSetting=self)
 
@@ -105,7 +105,7 @@ class cBaseSettings:
                 if self.aIniSettings.queryget(uKey) is not None:
                     uDefault = self.aIniSettings.queryget(uKey)
 
-                uResult:str     = Config_GetDefault_Str(self.oObject.oObjectConfig.oConfigParser,self.uSection, uKey,uDefault)
+                uResult:str     = Config_GetDefault_Str(oConfig=self.oObject.oObjectConfig.oConfigParser,uSection=self.uSection, uOption=uKey,vDefaultValue=uDefault)
 
                 if uType == "scrolloptions" or uType == "string":
                     self.aIniSettings[uKey]=ReplaceVars(uResult)
@@ -125,14 +125,14 @@ class cBaseSettings:
                 elif uType == "title" or uType=="buttons":
                     pass
                 else:
-                    self.ShowError(u'Cannot read config name (base), wrong attribute:'+self.oObject.oObjectConfig.oFnConfig.string + u' Section:'+self.uSection+" " +dLine["type"])
+                    self.ShowError(uMsg=u'Cannot read config name (base), wrong attribute:'+self.oObject.oObjectConfig.oFnConfig.string + u' Section:'+self.uSection+" " +dLine["type"])
 
                 if uKey == 'FNCodeset':
                     self.ReadCodeset()
 
             self.oObject.oObjectConfig.oConfigParser.write()
         except Exception as e:
-            self.ShowError(u'Cannot read config name (base):'+self.oObject.oObjectConfig.oFnConfig.string + u' Section:'+self.uSection,e)
+            self.ShowError(uMsg=u'Cannot read config name (base):'+self.oObject.oObjectConfig.oFnConfig.string + u' Section:'+self.uSection,oException=e)
             return
 
     def WriteConfigToIniFile(self) -> None:
@@ -143,25 +143,25 @@ class cBaseSettings:
         # Dummy
         pass
 
-    def ShowWarning(self,uMsg:str) -> str:
+    def ShowWarning(self,*,uMsg:str) -> str:
         """ Shows a warning """
         uRet:str=u'Script '+self.oObject.uObjectName+u'/'+self.uConfigName+u': '+ uMsg
         Logger.warning (uRet)
         return uRet
 
-    def ShowInfo(self,uMsg:str) -> str:
+    def ShowInfo(self,*,uMsg:str) -> str:
         """ Shows a warning """
         uRet:str=u'Script '+self.oObject.uObjectName+u'/'+self.uConfigName+u': '+ uMsg
         Logger.info (uRet)
         return uRet
 
-    def ShowDebug(self,uMsg:str)-> str:
+    def ShowDebug(self,*,uMsg:str)-> str:
         """ Shows a debug message """
         uRet:str = "%s %s/%s:%s" % (self.uType.capitalize(),self.oObject.uObjectName,self.uConfigName,uMsg)
         Logger.debug (uRet)
         return uRet
 
-    def ShowError(self,uMsg:str, oException:Exception=None) -> str:
+    def ShowError(self,*,uMsg:str, oException:Exception=None) -> str:
         """ Shows an error"""
         iErrNo:int = 0
         if oException is not None:

@@ -34,8 +34,8 @@ import ORCA.Globals as Globals
       <description language='English'>Script to adding debugging fuctions on specific keys</description>
       <description language='German'>Script um debugging Funktionen auf einzelne Tasten zu legen</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -73,13 +73,13 @@ class cScript(cKeyhandlerTemplate):
     """
 
     def __init__(self):
-        cKeyhandlerTemplate.__init__(self)
+        super().__init__()
         self.uSubType           = u'DEBUG'
         self.uSortOrder         = u'last'
         self.uIniFileLocation   = u'none'
 
     def HandleKey(self,**kwargs) -> Dict:
-        cKeyhandlerTemplate.HandleKey(self, **kwargs)
+        super().HandleKey(**kwargs)
 
         uKey:str   = kwargs.get("key",0)
         window     = kwargs.get("window",None)
@@ -91,7 +91,7 @@ class cScript(cKeyhandlerTemplate):
             Globals.oApp.on_resume()
         elif uKey ==  "F4":
             Globals.bShowBorders=not Globals.bShowBorders
-            Globals.oTheScreen.AddActionToQueue([{'string': 'updatewidget *@*'}])
+            Globals.oTheScreen.AddActionToQueue(aActions=[{'string': 'updatewidget *@*'}])
         elif uKey == "F12" and window is not None:  # F12
             window.screenshot()
         elif uKey == "F11" and window is not None:  # F11

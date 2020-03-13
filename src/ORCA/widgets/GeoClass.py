@@ -58,10 +58,11 @@ class cWidgetGeoClass(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
             return True
         return False
 
-    def SetWidgetColor(self,uBackgroundColor):
+    def SetWidgetColor(self,uBackgroundColor) -> bool:
         super().SetWidgetColor(uBackgroundColor)
         if self.oObject:
             self.oObject.SetColor(self.aBackGroundColor)
+        return True
 
     def UpdateWidget(self):
         self.SetWidgetColor(ReplaceVars(self.uBackGroundColor))

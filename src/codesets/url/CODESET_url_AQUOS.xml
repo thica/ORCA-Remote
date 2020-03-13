@@ -9,8 +9,8 @@
       <description language='English'>LAN Control for Sharp Aquos TVs (european models)</description>
       <description language='German'>LAN Steuerung für Sharp Aquos TVs (europäische Modelle)</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_AQUOS.xml</local>
@@ -32,7 +32,7 @@
     </entry>
   </repositorymanager>
 
-  <action string="codeset" name='getdeviceinfo'    type="string" waitforresponse='1' requesttype='GET'  cmd='' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip"}' parseoption='xml' ldestvar='"MANUFACTURER","MODELNAME"' getvar='ORCAMULTI"{urn:schemas-upnp-org:device-1-0}device,{urn:schemas-upnp-org:device-1-0}manufacturer","{urn:schemas-upnp-org:device-1-0}device,{urn:schemas-upnp-org:device-1-0}modelName"' />
+  <action string="codeset" name='getdeviceinfo'    type="string" waitforresponse='1' requesttype='GET'  cmd='' headers='{"Connection":"Keep-Alive","Accept-Encoding":"gzip"}' parseoption='xml' ldestvar='"MANUFACTURER","MODELNAME"' getvar='"manufacturer","modelName"' parseflags='UL' />
 
   <action name='logon' >
       <action string="if $cvar(firstcall)==1" varcontext="codeset"/>
@@ -51,7 +51,7 @@
           <action string="setvar loewe_URL=/loewe_tablet_0001"/>
           <action string="setvar firstcall=0" varcontext="codeset"/>
       <action string="endif"/>
-      <action string="codeset" name='logon'            type="soap" waitforresponse='1' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_requestaccess)' params='$var(loeweparams_requestaccess)' parseoption='xml' ldestvar='"FCID","CLIENTID"' gdestvar='"dummy","dummy"' getvar='ORCAMULTI"{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}RequestAccessResponse,{urn:loewe.de:RemoteTV:Tablet}fcid","{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}RequestAccessResponse,{urn:loewe.de:RemoteTV:Tablet}ClientId"'  />
+      <action string="codeset" name='logon'            type="soap" waitforresponse='1' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_requestaccess)' params='$var(loeweparams_requestaccess)' parseoption='xml' ldestvar='"FCID","CLIENTID"' gdestvar='"dummy","dummy"' getvar='"fcid","ClientId"' parseflags='UL' />
   </action >
 
   <action string="codeset" name='info'             type="soap" rc_key="79"  waitforresponse='0' requesttype='POST' cmd='$var(loewe_URL)' headers='$var(loeweheader_injectkey)' params='$var(loeweparams_injectkey_l2700)'/>
@@ -129,7 +129,7 @@
 
   <!-- some volume helpers: Setting Volume in TV accepts a range form 0 to 50000 but we prefer a value range from 0 to 100-->
   <action name="getvolume" >
-      <action name='getvolume_real'         string="codeset"   type="soap"   waitforresponse='1' requesttype='POST' cmd='$var(loewe_URL)' parseoption='xml' gdestvar='$var(GLOBALDESTVAR)' getvar='{http://schemas.xmlsoap.org/soap/envelope/}Body,{urn:loewe.de:RemoteTV:Tablet}GetVolumeResponse,{urn:loewe.de:RemoteTV:Tablet}Value' headers='$var(loeweheader_getvolume)' params='$var(loeweparams_getvolume)'/>
+      <action name='getvolume_real'         string="codeset"   type="soap"   waitforresponse='1' requesttype='POST' cmd='$var(loewe_URL)' parseoption='xml' gdestvar='$var(GLOBALDESTVAR)' getvar='Value' headers='$var(loeweheader_getvolume)' parseflags="U" params='$var(loeweparams_getvolume)'/>
       <action name='save error code'        string="setvar LASTERRORCODETMP=$var(LASTERRORCODE)"/>
       <action name='adjustresult'           string="modifyvar" varname="$var(GLOBALDESTVAR)" operator="divide" parameter1="10000"/>
       <action name='restore error code'     string="setvar LASTERRORCODE=$var(LASTERRORCODETMP)"/>

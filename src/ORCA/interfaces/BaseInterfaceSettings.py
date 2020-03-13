@@ -63,8 +63,8 @@ class cBaseInterFaceSettings(cBaseSettings):
         super().__init__(oInterFace)
 
         self.oInterFace:cBaseInterFace                          = oInterFace
-        self.uConfigName                                        = "DEVICE_DEFAULT"
-        self.uType                                              = "interface"
+        self.uConfigName:str                                    = "DEVICE_DEFAULT"
+        self.uType:str                                          = "interface"
 
         self.aIniSettings.bDisableInterFaceOnError              = False
         self.aIniSettings.bDisconnectInterFaceOnSleep           = True
@@ -74,6 +74,7 @@ class cBaseInterFaceSettings(cBaseSettings):
         self.aIniSettings.uHost                                 = u'192.168.1.2'
         self.aIniSettings.uParseResultOption                    = u''
         self.aIniSettings.uParseResultTokenizeString            = u''
+        self.aIniSettings.uParseResultFlags                     = u''
         self.aIniSettings.uPort                                 = u'80'
         self.aIniSettings.uResultEndString                      = u'\\n'
         self.aIniSettings.uDiscoverScriptName                   = u''
@@ -140,7 +141,7 @@ class cBaseInterFaceSettings(cBaseSettings):
         if self.iDiscoverCount > self.iMaxDiscoverCount:
             return False
 
-        self.ShowDebug(u'Try to discover device')
+        self.ShowDebug(uMsg=u'Try to discover device')
         uDiscoverScriptName:str = self.aIniSettings.uDiscoverScriptName
         dParams:Dict[str,Any] = {}
 
@@ -167,7 +168,7 @@ class cBaseInterFaceSettings(cBaseSettings):
 
             return True
         else:
-            self.ShowError(u'Can''t discover device:' + self.oInterFace.oObjectConfig.oFnConfig.string + u' Section:' + self.uSection, oException)
+            self.ShowError(uMsg=u'Can''t discover device:' + self.oInterFace.oObjectConfig.oFnConfig.string + u' Section:' + self.uSection, oException=oException)
             return False
 
     def ReadCodeset(self) -> None:
@@ -179,17 +180,17 @@ class cBaseInterFaceSettings(cBaseSettings):
         oCodesetFileName:cFileName = self.oInterFace.FindCodesetFile(self.aIniSettings.uFNCodeset)
 
         if oCodesetFileName is None:
-            self.ShowDebug(u'Cannot Read Codeset (Not Found):' + self.aIniSettings.uFNCodeset)
+            self.ShowDebug(uMsg=u'Cannot Read Codeset (Not Found):' + self.aIniSettings.uFNCodeset)
             return
 
-        self.ShowDebug(u'Read Codeset:'+oCodesetFileName)
+        self.ShowDebug(uMsg=u'Read Codeset:'+oCodesetFileName)
 
         if oCodesetFileName.Exists():
             uET_Data:str     = CachedFile(oFileName=oCodesetFileName)
-            oET_Root:Element = Orca_FromString(uET_Data,None,oCodesetFileName.string)
+            oET_Root:Element = Orca_FromString(uET_Data=uET_Data,oDef=None,uFileName=oCodesetFileName.string)
             Orca_include(oET_Root,orca_et_loader)
             dTmpCodeSetActions:Dict[str,List[cAction]] = {}
-            Globals.oActions.LoadActionsSub(oET_Root ,u'',u'action', dTmpCodeSetActions,oCodesetFileName.string)
+            Globals.oActions.LoadActionsSub(oET_Root=oET_Root ,uSegmentTag=u'',uListTag=u'action', dTargetDic=dTmpCodeSetActions,uFileName=oCodesetFileName.string)
             # replacing alias
             bDoItAgain:bool = True
             uKey:str        = u''
@@ -220,7 +221,7 @@ class cBaseInterFaceSettings(cBaseSettings):
                                     bDoItAgain=True
 
                     except Exception as e:
-                        uMsg:str = self.ShowError(u'Cannot read Codeset (wrong alias [%s=%s] CodesetFileName: %s):'% (uKey,uAlias,oCodesetFileName.string),e)
+                        uMsg:str = self.ShowError(uMsg=u'Cannot read Codeset (wrong alias [%s=%s] CodesetFileName: %s):'% (uKey,uAlias,oCodesetFileName.string),oException=e)
                         ShowErrorPopUp(uTitle='Error Reading Codeset',uMessage=uMsg)
 
                 # Make calls local & Read the common attributes
@@ -237,10 +238,10 @@ class cBaseInterFaceSettings(cBaseSettings):
                     Globals.oActions.SetActionList(self.MakeLocalActionName(uKey),dTmpCodeSetActions[uKey])
 
             except Exception as e:
-                uMsg:str = self.ShowError(u'Cannot read Codeset :',e)
+                uMsg:str = self.ShowError(uMsg=u'Cannot read Codeset :',oException=e)
                 ShowErrorPopUp(uTitle='Error Reading Codeset',uMessage=uMsg)
 
-            self.SetContextVar("firstcall","1")
+            self.SetContextVar(uVarName="firstcall",uVarValue="1")
 
     def ReadAction(self,oAction:cAction) -> None:
         """
@@ -257,6 +258,7 @@ class cBaseInterFaceSettings(cBaseSettings):
         oAction.bWaitForResponse            = ToBool(oAction.dActionPars.get(u'waitforresponse',   u'0'))
         oAction.uParseResultOption          = oAction.dActionPars.get(u'parseoption',       self.aIniSettings.uParseResultOption)
         oAction.uParseResultTokenizeString  = oAction.dActionPars.get(u'parsetoken',        self.aIniSettings.uParseResultTokenizeString)
+        oAction.uParseResultFlags           = oAction.dActionPars.get(u'parseflags',        self.aIniSettings.uParseResultFlags)
         oAction.uResultEndString            = oAction.dActionPars.get(u'parseendstring',    self.aIniSettings.uResultEndString)
 
         oAction.dActionPars['interface']  = self.oInterFace.uObjectName
@@ -277,12 +279,12 @@ class cBaseInterFaceSettings(cBaseSettings):
     def Connect(self) -> bool:
         """ basic helper for managing connect """
         if self.bOnError:
-            self.ShowDebug(u'Interface Connect: Interface is on Error, setting interface to disconnected')
+            self.ShowDebug(uMsg=u'Interface Connect: Interface is on Error, setting interface to disconnected')
             self.bIsConnected=False
         if not self.aIniSettings.bDisableInterFaceOnError:
             self.bOnError=False
         if self.bIsConnected:
-            self.ShowDebug(u'Interface Connect: Interface is connected, no connect required.')
+            self.ShowDebug(uMsg=u'Interface Connect: Interface is connected, no connect required.')
             return False
         self.ReadStandardActions()
         if self.bOnError:
@@ -292,7 +294,7 @@ class cBaseInterFaceSettings(cBaseSettings):
         if self.aIniSettings.get("bSaveDiscoveredIP") is not None and self.aIniSettings.get("uOldDiscoveredIP") is not None:
             if self.aIniSettings.bSaveDiscoveredIP and self.aIniSettings.uOldDiscoveredIP != '' and self.aIniSettings.uHost== u'discover':
                 self.aIniSettings.uHost=self.aIniSettings.uOldDiscoveredIP
-                self.ShowDebug("Reusing previous discovered IP:"+self.aIniSettings.uOldDiscoveredIP)
+                self.ShowDebug(uMsg="Reusing previous discovered IP:"+self.aIniSettings.uOldDiscoveredIP)
             elif self.aIniSettings.uHost==u'discover':
                 bRet:bool = self.Discover()
                 if not bRet:
@@ -300,7 +302,7 @@ class cBaseInterFaceSettings(cBaseSettings):
                         self.aIniSettings.uHost=self.aIniSettings.uOldDiscoveredIP
         if self.aIniSettings.uHost.startswith('linked:'):
             self.aIniSettings.uHost=self.oInterFace.oObjectConfig.GetSettingParFromVar(self.aIniSettings.uHost)
-            self.ShowDebug(u'Pulled crosslinked var: %s=%s' %(uOldHost,self.aIniSettings.uHost))
+            self.ShowDebug(uMsg=u'Pulled crosslinked var: %s=%s' %(uOldHost,self.aIniSettings.uHost))
 
         if self.aIniSettings.uHost=="discover":
             return False
@@ -380,7 +382,7 @@ class cBaseInterFaceSettings(cBaseSettings):
         #    self.ShowWarning(u'No Trigger Action defined for Trigger:' + oTrigger.uTriggerName)
         #    # return
 
-        self.ShowDebug(oTrigger.uTriggerName+":"u'Trigger Action:'+oTrigger.uTriggerAction)
+        self.ShowDebug(uMsg=oTrigger.uTriggerName+":"u'Trigger Action:'+oTrigger.uTriggerAction)
 
         uCmd:str
         vRetVal:Union[str,Tuple]
@@ -418,7 +420,7 @@ class cBaseInterFaceSettings(cBaseSettings):
         if oTrigger.uRetVar != u'' and uRetVal != u'':
             SetVar(uVarName = oTrigger.uRetVar, oVarValue = uRetVal)
         if oAction.uActionName != u'':
-            aActions=Globals.oEvents.CreateSimpleActionList([{'string':'call','actionname':oTrigger.uTriggerAction,'name':oAction.uActionName}])
+            aActions=Globals.oEvents.CreateSimpleActionList(aActions=[{'string':'call','actionname':oTrigger.uTriggerAction,'name':oAction.uActionName}])
             Globals.oEvents.ExecuteActionsNewQueue(aActions,Globals.oTheScreen.oCurrentPage.oWidgetBackGround)
 
 
@@ -433,13 +435,13 @@ class cBaseInterFaceSettings(cBaseSettings):
         self.Disconnect()
     def Disconnect(self) -> bool:
         """ Basic disconnect function """
-        self.ShowDebug(u'Base Disconnect #1:Closing Connection')
+        self.ShowDebug(uMsg=u'Base Disconnect #1:Closing Connection')
         if not self.bIsConnected:
             return False
-        self.ShowDebug(u'Base Disconnect #2:Closing Connection')
+        self.ShowDebug(uMsg=u'Base Disconnect #2:Closing Connection')
         self.bIsConnected = False
         if self.bOnError:
             return False
-        self.ShowDebug(u'Closing Connection')
+        self.ShowDebug(uMsg=u'Closing Connection')
         Clock.unschedule(self.FktDisconnect)
         return True

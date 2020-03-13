@@ -26,7 +26,7 @@ import codecs
 __all__ = ['LoadFile']
 
 
-def LoadFile(oFileName):
+def LoadFile(*,oFileName):
     """ returns a content of file as string (unicode on Py3)
     :rtype: string
     :param cFileName oFileName: the FileName to load
@@ -35,7 +35,7 @@ def LoadFile(oFileName):
 
     if isinstance(oFileName,str):
         Logger.warning("Please pass a cFileName to LoadFile:"+oFileName)
-        oFileName=cFileName('').ImportFullPath(oFileName)
+        oFileName=cFileName('').ImportFullPath(uFnFullName=oFileName)
 
 
     try:

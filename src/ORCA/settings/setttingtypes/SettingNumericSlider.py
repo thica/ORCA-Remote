@@ -42,11 +42,11 @@ class SettingNumericSlider(SettingNumeric):
     """ An setting item, which has a slider to input a numeric value """
     def __init__(self, **kwargs):
         self.register_event_type('on_release')
-        super().__init__(**RemoveNoClassArgs(kwargs,SettingNumeric))
+        super().__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=SettingNumeric))
         self.fMin:float                         = ToFloat(kwargs["min"])
         self.fMax:float                         = ToFloat(kwargs["max"])
         self.iRoundPos:int                      = int(kwargs["roundpos"])
-        self.slider:Union[Slider:None]          = None
+        self.slider:Union[Slider,None]          = None
         self.textvalue:Union[TextInput,None]    = None
 
     def _create_popup(self, instance) -> None:

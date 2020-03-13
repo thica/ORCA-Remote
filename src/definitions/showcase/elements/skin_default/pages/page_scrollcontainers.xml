@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<page name="Page_ScrollContainer">
+<page name="Page_ScrollList">
   <page_parameter>
     <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
   </page_parameter>
@@ -13,11 +13,11 @@
 
     <element name='Anchor1' type='ANCHOR' posx='%2' posy='of:bottom:Anchor Top' width='%23' height='%70' >
       <elements>
-        <element name="ScollBox Left" type="SCROLLCONTAINER" picturenormal="background boxes" container="container_1" rowheight="%25"  />
+        <element name="ScollBox Left" type="SCROLLLIST" picturenormal="background boxes" container="list_1" rowheight="%25"  />
         <element name='Anchor1 Inner' type='ANCHOR'  height='%25' >
-           <element name="First Button"       type="BUTTON" posx="left"  posy="top"    height="%100" width="%40" picturenormal='button wide*'     container="container_1" caption="First Button" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h20'  />
-           <element name="Second Button Top"  type="BUTTON" posx="right" posy="top"    height="%30" width="%60" picturenormal="button wide*"     container="container_1" caption="$var(scrollcontent_button1_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h50'  />
-           <element name="Second Button Down" type="BUTTON" posx="right" posy="bottom" height="%70" width="%60" picturenormal="button wide*"     container="container_1" caption="$var(scrollcontent_button2_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h25'  />
+           <element name="First Button"       type="BUTTON" posx="left"  posy="top"    height="%100" width="%40" picturenormal='button wide*'    container="list_1" caption="First Button" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h20'  />
+           <element name="Second Button Top"  type="BUTTON" posx="right" posy="top"    height="%30" width="%60" picturenormal="button wide*"     container="list_1" caption="$var(scrollcontent_button1_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h50'  />
+           <element name="Second Button Down" type="BUTTON" posx="right" posy="bottom" height="%70" width="%60" picturenormal="button wide*"     container="list_1" caption="$var(scrollcontent_button2_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h25'  />
         </element>
       </elements>
     </element>
@@ -26,10 +26,10 @@
 
     <element name='Anchor2' type='ANCHOR' posx='%34' posy='of:bottom:Anchor Top' width='%23' height='%60' >
       <elements>
-        <element name="ScollBox 2cnd left" type="SCROLLCONTAINER" picturenormal="background boxes" container="container_2" rowheight="%25"  />
+        <element name="ScrollBox 2cnd left" type="SCROLLLIST" picturenormal="background boxes" container="list_2" rowheight="%25"  />
         <element name='Anchor2 Inner' type='ANCHOR'  height='%25' >
-          <element name="First Button"  type="BUTTON"          posx="left"  width="%40" picturenormal='button wide*'     container="container_2" caption="$var(scrollcontent_button1_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h20' />
-          <element name="Second Button" type="BUTTON"          posx="right" width="%60" picturenormal="button wide*"     container="container_2" caption="Second button" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h20' />
+          <element name="First Button"  type="BUTTON"          posx="left"  width="%40" picturenormal='button wide*'     container="list_2" caption="$var(scrollcontent_button1_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h20' />
+          <element name="Second Button" type="BUTTON"          posx="right" width="%60" picturenormal="button wide*"     container="list_2" caption="Second button" action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h20' />
         </element>
       </elements>
      </element>
@@ -38,11 +38,11 @@
 
     <element name='Anchor3' type='ANCHOR' posx='%66' posy='of:bottom:Anchor Top' width='%23' height='%65' >
       <elements>
-        <element name="ScrollBox 2cnd right" type="SCROLLCONTAINER" picturenormal="background boxes" container="container_3" rowheight="%15"  />
+        <element name="ScrollBox 2cnd right" type="SCROLLLIST" picturenormal="background boxes" container="list_3" rowheight="%15"  />
         <element name='Anchor3 Inner'   type='ANCHOR'  height='%15' >
-          <element name="First Button"  type="TEXTFIELD"   posx="left"          width="%68" picturenormal='button wide*'     container="container_3" caption="$var(scrollcontent_movies_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}'  />
-          <element name='Button Play'   type='BUTTON'   posx='right'         width='%16' picturenormal='button square*' container="container_3" action='Send Play'         fontsize='%h30' iconfontsize='%h70'  caption='icon:media_play' />
-          <element name='Button Delete' type='BUTTON'   posx='of:toleft:last' width='%16' picturenormal='button square*' container="container_3" action='FKT_ScrollContainer_DeleteMovie'     fontsize='%h30' iconfontsize='%h70'  caption='icon:delete' />
+          <element name="First Button"  type="TEXTFIELD"   posx="left"          width="%68" picturenormal='button wide*'   container="list_3" caption="$var(scrollcontent_movies_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}'  />
+          <element name='Button Play'   type='BUTTON'   posx='right'         width='%16' picturenormal='button square*'    container="list_3" action='Send Play'         fontsize='%h30' iconfontsize='%h70'  caption='icon:media_play' />
+          <element name='Button Delete' type='BUTTON'   posx='of:toleft:last' width='%16' picturenormal='button square*'   container="list_3" action='FKT_ScrollList_DeleteMovie'     fontsize='%h30' iconfontsize='%h70'  caption='icon:delete' />
         </element>
       </elements>
      </element>
@@ -51,12 +51,12 @@
 
     <element name='Anchor4' type='ANCHOR' posx='%98' posy='of:bottom:Anchor Top' width='%23' height='%65' >
       <elements>
-        <element name="ScrollBox right" type="SCROLLCONTAINER" picturenormal="background boxes" container="container_4" rowheight="%15"  />
+        <element name="ScrollBox right" type="SCROLLLIST" picturenormal="background boxes" container="list_4" rowheight="%15"  />
         <element name='Anchor4 Inner'   type='ANCHOR'  height='%15' >
-          <element name="First Button"  type="TEXTFIELD"   posx="left"           width="%60"   height='%90' picturenormal='button wide*'   container="container_4" caption="$var(scrollcontent_movies_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}'  />
-          <element name='Button Play'   type='BUTTON'      posx='right'          width='%20'   height='%90' picturenormal='button square*' container="container_4" action='Send Play'         fontsize='%h30' iconfontsize='%h70'  caption='icon:media_play' />
-          <element name='Button Delete' type='BUTTON'      posx='of:toleft:last' width='%20'   height='%90' picturenormal='button square*' container="container_4" action='FKT_ScrollContainer_DeleteMovie'     fontsize='%h30' iconfontsize='%h70'  caption='icon:delete' />
-          <element name='Devider'       type='RECTANGLE'   posx='left'           posy="bottom" height="%7"  backgroundcolor='$var(shadow)' container="container_4"  />
+          <element name="First Button"  type="TEXTFIELD"   posx="left"           width="%60"   height='%90' picturenormal='button wide*'   container="list_4" caption="$var(scrollcontent_movies_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}'  />
+          <element name='Button Play'   type='BUTTON'      posx='right'          width='%20'   height='%90' picturenormal='button square*' container="list_4" action='Send Play'         fontsize='%h30' iconfontsize='%h70'  caption='icon:media_play' />
+          <element name='Button Delete' type='BUTTON'      posx='of:toleft:last' width='%20'   height='%90' picturenormal='button square*' container="list_4" action='FKT_ScrollList_DeleteMovie'     fontsize='%h30' iconfontsize='%h70'  caption='icon:delete' />
+          <element name='Devider'       type='RECTANGLE'   posx='left'           posy="bottom" height="%7"  backgroundcolor='$var(shadow)' container="list_4"  />
         </element>
       </elements>
      </element>

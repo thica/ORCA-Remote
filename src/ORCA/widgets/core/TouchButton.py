@@ -26,7 +26,7 @@ from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
 
 class cTouchButton(cOrcaButtonBehaviour,Button):
     def __init__(self,**kwargs):
-        Button.__init__(self,**RemoveNoClassArgs(kwargs,Button))
+        Button.__init__(self,**RemoveNoClassArgs(dInArgs=kwargs,oObject=Button))
         cOrcaButtonBehaviour.__init__(self,**kwargs)
 
     def on_touch_down(self, touch) -> bool:

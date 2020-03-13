@@ -40,8 +40,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to Im/Export Orca files</description>
       <description language='German'>Tool um die Orca Files zu Im/Exportieren</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -78,7 +78,7 @@ class cScript(cToolsTemplate):
     """
 
     def __init__(self):
-        cToolsTemplate.__init__(self)
+        super().__init__()
         self.uSubType           = u'IRDB'
         self.uSortOrder         = u'auto'
         self.uSettingSection    = u'tools'
@@ -87,31 +87,31 @@ class cScript(cToolsTemplate):
 
 
     def RunScript(self, *args, **kwargs) -> None:
-        cToolsTemplate.RunScript(self,*args, **kwargs)
+        super().RunScript(*args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.ShowPageExport(self, *args, **kwargs)
 
     def ShowPageExport(self, *args, **kwargs) -> None:
         SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="EXPORT")
         oEvents = Globals.oEvents
-        aActions=oEvents.CreateSimpleActionList([{'name':'show page','string':'showpage','pagename':'Page_Export'},
-                                                 {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_8)', 'autoupdate':'1'}])
+        aActions=oEvents.CreateSimpleActionList(aActions=[{'name':'show page','string':'showpage','pagename':'Page_Export'},
+                                                          {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_8)', 'autoupdate':'1'}])
         oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
     def ShowPageImport(self, *args, **kwargs) -> None:
         SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="IMPORT")
         oEvents = Globals.oEvents
-        aActions=oEvents.CreateSimpleActionList([{'name':'show page','string':'showpage','pagename':'Page_Export'},
-                                                 {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_9)', 'autoupdate':'1'}])
+        aActions=oEvents.CreateSimpleActionList(aActions=[{'name':'show page','string':'showpage','pagename':'Page_Export'},
+                                                          {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_9)', 'autoupdate':'1'}])
         oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
     def Register(self, *args, **kwargs) -> Dict:
-        cToolsTemplate.Register(self,*args, **kwargs)
-        Globals.oNotifications.RegisterNotification("DEFINITIONPAGESLOADED",            fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools Import Export")
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-IMPORT",   fNotifyFunction=self.ShowPageImport,  uDescription="Script Tools Import / Export")
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-EXPORT",   fNotifyFunction=self.ShowPageExport,  uDescription="Script Tools Import / Export")
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-DOIMPORT", fNotifyFunction=self.ImportOrcaFiles, uDescription="Script Tools Import / Export")
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTIMPORTEXPORT-DOEXPORT", fNotifyFunction=self.ExportOrcaFiles, uDescription="Script Tools Import / Export")
+        super().Register(*args, **kwargs)
+        Globals.oNotifications.RegisterNotification(uNotification="DEFINITIONPAGESLOADED",            fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools Import Export")
+        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTIMPORTEXPORT-IMPORT",   fNotifyFunction=self.ShowPageImport,  uDescription="Script Tools Import / Export")
+        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTIMPORTEXPORT-EXPORT",   fNotifyFunction=self.ShowPageExport,  uDescription="Script Tools Import / Export")
+        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTIMPORTEXPORT-DOIMPORT", fNotifyFunction=self.ImportOrcaFiles, uDescription="Script Tools Import / Export")
+        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTIMPORTEXPORT-DOEXPORT", fNotifyFunction=self.ExportOrcaFiles, uDescription="Script Tools Import / Export")
 
         oScriptSettingPlugin = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName
@@ -130,7 +130,7 @@ class cScript(cToolsTemplate):
 
         if oDefinition.uName == Globals.uDefinitionName:
             if self.oFnXML.Exists():
-                oDefinition.LoadFurtherXmlFile(self.oFnXML)
+                oDefinition.LoadFurtherXmlFile(oFnXml=self.oFnXML)
 
     def ExportOrcaFiles(self,*args,**kwargs) -> None:
         """
@@ -140,7 +140,7 @@ class cScript(cToolsTemplate):
         oPath.Delete()
         if not Globals.oPathRoot.string in oPath.string:
             fIgnore = ignore_patterns('*.ini', 'ORCA', '*.py*')
-            Globals.oPathRoot.Copy(oPath, fIgnore)
+            Globals.oPathRoot.Copy(oDest=oPath, fIgnoreFiles=fIgnore)
 
     def ImportOrcaFiles(self,*args,**kwargs) -> None:
         """
@@ -150,6 +150,6 @@ class cScript(cToolsTemplate):
         oFnCheckFile:cFileName = cFileName(oPath + 'actions') + 'actions.xml'
         if oFnCheckFile.Exists():
             if not Globals.bProtected:
-                oPath.Copy(Globals.oPathRoot)
+                oPath.Copy(oDest=Globals.oPathRoot)
 
 

@@ -182,8 +182,9 @@ class cOrcaButtonBehaviour:
 
         # noinspection PyUnresolvedReferences
         oOrcaWidget:cWidgetBase = self.oOrcaWidget
-        if oOrcaWidget.uActionNameLongTap!=u'':
-            return
+        if hasattr(self,'uActionNameLongTap'):
+            if oOrcaWidget.uActionNameLongTap!=u'':
+                return
 
         if Globals.fStartRepeatDelay>0:
             self.fktCallBackRepeat = partial(self.fRepeat, touch)

@@ -20,6 +20,7 @@
 from __future__ import annotations
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Union
 from xml.etree.ElementTree import Element
 
@@ -71,7 +72,7 @@ class cAction:
         self.dActionPars:Dict                   = {}
         self.dCommandParameter:Dict             = {}  # just internal for interfaces
         self.iActionId:int                      = 0
-        self.oParentWidget:Union[cWidgetBase,None]   = None
+        self.oParentWidget:Optional[cWidgetBase]= None
         self.uActionName:str                    = u''
         self.uActionString:str                  = u''
         self.uActionTapType:str                 = u'both'  # could be both, single, double
@@ -83,6 +84,7 @@ class cAction:
         # for resultparser
         self.uParseResultOption:str             = u''
         self.uParseResultTokenizeString:str     = u''
+        self.uParseResultFlags:str              = u''
         self.uGetVar:str                        = u''
         self.uGlobalDestVar:str                 = u''
         self.uLocalDestVar:str                  = u''
@@ -100,7 +102,7 @@ class cAction:
         self.uFunctionContext = kwargs.get("functionname", "")
 
         if "pars" in kwargs:
-            self.ParseAction(oSource=kwargs["pars"],oParentWidget=self.oParentWidget)
+            self.ParseAction(vSource=kwargs["pars"],oParentWidget=self.oParentWidget)
 
 
     def __copy__(self) -> cAction:
@@ -124,19 +126,25 @@ class cAction:
 
         return oRes
 
-    def ParseAction(self,oSource:Union[str,Dict,Element],oParentWidget:Union[cWidgetBase,None]=None) -> None:
+    def ParseAction(self,*,vSource:Union[str,Dict,Element],oParentWidget:Optional[cWidgetBase]=None) -> None:
+        """
+        Parses the action parameter in the action
+        :param vSource: The sources for the values, could be a string, a dict or a xml element
+        :param oParentWidget: The parent widget for the action
+        :return: None
+        """
         try:
             ''' parses an action from a given element , could be a dict or a XML node'''
-            if isinstance(oSource, str):
-                Logger.error("Invalid Action Parameter:"+oSource)
+            if isinstance(vSource, str):
+                Logger.error("Invalid Action Parameter:"+vSource)
                 self.uActionString      =  'noaction'
                 self.iActionId          =  GetActionID(self.uActionString)
                 return
 
-            if isinstance(oSource, dict):
-                self.dActionPars=oSource
+            if isinstance(vSource, dict):
+                self.dActionPars=vSource
             else:
-                self.dActionPars=copy(oSource.attrib)
+                self.dActionPars=copy(vSource.attrib)
 
             if self.uFunctionContext:
                 for uKey in self.dActionPars:
@@ -146,7 +154,7 @@ class cAction:
                 self.dActionPars["commandparameter"]= ToDic(self.dActionPars.get("commandparameter"))
 
             self.uActionString      =  self.dActionPars.get(u'string',u'noaction')
-            self.SplitAction(self.uActionString)
+            self.SplitAction(uActionString=self.uActionString)
 
             ''' Parses an action from a Source object '''
             self.oParentWidget      =  oParentWidget
@@ -173,8 +181,11 @@ class cAction:
         except Exception as e:
             LogError(uMsg="Cant parse Action" , oException=e)
 
-    def SplitAction(self,uActionString:str) -> None:
-
+    def SplitAction(self,*,uActionString:str) -> None:
+        """
+        Helper function to split an action string into the parameter
+        :param uActionString: The string representing the action
+        """
         i:int
         iPos:int
         uString:str
@@ -200,26 +211,26 @@ class cAction:
         except Exception as e:
             LogError(uMsg = "Wrong Parameter for Action given:"+uActionString, oException = e)
 
-    def Dump(self,iIndent:int) -> None:
+    def Dump(self,*,iIndent:int) -> None:
         """ Dumps a specific action """
 
         uOut:str
         uKey:str
-        uAttributName:str
+        uAttributeName:str
 
         uOut = u" " * iIndent
         if self.uActionName:
             uOut+= self.uActionName+": "
-        for uAttributName in self.__dict__:
-            oValue= self.__dict__[uAttributName]
+        for uAttributeName in self.__dict__:
+            oValue= self.__dict__[uAttributeName]
             if isinstance(oValue,str):
                 if not "$var" in oValue:
-                    uOut+="'%s'='%s' , " % (uAttributName,oValue)
+                    uOut+="'%s'='%s' , " % (uAttributeName,oValue)
                 else:
-                    uOut+="'%s'='%s [%s]' , " % (uAttributName,oValue,ReplaceVars(oValue))
+                    uOut+="'%s'='%s [%s]' , " % (uAttributeName,oValue,ReplaceVars(oValue))
 
             elif isinstance(oValue,dict):
-                uOut=uOut+uAttributName+":{"
+                uOut=uOut+uAttributeName+":{"
                 for uKey in oValue:
                     if uKey!= "name":
                         uValue=oValue[uKey]

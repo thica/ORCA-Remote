@@ -32,10 +32,10 @@ class cRepSkipFile:
     """
     def __init__(self):
         self.uFile:str = u''
-    def ParseFromXMLNode(self,oXMLNode:Element) -> None:
+    def ParseFromXMLNode(self,*,oXMLNode:Element) -> None:
         """ Parses an xms string into object vars """
-        self.uFile:str = AdjustPathToOs(oXMLNode.text)
-    def WriteToXMLNode(self,oXMLNode:Element) -> None:
+        self.uFile:str = AdjustPathToOs(uPath=oXMLNode.text)
+    def WriteToXMLNode(self,*,oXMLNode:Element) -> None:
         """ writes object vars to an xml node """
         oVal:Element = SubElement(oXMLNode,'file')
         oVal.text=self.uFile

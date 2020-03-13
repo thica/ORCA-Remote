@@ -24,7 +24,7 @@ Base Module for Scripts and Interfaces
 
 from typing import Dict
 from typing import Union
-
+from typing import Optional
 
 from kivy.logger                             import Logger
 from ORCA.utils.LogError                     import LogError
@@ -55,16 +55,16 @@ class cBaseObject:
         self.bIsInit:bool                       = False
         self.iMyVersion:int                     = ToIntVersion('1.0.0')
         self.iOrcaVersion:int                   = ToIntVersion('1.0.0')     #OrcaVersion defines for what Orca Version the Interface has been developed
-        self.oFnObject:Union[cFileName,None]    = None
+        self.oFnObject:Optional[cFileName]      = None
         self.oObjectConfig:cBaseConfig          = None
-        self.oPathMyData:Union[cPath,None]      = None
-        self.oPathMyCode:Union[cPath,None]      = None
+        self.oPathMyData:Optional[cPath]        = None
+        self.oPathMyCode:Optional[cPath]        = None
         self.uConfigName:str                    = u'DEFAULT'
         self.uIniFileLocation:str               = u'local'
         self.uObjectName:str                    = u''
         self.uObjectType:str                    = u''
 
-    def Init(self,uObjectName:str,oFnObject:Union[cFileName,None]=None) -> None:
+    def Init(self,uObjectName:str,oFnObject:Optional[cFileName]=None) -> None:
         """ Initializes the script """
 
         self.bIsInit            = True
@@ -92,28 +92,28 @@ class cBaseObject:
         self.oFnObject            = cFileName(oFnObject)
 
         Globals.oLanguage.LoadXmlFile(self.uObjectType.upper(), self.uObjectName)
-        oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFnObject)
+        oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFileName=oFnObject)
         if oRepManagerEntry.ParseFromSourceFile():
             self.iMyVersion     = oRepManagerEntry.oRepEntry.iVersion
             self.iOrcaVersion   = oRepManagerEntry.oRepEntry.iMinOrcaVersion
-        Globals.oNotifications.RegisterNotification("on_stopapp",self.DeInit,self.uObjectType.capitalize()+":"+self.uObjectName)
-        Globals.oNotifications.RegisterNotification("on_pause",self.OnPause,self.uObjectType.capitalize()+":"+self.uObjectName)
-        Globals.oNotifications.RegisterNotification("on_resume",self.OnResume,self.uObjectType.capitalize()+":"+self.uObjectName)
+        Globals.oNotifications.RegisterNotification(uNotification="on_stopapp",fNotifyFunction=self.DeInit,  uDescription=self.uObjectType.capitalize()+":"+self.uObjectName)
+        Globals.oNotifications.RegisterNotification(uNotification="on_pause",  fNotifyFunction=self.OnPause, uDescription=self.uObjectType.capitalize()+":"+self.uObjectName)
+        Globals.oNotifications.RegisterNotification(uNotification="on_resume", fNotifyFunction=self.OnResume,uDescription=self.uObjectType.capitalize()+":"+self.uObjectName)
 
-        self.ShowDebug(u'Init')
+        self.ShowDebug(uMsg=u'Init')
 
     def DeInit(self, **kwargs) -> None:
-        """ Deinitialisizes the object """
-        self.ShowDebug(u'DeInit')
+        """ De-Initialisizes the object """
+        self.ShowDebug(uMsg=u'DeInit')
 
     def OnPause(self,**kwargs) -> None:
         """ called by system, if the device goes on pause """
-        self.ShowInfo(u'OnPause')
+        self.ShowInfo(uMsg=u'OnPause')
     def OnResume(self,**kwargs) -> None:
         """ called by system, if the device resumes """
-        self.ShowInfo(u'OnResume')
+        self.ShowInfo(uMsg=u'OnResume')
 
-    def _FormatShowMessage(self,uMsg:str,uParConfigName:str=u"",uParAdd:str=u"") -> str:
+    def _FormatShowMessage(self,*,uMsg:str,uParConfigName:str=u"",uParAdd:str=u"") -> str:
         """
         Creates a debug line for the object
 
@@ -129,7 +129,7 @@ class cBaseObject:
 
         return "%s %s %s: %s" % (self.uObjectType.capitalize(),self.uObjectName , uConfigName , uMsg)
 
-    def ShowWarning(self,uMsg:str,uParConfigName:str=u"") -> str:
+    def ShowWarning(self,*,uMsg:str,uParConfigName:str=u"") -> str:
         """
         Writes a warning message
 
@@ -137,11 +137,11 @@ class cBaseObject:
         :param str uParConfigName: The configuration name
         :return: The written logfile entry
         """
-        uRet:str = self._FormatShowMessage(uMsg,uParConfigName)
+        uRet:str = self._FormatShowMessage(uMsg=uMsg,uParConfigName=uParConfigName)
         Logger.warning (uRet)
         return uRet
 
-    def ShowDebug(self,uMsg:str,uParConfigName:str=u"") -> str:
+    def ShowDebug(self,*,uMsg:str,uParConfigName:str=u"") -> str:
         """
         writes a debug message
 
@@ -150,11 +150,11 @@ class cBaseObject:
         :param str uParConfigName: The configuration name
         :return: The written logfile entry
         """
-        uRet:str = self._FormatShowMessage(uMsg,uParConfigName)
+        uRet:str = self._FormatShowMessage(uMsg=uMsg,uParConfigName=uParConfigName)
         Logger.debug (uRet)
         return uRet
 
-    def ShowInfo(self,uMsg:str,uParConfigName:str=U"") -> str:
+    def ShowInfo(self,*,uMsg:str,uParConfigName:str=U"") -> str:
         """
         writes a info message
 
@@ -163,11 +163,11 @@ class cBaseObject:
         :return: The written logfile entry
         """
 
-        uRet:str = self._FormatShowMessage(uMsg,uParConfigName)
+        uRet:str = self._FormatShowMessage(uMsg=uMsg,uParConfigName=uParConfigName)
         Logger.info (uRet)
         return uRet
 
-    def ShowError(self,uMsg:str, uParConfigName:str=u"",uParAdd:str=u"",oException:Exception=None) -> str:
+    def ShowError(self,*,uMsg:str, uParConfigName:str=u"",uParAdd:str=u"",oException:Exception=None) -> str:
         """
         writes an error message
 
@@ -204,7 +204,7 @@ class cBaseObject:
         return None
 
 
-    def GetSettingObjectForConfigName(self,uConfigName:str) -> cBaseSettings:
+    def GetSettingObjectForConfigName(self,*,uConfigName:str) -> cBaseSettings:
         """
         Creates/returns a config object
 
@@ -216,15 +216,15 @@ class cBaseObject:
         oSetting = self.dSettings.get(uConfigName)
 
         if oSetting is None:
-            uConfigName:str=ReplaceVars(uConfigName)
+            uConfigName = ReplaceVars(uConfigName)
             oSetting = self.dSettings.get(uConfigName)
 
         if oSetting is None:
             oSetting = self.GetNewSettingObject()
             self.dSettings[uConfigName]=oSetting
-            oSetting.ReadConfigFromIniFile(uConfigName)
+            oSetting.ReadConfigFromIniFile(uConfigName=uConfigName)
         return oSetting
 
-    def CreateCodsetListJSONString(self) -> str:
+    def CreateCodesetListJSONString(self) -> str:
         """ Dummy """
         pass

@@ -24,7 +24,7 @@
 
 CTH:
 
-Code taken from Kivy garden and adjusted to match ORCA requierements
+Code taken from Kivy garden and adjusted to match ORCA requirements
 
 FileBrowser
 ===========
@@ -83,7 +83,6 @@ a shortcut to the Documents directory added to the favorites bar::
     :align: right
 '''
 
-import string
 from os.path import sep, dirname, expanduser, isdir
 from os import walk
 from functools import partial
@@ -97,7 +96,8 @@ from kivy.lang import Builder
 from kivy.utils import platform as core_platform
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
-from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
+from ORCA.utils.Platform import OS_GetDrives
+from ORCA.utils.Platform import OS_GetSystemUserPath
 
 
 __all__ = ('FileBrowser', )
@@ -106,46 +106,22 @@ __version__ = '1.1'
 
 platform = core_platform
 
-if platform == 'win':
-    from ctypes import windll, create_unicode_buffer
-
 class SettingSpacer(Widget):
     """ Internal class, not documented."""
     pass
 
 def get_drives():
     """ returns a list of all available drives """
-    drives = []
-    if platform == 'win':
-        bitmask = windll.kernel32.GetLogicalDrives()
-        GetVolumeInformationW = windll.kernel32.GetVolumeInformationW
-        for letter in string.ascii_uppercase:
-            if bitmask & 1:
-                name = create_unicode_buffer(64)
-                # get name of the drive
-                drive = letter + u':'
-                GetVolumeInformationW(drive + sep, name, 64, None,None, None, None, 0)
-                drives.append((drive, name.value))
-            bitmask >>= 1
-    elif platform == 'linux':
-        drives.append((sep, sep))
-        drives.append((expanduser(u'~'), '~/'))
-        places = (sep + u'mnt', sep + u'media')
-        for place in places:
-            if isdir(place):
-                for directory in walk(place).next()[1]:
-                    drives.append((place + sep + directory, directory))
-    elif platform == 'macosx' or platform == 'ios':
-        drives.append((expanduser(u'~'), '~/'))
-        vol = sep + u'Volume'
-        if isdir(vol):
-            for drive in walk(vol).next()[1]:
-                drives.append((vol + sep + drive, drive))
-    return drives
+    return OS_GetDrives()
+
+def get_home_directory():
+    return OS_GetSystemUserPath().string
 
 class FileBrowserIconView(IconView):
     """ pass """
     pass
+
+
 
 Builder.load_string('''
 #:kivy 1.2.0
@@ -371,14 +347,14 @@ class LinkTree(TreeView):
         if not node.path or node.nodes:
             return
         parent = node.path
-        # noinspection PyShadowingBuiltins
-        next = walk(parent).next()
-        if next:
-            for path in next[1]:
+        _next = next(walk(parent))
+        if _next:
+            for path in _next[1]:
                 self.add_node(TreeLabel(text=path, path=parent + sep + path),
                               node)
 
 
+# noinspection PyArgumentList
 class FileBrowser(BoxLayout):
     """FileBrowser class, see module documentation for more information.
     """
@@ -595,7 +571,7 @@ class FileBrowser(BoxLayout):
         pass
 
     def __init__(self, **kwargs):
-        super(FileBrowser, self).__init__(**RemoveNoClassArgs(kwargs,FileBrowser))
+        super(FileBrowser, self).__init__(**kwargs)
         Clock.schedule_once(self._post_init)
 
     # noinspection PyUnusedLocal
@@ -634,6 +610,7 @@ class FileBrowser(BoxLayout):
         if self.transition:
             self.ids.sm.transition=self.transition
 
+    # noinspection PyMethodMayBeStatic
     def _shorten_filenames(self, filenames):
         if not len(filenames):
             return ''
@@ -644,6 +621,7 @@ class FileBrowser(BoxLayout):
         else:
             return filenames[0] + ', _..._, ' + filenames[-1]
 
+    # noinspection PyUnusedLocal
     def _attr_callback(self, attr, obj, value):
         setattr(self, attr, getattr(obj, attr))
 

@@ -24,12 +24,11 @@ from typing                                 import List
 from typing                                 import Dict
 from typing                                 import Tuple
 
-
-from xml.etree.ElementTree                  import ElementTree
 from xml.etree.ElementTree                  import tostring
 from xml.etree.ElementTree                  import ParseError
 from xml.etree.ElementTree                  import Element
 from xml.etree.ElementTree                  import XMLParser
+
 
 from ORCA.utils.XML                         import CommentedTreeBuilder
 
@@ -46,6 +45,9 @@ from ORCA.ui.BasePopup                      import SettingSpacer
 from ORCA.vars.Replace                      import ReplaceVars
 from ORCA.widgets.core.FileBrowser          import FileBrowser
 from ORCA.utils.RemoveNoClassArgs           import RemoveNoClassArgs
+from ORCA.utils.XML                         import LoadXMLFile
+from ORCA.utils.XML                         import WriteXMLFile
+from ORCA.utils.FileName                    import cFileName
 from ORCA.scripttemplates.Template_System   import cSystemTemplate
 from ORCA.widgets.base.Base                 import cWidgetBase
 from ORCA.ScreenPage                        import cScreenPage
@@ -60,8 +62,8 @@ import ORCA.Globals as Globals
       <description language='English'>Additional Widget to convert IR Files from iTach format to Kira Keene format</description>
       <description language='German'>Zusätzliches Widgets um IR Dateien vom iTach Format zum Kira Keene Format zu konvertieren</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -142,7 +144,7 @@ def GlobalCacheToCCF(uGCString:str) -> Tuple[str,int]:
         iPairData = int(aArray[i])
         uTmpString = ToHex(iPairData)
         uFinalString = uFinalString + " " + uTmpString
-        i=i+1
+        i += 1
     return uFinalString,iRepeatCount
 
 def CCfToKeene(uCCFString:str,iRepeatCount:int):
@@ -173,14 +175,14 @@ def CCfToKeene(uCCFString:str,iRepeatCount:int):
 
         while iX<255:
             aBurst_Time.append(0)
-            iX=iX+1
+            iX += 1
 
         iX=0
         while iX<iCodeLength:
             uTmpStr = uData[iX: iX + 4]
             aBurst_Time[iy]=int(uTmpStr,16)
-            iy=iy+1
-            iX=iX+5
+            iy += 1
+            iX += 5
 
         iFreq = int (4145 / aBurst_Time[1])
 
@@ -194,21 +196,21 @@ def CCfToKeene(uCCFString:str,iRepeatCount:int):
         iX=0
         while iX<iy:
             aMyInt.append(0)
-            iX=iX+1
+            iX += 1
 
         aMyInt[0]       = int(iFreq * 256 + iPair_Count)
         iCycle_time     = int(1000 / iFreq)
         iLead_in        = aBurst_Time[4] * iCycle_time
         aMyInt[1]       = iLead_in
         aMyInt[2]       = aBurst_Time[5] * iCycle_time # lead space
-        iPair_Count     = iPair_Count - 1  # only loop data pairs
+        iPair_Count    -= 1  # only loop data pairs
         iX              = 0
         iEnd            = iPair_Count * 2
 
         while iX<iEnd:
             iTint = int(aBurst_Time[iX + 6] * iCycle_time)
             aMyInt[iX + 3] = iTint
-            iX=iX+1
+            iX += 1
 
         aMyInt[iX + 2] = 8192   # over write the lead out space with 2000 X is one over when exits from for loop
         uData = ""
@@ -217,7 +219,7 @@ def CCfToKeene(uCCFString:str,iRepeatCount:int):
         iEnd            = (iPair_Count * 2) + 3
         while iX<iEnd:
             uData = uData + ToHex(aMyInt[iX]) + " "
-            iX=iX+1
+            iX += 1
         bError = False
     except Exception as e:
         uMsg:str='CCfToKeene:Can''t Convert:'+str(e)
@@ -245,7 +247,7 @@ class cITachToKeene(BoxLayout):
 
     def __init__(self, **kwargs):
         kwargs['orientation']='vertical'
-        super(cITachToKeene, self).__init__(**RemoveNoClassArgs(kwargs,BoxLayout))
+        super(cITachToKeene, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=BoxLayout))
         self.uCodesetFileName:str           = ''
         self.oLayoutHeaders:BoxLayout       = BoxLayout(size_hint_y= None , height= 30)
         self.oLayoutButtons:BoxLayout       = BoxLayout(size_hint_y= None , height= 30)
@@ -288,7 +290,7 @@ class cITachToKeene(BoxLayout):
                  'location_string': ReplaceVars('$lvar(5021)'),
                  'listview_string': ReplaceVars('$lvar(5022)'),
                  'iconview_string': ReplaceVars('$lvar(5023)'),
-                 'transition ': FadeTransition(),
+                 'transition': FadeTransition(),
                  'size_hint': (1, 1),
                  'favorites': [(Globals.oPathRoot.string, 'ORCA')],
                  'show_fileinput': False,
@@ -325,11 +327,11 @@ class cITachToKeene(BoxLayout):
             self.uCodesetFileName=oFileBrowser.selection[0]
 
         try:
-            self.oXMLCodeset = ElementTree()
             oParser          = XMLParser(target=CommentedTreeBuilder())
-            self.oXMLCodeset.parse(source=self.uCodesetFileName,parser=oParser)
-            if self.oXMLCodeset is not None:
-                oXMLRoot = self.oXMLCodeset.getroot()
+            oXMLRoot         = LoadXMLFile(oFile=cFileName().ImportFullPath(uFnFullName=self.uCodesetFileName),oParser=oParser)
+            # oXMLRoot         = LoadXMLFile(oFile=cFileName().ImportFullPath(uFnFullName=self.uCodesetFileName))
+
+            if oXMLRoot is not None:
                 self.oTextInput.text=tostring(oXMLRoot)
                 for oCode in oXMLRoot:
                     uCmd=oCode.get('cmd')
@@ -406,19 +408,20 @@ class cITachToKeene(BoxLayout):
                             oName=oDEDep.find("name")
                             if oName is not None:
                                 oName.text=oName.text.replace("iTach IR Control","CCF IR Codes")
-                oXMLRepMgSources=oXMLRepMgrEntry.findall("sources")
+                oXMLRepMgSources=oXMLRepMgrEntry.find("sources")
                 if oXMLRepMgSources is not None:
-                    oXMLRepMgSource=oXMLRepMgSources.find("source")
-                    if oXMLRepMgSource is not None:
-                        for oSource in oXMLRepMgSource:
-                            oSource.text=oSource.text.replace("_iTach_","_infrared_ccf_")
+                    oXMLRepMgSourceBlock=oXMLRepMgSources.findall("source")
+                    if oXMLRepMgSourceBlock is not None:
+                        for oXMLRepMgSource in oXMLRepMgSourceBlock:
+                            for oSource in oXMLRepMgSource:
+                                oSource.text=oSource.text.replace("_iTach_","_infrared_ccf_")
 
     # noinspection PyUnusedLocal
     def show_save(self,*largs) -> None:
         if self.oTextInput2.text!="":
             uOutput:str=self.uCodesetFileName+"3"
             uOutput=uOutput.replace("_iTach_","_Keene_Kira_")
-            self.oXMLCodeset.write(uOutput, encoding="UTF-8",xml_declaration='<?xml version="1.0" encoding="UTF-8"?>')
+            WriteXMLFile(oFile=cFileName().ImportFullPath(uFnFullName=uOutput),oElem=self.oXMLCodeset)
         self.oTextInput.text=""
         self.oTextInput2.text=""
 
@@ -490,14 +493,14 @@ class cScript(cSystemTemplate):
     """
 
     def __init__(self):
-        cSystemTemplate.__init__(self)
+        super().__init__()
         self.uSubType           = u'WIDGET'
         self.uSortOrder         = u'auto'
         self.uIniFileLocation   = u'none'
 
 
     def RunScript(self, *args, **kwargs) -> None:
-        Globals.oNotifications.RegisterNotification("UNKNOWNWIDGET",fNotifyFunction=self.AddWidgetFromXmlNode,uDescription="Script Widget iTach2Keene")
+        Globals.oNotifications.RegisterNotification(uNotification="UNKNOWNWIDGET",fNotifyFunction=self.AddWidgetFromXmlNode,uDescription="Script Widget iTach2Keene")
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def AddWidgetFromXmlNode(self,*args,**kwargs) -> Union[Dict,None]:

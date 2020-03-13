@@ -44,8 +44,8 @@ from IRDB                                   import ShowITachIRDB
       <description language='English'>Tool get IR Codes from the iTach Database</description>
       <description language='German'>Tool IR Codes von der iTach Datenbank zu beziehen</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -60,8 +60,6 @@ from IRDB                                   import ShowITachIRDB
   </repositorymanager>
 </root>
 '''
-
-
 
 class cScript(cToolsTemplate):
     """
@@ -83,7 +81,7 @@ class cScript(cToolsTemplate):
 
     class cScriptSettings(cBaseScriptSettings):
         def __init__(self,oScript:cScript):
-            cBaseScriptSettings.__init__(self,oScript)
+            super().__init__(oScript)
             self.aIniSettings.uHost     = u"http://irdbservice.cloudapp.net:8080/"
             self.aIniSettings.uUser     = oScript.oEnvParameter.uIRDBUser
             self.aIniSettings.uPassword = oScript.oEnvParameter.uIRDBPassword
@@ -98,7 +96,7 @@ class cScript(cToolsTemplate):
             oParser.add_argument('--irdbpassword', default=GetEnvVar('IRDBPASSWORD'), action=cParserAction, oParameter=self, dest="uIRDBPassword", help='Set the initialisation password for the IRDB (can be passed as IRDBPASSWORD environment var)')
 
     def __init__(self):
-        cToolsTemplate.__init__(self)
+        super().__init__()
         self.uSubType        = u'IRDB'
         self.uSortOrder      = u'auto'
         self.uSettingSection = u'tools'
@@ -113,13 +111,13 @@ class cScript(cToolsTemplate):
         :param str uScriptFile: The file of the script (to be passed to all scripts)
         """
 
-        cToolsTemplate.Init(self, uObjectName, uScriptFile)
+        super().Init(uObjectName=uObjectName, oFnObject = uScriptFile)
         self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
 
     def RunScript(self, *args, **kwargs) -> None:
-        cToolsTemplate.RunScript(self,*args, **kwargs)
+        super().RunScript(*args, **kwargs)
         if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
             self.ShowIRDB(self, *args, **kwargs)
 
@@ -130,8 +128,8 @@ class cScript(cToolsTemplate):
         ShowITachIRDB(uHost=oSetting.aIniSettings.uHost,uUser=oSetting.aIniSettings.uUser,uPassword=oSetting.aIniSettings.uPassword)
 
     def Register(self, *args, **kwargs) -> Dict:
-        cToolsTemplate.Register(self,*args, **kwargs)
-        Globals.oNotifications.RegisterNotification("STARTSCRIPTIRDBITACH", fNotifyFunction=self.ShowIRDB, uDescription="Script Tools IRDB iTach")
+        super().Register(*args, **kwargs)
+        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTIRDBITACH", fNotifyFunction=self.ShowIRDB, uDescription="Script Tools IRDB iTach")
         oScriptSettingPlugin:cScriptSettingPlugin   = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName            = self.uObjectName
         oScriptSettingPlugin.uSettingName           = "ORCA"

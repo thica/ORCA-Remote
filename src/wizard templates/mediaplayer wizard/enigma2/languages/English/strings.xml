@@ -2,7 +2,7 @@
 <!--$Revision$ -->
 <strings>
   <!--Custom Strings -->
-  <string id="enigma2_10000">You need to apply the IP - Address of your Receiver in Settings->Interfaces->url->ENIGMA2. If your Receiver supports Wake On Lan the you need to apply the MAC Address of your receiver in Settings->Interfaces->wake_on_lan->ENIGMA2</string>
+  <string id="enigma2_10000">Enigma2-Webinterface required! This template supports discover of your Enigma Receiver. If this fails, you need to apply the IP - Address of your Receiver in Settings->Interfaces->url->ENIGMA2. If your Receiver supports Wake On Lan the you need to apply the MAC Address of your receiver in Settings->Interfaces->wake_on_lan->ENIGMA2</string>
   <string id="enigma2_10001">Root Access Interface</string>
   <string id="enigma2_10002">Root Access Interface to use</string>
   <string id="enigma2_10003">Root Access Config</string>
@@ -12,5 +12,7 @@
   <string id="enigma2_10011">Reload Bouquet</string>
   <string id="enigma2_10012">Reload the bouquets from Enigma</string>
   <string id="enigma2_10013">Start</string>
+  <string id="enigma2_10014">Delete Movie?</string>
+  <string id="enigma2_10015">Do you want to delete movie</string>
 
 </strings>

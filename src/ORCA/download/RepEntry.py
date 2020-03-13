@@ -20,7 +20,7 @@
 """
 
 from typing                       import List
-from typing                       import Union
+from typing                       import Optional
 from xml.etree.ElementTree        import Element
 from xml.etree.ElementTree        import SubElement
 from ORCA.vars.Replace            import ReplaceVars
@@ -54,7 +54,7 @@ class cRepEntry:
         self.uDescription:str                       = u''
         self.uMinOrcaVersion:str                    = u''
         self.uName:str                              = u'Error'
-        self.oPath:Union[cPath,None]                = None
+        self.oPath:Optional[cPath]                  = None
         self.uRepType:str                           = u''
         self.uUrl:str                               = u''
         self.uVersion:str                           = u''
@@ -62,46 +62,46 @@ class cRepEntry:
     def __repr__(self) -> str:
         return repr(self.uName)
 
-    def ParseFromXMLNode(self,oXMLEntry:Element) -> None:
+    def ParseFromXMLNode(self,*,oXMLEntry:Element) -> None:
         """ Parses an xms string into object vars """
 
         oXMLSources:Element
         oXMLDependencies:Element
         oXMLSkipFiles:Element
 
-        self.uName          = GetXMLTextValue(oXMLEntry,u'name',True,u'Error')
-        self.uAuthor        = GetXMLTextValue(oXMLEntry,u'author',False,u'unknown')
-        self.uVersion       = GetXMLTextValue(oXMLEntry,u'version',False,u'0')
-        self.uMinOrcaVersion= GetXMLTextValue(oXMLEntry,u'minorcaversion',False,u'1.1.0')
-        self.bSkip          = GetXMLBoolValue(oXMLEntry,u'skip',False,False)
+        self.uName          = GetXMLTextValue(oXMLNode=oXMLEntry,uTag=u'name',          bMandatory=True, vDefault=u'Error')
+        self.uAuthor        = GetXMLTextValue(oXMLNode=oXMLEntry,uTag=u'author',        bMandatory=False,vDefault=u'unknown')
+        self.uVersion       = GetXMLTextValue(oXMLNode=oXMLEntry,uTag=u'version',       bMandatory=False,vDefault=u'0')
+        self.uMinOrcaVersion= GetXMLTextValue(oXMLNode=oXMLEntry,uTag=u'minorcaversion',bMandatory=False,vDefault=u'1.1.0')
+        self.bSkip          = GetXMLBoolValue(oXMLNode=oXMLEntry,uTag=u'skip',          bMandatory=False,bDefault=False)
         self.iVersion       = ToIntVersion(self.uVersion)
         self.iMinOrcaVersion= ToIntVersion(self.uMinOrcaVersion)
-        self.oDescriptions.ParseFromXMLNode(oXMLEntry)
+        self.oDescriptions.ParseFromXMLNode(oXMLEntry=oXMLEntry)
 
         oXMLSources = oXMLEntry.find(u'sources')
         if not oXMLSources is None:
             for oXMLSource in oXMLSources.findall(u'source'):
                 oSource:cRepSource = cRepSource()
-                oSource.ParseFromXMLNode(oXMLSource)
+                oSource.ParseFromXMLNode(oXMLNode=oXMLSource)
                 self.aSources.append(oSource)
 
         oXMLDependencies = oXMLEntry.find(u'dependencies')
         if not oXMLDependencies is None:
             for oXMLDependency in oXMLDependencies.findall(u'dependency'):
                 oRepDependency:cRepDependency=cRepDependency()
-                oRepDependency.ParseFromXMLNode(oXMLDependency)
+                oRepDependency.ParseFromXMLNode(oXMLNode=oXMLDependency)
                 self.aDependencies.append(oRepDependency)
 
         oXMLSkipFiles = oXMLEntry.find(u'skipfiles')
         if not oXMLSkipFiles is None:
             oRepSkipFile:cRepSkipFile = cRepSkipFile()
             for oXMLSkipFile in oXMLSkipFiles.findall(u'file'):
-                oRepSkipFile.ParseFromXMLNode(oXMLSkipFile)
+                oRepSkipFile.ParseFromXMLNode(oXMLNode=oXMLSkipFile)
                 oRepSkipFile.uFile=ReplaceVars(oRepSkipFile.uFile)
                 self.aSkipFiles.append(oRepSkipFile)
                 self.aSkipFileNames.append(oRepSkipFile.uFile)
 
-    def WriteToXMLNode(self,oXMLNode:Element) -> None:
+    def WriteToXMLNode(self,*,oXMLNode:Element) -> None:
         """ writes object vars to an xml node """
 
         oXMLEntry:Element
@@ -112,7 +112,7 @@ class cRepEntry:
         oXMLEntry   = SubElement(oXMLNode,'entry')
         oVal        = SubElement(oXMLEntry,'name')
         oVal.text   = self.uName
-        self.oDescriptions.WriteToXMLNode(oXMLEntry)
+        self.oDescriptions.WriteToXMLNode(oXMLNode=oXMLEntry)
         oVal        = SubElement(oXMLEntry,'author')
         oVal.text   = self.uAuthor
         oVal        = SubElement(oXMLEntry,'version')
@@ -122,9 +122,9 @@ class cRepEntry:
 
         oXMLSources = SubElement(oXMLEntry,'sources')
         for oSource in self.aSources:
-            oSource.WriteToXMLNode(oXMLSources)
+            oSource.WriteToXMLNode(oXMLNode=oXMLSources)
         oXMLDependencies = SubElement(oXMLEntry,'dependencies')
         for oDependency in self.aDependencies:
-            oDependency.WriteToXMLNode(oXMLDependencies)
+            oDependency.WriteToXMLNode(oXMLNode=oXMLDependencies)
         #we do not write skipfiles by purpose
 

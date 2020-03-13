@@ -30,7 +30,7 @@ from kivy.metrics           import dp
 from ORCA.utils.LogError    import LogError
 from ORCA.scripts.BaseScript import cBaseScript
 from ORCA.vars.Replace      import ReplaceVars
-from ORCA.vars.QueryDict    import QueryDict
+from ORCA.vars.QueryDict    import TypedQueryDict
 
 import ORCA.Globals as Globals
 
@@ -38,12 +38,12 @@ class cDiscoverScriptTemplate(cBaseScript):
     """ template class for discover scripts """
     def __init__(self):
         cBaseScript.__init__(self)
-        self.dDevices:Dict[str,QueryDict]   = {}
-        self.uType:str                      = u'DEVICE_DISCOVER'
-        self.iLineHeight:int                = dp(35)
-        self.oGrid:Union[GridLayout,None]   = None
-        self.iDivide:int                    = 1
-        self.bFirstLine:bool                = True
+        self.dDevices:Dict[str,TypedQueryDict]  = {}
+        self.uType:str                          = u'DEVICE_DISCOVER'
+        self.iLineHeight:int                    = dp(35)
+        self.oGrid:Union[GridLayout,None]       = None
+        self.iDivide:int                        = 1
+        self.bFirstLine:bool                    = True
 
     def RunScript(self, *args, **kwargs) -> Dict:
         """ main entry point to run the script """
@@ -84,7 +84,7 @@ class cDiscoverScriptTemplate(cBaseScript):
         """ empty placeholder """
         return []
 
-    def AddLine(self,aLine:List[str],dDevice:QueryDict):
+    def AddLine(self,aLine:List[str],dDevice:TypedQueryDict):
         """ adds a line to the discover results """
         aButtons:List[Button] = []
 

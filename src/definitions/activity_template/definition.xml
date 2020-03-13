@@ -75,8 +75,8 @@
       <description language='English'>Template to add common activity commands</description>
       <description language='German'>Template um Activitäten zu unterstützen</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/activity_template</local>

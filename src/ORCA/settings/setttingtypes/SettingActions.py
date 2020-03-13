@@ -73,7 +73,7 @@ class SettingActions(SettingScrollOptionsWithOptions):
         uCmd:str
         del self.aCodesetCmds[:]
         try:
-            oXMLCodeset:Element = LoadXMLFile(cFileName(Globals.oPathCodesets) + uFN)
+            oXMLCodeset:Element = LoadXMLFile(oFile=cFileName(Globals.oPathCodesets) + uFN)
             Orca_include(oXMLCodeset,orca_et_loader)
             if oXMLCodeset is not None:
                 # First read imported codesets
@@ -82,12 +82,12 @@ class SettingActions(SettingScrollOptionsWithOptions):
                     oXMLImportCodesets:Element=oXMLImports.find('codeset')
                     if oXMLImportCodesets is not None:
                         for oXMLCode in oXMLImportCodesets.findall('code'):
-                            uCmd=GetXMLTextAttribute(oXMLCode,'action',False,'')
+                            uCmd=GetXMLTextAttribute(oXMLNode=oXMLCode,uTag='action',bMandatory=False,vDefault='')
                             if uCmd:
                                 self.aCodesetCmds.append(uCmd)
 
                 for oXMLCode in oXMLCodeset.findall('code'):
-                    uCmd=GetXMLTextAttribute(oXMLCode,'action',False,'')
+                    uCmd=GetXMLTextAttribute(oXMLNode=oXMLCode,uTag='action',bMandatory=False,vDefault='')
                     if uCmd:
                         self.aCodesetCmds.append(uCmd)
 

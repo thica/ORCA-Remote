@@ -81,15 +81,15 @@ class cWidgetFileViewer(cWidgetBase,cWidgetBaseText,cWidgetBaseBase):
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        self.uFileName  = GetXMLTextAttribute(oXMLNode,u'filename',    False,"")
+        self.uFileName  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'filename', bMandatory=False, vDefault="")
         self.bNoTextSize = True
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def LoadFile(self):
         """ loads a file to show """
-        oFn = cFileName('').ImportFullPath(ReplaceVars(self.uFileName))
+        oFn = cFileName('').ImportFullPath(uFnFullName=ReplaceVars(self.uFileName))
         Logger.debug("Reading File:"+oFn)
-        self.uCaption=LoadFile(oFn)
+        self.uCaption=LoadFile(oFileName=oFn)
 
     def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """

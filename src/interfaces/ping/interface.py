@@ -36,8 +36,8 @@ from ORCA.actions.ReturnCode                import eReturnCode
       <description language='English'>Interface to verify, if devices respond to ping</description>
       <description language='German'>Interface um zu prüfen, ob Geräte auf einen Ping antworten</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/ping</local>
@@ -54,15 +54,14 @@ from ORCA.actions.ReturnCode                import eReturnCode
 
 
 class cInterface(cBaseInterFace):
-
     def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
-        cBaseInterFace.Init(self, uObjectName, oFnObject)
+        super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
         self.oObjectConfig.dDefaultSettings['Host']['active']  = "enabled"
         self.oObjectConfig.dDefaultSettings['Host']['desc']    = "$lvar(IFACE_PING_1)"
 
     def DoAction(self,oAction:cAction) -> eReturnCode:
-        oSetting:cBaseInterFaceSettings=self.GetSettingObjectForConfigName(oAction.dActionPars.get(u'configname',u''))
-        if Ping(oSetting.aIniSettings.uHost):
+        oSetting:cBaseInterFaceSettings=self.GetSettingObjectForConfigName(uConfigName=oAction.dActionPars.get(u'configname',u''))
+        if Ping(uHostname=oSetting.aIniSettings.uHost):
             return eReturnCode.Success
         else:
             return eReturnCode.Error

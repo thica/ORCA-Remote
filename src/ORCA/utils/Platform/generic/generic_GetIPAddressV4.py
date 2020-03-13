@@ -21,7 +21,17 @@
 
 from typing import List
 from typing import Dict
+from typing import Tuple
+
 from kivy import Logger
+
+import select
+import socket
+import threading
+
+from ORCA.utils.LogError            import LogError
+from ORCA.utils.Sleep               import fSleep
+
 
 try:
     import netifaces
@@ -63,3 +73,64 @@ def GetIPAddressV4() -> str:
             uRet=uFound
 
     return uRet
+
+def GetLocalIPV4()->str:
+
+    # Fast but not safe
+    uMyIP:str
+    s:socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # Not necessary successfull
+        s.connect(('10.255.255.255', 0))
+        uMyIP = s.getsockname()[0]
+    except:
+        uMyIP = GetLocalIPV4_FallBack()
+    finally:
+        s.close()
+
+    return uMyIP
+
+def GetLocalIPV4_FallBack() ->str:
+    """ gets the local IP by opening a socket to itself """
+    def udp_listening_server()->str:
+        """ the server component """
+        bMsg: bytes
+        tAddress: Tuple
+        try:
+            oInSocket:socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            oInSocket.bind(("0.0.0.0", 18888))
+            oInSocket.setblocking(False)
+            while True:
+                tResult:Tuple = select.select([oInSocket],[],[])
+                bMsg, tAddress = tResult[0][0].recvfrom(1024)
+                if bMsg == b'ORCAIPREQUEST':
+                    aIP.append(tAddress[0])
+                    break
+            oInSocket.close()
+        except Exception as exc:
+            LogError(uMsg=u'GetLocalIp:udp_listening_server:',oException=exc)
+            return u'127.0.0.0'
+
+    try:
+        Logger.debug("Using Fallback to detect V4 IP Address")
+        aIP:List  = []
+        oThread:threading.Thread = threading.Thread(target=udp_listening_server)
+        oThread.aIP = aIP
+        oThread.start()
+        oOutSocket:socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        oOutSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        i:int = 0
+        while len(aIP)==0:
+            oOutSocket.sendto(b'ORCAIPREQUEST', ("255.255.255.255", 18888))
+            fSleep(fSeconds=0.1)
+            i+=1
+            if i==10:
+                break
+        oOutSocket.close()
+        if len(aIP)>0:
+            return aIP[0]
+        else:
+            return u'127.0.0.0'
+    except Exception as e:
+        LogError(uMsg='GetLocalIpV4:',oException=e)
+        return u'127.0.0.0'

@@ -31,6 +31,7 @@ python -m pip install ws4py
 python -m pip install httplib2
 python -m pip install pycparser
 python -m pip install mwclient
+python -m pip install demjson
 
 rem This fails on windows
 rem python -m pip install openssl

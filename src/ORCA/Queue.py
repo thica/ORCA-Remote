@@ -173,10 +173,10 @@ class cQueue:
             if self.iActionQueuePos < len(self.aActionQueue):
                 oAction=self.aActionQueue[self.iActionQueuePos]
                 Globals.oEvents.bDoNext = True
-                eRetReal= self.WorkOnQueueDoAction(oAction)
+                eRetReal= self.WorkOnQueueDoAction(oAction=oAction)
                 if eRetReal!=eReturnCode.Nothing:
                     eRet=eRetReal
-                self.iActionQueuePos=self.iActionQueuePos+1
+                self.iActionQueuePos += 1
                 if not self == aActiveQueueStack[-1]:
                     #Logger.debug ("Not own queue")
                     return eRet
@@ -191,10 +191,10 @@ class cQueue:
                         fSleep (fWait/1000.0)
                     '''
                     fWait=ToFloat(ReplaceVars(oAction.dActionPars.get('time','1')))
-                    Globals.oEvents.LogAction(u'Wait',oAction)
+                    Globals.oEvents.LogAction(uTxt=u'Wait',oAction=oAction)
                     Globals.oEvents.bDoNext = False
-                    fSleep (fWait/1000)
-                    Globals.oEvents.LogAction(u'Wait2',oAction)
+                    fSleep (fSeconds=fWait/1000) # Todo: Check division
+                    Globals.oEvents.LogAction(uTxt=u'Wait2',oAction=oAction)
 
                 #We will execute some basic Actions like Var manipulation immediately, to make it faster
                 #If we wait, then prevent fast execution
@@ -223,7 +223,7 @@ class cQueue:
                             Clock.schedule_once(partial(GetActiveQueue().WorkOnQueue,bForce),fNextFrame)
                 return eRet
 
-    def AddActions(self,aActions:List[cAction], oParentWidget:cWidgetBase) -> None:
+    def AddActions(self,*,aActions:List[cAction], oParentWidget:cWidgetBase) -> None:
         """ This functions just adds the action commands to the queue """
 
         oTmpAction:cAction
@@ -245,11 +245,11 @@ class cQueue:
                         iActionId=aTmpActions[0].iActionId
 
             if iActionId == Globals.oActions.oActionType.SendCommand:
-                self.__InsertToQueue(cAction(actionname='enabletransmitterpicture'))
+                self.__InsertToQueue(oAction=cAction(actionname='enabletransmitterpicture'))
             if iActionId == Globals.oActions.oActionType.ShowPage:
-                self.__InsertToQueue(cAction(actionname='PAGESTOPACTIONS', actionstring="call"))
+                self.__InsertToQueue(oAction=cAction(actionname='PAGESTOPACTIONS', actionstring="call"))
 
-            self.__InsertToQueue(oAction)
+            self.__InsertToQueue(oAction=oAction)
 
             if iActionId == Globals.oActions.oActionType.ShowPage:
                 oTmpAction = copy(oTmpAction)
@@ -263,19 +263,19 @@ class cQueue:
                 oTmpAction.dActionPars['pagename'] = uPagenameToCall
                 oTmpAction.dActionPars['currentpagename'] = GetVar(uVarName = 'CURRENTPAGE')
                 oTmpAction.iActionId = GetActionID(oTmpAction.dActionPars['string'])
-                self.__InsertToQueue(oTmpAction)
+                self.__InsertToQueue(oAction=oTmpAction)
             if iActionId == Globals.oActions.oActionType.SendCommand:
-                self.__InsertToQueue(cAction(actionname='disabletransmitterpicture'))
+                self.__InsertToQueue(oAction=cAction(actionname='disabletransmitterpicture'))
 
-    def __InsertToQueue(self,oAction:cAction) -> None:
+    def __InsertToQueue(self,*,oAction:cAction) -> None:
         """ insert an action to the latest queue """
         if not oAction.bForce:
             self.aActionQueue.append(oAction)
         else:
-            self.WorkOnQueueDoAction(oAction)
+            self.WorkOnQueueDoAction(oAction=oAction)
         return
 
-    def WorkOnQueueDoAction(self,oAction:cAction) -> Union[eReturnCode,int]:
+    def WorkOnQueueDoAction(self,*,oAction:cAction) -> Union[eReturnCode,int]:
         """ Executes a single action in a queue (including condition verifying)"""
 
         eRet:eReturnCode = eReturnCode.Success
@@ -284,13 +284,13 @@ class cQueue:
         if oAction.iActionId==Globals.oActions.oActionType.If:
             # we do the If statement only in case of the condition fails
             if bCheckSuccess:
-                Globals.oEvents.LogAction("if",oAction, "executing actions")
+                Globals.oEvents.LogAction(uTxt="if",oAction=oAction, uAddText="executing actions")
             # we need to run the if command in any way to skip the actions
             bCheckSuccess=not bCheckSuccess
 
         if bCheckSuccess:
             #We set / replace Action Command Pars by Definition/Button pars
-            eRet=self.ExecuteAction(oAction)
+            eRet=self.ExecuteAction(oAction=oAction)
             if eRet!=eReturnCode.Nothing:
                 SetVar(uVarName = u'LASTERRORCODE', oVarValue = ToUnicode(eRet))
                 if eRet!=eReturnCode.Success:
@@ -298,7 +298,7 @@ class cQueue:
         return eRet
 
     # noinspection PyMethodMayBeStatic
-    def ExecuteAction(self,oAction:cAction) -> Union[int,eReturnCode]:
+    def ExecuteAction(self,*,oAction:cAction) -> Union[int,eReturnCode]:
         """ Executes a single action in a queue (excluding condition verifying)"""
 
         eRet: Union[int, eReturnCode]

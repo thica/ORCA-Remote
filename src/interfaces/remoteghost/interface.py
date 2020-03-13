@@ -21,9 +21,10 @@
 """
 
 from __future__                             import annotations
-from typing                                 import Union
+from typing                                 import Optional
 from typing                                 import List
 from typing                                 import Dict
+from typing                                 import Tuple
 
 import select
 import socket
@@ -47,8 +48,8 @@ from ORCA.actions.ReturnCode                import eReturnCode
       <description language='English'>Interface to send commands to EventGhost</description>
       <description language='German'>Interface um Kommandos an EventGhost zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/remoteghost</local>
@@ -125,22 +126,22 @@ class cInterface(cBaseInterFace):
 
     class cInterFaceSettings(cBaseInterFaceSettings):
         def __init__(self,oInterFace:cInterface):
-            cBaseInterFaceSettings.__init__(self,oInterFace)
+            super().__init__(oInterFace)
             self.aIniSettings.iTimeToClose          = -1
             self.aIniSettings.uParseResultOption    = u'store'
             self.bStopThreadEvent:bool              = False
             self.iBufferSize:int                    = 1024
-            self.oSocket:Union[socket.socket,None]  = None
-            self.oThread                            = None
+            self.oSocket:Optional[socket.socket]    = None
+            self.oThread:Optional[Thread]           = None
             self.uMsg:str                           = u''
 
         def ReadConfigFromIniFile(self,uConfigName:str) -> None:
-            cBaseInterFaceSettings.ReadConfigFromIniFile(self,uConfigName)
+            super().ReadConfigFromIniFile(uConfigName=uConfigName)
             self.aIniSettings.uParseResultOption = u'store'
             return
 
         def Connect(self) -> bool:
-            if not cBaseInterFaceSettings.Connect(self):
+            if not super().Connect():
                 return False
 
             try:
@@ -171,20 +172,20 @@ class cInterface(cBaseInterFace):
                     self.oThread.start()
 
                 if self.oSocket is None:
-                    self.ShowError(u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
+                    self.ShowError(uMsg=u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                     self.bOnError=True
                     return False
                 self.bIsConnected =True
             except Exception as e:
-                self.ShowError(u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,e)
+                self.ShowError(uMsg=u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.bOnError=True
                 return False
 
-            self.ShowDebug(u'Interface connected!')
+            self.ShowDebug(uMsg=u'Interface connected!')
             return True
 
         def Disconnect(self) -> bool:
-            if not cBaseInterFaceSettings.Disconnect(self):
+            if not super().Disconnect():
                 return False
 
             self.bStopThreadEvent=True
@@ -204,7 +205,7 @@ class cInterface(cBaseInterFace):
             try:
                 while not self.bStopThreadEvent:
                     if self.oSocket is not None:
-                        ready:List = select.select([self.oSocket], [], [],1.0)
+                        ready:Tuple = select.select([self.oSocket], [], [],1.0)
                         # the first element of the returned list is a list of readable sockets
                         if ready[0]:
                             byResponses = self.oSocket.recv(self.iBufferSize)
@@ -217,7 +218,7 @@ class cInterface(cBaseInterFace):
                                     if True:
                                          # If the returned Command is a response to the send message
                                         if uResponse.startswith(u'RemoteGhost.'):
-                                            self.ShowDebug(u'Returned Message:'+uResponse)
+                                            self.ShowDebug(uMsg=u'Returned Message:'+uResponse)
                                             #todo: parse the command from return
                                             # We do not need to wait for an response anymore
                                             StartWait(0)
@@ -229,28 +230,28 @@ class cInterface(cBaseInterFace):
                                             if oActionTrigger is not None:
                                                 self.CallTrigger(oActionTrigger,uResponse)
                                             else:
-                                                self.ShowDebug(u'Discard message:'+uResponse)
+                                                self.ShowDebug(uMsg=u'Discard message:'+uResponse)
 
             except Exception as e:
-                self.ShowError(u'Error Receiving Response:',e)
+                self.ShowError(uMsg=u'Error Receiving Response:',oException=e)
                 self.bIsConnected=False
             try:
                 if not self.oSocket is None:
-                    self.ShowDebug(u'Closing socket in Thread')
+                    self.ShowDebug(uMsg=u'Closing socket in Thread')
                     self.oSocket.close()
             except Exception as e:
-                self.ShowError(u'Error closing socket in Thread',e)
+                self.ShowError(uMsg=u'Error closing socket in Thread',oException=e)
 
 
     def __init__(self):
         cInterFaceSettings=self.cInterFaceSettings
-        cBaseInterFace.__init__(self)
+        super().__init__()
         self.dSettings:Dict                             = {}
-        self.oSetting:Union[cInterFaceSettings,None]    = None
+        self.oSetting:Optional[cInterFaceSettings]      = None
         self.iWaitMs:int                                = 2000
 
     def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
-        cBaseInterFace.Init(self,uObjectName, oFnObject)
+        super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
         self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
         self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
@@ -263,7 +264,7 @@ class cInterface(cBaseInterFace):
         self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
 
     def DeInit(self, **kwargs) -> None:
-        cBaseInterFace.DeInit(self,**kwargs)
+        super().DeInit(**kwargs)
         for uSettingName in self.dSettings:
             self.dSettings[uSettingName].DeInit()
 
@@ -272,7 +273,7 @@ class cInterface(cBaseInterFace):
 
     # noinspection PyUnresolvedReferences
     def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
-        cBaseInterFace.SendCommand(self,oAction,oSetting,uRetVar,bNoLogOut)
+        super().SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=uRetVar,bNoLogOut=bNoLogOut)
 
         uCmd:str
         uPrefix:str      = u''
@@ -298,9 +299,9 @@ class cInterface(cBaseInterFace):
         if uCmd==u'*':
             uCmd=oAction.dActionPars['commandname']
 
-        self.ShowInfo(u'Sending Command: '+uPrefix+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,oSetting.uConfigName)
+        self.ShowInfo(uMsg=u'Sending Command: '+uPrefix+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,uParConfigName=oSetting.uConfigName)
 
-        while iTryCount<2:
+        while iTryCount<self.iMaxTryCount:
             iTryCount+=1
             oSetting.Connect()
            # we need to verify if we are really connected, as the connection might have died

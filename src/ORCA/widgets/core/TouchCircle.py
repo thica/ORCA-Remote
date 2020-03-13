@@ -32,7 +32,7 @@ __all__ = ['cTouchCircle']
 class cTouchCircle(cOrcaButtonBehaviour,Widget):
     def __init__(self,**kwargs):
         self.aBackGroundColor:List[float] = kwargs['background_color']
-        Widget.__init__(self,**RemoveNoClassArgs(kwargs,Widget))
+        Widget.__init__(self,**RemoveNoClassArgs(dInArgs=kwargs,oObject=Widget))
         cOrcaButtonBehaviour.__init__(self,**kwargs)
         # create the graphics
         with self.canvas:

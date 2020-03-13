@@ -43,7 +43,7 @@ def StartWait(iWaitTime:int=-1) -> None:
 
     if iWaitTime == 0:
         ORCA.utils.wait.Globals.oWaitEndTime = ORCA.utils.wait.Globals.oWaitZeroTime
-        fSleep(0.01)
+        fSleep(fSeconds=0.01)
     else:
         ORCA.utils.wait.Globals.oWaitEndTime = datetime.now() + timedelta(milliseconds=iWaitTime)
 

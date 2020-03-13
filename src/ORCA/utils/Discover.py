@@ -89,7 +89,7 @@ class cDiscover_List(cBasePopup):
         self.oScrollContent.size=(self.oPopup.width,iHeight)
 
     # noinspection PyUnusedLocal
-    def On_Cancel(self,instance):
+    def On_Cancel(self,oButton):
         """ call handler for abort """
         cBasePopup.ClosePopup(self)
 

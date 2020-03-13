@@ -2,16 +2,14 @@
 <!-- Translates Orca Actions to Interface Commands action = Orca Action String -->
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
-  <!--
-
   <repositorymanager>
     <entry>
       <name>Android adb Fire TV</name>
       <description language='English'>Fire TV commandset for Android by adb</description>
       <description language='German'>Fire TV Kommandos für Android über adb</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.4</version>
-      <minorcaversion>4.6.4</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/android_adb/CODESET_android_adb_FIRETV.xml</local>
@@ -28,18 +26,20 @@
     </entry>
   </repositorymanager>
 
-  WikiDoc:Doc
-  WikiDoc:Context:Codesets
-  WikiDoc:Page:Userdescription codeset Android_adb_FIRETV
-  WikiDoc:TOCTitle:android_adb_FIRETV
+<!--
 
-  = Android FireTV =
+WikiDoc:Doc
+WikiDoc:Context:Codesets
+WikiDoc:Page:Userdescription codeset Android_adb_FIRETV
+WikiDoc:TOCTitle:android_adb_FIRETV
 
-  This codeset defines some commands, which are on Amazons FireTV different to the Android standard
-  WikiDoc:End
+= Android FireTV =
+
+This codeset defines some commands, which are on Amazons FireTV different to the Android standard
+WikiDoc:End
 
 
-   -->
+ -->
    <xi:include href="$var(CODESETPATH)/android_adb/CODESET_android_adb_DEFAULT.xml" parse="xml" />
 
  <!-- Different codes on FireTV -->

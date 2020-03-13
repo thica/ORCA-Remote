@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from typing                 import Union
+from kivy.gesture           import Gesture
 from xml.etree.ElementTree  import Element
 from ORCA.utils.XML         import GetXMLTextAttribute
 
@@ -28,10 +28,9 @@ class cGesture:
     """ Gesture Abstraction Object """
     def __init__(self):
         self.uGestureName:str           =  u''
-        self.oGesture:Union[str,None]   =  None
+        self.oGesture:Gesture           =  Gesture()
         self.uGestureString:str         =  u''
-    def ParseGestureFromXMLNode(self,oXMLNode:Element) -> None:
+    def ParseGestureFromXMLNode(self,*,oXMLNode:Element) -> None:
         """ Parses a gesture from an xml object """
-        self.uGestureName       =  GetXMLTextAttribute(oXMLNode,u'name',True,u'')
-        self.uGestureString     =  GetXMLTextAttribute(oXMLNode,u'data',True,u'')
-
+        self.uGestureName               =  GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'')
+        self.uGestureString             =  GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'data',bMandatory=True,vDefault=u'')

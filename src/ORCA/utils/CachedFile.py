@@ -36,7 +36,7 @@ def CachedFile(*,oFileName: cFileName) -> str:
 
     uFileContent: str = Cache.get(category = uCacheName, key = oFileName.string)
     if uFileContent is None:
-        uFileContent = LoadFile(oFileName)
+        uFileContent = LoadFile(oFileName=oFileName)
         Cache.append(category = uCacheName, key = oFileName.string, obj = uFileContent, timeout = 120)
 
     return uFileContent

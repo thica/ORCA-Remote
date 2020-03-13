@@ -46,8 +46,8 @@ import ORCA.Globals as Globals
       <description language='English'>Interface to send a WOL command to device</description>
       <description language='German'>Interface ein WOL Kommando an ein Gerät zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/wake_on_lan</local>
@@ -65,7 +65,7 @@ import ORCA.Globals as Globals
 class cInterface(cBaseInterFace):
 
     def __init__(self):
-        cBaseInterFace.__init__(self)
+        super().__init__()
         self.dSettings:Dict   = {}
 
     def GetConfigJSON(self) -> Dict:
@@ -73,9 +73,9 @@ class cInterface(cBaseInterFace):
                 }
 
     def DoAction(self,oAction:cAction) -> eReturnCode:
-        self.ShowDebug(u'Request Action Wakeup')
+        self.ShowDebug(uMsg=u'Request Action Wakeup')
         uConfigName:str = oAction.dActionPars.get(u'configname',u'')
-        oSetting:cBaseInterFaceSettings = self.GetSettingObjectForConfigName(uConfigName)
+        oSetting:cBaseInterFaceSettings = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
         if oAction.dActionPars.get("commandname")=="power_on":
             return self.WakeOnLan(oSetting.aIniSettings.uMAC, uConfigName)
         else:
@@ -83,7 +83,7 @@ class cInterface(cBaseInterFace):
             return eReturnCode.Error
 
     def WakeOnLan(self,uMacAddress,uConfigName:str) -> eReturnCode:
-        self.ShowInfo(u'Sending Magic Package for '+uMacAddress)
+        self.ShowInfo(uMsg=u'Sending Magic Package for '+uMacAddress)
         uMacAddressNorm:str=self.NormalizeMac(uMacAddress,uConfigName)
         send_magic_packet(uMacAddressNorm)
         self.wake_on_lan(uMacAddressNorm)
@@ -99,7 +99,7 @@ class cInterface(cBaseInterFace):
             sep = uRet[2]
             uRet = uRet.replace(sep, '')
         else:
-            self.ShowError("Wrong format for MAC Address:"+uMacAddress,uConfigName)
+            self.ShowError(uMsg="Wrong format for MAC Address:"+uMacAddress,uParConfigName=uConfigName)
         return uRet
 
     # noinspection PyMethodMayBeStatic

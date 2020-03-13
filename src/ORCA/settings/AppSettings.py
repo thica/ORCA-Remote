@@ -80,7 +80,7 @@ def GetJsonFromSettingFileName(uSettingFileName:str) -> str:
     if not oFnSetting.Exists():
         oFnSetting: cFileName = cFileName(Globals.oPathApp + "ORCA/settings/settingstrings") + uSettingFileName
 
-    return ReplaceVars(LoadFile(oFnSetting))
+    return ReplaceVars(LoadFile(oFileName=oFnSetting))
 
 def ScanDefinitionNames() -> Dict:
     """
@@ -97,9 +97,9 @@ def ScanDefinitionNames() -> Dict:
     for uDefinitionName in Globals.aDefinitionList:
         if not uDefinitionName in aHide:
             if Globals.dDefinitionPathes.get(uDefinitionName) is None:
-                oDefinitionPathes=cDefinitionPathes(uDefinitionName)
+                oDefinitionPathes=cDefinitionPathes(uDefinitionName=uDefinitionName)
                 Globals.dDefinitionPathes[uDefinitionName]=oDefinitionPathes
-            oRepManagerEntry=cRepManagerEntry(Globals.dDefinitionPathes[uDefinitionName].oFnDefinition)
+            oRepManagerEntry=cRepManagerEntry(oFileName=Globals.dDefinitionPathes[uDefinitionName].oFnDefinition)
             if oRepManagerEntry.ParseFromXML():
                 dDefinitionReps[uDefinitionName]=oRepManagerEntry.oRepEntry.uName
 
@@ -129,7 +129,7 @@ def BuildSettingsString() -> str:
             break
         if Globals.aDefinitionList[i].endswith(u"_template"):
             Globals.aDefinitionList[i],Globals.aDefinitionList[iLast]=Globals.aDefinitionList[iLast],Globals.aDefinitionList[i]
-            iLast=iLast-1
+            iLast -= 1
 
     dDefinitionReps:Dict=ScanDefinitionNames()
     Globals.oScripts.LoadScripts()
@@ -155,7 +155,11 @@ def BuildSettingsStringDefinitionList() -> str:
     oDef:cDefinition
     iStart:int
 
-    aDefinitionListSorted:List[cDefinition] = sorted(Globals.oDefinitions, key=lambda entry: entry.uDefPublicTitle)
+    # aDefinitionListSortedTitle:List[cDefinition] = sorted(Globals.oDefinitions, key=lambda entry: entry.uDefPublicTitle)
+    aDefinitions:List[cDefinition] = []
+    for uDefKey in Globals.oDefinitions:
+        aDefinitions.append(Globals.oDefinitions[uDefKey])
+    aDefinitionListSorted:List[cDefinition] = sorted(aDefinitions, key=lambda entry:  entry.uDefPublicTitle)
 
     for oDef in aDefinitionListSorted:
         if len(oDef.dDefinitionSettingsJSON)>0:

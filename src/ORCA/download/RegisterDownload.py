@@ -26,7 +26,7 @@ import ORCA.Globals as Globals
 
 __all__ = ['RegisterDownLoad']
 
-def RegisterDownLoad(uType:str,uName:str,iVersion:int):
+def RegisterDownLoad(*,uType:str,uName:str,iVersion:int):
     """ Registers a repository """
 
     if not uName=='':

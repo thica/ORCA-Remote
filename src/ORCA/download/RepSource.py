@@ -42,20 +42,20 @@ class cRepSource:
         self.uTargetPath:str          = u''
         self.uLocal:str               = u''
 
-    def ParseFromXMLNode(self,oXMLNode:Element) -> None:
+    def ParseFromXMLNode(self,*,oXMLNode:Element) -> None:
         """ Parses an xms string into object vars """
-        self.uSourceFile = GetXMLTextValue(oXMLNode,u'sourcefile',True,u'')
-        self.uTargetPath = GetXMLTextValue(oXMLNode,u'targetpath',True,u'')
-        self.uLocal      = AdjustPathToOs(ReplaceVars(GetXMLTextValue(oXMLNode,u'local',False,u'')))
+        self.uSourceFile = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'sourcefile',bMandatory=True,vDefault=u'')
+        self.uTargetPath = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'targetpath',bMandatory=True,vDefault=u'')
+        self.uLocal      = AdjustPathToOs(uPath=ReplaceVars(GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'local',bMandatory=False,vDefault=u'')))
 
-    def WriteToXMLNode(self,oXMLNode:Element) -> None:
+    def WriteToXMLNode(self,*,oXMLNode:Element) -> None:
 
         """ writes object vars to an xml node """
         oVal: Element
         oXMLSource:Element = SubElement(oXMLNode,'source')
         oVal               = SubElement(oXMLSource,'sourcefile')
 
-        oFnUrl:cFileName   = cFileName('').ImportFullPath(self.uSourceFile)
+        oFnUrl:cFileName   = cFileName('').ImportFullPath(uFnFullName=self.uSourceFile)
         oVal.text          = oFnUrl.urlstring
         oVal               = SubElement(oXMLSource,'targetpath')
         oVal.text          = self.uTargetPath

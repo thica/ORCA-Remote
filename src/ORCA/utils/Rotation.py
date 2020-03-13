@@ -28,7 +28,7 @@ class cRotation:
     """ Rotation abstraction layer """
     def __init__(self):
         Logger.debug (u'Loading Orientation Support' )
-        self.bLocked = False
+        self.bLocked:bool = False
         self.oRotation = OS_GetRotationObject()
     def Lock(self):
         """ Locks the rotation on a device """

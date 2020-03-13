@@ -89,19 +89,17 @@ class cWidgetBaseText(cWidgetBaseBase):
         try:
             super().ParseXMLBaseNode(oXMLNode, oParentScreenPage, uAnchor)
             self.uCaption           = u''
-            self.uhTextAlign        =   GetXMLTextAttribute (oXMLNode,u'htextalign',    False,u'center')
-            self.uvTextAlign        =   GetXMLTextAttribute (oXMLNode,u'vtextalign',    False,u'middle')
-            self.bBold              =   GetXMLBoolAttribute (oXMLNode,u'bold',          False,False)
-            self.bItalic            =   GetXMLBoolAttribute (oXMLNode,u'italic',        False,False)
-            self.uFontIndex         =   GetXMLTextAttribute (oXMLNode,u'fontid',        False,self.oDef.uDefaultFont)
+            self.uhTextAlign        =   GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'htextalign',   bMandatory=False, vDefault=u'center')
+            self.uvTextAlign        =   GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'vtextalign',   bMandatory=False, vDefault=u'middle')
+            self.bBold              =   GetXMLBoolAttribute (oXMLNode=oXMLNode,uTag=u'bold',         bMandatory=False, bDefault=False)
+            self.bItalic            =   GetXMLBoolAttribute (oXMLNode=oXMLNode,uTag=u'italic',       bMandatory=False, bDefault=False)
+            self.uFontIndex         =   GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'fontid',       bMandatory=False, vDefault=self.oDef.uDefaultFont)
             self.uOrgFontIndex      =   self.uFontIndex
-
-            uFontSize:str           =   GetXMLTextAttribute (oXMLNode,u'fontsize',      False,'0')
-            uIconFontSize:str       =   GetXMLTextAttribute (oXMLNode, u'iconfontsize', False, uFontSize)
-            self.aTextColor         =   GetColorFromHex(GetXMLTextAttribute (oXMLNode,u'textcolor',False,uColorUndefined))
-            self.SetCaption(GetXMLTextAttribute(oXMLNode,u'caption',False,u''))
-            self.uOrgSecondCaption  =   GetXMLTextAttribute(oXMLNode,u'secondcaption',False,u'')
-
+            uFontSize:str           =   GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'fontsize',                 bMandatory=False, vDefault='0')
+            uIconFontSize:str       =   GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'iconfontsize',             bMandatory=False, vDefault=uFontSize)
+            self.aTextColor         =   GetColorFromHex(GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'textcolor',bMandatory=False, vDefault=uColorUndefined))
+            self.SetCaption(GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'caption',                              bMandatory=False, vDefault=u''))
+            self.uOrgSecondCaption  =   GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'secondcaption',             bMandatory=False, vDefault=u'')
             Globals.oTheScreen.oFonts.dUsedFonts[self.uFontIndex]=True
 
             if self.aTextColor == aColorUndefined:
@@ -118,19 +116,19 @@ class cWidgetBaseText(cWidgetBaseBase):
 
             if uFontSize == "0":
                 if self.eWidgetType == eWidgetType.Button or self.eWidgetType == eWidgetType.DropDown or self.eWidgetType == eWidgetType.Switch:
-                    uFontSize = str(self.oDef.iFontSize_Button)
+                    uFontSize = self.oDef.uFontSize_Button
                 elif self.eWidgetType == eWidgetType.TextField or self.eWidgetType == eWidgetType.TextInput or self.eWidgetType == eWidgetType.Slider:
-                    uFontSize = str(self.oDef.iFontSize_Text)
+                    uFontSize = self.oDef.uFontSize_Text
                 elif self.eWidgetType == eWidgetType.FileViewer or self.eWidgetType == eWidgetType.Settings:
-                    uFontSize = str(self.oDef.iFontSize_File)
+                    uFontSize = self.oDef.uFontSize_File
 
             if uIconFontSize == "0":
                 if self.eWidgetType == eWidgetType.Button or self.eWidgetType == eWidgetType.DropDown or self.eWidgetType == eWidgetType.Switch:
-                    uIconFontSize = str(self.oDef.iFontSize_Button)
+                    uIconFontSize = self.oDef.uFontSize_Button
                 elif self.eWidgetType == eWidgetType.TextField or self.eWidgetType == eWidgetType.TextInput or self.eWidgetType == eWidgetType.Slider:
-                    uIconFontSize = str(self.oDef.iFontSize_Text)
+                    uIconFontSize = self.oDef.uFontSize_Text
                 elif self.eWidgetType == eWidgetType.FileViewer or self.eWidgetType == eWidgetType.Settings:
-                    uIconFontSize = str(self.oDef.iFontSize_File)
+                    uIconFontSize = self.oDef.uFontSize_File
 
             # todo: check where to scale fonts
             if uFontSize[0] == u'd':

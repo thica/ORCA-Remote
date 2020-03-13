@@ -1,25 +1,38 @@
 from contextlib import contextmanager
 import json
 import base64
-import struct
 import datetime
 
-from maxcube.device import \
-    MaxDevice, \
-    MAX_CUBE, \
-    MAX_ROOM, \
-    MAX_THERMOSTAT, \
-    MAX_THERMOSTAT_PLUS, \
-    MAX_WINDOW_SHUTTER, \
-    MAX_WALL_THERMOSTAT, \
-    MAX_DEVICE_MODE_AUTOMATIC, \
-    MAX_DEVICE_MODE_MANUAL, \
-    MAX_DEVICE_BATTERY_OK, \
-    MAX_DEVICE_BATTERY_LOW
-from maxcube.room import MaxRoom
-from maxcube.thermostat import MaxThermostat
-from maxcube.wallthermostat import MaxWallThermostat
-from maxcube.windowshutter import MaxWindowShutter
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from interfaces.elv_max.maxcube.device import \
+        MaxDevice, \
+        MAX_CUBE, \
+        MAX_THERMOSTAT, \
+        MAX_THERMOSTAT_PLUS, \
+        MAX_WINDOW_SHUTTER, \
+        MAX_WALL_THERMOSTAT, \
+        MAX_DEVICE_MODE_AUTOMATIC, \
+        MAX_DEVICE_MODE_MANUAL
+    from interfaces.elv_max.maxcube.room import MaxRoom
+    from interfaces.elv_max.maxcube.thermostat import MaxThermostat
+    from interfaces.elv_max.maxcube.wallthermostat import MaxWallThermostat
+    from interfaces.elv_max.maxcube.windowshutter import MaxWindowShutter
+else:
+    from maxcube.device import \
+        MaxDevice, \
+        MAX_CUBE, \
+        MAX_ROOM, \
+        MAX_THERMOSTAT, \
+        MAX_THERMOSTAT_PLUS, \
+        MAX_WINDOW_SHUTTER, \
+        MAX_WALL_THERMOSTAT, \
+        MAX_DEVICE_MODE_AUTOMATIC, \
+        MAX_DEVICE_MODE_MANUAL
+    from maxcube.room import MaxRoom
+    from maxcube.thermostat import MaxThermostat
+    from maxcube.wallthermostat import MaxWallThermostat
+    from maxcube.windowshutter import MaxWindowShutter
 # import logging
 # logger = logging.getLogger(__name__)
 
@@ -152,9 +165,9 @@ class MaxCube(MaxDevice):
         device_rf_address = message[1:].split(',')[0][1:].upper()
         data = bytearray(base64.b64decode(message[2:].split(',')[1]))
 
-        length = data[0]
-        rf_address = self.parse_rf_address(data[1: 3])
-        device_type = data[4]
+        # length = data[0]
+        # rf_address = self.parse_rf_address(data[1: 3])
+        # device_type = data[4]
 
         devices = self.devices_by_rf(device_rf_address)
 
@@ -201,7 +214,7 @@ class MaxCube(MaxDevice):
         for _ in range(0, num_rooms):
             room_id = tuple(data[pos:pos + 2])[0]
             name_length = tuple(data[pos:pos + 2])[1]
-            pos += 1 + 1
+            pos += 1
             name = data[pos:pos + name_length].decode('utf-8')
             pos += name_length
             device_rf_address = self.parse_rf_address(data[pos: pos + 3])
@@ -260,7 +273,7 @@ class MaxCube(MaxDevice):
         while pos < len(data):
             length = data[pos]
             device_rf_address = self.parse_rf_address(data[pos + 1: pos + 4])
-            flags = data[pos + 5: pos + 6]
+            # flags = data[pos + 5: pos + 6]
 
             devices = self.devices_by_rf(device_rf_address)
 
@@ -376,6 +389,7 @@ class MaxCube(MaxDevice):
             logger.debug('Response: ' + self.connection.response)
             return self.connection.response
 
+    # noinspection PyMethodMayBeStatic
     def get_programme_temperature(self,device):
         try:
             programme = device.programme
@@ -388,7 +402,7 @@ class MaxCube(MaxDevice):
                 for segment in day_programme:
                     if minutes < segment["untilminutes"]:
                         return segment["temp"]
-        except Exception as e:
+        except Exception:
             return device.target_temperature
 
 
@@ -413,18 +427,18 @@ class MaxCube(MaxDevice):
                     if result:
                         duty_cycle, command_result, memory_slots = result[2:].split(",")
                         if int(command_result) > 0:
-                            raise "Error"
+                            raise Exception('Error')
                         if duty_cycle == 100 and memory_slots == 0:
-                            raise "Run out of duty cycle and memory slots"
+                            raise Exception("Run out of duty cycle and memory slots")
 
 
     @classmethod
     def resolve_device_mode(cls, bits):
-        return (bits & 3)
+        return bits & 3
 
     @classmethod
     def resolve_device_battery(cls, bits):
-        return (bits >> 7)
+        return bits >> 7
 
     @classmethod
     def parse_rf_address(cls, address):

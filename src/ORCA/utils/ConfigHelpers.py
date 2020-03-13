@@ -19,6 +19,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from typing import Union
+
 from ORCA.utils.TypeConvert import ToUnicode
 from ORCA.utils.TypeConvert import ToFloat
 from ORCA.utils.TypeConvert import ToInt
@@ -31,38 +33,42 @@ __all__ = ['Config_GetDefault_Bool',
            'Config_GetDefault_Int',
            'Config_GetDefault_Path']
 
-def Config_GetDefault_Bool(oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) ->bool:
-    return Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue) == u'1'
+def Config_GetDefault_Bool(*,oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) ->bool:
+    return Config_GetDefault_Str(oConfig=oConfig,uSection=uSection,uOption=uOption, vDefaultValue=uDefaultValue) == u'1'
 
-def Config_GetDefault_Float(oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) ->float:
-    return ToFloat(Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue))
+def Config_GetDefault_Float(*,oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) ->float:
+    return ToFloat(Config_GetDefault_Str(oConfig=oConfig,uSection=uSection,uOption=uOption, vDefaultValue=uDefaultValue))
 
-def Config_GetDefault_Int(oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) -> int:
-    return ToInt(Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue))
+def Config_GetDefault_Int(*,oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) -> int:
+    return ToInt(Config_GetDefault_Str(oConfig=oConfig,uSection=uSection,uOption=uOption, vDefaultValue=uDefaultValue))
 
-def Config_GetDefault_Path(oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) -> cPath:
-    return cPath(Config_GetDefault_Str(oConfig, uSection, uOption, uDefaultValue))
+def Config_GetDefault_Path(*,oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) -> cPath:
+    return cPath(Config_GetDefault_Str(oConfig=oConfig,uSection=uSection,uOption=uOption, vDefaultValue=uDefaultValue))
 
-def Config_GetDefault_Str(oConfig: ConfigParser , uSection: str, uOption: str, uDefaultValue: str) -> str:
+def Config_GetDefault_Str(*,oConfig: ConfigParser , uSection: str, uOption: str, vDefaultValue:Union[None,bool,str]) -> str:
     """
     Replacement for the kivy function
 
-    :param Config oConfig: The configparser object
-    :param string uSection: The name of the section
-    :param string uOption: The name of the option
-    :param string uDefaultValue: The default value
+    :param oConfig: The configparser object
+    :param uSection: The name of the section
+    :param uOption: The name of the option
+    :param vDefaultValue: The default value
     :return: The value of an ini setting or the default value
     """
+    uDefaultValue:str = u""
+
     if not oConfig.has_section(uSection):
         oConfig.add_section(uSection)
     if not oConfig.has_option(uSection, uOption):
-        if uDefaultValue is not None:
-            if type(uDefaultValue)==bool:
-                if uDefaultValue:
+        if vDefaultValue is not None:
+            if type(vDefaultValue)==bool:
+                if vDefaultValue:
                     uDefaultValue: str=u'1'
                 else:
                     uDefaultValue: str = u'0'
+            else:
+                uDefaultValue = vDefaultValue
             oConfig.set(uSection, uOption, uDefaultValue)
         return uDefaultValue
-    sRetVal: str = ToUnicode(oConfig.get(uSection, uOption))
-    return sRetVal
+    uRetVal: str = ToUnicode(oConfig.get(uSection, uOption))
+    return uRetVal

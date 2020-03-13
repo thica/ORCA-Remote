@@ -35,13 +35,13 @@ class cRepDependency:
     def __init__(self):
         self.uType:str           = u''
         self.uName:str           = u''
-    def ParseFromXMLNode(self,oXMLNode:Element) -> None:
+    def ParseFromXMLNode(self,*,oXMLNode:Element) -> None:
         """ Parses an xms string into object vars """
-        self.uType = GetXMLTextValue(oXMLNode,u'type',True,u'')
-        self.uName = GetXMLTextValue(oXMLNode,u'name',True,u'')
+        self.uType = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'type',bMandatory=True,vDefault=u'')
+        self.uName = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'')
 
-    def WriteToXMLNode(self,oXMLNode:Element) -> None:
-        """ writes object vars to an xml node """
+    def WriteToXMLNode(self,*,oXMLNode:Element) -> None:
+        """ writes object vars to a xml node """
         oVal:Element
         oXMLSource:Element
 

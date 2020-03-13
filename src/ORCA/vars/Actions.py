@@ -165,11 +165,10 @@ def Var_Increase(uVarName:str, uStep:str='1', uMax:str='') -> str:
         uValue = Var_NormalizeInt(uValue)
         SetVar(uVarName=uVarName, oVarValue=uValue)
         Logger.debug(u'Var_Increase: [%s] plus [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uStepToUse, uValue, uVarName))
+        return uValue
     except Exception as e:
         LogError(uMsg=u'Var_Increase: Invalid Argument', oException=e)
         return u'Error'
-
-
 
 def Var_Decrease(uVarName:str, uStep:str, uMin:str) -> str:
     """
@@ -206,6 +205,7 @@ def Var_Decrease(uVarName:str, uStep:str, uMin:str) -> str:
         uValue = Var_NormalizeInt(uValue)
         SetVar(uVarName=uVarName, oVarValue=uValue)
         Logger.debug(u'Var_Decrease: [%s] minus [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uStepToUse, uValue, uVarName))
+        return uValue
     except Exception as e:
         LogError(uMsg=u'Var_Decrease: Invalid Argument', oException=e)
         return u'Error'
@@ -239,6 +239,7 @@ def Var_Multiply(uVarName:str, uFactor:str) ->str:
         uValue = Var_NormalizeInt(uValue)
         SetVar(uVarName=uVarName, oVarValue=uValue)
         Logger.debug(u'Var_Multiply: [%s] * [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uFactorToUse, uValue, uVarName))
+        return uValue
     except Exception as e:
         LogError(uMsg=u'Var_Multiply: Invalid Argument', oException=e)
         return u'Error'
@@ -275,11 +276,10 @@ def Var_Divide(uVarName:str, uDivisor:str) -> str:
         uValue = Var_NormalizeInt(uValue)
         SetVar(uVarName=uVarName, oVarValue=uValue)
         Logger.debug(u'Var_Divide: [%s] / [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uDivisorToUse, uValue, uVarName))
+        return uValue
     except Exception as e:
         LogError(uMsg=u'Var_Divide: Invalid Argument', oException=e)
         return u'Error'
-    return uValue
-
 
 def Var_Power(uVarName:str, uPower:str) -> str:
     """
@@ -308,10 +308,10 @@ def Var_Power(uVarName:str, uPower:str) -> str:
         uValue = Var_NormalizeInt(uValue)
         SetVar(uVarName=uVarName, oVarValue=uValue)
         Logger.debug(u'Var_Power: [%s] ^ [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uPowerToUse, uValue, uVarName))
+        return uValue
     except Exception as e:
         LogError(uMsg=u'Var_Power: Invalid Argument', oException=e)
         return u'Error'
-
 
 def Var_UpperCase(uVarName:str) -> str:
     """
@@ -467,10 +467,10 @@ def Var_Part(uVarName:str, uStart:str, uEnd:str) -> str:
         else:
             uValue = uValue[:int(uEnd)]
         SetVar(uVarName=uVarName, oVarValue=uValue)
+        return uValue
     except Exception as e:
         LogError(uMsg='Var_Part: Invalid Argument', oException=e)
         return u'Error'
-
 
 def Var_Len(uVarName: str, uDestVar:str) -> str:
     """
@@ -542,7 +542,7 @@ def Var_Find(uVarName:str, uFindVar:str, uDestVar:str) -> str:
         uValue = uVarName
     uValue = ReplaceVars(uValue)
 
-    uFindVar:str = ReplaceVars(uFindVar)
+    uFindVar = ReplaceVars(uFindVar)
     iPos:int = uValue.find(uFindVar)
     uResult:str = ToUnicode(iPos)
     SetVar(uVarName=uDestVar, oVarValue=uResult)
@@ -633,6 +633,7 @@ def Var_Hex2Int(uVarName:str) -> str:
         uValue = ToUnicode(iValue)
         uValue = Var_NormalizeInt(uValue)
         SetVar(uVarName=uVarName, oVarValue=uValue)
+        return uValue
     except Exception as e:
         LogError(uMsg=u'Var_Hex2Int: Invalid Argument (%s):' % uValue, oException=e)
         return u'0'
@@ -659,6 +660,7 @@ def Var_Int2Hex(uVarName:str, uFormat:str='{0:0>2X}') -> str:
         uValue = uFormat.format(int(uValue))
         uValue = ToUnicode(uValue)
         SetVar(uVarName=uVarName, oVarValue=uValue)
+        return uValue
     except Exception as e:
         LogError(uMsg=u'Var_Int2Hex: Invalid Argument (%s):' % uValue, oException=e)
         return u'0'
@@ -675,8 +677,8 @@ def Var_LoadFile(uVarName:str, uFileName:str) -> str:
     """
 
     try:
-        oFileName:cFileName = cFileName('').ImportFullPath(uFileName)
-        uValue:str = LoadFile(oFileName)
+        oFileName:cFileName = cFileName('').ImportFullPath(uFnFullName=uFileName)
+        uValue:str = LoadFile(oFileName=oFileName)
         SetVar(uVarName=uVarName, oVarValue=uValue)
         return uValue
     except Exception as e:
@@ -708,8 +710,8 @@ def Var_Format(uVarName:str, uFormat:str):
         elif uFormatToUse.startswith('(float)'):
             uFormatToUse = uFormatToUse[7:]
             uValue = uFormatToUse.format(ToFloat(uValue))
-
         SetVar(uVarName=uVarName, oVarValue=uValue)
+        return uValue
     except Exception as e:
         LogError(uMsg=u'Var_Format: Invalid Argument', oException=e)
         return u''

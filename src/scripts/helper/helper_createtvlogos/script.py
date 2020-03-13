@@ -39,8 +39,8 @@ import ORCA.Globals as Globals
       <description language='English'>Helper script to create TV Logos (internal)</description>
       <description language='German'>Hilfs - Skript zum Erstellen der TV Logos (internal)</description>
       <author>Carsten Thielepape</author>
-      <version>4.6.2</version>
-      <minorcaversion>4.6.2</minorcaversion>
+      <version>5.0.0</version>
+      <minorcaversion>5.0.0</minorcaversion>
       <skip>1</skip>
       <sources>
         <source>
@@ -70,7 +70,7 @@ class cScript(cBaseScript):
     """
 
     def __init__(self):
-        cBaseScript.__init__(self)
+        super().__init__()
         self.uType:str              = u'HELPERS'
         self.dServices:Dict         = {}
         self.dLogos:Dict            = {}
@@ -84,17 +84,18 @@ class cScript(cBaseScript):
         :param cFileName oFnScript: The file of the script (to be passed to all scripts)
         """
 
-        cBaseScript.Init(self, uObjectName, oFnScript)
+        super().Init(uObjectName= uObjectName, oFnObject=oFnScript)
 
 
     def RunScript(self, *args:List, **kwargs:Dict) -> Union[Dict,None]:
         """ Main Entry point, parses the cmd_type and calls the relevant functions """
         try:
             if kwargs.get("caller",None)=="settings":
-                return self.CreateLogoSources(**kwargs)
+                self.CreateLogoSources(**kwargs)
+                return None
         except Exception as e:
             self.ShowError(uMsg="Can''t run TV Helper script, invalid parameter",uParConfigName=self.uConfigName,oException=e)
-            return {"ret":1}
+        return {"ret":1}
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def CreateLogoSources(self,**kwargs) -> None:
@@ -125,7 +126,7 @@ class cScript(cBaseScript):
             oPathDest.Create()
 
             oFnSource = cFileName(oPathSources)+"srp.index.txt"
-            oFnSource.Copy(oPathDest)
+            oFnSource.Copy(oNewFile=oPathDest)
 
             oPathDest=oPathDest+"picons"
             oPathDest.Create()
@@ -135,7 +136,7 @@ class cScript(cBaseScript):
             for uFnSource in aSourceIcons:
                 oFnSource = cFileName(cPath(uPathSource)) + uFnSource
                 if uFnSource.startswith("1_"):
-                    oFnSource.Copy(oPathDestRef)
+                    oFnSource.Copy(oNewFile=oPathDestRef)
                 else:
                     uSubFolder=uFnSource.upper()[:2]
                     if uSubFolder[0].isnumeric():
@@ -144,4 +145,4 @@ class cScript(cBaseScript):
                     if not uSubFolder in dFolderTarget:
                         dFolderTarget[uSubFolder] = uSubFolder
                         oPathDestSub.Create()
-                    oFnSource.Copy(oPathDestSub)
+                    oFnSource.Copy(oNewFile=oPathDestSub)

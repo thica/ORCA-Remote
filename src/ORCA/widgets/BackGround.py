@@ -86,14 +86,14 @@ class cWidgetBackGround(cWidgetPicture,cWidgetRectangle):
         super().__init__(**kwargs)
 
     def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage,uAnchor:str=''):
-        bRet1:bool = cWidgetPicture.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
-        bRet2:bool = cWidgetRectangle.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
-        self.iPosX = 0
-        self.iPosY = 0
-        self.iHeight = Globals.iAppHeight * self.oDef.fRationY
-        self.iWidth = Globals.iAppWidth * self.oDef.fRationX
+        bRet1:bool      = cWidgetPicture.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
+        bRet2:bool      = cWidgetRectangle.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
+        self.iPosX      = 0
+        self.iPosY      = 0
+        self.iHeight    = int(Globals.iAppHeight * self.oDef.fRationY)
+        self.iWidth     = int(Globals.iAppWidth * self.oDef.fRationX)
+        self.uName      = u'Background'
 
-        self.uName = u'Background'
         if bRet1 and bRet2:
             return True
         return False

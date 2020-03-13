@@ -43,8 +43,7 @@ def GetIPAddressV6() -> str:
     except Exception as e:
         LogError(uMsg="Failure on GetIPAddressV6", oException=e)
         return uIP
-    finally:
-        s.close()
+    s.close()
 
     Logger.debug("Found IPv6 Address:"+uIP)
 

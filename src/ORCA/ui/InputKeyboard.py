@@ -52,7 +52,7 @@ class cInputKeyboard(cBasePopup):
         """ sets the focus to the input field, called by the clock, to avoid timing problems """
         self.oTextInput.focus=True
 
-    def ShowKeyBoard(self,uDestVar:str,oFktNotify:Union[Callable,None], uTitle:str):
+    def ShowKeyBoard(self,*,uDestVar:str,oFktNotify:Union[Callable,None], uTitle:str):
         """ create popup layout """
         uText:str
         oBtn: cMultiLineButton
@@ -89,7 +89,7 @@ class cInputKeyboard(cBasePopup):
         self.oPopup.open()
 
     # noinspection PyUnusedLocal
-    def On_Cancel(self,instance:cMultiLineButton) -> None:
+    def On_Cancel(self,oMultiLineButton:cMultiLineButton) -> None:
         """ Reacts to pressing the cancel button """
         if self.oTextInput:
             self.oTextInput.focus = False
@@ -100,7 +100,7 @@ class cInputKeyboard(cBasePopup):
         self.On_Cancel(self.oButtonCancel)
 
     # noinspection PyUnusedLocal
-    def On_Enter(self,instance:cMultiLineButton) -> None:
+    def On_Enter(self,oMultiLineButton:cMultiLineButton) -> None:
         """
         Will be Called by Input Popup, if the users press Enter
         Closes the Popoup
@@ -122,8 +122,10 @@ class cInputKeyboard(cBasePopup):
         self.oFktNotify(self.oTextInput.text)
 
 
-def ShowKeyBoard(uDestVar:str,oFktNotify:Union[Callable,None],  uTitle:str = 'Input') -> cInputKeyboard:
-    """ convinience abstraction to show the keyboard class """
+def ShowKeyBoard(*,uDestVar:str,oFktNotify:Union[Callable,None],  uTitle:str = "*") -> cInputKeyboard:
+    """ convenience abstraction to show the keyboard class """
+    if uTitle == "*":
+        uTitle = ReplaceVars("$lvar(1072)")
     oInputKeyboard:cInputKeyboard  = cInputKeyboard()
-    oInputKeyboard.ShowKeyBoard(uDestVar,oFktNotify, uTitle)
+    oInputKeyboard.ShowKeyBoard(uDestVar=uDestVar,oFktNotify=oFktNotify, uTitle=uTitle)
     return oInputKeyboard

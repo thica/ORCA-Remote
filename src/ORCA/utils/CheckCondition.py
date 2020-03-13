@@ -17,6 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing import cast
 from typing import List
 from typing import Tuple
 from typing import Dict
@@ -46,7 +47,7 @@ def SplitCondition(*,uCondition: str) -> Tuple[str,str,str]:
     :return: tuple: [0]=uConditionCheckType, [1]=uConditionVar, {2]=uConditionValue
     """
     for uConditionSeparator in aConditions:
-        aRsp: List[str,str] = uCondition.split(uConditionSeparator)
+        aRsp:List[str] = uCondition.split(uConditionSeparator)
         if len(aRsp) == 2:
             uConditionCheckType:str = uConditionSeparator
             uConditionVar:str       = aRsp[0]
@@ -68,22 +69,23 @@ def CheckCondition(*,oPar: Union[Dict,cAction,Element]) -> bool:
     :return: True, if condition checks to true
     """
 
+    oAction: cAction
     if oPar.__class__.__name__ == "cAction":
-        oAction: cAction = oPar
+        oAction = oPar
         oPar = oAction.dActionPars
     else:
-        oAction: cAction = cAction()
+        oAction = cAction()
 
-    uConditionCheckType: str = oPar.get(u'conditionchecktype')
-    uCondition: str          = oPar.get(u'condition')
-    uContext: str            = oPar.get(u"varcontext", "")
+    uConditionCheckType: str = cast(Dict,oPar).get(u'conditionchecktype')
+    uCondition: str          = cast(Dict,oPar).get(u'condition')
+    uContext: str            = cast(Dict,oPar).get(u"varcontext", "")
 
     if uConditionCheckType is None:
         if uCondition is None:
             return True
 
-    uConditionVar: str   = oPar.get(u'conditionvar')
-    uConditionValue: str = oPar.get(u'conditionvalue')
+    uConditionVar: str   = cast(Dict,oPar).get(u'conditionvar')
+    uConditionValue: str = cast(Dict,oPar).get(u'conditionvalue')
 
     if uCondition != '' and uCondition is not None:
         uConditionCheckType, uConditionVar, uConditionValue = SplitCondition(uCondition=uCondition)
@@ -107,7 +109,7 @@ def CheckCondition(*,oPar: Union[Dict,cAction,Element]) -> bool:
             uVar = ReplaceVars(uVar, uContext)
 
         uValue: str              = ReplaceVars(uConditionValue, uContext)
-        uConditionCheckType: str = ReplaceVars(uConditionCheckType, uContext)
+        uConditionCheckType      = ReplaceVars(uConditionCheckType, uContext)
         if uConditionCheckType == u'==' or uConditionCheckType == u'=':
             if uVar == uValue:
                 bRet = True

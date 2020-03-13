@@ -27,6 +27,8 @@
             <setting name="User" parameter="root" />
             <setting name="Password" parameter="" />
             <setting name="ParseResult" parameter="no" />
+            <setting name="DiscoverScriptName" parameter="discover_enigma"/>
+            <setting name="DISCOVER_ENIGMA_models" parameter="['Enigma']"/>
         </configuration>
     </interface>
 </interface_setup>

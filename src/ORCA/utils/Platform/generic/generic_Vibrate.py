@@ -42,3 +42,4 @@ def Vibrate(fDuration:float=0.05) -> bool:
             uMsg=u'Globals: can\'t Vibrate:'+ToUnicode(ex)
             Logger.info (uMsg)
             return False
+    return True
