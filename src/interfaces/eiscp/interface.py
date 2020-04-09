@@ -60,8 +60,8 @@ import ORCA.Globals as Globals
       <description language='English'>Onkyo EISCP Interface (LAN/IP)</description>
       <description language='German'>Onkyo EISCP Interface (LAN/IP)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/eiscp</local>

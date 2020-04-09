@@ -114,10 +114,10 @@ class cWidgetDropDown(cWidgetButton):
         self.iTmpAnchorWidth:int                    = 0
         self.iTmpAnchorHeight:int                   = 0
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
 
         uCaption:str = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag="caption",bMandatory=False,vDefault="")
-        bRet:bool    = super().InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
+        bRet:bool    = super().InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=uAnchor)
         bDummy:bool
 
         oXMLNode.set("caption", uCaption)
@@ -164,7 +164,7 @@ class cWidgetDropDown(cWidgetButton):
                         oTmpAnchor.iWidth  = self.iTmpAnchorWidth
                         oTmpAnchor.iHeight = self.iTmpAnchorHeight
 
-                    oBtn.InitWidgetFromXml(self.oXMLNode, self.oParentScreenPage, self.uAnchorName)
+                    oBtn.InitWidgetFromXml(oXMLNode=self.oXMLNode, oParentScreenPage=self.oParentScreenPage, uAnchor=self.uAnchorName)
                     # oBtn.SetCaption(self.aCaptions[num])
                     oBtn.iAnchorPosX          = 0
                     oBtn.iAnchorPosY          = 0

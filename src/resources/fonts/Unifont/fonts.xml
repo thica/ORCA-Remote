@@ -6,8 +6,8 @@
       <description language='English'>Default Unicode Font</description>
       <description language='German'>Standard Unicode Schrift</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(RESOURCEPATH)/fonts/Unifont</local>

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 python3 -m pip install  "future"
 python3 -m pip install  "plyer"
 python3 -m pip install  "rsa"
@@ -13,3 +12,4 @@ python3 -m pip install  "netifaces"
 python3 -m pip install  "pillow"
 python3 -m pip install  "demjson"
 python3 -m pip install  "telnetlib"
+python3 -m pip install  "adb-shell"

@@ -79,7 +79,7 @@ class cWidgetBorder(cWidgetBase):
         self.uLineWidth: str    = u''
         self.iLineWidth: int = 1
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
 
         bRet:bool=self.ParseXMLBaseNode(oXMLNode, oParentScreenPage, uAnchor)

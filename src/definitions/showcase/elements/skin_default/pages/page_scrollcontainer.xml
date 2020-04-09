@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_ScrollContainer">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+      <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+    </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+
+    <element name='Anchor Top' type='ANCHOR' posx='%2' posy='%25' width='%30' height='%1' />
+
+    <element name='Anchor1' type='ANCHOR' posx='center' posy='of:bottom:Anchor Top' width='%23' height='%70' >
+      <elements>
+        <element name="ScollBox Left" type="SCROLLCONTAINER" picturenormal="background boxes"  >
+          <element name='Anchor1 Inner' type='ANCHOR' width='%200' height="of:width:self:*1.5"  >
+            <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_main_menu.xml" parse="xml" />
+          </element>
+        </element>
+      </elements>
+    </element>
+
+    <element name='Explanation 1' type='TEXTFIELD' posx='%2' posy='of:totop:Anchor1' width='%96' height='%15' caption="If the space is limited you can put the elements into a scrollable window" fontsize='%h20'  htextalign='center' vtextalign='top' fontid='Serif'/>
+
+
+  </elements>
+</page>

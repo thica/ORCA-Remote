@@ -6,8 +6,8 @@
             <description language='English'>Android Remote Control (using adb/TCP) (for mediaplayer template)</description>
             <description language='German'>Android Fernbedienung (verwendet adb/TCP) (for mediaplayer template)</description>
             <author>Carsten Thielepape</author>
-            <version>5.0.0</version>
-            <minorcaversion>5.0.0</minorcaversion>
+            <version>5.0.1</version>
+            <minorcaversion>5.0.1</minorcaversion>
             <skip>0</skip>
             <sources>
                 <source>

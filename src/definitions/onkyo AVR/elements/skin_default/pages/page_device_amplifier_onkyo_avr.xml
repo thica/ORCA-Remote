@@ -15,8 +15,10 @@
     </element>
 
     <element name='Anchor Media section' type='ANCHOR' posx='%90' posy='of:totop:Anchor BottomGap' width='%21' height='%86'>
-      <element name='Frame Volumes' type='PICTURE' posy='middle' height='%55' picturenormal='background boxes' />
-      <element name='Button Mute' type='BUTTON' posx='center' posy='middle' width='%25' height='of:width:self' picturenormal='button round*' action='Send Mute Toggle' fontsize='%h30' iconfontsize='%h50' caption='icon:volume_mute' />
+      <element name='Frame Volumes' type='PICTURE' posy='middle' posx="center" height='%60' width="%98" picturenormal='background boxes' />
+      <element name='Button Mute'         type='BUTTON' posx='center' posy='middle'  width='%25' height='of:width:self' picturenormal='button round*' action='Send Mute Toggle' fontsize='%h30' iconfontsize='%h50' caption='icon:volume_mute' />
+      <element name='Button Volume Up'    type='BUTTON' posx='%97'  posy='middle'  width='%25' height='of:width:self' picturenormal='button round*' action='Send Volume Up'   fontsize='%h30'  iconfontsize='%h50' caption='icon:volume_up' />
+      <element name='Button Volume Down'  type='BUTTON' posx='%3'   posy='middle'  width='%25' height='of:width:self' picturenormal='button round*' action='Send Volume Down' fontsize='%h30'  iconfontsize='%h50' caption='icon:volume_down' />
 
       <element name='Anchor KNOB' type='ANCHOR'  posy='bottom'  height='of:width:self'>
         <element name="Amp Back" type="PICTURE" picturenormal="knob back" />
@@ -36,12 +38,12 @@
       </element>
       <element name='Anchor Subwoofer Volume'       type='ANCHOR'    posx='center' posy='top'     width='%33' >
         <element name="Amp Volume Sub Label"        type="TEXTFIELD" posx="center" posy="top"                 height="%6" caption='$lvar(onkyoAVR_10008)' fontsize='%h100'  vtextalign='middle' htextalign='center' />
-        <element name="Amp Volume Sub"              type="SLIDER"    posx="center" posy="middle"  width="%50" height="%75" picturenormal="background boxes" picturebutton="button round normal" action="$dvar(definition_alias_mediaplayer_template) Set Subwoofer Volume By Widget"  mindatavalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Min)" maxdatavalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Max)" destvar="$dvar(definition_alias_mediaplayer_template)_subwoofervolume"  roundpos="0" orientation="vertical" discardmoves="1" fontsize='%w50'  caption='icon:volume_up'/>
+        <element name="Amp Volume Sub"              type="SLIDER"    posx="center" posy="middle"  width="%50" height="%75" picturenormal="background boxes" picturebutton="button round normal" action="$dvar(definition_alias_mediaplayer_template) Set Subwoofer Volume By Widget"  mindatavalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Min)" maxdatavalue="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_SubWooferLevel_Max)" destvar="$dvar(definition_alias_mediaplayer_template)_subwoofervolume"  roundpos="0" orientation="vertical" discardmoves="1" fontsize='%w50'  caption='icon:volume'/>
         <element name='Amp Volume Sub Textvalue'    type='TEXTFIELD' posx='center' posy="bottom"              height='%6'  fontsize='%h100'  caption='$var($dvar(definition_alias_mediaplayer_template)_subwoofervolume)' />
       </element>
       <element name='Anchor Main Volume1'           type='ANCHOR'    posx='right'  posy='top'     width='%33' >
         <element name="Main Volume Label"           type="TEXTFIELD" posx="center" posy="top"                 height="%6" caption='$lvar(onkyoAVR_10013)'  fontsize='%h100'  vtextalign='middle' htextalign='center' />
-        <element name="Main Volume"                 type="SLIDER"    posx="center" posy="middle"  width="%50" height="%75" picturenormal="background boxes" picturebutton="button round normal" action="$dvar(definition_alias_mediaplayer_template) Set Main Volume By Widget"  mindatavalue="0" maxdatavalue="$var($dvar(definition_alias_mediaplayer_template)_MAXVOLUME)" destvar="$dvar(definition_alias_mediaplayer_template)_mainvolume"  roundpos="0" orientation="vertical" discardmoves="1" fontsize='%w50'  caption='icon:volume_up'/>
+        <element name="Main Volume"                 type="SLIDER"    posx="center" posy="middle"  width="%50" height="%75" picturenormal="background boxes" picturebutton="button round normal" action="$dvar(definition_alias_mediaplayer_template) Set Main Volume By Widget"  mindatavalue="0" maxdatavalue="$var($dvar(definition_alias_mediaplayer_template)_MAXVOLUME)" destvar="$dvar(definition_alias_mediaplayer_template)_mainvolume"  roundpos="0" orientation="vertical" discardmoves="1" fontsize='%w50'  caption='icon:volume'/>
         <element name='Main Volume Textvalue'       type='TEXTFIELD' posx='center' posy="bottom"              height='%6'  fontsize='%h100'  caption='$var($dvar(definition_alias_mediaplayer_template)_mainvolume)' />
       </element>
     </element>

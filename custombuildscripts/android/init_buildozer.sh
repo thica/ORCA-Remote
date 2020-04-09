@@ -2,40 +2,37 @@
 
 # set -x
 
+function ECHO ()
+{
+  echo -e "$1"
+  echo "$1" >> "$LOGFILE"
+}
+
+
 function APT_INSTALL ()
 {
-  echo "Install $1$2"
-  echo "Install $1$2" >> "$LOGFILE"
+  ECHO "\033[1;37mInstall (apt) $1$2  \033[s "
   sudo apt install -y $1$2 >> "$LOGFILE" 2>>"$LOGFILE"
   if [ $? -eq 0 ]; then
-    echo OK >> "$LOGFILE"
+    ECHO '\033[u \033[1;32m -> OK\033[1;37m'
   else
-    echo FAIL
-    echo FAIL >> "$LOGFILE"
+    ECHO '\033[u \033[1;31m -> FAIL\033[1;37m'
     exit 1
   fi
 }
 
 function PIP_INSTALL ()
 {
-  echo "Install $1$2"
-  echo "Install $1$2" >> "$LOGFILE"
+  ECHO "Install (pip3) $1$2 \033[s"
   pip3 install $3 $1$2  >> "$LOGFILE" 2>>"$LOGFILE"
   if [ $? -eq 0 ]; then
-    echo OK >> "$LOGFILE"
+    ECHO '\033[u \033[1;32m -> OK\033[1;37m'
   else
-    echo FAIL
-    echo FAIL >> "$LOGFILE"
+    ECHO '\033[u \033[1;31m -> FAIL\033[1;37m'
     exit 1
   fi
 
 }
-
-# cd /media/Master/custombuildscripts/debian
-# ./init_pyinstaller.sh
-# exit 0
-
-
 
 # just to activate sudo
 sudo ls > /dev/null
@@ -43,8 +40,8 @@ sudo ls > /dev/null
 export LOGFILE=${HOME}/logfile.txt
 # export LOGFILE=/dev/tty
 
-echo "Logging to $LOGFILE"
-echo "Start Log" > "$LOGFILE"
+ECHO "Logging to $LOGFILE"
+ECHO "Start Log"
 
 
 cd "${HOME}"
@@ -81,9 +78,7 @@ export VERSION_LIBFFI_DEV=""
 export VERSION_AUTOCONF=""
 export VERSION_LIBTOOL=""
 
-
-echo "Reading Secrets"
-echo "Reading Secrets" >> $LOGFILE
+ECHO "Reading Secrets"
 set -o allexport
 source "$SECRETSDIR/secrets.ini"
 set +o allexport
@@ -98,36 +93,32 @@ export P4A_RELEASE_KEYSTORE="$SECRETSDIR/release-key.keystore"
 
 if [ -d "${BUILDDIR}" ]
 then
-    echo "Reusing existing build"
+    ECHO "Reusing existing build"
     export "FROMSCRATCH=0"
 else
-    echo "Building from scratch"
+    ECHO "Building from scratch"
     export "FROMSCRATCH=1"
 fi
 
 if [ "$FROMSCRATCH" == "1" ]
 then
-    echo "Create Folder"
-    echo "Create Folder" >> "$LOGFILE"
+    ECHO "Create Folder"
     mkdir "${SOURCEDIR}" >> "$LOGFILE"
     mkdir "${TARGETDIR}" >> "$LOGFILE"
     mkdir "${BUILDDIR}" >> "$LOGFILE"
 fi
 
-echo "Copy sources"
-echo "Copy sources" >> "$LOGFILE"
+ECHO "Copy sources"
 cp -R /media/Master/. "${SOURCEDIR}" >> "$LOGFILE"
 # rsync -vazCq  /media/Master/. "${SOURCEDIR}" >> $LOGFILE
 
-echo "Run custom script to prepare sources"
-echo "Run custom script to prepare sources" >> "$LOGFILE"
+ECHO "Run custom script to prepare sources"
 # 'Prepare/Copy sources (Make the script excutable)'
 chmod +x "${SOURCEDIR}/custombuildscripts/android/prepare_sources.sh"
 # do not remove the leading dot
 . "${SOURCEDIR}/custombuildscripts/android/prepare_sources.sh"  >> "$LOGFILE"
 
-echo "Copy buildozer.spec"
-echo "Copy buildozer.spec" >> "$LOGFILE"
+ECHO "Copy buildozer.spec"
 # Copy buildozer.spec file to target folder (root)'
 cp "${SOURCEDIR}/custombuildscripts/android/buildozer.spec" "${BUILDDIR}/buildozer.spec"  >> "$LOGFILE"
 
@@ -146,13 +137,11 @@ then
 
   PIP_INSTALL "setuptools" "$VERSION_SETUPTOOLS"
 
-  echo "Unzip buildozer"
-  echo "Unzip buildozer" >> "$LOGFILE"
+  ECHO "Unzip buildozer"
   7z x "$SNAPSHOTDIR/buildozer.zip" >> "$LOGFILE"
   mv "${HOME}/buildozer-master" "${HOME}/buildozer" >> "$LOGFILE"
   cd "${HOME}/buildozer"
-  echo "Build buildozer"
-  echo "Build buildozer" >> "$LOGFILE"
+  ECHO "Build buildozer"
   python setup.py build >> "$LOGFILE" 2>>"$LOGFILE"
   sudo pip3 install -e . >> "$LOGFILE" 2>>"$LOGFILE"
   export PATH="${HOME}/.local/bin:$PATH"
@@ -172,16 +161,45 @@ then
   APT_INSTALL "python3-venv"
   APT_INSTALL "cmake"           "$VERSION_CMAKE"
   PIP_INSTALL "cython"          "$VERSION_CYTHON"
+  APT_INSTALL "cython"
   APT_INSTALL "libffi-dev"      "$VERSION_LIBFFI_DEV"
 
 
-  echo "Run Buildozer First Time (this will fail (buildozer bug)"
-  echo "Run Buildozer First Time (this will fail (buildozer bug)" >> "$LOGFILE"
+  # we install the Android SDK manually, as buildozer fails to accept the licenses
+  ECHO "Installing Android SDK"
+  # download
+  wget http://dl.google.com/android/repository/sdk-tools-linux-4333796.zip >> "$LOGFILE"
+  mkdir android-sdk >> "$LOGFILE"
+  cd android-sdk
+  # unzip
+  unzip  ~/sdk-tools-linux-4333796.zip >> "$LOGFILE"
+  # This is the weakest point: Buildozer seatrches for the latest available build tools version, which might change
+  yes|tools/bin/sdkmanager --licenses >> "$LOGFILE"
+  yes|tools/bin/sdkmanager "build-tools;30.0.0-rc2" >> "$LOGFILE"
+
+  # we install the ndk as well
+  cd ~
+  ECHO "Installing Android NDK"
+  wget http://dl.google.com/android/repository/android-ndk-r19b-linux-x86_64.zip >> "$LOGFILE"
+  unzip ~/android-ndk-r19b-linux-x86_64.zip >> "$LOGFILE"
+  # will be extracted to android-ndk-r19b
+
+  # lets use the sdk manager to istall further android tools
+  cd ~/android-sdk/tools/bin
+  ./sdkmanager tools >> "$LOGFILE"
+  yes|./sdkmanager platform-tools >> "$LOGFILE"
+  ./sdkmanager --update >> "$LOGFILE"
+  ./sdkmanager  "platforms;android-27" >> "$LOGFILE"
+
+
+  ECHO "Run Buildozer First Time (this will fail ,buildozer bug)"
   # 'Run Buildozer First Time (this will fail (buildozer bug), but shown as succeed)'
   cd "${BUILDDIR}"
-  timeout 180 buildozer -v android release >> "$LOGFILE" 2>>"$LOGFILE"
-  # buildozer -v android release
+  buildozer -v android release
 
+  # Temporary: We now have to remove the broken openssl down and patch the receipe
+  rm -rf "${BUILDDIR}"/.buildozer/android/platform/build-armeabi-v7a/packages/openssl
+  sed -i 's/1.1.1/1.1.1f/'  "${BUILDDIR}"/.buildozer/android/platform/python-for-android/pythonforandroid/recipes/openssl/__init__.py
 
   if [ -f $P4A_RELEASE_KEYSTORE ]
   then
@@ -197,19 +215,19 @@ then
   fi
 
   # Buildozer installs ths SDK to /home/kivy
-  echo "Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)"
-  echo "Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)" >> "$LOGFILE"
-  yes|"${HOME}/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" "build-tools;29.0.2"  >> "$LOGFILE" 2>>"$LOGFILE"
+  # echo "Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)"
+  # echo "Install Android Build Tools after failed build (this should be done by buildozer, but the bug has not been removed)" >> "$LOGFILE"
+  # yes|"${HOME}/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" "build-tools;29.0.2"  >> "$LOGFILE" 2>>"$LOGFILE"
 
   # 'Remove the old buildozer app build folder'
-  cd "${BUILDDIR}"
-  rm -r -f "${BUILDDIR}/.buildozer"
+  # cd "${BUILDDIR}"
+  # rm -r -f "${BUILDDIR}/.buildozer"
 fi
+
 
 echo "Remove any old Build"
 echo "Remove any old Build" >> "$LOGFILE"
 rm "${BUILDDIR}/bin/*.apk" >> "$LOGFILE" >/dev/null 2>/dev/null
-
 
 echo "Run buildozer (this should work)"
 echo "Run buildozer (this should work)" >> "$LOGFILE"

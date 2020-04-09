@@ -66,7 +66,8 @@ from ORCA.widgets.Switch            import cWidgetSwitch
 from ORCA.widgets.TextField         import cWidgetTextField
 from ORCA.widgets.TextInput         import cWidgetTextInput
 from ORCA.widgets.Video             import cWidgetVideo
-from ORCA.widgets.ScrollList   import cWidgetScrollList
+from ORCA.widgets.ScrollList        import cWidgetScrollList
+from ORCA.widgets.ScrollContainer   import cWidgetScrollContainer
 from ORCA.widgets.Border            import cWidgetBorder
 from ORCA.utils.FileName            import cFileName
 
@@ -123,26 +124,27 @@ class cScreenPage:
         self.oScreen:Optional[Screen]                        = None
 
         self.dFktsCreateWidget[eWidgetType.BackGround]       = self.AddWidgetFromXmlNode_BackGround, None
-        self.dFktsCreateWidget[eWidgetType.TextField]        = self.AddWidgetFromXmlNode_Text, cWidgetTextField
-        self.dFktsCreateWidget[eWidgetType.Anchor]           = self.AddWidgetFromXmlNode_Anchor, cWidgetAnchor
-        self.dFktsCreateWidget[eWidgetType.Button]           = self.AddWidgetFromXmlNode_Class, cWidgetButton
-        self.dFktsCreateWidget[eWidgetType.Switch]           = self.AddWidgetFromXmlNode_Class, cWidgetSwitch
-        self.dFktsCreateWidget[eWidgetType.Picture]          = self.AddWidgetFromXmlNode_Class, cWidgetPicture
-        self.dFktsCreateWidget[eWidgetType.TextInput]        = self.AddWidgetFromXmlNode_Class, cWidgetTextInput
-        self.dFktsCreateWidget[eWidgetType.Knob]             = self.AddWidgetFromXmlNode_Class, cWidgetKnob
-        self.dFktsCreateWidget[eWidgetType.FileViewer]       = self.AddWidgetFromXmlNode_Class, cWidgetFileViewer
-        self.dFktsCreateWidget[eWidgetType.Slider]           = self.AddWidgetFromXmlNode_Class, cWidgetSlider
-        self.dFktsCreateWidget[eWidgetType.Rectangle]        = self.AddWidgetFromXmlNode_Class, cWidgetRectangle
-        self.dFktsCreateWidget[eWidgetType.Circle]           = self.AddWidgetFromXmlNode_Class, cWidgetCircle
-        self.dFktsCreateWidget[eWidgetType.Video]            = self.AddWidgetFromXmlNode_Class, cWidgetVideo
-        self.dFktsCreateWidget[eWidgetType.DropDown]         = self.AddWidgetFromXmlNode_Class, cWidgetDropDown
-        self.dFktsCreateWidget[eWidgetType.ColorPicker]      = self.AddWidgetFromXmlNode_Class, cWidgetColorPicker
-        self.dFktsCreateWidget[eWidgetType.Settings]         = self.AddWidgetFromXmlNode_Class, cWidgetSettings
-        self.dFktsCreateWidget[eWidgetType.FileBrowser]      = self.AddWidgetFromXmlNode_Class, cWidgetFileBrowser
-        self.dFktsCreateWidget[eWidgetType.ScrollList]       = self.AddWidgetFromXmlNode_Class, cWidgetScrollList
-        self.dFktsCreateWidget[eWidgetType.Border]           = self.AddWidgetFromXmlNode_Class, cWidgetBorder
-        self.dFktsCreateWidget[eWidgetType.NoWidget]         = self.AddWidgetFromXmlNode_None, None
-        self.dFktsCreateWidget[eWidgetType.SkipWidget]       = self.AddWidgetFromXmlNode_Skip, None
+        self.dFktsCreateWidget[eWidgetType.TextField]        = self.AddWidgetFromXmlNode_Text,      cWidgetTextField
+        self.dFktsCreateWidget[eWidgetType.Anchor]           = self.AddWidgetFromXmlNode_Anchor,    cWidgetAnchor
+        self.dFktsCreateWidget[eWidgetType.Button]           = self.AddWidgetFromXmlNode_Class,     cWidgetButton
+        self.dFktsCreateWidget[eWidgetType.Switch]           = self.AddWidgetFromXmlNode_Class,     cWidgetSwitch
+        self.dFktsCreateWidget[eWidgetType.Picture]          = self.AddWidgetFromXmlNode_Class,     cWidgetPicture
+        self.dFktsCreateWidget[eWidgetType.TextInput]        = self.AddWidgetFromXmlNode_Class,     cWidgetTextInput
+        self.dFktsCreateWidget[eWidgetType.Knob]             = self.AddWidgetFromXmlNode_Class,     cWidgetKnob
+        self.dFktsCreateWidget[eWidgetType.FileViewer]       = self.AddWidgetFromXmlNode_Class,     cWidgetFileViewer
+        self.dFktsCreateWidget[eWidgetType.Slider]           = self.AddWidgetFromXmlNode_Class,     cWidgetSlider
+        self.dFktsCreateWidget[eWidgetType.Rectangle]        = self.AddWidgetFromXmlNode_Class,     cWidgetRectangle
+        self.dFktsCreateWidget[eWidgetType.Circle]           = self.AddWidgetFromXmlNode_Class,     cWidgetCircle
+        self.dFktsCreateWidget[eWidgetType.Video]            = self.AddWidgetFromXmlNode_Class,     cWidgetVideo
+        self.dFktsCreateWidget[eWidgetType.DropDown]         = self.AddWidgetFromXmlNode_Class,     cWidgetDropDown
+        self.dFktsCreateWidget[eWidgetType.ColorPicker]      = self.AddWidgetFromXmlNode_Class,     cWidgetColorPicker
+        self.dFktsCreateWidget[eWidgetType.Settings]         = self.AddWidgetFromXmlNode_Class,     cWidgetSettings
+        self.dFktsCreateWidget[eWidgetType.FileBrowser]      = self.AddWidgetFromXmlNode_Class,     cWidgetFileBrowser
+        self.dFktsCreateWidget[eWidgetType.ScrollList]       = self.AddWidgetFromXmlNode_Container, cWidgetScrollList
+        self.dFktsCreateWidget[eWidgetType.ScrollContainer]  = self.AddWidgetFromXmlNode_Container, cWidgetScrollContainer
+        self.dFktsCreateWidget[eWidgetType.Border]           = self.AddWidgetFromXmlNode_Class,     cWidgetBorder
+        self.dFktsCreateWidget[eWidgetType.NoWidget]         = self.AddWidgetFromXmlNode_None,      None
+        self.dFktsCreateWidget[eWidgetType.SkipWidget]       = self.AddWidgetFromXmlNode_Skip,      None
 
     def InitPageFromXmlNode(self,*,oXMLNode:Element) -> None:
         """ Get Page Definitions """
@@ -290,6 +292,7 @@ class cScreenPage:
         :param str uAnchor:
         :return: The Last Added Element
         """
+
         oRet:Union[cWidgetBase,None] = None
         # Get list of all 'root elements', if not nested
         for oXMLWidget in oXMLNode:
@@ -311,7 +314,7 @@ class cScreenPage:
         for oXMLWidget in oXMLWidgets.findall('element'):
             self.oWidgetBackGround.GetWidgetTypeFromXmlNode(oXMLWidget)
             if self.oWidgetBackGround.eWidgetType==eWidgetType.BackGround:
-                self.oWidgetBackGround.InitWidgetFromXml(oXMLWidget,self)
+                self.oWidgetBackGround.InitWidgetFromXml(oXMLNode=oXMLWidget,oParentScreenPage=self)
                 return
 
     def AddWidgetFromXmlNode_Class(self,*,oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
@@ -319,13 +322,13 @@ class cScreenPage:
         oTmpWidget:cWidgetBase=oClass()
         oTmpWidget.SaveLastWidgetPos()
 
-        if oTmpWidget.InitWidgetFromXml(oXMLNode,self, uAnchor):
+        if oTmpWidget.InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=self, uAnchor=uAnchor):
             if oClass==cWidgetButton:
                 if u':::' in oTmpWidget.GetCaption():
                     oTmpWidget=cWidgetDropDown()
                     oTmpWidget.RestoreLastWidgetPos()
 
-                    if not oTmpWidget.InitWidgetFromXml(oXMLNode,self, uAnchor):
+                    if not oTmpWidget.InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=self, uAnchor=uAnchor):
                         return oTmpWidget
             self.aWidgets.append(oTmpWidget)
             self.dWidgets[oTmpWidget.uName].append(oTmpWidget)
@@ -333,25 +336,34 @@ class cScreenPage:
         return oTmpWidget
 
     def AddWidgetFromXmlNode_Anchor(self, *,oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
-        oTmpAnchor:cWidgetBase = oClass()
-        if oTmpAnchor.InitWidgetFromXml(oXMLNode,self, uAnchor):
-            self.aWidgets.append(oTmpAnchor)
-            self.dWidgets[oTmpAnchor.uName].append(oTmpAnchor)
-            self._AddElements(oXMLNode=oXMLNode, uAnchor=oTmpAnchor.uName)
-        return oTmpAnchor
+        oTmpWidget:cWidgetBase = oClass()
+        if oTmpWidget.InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=self, uAnchor=uAnchor):
+            self.aWidgets.append(oTmpWidget)
+            self.dWidgets[oTmpWidget.uName].append(oTmpWidget)
+            self._AddElements(oXMLNode=oXMLNode, uAnchor=oTmpWidget.uName)
+        return oTmpWidget
+
+    def AddWidgetFromXmlNode_Container(self, *,oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
+        oTmpWidget:cWidgetBase = oClass()
+        if oTmpWidget.InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=self, uAnchor=uAnchor):
+            self.aWidgets.append(oTmpWidget)
+            oTmpWidget.SetContainer(uContainer=oTmpWidget.uContainer)
+            self._AddElements(oXMLNode=oXMLNode, uAnchor=uAnchor)
+            oTmpWidget.SetContainer(uContainer="")
+        return oTmpWidget
 
     def AddWidgetFromXmlNode_Text(self,*, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
-        oTmpText:cWidgetTextField=oClass()
-        if oTmpText.InitWidgetFromXml(oXMLNode,self, uAnchor):
-            self.aWidgets.append(oTmpText)
-            self.dWidgets[oTmpText.uName].append(oTmpText)
-            if oTmpText.bIsClock:
+        oTmpWidget:cWidgetTextField=oClass()
+        if oTmpWidget.InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=self, uAnchor=uAnchor):
+            self.aWidgets.append(oTmpWidget)
+            self.dWidgets[oTmpWidget.uName].append(oTmpWidget)
+            if oTmpWidget.bIsClock:
                 self.aClockWidgetsIndex.append(len(self.aWidgets)-1)
-            if oTmpText.bIsDate:
+            if oTmpWidget.bIsDate:
                 self.aDateWidgetsIndex.append(len(self.aWidgets)-1)
 
             self._AddElements(oXMLNode=oXMLNode, uAnchor=uAnchor)
-        return oTmpText
+        return oTmpWidget
 
     # noinspection PyUnusedLocal
     def AddWidgetFromXmlNode_BackGround(self,*, oXMLNode:Element, uAnchor:str, oClass:Callable) -> cWidgetBase:
@@ -406,8 +418,9 @@ class cScreenPage:
 
             #Create all the widgets of the page
             for oWidget in self.aWidgets:
-                if not oWidget.Create(self.oWidgetBackGround.oObject):
-                    self.aErrorWidgets.append(oWidget)
+                if not oWidget.bIsCreated:
+                    if not oWidget.Create(self.oWidgetBackGround.oObject):
+                        self.aErrorWidgets.append(oWidget)
 
             self.PostHandleErrorWidgets()
             self.bIsInit=True

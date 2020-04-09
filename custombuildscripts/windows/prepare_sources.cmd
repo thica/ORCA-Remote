@@ -62,16 +62,12 @@ mkdir %TARGETDIR%\actions
 copy /Y %SOURCEDIR%\src\actions\actionsfallback.xml %TARGETDIR%\actions
 mkdir %TARGETDIR%\ORCA
 xcopy /Y %SOURCEDIR%\src\ORCA %TARGETDIR%\ORCA /S /q
-rem /exclude:"%SOURCEDIR%\custombuildscripts\windows\exludepyc.txt
-mkdir %TARGETDIR%\interfacestmp
-xcopy /Y %SOURCEDIR%\src\interfaces %TARGETDIR%\interfacestmp /S /q
-rem /exclude:"%SOURCEDIR%\custombuildscripts\windows\exludepyc.txt
-mkdir %TARGETDIR%\scriptstmp
-xcopy /Y %SOURCEDIR%\src\scripts %TARGETDIR%\scriptstmp /S /q
-rem /exclude:"%SOURCEDIR%\custombuildscripts\windows\exludepyc.txt
-
-mkdir %TARGETDIR%\Platform
-xcopy /Y %SOURCEDIR%\src\ORCA\utils\Platform %TARGETDIR%\Platform /S /q
+rem mkdir %TARGETDIR%\interfacestmp
+rem xcopy /Y %SOURCEDIR%\src\interfaces %TARGETDIR%\interfacestmp /S /q
+rem mkdir %TARGETDIR%\scriptstmp
+rem xcopy /Y %SOURCEDIR%\src\scripts %TARGETDIR%\scriptstmp /S /q
+rem mkdir %TARGETDIR%\Platform
+rem copy /Y %SOURCEDIR%\src\ORCA\utils\Platform %TARGETDIR%\Platform /S /q
 
 copy /Y "%SOURCEDIR%\custombuildscripts\windows\orcafullscreen.cmd" %TARGETDIR%
 echo Finished copy files

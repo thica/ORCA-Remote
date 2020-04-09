@@ -85,9 +85,9 @@ class cWidgetBackGround(cWidgetPicture,cWidgetRectangle):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage,uAnchor:str=''):
-        bRet1:bool      = cWidgetPicture.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
-        bRet2:bool      = cWidgetRectangle.InitWidgetFromXml(self,oXMLNode,oParentScreenPage, u'')
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage,uAnchor:str='') -> bool:
+        bRet1:bool      = cWidgetPicture.InitWidgetFromXml(self,oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=u'')
+        bRet2:bool      = cWidgetRectangle.InitWidgetFromXml(self,oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=u'')
         self.iPosX      = 0
         self.iPosY      = 0
         self.iHeight    = int(Globals.iAppHeight * self.oDef.fRationY)

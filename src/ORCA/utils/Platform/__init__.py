@@ -50,6 +50,7 @@ __all__ = ['OS_ToPath',
            'OS_GetRotationObject',
            'OS_GetUserDownloadsDataPath',
            'OS_GetSystemUserPath',
+           'OS_GetSystemTmpPath',
            'OS_GetInstallationDataPath',
            'OS_Platform',
            'OS_RegisterSoundProvider',
@@ -253,3 +254,7 @@ def OS_GetDrives() -> List[str]:
     """
     return cast(List[str],GetFunction("GetDrives")())
 
+
+def OS_GetSystemTmpPath() -> cPath:
+    """ Gets the system temporary """
+    return cast(cPath,GetFunction("GetSystemTmpPath")())

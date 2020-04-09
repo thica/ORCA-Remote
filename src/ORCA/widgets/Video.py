@@ -75,7 +75,7 @@ class cWidgetVideo(cWidgetBase):
         self.iOldDuration:int       = -1
         self.oConnection            = None
         self.uFileName:str          = ''
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 

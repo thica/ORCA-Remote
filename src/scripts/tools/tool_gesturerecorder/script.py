@@ -45,8 +45,8 @@ else:
       <description language='English'>Tool to record gestures</description>
       <description language='German'>Tool um Gesten aufzuzeichnen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

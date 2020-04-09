@@ -93,7 +93,7 @@ class cWidgetFileBrowser(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         self.uActionNameCancel:str  = ""
         self.bDirSelect:bool        = False
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         self.oPathStart             = cPath(GetVar(uVarName = "filebrowserfile"))
         self.uActionNameCancel      = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actioncancel',bMandatory=False,vDefault=u'')

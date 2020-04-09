@@ -27,6 +27,8 @@
 {"type": "bool",                 "title": "$lvar(553)","desc": "$lvar(554)","section": "ORCA","key": "longdate"},
 {"type": "bool",                 "title": "$lvar(555)","desc": "$lvar(556)","section": "ORCA","key": "longday"},
 {"type": "bool",                 "title": "$lvar(557)","desc": "$lvar(558)","section": "ORCA","key": "longmonth"},
+{"type": "scrolloptions",        "title": "$lvar(624)","desc": "$lvar(625)","section": "ORCA","key": "defaulttransitiontype","options":$var(SETTINGS_TRANSITIONTYPES)},
+{"type": "scrolloptions",        "title": "$lvar(626)","desc": "$lvar(627)","section": "ORCA","key": "defaulttransitiondirection","options":$var(SETTINGS_TRANSITIONDIRECTIONS)},
 { "type": "title",               "title": "$lvar(590)" },
 {"type": "numericslider",        "title": "$lvar(591)","desc": "$lvar(592)","section": "ORCA","key": "soundvolume_startup",        "min":"0", "max":"100" ,"roundpos":"0"},
 {"type": "numericslider",        "title": "$lvar(593)","desc": "$lvar(594)","section": "ORCA","key": "soundvolume_shutdown",       "min":"0", "max":"100" ,"roundpos":"0"},

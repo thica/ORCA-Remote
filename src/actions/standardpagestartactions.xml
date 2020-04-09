@@ -109,6 +109,7 @@
     <action name="If we pressed the button ShowLogFile in the settings"             string="addvarlink" varname="button_show_logfile"           linktype="call" actionname="FKT_ORCASHOWLOGFILE" />
     <action name="If we pressed the button ShowCredits"                             string="addvarlink" varname="button_show_credits"           linktype="call" actionname="FKT_ORCASHOWCREDITS" />
     <action name="If we pressed the button GetOnlineources in the settings"         string="addvarlink" varname="button_getonline"              linktype="action" parameters='{"string":"showpage Page_Settings_Download"}' />
+    <action name="If we changed the default effect type in the settings"            string="addvarlink" varname="defaulttransitiontype"         linktype="action" parameters='{"string":"setpageeffect","effect":"$var(defaulttransitiontype)"}' />
     <action name="Standard Definitions end here" />
 
   </pagestartaction>

@@ -135,7 +135,7 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         self.uDestVar:str                            = u''
         self.iRoundPos:int                           = 0
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
@@ -160,6 +160,7 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         self.AddArg('source',ToAtlas(oFileName=self.oFnPictureNormal))
         self.CreateBase(Parent=oParent,Class=Image)
         self.oObjectPicture             = self.oObject
+        self.bIsCreated = False
         self.AddArg('do_scale',False)
         self.AddArg('do_translation_y',False)
         self.AddArg('auto_bring_to_front',False)

@@ -6,8 +6,8 @@
       <description language='English'>IR Control for Octagon Receiver (for mediaplayer template)</description>
       <description language='German'>IR Fernbedienung für Octagon Receiver (Für Mediaplayer Template)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/octagon 1018</local>

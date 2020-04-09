@@ -8,8 +8,8 @@
       <description language='English'>English language strings</description>
       <description language='German'>Englische Zeichenketten</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/languages/English</local>
@@ -197,7 +197,7 @@
   <string id="576">Clear ATLAS</string>
   <string id="577">Scripts</string>
   <string id="578">Configure script settings / Start scripts</string>
-
+  <string id="579">System</string>
   <string id="580">Definition</string>
   <string id="585">Info</string>
   <string id="586">Orca Application Information</string>
@@ -235,7 +235,10 @@
   <string id="617">Subnet V4</string>
   <string id="618">IP Address V6</string>
   <string id="619">MAC Address</string>
-
+  <string id="624">Page effect type</string>
+  <string id="625">Default page effect type</string>
+  <string id="626">Page effect direction</string>
+  <string id="627">Default page effect direction</string>
   <string id="633">Others</string>
   <string id="634">Sounds</string>
   <string id="635">Choose Sounds</string>

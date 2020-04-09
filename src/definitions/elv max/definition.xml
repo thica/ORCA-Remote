@@ -54,8 +54,8 @@
       <description language='English'>ELV MAX heating control</description>
       <description language='German'>ELV MAX Heizungs Steuerung</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/elv max</local>

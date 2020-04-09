@@ -55,8 +55,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover iTach devices</description>
       <description language='German'>Erkennt sucht iTach Geräte über beacon</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_itach</local>

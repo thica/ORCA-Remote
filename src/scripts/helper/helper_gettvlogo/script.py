@@ -46,8 +46,8 @@ import ORCA.Globals as Globals
       <description language='English'>Helper Scripts to find TV Logos</description>
       <description language='German'>Hilfs Skript um TV-Logos zu finden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

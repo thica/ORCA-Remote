@@ -46,8 +46,8 @@ import ORCA.Globals as Globals
       <description language='English'>Interface to send a WOL command to device</description>
       <description language='German'>Interface ein WOL Kommando an ein Gerät zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/wake_on_lan</local>

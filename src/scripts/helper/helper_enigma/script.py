@@ -82,8 +82,8 @@ typeServices       = Dict[str,typeServiceList]
       <description language='English'>Enigma Helper Script (for DVB Receiver)</description>
       <description language='German'>Enigma Hilfs - Skript (Für DVB Receiver)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -198,7 +198,7 @@ class cScript(cBaseScript):
             uContext:str                    = oSetting.uContext
             uSection:str                    = Globals.uDefinitionName
 
-            iMaxBouquets:int                = 6
+            iMaxBouquets:int                = 9
             iMaxChannelsPerBouquets:int     = 27
 
             iBouquetNumber:int
@@ -402,7 +402,7 @@ class cScript(cBaseScript):
             iMovieNum = 0  # Order Number of the Channel
             if uXmlContent:
                 oXmlMovies:Element       = LoadXMLString(uXML=uXmlContent)
-                self.dMovies[uContext]    = {}
+                self.dMovies[uContext]   = {}
                 dMovies:typeMovies       = {}
 
                 Var_DelArray("%s_%s[]" % (uReturnVar,'reference'))

@@ -71,6 +71,7 @@ def Build_Settings(oSettings:KivySettings) -> None:
         # and pass to kivy
         oSettings.add_json_panel(ReplaceVars('$lvar(699)'), Globals.oOrcaConfigParser, data=BuildSettingsStringOnlineResources())
 
+
     else:
         # just build the small settings
         oSettings.add_json_panel(u'ORCA', Globals.oOrcaConfigParser, data=BuildSmallSettingsString())
@@ -141,6 +142,8 @@ def BuildSettingsString() -> str:
     BuildSettingOptionListVar(aInterfaceList,                               "SETTINGS_INTERFACENAMELIST")
     BuildSettingOptionListVar(Globals.oSound.aSoundsList,                   "SETTINGS_SOUNDLIST")
     BuildSettingOptionListVar(Globals.aSkinList,                            "SETTINGS_SKINLIST")
+    BuildSettingOptionListVar(Globals.aTransitionTypes,                     "SETTINGS_TRANSITIONTYPES")
+    BuildSettingOptionListVar(Globals.aTransitionDirections,                "SETTINGS_TRANSITIONDIRECTIONS")
     BuildSettingOptionListDictVar(dDefinitionReps,                          "SETTINGS_DEFINITIONLIST")
     return GetJsonFromSettingFileName("setting_orca.txt")
 

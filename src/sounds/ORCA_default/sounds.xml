@@ -16,8 +16,8 @@
       <description language='English'>ORCA default sounds</description>
       <description language='German'>ORCA Standard Töne</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/sounds/ORCA_default</local>

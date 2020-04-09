@@ -27,7 +27,10 @@ from typing                                 import Union
 from ORCA.scripts.BaseScript                import cBaseScript
 from ORCA.utils.Path                        import cPath
 from ORCA.utils.FileName                    import cFileName
-
+from ORCA.utils.Tar                         import cTarFile
+from ORCA.utils.Platform                    import OS_GetSystemTmpPath
+from ORCA.utils.Platform                    import OS_GetSystemUserPath
+from ORCA.ui.ShowErrorPopUp                 import ShowErrorPopUp
 import ORCA.Globals as Globals
 
 
@@ -39,8 +42,8 @@ import ORCA.Globals as Globals
       <description language='English'>Helper script to create TV Logos (internal)</description>
       <description language='German'>Hilfs - Skript zum Erstellen der TV Logos (internal)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <skip>1</skip>
       <sources>
         <source>
@@ -103,29 +106,61 @@ class cScript(cBaseScript):
         dFolderTarget:Dict[str,str] = {}
         oFnDest:cFileName
         oFnSource:cFileName
+        oFnTarFile:cFileName
         oPathDest:cPath
         oPathDestRef:cPath
         oPathDestSub:cPath
         uFileCore:str
+        uFile:str
         uFnSource:str
         uPathSource:str
         uSubFolder:str
+        oPathSources:cPath
+        oPathSourcesDebug:cPath
+        aFolder:List[str]
+        aFiles:List[str]
 
-        oPathSources:cPath = cPath("$var(RESOURCEPATH)/tvlogos-src")
-        oPathSourcesDebug:cPath = cPath("c:/tvlogos-src")
-
+        oPathSources = cPath("$var(RESOURCEPATH)/tvlogos-src")
+        oPathSourcesDebug = cPath("c:/tvlogos-src")
         if oPathSourcesDebug.Exists():
             oPathSources=oPathSourcesDebug
 
+        oPathSourcesDebug = OS_GetSystemUserPath() + "tvlogos-src"
+        if oPathSourcesDebug.Exists():
+            oPathSources=oPathSourcesDebug
 
-        aFolder:List[str] = oPathSources.GetFolderList(bFullPath=True)
+        aFiles = oPathSources.GetFileList(bSubDirs=False,bFullPath=True)
+        if aFiles:
+            oFnSource = cFileName(oPathSources)+"srp.index.txt"
+            if not  oFnSource.Exists():
+                ShowErrorPopUp(uMessage="srp.index.txt is missing in source folder!")
+                return
+            oPathSourcesDebug = OS_GetSystemTmpPath()+"tvlogos-src"
+            oPathSourcesDebug.Delete()
+            oPathSourcesDebug.Create()
+            oFnSource.Copy(oNewFile=oPathSourcesDebug)
+            for uFnXY in aFiles:
+                if uFnXY.endswith(".tar.xz") and "snp-full" in uFnXY and "190x102." in uFnXY:
+                    oTarFile = cTarFile().ImportFullPath(uFnFullName=uFnXY)
+                    self.ShowDebug(uMsg="Untar: %s to %s" % (oTarFile.string,oPathSourcesDebug.string))
+                    oTarFile.UnTar(oPath=oPathSourcesDebug)
+            oPathSources = oPathSourcesDebug
+
+        aFolder = oPathSources.GetFolderList(bFullPath=True)
         for uPathSource in aFolder:
             dFolderTarget.clear()
             uFileCore = uPathSource[uPathSource.rfind("102.")+4:uPathSource.find("_")]
             oPathDest = Globals.oPathTVLogos+uFileCore
             oPathDest.Create()
 
+            self.ShowDebug(uMsg="Create Picons for: %s" % (oPathDest.string))
+
             oFnSource = cFileName(oPathSources)+"srp.index.txt"
+
+            if not  oFnSource.Exists():
+                ShowErrorPopUp(uMessage="srp.index.txt is missing in source folder!")
+                return
+
             oFnSource.Copy(oNewFile=oPathDest)
 
             oPathDest=oPathDest+"picons"
@@ -139,6 +174,7 @@ class cScript(cBaseScript):
                     oFnSource.Copy(oNewFile=oPathDestRef)
                 else:
                     uSubFolder=uFnSource.upper()[:2]
+                    uSubFolder=uSubFolder.replace(".","")
                     if uSubFolder[0].isnumeric():
                         uSubFolder="0-9"
                     oPathDestSub=oPathDest+uSubFolder
@@ -146,3 +182,4 @@ class cScript(cBaseScript):
                         dFolderTarget[uSubFolder] = uSubFolder
                         oPathDestSub.Create()
                     oFnSource.Copy(oNewFile=oPathDestSub)
+

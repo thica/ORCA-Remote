@@ -8,8 +8,8 @@
       <description language='English'>German language strings</description>
       <description language='German'>Deutsche Zeichenketten</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/languages/German</local>
@@ -222,6 +222,10 @@
   <string id="615">IP Adresse V4</string>
   <string id="618">IP Adresse V6</string>
   <string id="619">MAC Adresse</string>
+  <string id="624">Seiten Effekt Type</string>
+  <string id="625">Standard Seiten Effect Typ</string>
+  <string id="626">Seiten Effekt Richtung</string>
+  <string id="627">Standard Richtung für Seiten Effekte</string>
 
   <string id="633">Sonstiges</string>
   <string id="634">Töne</string>

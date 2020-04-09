@@ -79,7 +79,7 @@ class cWidgetFileViewer(cWidgetBase,cWidgetBaseText,cWidgetBaseBase):
         super().__init__()
         self.uFileName:str = "" #we don't  use cFileName by purpose to handle vars properly
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         self.uFileName  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'filename', bMandatory=False, vDefault="")
         self.bNoTextSize = True

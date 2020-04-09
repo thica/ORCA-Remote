@@ -48,7 +48,8 @@ class eWidgetType(Enum):
     Switch          = auto()
     SkipWidget      = auto()
     FileBrowser     = auto()
-    ScrollList = auto()
+    ScrollList      = auto()
+    ScrollContainer = auto()
     Border          = auto()
 
     def __str__(self):

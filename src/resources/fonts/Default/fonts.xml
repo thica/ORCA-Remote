@@ -7,8 +7,8 @@
       <description language='English'>Orca default fonts</description>
       <description language='German'>Orca Standard Schriften</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(RESOURCEPATH)/fonts/Default</local>

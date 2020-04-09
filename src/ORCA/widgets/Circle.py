@@ -86,7 +86,7 @@ class cWidgetCircle(cWidgetGeoClass):
         self.fEndAngle:float         = 360.0
         self.oFnPictureNormal        = cFileName(u"")
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         self.oFnPictureNormal           = cFileName("").ImportFullPath(uFnFullName=GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'picturenormal',bMandatory=False,uDefault=u''))
         self.fStartAngle                = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'startangle', bMandatory=False, fDefault=0.0)
         self.fEndAngle                  = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'stopangle',  bMandatory=False, fDefault=0.0)

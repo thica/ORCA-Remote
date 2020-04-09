@@ -118,7 +118,7 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
         self.oFnButtonPictureDisabled:cFileName      = cFileName('')
         self.ClassName:Callable                      = cTouchButton
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet:bool =self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:

@@ -110,7 +110,7 @@ class ORCA_App(App):
         App.__init__(self)
 
         # Don't Move or change
-        self.sVersion="5.0.0"
+        self.sVersion="5.0.1"
         self.sBranch="Edinburgh"
 
         #todo: Remove in release
@@ -463,14 +463,22 @@ class ORCA_App(App):
                 Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=uKey, vDefaultValue='1')
 
             # Getting the lists for skins, definitions and languages
-            Globals.aSkinList          = self.oPathSkinRoot.GetFolderList()
-            Globals.aLanguageList      = Globals.oPathLanguageRoot.GetFolderList()
-            Globals.aDefinitionList    = Globals.oPathDefinitionRoot.GetFolderList()
-            Globals.uSkinName          = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'skin', vDefaultValue=u'ORCA_silver_hires')
-            self.uSoundsName           = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'sounds', vDefaultValue=u'ORCA_default')
-            Globals.uLanguage          = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'language', vDefaultValue=OS_GetLocale())
-            Globals.bShowBorders       = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'showborders', uDefaultValue=u'0')
-            Globals.uDefinitionContext = Globals.uDefinitionName
+            Globals.aSkinList                   = self.oPathSkinRoot.GetFolderList()
+            Globals.aLanguageList               = Globals.oPathLanguageRoot.GetFolderList()
+            Globals.aDefinitionList             = Globals.oPathDefinitionRoot.GetFolderList()
+            Globals.uSkinName                   = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'skin', vDefaultValue=u'ORCA_silver_hires')
+            self.uSoundsName                    = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'sounds', vDefaultValue=u'ORCA_default')
+            Globals.uLanguage                   = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'language', vDefaultValue=OS_GetLocale())
+            Globals.bShowBorders                = Config_GetDefault_Bool(oConfig=oConfig, uSection=u'ORCA', uOption=u'showborders', uDefaultValue=u'0')
+            Globals.uDefinitionContext          = Globals.uDefinitionName
+
+            # this is temporary as some screen animation do not work in the final WINDOwS package (pyinstaller package)
+            uDefaultType:str = "fade"
+            if Globals.uPlatform == "win":
+                uDefaultType = "no"
+
+            Globals.uDefaultTransitionType      = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'defaulttransitiontype', vDefaultValue=uDefaultType)
+            Globals.uDefaultTransitionDirection = Config_GetDefault_Str(oConfig=oConfig, uSection=u'ORCA', uOption=u'defaulttransitiondirection', vDefaultValue="left")
 
             if Globals.uDefinitionName == 'setup':
                 Logger.setLevel(logging.DEBUG)

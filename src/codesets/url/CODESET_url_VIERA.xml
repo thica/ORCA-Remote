@@ -9,8 +9,8 @@
       <description language='English'>LAN Control for Panasonic Viera TVs</description>
       <description language='German'>LAN Steuerung für Panasonic Viera TVs</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_VIERA.xml</local>

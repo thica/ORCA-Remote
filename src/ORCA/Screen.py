@@ -268,7 +268,7 @@ class cTheScreen(EventDispatcher):
         self.uCurrentEffectDirection = uDirection
 
         try:
-            if ToUnicode(type(self.oRootSM.transition)).endswith(u'SlideTransition\'>'):
+            if ToUnicode(type(self.oRootSM.transition)).endswith(u'SlideTransition\'>') or True:
                 if uDirection!=u'':
                     self.oRootSM.transition.direction=uDirection
             return True

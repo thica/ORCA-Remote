@@ -10,8 +10,8 @@
       <description language='English'>WDTV Live Control using Webserver/URL (incomplete)</description>
       <description language='German'>WDTV Live Control über Webserver/URL (nicht komplett)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <skip>1</skip>
       <sources>
         <source>

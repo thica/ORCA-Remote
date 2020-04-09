@@ -10,6 +10,6 @@
 # cp -L -f -R  "${SOURCEDIR}/src/scripts" "${TARGETDIR}/scriptstmp"
 # cp -L -f -R  "${SOURCEDIR}/src/scripts" "${TARGETDIR}"
 
-mkdir "${TARGETDIR}/Platform"
-# cp -L -f -R  "${SOURCEDIR}/src/ORCA/utils/Platform" "${TARGETDIR}/Platform"
-cp -L -f -R  "${SOURCEDIR}/src/ORCA/utils/Platform" "${TARGETDIR}"
+# mkdir "${TARGETDIR}/Platform"
+## cp -L -f -R  "${SOURCEDIR}/src/ORCA/utils/Platform" "${TARGETDIR}/Platform"
+# cp -L -f -R  "${SOURCEDIR}/src/ORCA/utils/Platform" "${TARGETDIR}"

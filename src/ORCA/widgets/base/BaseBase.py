@@ -46,6 +46,7 @@ class cWidgetBaseBase:
     def __init__(self,**kwargs):
 
         self._bEnabled:bool                             = True
+        self._bIsCreated:bool                           = False
         self._uName:str                                 = u'noname'
         self._uAnchorName: str                          = u''
         self._eWidgetType:eWidgetType                   = eWidgetType.NoWidget
@@ -76,6 +77,7 @@ class cWidgetBaseBase:
         self._oParent:Union[Widget,None]                = None
         self._oParentScreenPage:Union[cScreenPage,None] = None
 
+    bIsCreated:bool          = property(lambda self: self._bIsCreated,     lambda self, value: setattr(self, '_bIsCreated', value))
     bIsEnabled:bool          = property(lambda self: self._bEnabled,       lambda self, value: setattr(self, '_bEnabled',value))
     uName:str                = property(lambda self: self._uName,          lambda self, value: setattr(self, '_uName',value))
     uAnchorName:str          = property(lambda self: self._uAnchorName,    lambda self, value: setattr(self, '_uAnchorName',value))

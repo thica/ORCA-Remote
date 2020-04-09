@@ -10,8 +10,8 @@
       <description language='English'>CEC Control using Telnet for the RPI</description>
       <description language='German'>CEC Steuerung über Telnet für den RPI</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

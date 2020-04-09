@@ -88,8 +88,8 @@
       <description language='English'>Philips Hue Light Control via LAN conrol</description>
       <description language='German'>Philips Hue Lich Fernbedienung über LAN</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/philips hue</local>

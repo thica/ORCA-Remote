@@ -48,8 +48,8 @@ import ORCA.Globals as Globals
       <description language='English'>Additional Widget to record gestures</description>
       <description language='German'>Zusätzliches Widgets um Gesten aufzuzeichnen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -148,7 +148,7 @@ class cWidgetGestureRecorder(cWidgetBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 

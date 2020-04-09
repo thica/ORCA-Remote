@@ -6,8 +6,8 @@
             <description language="English">MCE power on command using IR</description>
             <description language="German">MCE power on Befehl über IR</description>
             <author>Carsten Thielepape</author>
-            <version>5.0.0</version>
-            <minorcaversion>5.0.0</minorcaversion>
+            <version>5.0.1</version>
+            <minorcaversion>5.0.1</minorcaversion>
             <sources>
                 <source>
                     <local>$var(APPLICATIONPATH)/codesets/infrared_ccf/CODESET_infrared_ccf_MCE.xml</local>

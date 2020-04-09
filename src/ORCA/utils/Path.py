@@ -81,7 +81,7 @@ class cPath:
 
         if Logger.level==logging.DEBUG:
             if "." in self.uRaw[-4:]:
-                LogError(uMsg="do not pass full filenames to a path:"+self.uRaw, bTrackStack=True)
+                LogError(uMsg="do not pass full filenames to a path | "+self.uRaw, bTrackStack=True)
 
         self.Normalize()
 

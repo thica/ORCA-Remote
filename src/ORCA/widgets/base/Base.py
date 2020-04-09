@@ -49,6 +49,9 @@ from typing                            import Any
 
 from xml.etree.ElementTree             import Element
 
+import random
+import string
+
 from kivy.logger                       import Logger
 from kivy.metrics                      import dp,sp
 from kivy.uix.layout                   import Layout
@@ -85,6 +88,7 @@ __all__ = ['cWidgetBase']
 
 oLastWidget:Union[cWidgetBase,None]     = None
 oLastWidgetSave:Union[cWidgetBase,None] = None
+uContainerContext:str                   = u''
 
 class cWidgetBase(cWidgetBaseBase):
     # Base Class for all ORCA widgets
@@ -212,6 +216,9 @@ class cWidgetBase(cWidgetBaseBase):
         iAnchorHeight:int
         bApplyWidth:bool
         fVar:float
+        i:int
+
+        global uContainerContext
 
         try:
             global oLastWidget
@@ -226,7 +233,7 @@ class cWidgetBase(cWidgetBaseBase):
 
             self.oDef               = oDef
             self.uDefinitionContext = uDefinitionContext
-            self.uName               = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'NoName')
+            self.uName              = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'NoName')
             self.oParentScreenPage  = oParentScreenPage
             self.uPageName          = self.oParentScreenPage.uPageName
 
@@ -271,6 +278,17 @@ class cWidgetBase(cWidgetBaseBase):
 
             self.bIsEnabled         = GetXMLBoolAttribute(oXMLNode=oXMLNode, uTag=u'enabled',        bMandatory=False,  bDefault=True)
             self.uContainer         = GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'container',      bMandatory=False,  vDefault=u'')
+
+            if (self.eWidgetType == eWidgetType.ScrollContainer or self.eWidgetType == eWidgetType.ScrollList) and self.uContainer == u'':
+                self.uContainer = ''.join(random.choice(string.ascii_lowercase)+str(i) for i in range(20))
+
+
+            if self.uName == "Anchor2 Inner":
+                i=1
+
+            if self.uContainer==u'':
+                self.uContainer=uContainerContext
+
             self.uBackGroundColor   = GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'backgroundcolor',bMandatory=False,  vDefault=u'#00000000')
             self.aBackGroundColor   = GetColorFromHex(ReplaceVars(self.uBackGroundColor))
 
@@ -325,7 +343,7 @@ class cWidgetBase(cWidgetBaseBase):
 
             if not fPercentage == -1.0:
                 iPosX = self.iAnchorPosX + ((fPercentage / 100) * self.iAnchorWidth) - (self.iWidth * (fPercentage / 100))
-        return iPosX
+        return int(iPosX)
 
     def CalculatePosY(self,uPosY:str) -> int:
         fPercentage:float = -1.0
@@ -483,7 +501,11 @@ class cWidgetBase(cWidgetBaseBase):
                     LogError(uMsg=u'Unknown Operator:'+uOperator)
         return ToInt(fRetVal)
 
+
     def CreateBase(self,Parent:Widget,Class:Union[Callable,str]) -> bool:
+
+        if self.bIsCreated:
+            return True
 
         try:
             self.oParent        = Parent
@@ -518,6 +540,7 @@ class cWidgetBase(cWidgetBaseBase):
                 self.oObject.oOrcaWidget = self
                 self.FlipBorder()
 
+            self.bIsCreated = True
             return True
         except Exception as e:
             LogError(uMsg=u'Can''t create widget:'+self.uName,oException=e)
@@ -598,7 +621,12 @@ class cWidgetBase(cWidgetBaseBase):
         Logger.error(u'WidgetBase: Create called on base, not allowed [%s]' % self.uName)
         return False
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Dummy, needs to be overridden and not called """
         Logger.error(u'WidgetBase: Create called on base, not allowed [%s]' % self.uName)
         return False
+
+    @staticmethod
+    def SetContainer(*,uContainer:str):
+        global uContainerContext
+        uContainerContext = uContainer

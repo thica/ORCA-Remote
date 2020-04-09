@@ -210,7 +210,7 @@ class cFileName:
 
     def Size(self) ->int:
         """
-        Returns the size of a files
+        Returns the size of a file
         :return: File size of -1 on error
         """
 
@@ -221,4 +221,15 @@ class cFileName:
             return -1
 
 
+    def Extension(self) -> str:
+        """
+        Returns the extension of a file (with dot)
+        :return: extension as str
+        """
+
+        try:
+            return os.path.splitext(self.string)[1]
+        except Exception as e:
+            LogError (uMsg=u'can\'t get file extension [%s]' % self.string, oException=e)
+            return ""
 

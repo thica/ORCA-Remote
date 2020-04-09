@@ -47,8 +47,8 @@ from ORCA.actions.ReturnCode                import eReturnCode
       <description language='English'>Interface to send telnet commands</description>
       <description language='German'>Interface um Telnet Kommandos zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/telnet</local>

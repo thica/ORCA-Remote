@@ -20,8 +20,8 @@
       <description language='English'>First definition to show, if no default definition has been chosen</description>
       <description language='German'>Erste Definition bei Programmstart, falls keine andere Definition gewählt wurde</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/setup</local>

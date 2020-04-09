@@ -44,8 +44,8 @@ from ORCA.actions.ReturnCode                    import eReturnCode
       <description language='English'>Sends commands via the Websocket protocol</description>
       <description language='German'>Sendet Befehle via dem Websocket protokoll</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

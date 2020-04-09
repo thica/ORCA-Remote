@@ -125,7 +125,7 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
         self.fDataRange:float                       = 100.0
         self.iRoundPos:int                          = 0
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:

@@ -11,8 +11,8 @@
       <description language='English'>DVBViewer Control using Eventghost / Plugin-Events</description>
       <description language='German'>DVBViewer Kontrolle über Eventghost / Plugin-Events</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/remoteghost/CODESET_remoteghost_DVBVIEWER_plugin.xml</local>

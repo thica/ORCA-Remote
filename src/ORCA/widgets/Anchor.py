@@ -70,7 +70,7 @@ class cWidgetAnchor(cWidgetBase):
         self.AddArg('background_color', [1.0, 0.0, 1.0, 1.0])
         self.AddArg('linewidth', "2")
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads from Xml """
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage, uAnchor)
 

@@ -4,16 +4,17 @@ Website: https://www.picons.eu/
 Use the hardlinks 220x132
 use: 
 
-dark.on.reflection
+dark.on.reflection: snp-full.220x132-190x102.dark.on.reflection_yyyy-mm-dd--hh-mm-ss.hardlink.tar.xz
 light.on.reflection
-light.on.transparent
-
-download
-Extract all to folder resources/tvlogos-src
+dark.on.transparent
 
 download:
-srp.index.txt
-copy to resources
+srp.index.txt from the github (https://github.com/picons/picons/tree/master/build-source) -> rename srp.index to srp.index.txt
+https://raw.githubusercontent.com/picons/picons/master/build-source/srp.index
+
+Copy all 4 files to c:/tvlogos-src (windows) or ~/tvlogos-src (linux)
+Run the Create TV Logos scripts from ORCA
+
  
 
 

@@ -78,9 +78,9 @@ class cWidgetTextInput(cWidgetTextField):
         super().__init__()
         self.uDestVar:str       = u''
         self.oInputKeyboard = None
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        bRet:bool = super(cWidgetTextInput, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
+        bRet:bool = super(cWidgetTextInput, self).InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=uAnchor)
         self.uDestVar = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'destvar', bMandatory=False,vDefault=u'inputstring')
         uTmp:str = GetVar(uVarName = self.uDestVar)
         if uTmp:

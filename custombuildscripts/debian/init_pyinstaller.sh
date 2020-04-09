@@ -4,32 +4,33 @@ set +x
 
 function ECHO ()
 {
-  echo "$1"
+  echo -e "$1"
   echo "$1" >> "$LOGFILE"
 }
 
 function APT_INSTALL ()
 {
-  ECHO "Install (APT) $1$2"
+  ECHO "\033[1;37mInstall (apt) $1$2  \033[s "
   sudo apt install -y $1$2 >> "$LOGFILE" 2>>"$LOGFILE"
   if [ $? -eq 0 ]; then
-    ECHO "OK"
+    ECHO '\033[u \033[1;32m -> OK\033[1;37m'
   else
-    ECHO "FAIL"
+    ECHO '\033[u \033[1;31m -> FAIL\033[1;37m'
     exit 1
   fi
 }
 
 function PIP_INSTALL ()
 {
-  ECHO "Install (PIP3) $1$2"
-  python3 -m pip install $3 $1$2  >> "$LOGFILE" 2>>"$LOGFILE"
+  ECHO "Install (pip3) $1$2 \033[s"
+  pip3 install $3 $1$2  >> "$LOGFILE" 2>>"$LOGFILE"
   if [ $? -eq 0 ]; then
-    ECHO "OK" >> "$LOGFILE"
+    ECHO '\033[u \033[1;32m -> OK\033[1;37m'
   else
-    ECHO "FAIL"
+    ECHO '\033[u \033[1;31m -> FAIL\033[1;37m'
     exit 1
   fi
+
 }
 
 function PIP2_INSTALL ()
@@ -94,10 +95,9 @@ then
     mkdir "${BUILDDIR}" >> "$LOGFILE"
 fi
 
+
 ECHO "Copy sources"
 cp -R /media/Master/. "${SOURCEDIR}" >> "$LOGFILE"
-# rsync -vazCq  /media/Master/. "${SOURCEDIR}" >> $LOGFILE
-
 
 ECHO "Run custom script to prepare sources"
 # 'Prepare/Copy sources (Make the script excutable)'
@@ -174,7 +174,7 @@ then
 fi
 
 ECHO "Remove any old Build"
-rm -r "${BUILDDIR}/dist/dist" -y >> "$LOGFILE" >/dev/null 2>/dev/null
+rm -r "${BUILDDIR}/dist" -y >> "$LOGFILE" >/dev/null 2>/dev/null
 
 ECHO "Copy debian.spec file to target folder (root)"
 cp "${SOURCEDIR}/custombuildscripts/debian/debian.spec" "${BUILDDIR}/debian.spec" >> "$LOGFILE"
@@ -189,16 +189,17 @@ python3 -c "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycac
 # read -p "Press [Enter] key to start backup..."
 
 
+
 ECHO Run PyInstaller
 cd "${BUILDDIR}"
-python3 -B -m PyInstaller --clean --name KivyAppDebian debian.spec
+python3 -B -m PyInstaller --clean --paths ~/.local/lib/python3.7/site-packages --icon="${SOURCEDIR}/custombuildscripts/debian/OrcaLogo.ico" debian.spec
 
 # read -p "Press [Enter] key to start backup..."
 
 
 # find the zip
 ECHO "Searching for binary"
-export BUILD_ZIP=${BUILDDIR}/dist/ORCA/ORCA_DEBIAN"
+export BUILD_ZIP="${BUILDDIR}"
 ECHO "Found DEST: $BUILD_ZIP"
 
 # 'Prepare/Copy Binray (Make the script excutable)'
@@ -206,8 +207,5 @@ ECHO "Finalize Binary"
 chmod +x "${SOURCEDIR}/custombuildscripts/debian/prepare_binaries.sh"
 . "${SOURCEDIR}/custombuildscripts/debian/prepare_binaries.sh"
 
-ECHO "Done/Finished"
-echo "Done/Finished" >> "$LOGFILE"
 
-
-
+ECHO "Done Finished"

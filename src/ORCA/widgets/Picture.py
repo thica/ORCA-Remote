@@ -83,7 +83,7 @@ class cWidgetPicture(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         # we dont use a cFileName object by purpose, as we might need to handle vars and skin reference
         self.uFnPictureNormalVar:str            = ""
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
 
         """ Reads further Widget attributes from a xml node """
         bRet:bool = self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)

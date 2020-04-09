@@ -97,8 +97,8 @@ class cTheScreenWithInit(cTheScreen):
     def LogToSplashScreen(self,*,uText:str,uPercentage:str='') -> None:
         """ Logs a main text message to the splash screen """
         self.uSplashText                        = uText
-        self.oSplashLogger.size=(Globals.iAppWidth*0.95,Globals.iAppHeight/3)
-        self.oSplashLogger.text_size=(Globals.iAppWidth*0.95,None)
+        self.oSplashLogger.size                 = (Globals.iAppWidth*0.95,Globals.iAppHeight/3)
+        self.oSplashLogger.text_size            = (Globals.iAppWidth*0.95,None)
         self.oSplashLogger.text                 = ReplaceVars(uText)
         if uPercentage!='':
             fPercentage:float
@@ -362,6 +362,9 @@ class cTheScreenWithInit(cTheScreen):
         SetVar(uVarName=u'IP_SUBNETV6',           oVarValue=Globals.uIPSubNetV6)
         SetVar(uVarName=u'MAC_ADDRESS_COLON',     oVarValue=Globals.uMACAddressColon)
         SetVar(uVarName=u'MAC_ADDRESS_DASH',      oVarValue=Globals.uMACAddressDash)
+        SetVar(uVarName=u'DEFAULTTRANSITIONTYPE', oVarValue=Globals.uDefaultTransitionType)
+        SetVar(uVarName=u'DEFAULTTRANSITIONDIRECTION', oVarValue=Globals.uDefaultTransitionDirection)
+
         SetVar(uVarName=u'DEFINITIONSTARTPAGE',   oVarValue=u'Page_Settings')
         SetVar(uVarName=u'INTERFACENAMES',        oVarValue=Globals.oInterFaces.uInterFaceListSettingString)
         SetVar(uVarName=u'WAITFORROTATION',       oVarValue=u'0')

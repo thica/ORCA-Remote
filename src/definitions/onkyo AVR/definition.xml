@@ -96,8 +96,8 @@
       <description language='English'>LAN Remote Control for ONKYO Receiver</description>
       <description language='German'>LAN Fernbedienung für ONKYO Receiver</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/onkyo AVR</local>

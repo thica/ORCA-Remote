@@ -76,7 +76,7 @@ class cWidgetScrollList(cWidgetPicture):
     |fixed: needs to be "SCROLLCONTAINER". Capital letters!
     |-
     |container
-    |A string, which identifies the container AND all elements to place into the row of the container
+    |A string, which identifies the container AND all elements to place into the row of the container. If blank, a random value is used
     |-
     |rowheight
     |The rowheigth of a full line within the container: The line definition (all widgets in a line) must fir the this number
@@ -94,8 +94,14 @@ class cWidgetScrollList(cWidgetPicture):
         </element>
       </elements>
     </element>
+    </syntaxhighlight></div>
+
+    A second example with automated container assignment
+    <div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
 
     </syntaxhighlight></div>
+
+
     WikiDoc:End
     """
 
@@ -112,7 +118,7 @@ class cWidgetScrollList(cWidgetPicture):
         self.aChilds:List[cWidgetBase]              = []
 
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         self.uRowHeightInit = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag="rowheight",bMandatory=True,vDefault="%20")
         return super().InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage ,uAnchor=uAnchor)
@@ -184,12 +190,15 @@ class cWidgetScrollList(cWidgetPicture):
         yPos:int
         iAdd:int
         uVarIndex:str
+        dTmpdActionPars:Dict = {}
 
         for u in range(self.iNumRows):
             iIndex = 0
             uVarIndex = u'' # by purpose, we don't set it by child, we use the last known index, in case we have widgets without vars eg Buttons
             for oChild in aChilds:
-                dTmpdActionPars         = CopyDict(oChild.dActionPars)
+
+                if hasattr(oChild,"dActionPars"):
+                    dTmpdActionPars         = CopyDict(oChild.dActionPars)
                 oTmpChild               = copy(oChild)
                 oTmpChild.uName          = "%s[%s]" % (oTmpChild.uName, str(u))
                 oTmpChild.iHeightInit   = self.iRowHeight * (oChild.iHeightInit/oChild.iAnchorHeight)

@@ -21,15 +21,16 @@
             <configuration name ="STREAM_Bunny">
                 <setting name="widgetname" parameter="VIDEO 1"/>
                 <setting name="streamyt" parameter="rtsp://r5---sn-4g57kued.c.youtube.com/CiILENy73wIaGQm-z8Iok64r_hMYDSANFEgGUgZ2aWRlb3MM/0/0/0/video.3gp"/>
-                <setting name="stream" parameter="rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"/>
+                <setting name="stream2" parameter="rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"/>
                 <setting name="stream1" parameter="https://pdlvimeocdn-a.akamaihd.net/83267/098/358148511.mp4?token2=1441642950_f6b3697799c889e5ba9ff72d516ffee9&amp;aksessionid=4baeebc43e7f5b60"/>
+                <setting name="stream" parameter="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov" />
                 <setting name="FNCodeset" parameter="CODESET_orca_video_default.xml"/>
                 <setting name="DisableInterFaceOnError" parameter="0"/>
                 <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
             </configuration>
             <configuration name ="STREAM_RED">
                 <setting name="widgetname" parameter="VIDEO 2"/>
-                <setting name="stream" parameter="http://samples.mplayerhq.hu/V-codecs/h264/interlaced_crop.mp4"/>
+                <setting name="stream" parameter="rtsp://freja.hiof.no:1935/rtplive/definst/hessdalen03.stream"/>
                 <setting name="FNCodeset" parameter="CODESET_orca_video_default.xml"/>
                 <setting name="DisableInterFaceOnError" parameter="0"/>
                 <setting name="DisconnectInterFaceOnSleep" parameter="1"/>
@@ -47,8 +48,8 @@
       <description language='English'>Showcase definition to provide an overview of available screen elements</description>
       <description language='German'>Showcase Definition, um einen Überblick über die verfügbaren Bildschirmelemente zu geben</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/showcase</local>

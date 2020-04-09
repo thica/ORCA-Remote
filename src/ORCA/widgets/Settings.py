@@ -29,6 +29,7 @@ from functools                      import partial
 from kivy.uix.settings              import Settings
 from kivy.uix.settings              import SettingsWithSidebar
 from kivy.uix.settings              import SettingsWithSpinner
+from kivy.uix.spinner               import Spinner
 from kivy.clock                     import Clock
 from kivy.logger                    import Logger
 from ORCA.settings.SettingChanges   import OrcaConfigParser_On_Setting_Change
@@ -96,10 +97,10 @@ class cWidgetSettings(cWidgetFileViewer):
         self.aSettingObjects:Dict[str,Settings] = {}
         self.oReAssignObject                    = None
 
-    def InitWidgetFromXml(self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+    def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         self.uSettingsType  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'settingstype', bMandatory=False,vDefault=u'interface')
         self.oXMLNode       = oXMLNode
-        bRet=super(cWidgetSettings, self).InitWidgetFromXml(oXMLNode,oParentScreenPage, uAnchor)
+        bRet=super(cWidgetSettings, self).InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=uAnchor)
         if bRet:
             bRet = self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         return bRet
@@ -119,6 +120,8 @@ class cWidgetSettings(cWidgetFileViewer):
         uConfigName:str
         oInterFace:cBaseInterFace
         oScript:cBaseScript
+        uNewMenuName:str = ReplaceVars("$lvar(579)")
+        uOldMenuName:str = "Kivy"
 
         try:
             if self.uSettingsType==u'powerstati':
@@ -172,6 +175,16 @@ class cWidgetSettings(cWidgetFileViewer):
             if self.uSettingsType==u'orca':
                 if self.CreateBase(Parent=oParent, Class=''):
                     self.oObject = Globals.oApp.create_settings()
+
+                    # Replace the old "Kivy" Menu text by "System"
+                    oMenu = self.oObject.interface.menu
+                    for oChildren in oMenu.children:
+                        if isinstance(oChildren,Spinner):
+                            for n, uValue in enumerate(oChildren.values):
+                                if uValue == uOldMenuName:
+                                    oChildren.values[n] = uNewMenuName
+                                    oMenu.panel_names[uNewMenuName] = oMenu.panel_names.pop(uOldMenuName)
+
                     Globals.oApp._app_settings = self.oObject
                     self.oObject.oOrcaWidget=   self
                     self.oObject.size=oParent.size

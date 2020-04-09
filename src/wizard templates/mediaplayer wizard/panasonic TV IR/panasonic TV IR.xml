@@ -6,8 +6,8 @@
       <description language='English'>IR Remote Control for Panasonic TVs (for mediaplayer template)</description>
       <description language='German'>IR Fernbedienung für Panasonic TVs (Für Mediaplayer Template)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/panasonic TV IR</local>

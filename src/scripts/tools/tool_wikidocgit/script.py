@@ -39,8 +39,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to create the ORCA Wikipedia for GIT (internal Tool)</description>
       <description language='German'>Tool um das ORCA Wikipedia zu schreiben für GIT (internes Tool)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

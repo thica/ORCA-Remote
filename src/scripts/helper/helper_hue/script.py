@@ -47,8 +47,8 @@ import ORCA.Globals as Globals
       <description language='English'>HUE Helper Script</description>
       <description language='German'>HUE Hilfs - Skript</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/helper/helper_hue</local>

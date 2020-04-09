@@ -103,7 +103,7 @@ class cResultParser:
         if uParseResultOption == u'no' or uParseResultOption == u'':
             return u'',u''
 
-        if uParseResultOption != u'store' and uGetVar=="":
+        if uParseResultOption != u'store' and uParseResultOption != u'tokenize' and uGetVar=="":
             return u'',u''
 
         try:

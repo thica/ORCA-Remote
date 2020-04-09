@@ -6,8 +6,8 @@
       <description language='English'>TV Logos Dark on transparent background (50 MB!)</description>
       <description language='German'>TV Logos Dunkel auf transparentem Hintergrund  (50 MB!)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.0</version>
-      <minorcaversion>5.0.0</minorcaversion>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
       <sources>
         <source>
           <local>$var(RESOURCEPATH)/tvlogos/dark.on.transparent</local>
