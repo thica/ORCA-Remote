@@ -98,10 +98,11 @@ class cScreenPage:
         #indexed array of widgets
         self.dWidgets:defaultdict                              = defaultdict(list)
         #List of all widgets to remove after creation
-        self.aErrorWidgets: List[cWidgetBase] = []
+        self.aErrorWidgets: List[cWidgetBase]                  = []
         #List of all widgets to add after creation
-        self.aAddWidgets: List[cWidgetBase] = []
-
+        self.aAddWidgets: List[cWidgetBase]                    = []
+        #List of all Widgets grouped by Anchor, we be created on request by enablewidget
+        self.dAnchorWidgets:Dict[str,List[cWidgetBase]]        = {}
 
         self.iESCPressCount:int                                = 0
 
@@ -347,6 +348,7 @@ class cScreenPage:
         oTmpWidget:cWidgetBase = oClass()
         if oTmpWidget.InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=self, uAnchor=uAnchor):
             self.aWidgets.append(oTmpWidget)
+            self.dWidgets[oTmpWidget.uName].append(oTmpWidget)
             oTmpWidget.SetContainer(uContainer=oTmpWidget.uContainer)
             self._AddElements(oXMLNode=oXMLNode, uAnchor=uAnchor)
             oTmpWidget.SetContainer(uContainer="")
@@ -486,4 +488,14 @@ class cScreenPage:
             self.iESCPressCount = 0
 
         return True
+
+    def CreateAnchorWidgets(self):
+        oWidget:cWidgetBase
+        aAnchorWidgets:List[cWidgetBase]
+        for oWidget in self.aWidgets:
+            uAnchorName = oWidget.uAnchorName
+            if uAnchorName!="":
+                if self.dAnchorWidgets.get(uAnchorName) is None:
+                    self.dAnchorWidgets[uAnchorName] = []
+                self.dAnchorWidgets[uAnchorName].append(oWidget)
 

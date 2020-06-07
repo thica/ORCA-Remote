@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <action name="$dvar(definition_alias_gardena)_GetIrrigationValues">
+
+        <action name="Hide all infos"  string="call $dvar(definition_alias_gardena)_HideAllInfos" />
+        <action name="Enable gateway infos" string="setwidgetattribute" widgetname="Anchor Info Frame Irrigation"  attributename="enable" attributevalue="1"/>
+
+        <!-- Status -->
+        <action name="We need the status of the device" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_STATUS_VALUERAW=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_device_state" />
+        <action name="Get the value #2"      string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_STATUS_VALUERAW" />
+        <action name="Compile the translation var" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_STATUS_VALUE=GardenaStatus[$var($dvar(definition_alias_gardena)_IRRIGATION_STATUS_VALUERAW)]" />
+        <action name="Get the translation"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_STATUS_VALUE" />
+
+        <!-- Connection status -->
+        <action name="We need the index of the infos" string="setvar $dvar(definition_alias_gardena)_searchability=device_info" />
+        <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+        <action name="We need the index of the connection status" string="setvar $dvar(definition_alias_gardena)_searchproperty=connection_status" />
+        <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+        <action name="Get the value (connection status)" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_CONNECTION_STATUS_VALUERAW=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+        <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_CONNECTION_STATUS_VALUERAW" />
+        <action name="Compile the translation var" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_CONNECTION_STATUS_VALUE=GardenaStatus[$var($dvar(definition_alias_gardena)_IRRIGATION_CONNECTION_STATUS_VALUERAW)]" />
+        <action name="Get the translation"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_CONNECTION_STATUS_VALUE" />
+
+        <!-- Valves -->
+        <action name="We need the index of the valves" string="setvar $dvar(definition_alias_gardena)_searchsetting=valve_names" />
+        <action name="Find it" string="call $dvar(definition_alias_gardena)_FindSettingsIndex" />
+
+        <action name="Get the name (valve1)"  string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_NAME_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[0]_name" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_NAME_VALUE" />
+        <action name="Get the index (valve1)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[0]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_ID_VALUE" />
+        <action name="Get the index (valve1)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_NAME_VALUE)]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[0]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_NAME_VALUE)]_ID_VALUE" />
+        <action name="Get the name (valve2)"  string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_NAME_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[1]_name" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_NAME_VALUE" />
+        <action name="Get the index (valve2)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[1]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_ID_VALUE" />
+        <action name="Get the index (valve2)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_NAME_VALUE)]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[1]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_NAME_VALUE)]_ID_VALUE" />
+        <action name="Get the name (valve3)"  string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_NAME_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[2]_name" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_NAME_VALUE" />
+        <action name="Get the index (valve3)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[2]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_ID_VALUE" />
+        <action name="Get the index (valve3)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_NAME_VALUE)]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[2]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_NAME_VALUE)]_ID_VALUE" />
+        <action name="Get the name (valve4)"  string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_NAME_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[3]_name" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_NAME_VALUE" />
+        <action name="Get the index (valve4)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[3]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_ID_VALUE" />
+        <action name="Get the index (valve4)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_NAME_VALUE)]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[3]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_NAME_VALUE)]_ID_VALUE" />
+        <action name="Get the name (valve5)"  string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_NAME_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[4]_name" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_NAME_VALUE" />
+        <action name="Get the index (valve5)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[4]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_ID_VALUE" />
+        <action name="Get the index (valve5)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_NAME_VALUE)]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[4]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_NAME_VALUE)]_ID_VALUE" />
+        <action name="Get the name (valve6)"  string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_NAME_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[5]_name" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_NAME_VALUE" />
+        <action name="Get the index (valve6)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[5]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_ID_VALUE" />
+        <action name="Get the index (valve6)" string=                                "setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_NAME_VALUE)]_ID_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[$var($dvar(definition_alias_gardena)_settingsindex)]_value[5]_id" />
+        <action name="Get the value #2"       string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_NAME_VALUE)]_ID_VALUE" />
+
+
+        <!-- Scheduling -->
+        <action name="We need the index of the scheduling" string="setvar $dvar(definition_alias_gardena)_searchability=scheduling" />
+        <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+        <action name="Get the scheduled next start valve 1"    string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_SCHEDULED_NEXTSTART=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[0]_value" />
+        <action name="Get the scheduled next start valve 1 #2" string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_SCHEDULED_NEXTSTART" />
+        <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_SCHEDULED_NEXTSTART" parameter1="#DT%Y-%m-%dT%H:%MZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_SCHEDULED_NEXTSTART)!=none"/>
+        <action name="Reset Time"   string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_SCHEDULED_NEXTSTART=" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_SCHEDULED_NEXTSTART)==none"/>
+
+        <action name="Get the scheduled next start valve 2"    string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_SCHEDULED_NEXTSTART=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[1]_value" />
+        <action name="Get the scheduled next start valve 2 #2" string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_SCHEDULED_NEXTSTART" />
+        <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_SCHEDULED_NEXTSTART" parameter1="#DT%Y-%m-%dT%H:%MZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_SCHEDULED_NEXTSTART)!=none"/>
+        <action name="Reset Time"   string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_SCHEDULED_NEXTSTART=" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_SCHEDULED_NEXTSTART)==none"/>
+
+        <action name="Get the scheduled next start valve 1"    string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_SCHEDULED_NEXTSTART=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[2]_value" />
+        <action name="Get the scheduled next start valve 1 #2" string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_SCHEDULED_NEXTSTART" />
+        <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_SCHEDULED_NEXTSTART" parameter1="#DT%Y-%m-%dT%H:%MZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_SCHEDULED_NEXTSTART)!=none"/>
+        <action name="Reset Time"   string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_SCHEDULED_NEXTSTART=" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_SCHEDULED_NEXTSTART)==none"/>
+
+        <action name="Get the scheduled next start valve 1"    string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_SCHEDULED_NEXTSTART=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[3]_value" />
+        <action name="Get the scheduled next start valve 1 #2" string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_SCHEDULED_NEXTSTART" />
+        <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_SCHEDULED_NEXTSTART" parameter1="#DT%Y-%m-%dT%H:%MZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_SCHEDULED_NEXTSTART)!=none"/>
+        <action name="Reset Time"   string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_SCHEDULED_NEXTSTART=" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_SCHEDULED_NEXTSTART)==none"/>
+
+        <action name="Get the scheduled next start valve 1"    string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_SCHEDULED_NEXTSTART=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[4]_value" />
+        <action name="Get the scheduled next start valve 1 #2" string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_SCHEDULED_NEXTSTART" />
+        <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_SCHEDULED_NEXTSTART" parameter1="#DT%Y-%m-%dT%H:%MZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_SCHEDULED_NEXTSTART)!=none"/>
+        <action name="Reset Time"   string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_SCHEDULED_NEXTSTART=" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_SCHEDULED_NEXTSTART)==none"/>
+
+        <action name="Get the scheduled next start valve 1"    string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_SCHEDULED_NEXTSTART=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[5]_value" />
+        <action name="Get the scheduled next start valve 1 #2" string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_SCHEDULED_NEXTSTART" />
+        <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_SCHEDULED_NEXTSTART" parameter1="#DT%Y-%m-%dT%H:%MZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_SCHEDULED_NEXTSTART)!=none"/>
+        <action name="Reset Time"   string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_SCHEDULED_NEXTSTART=" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_SCHEDULED_NEXTSTART)==none"/>
+
+        <!-- Update the dropdown of valves -->
+        <action name="Set the array" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_NAME[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_ID_VALUE)]=$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_NAME_VALUE)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_NAME_VALUE)!=" />
+        <action name="Set the array" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_NAME[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_ID_VALUE)]=$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_NAME_VALUE)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_NAME_VALUE)!="/>
+        <action name="Set the array" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_NAME[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_ID_VALUE)]=$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_NAME_VALUE)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_NAME_VALUE)!="/>
+        <action name="Set the array" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_NAME[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_ID_VALUE)]=$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_NAME_VALUE)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_NAME_VALUE)!="/>
+        <action name="Set the array" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_NAME[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_ID_VALUE)]=$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_NAME_VALUE)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_NAME_VALUE)!="/>
+        <action name="Set the array" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_NAME[$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_ID_VALUE)]=$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_NAME_VALUE)" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_NAME_VALUE)!="/>
+        <action name="remove the default value" string="modifyvar" operator="delete" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVES_NAME[0]" />
+
+    </action>
+
+    <action name="$dvar(definition_alias_gardena)_InitVars_Irrigation">
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_STATUS_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_STATUS_TIMESTAMP=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_CONNECTION_STATUS_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_CONNECTION_STATUS_TIMESTAMP=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_NAME_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_NAME_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_NAME_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_NAME_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_NAME_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_NAME_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_SCHEDULED_NEXTSTART=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[0]_SCHEDULED_END=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_SCHEDULED_NEXTSTART=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[1]_SCHEDULED_END=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_SCHEDULED_NEXTSTART=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[2]_SCHEDULED_END=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_SCHEDULED_NEXTSTART=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[3]_SCHEDULED_END=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_SCHEDULED_NEXTSTART=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[4]_SCHEDULED_END=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_SCHEDULED_NEXTSTART=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVE[5]_SCHEDULED_END=" />
+
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_SETMINUTES=20"/>
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_CURRENT_ID=" />
+        <action name="Set Var Link Irrigation Minutes" string="addvarlink" varname="$dvar(definition_alias_gardena)_IRRIGATION_SETMINUTES" linktype="widget" widgetname="Text Hours Irrigation" />
+
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_HEADER=$lvar(gardena_10037)" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_NAME[0]=$lvar(5017)" />
+
+
+    </action>
+
+    <action name="$dvar(definition_alias_gardena)_change_valve" >
+        <action name="Sets the Valve ID #1"  string="setvar $dvar(definition_alias_gardena)_IRRIGATION_VALVES_CURRENT_ID=$dvar(definition_alias_gardena)_IRRIGATION_VALVE[$par(DROPDOWNVALUE)]_ID_VALUE" />
+        <action name="Sets the Valve ID #2"  string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_IRRIGATION_VALVES_CURRENT_ID" />
+    </action>
+
+
+    <action name="$dvar(definition_alias_gardena)_Info_Button_Pressed_Irrigation">
+        <action name="Show Dummy Message" string="showquestion" title="Message" message="´Pressed the Info area (Irrigation)" actionyes="dummy"/>
+    </action>
+
+    <action name="$dvar(definition_alias_gardena)_start_valve" >
+        <action name="if" string="if $var($dvar(definition_alias_gardena)_IRRIGATION_VALVES_CURRENT_ID)!=" />
+            <action name="Get time var" string="setvar tmpvar=$var($dvar(definition_alias_gardena)_IRRIGATION_SETMINUTES)" />
+            <action name="Make seconds of minutes" string="modifyvar" varname="tmpvar" operator="multiply" parameter1="60" />
+            <action name="Open Valve"  string="sendcommand irrigation_openvalve" commandparameter='{"valveid":"$var($dvar(definition_alias_gardena)_IRRIGATION_VALVES_CURRENT_ID)", "time_in_seconds":"$var(tmpvar)","deviceid":"$var($dvar(definition_alias_gardena)_DEVICEID)","locationid":"$var($dvar(definition_alias_gardena)_LOCATION_ID)"}'  interface="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)"  />
+            <action name="Refresh data from gateway"  string="call $dvar(definition_alias_gardena)_Update Data" />
+        <action name="endif" string="endif" />
+        <action name="Show Message nothing selected" string="showquestion" title="Message" message="$lvar(gardena_10038)" actionyes="dummy" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVES_CURRENT_ID)=="/>
+
+    </action>
+
+    <action name="$dvar(definition_alias_gardena)_stop_valve" >
+        <action name="if" string="if $var($dvar(definition_alias_gardena)_IRRIGATION_VALVES_CURRENT_ID)!=" />
+            <action name="Close Valve"  string="sendcommand irrigation_closevalve" commandparameter='{"valveid":"$var($dvar(definition_alias_gardena)_IRRIGATION_VALVES_CURRENT_ID)", "deviceid":"$var($dvar(definition_alias_gardena)_DEVICEID)","locationid":"$var($dvar(definition_alias_gardena)_LOCATION_ID)"}'  interface="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)"  />
+        <action name="endif" string="endif" />
+        <action name="Show Message nothing selected" string="showquestion" title="Message" message="$lvar(gardena_10038)" actionyes="dummy" condition="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVES_CURRENT_ID)=="/>
+    </action>
+
+    <action name="$dvar(definition_alias_gardena)_Info_Button_Pressed_Irrigation">
+        <action1 name="Show Dummy Message" string="showquestion" title="Message" message="´Pressed the Info area (Irrigation)" actionyes="dummy"/>
+    </action>
+
+
+</includes>
+

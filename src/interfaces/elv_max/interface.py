@@ -59,7 +59,7 @@ if TYPE_CHECKING:
     from interfaces.elv_max.maxcube.connection  import MaxCubeConnection
     from interfaces.elv_max.maxcube.room        import MaxRoom
 else:
-    sys.path.append((cPath(Globals.oPathInterface + "/elv_max")).string)
+    sys.path.append(str(cPath(Globals.oPathInterface + "/elv_max")))
     # noinspection PyUnresolvedReferences
     from maxcube.cube import MaxCube
     # noinspection PyUnresolvedReferences

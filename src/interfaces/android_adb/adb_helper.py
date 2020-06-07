@@ -63,13 +63,13 @@ class cADB_Helper:
         for oPath in aKeyPathes:
             if oPath.Exists():
                 try:
-                    with open(oPath.string) as f:
+                    with open(str(oPath)) as f:
                         oPriv   = f.read()
                         oSigner = PythonRSASigner('', oPriv)
                         self.aGlobalRSA_KEYS.append(oSigner)
-                        Logger.info("RSA Keyfiles loaded from "+oPath.string)
+                        Logger.info("RSA Keyfiles loaded from "+str(oPath))
                 except Exception as e:
-                    Logger.error("Error Loading RSA Keys from "+oPath.string+" "+str(e))
+                    Logger.error("Error Loading RSA Keys from "+str(oPath)+" "+str(e))
             else:
                 Logger.debug("No RSA Keyfiles at "+oPath)
 

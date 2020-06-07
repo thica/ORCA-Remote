@@ -24,6 +24,9 @@ import traceback
 from kivy.logger    import Logger
 from ORCA.App       import ORCA_App
 
+#  from ORCA.discover_ws import TestWSDiscovery
+#  TestWSDiscovery()
+
 
 ORCA = None
 try:
@@ -35,5 +38,5 @@ except Exception as exception:
     Logger.critical(uMsg)
     uMsg = traceback.format_exc()
     Logger.critical(uMsg)
-    if ORCA:
+    if ORCA is not None:
         ORCA.StopApp()

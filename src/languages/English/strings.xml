@@ -330,6 +330,9 @@
   <string id="755">Discover Script to use for discover</string>
   <string id="760">Re-discover devices</string>
   <string id="761">Re-discover devives used in this definition</string>
+  <string id="800">sec</string>
+  <string id="801">min</string>
+  <string id="802">hour</string>
 
     <!--Button Strings -->
   <string id="1000">Power</string>

@@ -396,7 +396,7 @@ class cEventActionsWidgetControl(cEventActionBase):
                     if oWidget.eWidgetType == eWidgetType.Video:
                         bRet = cast(cWidgetVideo,oWidget).SetFileName(uAttributeValue)
                 elif uAttributeName==u'enable':
-                    bRet =  oWidget.EnableWidget(uAttributeValue==u'1')
+                    bRet =  oWidget.EnableWidget(bEnable=(uAttributeValue==u'1'))
                 elif uAttributeName==u'remove':
                     bRet =  oWidget.oParentScreenPage.RemoveWidget(oWidget=oWidget)
                 elif uAttributeName==u'setfocus':

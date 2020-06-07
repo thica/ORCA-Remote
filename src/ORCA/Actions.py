@@ -66,12 +66,12 @@ class cActions:
 
         try:
             oET_Root = LoadXMLFile(oFile=oFnActionFile)
-            self.LoadActionsSub(oET_Root=oET_Root ,uSegmentTag=u'appstartactions',uListTag=u'appstartaction',dTargetDic=self.dActionsPageStart,uFileName=oFnActionFile.string)
+            self.LoadActionsSub(oET_Root=oET_Root ,uSegmentTag=u'appstartactions',uListTag=u'appstartaction',dTargetDic=self.dActionsPageStart,uFileName=str(oFnActionFile))
             # just in case we have some sub commands (mainly in the fall back actions command set)
-            self.LoadActionsSub(oET_Root=oET_Root ,uSegmentTag=u'actions',uListTag= u'action',dTargetDic= self.dActionsCommands,uFileName=oFnActionFile.string)
+            self.LoadActionsSub(oET_Root=oET_Root ,uSegmentTag=u'actions',uListTag= u'action',dTargetDic= self.dActionsCommands,uFileName=str(oFnActionFile))
 
         except Exception as e:
-            ShowErrorPopUp(uTitle="LoadActionsAppStart: Fatal Error",uMessage=u'TheScreen: Fatal Error:Load Appstart Action XmlFile (%s)' % oFnActionFile.string,bAbort=True,oException=e)
+            ShowErrorPopUp(uTitle="LoadActionsAppStart: Fatal Error",uMessage=u'TheScreen: Fatal Error:Load Appstart Action XmlFile (%s)' % str(oFnActionFile),bAbort=True,oException=e)
 
         aActions:List[cAction] = self.dActionsPageStart.get(u'earlyappstart')
         if aActions:

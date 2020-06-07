@@ -185,11 +185,15 @@ def XMLPrettify(*,oElem:Element)-> str:
         uFinal = uFinal.replace("\n"+" "*iNum+"\n", "\n")
     return uFinal
 
-# noinspection PyDefaultArgument,PyUnusedLocal
-def orca_et_loader(uFile:str, uParse:str, uEncoding:str="xml",oReplacementVars:cDefinitionVars=cDefinitionVars()) -> Union[List[str],Element,None]:
+# noinspection PyUnusedLocal
+def orca_et_loader(uFile:str, uParse:str, uEncoding:str="xml",oReplacementVars:Optional[cDefinitionVars]=None) -> Union[List[str],Element,None]:
     """Custom Loader for ElementTree Include to add definition path to includes
         and to make make bulk include using placeholder possible
     """
+
+    if oReplacementVars is None:
+        oReplacementVars = cDefinitionVars()
+
     if uFile.endswith('*'):
         aRet:List[str]   = []
         oFn:cFileName    = cFileName("").ImportFullPath(uFnFullName=uFile)
@@ -228,8 +232,8 @@ def orca_et_loader(uFile:str, uParse:str, uEncoding:str="xml",oReplacementVars:c
 
 def Orca_FromString(*,uET_Data:str, oDef:cDefinition, uFileName:str="Unknown") -> Union[Element,None]:
     """  reads xml from a string and sets the definition context vars
-    :param str uET_Data: The string representinga xml
-    :param cDefinition oDef: The definition, wehere the xml belomgs to
+    :param str uET_Data: The string representing a xml
+    :param cDefinition oDef: The definition, where the xml belongs to
     :param uFileName: The original filename (for debugging support)
     :return:
     """
@@ -241,17 +245,18 @@ def Orca_FromString(*,uET_Data:str, oDef:cDefinition, uFileName:str="Unknown") -
 
         oET_Root.set('definitioncontext',oDef.uName)
         oET_Root.set('definitionalias', oDef.uAlias)
-        oET_Root.set('replacementvars',oDef.oDefinitionVars)
+        # oET_Root.set('replacementvars',oDef.oDefinitionVars)
 
         for e in oET_Root:
             e.set('definitioncontext',oDef.uName)
             e.set('definitionalias',oDef.uAlias)
-            e.set('replacementvars',oDef.oDefinitionVars)
+            # e.set('replacementvars',oDef.oDefinitionVars)
             e.set('linefilename',uFileName)
         return oET_Root
     except Exception as e:
         LogError(uMsg='FromString:Invalid XML:'+uFileName,oException=e)
-        LogError(uMsg=ReplaceDefVars(uET_Data,oDef.oDefinitionVars))
+        if oDef is not None:
+            LogError(uMsg=ReplaceDefVars(uET_Data,oDef.oDefinitionVars))
     return None
 
 def Orca_include(oElem, pLoader: Callable,uFileName:str = "Unknown Filename")-> None:

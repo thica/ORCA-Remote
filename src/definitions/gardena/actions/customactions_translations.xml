@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <action name="$dvar(definition_alias_gardena)_InitVars_Translations">
+
+        <action name="Init" string="setvar GardenaStatus[ok_cutting]=$lvar(gardena_ok_cutting)" />
+        <action name="Init" string="setvar GardenaStatus[paused]=$lvar(gardena_paused)" />
+        <action name="Init" string="setvar GardenaStatus[ok_searching]=$lvar(gardena_ok_searching)" />
+        <action name="Init" string="setvar GardenaStatus[ok_charging]=$lvar(gardena_ok_charging)" />
+        <action name="Init" string="setvar GardenaStatus[ok_leaving]=$lvar(gardena_ok_leaving)" />
+        <action name="Init" string="setvar GardenaStatus[wait_updating]=$lvar(gardena_wait_updating)" />
+        <action name="Init" string="setvar GardenaStatus[wait_power_up]=$lvar(gardena_wait_power_up)" />
+        <action name="Init" string="setvar GardenaStatus[parked_timer]=$lvar(gardena_parked_timer)" />
+        <action name="Init" string="setvar GardenaStatus[parked_park_selected]=$lvar(gardena_parked_park_selected)" />
+        <action name="Init" string="setvar GardenaStatus[off_disabled]=$lvar(gardena_off_disabled)" />
+        <action name="Init" string="setvar GardenaStatus[off_hatch_open]=$lvar(gardena_off_hatch_open)" />
+        <action name="Init" string="setvar GardenaStatus[unknown]=$lvar(gardena_unknown)" />
+        <action name="Init" string="setvar GardenaStatus[error]=$lvar(gardena_error)" />
+        <action name="Init" string="setvar GardenaStatus[error_at_power_up]=$lvar(gardena_error_at_power_up)" />
+        <action name="Init" string="setvar GardenaStatus[off_hatch_closed]=$lvar(gardena_off_hatch_closed)" />
+        <action name="Init" string="setvar GardenaStatus[ok_cutting_timer_overridden]=$lvar(gardena_ok_cutting_timer_overridden)" />
+        <action name="Init" string="setvar GardenaStatus[parked_autotimer]=$lvar(gardena_parked_autotimer)" />
+        <action name="Init" string="setvar GardenaStatus[parked_daily_limit_reached]=$lvar(gardena_parked_daily_limit_reached)" />
+        <action name="Init" string="setvar GardenaStatus[no_message]=$lvar(gardena_no_message)" />
+        <action name="Init" string="setvar GardenaStatus[outside_working_area]=$lvar(gardena_outside_working_area)" />
+        <action name="Init" string="setvar GardenaStatus[no_loop_signal]=$lvar(gardena_no_loop_signal)" />
+        <action name="Init" string="setvar GardenaStatus[wrong_loop_signal]=$lvar(gardena_wrong_loop_signal)" />
+        <action name="Init" string="setvar GardenaStatus[loop_sensor_problem_front]=$lvar(gardena_loop_sensor_problem_front)" />
+        <action name="Init" string="setvar GardenaStatus[loop_sensor_problem_rear]=$lvar(gardena_loop_sensor_problem_rear)" />
+        <action name="Init" string="setvar GardenaStatus[trapped]=$lvar(gardena_trapped)" />
+        <action name="Init" string="setvar GardenaStatus[upside_down]=$lvar(gardena_upside_down)" />
+        <action name="Init" string="setvar GardenaStatus[low_battery]=$lvar(gardena_low_battery)" />
+        <action name="Init" string="setvar GardenaStatus[empty_battery]=$lvar(gardena_empty_battery)" />
+        <action name="Init" string="setvar GardenaStatus[no_drive]=$lvar(gardena_no_drive)" />
+        <action name="Init" string="setvar GardenaStatus[lifted]=$lvar(gardena_lifted)" />
+        <action name="Init" string="setvar GardenaStatus[stuck_in_charging_station]=$lvar(gardena_stuck_in_charging_station)" />
+        <action name="Init" string="setvar GardenaStatus[charging_station_blocked]=$lvar(gardena_charging_station_blocked)" />
+        <action name="Init" string="setvar GardenaStatus[collision_sensor_problem_rear]=$lvar(gardena_collision_sensor_problem_rear)" />
+        <action name="Init" string="setvar GardenaStatus[collision_sensor_problem_front]=$lvar(gardena_collision_sensor_problem_front)" />
+        <action name="Init" string="setvar GardenaStatus[wheel_motor_blocked_right]=$lvar(gardena_wheel_motor_blocked_right)" />
+        <action name="Init" string="setvar GardenaStatus[wheel_motor_blocked_left]=$lvar(gardena_wheel_motor_blocked_left)" />
+        <action name="Init" string="setvar GardenaStatus[wheel_drive_problem_right]=$lvar(gardena_wheel_drive_problem_right)" />
+        <action name="Init" string="setvar GardenaStatus[wheel_drive_problem_left]=$lvar(gardena_wheel_drive_problem_left)" />
+        <action name="Init" string="setvar GardenaStatus[cutting_system_blocked]=$lvar(gardena_cutting_system_blocked)" />
+        <action name="Init" string="setvar GardenaStatus[invalid_sub_device_combination]=$lvar(gardena_invalid_sub_device_combination)" />
+        <action name="Init" string="setvar GardenaStatus[settings_restored]=$lvar(gardena_settings_restored)" />
+        <action name="Init" string="setvar GardenaStatus[electronic_problem]=$lvar(gardena_electronic_problem)" />
+        <action name="Init" string="setvar GardenaStatus[charging_system_problem]=$lvar(gardena_charging_system_problem)" />
+        <action name="Init" string="setvar GardenaStatus[tilt_sensor_problem]=$lvar(gardena_tilt_sensor_problem)" />
+        <action name="Init" string="setvar GardenaStatus[wheel_motor_overloaded_right]=$lvar(gardena_wheel_motor_overloaded_right)" />
+        <action name="Init" string="setvar GardenaStatus[wheel_motor_overloaded_left]=$lvar(gardena_wheel_motor_overloaded_left)" />
+        <action name="Init" string="setvar GardenaStatus[charging_current_too_high]=$lvar(gardena_charging_current_too_high)" />
+        <action name="Init" string="setvar GardenaStatus[temporary_problem]=$lvar(gardena_temporary_problem)" />
+        <action name="Init" string="setvar GardenaStatus[guide_1_not_found=$lvar(gardena_guide_1_not_found)" />
+        <action name="Init" string="setvar GardenaStatus[guide_2_not_found]=$lvar(gardena_guide_2_not_found)" />
+        <action name="Init" string="setvar GardenaStatus[guide_3_not_found]=$lvar(gardena_guide_3_not_found)" />
+        <action name="Init" string="setvar GardenaStatus[difficult_finding_home]=$lvar(gardena_difficult_finding_home)" />
+        <action name="Init" string="setvar GardenaStatus[guide_calibration_accomplished]=$lvar(gardena_guide_calibration_accomplished)" />
+        <action name="Init" string="setvar GardenaStatus[guide_calibration_failed]=$lvar(gardena_guide_calibration_failed)" />
+        <action name="Init" string="setvar GardenaStatus[temporary_battery_problem]=$lvar(gardena_temporary_battery_problem)" />
+        <action name="Init" string="setvar GardenaStatus[battery_problem]=$lvar(gardena_battery_problem)" />
+        <action name="Init" string="setvar GardenaStatus[alarm_mower_switched_off]=$lvar(gardena_alarm_mower_switched_off)" />
+        <action name="Init" string="setvar GardenaStatus[alarm_mower_stopped]=$lvar(gardena_alarm_mower_stopped)" />
+        <action name="Init" string="setvar GardenaStatus[alarm_mower_lifted]=$lvar(gardena_alarm_mower_lifted)" />
+        <action name="Init" string="setvar GardenaStatus[alarm_mower_tilted]=$lvar(gardena_alarm_mower_tilted)" />
+        <action name="Init" string="setvar GardenaStatus[connection_changed]=$lvar(gardena_connection_changed)" />
+        <action name="Init" string="setvar GardenaStatus[connection_not_changed]=$lvar(gardena_connection_not_changed)" />
+        <action name="Init" string="setvar GardenaStatus[com_board_not_available]=$lvar(gardena_com_board_not_available)" />
+        <action name="Init" string="setvar GardenaStatus[slipped]=$lvar(gardena_slipped)" />
+        <action name="Init" string="setvar GardenaStatus[out_of_operation]=$lvar(gardena_out_of_operation)" />
+        <action name="Init" string="setvar GardenaStatus[replace_now]=$lvar(gardena_replace_now)" />
+        <action name="Init" string="setvar GardenaStatus[low]=$lvar(gardena_low)" />
+        <action name="Init" string="setvar GardenaStatus[ok]=$lvar(gardena_ok)" />
+        <action name="Init" string="setvar GardenaStatus[no_source]=$lvar(gardena_no_source)" />
+        <action name="Init" string="setvar GardenaStatus[mower_charging]=$lvar(gardena_mower_charging)" />
+        <action name="Init" string="setvar GardenaStatus[completed_cutting_autotimer]=$lvar(gardena_completed_cutting_autotimer)" />
+        <action name="Init" string="setvar GardenaStatus[week_timer]=$lvar(gardena_week_timer)" />
+        <action name="Init" string="setvar GardenaStatus[countdown_timer]=$lvar(gardena_countdown_timer)" />
+        <action name="Init" string="setvar GardenaStatus[undefined]=$lvar(gardena_undefined)" />
+        <action name="Init" string="setvar GardenaStatus[unknown]=$lvar(gardena_unknown)" />
+        <action name="Init" string="setvar GardenaStatus[status_device_unreachable]=$lvar(gardena_status_device_unreachable)" />
+        <action name="Init" string="setvar GardenaStatus[status_device_alive]=$lvar(gardena_status_device_alive)" />
+        <action name="Init" string="setvar GardenaStatus[bad]=$lvar(gardena_bad)" />
+        <action name="Init" string="setvar GardenaStatus[poor]=$lvar(gardena_poor)" />
+        <action name="Init" string="setvar GardenaStatus[good]=$lvar(gardena_good)" />
+        <action name="Init" string="setvar GardenaStatus[idle]=$lvar(gardena_idle)" />
+        <action name="Init" string="setvar GardenaStatus[firmware_cancel]=$lvar(gardena_firmware_cancel)" />
+        <action name="Init" string="setvar GardenaStatus[firmware_upload]=$lvar(gardena_firmware_upload)" />
+        <action name="Init" string="setvar GardenaStatus[unsupported]=$lvar(gardena_unsupported)" />
+        <action name="Init" string="setvar GardenaStatus[up_to_date]=$lvar(gardena_up_to_date)" />
+        <action name="Init" string="setvar GardenaStatus[mower]=$lvar(gardena_mower)" />
+        <action name="Init" string="setvar GardenaStatus[watering_computer]=$lvar(gardena_watering_computer)" />
+        <action name="Init" string="setvar GardenaStatus[no_frost]=$lvar(gardena_no_frost)" />
+        <action name="Init" string="setvar GardenaStatus[open]=$lvar(gardena_open)" />
+        <action name="Init" string="setvar GardenaStatus[closed]=$lvar(gardena_closed)" />
+        <action name="Init" string="setvar GardenaStatus[included]=$lvar(gardena_included)" />
+        <action name="Init" string="setvar GardenaStatus[active]=$lvar(gardena_active)" />
+        <action name="Init" string="setvar GardenaStatus[inactive]=$lvar(gardena_inactive)" />
+        <action name="Init" string="setvar GardenaStatus[online]=$lvar(gardena_online)" />
+
+    </action>
+</includes>
+

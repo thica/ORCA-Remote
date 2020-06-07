@@ -1,0 +1,119 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:DefinitionsForUser
+WikiDoc:Page:Userdescription Definition unraid simple
+WikiDoc:TOCTitle:unraid simple
+
+= Unraid Simple =
+
+The unraid simple definition has only two function. It can power on or switch off the unraid server (NAS).
+As it uses Wake On Lan for Power On and Telnet to Power Off it might fit for other devices as well.
+Switch off is not fully reliable, but this is more an Unraid bug.
+
+Key features:
+* Works for large and small screen sizes and all orientations
+
+[[File:unraid simple_main_large_landscape.png|link=]]
+[[File:unraid simple_main_large_portrait.png|link=]]
+[[File:unraid simple_main_small_landscape.png|link=]]
+[[File:unraid simple_main_small_portrait.png|link=]]
+
+The main page in large screen and landscape mode
+
+WikiDoc:End
+'''
+'''
+WikiDoc:Doc
+WikiDoc:Context:Reference_Definitions
+WikiDoc:Page:Reference Definition unraid simple
+WikiDoc:TOCTitle:unraid simple
+
+= Overview =
+
+The unraid simple definition has only two function. It can power on or switch off the unraid server (NAS).
+As it uses Wake On Lan for Power On and Telnet to Power Off it might fit for other devices as well.
+
+[[File:unraid simple_main_large_landscape.png|link=]]
+The main page in large screen and landscape mode. For more details please have a look in the user description for the definition
+
+This definition has the following capabilities
+
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Capability
+! align="left" | Description
+|-
+|Orientation
+|Landscape and portrait
+|-
+|Screen Size
+|
+* large / landscape
+* large / portrait
+* small / landscape
+* small / portrait
+|-
+|Interfaces
+|wakeonlan and telnet
+|}</div>
+
+= Definitionvars =
+This definition uses the following definitionvars:
+
+* "definition_alias_unraid": default value = "UNRAID"
+
+= Settings =
+This template defines the following settings:
+
+== Interfaces ==
+$dvar(definition_alias_unraid)_INTERFACE_MAIN : The main interface to control the device
+$dvar(definition_alias_unraid)_CONFIGNAME_MAIN : The main configuration name to control the device
+$dvar(definition_alias_unraid)_INTERFACE_POWERON : The interface to power on the device
+$dvar(definition_alias_unraid)_CONFIGNAME_POWERON : The configuration name to control the device
+
+= How to import =
+
+You can import the definition by using the following syntax in your definition.xml
+
+<div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+
+  <def_parameter>
+    <definitionvars>{"definition_alias_unraid":"UNRAID"}</definitionvars>
+  </def_parameter>
+
+  <definitionimports>
+      <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          definitionvars  ='{"definition_activity_template":                         "$dvar(definition_activity_template)",
+                             "definition_alias_unraid":                              "$dvar(definition_alias_unraid)"}'>unraid simple</definition>
+  </definitionimports>
+
+</syntaxhighlight></div>
+
+= Elements =
+The following elements are defined to use:
+
+Usual there no specific elements of the definition to use (Use the whole definition)
+
+= Pages =
+
+The following pages are defined:
+
+* Page_Device_$dvar(definition_alias_unraid)
+
+= Actions =
+
+The following actions are defined:
+
+* FKT SwitchOn $dvar(definition_alias_unraid)
+* FKT SwitchOff $dvar(definition_alias_unraid)
+* Add NavigationBar $dvar(definition_alias_unraid)
+* FKT WaitForReady_$dvar(definition_alias_unraid) : This is an empty function
+
+
+
+WikiDoc:End
+'''

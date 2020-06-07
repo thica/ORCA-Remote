@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+<action name="Add NavigationBar $dvar(definition_alias_gardena)">
+    <action name="Add Topline" string="loadelement" filename="$var($dvar(definition_alias_gardena)_NAVIGATIONBAR)" pagename="Page_Device_$dvar(definition_alias_gardena)" condition="$var($dvar(definition_alias_gardena)_NAVIGATIONBAR)!="/>
+</action>
+
+<action name="FKT WaitForReady_$dvar(definition_alias_gardena)" />
+
+<action name="PageStart Definition_$dvar(definition_alias_gardena)">
+    <action name="The page to start with" string="setvar DEFINITIONSTARTPAGE=Page_Device_$dvar(definition_alias_gardena)" />
+    <action name="Add Navigation Bar" string="call Add NavigationBar $dvar(definition_alias_gardena)" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_CURRENT_DEVICE=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_CURRENT_DEVICEINDEX=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_0=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_1=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_2=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_3=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_4=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_5=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_6=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_7=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_8=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_9=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_10=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_11=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_12=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_13=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_14=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_15=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_16=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_17=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_GROUP_DEVICES_STATUS_18=0" />
+</action>
+
+<action name="PageStart Page_Device_$dvar(definition_alias_gardena)">
+    <action name="" string="getinterfacesetting" interfacename="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)" varname="password" retvar="GARDENAPASSWORD"/>
+    <action name="get credentials" string="call Fkt GetInterFaceConfigParameter" PAGEINPUTRETURN="" Label1="Gardena e-Mail" Label2="Gardena password" Label3="" Config_Interface="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" Config_Config="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)" Config_Par1="User" Config_Par2="Password" Config_Par3="" Header="Gardena credentials" Message="Please enter your Gardena credentials. They will not be tested here! Be aware: all credentials will be stored in plain text!" condition="$var(GARDENAPASSWORD)==YourGardenaPW"/>
+    <action name="" string="addvarlink" varname="$dvar(definition_alias_gardena)_MOWER_SETMINUTES" linktype="widget" widgetname="Text Hours Mower" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_CATEGORY=gateway" />
+    <action name="Get Locations"  string="call $dvar(definition_alias_gardena)_GetLocations)"  />
+</action>
+
+<action name="PageStart Page_Device_$dvar(definition_alias_gardena)_Sensor_Popup">
+    <action name="Get all Sensor Values" string="call $dvar(definition_alias_gardena)_GetSensorValues" />
+    <action name="Show all parsed results" string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)_Sensor_Popup" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_GetLocations)">
+    <action name="Get Locations"  string="sendcommand getlocations" retvar="$dvar(definition_alias_gardena)_cfg" interface="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)"  />
+    <action name="Parse Locations for Dropdown" string="call $dvar(definition_alias_gardena)_CollectLocations" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_CollectLocations">
+    <action name="init number of locations" string="setvar $dvar(definition_alias_gardena)_CNTLOCATIONS=0" />
+    <action name="loop through all gardena locations" string="forin"  varname="$dvar(definition_alias_gardena)_cfg_locations[]_name" level="1" actionname="$dvar(definition_alias_gardena)_CollectLocations_sub" />
+    <action name="" string="setvar $dvar(definition_alias_gardena)_UNINITIALIZED_LOCATION=$var($dvar(definition_alias_gardena)_LOCATION_NAME[0])" />
+    <action name="Update Locations" string="updatewidget DropDown_Locations" />
+    <action name="update the devices"  string="call $dvar(definition_alias_gardena)_CollectDevices" DROPDOWNINDEX="0"  />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_CollectLocations_sub">
+    <action name="Add Name Array"           string="setvar $dvar(definition_alias_gardena)_LOCATION_NAME[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]=$dvar(definition_alias_gardena)_cfg_locations[$par(forin_index)]_name" />
+    <action name="Add ID Array"             string="setvar $dvar(definition_alias_gardena)_LOCATION_ID[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]=$dvar(definition_alias_gardena)_cfg_locations[$par(forin_index)]_id" />
+    <action name="Add City Array"           string="setvar $dvar(definition_alias_gardena)_LOCATION_CITY[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]=$dvar(definition_alias_gardena)_cfg_locations[$par(forin_index)]_geo_position_city" />
+    <action name="Add Address Array"        string="setvar $dvar(definition_alias_gardena)_LOCATION_ADDRESS[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]=$dvar(definition_alias_gardena)_cfg_locations[$par(forin_index)]_geo_position_address" />
+    <action name="Add Sunrise Array"        string="setvar $dvar(definition_alias_gardena)_LOCATION_SUNRISE[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]=$dvar(definition_alias_gardena)_cfg_locations[$par(forin_index)]_geo_position_sunrise" />
+    <action name="Add Sunset Array"         string="setvar $dvar(definition_alias_gardena)_LOCATION_SUNSET[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]=$dvar(definition_alias_gardena)_cfg_locations[$par(forin_index)]_geo_position_sunset" />
+    <action name="Add Time Offset Array"    string="setvar $dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]=$dvar(definition_alias_gardena)_cfg_locations[$par(forin_index)]_geo_position_gateway_time_zone_offset" />
+    <action name="Create part 2"            string="modifyvar" varname="$dvar(definition_alias_gardena)_LOCATION_NAME[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]" operator="fromvar"  />
+    <action name="Create part 2"            string="modifyvar" varname="$dvar(definition_alias_gardena)_LOCATION_ID[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]" operator="fromvar"  />
+    <action name="Create part 2"            string="modifyvar" varname="$dvar(definition_alias_gardena)_LOCATION_CITY[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]" operator="fromvar"  />
+    <action name="Create part 2"            string="modifyvar" varname="$dvar(definition_alias_gardena)_LOCATION_ADDRESS[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]" operator="fromvar"  />
+    <action name="Create part 2"            string="modifyvar" varname="$dvar(definition_alias_gardena)_LOCATION_SUNSET[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]" operator="fromvar"  />
+    <action name="Create part 2"            string="modifyvar" varname="$dvar(definition_alias_gardena)_LOCATION_SUNRISE[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]" operator="fromvar"  />
+    <action name="Create part 2"            string="modifyvar" varname="$dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET[$var($dvar(definition_alias_gardena)_CNTLOCATIONS)]" operator="fromvar"  />
+    <action name="increase number of locations" string="modifyvar" varname=" $dvar(definition_alias_gardena)_CNTLOCATIONS" operator="increase" parameter1="1" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_CollectDevices">
+    <action name="Get DropDown List Index"              string="setvar $dvar(definition_alias_gardena)_CURRENT_DEVICEINDEX=$par(DROPDOWNINDEX)" />
+    <action name="Compile Var Name"                     string="setvar $dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET=$dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET[$var($dvar(definition_alias_gardena)_CURRENT_DEVICEINDEX)]" />
+    <action name="Get the timeoffset of the location"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET" />
+    <action name="Compile Var Name"                     string="setvar $dvar(definition_alias_gardena)_LOCATION_ID=$dvar(definition_alias_gardena)_LOCATION_ID[$var($dvar(definition_alias_gardena)_CURRENT_DEVICEINDEX)]" />
+    <action name="Get the ID of the location"           string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_LOCATION_ID" />
+    <action name="Compile Var Name"                     string="setvar $dvar(definition_alias_gardena)_LOCATION_NAME=$dvar(definition_alias_gardena)_LOCATION_NAME[$var($dvar(definition_alias_gardena)_CURRENT_DEVICEINDEX)]" />
+    <action name="Get the Name of the location"         string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_LOCATION_NAME" />
+    <action name="Get Devices for location"             string="sendcommand getlocationdevices" retvar="$dvar(definition_alias_gardena)" commandparameter='{"locationid":"$var($dvar(definition_alias_gardena)_LOCATION_ID)"}' />
+    <action name="init number of devices"               string="setvar $dvar(definition_alias_gardena)_CNTDEVICES=0" />
+    <action name="loop through all gardena devices"     string="forin"  varname="$dvar(definition_alias_gardena)_devices[]_name" level="1" actionname="$dvar(definition_alias_gardena)_CollectDevices_sub" />
+    <action name="Update Label"                         string="setvar $dvar(definition_alias_gardena)_UNINITIALIZED_DEVICES=$var($dvar(definition_alias_gardena)_DEVICES_NAME[0])" />
+    <action name="Update Devices"                       string="updatewidget ScrollBox_Devices" />
+    <action name="parse location infos"                 string="call $dvar(definition_alias_gardena)_GetLocationValues" />
+    <action name="Enable location infos"                string="setwidgetattribute" widgetname="Anchor Info Frame Location"     attributename="enable" attributevalue="1"/>
+    <action name="Show all parsed results"              string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)"  />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_CollectDevices_sub">
+    <action name="Add Name Array"       string="setvar $dvar(definition_alias_gardena)_DEVICES_NAME[$var($dvar(definition_alias_gardena)_CNTDEVICES)]=$dvar(definition_alias_gardena)_devices[$par(forin_index)]_name" />
+    <action name="Add ID Array"         string="setvar $dvar(definition_alias_gardena)_DEVICES_ID[$var($dvar(definition_alias_gardena)_CNTDEVICES)]=$dvar(definition_alias_gardena)_devices[$par(forin_index)]_id" />
+    <action name="Add Category Array"   string="setvar $dvar(definition_alias_gardena)_DEVICES_CATEGORY[$var($dvar(definition_alias_gardena)_CNTDEVICES)]=$dvar(definition_alias_gardena)_devices[$par(forin_index)]_category" />
+    <action name="Create part 2"        string="modifyvar" varname="$dvar(definition_alias_gardena)_DEVICES_NAME[$var($dvar(definition_alias_gardena)_CNTDEVICES)]" operator="fromvar"  />
+    <action name="Create part 2"        string="modifyvar" varname="$dvar(definition_alias_gardena)_DEVICES_ID[$var($dvar(definition_alias_gardena)_CNTDEVICES)]" operator="fromvar"  />
+    <action name="Create part 2"        string="modifyvar" varname="$dvar(definition_alias_gardena)_DEVICES_CATEGORY[$var($dvar(definition_alias_gardena)_CNTDEVICES)]" operator="fromvar"  />
+    <action name="increase number of devices" string="modifyvar" varname="$dvar(definition_alias_gardena)_CNTDEVICES" operator="increase" parameter1="1" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_ChangeDevice">
+    <action name="Save Device Index" string="setvar $dvar(definition_alias_gardena)_DEVICEINDEX=$par(SCROLLLISTINDEX)" />
+    <action name="Set Device Index" string="setvar $dvar(definition_alias_gardena)_CURRENT_DEVICE=$par(SCROLLLISTINDEX)" />
+    <action name="Show Device" string="call $dvar(definition_alias_gardena)_ShowDevice" />
+    <action name="Show the action" string="call $dvar(definition_alias_gardena)_Actions" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_ShowDevice">
+    <action name="Get Generic Vars" string="call $dvar(definition_alias_gardena)_GetDeviceGenerics" />
+    <action name="if we selected a sensor" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==sensor" />
+        <action name="Get all Sensor Values" string="call $dvar(definition_alias_gardena)_GetSensorValues" />
+        <action name="Show all parsed results" string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)"  />
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a gateway" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==gateway" />
+        <action name="Get all Gateway Values" string="call $dvar(definition_alias_gardena)_GetGatewayValues" />
+        <action name="Show all parsed results" string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)"  />
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a mower" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==mower" />
+        <action name="Get all Mower Values" string="call $dvar(definition_alias_gardena)_GetMowerValues" />
+        <action name="Show all parsed results" string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)"  />
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a irrigation control (watering)" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==ic24" />
+        <action name="Get all Irrigation Values" string="call $dvar(definition_alias_gardena)_GetIrrigationValues" />
+        <action name="Show all parsed results" string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)"  />
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a watering_computer (not tested)" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==watering_computer" />
+        <action name="Get all Watering Computer Values" string="call $dvar(definition_alias_gardena)_GetWateringComputerValues" />
+        <action name="Show all parsed results" string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)"  />
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a power socket (not tested)" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==power" />
+        <action name="Get all Power Values" string="call $dvar(definition_alias_gardena)_GetPowerValues" />
+        <action name="Show all parsed results" string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)"  />
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a electronic pressure pump (not tested)" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==electronic_pressure_pump" />
+        <action name="Get all Pump Values" string="call $dvar(definition_alias_gardena)_GetPumpValues" />
+        <action name="Show all parsed results" string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)"  />
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <!--Rest is not implemented" string -->
+    <action name="Initialize basic" string="call $dvar(definition_alias_gardena)_GetUnknownValues" />
+    <action name="Show all parsed results" string="updatewidget *@Page_Device_$dvar(definition_alias_gardena)"  />
+    <action1 name="Show Sensor" string="showpage Page_Device_$dvar(definition_alias_gardena)_Sensor_Popup" condition="$var($dvar(definition_alias_gardena)_CATEGORY)==sensor"/>
+<action name="endif" string="endif" />
+
+</action>
+
+<action name="$dvar(definition_alias_gardena)_GetDeviceGenerics">
+    <action name="Compile var name"                string="setvar $dvar(definition_alias_gardena)_DEVICENAME=$dvar(definition_alias_gardena)_DEVICES_NAME[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]" />
+    <action name="Get the name of the device"      string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_DEVICENAME" />
+    <action name="Compile var name"                string="setvar $dvar(definition_alias_gardena)_DEVICEID=$dvar(definition_alias_gardena)_DEVICES_ID[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]" />
+    <action name="Get the id of the device"        string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_DEVICEID" />
+    <action name="Compile var name"                string="setvar $dvar(definition_alias_gardena)_CATEGORY=$dvar(definition_alias_gardena)_DEVICES_CATEGORY[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]" />
+    <action name="Get the category of the device"  string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_CATEGORY" />
+    <action name="Get the index of the device"     string="setvar $dvar(definition_alias_gardena)_DEVICEINDEX=$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_FindAbilityIndex">
+    <action name="SET" string="setvar TMPBREAKLOOP=0" />
+    <action name="SET" string="setvar $dvar(definition_alias_gardena)_abilityindex=-1)" />
+    <action name="Loop" string="forin"  varname="$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[]_name" level="2" actionname="$dvar(definition_alias_gardena)_FindAbilityIndex_sub" breakvar="TMPBREAKLOOP"/>
+</action>
+
+<action name="$dvar(definition_alias_gardena)_FindAbilityIndex_sub">
+    <action name="if" string="if $par(forin_value)==$var($dvar(definition_alias_gardena)_searchability)"/>
+        <action name="We have found the index" string="setvar $dvar(definition_alias_gardena)_abilityindex=$par(forin_index)" />
+        <action name="Stop the loop" string="setvar TMPBREAKLOOP=1"  />
+    <action name="endif" string="endif" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_FindSettingsIndex">
+    <action name="SET" string="setvar TMPBREAKLOOP=0" />
+    <action name="SET" string="setvar $dvar(definition_alias_gardena)_settingsindex=-1)" />
+    <action name="Loop" string="forin"  varname="$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_settings[]_name" level="2" actionname="$dvar(definition_alias_gardena)_FindSettingsIndex_sub" breakvar="TMPBREAKLOOP"/>
+</action>
+
+<action name="$dvar(definition_alias_gardena)_FindSettingsIndex_sub">
+    <action name="if" string="if $par(forin_value)==$var($dvar(definition_alias_gardena)_searchsetting)"/>
+    <action name="We have found the index" string="setvar $dvar(definition_alias_gardena)_settingsindex=$par(forin_index)" />
+    <action name="Stop the loop" string="setvar TMPBREAKLOOP=1"  />
+    <action name="endif" string="endif" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_FindPropertyIndex">
+    <action name="SET" string="setvar TMPBREAKLOOP=0" />
+    <action name="SET" string="setvar $dvar(definition_alias_gardena)_propertyindex=-1)" />
+    <action name="Loop" string="forin"  varname="$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[]_name" level="3" actionname="$dvar(definition_alias_gardena)_FindPropertyIndex_sub" breakvar="TMPBREAKLOOP"/>
+</action>
+
+<action name="$dvar(definition_alias_gardena)_FindPropertyIndex_sub">
+    <action name="if" string="if $par(forin_value)==$var($dvar(definition_alias_gardena)_searchproperty)"/>
+    <action name="We have found the index" string="setvar $dvar(definition_alias_gardena)_propertyindex=$par(forin_index)" />
+    <action name="Stop the loop" string="setvar TMPBREAKLOOP=1"  />
+    <action name="endif" string="endif" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_HideAllInfos">
+    <action name="Disable sensor infos"             string="setwidgetattribute" widgetname="Anchor Info Frame Sensor"       attributename="enable" attributevalue="0"/>
+    <action name="Disable gateway infos"            string="setwidgetattribute" widgetname="Anchor Info Frame Gateway"      attributename="enable" attributevalue="0"/>
+    <action name="Disable mover infos"              string="setwidgetattribute" widgetname="Anchor Info Frame Mower"        attributename="enable" attributevalue="0"/>
+    <action name="Disable irrigation infos"         string="setwidgetattribute" widgetname="Anchor Info Frame Irrigation"   attributename="enable" attributevalue="0"/>
+    <action name="Disable location infos"           string="setwidgetattribute" widgetname="Anchor Info Frame Location"     attributename="enable" attributevalue="0"/>
+    <action name="Disable wateringcomputer infos"   string="setwidgetattribute" widgetname="Anchor Info Frame WateringComputer"     attributename="enable" attributevalue="0"/>
+    <action name="Disable power infos"              string="setwidgetattribute" widgetname="Anchor Info Frame Power"        attributename="enable" attributevalue="0"/>
+</action>
+
+<action name="$dvar(definition_alias_gardena)_Update Data">
+    <action name="Refresh data from gateway"  string="call $dvar(definition_alias_gardena)_GetLocations)" />
+    <action name="Show refreshed data"  string="call $dvar(definition_alias_gardena)_ChangeDevice" SCROLLLISTINDEX="$var($dvar(definition_alias_gardena)_DEVICEINDEX)"/>
+</action>
+
+<action name="$dvar(definition_alias_gardena)_GetWateringComputerValues">
+    <action name="Set Label" string="setvar $dvar(definition_alias_gardena)_LABEL[1]=$lvar(gardena_10035)"/>
+    <action name="En/Disable button"  string="setwidgetattribute" widgetname="Buttons Show Actions" attributename="enable" attributevalue="0"/>
+</action>
+
+<action name="$dvar(definition_alias_gardena)_GetPowerValues">
+    <action name="Set Label" string="setvar $dvar(definition_alias_gardena)_LABEL[1]=$lvar(gardena_10035)"/>
+    <action name="En/Disable button"  string="setwidgetattribute" widgetname="Buttons Show Actions" attributename="enable" attributevalue="0"/>
+</action>
+
+<action name="$dvar(definition_alias_gardena)_GetUnknownValues">
+    <action name="Set Label" string="setvar $dvar(definition_alias_gardena)_LABEL[1]=$lvar(gardena_10035)"/>
+    <action name="En/Disable button"  string="setwidgetattribute" widgetname="Buttons Show Actions" attributename="enable" attributevalue="0"/>
+</action>
+
+
+<action name="$dvar(definition_alias_gardena)_Actions">
+    <action name="Disable mover actions"                string="setwidgetattribute" widgetname="Anchor Action Frame Mower" attributename="enable" attributevalue="0"/>
+    <action name="Disable sensor actions"               string="setwidgetattribute" widgetname="Anchor Action Frame Sensor" attributename="enable" attributevalue="0"/>
+    <action name="Disable irrigation actions"           string="setwidgetattribute" widgetname="Anchor Action Frame Irrigation" attributename="enable" attributevalue="0"/>
+    <action name="Disable power actions"                string="setwidgetattribute" widgetname="Anchor Action Frame Power" attributename="enable" attributevalue="0"/>
+    <action name="Disable gateway actions"              string="setwidgetattribute" widgetname="Anchor Action Frame Gateway" attributename="enable" attributevalue="0"/>
+    <action name="Disable watering computer actions"    string="setwidgetattribute" widgetname="Anchor Action Frame Watering Computer" attributename="enable" attributevalue="0"/>
+
+    <action name="if we selected a mower" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==mower" />
+        <action name="Enable mower actions"  string="setwidgetattribute" widgetname="Anchor Action Frame Mower" attributename="enable" attributevalue="1"/>
+        <action name="Update Picture" string="setwidgetattribute" widgetname="Picture Device" attributename="picturenormal" attributevalue="$var($dvar(definition_alias_gardena)_DEVICEPICTURE_MOWER)" autoupdate="1"/>
+       <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a sensor" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==sensor" />
+        <action name="Enable sensor actions"  string="setwidgetattribute" widgetname="Anchor Action Frame Sensor" attributename="enable" attributevalue="1"/>
+        <action name="Update Picture" string="setwidgetattribute" widgetname="Picture Device" attributename="picturenormal" attributevalue="$var($dvar(definition_alias_gardena)_DEVICEPICTURE_SENSOR)" autoupdate="1"/>
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a irrigation" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==ic24" />
+        <action name="Enable Irrigation actions"  string="setwidgetattribute" widgetname="Anchor Action Frame Irrigation" attributename="enable" attributevalue="1"/>
+        <action name="Update Picture" string="setwidgetattribute" widgetname="Picture Device" attributename="picturenormal" attributevalue="$var($dvar(definition_alias_gardena)_DEVICEPICTURE_IRRIGATION)" autoupdate="1"/>
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a power" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==power" />
+        <action name="Enable Power actions"  string="setwidgetattribute" widgetname="Anchor Action Frame Power" attributename="enable" attributevalue="1"/>
+        <action name="Update Picture" string="setwidgetattribute" widgetname="Picture Device" attributename="picturenormal" attributevalue="$var($dvar(definition_alias_gardena)_DEVICEPICTURE_POWER)" autoupdate="1"/>
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a gateway" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==gateway" />
+        <action name="Enable gateway actions"  string="setwidgetattribute" widgetname="Anchor Action Frame Gateway" attributename="enable" attributevalue="1"/>
+        <action name="Update Picture" string="setwidgetattribute" widgetname="Picture Device" attributename="picturenormal" attributevalue="$var($dvar(definition_alias_gardena)_DEVICEPICTURE_GATEWAY)" autoupdate="1"/>
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="if we selected a watering computer" string="if $var($dvar(definition_alias_gardena)_CATEGORY)==watering_computer" />
+        <action name="Enable Power actions"  string="setwidgetattribute" widgetname="Anchor Action Frame Watering Computer" attributename="enable" attributevalue="1"/>
+        <action name="Update Picture" string="setwidgetattribute" widgetname="Picture Device" attributename="picturenormal" attributevalue="$var($dvar(definition_alias_gardena)_DEVICEPICTURE_WATER_CONTROL)" autoupdate="1"/>
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+</action>
+
+<xi:include href="$var(DEFINITIONPATH)/actions/customactions_sensor.xml" parse="xml" />
+<xi:include href="$var(DEFINITIONPATH)/actions/customactions_gateway.xml" parse="xml" />
+<xi:include href="$var(DEFINITIONPATH)/actions/customactions_mower.xml" parse="xml" />
+<xi:include href="$var(DEFINITIONPATH)/actions/customactions_irrigation.xml" parse="xml" />
+<xi:include href="$var(DEFINITIONPATH)/actions/customactions_power.xml" parse="xml" />
+<xi:include href="$var(DEFINITIONPATH)/actions/customactions_watering_computer.xml" parse="xml" />
+<xi:include href="$var(DEFINITIONPATH)/actions/customactions_location.xml" parse="xml" />
+<xi:include href="$var(DEFINITIONPATH)/actions/customactions_translations.xml" parse="xml" />
+
+</includes>

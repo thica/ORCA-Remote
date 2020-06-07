@@ -304,6 +304,30 @@ def ResultParser_Test():
     uVarName, uVarValue = oResultParser.Parse(uResponse=uResponse,uGetVar=uGetVar,uParseResultOption=uParseResultOption,uGlobalDestVar=uGlobalDestVar,uLocalDestVar=uLocalDestVar,uTokenizeString=uTokenizeString,uParseResultFlags=uParseResultFlags)
 
 
+    Logger.debug("Example 10: Get everything values")
+    uGlobalDestVar      = 'MyResult'
+    uParseResultFlags   = "E"
+    uVarName, uVarValue = oResultParser.Parse(uResponse=uResponse,uGetVar=uGetVar,uParseResultOption=uParseResultOption,uGlobalDestVar=uGlobalDestVar,uLocalDestVar=uLocalDestVar,uTokenizeString=uTokenizeString,uParseResultFlags=uParseResultFlags)
+
+    uResponse = '{"locations": [{"id": "875f468b-18b7-4861-92d3-463a4bc1c7db","name": "My Garden","authorized_at": "2020-03-14T10:22:24.682Z","authorized_user_ids": [],"device_flashing": {},"devices": ["8a0afcf8-8d0a-4bbb-acd6-425aa6720295","4f967509-2c86-406e-bd1d-03bd88bf6fe0","b0305931-17e1-4701-b7d4-d3f5b59b4bbf","1efc9553-3dec-4a72-b6e8-2843a30666ff"],"geo_position": {"latitude": 51.2742326,"longitude": 6.790471400000001,"address": "Am Klosterhof, 40472 Düsseldorf, Deutschland","city": "Düsseldorf","gateway_time_zone": "Europe/Berlin","gateway_time_zone_offset": 7200000,"id": "9189c5e2-ede2-4f74-ba61-7101876cf774","sunrise": "06:32","sunset": "20:33","time_zone": "Europe/Berlin","time_zone_offset": 7200000},"zones": []}]}'
+
+    Logger.debug("Example 10a: Get everything values")
+    uGlobalDestVar      = 'MyResult'
+    uParseResultFlags   = "E"
+    uVarName, uVarValue = oResultParser.Parse(uResponse=uResponse,uGetVar=uGetVar,uParseResultOption=uParseResultOption,uGlobalDestVar=uGlobalDestVar,uLocalDestVar=uLocalDestVar,uTokenizeString=uTokenizeString,uParseResultFlags=uParseResultFlags)
+
+
+    Logger.debug("Example 10b: a further test")
+    uGlobalDestVar      = 'MyResult'
+    uParseResultFlags   = "E"
+    uVarName, uVarValue = oResultParser.Parse(uResponse="{'Fruit1':'Apple','Fruit2':'Peach','Metal':{'Gold':'Not Platin'}}",uGetVar=uGetVar,uParseResultOption=uParseResultOption,uGlobalDestVar=uGlobalDestVar,uLocalDestVar=uLocalDestVar,uTokenizeString=uTokenizeString,uParseResultFlags=uParseResultFlags)
+    uVarName, uVarValue = oResultParser.Parse(uResponse='{"sessions": {"token": "13554183-66a9-44a7-92a1-0c7e3c6eb100","user_id": "076825b3-d33b-4431-9b04-4ab9e6d0556b","refresh_token": "5a239f50-706c-4f9a-97d9-878a58571328"}}',uGetVar=uGetVar,uParseResultOption=uParseResultOption,uGlobalDestVar=uGlobalDestVar,uLocalDestVar=uLocalDestVar,uTokenizeString=uTokenizeString,uParseResultFlags=uParseResultFlags)
+
+
+    # '{"sessions": {"token": "13554183-66a9-44a7-92a1-0c7e3c6eb100","user_id": "076825b3-d33b-4431-9b04-4ab9e6d0556b","refresh_token": "5a239f50-706c-4f9a-97d9-878a58571328"}}'
+
+    exit(0)
+
     uResponse          = uXml
     uParseResultOption = 'xml'
 

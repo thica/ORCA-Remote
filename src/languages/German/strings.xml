@@ -326,6 +326,10 @@
   <string id="760">Discover für Definition neu starten</string>
   <string id="761">Ermittele die in dieser Definition verwendeten Geräte</string>
 
+  <string id="800">Sek</string>
+  <string id="801">Min</string>
+  <string id="802">Std</string>
+
 
     <!--Button Strings -->
   <string id="1001">Einschalten</string>

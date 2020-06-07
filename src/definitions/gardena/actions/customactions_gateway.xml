@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <action name="$dvar(definition_alias_gardena)_GetGatewayValues">
+
+        <action name="Hide all infos"  string="call $dvar(definition_alias_gardena)_HideAllInfos" />
+        <action name="Enable gateway infos" string="setwidgetattribute" widgetname="Anchor Info Frame Gateway"  attributename="enable" attributevalue="1"/>
+
+        <action name="We need the index of the info" string="setvar $dvar(definition_alias_gardena)_searchability=device_info" />
+        <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+
+        <action name="We need the index of the connection" string="setvar $dvar(definition_alias_gardena)_searchproperty=connection_status" />
+        <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+        <action name="Get the value (connection)" string="setvar $dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_VALUE2=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+        <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_VALUE2" />
+        <action name="Compile the translation var" string="setvar $dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_VALUE=GardenaStatus[$var($dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_VALUE2)]" />
+        <action name="Get the translation"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_VALUE" />
+        <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+        <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_TIMESTAMP" />
+        <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+
+        <action name="We need the index of the LAN" string="setvar $dvar(definition_alias_gardena)_searchproperty=ethernet_status" />
+        <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+        <action name="Get the value (ethernet)" string="setvar $dvar(definition_alias_gardena)_GATEWAY_LANCONNECTED_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value_isconnected" />
+        <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_GATEWAY_LANCONNECTED_VALUE" />
+        <action name="Translate" string="setvar $dvar(definition_alias_gardena)_GATEWAY_LANCONNECTED_VALUE=$lvar(gardena_10040)" condition="$var($dvar(definition_alias_gardena)_GATEWAY_LANCONNECTED_VALUE)==true"/>
+        <action name="Translate" string="setvar $dvar(definition_alias_gardena)_GATEWAY_LANCONNECTED_VALUE=$lvar(gardena_10041)" condition="$var($dvar(definition_alias_gardena)_GATEWAY_LANCONNECTED_VALUE)==false"/>
+
+        <action name="We need the index of the wifi" string="setvar $dvar(definition_alias_gardena)_searchproperty=wifi_status" />
+        <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+        <action name="Get the value (wifi)" string="setvar $dvar(definition_alias_gardena)_GATEWAY_WIFICONNECTED_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value_isconnected" />
+        <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_GATEWAY_WIFICONNECTED_VALUE" />
+        <action name="Translate" string="setvar $dvar(definition_alias_gardena)_GATEWAY_WIFICONNECTED_VALUE=$lvar(gardena_10040)" condition="$var($dvar(definition_alias_gardena)_GATEWAY_WIFICONNECTED_VALUE)==true"/>
+        <action name="Translate" string="setvar $dvar(definition_alias_gardena)_GATEWAY_WIFICONNECTED_VALUE=$lvar(gardena_10041)" condition="$var($dvar(definition_alias_gardena)_GATEWAY_WIFICONNECTED_VALUE)==false"/>
+        <action name="Get the value (wifi)" string="setvar $dvar(definition_alias_gardena)_GATEWAY_WIFISIGNAL_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value_signal" />
+        <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_GATEWAY_WIFISIGNAL_VALUE" />
+
+    </action>
+
+
+
+    <action name="$dvar(definition_alias_gardena)_InitVars_Gateway">
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_GATEWAY_CONNECTION_STATUS_TIMESTAMP=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_GATEWAY_LANCONNECTED_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_GATEWAY_WIFICONNECTED_VALUE=" />
+        <action name="Init" string="setvar $dvar(definition_alias_gardena)_GATEWAY_WIFISIGNAL_VALUE=" />
+    </action>
+
+
+    <action name="$dvar(definition_alias_gardena)_Info_Button_Pressed_Gateway">
+        <action name="Show Dummy Message" string="showquestion" title="Message" message="´Pressed the Info area (Gateway)" actionyes="dummy"/>
+    </action>
+
+</includes>
+

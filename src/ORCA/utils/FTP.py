@@ -165,7 +165,7 @@ class cFTP:
 
     def UploadLocalFile(self,*,oFile:cFileName, oBaseLocalDir:cPath, oBaseRemoteDir:cPath) ->bool:
         """
-        Subfunction to upload a local file including sub pathes to to remote folder
+        Subfunction to upload a local file including sub pathes to a remote folder
 
         :param cFileName oFile: FileName to Upload
         :param cPath oBaseLocalDir: Local Path
@@ -186,6 +186,54 @@ class cFTP:
                     bRet = self._UploadFile(oFile=oFile,oRemoteSubPath=oRemoteSubPath)
                 else:
                     Logger.warning ("File no longer exists, (%s)!" % oFile.string)
+
+            return bRet
+
+        except Exception as e:
+            LogError(uMsg='Fatal FTP error',oException=e)
+            return False
+
+    def _DownloadFile(self,*,oFnLocalFile:cFileName,oPathRemote:cPath) ->bool:
+        """
+        downloads a file from a ftp server
+
+        :param cFileName oFnLocalFile: Local filename to download to, basename will be taken as the ftp filename
+        :param cPath oPathRemote: The remote FTP Path
+        :return:
+        """
+        uFileName:str        = oFnLocalFile.basename
+        uDisplayFilename:str = uFileName
+
+        Logger.debug('Download (%s) via FTP from %s' % (uDisplayFilename,oPathRemote.unixstring))
+        uGetCmd:str = 'RETR %s' % uFileName
+        try:
+            if self.ChangeDir(oPath=oPathRemote):
+                self.oFTP.retrbinary(uGetCmd, open(str(oFnLocalFile), 'wb').write)
+                Logger.debug('FTP: Download done!')
+            return True
+        except Exception as e:
+            LogError(uMsg='FTP: can\'t Download file (%s), general failure' % uFileName,oException=e)
+        return False
+
+
+    def DownloadRemoteFile(self,*,oFnFile:cFileName, oPathLocal:cPath, oPathRemote:cPath) ->bool:
+        """
+        Subfunction to download a remote file to a local folder
+
+        :param cFileName oFnFile: FileName to Download
+        :param cPath oPathLocal: Local Path
+        :param cPath oPathRemote: Remote FTP Path
+        :return:
+        """
+        try:
+            bRet:bool
+            uFnFile:str           = oFnFile.basename
+            oFnLocal:cFileName    = cFileName(oPathLocal) + uFnFile
+
+            if not oPathLocal.Exists():
+                oPathLocal.Create()
+
+            bRet = self._DownloadFile(oFnLocalFile=oFnLocal,oPathRemote=oPathRemote)
 
             return bRet
 

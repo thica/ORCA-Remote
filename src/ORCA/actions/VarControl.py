@@ -53,6 +53,7 @@ from ORCA.vars.Actions          import Var_Part
 from ORCA.vars.Actions          import Var_Power
 from ORCA.vars.Actions          import Var_Round
 from ORCA.vars.Actions          import Var_StringToHexString
+from ORCA.vars.Actions          import Var_StringToTime
 from ORCA.vars.Actions          import Var_ToVar
 from ORCA.vars.Actions          import Var_Trim
 from ORCA.vars.Actions          import Var_UpperCase
@@ -198,6 +199,7 @@ class cEventActionsVarControl(cEventActionBase):
         * "concatenate"
         * "getpart"
         * "format"
+        * "totime"
         * "getlen"
         * "find"
         * "power"
@@ -268,6 +270,10 @@ class cEventActionsVarControl(cEventActionBase):
         |The format string, following the python string.format syntax
         e.g.: "(int)FFFF00{0:0>2x}"
         |
+        |totime
+        |The format string for the python datetime.datetime.strptime function
+        e.g.: "%Y-%m-%dT%H:%M:%SZ"
+        | Time offset (milliseconds of no unit given)
         |-
         |round
         |The rounding position (eg 0=round to int)
@@ -372,6 +378,8 @@ class cEventActionsVarControl(cEventActionBase):
             Var_Hex2Int(uVarName = uVarName)
         elif uOperator==u'hexstringtostring':
             Var_HexStringToString(uVarName = uVarName)
+        elif uOperator == u'totime':
+            Var_StringToTime(uVarName = uVarName,uFormat=ReplaceVars(uParameter1),uGap=ReplaceVars(uParameter2))
         elif uOperator == u'stringtohexstring':
             Var_StringToHexString(uVarName = uVarName)
         elif uOperator==u'load':
@@ -583,7 +591,7 @@ class cEventActionsVarControl(cEventActionBase):
         uActionName:str         = ReplaceVars(oAction.dActionPars.get("actionname",""))
         uBreakVar:str           = ReplaceVars(oAction.dActionPars.get("breakvar",""))
         aActions:List[cAction]  = []
-        aVars:List[str]         = sorted(Var_GetArray(uVarName = uVarName,iLevel = iLevel))
+        aVars:List[str]         = Var_GetArray(uVarName = uVarName,iLevel = iLevel,bSort=True)
 
         SetVar(uVarName = uBreakVar, oVarValue = "0")
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+
+<action name="$dvar(definition_alias_gardena)_GetLocationValues">
+    <action name="Hide all infos"  string="call $dvar(definition_alias_gardena)_HideAllInfos" />
+    <action name="Enable location infos" string="setwidgetattribute" widgetname="Anchor Info Frame Location"  attributename="enable" attributevalue="1"/>
+    <action name="Get the value (City)" string="setvar $dvar(definition_alias_gardena)_LOCATION_CITY_VALUE=$dvar(definition_alias_gardena)_LOCATION_CITY[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_LOCATION_CITY_VALUE" />
+    <action name="Get the value (Address)" string="setvar $dvar(definition_alias_gardena)_LOCATION_ADDRESS_VALUE=$dvar(definition_alias_gardena)_LOCATION_ADDRESS[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_LOCATION_ADDRESS_VALUE" />
+    <action name="Get the value (Sunrise)" string="setvar $dvar(definition_alias_gardena)_LOCATION_SUNRISE_VALUE=$dvar(definition_alias_gardena)_LOCATION_SUNRISE[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_LOCATION_SUNRISE_VALUE" />
+    <action name="Get the value (Sunset)" string="setvar $dvar(definition_alias_gardena)_LOCATION_SUNSET_VALUE=$dvar(definition_alias_gardena)_LOCATION_SUNSET[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_LOCATION_SUNSET_VALUE" />
+</action>
+
+
+<action name="$dvar(definition_alias_gardena)_InitVars_Location">
+    <action name="Init"  string="setvar $dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET=" />
+    <action name="Init"  string="setvar $dvar(definition_alias_gardena)_LOCATION_ID=" />
+    <action name="Init"  string="setvar $dvar(definition_alias_gardena)_LOCATION_NAME[]=" />
+    <action name="Init"  string="setvar $dvar(definition_alias_gardena)_LOCATION_NAME=" />
+    <action name="Init"  string="setvar $dvar(definition_alias_gardena)_LOCATION_NAME[0]=Unknown" />
+    <action name="Init"  string="setvar $dvar(definition_alias_gardena)_LOCATION_CITY_VALUE=" />
+    <action name="Init"  string="setvar $dvar(definition_alias_gardena)_LOCATION_ADDRESS_VALUE=" />
+    <action name="Init"  string="setvar $dvar(definition_alias_gardena)_LOCATION_SUNSET_VALUE=" />
+    <action name="Init"  string="setvar $dvar(definition_alias_gardena)_LOCATION_SUNRISE_VALUE=" />
+</action>
+
+
+</includes>
+

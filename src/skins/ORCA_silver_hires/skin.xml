@@ -73,6 +73,8 @@
     <color name="dimmed">#000000aa</color>
     <color name="shadow">#00000088</color>
     <color name="green">#008000ff</color>
+    <color name="silver">#C0C0C0ff</color>
+
   </colors>
 
   <!-- Redirects can be used to replace standards elements & pages with skin elements-->

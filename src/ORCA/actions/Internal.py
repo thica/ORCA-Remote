@@ -17,6 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from xml.etree.ElementTree              import Element
 
 from ORCA.actions.Base                  import cEventActionBase
 from ORCA.definition.DefinitionContext  import SetDefinitionContext
@@ -29,7 +30,8 @@ from ORCA.utils.FileName                import cFileName
 from ORCA.Action                        import cAction
 from ORCA.download.Repository           import oRepository
 from ORCA.actions.ReturnCode            import eReturnCode
-
+from ORCA.utils.CachedFile              import CachedFile
+from ORCA.utils.XML                     import Orca_FromString
 import ORCA.Globals as Globals
 
 __all__ = ['cEventActionsInternal']
@@ -308,6 +310,24 @@ class cEventActionsInternal(cEventActionBase):
         Globals.oTheScreen.LoadFonts_ForDefinition(uDefinitionName=uDefinitionName)
         return eReturnCode.Nothing
 
+    def ExecuteActionLoadActionFile(self,oAction:cAction) -> eReturnCode:
+        """
+        loadactionfile:
+            Load as specific action file
+            Parameter:
+            actionfilename: Full path to the action file
+        """
+
+        self.oEventDispatcher.LogAction(uTxt=u'LoadActionFile',oAction=oAction)
+        oFnAction:cFileName=cFileName().ImportFullPath(uFnFullName=oAction.dActionPars.get("actionfilename",""))
+        if oFnAction.Exists():
+            uET_Data = CachedFile(oFileName=oFnAction)
+            oET_Root:Element = Orca_FromString(uET_Data=uET_Data, oDef=None, uFileName=str(oFnAction))
+            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag=u'actions',uListTag=u'action',dTargetDic=Globals.oActions.dActionsCommands,uFileName=oFnAction.string)
+
+
+        return eReturnCode.Nothing
+
     def ExecuteActionLoadDefinitionActions(self,oAction:cAction) -> eReturnCode:
         """
         loaddefinitionactions:
@@ -443,6 +463,8 @@ class cEventActionsInternal(cEventActionBase):
             bRet=Globals.oFTP.DisConnect()
         elif uCommand==u'uploadfile':
             bRet = Globals.oFTP.UploadLocalFile(oFile=oLocalFile, oBaseLocalDir=oLocalBaseFolder, oBaseRemoteDir=oRemoteBaseFolder)
+        elif uCommand==u'downloadfile':
+            bRet = Globals.oFTP.DownloadRemoteFile(oFnFile=oLocalFile, oPathLocal=oLocalBaseFolder, oPathRemote=oRemoteBaseFolder)
         if bRet:
             return eReturnCode.Success
         else:

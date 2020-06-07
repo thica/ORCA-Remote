@@ -36,6 +36,7 @@ from    ORCA.utils.TypeConvert  import ToDic
 from    ORCA.utils.TypeConvert  import XMLToDic
 from    ORCA.utils.ParseDict    import ParseDictKeyTree
 from    ORCA.utils.ParseDict    import ParseDictAny
+from    ORCA.utils.ParseDict    import ParseDictAll
 from    ORCA.vars.Replace       import ReplaceVars
 from    ORCA.vars.Access        import SetVar
 
@@ -103,14 +104,14 @@ class cResultParser:
         if uParseResultOption == u'no' or uParseResultOption == u'':
             return u'',u''
 
-        if uParseResultOption != u'store' and uParseResultOption != u'tokenize' and uGetVar=="":
+        if uParseResultOption != u'store' and uParseResultOption != u'tokenize' and uGetVar=="" and not "E" in uParseResultFlags:
             return u'',u''
 
         try:
             if uParseResultOption == u'store':
                 return self._Parse_Store(uResponse)
             elif uParseResultOption == u'json':
-                if uGetVar:
+                if uGetVar or "E" in uParseResultFlags:
                     return self._Parse_Json(uResponse,uGetVar,uParseResultFlags)
             elif uParseResultOption == u'tokenize':
                 return self._Parse_Tokenize(uResponse,uGetVar,uTokenizeString)
@@ -163,7 +164,7 @@ class cResultParser:
 
         try:
             tJsonResponse = json.loads(uResponse)
-        except Exception as e:
+        except:
             uResponse=fixLazyJsonWithComments(uResponse)
             try:
                 tJsonResponse = json.loads(uResponse)
@@ -184,7 +185,21 @@ class cResultParser:
             if "U" in uParseResultFlags:
                 aResult = ParseDictAny(vObj=uResponse,uSearchKey=uGetVar)
             else:
-                aResult = ParseDictKeyTree(vObj=uResponse, aKeys=ToList(uGetVar))
+                if "E" in uParseResultFlags:
+                    dResult=ParseDictAll(vObj=uResponse,uPrefix="")
+                    uLocalDestVar  = self.uLocalDestVar
+                    uGlobalDestVar = self.uGlobalDestVar
+                    for uFoundKey, uValue in dResult.items():
+                        if uLocalDestVar:
+                            self.uLocalDestVar = uLocalDestVar + "%s" % uFoundKey
+                        if uGlobalDestVar:
+                            self.uGlobalDestVar = uGlobalDestVar + "%s" % uFoundKey
+                        self._SetVar(uValue, u'Dictionary value')
+                    self.uLocalDestVar  = uLocalDestVar
+                    self.uGlobalDestVar = uGlobalDestVar
+                    aResult=[]
+                else:
+                    aResult = ParseDictKeyTree(vObj=uResponse, aKeys=ToList(uGetVar))
 
             if aResult:
                 if not "A" in uParseResultFlags:

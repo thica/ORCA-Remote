@@ -126,7 +126,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         self.oEventDispatcher.bDoNext = False
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit is not None:
-                Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit.EnableWidget(True)
+                Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit.EnableWidget(bEnable=True)
         return eReturnCode.Nothing
 
     def ExecuteActionDisableTransmitterPicture(self,oAction:cAction) -> eReturnCode:
@@ -157,7 +157,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         self.oEventDispatcher.LogAction(uTxt=u'DisableTransmitterPicture',oAction=oAction)
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit is not None:
-                Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit.EnableWidget(False)
+                Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit.EnableWidget(bEnable=False)
         return eReturnCode.Nothing
 
     def ExecuteActionEnableWaitPicture(self,oAction:cAction) -> eReturnCode:
@@ -188,7 +188,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         self.oEventDispatcher.bDoNext = False
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureWait is not None:
-                Globals.oTheScreen.oCurrentPage.oWidgetPictureWait.EnableWidget(True)
+                Globals.oTheScreen.oCurrentPage.oWidgetPictureWait.EnableWidget(bEnable=True)
         return eReturnCode.Nothing
 
     def ExecuteActionDisableWaitPicture(self,oAction:cAction) -> eReturnCode:
@@ -219,6 +219,6 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         self.oEventDispatcher.bDoNext = False
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureWait is not None:
-                Globals.oTheScreen.oCurrentPage.oWidgetPictureWait.EnableWidget(False)
+                Globals.oTheScreen.oCurrentPage.oWidgetPictureWait.EnableWidget(bEnable=False)
         return eReturnCode.Nothing
 

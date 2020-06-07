@@ -63,12 +63,11 @@ class cWidgetAnchor(cWidgetBase):
     WikiDoc:End
     """
 
-
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         # For the Border
         self.AddArg('background_color', [1.0, 0.0, 1.0, 1.0])
-        self.AddArg('linewidth', "2")
+        self.AddArg('linewidth', "1.0")
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads from Xml """

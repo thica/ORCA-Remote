@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+
+<action name="$dvar(definition_alias_gardena)_GetSensorValues">
+
+    <action name="Hide all infos"  string="call $dvar(definition_alias_gardena)_HideAllInfos" />
+
+    <action name="Enable sensor infos" string="setwidgetattribute" widgetname="Anchor Info Frame Sensor"  attributename="enable" attributevalue="1"/>
+
+    <!-- Ambient Temperature -->
+    <action name="We need the index of the ambient temperature" string="setvar $dvar(definition_alias_gardena)_searchability=ambient_temperature" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the temperature" string="setvar $dvar(definition_alias_gardena)_searchproperty=temperature" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Temperature)" string="setvar $dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_VALUE" />
+    <action name="Get the value (Unit)" string="setvar $dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_UNIT=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_unit" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_UNIT" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+    <action name="We need the index of the status" string="setvar $dvar(definition_alias_gardena)_searchproperty=frost_warning" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (status)" string="setvar $dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_FROSTSTATUS_VALUERAW=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_FROSTSTATUS_VALUERAW" />
+    <action name="Compile the translation var" string="setvar $dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_FROSTSTATUS_VALUE=GardenaStatus[$var($dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_FROSTSTATUS_VALUERAW)]" />
+    <action name="Get the translation"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_FROSTSTATUS_VALUE" />
+
+    <!-- Soil Temperature -->
+    <action name="We need the index of the soil temperature" string="setvar $dvar(definition_alias_gardena)_searchability=soil_temperature" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the temperature" string="setvar $dvar(definition_alias_gardena)_searchproperty=temperature" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Temperature)" string="setvar $dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_VALUE" />
+    <action name="Get the value (Unit)" string="setvar $dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_UNIT=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_unit" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_UNIT" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+    <!-- Humidity -->
+    <action name="We need the index of the humidity" string="setvar $dvar(definition_alias_gardena)_searchability=humidity" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the humidity" string="setvar $dvar(definition_alias_gardena)_searchproperty=humidity" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Humidity)" string="setvar $dvar(definition_alias_gardena)_SENSOR_HUMIDITY_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_HUMIDITY_VALUE" />
+    <action name="Get the value (Unit)" string="setvar $dvar(definition_alias_gardena)_SENSOR_HUMIDITY_UNIT=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_unit" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_HUMIDITY_UNIT" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_SENSOR_HUMIDITY_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_HUMIDITY_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_SENSOR_HUMIDITY_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+    <!-- Light -->
+    <action name="We need the index of the light" string="setvar $dvar(definition_alias_gardena)_searchability=light" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the light" string="setvar $dvar(definition_alias_gardena)_searchproperty=light" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Light)" string="setvar $dvar(definition_alias_gardena)_SENSOR_LIGHT_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_LIGHT_VALUE" />
+    <action name="Get the value (Unit)" string="setvar $dvar(definition_alias_gardena)_SENSOR_LIGHT_UNIT=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_unit" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_LIGHT_UNIT" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_SENSOR_LIGHT_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_LIGHT_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_SENSOR_LIGHT_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+    <!-- Battery -->
+    <action name="We need the index of the battery" string="setvar $dvar(definition_alias_gardena)_searchability=battery" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the light" string="setvar $dvar(definition_alias_gardena)_searchproperty=level" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Humidity)" string="setvar $dvar(definition_alias_gardena)_SENSOR_BATTERY_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_BATTERY_VALUE" />
+    <action name="Get the value (Unit)" string="setvar $dvar(definition_alias_gardena)_SENSOR_BATTERY_UNIT=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_unit" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_BATTERY_UNIT" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_SENSOR_BATTERY_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_BATTERY_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_SENSOR_BATTERY_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+    <!-- WLAN -->
+    <action name="We need the index of the status" string="setvar $dvar(definition_alias_gardena)_searchability=radio" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the light" string="setvar $dvar(definition_alias_gardena)_searchproperty=quality" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Humidity)" string="setvar $dvar(definition_alias_gardena)_SENSOR_RADIO_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_RADIO_VALUE" />
+    <action name="Get the value (Unit)" string="setvar $dvar(definition_alias_gardena)_SENSOR_RADIO_UNIT=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_unit" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_RADIO_UNIT" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_SENSOR_RADIO_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_RADIO_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_SENSOR_RADIO_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+    <!-- Connection Status -->
+    <action name="We need the index of the infos" string="setvar $dvar(definition_alias_gardena)_searchability=device_info" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the connection status" string="setvar $dvar(definition_alias_gardena)_searchproperty=connection_status" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (status)" string="setvar $dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_VALUE2=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_VALUE2" />
+    <action name="Compile the translation var" string="setvar $dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_VALUE=GardenaStatus[$var($dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_VALUE2)]" />
+    <action name="Get the translation"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_VALUE" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+
+</action>
+
+
+<action name="$dvar(definition_alias_gardena)_InitVars_Sensor">
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_VALUE=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_UNIT=C" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_TIMESTAMP=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_AMBIENT_TEMPERATURE_FROSTSTATUS_VALUE=" />
+
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_VALUE=0" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_UNIT=C" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_SOIL_TEMPERATURE_TIMESTAMP=" />
+
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_HUMIDITY_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_HUMIDITY_UNIT=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_HUMIDITY_TIMESTAMP=" />
+
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_BATTERY_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_BATTERY_UNIT=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_BATTERY_TIMESTAMP=" />
+
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_LIGHT_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_LIGHT_UNIT=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_LIGHT_TIMESTAMP=" />
+
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_RADIO_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_RADIO_UNIT=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_RADIO_TIMESTAMP=" />
+
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_SENSOR_CONNECTION_STATUS_TIMESTAMP=" />
+
+</action>
+
+<action name="$dvar(definition_alias_gardena)_Info_Button_Pressed_Sensor">
+    <action1 name="Show Dummy Message" string="showquestion" title="Message" message="´Pressed the Info area (Sensor)" actionyes="dummy"/>
+</action>
+
+<action name="$dvar(definition_alias_gardena)_sensor_measure_soil_humidity">
+    <action name="Request update soil humidity"  string="sendcommand sensor_measure_soil_humidity" commandparameter='{"deviceid":"$var($dvar(definition_alias_gardena)_DEVICEID)","locationid":"$var($dvar(definition_alias_gardena)_LOCATION_ID)"}' retvar="$dvar(definition_alias_gardena)_status" interface="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)"  />
+    <action name="Refresh data from gateway"  string="call $dvar(definition_alias_gardena)_Update Data" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_sensor_measure_ambient_temperature">
+    <action name="Request update ambient temperature"  string="sendcommand sensor_measure_ambient_temperature" commandparameter='{"deviceid":"$var($dvar(definition_alias_gardena)_DEVICEID)","locationid":"$var($dvar(definition_alias_gardena)_LOCATION_ID)"}' retvar="$dvar(definition_alias_gardena)_status" interface="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)"  />
+    <action name="Refresh data from gateway"  string="call $dvar(definition_alias_gardena)_Update Data" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_sensor_measure_light">
+    <action name="Request update ambient temperature"  string="sendcommand sensor_measure_light" commandparameter='{"deviceid":"$var($dvar(definition_alias_gardena)_DEVICEID)","locationid":"$var($dvar(definition_alias_gardena)_LOCATION_ID)"}' retvar="$dvar(definition_alias_gardena)_status" interface="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)"  />
+    <action name="Refresh data from gateway"  string="call $dvar(definition_alias_gardena)_Update Data" />
+</action>
+
+</includes>
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_$dvar(definition_alias_gardena)'>
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+    <interface>$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)</interface>
+    <configname>$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)</configname>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background' type='BACKGROUND' picturenormal='background' />
+
+    <element name='Anchor TopGap'  type='ANCHOR'  posy='top' height='%7' />
+    <element name='Picture Device' type='PICTURE' posx='%4'                    posy='of:bottom:Anchor TopGap' width='%45' height='of:width:self:*0.5' picturenormal='$var($dvar(definition_alias_gardena)_DEVICEPICTURE)' />
+    <element name='Anchor LogoGap' type='ANCHOR'  posy='of:bottom:Picture Device' height='%5' />
+
+    <element name='Anchor Left Buttons' type='ANCHOR' posx='%4' posy='of:bottom:Anchor LogoGap' width='%45'  height='%8' >
+      <element name='DropDown_Locations' type='DROPDOWN'  posy='top'  height='%90' width='%100' fontsize="%h50"  picturenormal='button wide*' caption="$var($dvar(definition_alias_gardena)_UNINITIALIZED_LOCATION):::$dvar(definition_alias_gardena)_LOCATION_NAME[]"  setcaption="1" actions='$dvar(definition_alias_gardena)_CollectDevices'  />
+    </element>
+
+    <element name='Anchor Devices' type='ANCHOR' posx='of:left:Anchor Left Buttons' posy='of:bottom:Anchor Left Buttons' width='of:width:DropDown_Locations' height='%65' >
+      <elements>
+        <element name="ScrollBox_Devices" type="SCROLLLIST" picturenormal="background boxes" container="list_devices" rowheight="%8"  />
+        <element name='Anchor Devices Inner' type='ANCHOR'   height='%8' >
+          <element name="Switch Device"  type="SWITCH"    posx="left"  posy="top"    height="%88" picturenormal='button wide*' container="list_devices" group="$dvar(definition_alias_gardena)_group_devices" caption="$var($dvar(definition_alias_gardena)_DEVICES_NAME[])" action="$dvar(definition_alias_gardena)_ChangeDevice" destvar="$dvar(definition_alias_gardena)_group_devices_status" fontsize='%h50'  />
+          <element name='Devider'        type='RECTANGLE' posx='left'  posy="%95" height="%7"  backgroundcolor='$var(silver)' container="list_devices"  />
+        </element>
+      </elements>
+    </element>
+
+    <element name='Anchor Infos' type='ANCHOR' posx='%96' posy='of:bottom:Anchor TopGap' width='%45'  height='%56' >
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_location.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_sensor.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_gateway.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_mower.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_power.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_watering_control.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_irrigation.xml" parse="xml" />
+    </element>
+    <element name='Anchor Actions' type='ANCHOR' posx='%96' posy='of:tobottom:Anchor Devices' width='%45'  height='%33' >
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_action_sensor.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_action_gateway.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_action_mower.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_action_power.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_action_watering_control.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_action_irrigation.xml" parse="xml" />
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_action_watering_computer.xml" parse="xml" />
+    </element>
+  </elements>
+</page>

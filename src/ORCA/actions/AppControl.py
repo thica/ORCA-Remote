@@ -74,7 +74,8 @@ class cEventActionsAppControl(cEventActionBase):
         * queue: Dumps the current queue
         * vars: Dumps all vars
         * actions: Dumps all actions
-        * definitionvars: Dumps all defitions vars
+        * definitionvars: Dumps all definitions vars
+        * widgets: dumps all widget names
         |-
         |filter
         |Filter to apply, just showing elements which CONTAIN the filter token (not for type = queue)
@@ -96,6 +97,8 @@ class cEventActionsAppControl(cEventActionBase):
             DumpVars(uFilter = uFilter)
         elif uType=="actions":
             Globals.oActions.Dump(uFilter=uFilter)
+        elif uType=="widgets":
+            Globals.oTheScreen.DumpWidgets(uFilter=uFilter)
         elif uType=="definitionvars":
             if uDefinitionName:
                 oDef=Globals.oDefinitions.get(uDefinitionName)

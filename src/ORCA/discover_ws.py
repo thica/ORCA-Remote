@@ -479,6 +479,7 @@ def readMessage(sock):
     except socket.error as e:
         return None
     else:
+        print ("Receive:",str(data)," ",str(addr))
         return (data, addr)
 
 def parseProbeMessage(dXML:Dict):
@@ -514,6 +515,7 @@ def parseMessage(dXML:Dict):
     env.setXAddrs(ParseDictAny(vObj=dXML,            uSearchKey="XAddrs",            bSingleValue=True))
     env.setMetadataVersion(ParseDictAny(vObj=dXML,   uSearchKey="MetadataVersion",   bSingleValue=True))
 
+    print (str(env))
     return env
 
 
@@ -620,7 +622,6 @@ def parseResolveMatchMessage(dom):
 
 
 def parseEnvelope(data):
-    print (data)
     data = CleanXML(data)
     print (data)
     dom = minidom.parseString(data)
@@ -628,6 +629,8 @@ def parseEnvelope(data):
     # return parseMessage(dXML=dXML)
 
     soapAction = ParseDictAny(vObj=dXML, uSearchKey="Action", bSingleValue=True)
+
+    print (str(soapAction))
 
     # soapAction = dom.getElementsByTagNameNS(NS_A, "Action")[0].firstChild.data.strip()
     if soapAction == ACTION_PROBE:
@@ -840,7 +843,10 @@ class MessageReceiverThread(threading.Thread):
             if val is None:
                 time.sleep(0.01)
                 continue
+
             (data, addr) = val
+
+            print ("Thread:",str(data), " ",str(addr))
 
             env = parseEnvelope(data)
 
@@ -1075,7 +1081,7 @@ class WSDiscovery:
         elif env.getAction() == ACTION_HELLO:
             #check if it is from a discovery proxy
             rt = env.getRelationshipType()
-            if False and rt is not None and rt.getLocalname() == "Suppression" and rt.getNamespace() == NS_D:
+            if rt is not None and rt.getLocalname() == "Suppression" and rt.getNamespace() == NS_D:
                 xAddr = env.getXAddrs()[0]
                 #only support 'soap.udp'
                 if xAddr.startswith("soap.udp:"):
@@ -1258,7 +1264,7 @@ class WSDiscovery:
         return False
 
     def __isScopeInList(self, scope, scopes):
-        return False
+        return True
         for entry in scopes:
             if matchScope(scope.getValue(), entry.getValue(), scope.getMatchBy()):
                 return True
@@ -1344,7 +1350,8 @@ def showEnv(env):
     print ("Probe Matches: %s" % env.getProbeResolveMatches())
     print ("-----------------------------")
 
-if __name__ == "__main__":
+
+def TestWSDiscovery():
     wsd = WSDiscovery()
     wsd.start()
 
@@ -1358,8 +1365,8 @@ if __name__ == "__main__":
     xAddr = "localhost:8080/abc"
     wsd.publishService(types=[ttype], scopes=[scope2], xAddrs=[xAddr])
 
-    #ret = wsd.searchServices(scopes=[scope1], timeout=10)
-    ret = wsd.searchServices()
+    ret = wsd.searchServices(scopes=[scope1], timeout=10)
+    #ret = wsd.searchServices()
 
     for service in ret:
         print (service.getEPR() + ":" + service.getXAddrs()[0])

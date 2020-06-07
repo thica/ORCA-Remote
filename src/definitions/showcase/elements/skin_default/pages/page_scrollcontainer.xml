@@ -13,7 +13,7 @@
 
     <element name='Anchor1' type='ANCHOR' posx='center' posy='of:bottom:Anchor Top' width='%23' height='%70' >
       <elements>
-        <element name="ScollBox Left" type="SCROLLCONTAINER" picturenormal="background boxes"  >
+        <element name="ScrollBox Left" type="SCROLLCONTAINER" picturenormal="background boxes"  >
           <element name='Anchor1 Inner' type='ANCHOR' width='%200' height="of:width:self:*1.5"  >
             <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_main_menu.xml" parse="xml" />
           </element>

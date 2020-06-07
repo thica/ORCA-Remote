@@ -23,6 +23,7 @@ from copy                           import copy
 from typing                         import List
 from typing                         import Tuple
 from typing                         import Union
+from typing                         import Dict
 from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
 from kivy.uix.scrollview            import ScrollView
@@ -30,6 +31,7 @@ from kivy.uix.floatlayout           import FloatLayout
 from ORCA.widgets.base.Base         import cWidgetBase
 
 from ORCA.widgets.Picture           import cWidgetPicture
+from ORCA.widgets.Switch            import cWidgetSwitch
 from ORCA.utils.XML                 import GetXMLTextAttribute
 from ORCA.vars.Actions              import Var_GetArrayEx
 from ORCA.vars.Replace              import ReplaceVars
@@ -204,12 +206,16 @@ class cWidgetScrollList(cWidgetPicture):
                 oTmpChild.iHeightInit   = self.iRowHeight * (oChild.iHeightInit/oChild.iAnchorHeight)
                 oTmpChild.iPosXInit     = oTmpChild.iPosXInit - self.iPosXInit
                 oTmpChild.iGapY         = (self.iPosY *-1) + (self.iRowHeightScreen * (u + 0))
+                if isinstance(oChild,cWidgetSwitch):
+                    if oTmpChild.uDestVar:
+                        oTmpChild.uDestVar=oTmpChild.uDestVar+"_"+str(u)
 
                 if len(aCaptions[iIndex]) > u:
                     if hasattr(oTmpChild,"uCaption"):
                         oTmpChild.uOrgCaption   = aCaptions[iIndex][u][0]
                         oTmpChild.uCaption      = ReplaceVars(aCaptions[iIndex][u][0])
                         uVarIndex               = ReplaceVars(aCaptions[iIndex][u][1])
+
                 oTmpChild.Create(self.oObjectContent)
 
                 if hasattr(oTmpChild,"dActionPars"):

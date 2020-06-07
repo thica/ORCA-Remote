@@ -54,8 +54,9 @@ class cSliderEx(Slider):
         self.canvas.clear()
         if self.orientation==u'horizontal':
             fGap                     = (self.height - sp(32))/2
-            self.x                  += fGap
-            self.fBackGroundSize     = self.height / 4 - fGap * 2
+            self.x                   = self.x + fGap
+            self.width               = self.width - fGap * 2
+            self.fBackGroundSize     = self.height / 4 # - fGap * 2
             tKnobPos                 = (self.value_pos[0] - (self.height/2), self.value_pos[1] )
             tKnobSize                = (self.height, self.height)
             self.oKnob               = BorderImage(border=(0, 0, 0, 0),pos= tKnobPos, size= tKnobSize,source=self.uButtonPic)
@@ -64,7 +65,7 @@ class cSliderEx(Slider):
             self.canvas.add(self.oBorderImage)
         else:
             fGap                    = (self.width - sp(32))/2
-            self.y                 += fGap
+            self.y                  = self.y + fGap
             self.height             = self.height - fGap * 2
             self.fBackGroundSize    = self.width/4
             tKnobPos                = (self.value_pos[0] , self.value_pos[1] - (self.width/2))

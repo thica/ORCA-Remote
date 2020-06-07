@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+
+<action name="$dvar(definition_alias_gardena)_GetWateringComputerValues">
+
+    <action name="Hide all infos"  string="call $dvar(definition_alias_gardena)_HideAllInfos" />
+
+    <action name="Enable watering computer infos" string="setwidgetattribute" widgetname="Anchor Info Frame WateringComputer"  attributename="enable" attributevalue="1"/>
+
+    <!-- Battery -->
+    <action name="We need the index of the battery" string="setvar $dvar(definition_alias_gardena)_searchability=battery" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the level" string="setvar $dvar(definition_alias_gardena)_searchproperty=level" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Level)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_VALUE" />
+    <action name="Get the value (Unit)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_UNIT=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_unit" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_UNIT" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+    <!-- Status -->
+    <action name="We need the index of the mower" string="setvar $dvar(definition_alias_gardena)_searchability=mower" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the status" string="setvar $dvar(definition_alias_gardena)_searchproperty=status" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Status)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_VALUERAW=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_VALUERAW" />
+    <action name="Compile the translation var" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_VALUE=GardenaStatus[$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_VALUERAW)]" />
+    <action name="Get the translation"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_VALUE" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+    <!-- Error -->
+    <action name="We need the index of the errors" string="setvar $dvar(definition_alias_gardena)_searchproperty=error" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Error)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_ERROR_VALURAW=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_ERROR_VALUERAW" />
+    <action name="Compile the translation var" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_ERROR_VALUE=GardenaStatus[$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_ERROR_VALUERAW)]" />
+    <action name="Get the translation"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_ERROR_VALUE" />
+
+    <!-- Source for next start -->
+    <action name="We need the index of the start next source" string="setvar $dvar(definition_alias_gardena)_searchproperty=source_for_next_start" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Next Start)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTSOURCE_VALUERAW=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTSOURCE_VALUERAW" />
+    <action name="Compile the translation var" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTSOURCE_VALUE=GardenaStatus[$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTSOURCE_VALUERAW)]" />
+    <action name="Get the translation"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTSOURCE_VALUE" />
+
+    <!-- time for next start -->
+    <action name="We need the index of the start next time" string="setvar $dvar(definition_alias_gardena)_searchproperty=timestamp_next_start" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Next Start)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTTIME_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTTIME_VALUE" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTTIME_VALUE" parameter1="#DT%Y-%m-%dT%H:%MZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+    <!-- Radio -->
+    <action name="We need the index of the status" string="setvar $dvar(definition_alias_gardena)_searchability=radio" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the quality" string="setvar $dvar(definition_alias_gardena)_searchproperty=quality" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (Quality)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_VALUE=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_VALUE" />
+    <action name="Get the value (Unit)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_UNIT=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_unit" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_UNIT" />
+    <action name="Get the value (timestamp)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_TIMESTAMP=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_timestamp" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_TIMESTAMP" />
+    <action name="Format Time"  string="modifyvar" operator="totime" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_TIMESTAMP" parameter1="#DT%Y-%m-%dT%H:%M:%S.%fZ" parameter2="$var($dvar(definition_alias_gardena)_LOCATION_TIMEOFFSET)"/>
+
+    <!-- Connection status -->
+    <action name="We need the index of the info" string="setvar $dvar(definition_alias_gardena)_searchability=device_info" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindAbilityIndex" />
+    <action name="We need the index of the connection status" string="setvar $dvar(definition_alias_gardena)_searchproperty=connection_status" />
+    <action name="Find it" string="call $dvar(definition_alias_gardena)_FindPropertyIndex" />
+    <action name="Get the value (connection status)" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_CONNECTION_STATUS_VALUE2=$dvar(definition_alias_gardena)_devices[$var($dvar(definition_alias_gardena)_CURRENT_DEVICE)]_abilities[$var($dvar(definition_alias_gardena)_abilityindex)]_properties[$var($dvar(definition_alias_gardena)_propertyindex)]_value" />
+    <action name="Get the value #2"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_CONNECTION_STATUS_VALUE2" />
+    <action name="Compile the translation var" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_CONNECTION_STATUS_VALUE=GardenaStatus[$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_CONNECTION_STATUS_VALUE2)]" />
+    <action name="Get the translation"   string="modifyvar" operator="fromvar" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_CONNECTION_STATUS_VALUE" />
+
+</action>
+
+<action name="$dvar(definition_alias_gardena)_start_mower">
+    <action name="Get time var" string="setvar tmpvar=$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_SETMINUTES)" />
+    <action name="Make seconds of minutes" string="modifyvar" varname="tmpvar" operator="multiply" parameter1="60" />
+    <action name="start mower"  string="sendcommand mower_startoverridetimer" commandparameter='{"time_in_seconds":"$var(tmpvar)","deviceid":"$var($dvar(definition_alias_gardena)_DEVICEID)","locationid":"$var($dvar(definition_alias_gardena)_LOCATION_ID)"}' interface="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)"  />
+    <action name="Refresh data from gateway"  string="call $dvar(definition_alias_gardena)_Update Data" />
+</action>
+
+<action name="$dvar(definition_alias_gardena)_park_mower">
+    <action name="stop mower"  string="sendcommand mower_parkuntilnexttimer" commandparameter='{"deviceid":"$var($dvar(definition_alias_gardena)_DEVICEID)","locationid":"$var($dvar(definition_alias_gardena)_LOCATION_ID)"}'  interface="$var($dvar(definition_alias_gardena)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_gardena)_CONFIGNAME_MAIN)"  />
+    <action name="Refresh data from gateway"  string="call $dvar(definition_alias_gardena)_Update Data" />
+</action>
+
+
+<action name="$dvar(definition_alias_gardena)_InitVars_WateringComputer">
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_ERROR_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_TIMESTAMP=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTTIME_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_NEXTSTARTSOURCE_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_CONNECTION_STATUS_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_CONNECTION_STATUS_TIMESTAMP=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_UNIT=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_BATTERY_TIMESTAMP=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_VALUE=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_UNIT=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_TIMESTAMP=" />
+
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_WATERINGCOMPUTER_SETMINUTES=60"/>
+    <action name="Set Var Link Watering Computer Minutes" string="addvarlink" varname="$dvar(definition_alias_gardena)_WATERINGCOMPUTER_SETMINUTES" linktype="widget" widgetname="Text Minutes WateringComputer" />
+
+</action>
+
+<action name="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer">
+    <action1 name="Show Dummy Message" string="showquestion" title="Message" message="´Pressed the Info area (WateringComputer)" actionyes="dummy"/>
+</action>
+
+
+</includes>
+

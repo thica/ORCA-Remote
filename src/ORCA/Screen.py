@@ -345,6 +345,8 @@ class cTheScreen(EventDispatcher):
         uPageNameRep:str
         aPages:List[str]
         aWidgets:List[cWidgetBase]
+        oWidget:cWidgetBase
+        oPage:cScreenPage
 
         aRet:List[cWidgetBase] = []
         if "@" in uWidgetName:
@@ -387,8 +389,41 @@ class cTheScreen(EventDispatcher):
             if not bIgnoreError:
                 uMsg:str=u'The Screen: Widget not found:'+uWidgetNameRep
                 Logger.error (uMsg)
+                self.DumpWidgets(uPageNameRep)
 
         return aRet
+
+    def DumpWidgets(self,uPageName:str):
+
+        uPageNameRep:str
+        aPages:List[str]
+        oWidget:cWidgetBase
+        oPage:cScreenPage
+        uPageNameRep   = ReplaceVars(uPageName)
+
+        if uPageNameRep=="":
+            if self.oCurrentPage is not None:
+                uPageNameRep=self.oCurrentPage.uPageName
+
+        aPages=[]
+        if uPageNameRep!="*":
+            aPages.append(uPageNameRep)
+        else:
+            for uPageNameRep in self.oScreenPages:
+                aPages.append(uPageNameRep)
+
+        for uPageName in aPages:
+            oPage=self.oScreenPages.get(uPageName)
+            if oPage is None:
+                uMsg:str=u'The Screen: Dump: Page [%s]not found: ' % uPageName
+                Logger.error (uMsg)
+            else:
+                for oWidget in oPage.aWidgets:
+                    Logger.debug("Widget:[%s] Page:[%s]" % (oWidget.uName,oWidget.oParentScreenPage.uPageName))
+                Logger.debug("")
+                for uWidgetName in oPage.dWidgets:
+                    Logger.debug("Widget:[%s]" % uWidgetName)
+
 
 
     def GuiIsBlocked(self) -> bool:

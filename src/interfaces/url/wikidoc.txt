@@ -113,6 +113,9 @@ A  codeset file could look like that (shortened version):
 |-
 |params
 |Parameters to send to the device, for POST requests. eg.: '{"key": "Digit0"}'
+|-
+|codeok
+|The return code, which represents a success, default value is 200
 |}
 
 Variable replacement: You can use variable placeholder to use variables in your json command string

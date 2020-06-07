@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Anchor Action Frame Irrigation" type="ANCHOR">
+        <element name="Frame Irrigation" type="PICTURE"  picturenormal="background boxes" enabled="0"/>
+        <element name="Anchor Frame Irrigation Inner" width="%90" heigth="%92" posx="center" posy="middle" type="ANCHOR" enabled="0">
+            <element name="Text Header Irrigation"   type="TEXTFIELD" posx="center" posy="%2" height="of:width:self:*0.12" caption="$lvar(gardena_10036)"   fontsize='%h70' htextalign='center' enabled="0" shorten='1' />
+            <element name='DropDown_Valves' type='DROPDOWN'  posy='%30'  height='%15'  picturenormal='button wide*' caption="$var($dvar(definition_alias_gardena)_IRRIGATION_VALVES_HEADER):::$dvar(definition_alias_gardena)_IRRIGATION_VALVES_NAME[]" setcaption="1" actions='$dvar(definition_alias_gardena)_change_valve' enabled="0"  />
+            <element name='Frame Slider Irrigation' type='ANCHOR' posy='%70' height="%30" >
+                <element name="Slider Hours Irrigation" type="SLIDER"    posx="center" width='%100' posy="top" height="%40" picturenormal="background boxes" picturebutton="button square normal"  mindatavalue="2" maxdatavalue="59" destvar="$dvar(definition_alias_gardena)_IRRIGATION_SETMINUTES"  roundpos="0" orientation="horizontal" discardmoves="0" enabled="0"/>
+                <element name="Text Hours Irrigation"   type="TEXTFIELD" posx="center" posy="bottom" width="%50" height="%40" caption="$var($dvar(definition_alias_gardena)_IRRIGATION_SETMINUTES) $lvar(801)"  vtextalign='top' htextalign='center' fontsize='%h50' enabled="0" />
+            </element>
+            <element name="Button Start Irrigation"  type="BUTTON"  posx="left"  posy="%95"         width="%50" height="%15" picturenormal='button wide*'  caption="Start" action="$dvar(definition_alias_gardena)_start_valve"  enabled="0" />
+            <element name="Button Stop Irrigation"   type="BUTTON"  posx="right" posy="of:top:last" width="%50" height="%15" picturenormal='button wide*'  caption="Stop" action="$dvar(definition_alias_gardena)_stop_valve" enabled="0" />
+        </element>
+    </element>
+</elements>

@@ -160,7 +160,13 @@ def ToUnicode(Obj):
 
     try:
         if isinstance(Obj, bytes):
-            return Obj.decode("utf-8")
+            try:
+                return Obj.decode("utf-8")
+            except Exception as Ex:
+                LogError(uMsg=u'Unicode Transfer Error',oException=Ex)
+                uRet:str = Obj.decode(encoding="ascii", errors="ignore")
+                print (uRet)
+                return uRet
         else:
             return str(Obj)
     except Exception as e:
@@ -171,6 +177,7 @@ def ToUnicode(Obj):
             for cChar in Obj:
                 print (ord(cChar)),
             print ('')
+        return str(Obj)
 
     return Obj
 

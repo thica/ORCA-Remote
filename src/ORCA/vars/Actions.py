@@ -19,6 +19,8 @@
 
 from typing import List
 from typing import Tuple
+from datetime import datetime
+from datetime import timedelta
 
 from kivy.logger            import Logger
 
@@ -31,9 +33,11 @@ from ORCA.utils.LoadFile    import LoadFile
 from ORCA.utils.LogError    import LogError
 from ORCA.utils.TypeConvert import ToFloat
 from ORCA.utils.TypeConvert import ToUnicode
+from ORCA.utils.TypeConvert import ToInt
 from ORCA.utils.FileName    import cFileName
 
 import ORCA.vars.Globals
+import ORCA.Globals as Globals
 
 __all__ = ['Var_Concatenate',
            'Var_Decrease',
@@ -57,6 +61,7 @@ __all__ = ['Var_Concatenate',
            'Var_Power',
            'Var_Round',
            'Var_StringToHexString',
+           'Var_StringToTime',
            'Var_ToVar',
            'Var_Trim',
            'Var_UpperCase',
@@ -373,6 +378,8 @@ def Var_FromVar(uVarName:str, uContext:str=u'') -> str:
     uValue2:str = ReplaceVars(GetVar(uVarName=uValue,uContext=uContext))
     if uValue2 != u'':
         uValue = uValue2
+    else:
+        uValue=""
     SetVar(uVarName=uVarName, oVarValue=uValue,uContext=uContext)
     return uValue
 
@@ -564,9 +571,16 @@ def Var_GetArray(uVarName:str, iLevel:int, bSort:bool = True) -> List[str]:
     iPosStart:int = Find_nth_Character(uVarName, "[", iLevel)
     if iPosStart > 0:
         uRootVarName:str = uVarName[:iPosStart + 1]
+        uTail = uVarName[uVarName.rfind("]")+1:]
         for uName in ORCA.vars.Globals.dUserVars:
             if uName.startswith(uRootVarName) and len(uName)>len(uRootVarName) and uName[len(uRootVarName)]!="]":
-                aRet.append(uName)
+                if uTail == "":
+                    aRet.append(uName)
+                else:
+                    uRemains = uName[uName.find("]",iPosStart+1)+1:]
+                    if uRemains.startswith(uTail):
+                        aRet.append(uName)
+
         if bSort:
             aRet = sorted(aRet)
     return aRet
@@ -714,4 +728,63 @@ def Var_Format(uVarName:str, uFormat:str):
         return uValue
     except Exception as e:
         LogError(uMsg=u'Var_Format: Invalid Argument', oException=e)
+        return u''
+
+def Var_StringToTime(uVarName:str, uFormat:str, uGap:str):
+    """
+    Converts a time string into a language local time string
+    The changed variable value will be return and stored in the user vars (Triggers raised if set)
+
+    :param str uVarName: The variable name for the action, from where the value is pulled
+    :param str uFormat: The format to use (python datetime.strptime syntax).  You might add the requested output to the format at the beginning of the string: #D #T #DT, If not given, date and time will returned. eg: #D%Y-%m-%dT%H:%M:%SZ will just return the date
+    :param str uGap: The time delta to add (in milliseconnds if no time given,
+    :return: The changed variable value
+    """
+
+
+    bUseDate:bool = False
+    bUseTime:bool = False
+    uValue:str
+    uFormatToUse:str
+    uResult:str = u''
+    oDateTime:datetime
+    iGap:int
+
+    try:
+        uValue = GetVar(uVarName=uVarName)
+        if uValue is None:
+            return u''
+        uFormatToUse:str = ORCA.vars.Globals.dUserVars.get(uFormat)
+        if uFormatToUse is None:
+            uFormatToUse = uFormat
+
+        if uFormatToUse.startswith('#'):
+            if uFormatToUse.startswith('#DT') or uFormatToUse.startswith('#TD'):
+                bUseDate = True
+                bUseTime = True
+                uFormatToUse = uFormatToUse[3:]
+            elif uFormatToUse.startswith('#D'):
+                bUseDate = True
+                uFormatToUse = uFormatToUse[2:]
+            elif uFormatToUse.startswith('#T'):
+                bUseTime = True
+                uFormatToUse = uFormatToUse[2:]
+        else:
+            bUseDate = True
+            bUseTime = True
+        oDateTime = datetime.strptime(uValue,uFormatToUse)
+        if uGap:
+            iGap=ToInt(uGap)
+            oDateTime = oDateTime + timedelta(milliseconds=iGap)
+
+        if bUseDate:
+            uResult=Globals.oLanguage.GetLocalizedDate(Globals.bLongDate, Globals.bLongMonth, Globals.bLongDay,oDateTime.timetuple())
+            if bUseTime:
+                uResult = uResult+" "
+        if bUseTime:
+            uResult = uResult+Globals.oLanguage.GetLocalizedTime(Globals.bClockWithSeconds,oDateTime.timetuple())+" "
+        SetVar(uVarName=uVarName, oVarValue=uResult)
+        return uResult
+    except Exception as e:
+        LogError(uMsg=u'Var_StringToTime: Invalid Argument', oException=e)
         return u''

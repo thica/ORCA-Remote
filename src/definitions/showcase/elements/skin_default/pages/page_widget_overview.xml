@@ -34,7 +34,7 @@
       </element>
 
       <element name='Frame top' type='ANCHOR' posy='%66.7' height="of:width:self:*0.27" >
-        <element name="Dropdown" type="DROPDOWN" fontsize='%h50'  caption='$lvar(showcase_10016)'  captions='Option 1,Option 2,Option 3,Option 4' actions=',,,' htextalign='center' vtextalign='middle' picturenormal="button wide*" framecolor='$var(dimmed)' framewidth='d100:50'/>
+        <element name="Dropdown" type="DROPDOWN" fontsize='%h50'  caption='$lvar(showcase_10016)'  captions='Option 1,Option 2,Option 3,Option 4,Option 5,Option 6' actions=',,,,,' htextalign='center' vtextalign='middle' picturenormal="button wide*" framecolor='$var(dimmed)' framewidth='d100:50'/>
         <element name="Label" type="TEXTFIELD"      posy="of:bottom:last" height="%40" fontsize='%h90'  caption='$lvar(showcase_10016)' htextalign='center' vtextalign='middle' />
       </element>
 

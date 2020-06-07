@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Anchor Action Frame Gateway" type="ANCHOR">
+        <element name="Frame Gateway" type="PICTURE"  picturenormal="background boxes" enabled="0"/>
+        <element name="Anchor Frame Gateway Inner" width="%90" heigth="%92" posx="center" posy="middle" type="ANCHOR" enabled="0">
+            <element1 name="Text Header Gateway" type="TEXTFIELD" posx="center" posy="%2" height="of:width:self:*0.12" caption="$lvar(gardena_10036)"  fontsize='%h70' htextalign='center' enabled="0" shorten='1' />
+        </element>
+    </element>
+</elements>

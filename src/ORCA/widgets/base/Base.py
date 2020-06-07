@@ -84,6 +84,7 @@ else:
     cDefinition   = TypeVar("cDefinition")
     cWidgetAnchor = TypeVar("cWidgetAnchor")
 
+
 __all__ = ['cWidgetBase']
 
 oLastWidget:Union[cWidgetBase,None]     = None
@@ -282,10 +283,6 @@ class cWidgetBase(cWidgetBaseBase):
             if (self.eWidgetType == eWidgetType.ScrollContainer or self.eWidgetType == eWidgetType.ScrollList) and self.uContainer == u'':
                 self.uContainer = ''.join(random.choice(string.ascii_lowercase)+str(i) for i in range(20))
 
-
-            if self.uName == "Anchor2 Inner":
-                i=1
-
             if self.uContainer==u'':
                 self.uContainer=uContainerContext
 
@@ -356,7 +353,8 @@ class cWidgetBase(cWidgetBaseBase):
                 iPosY = self._ParseDimPosValue(uPosY)
             elif uPosY == u'top':
                 fPercentage = 0.0
-            elif uPosY == u'middle':
+            elif uPosY == u'middle' or uPosY == u'center':
+                uPosY = "middle"
                 fPercentage = 50.0
             elif uPosY.isdigit():
                 Logger.warning("Depreciated absolute PosY used:" + self.uName + " from:" + self.uPageName)
@@ -564,7 +562,9 @@ class cWidgetBase(cWidgetBaseBase):
         if not CheckCondition(oPar=oXMLNode):
             self._eWidgetType = eWidgetType.SkipWidget
 
-    def EnableWidget(self, bEnable:bool) -> bool:
+    def EnableWidget(self, *, bEnable:bool) -> bool:
+        oPage:cScreenPage
+        oWidget:cWidgetBase
         if bEnable:
             if self.oObject:
                 self.oObject.opacity = self.fOrgOpacity
@@ -574,6 +574,17 @@ class cWidgetBase(cWidgetBaseBase):
                     self.fOrgOpacity = self.oObject.opacity
                     self.oObject.opacity = 0.0
         self.bIsEnabled = bEnable
+
+        if self.eWidgetType == eWidgetType.Anchor:
+            # this enable to hide/show complete anchors
+            oPage = self.oParentScreenPage
+            if oPage is not None:
+                if len(oPage.dAnchorWidgets)==0:
+                    oPage.CreateAnchorWidgets()
+                if self.uName in oPage.dAnchorWidgets:
+                    for oWidget in oPage.dAnchorWidgets[self.uName]:
+                        if oWidget!=self:
+                            oWidget.EnableWidget(bEnable=bEnable)
 
         return True
 
@@ -625,6 +636,12 @@ class cWidgetBase(cWidgetBaseBase):
         """ Dummy, needs to be overridden and not called """
         Logger.error(u'WidgetBase: Create called on base, not allowed [%s]' % self.uName)
         return False
+
+    def __str__(self):
+        return "Name:%s Anchor:%s : Type:%s" % (self.uName,self.uAnchorName,str(self._eWidgetType))
+
+    def __repr__(self):
+        return self.__str__()
 
     @staticmethod
     def SetContainer(*,uContainer:str):

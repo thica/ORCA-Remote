@@ -461,6 +461,93 @@
     <action name="showfile"     string="showpage Page_ShowFile" />
   </action>
 
+  <action name="Fkt Structured Input">
+    <!-- We make sure, that we do not call ourself again and again
+          so lets evaluate the name of the current page -->
+    <action name="INIT Stop Flag" string="setvar WAITSTRUCTUREDINPUT=FALSE" />
+    <action name="ShowPage Structured Input" string="showpage Page_StructureInput" />
+    <action name="Wait For Structured Input" string="noaction" />
+    <action name="wait" string="wait 1000"  />
+    <action name="loop" string="goto Wait For Structured Input" condition="$var(WAITSTRUCTUREDINPUT)==FALSE" />
+    <action name="Exit Wait For Structured Input" />
+    <action name="Back to calling page" />
+    <action name="Return to given page (if given)" string="if $par(PAGEINPUTRETURN)!="/>
+        <action name="ShowCallingPage" string="showpage $par(PAGEINPUTRETURN)"/>
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+
+    <action name="Return to last page (if given)" string="if $var(LASTPAGE)!="/>
+        <action name="ShowCallingPage" string="showpage $var(LASTPAGE)"/>
+        <action name="GoodBye" string="exitaction"  />
+    <action name="endif" string="endif" />
+    <action name="ShowFirstPage" string="showpage $var(FIRSTPAGE)"/>
+  </action>
+
+  <action name="Fkt InputStructuredAbort" >
+    <action name="set stop flag" string="setvar WAITSTRUCTUREDINPUT=TRUE" />
+    <action name="set return status flag" string="setvar STRUCTUREDINPUTRETURN=CANCEL" />
+  </action>
+  <action name="Fkt InputStructuredSave" >
+    <action name="set stop flag" string="setvar WAITSTRUCTUREDINPUT=TRUE" />
+    <action name="set return status flag" string="setvar STRUCTUREDINPUTRETURN=SAVE" />
+  </action>
+
+  <action name="Fkt GetInterFaceConfigParameter" >
+
+    <!--
+       Expected Parameters
+       Header : the header for the Input Page
+       Message : the message for the Input Page
+       Label1
+       Label2
+       Label3 : the Labels for the input fields, if empty the input field will be disabled
+       Config_Interface : The interface where to pull setting values
+       Config_Config    : The config where to pull setting values
+       Config_Par1
+       Config_Par2
+       Config_Par3 : The config value to get/set
+    -->
+
+    <action name="Disable Input Field 1, if not required" string="setwidgetattribute" widgetname="Anchor Input 1@Page_StructureInput" attributename="enable" attributevalue="0" condition="$par(Label1)=" />
+    <action name="Disable Input Field 2, if not required" string="setwidgetattribute" widgetname="Anchor Input 2@Page_StructureInput" attributename="enable" attributevalue="0" condition="$par(Label2)=" />
+    <action name="Disable Input Field 3, if not required" string="setwidgetattribute" widgetname="Anchor Input 3@Page_StructureInput" attributename="enable" attributevalue="0" condition="$par(Label3)=" />
+    <action name="Set caption" string="setwidgetattribute" widgetname="Text_1@Page_StructureInput" attributename="caption" attributevalue="$par(Label1)"  />
+    <action name="Set caption" string="setwidgetattribute" widgetname="Text_2@Page_StructureInput" attributename="caption" attributevalue="$par(Label2)"  />
+    <action name="Set caption" string="setwidgetattribute" widgetname="Text_3@Page_StructureInput" attributename="caption" attributevalue="$par(Label3)"  />
+
+    <action name="If we want to pull interface settings" string="if $par(Config_Interface)!=" />
+      <action name="If we want to pull first settings" string="if $par(Config_Par1)!=" />
+        <action name="Get Setting" string="getinterfacesetting" interfacename="$par(Config_Interface)" configname="$par(Config_Config)" varname="$par(Config_Par1)" retvar="TmpPar"/>
+        <action name="Set caption par1" string="setwidgetattribute" widgetname="Inputfield_1@Page_StructureInput" attributename="caption" attributevalue="$var(TmpPar)"  />
+        <action name="Set the default Value" string="setvar structuredinputstring1=$var(TmpPar)" />
+      <action name="endif" string="endif"/>
+      <action name="If we want to pull first settings" string="if $par(Config_Par2)!=" />
+        <action name="Get Setting" string="getinterfacesetting" interfacename="$par(Config_Interface)" configname="$par(Config_Config)" varname="$par(Config_Par2)" retvar="TmpPar"/>
+        <action name="Set caption par2" string="setwidgetattribute" widgetname="Inputfield_2@Page_StructureInput" attributename="caption" attributevalue="$var(TmpPar)"  />
+        <action name="Set the default Value" string="setvar structuredinputstring2=$var(TmpPar)" />
+      <action name="endif" string="endif"/>
+      <action name="If we want to pull first settings" string="if $par(Config_Par3)!=" />
+        <action name="Get Setting" string="getinterfacesetting" interfacename="$par(Config_Interface)" configname="$par(Config_Config)" varname="$par(Config_Par3)" retvar="TmpPar"/>
+        <action name="Set caption par3" string="setwidgetattribute" widgetname="Inputfield_3@Page_StructureInput" attributename="caption" attributevalue="$var(TmpPar)"  />
+        <action name="Set the default Value" string="setvar structuredinputstring3=$var(TmpPar)" />
+      <action name="endif" string="endif"/>
+    <action name="endif" string="endif"/>
+
+    <action name="Set header"  string="setwidgetattribute" widgetname="Header@Page_StructureInput" attributename="caption" attributevalue="$par(Header)"  />
+    <action name="Set message" string="setwidgetattribute" widgetname="Message@Page_StructureInput" attributename="caption" attributevalue="$par(Message)"  />
+    <action name="Disable message, if not required" string="setwidgetattribute" widgetname="Anchor Message@Page_StructureInput" attributename="enable" attributevalue="0" condition="$par(Message)=" />
+
+    <action name="Show Structutred Input" string="call Fkt Structured Input" PAGEINPUTRETURN="$par(PAGEINPUTRETURN)" />
+
+    <action name="If we want to safe" string="if $var(STRUCTUREDINPUTRETURN)==SAVE" />
+      <action name="save var" string="saveinterfacesetting" interfacename="$par(Config_Interface)" configname="$par(Config_Config)" varname="$par(Config_Par1)" varvalue="$var(structuredinputstring1)" condition="$par(Config_Par1)!="/>
+      <action name="save var" string="saveinterfacesetting" interfacename="$par(Config_Interface)" configname="$par(Config_Config)" varname="$par(Config_Par2)" varvalue="$var(structuredinputstring2)" condition="$par(Config_Par2)!="/>
+      <action name="save var" string="saveinterfacesetting" interfacename="$par(Config_Interface)" configname="$par(Config_Config)" varname="$par(Config_Par3)" varvalue="$var(structuredinputstring3)" condition="$par(Config_Par3)!="/>
+    <action name="endif" string="endif"/>
+
+  </action>
+
+
 </includes>
 
 

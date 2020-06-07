@@ -82,6 +82,9 @@ class cWidgetTextField(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBase
     |textcolor
     |The color of the text in hexedecimal RGBA format. It has to start with a pound sign (eg: #ff00ffff). Please use only low capital chars. If not textcolor if given, the default skin textcolor is used.
     |-
+    |shorten
+    |If set to "1", the txt will be shortened rather then havng a line break, Defaults to "0"
+    |-
     |caption
     |This defines the text to show. You can use fixed strings, but it is recommended to use a variable , which will be replaced at runtime. If the caption starts with icon: then the icon name follwed the colon is used (eg. icon:help). For icons you can also add a color as well (eg. icon:info color:$var(red) )
     |-

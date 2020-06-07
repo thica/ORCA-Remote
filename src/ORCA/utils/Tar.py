@@ -19,7 +19,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from typing import List
+from typing                 import List
+from typing                 import Optional
 
 from fnmatch                import fnmatch
 from os                     import walk
@@ -116,8 +117,7 @@ class cTarFile(cFileName):
 
 
 class cTarPath(cPath):
-    # noinspection PyDefaultArgument
-    def TarFolder(self, oFnTarDest:cFileName, uRemovePath:str=u'', aSkipFiles:List[str]=[], uCompressionMode:str = "")-> bool:
+    def TarFolder(self, oFnTarDest:cFileName, uRemovePath:str=u'', aSkipFiles:Optional[List[str]]=None, uCompressionMode:str = "")-> bool:
         """
         Tars a folder to a tar file
 
@@ -132,6 +132,9 @@ class cTarPath(cPath):
         aDirs:List[str]
         aFiles:List[str]
         uMode:str
+
+        if aSkipFiles is None:
+            aSkipFiles = []
 
         try:
             Logger.debug(u'Taring path [%s] to file [%s] , removing path [%s]' % (self.string, oFnTarDest.string, uRemovePath))

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
   <pagestartaction name="appstart">
+      <!-- Load my passwords -->
+      <action name="Login To FTP Server"   string="executeftpcommand" command="connect" host="192.168.1.154" user="root" password="" ssl="0"/>
+      <action name="Download File to FTP Server"   string="executeftpcommand"     command="downloadfile" localfile="thicasecrets.xml" localbasefolder="$var(DOWNLOADSPATH)" remotebasefolder="/home/root"/>
+      <action name="Logout from FTP Server"   string="executeftpcommand" command="disconnect"  />
+      <action name="Load Secrets scripts"   string="loadactionfile" actionfilename="$var(DOWNLOADSPATH)/thicasecrets.xml"  />
+      <action name="set the secrets"   string="call setthicasecrets"  />
+
       <action name="" string="getsaveorcasetting" configtype="ORCA" varname="locales" varvalue="Deutschland" condition="$var(STARTCOUNT)==1" />
       <action name="" string="redirect" from="$var(STANDARDELEMENTSPATH)/block_topline.xml" to="$var(DEFINITIONPATHSKINELEMENTS[activity_template])/block_topline.xml" />
   </pagestartaction>

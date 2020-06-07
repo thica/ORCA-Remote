@@ -37,6 +37,7 @@ from ORCA.utils.TypeConvert                import UnEscapeUnicode
 from ORCA.utils.TypeConvert                import ToUnicode
 from ORCA.utils.TypeConvert                import ToDic
 from ORCA.utils.TypeConvert                import ToBytes
+from ORCA.utils.TypeConvert                import ToInt
 from ORCA.utils.FileName                   import cFileName
 from ORCA.Action                           import cAction
 from ORCA.actions.ReturnCode               import eReturnCode
@@ -96,10 +97,11 @@ class cInterface(cBaseInterFace):
 
         def ReadAction(self,oAction:cAction) -> None:
             super().ReadAction(oAction)
-            oAction.uParams      = oAction.dActionPars.get(u'params',u'')
-            oAction.uRequestType = oAction.dActionPars.get(u'requesttype',u'POST')
-            oAction.uHeaders     = oAction.dActionPars.get(u'headers',u'{}')
-            oAction.uProtocol    = oAction.dActionPars.get(u'protocol',u'http://')
+            oAction.uParams       = oAction.dActionPars.get(u'params',u'')
+            oAction.uRequestType  = oAction.dActionPars.get(u'requesttype',u'POST')
+            oAction.uHeaders      = oAction.dActionPars.get(u'headers',u'{}')
+            oAction.uProtocol     = oAction.dActionPars.get(u'protocol',u'http://')
+            oAction.iCodeOK       = ToInt(oAction.dActionPars.get(u'codeok',u'200'))
 
 
         def OnError(self,request,error) -> None:
@@ -208,13 +210,13 @@ class cInterface(cBaseInterFace):
             if oSetting.bIsConnected:
                 try:
                     iStatusCode, uRes = self.SendCommand_Helper(oAction,oSetting,self.uObjectName)
-                    if iStatusCode == 200:
+                    if iStatusCode == oAction.iCodeOK:
                         eRet = eReturnCode.Success
                         self.ShowDebug(uMsg=u'Sending Command succeeded: : %d' % iStatusCode, uParConfigName=oSetting.uConfigName)
                         break
                     elif iStatusCode == 0:
                         eRet = eReturnCode.Unknown
-                        self.ShowWarning(uMsg=u'Sending Command: Response should be 200, maybe error, maybe success: %d [%s]' % (iStatusCode,uRes),uParConfigName=oSetting.uConfigName)
+                        self.ShowWarning(uMsg=u'Sending Command: Response should be %d, maybe error, maybe success: %d [%s]' % (oAction.iCodeOK,iStatusCode,uRes),uParConfigName=oSetting.uConfigName)
                         break
                     else:
                         eRet = eRet.Error
@@ -252,8 +254,11 @@ class cInterface(cBaseInterFace):
         uUrlFull= ReplaceVars(uUrlFull,uObjectName+u'/'+oSetting.uConfigName)
         uUrlFull= ReplaceVars(uUrlFull)
 
-        # oSetting.SetContextVar('Host',oSetting.aIniSettings.uHost)
-        # oSetting.SetContextVar('Port',oSetting.aIniSettings.uPort)
+        oSetting.SetContextVar(uVarName='Host',uVarValue=oSetting.aIniSettings.uHost)
+        oSetting.SetContextVar(uVarName='Port',uVarValue=oSetting.aIniSettings.uPort)
+        oSetting.SetContextVar(uVarName='User',uVarValue=oSetting.aIniSettings.uUser)
+        oSetting.SetContextVar(uVarName='Password',uVarValue=oSetting.aIniSettings.uPassword)
+
         sAuth = u''
 
         #self.register_app('http://'+oAction.uHost,oSetting)

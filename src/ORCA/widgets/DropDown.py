@@ -85,7 +85,10 @@ class cWidgetDropDown(cWidgetButton):
     |If you want a colored frame around the dropdown, this specifies the frame width, either in relative pixels or in percentage, If not given, a defult vaule will be used
     |-
     |sorted
-    |(0/1) If set, the captions of the dropdown will be sorted, It will not sorte the actions, so use it only if you use the same action for each item
+    |(0/1) If set, the captions of the dropdown will be sorted, It will not sort the actions, so use it only if you use the same action for each item
+    |-
+    |setcaption
+    |(0/1) If set, the caption of the main button will be set o the selected dropdown value
 
     |}</div>
 
@@ -98,7 +101,7 @@ class cWidgetDropDown(cWidgetButton):
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.oDropDownButtons:List[cWidgetButton]   = []
+        self.aDropDownButtons:List[cWidgetButton]   = []
         self.aCaptions:List[str]                    = []
         self.aSecondCaptions:List[str]              = []
         self.uOrgCaptions:str                       = u''
@@ -113,6 +116,7 @@ class cWidgetDropDown(cWidgetButton):
         self.oXMLNode:Union[Element,None]           = None
         self.iTmpAnchorWidth:int                    = 0
         self.iTmpAnchorHeight:int                   = 0
+        self.bSetCaption:bool                       = False
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
 
@@ -124,19 +128,21 @@ class cWidgetDropDown(cWidgetButton):
 
         if bRet:
             self.aFrameColor        = GetColorFromHex(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'framecolor',bMandatory=False,vDefault=u'$var(dimmed)'))
-            uFramewidth:str         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'framewidth',  bMandatory=False,vDefault=str(int((self.oDef.iDefMaxX/self.fRationX)*0.03)))
+            # uFramewidth:str         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'framewidth',  bMandatory=False,vDefault=str(int((self.oDef.iDefMaxX/self.fRationX)*0.03)))
+            uFramewidth:str         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'framewidth',  bMandatory=False,vDefault=str(int((self.oDef.iDefMaxX/self.fRationX)*0.05)))
             self.iFrameWidth,bDummy = self.CalculateWidth(uWidth=uFramewidth,iAnchorWidth=self.iWidth)
             self.iFrameWidth        = self.iFrameWidth / self.fRationX
             self.aCaptions          = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'captions', bMandatory=False,vDefault=u'unknown').split(u',')
             self.aActionNames       = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actions',  bMandatory=False,vDefault=u'').split(u',')
             self.aOrgActionNames    = copy(self.aActionNames)
             self.bSorted            = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'sorted',   bMandatory=False,bDefault=False)
+            self.bSetCaption        = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'setcaption', bMandatory=False,bDefault=False)
             self.oXMLNode           = oXMLNode
 
             # this is a little bit tricky
             # we should parse all dropdown button here as well, but then,
             # updatewidget for the dropdown would not work
-            # so we do it in create, but at that time, the dimensions of the achor is lost
+            # so we do it in create, but at that time, the dimensions of the anchor is lost
             # so, we need to save the anchor dimensions here
             self.iTmpAnchorWidth = self.oTmpAnchor.iWidth
             self.iTmpAnchorHeight = self.oTmpAnchor.iHeight
@@ -144,7 +150,7 @@ class cWidgetDropDown(cWidgetButton):
 
     def Create(self, oParent: Widget) -> bool:
 
-        del self.oDropDownButtons[:]
+        del self.aDropDownButtons[:]
 
         try:
             self.GetCaptions()
@@ -176,7 +182,7 @@ class cWidgetDropDown(cWidgetButton):
                     oBtn.uActionNameLongTap   = u''
                     oBtn.iButtonNum           = num
 
-                    self.oDropDownButtons.append(oBtn)
+                    self.aDropDownButtons.append(oBtn)
 
             if self.oObjectDropDown is None:
                 super(cWidgetDropDown, self).Create(oParent)
@@ -186,9 +192,9 @@ class cWidgetDropDown(cWidgetButton):
                 #self.dismiss_on_select=True
 
                 if self.bSorted:
-                    self.oDropDownButtons = sorted(self.oDropDownButtons, key=lambda oDropDownButtons: ReplaceVars(oDropDownButtons.uCaption))
+                    self.aDropDownButtons = sorted(self.aDropDownButtons, key=lambda oDropDownButtons: ReplaceVars(oDropDownButtons.uCaption))
 
-                for oWidget in self.oDropDownButtons:
+                for oWidget in self.aDropDownButtons:
                     oWidget.Create(oParent)
                     oWidget.oObject.size        = self.oObject.size
                     oWidget.oObject.text_size   = self.oObject.text_size
@@ -232,7 +238,7 @@ class cWidgetDropDown(cWidgetButton):
         aCaptions: List[str]
         uCaptions: str
 
-        del self.oDropDownButtons[:]
+        del self.aDropDownButtons[:]
         if self.uCaption.endswith("[]"):
             aCaptions           = self.uCaption.split(u':::')
             self.uCaption       = aCaptions[0]
@@ -273,6 +279,8 @@ class cWidgetDropDown(cWidgetButton):
         instance.oOrcaWidget.uActionName = self.aActionNames[instance.oOrcaWidget.iButtonNum]
         instance.uTapType="down"
         instance.oOrcaWidget.On_Button_Down(instance)
+        if self.bSetCaption:
+            self.SetCaption(instance.text)
         return
 
     def UpdateWidget(self) -> None:
@@ -280,6 +288,7 @@ class cWidgetDropDown(cWidgetButton):
         self.aActionNames = copy(self.aOrgActionNames)
         if self.oObject:
             self.Create(self.oParent)
+            self.SetCaption(self.uCaption)
         return
 
     def UpdateWidgetSecondCaption(self) -> None:
@@ -292,3 +301,8 @@ class cWidgetDropDown(cWidgetButton):
         cWidgetButton.SetCaption(self,self.uCaption)
         return
 
+    def EnableWidget(self, *, bEnable:bool) -> bool:
+        oButton:cWidgetButton
+        super().EnableWidget(bEnable=bEnable)
+        for oButton in self.aDropDownButtons:
+            oButton.EnableWidget(bEnable=bEnable)

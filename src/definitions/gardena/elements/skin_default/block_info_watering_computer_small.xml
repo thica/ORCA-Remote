@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Anchor Info Frame WateringComputer" type="ANCHOR">
+        <element name="Backgound Info WateringComputer" type="PICTURE"  picturenormal="background boxes" enabled="0"/>
+        <element name="Anchor Info Frame WateringComputer Inner" width="%90" heigth="%92" posx="center" posy="middle" type="ANCHOR" enabled="0">
+
+            <element name='Label Device WateringComputer'                         type='TEXTFIELD'  posx='center'   posy='%2'              width='%100' height='of:width:self:*0.12' caption='$var($dvar(definition_alias_gardena)_DEVICENAME)' fontsize='%h70' enabled="0" shorten='1'/>
+            <element name='Gap Device WateringComputer'                           type='ANCHOR'     posx='center'   posy='of:bottom:last'  width='%100' height='%5' enabled="0" />
+
+            <element name='Info WateringComputer Reference'                       type='ANCHOR' posx='left' enabled="0" posy='of:bottom:Gap Device WateringComputer' width='%70' height='of:height:Label Device WateringComputer:*1.1'  />
+            <element name="ScrollBox WateringComputer" type="SCROLLCONTAINER"  picturenormal="transparentpic"  posy='of:bottom:Gap Device WateringComputer' height="%85" >
+            <element name='Anchor1 Inner' type='ANCHOR' height="of:width:self:*1.5"  >
+
+            <element name='Label WateringComputer Status'                         type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='left'  shorten='1' enabled="0" fontsize='%h60' htextalign="left"  posy='of:bottom:Gap Device WateringComputer'  width='%33' height='of:height:Info WateringComputer Reference' caption='$lvar(gardena_10030):' />
+            <element name='Value WateringComputer Status'                         type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='right' shorten='1' enabled="0" fontsize='%h60' htextalign="right" posy='of:top:last'     width='%67' height='of:height:Info WateringComputer Reference' caption='$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_VALUE)' />
+            <element name='Error Status'                               type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='left'  shorten='1' enabled="0" fontsize='%h60' htextalign="left"  posy='of:bottom:last'  width='%99' height='of:height:Info WateringComputer Reference' caption='$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_ERROR_VALUE)'  />
+            <element name='Timestamp WateringComputer Status'                     type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='left'  shorten='1' enabled="0" fontsize='%h60' htextalign="left"  posy='of:bottom:last'  width='%99' height='of:height:Info WateringComputer Reference' caption='$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_WATERINGCOMPUTER_STATUS_TIMESTAMP)'  />
+            <element name='Devider'                                    type='RECTANGLE' posx='left'  posy='of:bottom:last' height="%0.5"  backgroundcolor='$var(silver)' enabled="0"  />
+
+            <element name='Label WateringComputer Connection Status'              type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='left'  shorten='1' enabled="0" fontsize='%h60' htextalign="left"  posy='of:bottom:last'  width='%70' height='of:height:Info WateringComputer Reference' caption='$lvar(gardena_10017):' />
+            <element name='Value WateringComputer Connection Status'              type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='right' shorten='1' enabled="0" fontsize='%h60' htextalign="right" posy='of:top:last'     width='%30' height='of:height:Info WateringComputer Reference' caption='$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_CONNECTION_STATUS_VALUE)' />
+            <element name='Timestamp WateringComputer Connection Status'          type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='left'  shorten='1' enabled="0" fontsize='%h60' htextalign="left"  posy='of:bottom:last'  width='%99' height='of:height:Info WateringComputer Reference' caption='$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_CONNECTION_STATUS_TIMESTAMP)'  />
+            <element name='Devider'                                    type='RECTANGLE' posx='left'  posy='of:bottom:last' height="%0.5"  backgroundcolor='$var(silver)' enabled="0"  />
+
+            <element name='Label WateringComputer Radio'                          type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='left'  shorten='1' enabled="0" fontsize='%h60' htextalign="left"  posy='of:bottom:last'  width='%70' height='of:height:Info WateringComputer Reference' caption='$lvar(gardena_10016):' />
+            <element name='Value WateringComputer Radio'                          type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='right' shorten='1' enabled="0" fontsize='%h60' htextalign="right" posy='of:top:last'     width='%30' height='of:height:Info WateringComputer Reference' caption='$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_VALUE) $var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_UNIT)' />
+            <element name='Timestamp WateringComputer Radio'                      type='BUTTON' picturenormal='transparentpic' picturepressed="transparentpic" action="$dvar(definition_alias_gardena)_Info_Button_Pressed_WateringComputer" posx='left'  shorten='1' enabled="0" fontsize='%h60' htextalign="left"  posy='of:bottom:last'  width='%99' height='of:height:Info WateringComputer Reference' caption='$var($dvar(definition_alias_gardena)_WATERINGCOMPUTER_RADIO_TIMESTAMP)'  />
+            </element>
+            </element>
+        </element>
+    </element>
+</elements>
+
+

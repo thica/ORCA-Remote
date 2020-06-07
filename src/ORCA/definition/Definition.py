@@ -229,6 +229,12 @@ class cDefinition:
             oXMLPages:Element       = oET_Root.find('pages')
             for oXMLPage in oXMLPages.findall('page'):
                 Globals.oTheScreen.oScreenPages.AddPageFromXmlNode(oXMLPage=oXMLPage)
+            oXMLPageImport:Element       = oXMLPages.find('pageimport')
+            if oXMLPageImport is not None:
+                for oXMLPage in oXMLPageImport.findall('page'):
+                    Globals.oTheScreen.oScreenPages.AddPageFromXmlNode(oXMLPage=oXMLPage)
+
+
             Globals.oNotifications.SendNotification(uNotification="DEFINITIONPAGESLOADED",**{"definition":self})
         RestoreDefinitionContext()
 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <repositorymanager>
+        <entry>
+            <name>Gardena Cloud</name>
+            <description language='English'>Cloud Control for Gardena devices</description>
+            <description language='German'>Cloud Steuerung für Gardena Geräte</description>
+            <author>Carsten Thielepape</author>
+            <version>5.0.1</version>
+            <minorcaversion>5.0.1</minorcaversion>
+            <sources>
+                <source>
+                    <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_GARDENA_Cloud.xml</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_GARDENA_Cloud.zip</sourcefile>
+                    <targetpath>codesets/url</targetpath>
+                </source>
+            </sources>
+            <dependencies>
+                <dependency>
+                    <type>interfaces</type>
+                    <name>URL-Web</name>
+                </dependency>
+            </dependencies>
+        </entry>
+    </repositorymanager>
+
+    <action name='logon' >
+        <action string="if $cvar(firstcall)==1" varcontext="codeset"/>
+        <!-- Just to get a return code -->
+        <action string="setvar firstcall=0" varcontext="codeset"/>
+        <action name='gettokens' string="codeset"  type="string" waitforresponse='1' requesttype='POST' protocol="https://" cmd='/sg-1/sessions' headers='{"Content-Type": "application/json", "Content-length":"$cvar(datalenght)"}' parseoption='json' ldestvar='gardena' parseflags="E" params='{"sessions": {"email": "$cvar(User)","password": "$cvar(Password)"}}'/>
+        <action string="endif"/>
+
+    </action>
+
+    <action name='getlocations'                       string="codeset"  type="string" waitforresponse='1' requesttype='GET' protocol="https://" cmd='/sg-1/locations/?user_id=$cvar(gardena_sessions_user_id)'                  headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}'   parseoption='json' ldestvar1='gardena' parseflags="E" />
+    <action name='getlocationdevices'                 string="codeset"  type="string" waitforresponse='1' requesttype='GET' protocol="https://" cmd='/sg-1/devices?locationId=$var(locationid)'                                 headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}'  parseoption='json' ldestvar1='gardena' parseflags="E" />
+
+    <!-- Mover tested for Sileno City-->
+    <action name='mower_startoverridetimer'           string="codeset"  type="string" waitforresponse='1' requesttype='POST' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/mower/command?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "start_override_timer","parameters": {"duration": $var(time_in_seconds)}}' codeok="204" />
+    <action name='mower_startresumeschedule'          string="codeset"  type="string" waitforresponse='1' requesttype='POST' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/mower/command?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "start_resume_schedule"}' codeok="204" />
+    <action name='mower_parkuntilfurthernotice'       string="codeset"  type="string" waitforresponse='1' requesttype='POST' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/mower/command?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "park_until_further_notice"}' codeok="204" />
+    <action name='mower_parkuntilnexttimer'           string="codeset"  type="string" waitforresponse='1' requesttype='POST' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/mower/command?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "park_until_next_timer"}' codeok="204" />
+
+    <!-- Sensor tested -->
+    <action name='sensor_measure_soil_humidity'       string="codeset"  type="string" waitforresponse='1' requesttype='POST' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/humidity/command?locationId=$var(locationid)'  headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "measure_soil_humidity"}' codeok="204"/>
+    <action name='sensor_measure_light'               string="codeset"  type="string" waitforresponse='1' requesttype='POST' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/light/command?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "measure_light"}' codeok="204"/>
+    <action name='sensor_measure_ambient_temperature' string="codeset"  type="string" waitforresponse='1' requesttype='POST' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/ambient_temperature/command?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "measure_ambient_temperature"}' codeok="204"/>
+
+    <!-- watering / IC24 / irrigation control tested -->
+    <action name='irrigation_openvalve'               string="codeset"  type="string" waitforresponse='1' requesttype='PUT'  protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/watering/properties/watering_timer_$var(valveid)?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"properties":{"name":"watering_timer_$var(valveid)","value":{"state":"manual","duration":$var(time_in_seconds),"valve_id":$var(valveid)}}}' codeok="204" />
+    <action name='irrigation_closevalve'              string="codeset"  type="string" waitforresponse='1' requesttype='PUT'  protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/watering/properties/watering_timer_$var(valveid)?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"properties":{"name":"watering_timer_$var(valveid)","value":{"state":"manual","duration":0),"valve_id":$var(valveid)}}}' codeok="204" />
+
+    <!-- Bewässerungscomputer = wateringcomputer = outlet = not tested -->
+    <action name='wateringcomputer_manualoverride_start' string="codeset"  type="string" waitforresponse='1' requesttype='POST'  protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/outlet/command?locationId=$var(locationid)'    headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "manual_override","parameters": {"duration": $var(time_in_seconds),"manual_override":"open"}}' codeok="204" />
+    <action name='wateringcomputer_manualoverride_stop'  string="codeset"  type="string" waitforresponse='1' requesttype='POST'  protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/outlet/command?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "cancel_override"}' codeok="204" />
+
+    <!-- electronic pressure pump not tested -->
+    <action name='electronicpump_manualwateringtimer'    string="codeset"  type="string" waitforresponse='1' requesttype='POST' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/manual_watering/command?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"name": "pump_manual_watering_timer","parameters": {"duration": $var(time_in_seconds)}}' codeok="204" />
+
+    <!-- power not tested-->
+    <action name='power_on'     string="codeset"  type="string" waitforresponse='1' requesttype='PUT' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/power/properties/power_timer?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"properties" :{ "value": "on"}}' codeok="204" />
+    <action name='power_timer'  string="codeset"  type="string" waitforresponse='1' requesttype='PUT' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/power/properties/power_timer?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"properties" :{ "value": "$var(time_in_seconds)"}}' codeok="204" />
+    <action name='power_off'    string="codeset"  type="string" waitforresponse='1' requesttype='PUT' protocol="https://" cmd='/sg-1/devices/$var(deviceid)/abilities/power/properties/power_timer?locationId=$var(locationid)'     headers='{"Content-Type": "application/json", "X-Session":"$cvar(gardena_sessions_token)"}' params='{"properties" :{ "value": "off"}}' codeok="204" />
+
+
+    <actionold name="ping"            type="alias"       cmd="getvolume" />
+
+</includes>
+
+
+
+
+
+

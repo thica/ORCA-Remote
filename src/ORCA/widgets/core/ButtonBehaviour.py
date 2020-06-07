@@ -267,8 +267,13 @@ class cOrcaButtonBehaviour:
         if self.IsMyTouch(touch) and uButton=="left":
             # Logger.debug("on_touch_down")
             for child in self.children[:]:
-                if child.dispatch('on_touch_down', touch):
-                    return True
+                if hasattr(child,'oOrcaWidget'):
+                    if child.oOrcaWidget.bIsEnabled:
+                        if child.dispatch('on_touch_down', touch):
+                            return True
+                else:
+                    if child.dispatch('on_touch_down', touch):
+                        return True
             if touch.is_double_tap:
                 self.Delete_LongPressClock(touch)
                 self.Delete_RepeatClock(touch)

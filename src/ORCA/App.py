@@ -177,6 +177,15 @@ class ORCA_App(App):
         Init is scheduled to updated the splash screen for progress
         """
 
+        # from ORCA.utils.ParseResult_Test import ResultParser_Test
+        # oTest=ResultParser_Test()
+        # i=1
+        # exit(0)
+
+        # from ORCA.gardena import Gardena
+        # Gardena()
+        # exit(0)
+
         try:
             # Window.borderless = True
             Globals.oCheckPermissions.Wait()
@@ -206,6 +215,8 @@ class ORCA_App(App):
             Globals.uDeviceOrientation = 'landscape'
 
         SetVar(uVarName = u'DEVICEORIENTATION', oVarValue = Globals.uDeviceOrientation)
+        if Globals.oParameter.bSmallScreen:
+            Globals.fScreenSize=4.5
         SetVar(uVarName = u'SCREENSIZE', oVarValue = str(Globals.fScreenSize))
         SetVar(uVarName = u'WAITFORROTATION', oVarValue= '0')
         Globals.bWaitForRotation = False
@@ -295,12 +306,12 @@ class ORCA_App(App):
         Checks, if ORCA files are available somewhere
         """
         oFnCheck = cFileName(Globals.oPathRoot + 'actions')+ 'actions.xml'
-        Logger.debug(u'Looking for Orca files at ' + oFnCheck.string)
+        Logger.debug(u'Looking for Orca files at ' + str(oFnCheck))
         # if we can't find orca files (tested on the actions xml file), we stop here
         if not oFnCheck.Exists():
             Globals.bInit = False
             self.ShowSettings()
-            uMsg = ReplaceVars("$lvar(415)") % Globals.oPathRoot.string
+            uMsg = ReplaceVars("$lvar(415)") % str(Globals.oPathRoot)
             Logger.critical(uMsg)
             ShowErrorPopUp(uTitle='CheckForOrcaFiles: Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='Continue',uTextQuit=u'Quit')
             return False
@@ -340,7 +351,7 @@ class ORCA_App(App):
             # Globals.uMACAddressColon, Globals.uMACAddressDash = GetMACAddress()
             Globals.oPathApp = cPath(os.getcwd())
 
-            if Globals.oParameter.oPathDebug.string:
+            if str(Globals.oParameter.oPathDebug):
                 Globals.oPathRoot     = Globals.oParameter.oPathDebug
                 Globals.oPathAppReal  = Globals.oParameter.oPathDebug
 

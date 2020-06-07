@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name="Anchor Action Frame Mower" type="ANCHOR">
+        <element name="Frame Mower" type="PICTURE"  picturenormal="background boxes" enabled="0"/>
+        <element name="Anchor Frame Mower Inner" width="%90" heigth="%92" posx="center" posy="middle" type="ANCHOR" enabled="0">
+
+            <element name="Text Header Mower"   type="TEXTFIELD" posx="center" posy="%2" height="of:width:self:*0.12" caption="$lvar(gardena_10036)"   fontsize='%h70' htextalign='center' enabled="0" shorten='1' />
+            <element name='Frame Slider Mower' type='ANCHOR' posy='%50' height="%30" >
+                <element name="Slider Minutes Mower" type="SLIDER"    posx="center" width='%100' posy="top" height="%40" picturenormal="background boxes" picturebutton="button square normal"  mindatavalue="5" maxdatavalue="360" destvar="$dvar(definition_alias_gardena)_MOWER_SETMINUTES"  roundpos="0" orientation="horizontal" discardmoves="0" enabled="0"/>
+                <element name="Text Minutes Mower"   type="TEXTFIELD" posx="center" posy="bottom" width="%50" height="%40" caption="$var($dvar(definition_alias_gardena)_MOWER_SETMINUTES) $lvar(801)"  vtextalign='top' htextalign='center' fontsize='%h50' enabled="0" />
+            </element>
+
+            <element name="Button Start Mower"  type="BUTTON"  posx="left"  posy="%95"         width="%50" height="%15" picturenormal='button wide*'  caption="Start" action="$dvar(definition_alias_gardena)_start_mower"  enabled="0" />
+            <element name="Button Stop Mower"   type="BUTTON"  posx="right" posy="of:top:last" width="%50" height="%15" picturenormal='button wide*'  caption="Stop" action="$dvar(definition_alias_gardena)_park_mower"  enabled="0" />
+        </element>
+    </element>
+</elements>

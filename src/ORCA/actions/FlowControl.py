@@ -171,6 +171,33 @@ class cEventActionsFlowControl(cEventActionBase):
         self.oEventDispatcher.LogAction(uTxt=u'EndIf',oAction=oAction)
         return eReturnCode.Nothing
 
+    def ExecuteActionExitAction(self,oAction:cAction) -> eReturnCode:
+        """
+        WikiDoc:Doc
+        WikiDoc:Context:ActionsDetails
+        WikiDoc:Page:Actions-ExitAction
+        WikiDoc:TOCTitle:exitaction
+        = exitaction =
+
+        Exit the current action
+
+        <div style="overflow:auto; ">
+        {| class="wikitable"
+        ! align="left" | Attribute
+        ! align="left" | Description
+        |-
+        |string
+        |exitaction
+        |}</div>
+        WikiDoc:End
+        """
+
+        self.oEventDispatcher.LogAction(uTxt=u'ExitAction',oAction=oAction)
+        oQueue:cQueue = GetActiveQueue()
+        oQueue.iActionQueuePos=len(oQueue.aActionQueue)+1
+        return eReturnCode.Nothing
+
+
     def ExecuteActionCall(self,oAction:cAction) -> eReturnCode:
         """
         WikiDoc:Doc

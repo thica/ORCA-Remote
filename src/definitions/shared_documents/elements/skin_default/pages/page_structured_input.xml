@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page name='Page_StructureInput'>
+  <page_parameter>
+    <popup>1</popup>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background Clear' type='BACKGROUND' backgroundcolor='$var(dimmed)' />
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_structuredinput_ll.xml" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_structuredinput_ll.xml" parse="xml" condition="$var(SCREEN)==SCREEN_LS"></xi:include>
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_structuredinput_pl.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+    <xi:include href="$var(STANDARDELEMENTSPATH)/block_structuredinput_pl.xml" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
+  </elements>
+</page>

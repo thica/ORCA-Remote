@@ -22,11 +22,52 @@ from typing import List
 from typing import Dict
 from typing import Union
 
-from    ORCA.utils.Wildcard     import MatchWildCard
+from ORCA.utils.Wildcard     import MatchWildCard
+from ORCA.utils.TypeConvert import ToUnicode
 
 __all__ = ['ParseDictKeyTree',
-           'ParseDictAny']
+           'ParseDictAny',
+           'ParseDictAll']
 
+def ParseDictAll(*,vObj:Union[List,Dict],uPrefix:str) -> Dict[str,str]:
+    """Returns all values from a nested JSON"""
+    iLevel:int               = 0
+    dResult:Dict[str,str]    = {}
+    iOrgLevel:int
+
+    # noinspection PyShadowingNames
+    def Extract(vObj:Union[List,Dict], dResult:Dict[str,str],uPrefix:str,iLevel:int):
+        """Recursively collects values of keys in JSON tree."""
+        iLevel += 1
+        uFoundKey:str
+        vValue:Union[List,Dict,str]
+        uResult:str
+
+        if isinstance(vObj, dict):
+            for uFoundKey, vValue in vObj.items():
+                if isinstance(vValue, dict):
+                    Extract(vValue, dResult, uPrefix+"_"+uFoundKey,iLevel)
+                elif isinstance(vValue,list) and len(vValue) > 0 and isinstance(vValue[0], (dict,list)):
+                    iIndex:int=0
+                    for vValue2 in vValue:
+                        # Extract(vValue2, dResult, uPrefix+"_"+uFoundKey,iLevel)
+                        Extract(vValue2, dResult, uPrefix+"_"+uFoundKey+"[%d]"%iIndex,iLevel)
+                        iIndex+=1
+                elif isinstance(vValue,list):
+                    iIndex:int=0
+                    for uResult in vValue:
+                        dResult[uPrefix+"_"+uFoundKey+"[%d]"%iIndex]=ToUnicode(uResult)
+                        iIndex+=1
+                else:
+                    dResult[uPrefix+"_"+uFoundKey]=ToUnicode(vValue)
+        elif isinstance(vObj, list):
+            iIndex:int=0
+            for vItem in vObj:
+                iOrgLevel =  iLevel
+                Extract(vItem, dResult, uPrefix+"[%d]"%iIndex, iLevel-1)
+                iLevel = iOrgLevel
+        return dResult
+    return Extract(vObj, dResult, uPrefix,iLevel)
 
 def ParseDictKeyTree(*,vObj:Union[List,Dict], aKeys:List) -> List:
     """Pull all values of specified key from nested JSON."""

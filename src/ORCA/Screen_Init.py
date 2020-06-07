@@ -340,6 +340,7 @@ class cTheScreenWithInit(cTheScreen):
         SetVar(uVarName=u'TMPPATH',               oVarValue=Globals.oPathTmp.string)
         SetVar(uVarName=u'ACTIONPATH',            oVarValue=Globals.oPathAction.string)
         SetVar(uVarName=u'GESTURESPATH',          oVarValue=Globals.oPathGestures.string)
+        SetVar(uVarName=u'DOWNLOADSPATH',         oVarValue=Globals.oPathUserDownload.string)
         SetVar(uVarName=u'SKINNAME',              oVarValue=Globals.uSkinName)
         SetVar(uVarName=u'LANGUAGE',              oVarValue=Globals.uLanguage)
         SetVar(uVarName=u'CURRENTPAGE',           oVarValue=u'')

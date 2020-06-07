@@ -36,6 +36,7 @@ from ORCA.utils.LogError               import LogError
 from ORCA.utils.TypeConvert            import ToInt
 from ORCA.utils.XML                    import GetXMLBoolAttribute
 from ORCA.utils.XML                    import GetXMLTextAttribute
+from ORCA.utils.XML                    import GetXMLIntAttribute
 from ORCA.vars.Replace                 import ReplaceVars
 from ORCA.widgets.helper.WidgetType    import eWidgetType
 from ORCA.widgets.helper.HexColor      import GetColorFromHex
@@ -65,6 +66,7 @@ class cWidgetBaseText(cWidgetBaseBase):
         super().__init__(**kwargs)
 
         self.bBold:bool                                 = False
+        self.bShorten:bool                              = False
         self.bItalic:bool                               = False
         self.bIcon:bool                                 = False
         self.bNoTextSize:bool                           = False
@@ -73,6 +75,7 @@ class cWidgetBaseText(cWidgetBaseBase):
         self.iFontSize:int                              = 30
         self.iIconFontSize:int                          = 50
         self.iFontSizeInit:int                          = 30
+        self.iLines:int                                 = 0
         self.aTextColor:List[float]                     = GetColorFromHex('#FFFFFFFF')
         self.uFontIndex:str                             = u'Sans'
         self.uhTextAlign:str                            = u'center'
@@ -91,8 +94,10 @@ class cWidgetBaseText(cWidgetBaseBase):
             self.uCaption           = u''
             self.uhTextAlign        =   GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'htextalign',   bMandatory=False, vDefault=u'center')
             self.uvTextAlign        =   GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'vtextalign',   bMandatory=False, vDefault=u'middle')
+            self.bShorten           =   GetXMLBoolAttribute (oXMLNode=oXMLNode,uTag=u'shorten',      bMandatory=False, bDefault=False)
             self.bBold              =   GetXMLBoolAttribute (oXMLNode=oXMLNode,uTag=u'bold',         bMandatory=False, bDefault=False)
             self.bItalic            =   GetXMLBoolAttribute (oXMLNode=oXMLNode,uTag=u'italic',       bMandatory=False, bDefault=False)
+            self.iLines             =   GetXMLIntAttribute  (oXMLNode=oXMLNode,uTag=u'lines',        bMandatory=False, iDefault=0)
             self.uFontIndex         =   GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'fontid',       bMandatory=False, vDefault=self.oDef.uDefaultFont)
             self.uOrgFontIndex      =   self.uFontIndex
             uFontSize:str           =   GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'fontsize',                 bMandatory=False, vDefault='0')
@@ -172,6 +177,8 @@ class cWidgetBaseText(cWidgetBaseBase):
             self.AddArg('valign',               self.uvTextAlign)
             self.AddArg('italic',               self.bItalic)
             self.AddArg('bold',                 self.bBold)
+            self.AddArg('max_lines',            self.iLines)
+            self.AddArg('shorten',              self.bShorten)
             if not self.bNoTextSize:
                 self.AddArg('text_size',        (self.iWidth,self.iHeight))
             self.AddArg('color',                self.aTextColor)

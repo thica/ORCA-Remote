@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+    <action name="Init" string="setvar POWERSTATUS_$dvar(definition_alias_gardena)=OFF" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_UNINITIALIZED_LOCATION=$lvar(gardena_10001)" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_UNINITIALIZED_DEVICES=$lvar(gardena_10002)" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_DEVICENAME=" />
+    <action name="Init" string="setvar $dvar(definition_alias_gardena)_DEVICES_NAME[]="/>
+    <action name="Init Vars Sensor" string="call $dvar(definition_alias_gardena)_InitVars_Sensor" />
+    <action name="Init Vars Gateway" string="call $dvar(definition_alias_gardena)_InitVars_Gateway" />
+    <action name="Init Vars Mower" string="call $dvar(definition_alias_gardena)_InitVars_Mower" />
+    <action name="Init Vars Power" string="call $dvar(definition_alias_gardena)_InitVars_Power" />
+    <action name="Init Vars Watering Computer" string="call $dvar(definition_alias_gardena)_InitVars_WateringComputer" />
+    <action name="Init Vars Irrigation" string="call $dvar(definition_alias_gardena)_InitVars_Irrigation" />
+    <action name="Init Vars Location" string="call $dvar(definition_alias_gardena)_InitVars_Location" />
+    <action name="Init Vars Translations" string="call $dvar(definition_alias_gardena)_InitVars_Translations" />
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+    <action name="Calling the definition actions" string="call PageStart Definition_$dvar(definition_alias_gardena)" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_gardena)">
+    <action name="Calling the pagestart actions" string="call PageStart Page_Device_$dvar(definition_alias_gardena)" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_gardena)_Sensor_Popup">
+    <action name="Calling the pagestart actions" string="call PageStart Page_Device_$dvar(definition_alias_gardena)_Sensor_Popup" />
+  </pagestartaction>
+
+</includes>

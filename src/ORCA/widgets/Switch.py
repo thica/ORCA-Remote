@@ -143,7 +143,7 @@ class cWidgetSwitch(cWidgetButton):
         if self.uGroup:
             if GetVar(uVarName = self.uDestVar)=='1':
                 self.GroupSwitch()
-                #return
+                # return
         Var_Invert(self.uDestVar)
         self.InvertSwitch(None)
         super().UpdateWidget()

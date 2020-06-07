@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <name>Gardena</name>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <author>Carsten Thielepape</author>
+    <version>5.0.1</version>
+    <orientations>portrait,landscape</orientations>
+    <support>http://www.orca-remote.org/forum/</support>
+    <definitionvars>{"definition_alias_gardena":"GARDENA"}</definitionvars>
+  </def_parameter>
+
+  <startskip condition="$dvar(definition_alias_gardena_IMPORTPAGES)=0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/page_*" parse="xml" ></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_smallsize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LS"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_smallsize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PS"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+      <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+    </pages>
+  <stopskip/>
+
+  <settings>
+    <setting title="$lvar(700) (url)" desc="$lvar(701)" var="$dvar(definition_alias_gardena)_INTERFACE_MAIN" type="scrolloptions" default="url" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(702)" desc="$lvar(703)" var="$dvar(definition_alias_gardena)_CONFIGNAME_MAIN" type="string" default="DEVICE_$dvar(definition_alias_gardena)" />
+    <setting title="$lvar(gardena_10240)" desc="$lvar(gardena_10241)"  var="$dvar(definition_alias_gardena)_NAVIGATIONBAR"            type="string"   default="$var(STANDARDELEMENTSPATH)/block_topline.xml" />
+    <setting title="$lvar(gardena_10242)" desc="$lvar(gardena_10243)"  var="$dvar(definition_alias_gardena)_DEVICEPICTURE"            type='picture'  default='$var(DEFINITIONPATH[gardena])/pics/logo.png'  />
+    <setting title="$lvar(gardena_10245)" desc="$lvar(gardena_10245)"  var="$dvar(definition_alias_gardena)_DEVICEPICTURE_GATEWAY"    type='picture'  default='$var(DEFINITIONPATH[gardena])/pics/gateway.png'  />
+    <setting title="$lvar(gardena_10246)" desc="$lvar(gardena_10247)"  var="$dvar(definition_alias_gardena)_DEVICEPICTURE_MOVER"      type='picture'  default='$var(DEFINITIONPATH[gardena])/pics/mower.png'  />
+    <setting title="$lvar(gardena_10250)" desc="$lvar(gardena_10251)"  var="$dvar(definition_alias_gardena)_DEVICEPICTURE_POWER"      type='picture'  default='$var(DEFINITIONPATH[gardena])/pics/power.png'  />
+    <setting title="$lvar(gardena_10252)" desc="$lvar(gardena_10253)"  var="$dvar(definition_alias_gardena)_DEVICEPICTURE_SENSOR"     type='picture'  default='$var(DEFINITIONPATH[gardena])/pics/sensor.png'  />
+    <setting title="$lvar(gardena_10248)" desc="$lvar(gardena_10249)"  var="$dvar(definition_alias_gardena)_DEVICEPICTURE_IRRIGATION" type='picture'  default='$var(DEFINITIONPATH[gardena])/pics/irrigation.png'  />
+    <setting title="$lvar(gardena_10254)" desc="$lvar(gardena_10255)"  var="$dvar(definition_alias_gardena)_DEVICEPICTURE_WATER_CONTROL"   type='picture'  default='$var(DEFINITIONPATH[gardena])/pics/water-control.png'  />
+  </settings>
+
+  <interface_setup>
+    <interface name="url">
+      <configuration name ="DEVICE_$dvar(definition_alias_gardena)">
+        <setting name="Port" parameter="443"/>
+        <setting name="Host" parameter="sg-api.dss.husqvarnagroup.net"/>
+        <setting name="Password" parameter="YourGardenaPW"/>
+        <setting name="User" parameter="YourGardenaEmail"/>
+        <setting name="ParseResult" parameter="json"/>
+        <setting name="FNCodeset" parameter="CODESET_url_GARDENA.xml"/>
+        <setting name="DisableInterFaceOnError" parameter="0"/>
+        <setting name="DisconnectInterFaceOnSleep" parameter="0"/>
+        <setting name="TimeOut" parameter="10"/>
+      </configuration>
+     </interface>
+  </interface_setup>
+
+  <repositorymanager>
+    <entry>
+      <name>Gardena</name>
+      <description language='English'>Gardena Home Automation device control</description>
+      <description language='German'>Gardena Home Automation Geräte kontrolle</description>
+      <author>Carsten Thielepape</author>
+      <version>5.0.1</version>
+      <minorcaversion>5.0.1</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/gardena</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/gardena.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>codesets</type>
+          <name>Gardena Cloud</name>
+        </dependency>
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/gardena/interfacesettings*</file>
+        <file>$var(APPLICATIONPATH)/definitions/gardena/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+
+</orca>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elements>
+  <element name='Shadow' type='RECTANGLE' posx='%51' posy='%51'  width="%63" height="of:width:self:*0.30" backgroundcolor='$var(shadow)' />
+  <element name="Anchor Input" type='ANCHOR' posx="center" posy="center" width="%90" height="%90">
+    <element name='Background'       type='PICTURE'   posx='left'       posy='top'  picturenormal='background boxes' />
+    <element name='Anchor Inner' type='ANCHOR' posx="center" posy="center" width="%90" height="%90">
+      <element name="Header"           type="TEXTFIELD" posy="top"  height="%8" htextalign="center"  caption="" fontsize="%h70"  />
+      <element name="Anchor Input 1"   type="ANCHOR" posy="%10"  height="%13">
+        <element name='Background Inputfield' type='PICTURE' posx='left' posy='top' picturenormal='background input'  />
+        <element name='Text_1'       type='TEXTFIELD' posx='center' posy='top' height='%50' width='%95'  fontsize='%h40'  iconfontsize='%h100' caption='' vtextalign='top' htextalign='left' />
+        <element name='Inputfield_1' type='TEXTINPUT' posx='center' posy='%97' height='%70' width='%95'  fontsize='%h80' vtextalign='bottom' htextalign='left' caption='' destvar='structuredinputstring1'  />
+      </element>
+      <element name="Anchor Input 2"   type="ANCHOR" posy="%27"  height="%13">
+        <element name='Background Inputfield' type='PICTURE' posx='left' posy='top' picturenormal='background input'  />
+        <element name='Text_2'       type='TEXTFIELD' posx='center' posy='top' height='%50' width='%95'  fontsize='%h40'  iconfontsize='%h100' caption='Label2' vtextalign='top' htextalign='left' />
+        <element name='Inputfield_2' type='TEXTINPUT' posx='center' posy='%97' height='%70' width='%95'  fontsize='%h80' vtextalign='bottom' htextalign='left'  caption='' destvar='structuredinputstring2'  />
+      </element>
+      <element name="Anchor Input 3"   type="ANCHOR" posy="%44"  height="%13">
+        <element name='Background Inputfield' type='PICTURE' posx='left' posy='top' picturenormal='background input'  />
+        <element name='Text_3'       type='TEXTFIELD' posx='center' posy='top' height='%50' width='%95'  fontsize='%h40'  iconfontsize='%h100' caption='Label3' vtextalign='top' htextalign='left' />
+        <element name='Inputfield_3' type='TEXTINPUT' posx='center' posy='%97' height='%70' width='%95'  fontsize='%h80' vtextalign='bottom' htextalign='left'  caption='' destvar='structuredinputstring3'  />
+      </element>
+
+      <element name="Anchor Message"   type="ANCHOR" posy="%80"  height="%33">
+        <element name='Background Inputfield' type='PICTURE' posx='left' posy='top' picturenormal='background boxes'  />
+        <element name='Message' type='TEXTFIELD' posx='center' posy='center' height='%96' width='%96'  fontsize='d20' vtextalign='top' htextalign='left' caption="" />
+      </element>
+
+      <element name="Button Cancel"    type="BUTTON"    posx="%5"     posy="bottom"  width="%45"  height="%10"        picturenormal="button wide*" action="Fkt InputStructuredAbort"  caption="$lvar(5009)" />
+      <element name="Button Save"      type="BUTTON"    posx="%95"     posy="bottom"  width="%45"  height="%10"        picturenormal="button wide*" action="Fkt InputStructuredSave"  caption="$lvar(5025)" />
+    </element>
+  </element>
+ </elements>

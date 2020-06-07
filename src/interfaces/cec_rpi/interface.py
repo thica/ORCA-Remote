@@ -92,7 +92,7 @@ class cInterface(cInterFaceTelnet):
                 self.uTarget = uSourceDevice+uDestinationDevice
                 self.SetContextVar(uVarName='TARGET' ,uVarValue=self.uTarget)
             except Exception as e:
-                self.ShowError(uMsg=u'Cannot read config name:'+self.oInterFace.oObjectConfig.oFnConfig.string + u' Section:'+self.uSection,oException=e)
+                self.ShowError(uMsg=u'Cannot read config name:'+str(self.oInterFace.oObjectConfig.oFnConfig) + u' Section:'+self.uSection,oException=e)
 
     def __init__(self):
         super().__init__()
