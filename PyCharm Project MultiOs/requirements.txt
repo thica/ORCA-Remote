@@ -1,0 +1,11 @@
+Kivy~=2.0.0
+plyer~=2.0.0
+netifaces~=0.10.9
+demjson~=2.2.4
+mwclient~=0.10.1
+setuptools~=42.0.2
+ws4py~=0.5.1
+wakeonlan~=1.1.6
+rsa
+pypiwin32~=223
+pywin32~=227

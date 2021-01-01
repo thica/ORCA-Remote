@@ -49,8 +49,8 @@ except Exception as e:
       <description language='English'>Send IR Commands on Android devices with IR tranmitter WIP</description>
       <description language='German'>Sendet IR Befehle auf Android Geräten mit eingebautem IR Sender WIP</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

@@ -53,8 +53,8 @@ else:
       <description language='English'>Tool to create the ORCA Wikipedia (internal tool)</description>
       <description language='German'>Tool um das ORCA Wikipedia zu schreiben (internes Tool)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

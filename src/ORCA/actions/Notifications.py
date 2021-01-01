@@ -61,6 +61,7 @@ class cEventActionsNotifications(cEventActionBase):
         """
 
         uNotification:str                   = ReplaceVars(oAction.dActionPars.get("notification",""))
+
         dActionPars:Dict                    = ToDic(ReplaceVars(oAction.dActionPars.get("actionpars","{}")))
         if not isinstance(dActionPars,dict):
             dActionPars = ToDic(oAction.dActionPars.get("actionpars", "{}"))
@@ -91,7 +92,7 @@ class cEventActionsNotifications(cEventActionBase):
         |registernotification
         |notification string to register
         |action to be executed
-        |Page filter on which the the action should be applied. This can be "ALL" execute it independed of the pagename (default). Can be "NOPOPUP" to execute it only on non popup pages, Can be "POPUP" to execute it on all popup pages. Can be "FIRSTPAGE" to execute it only the first shown definition page, Does not execute it multiple time
+        |Page filter on which the the action should be applied. This can be "ALL" execute it independent of the pagename (default). Can be "NOPOPUP" to execute it only on non popup pages, Can be "POPUP" to execute it on all popup pages. Can be "FIRSTPAGE" to execute it only the first shown definition page, Does not execute it multiple time
         |}</div>
 
         All further parameter will passed as actions pars to the action

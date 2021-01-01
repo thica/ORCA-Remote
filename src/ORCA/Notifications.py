@@ -39,13 +39,13 @@ class cNotifications:
 
     def RegisterNotification(self,*, uNotification:str, fNotifyFunction:Callable, uDescription:str="", bQuiet:bool=False, aValueLinks:Optional[List[Dict]]=None, **kwargs) -> int:
         """
-        Registers a notificatio
+        Registers a notification
 
         :param uNotification: The notification name
         :param fNotifyFunction: The function to be called, if the notification is triggered
-        :param uDescription: A notification description(for debugging pirposes)
+        :param uDescription: A notification description(for debugging purposes)
         :param bQuiet: Flag, if true, no debug message will be triggered on notification
-        :param aValueLinks: Dict of chained values to passed through chained notification
+        :param aValueLinks: Dict of chained values to passed through chained notification, format "in:name / out:name"
         :param kwargs: args to pass through the notification
         :return:
         """
@@ -54,7 +54,7 @@ class cNotifications:
 
         dArgs:Dict                       = copy(kwargs)
         dArgs["notificationdescription"] = uDescription
-        dArgs["nofification"]            = uNotification
+        dArgs["notification"]            = uNotification
         iHash:int                        = hash(repr(dArgs)+repr(fNotifyFunction))
         uFilterPageName:str              = kwargs.get("filterpagename","")
 
@@ -73,7 +73,11 @@ class cNotifications:
         return iHash
 
     def UnRegisterNotification_ByHash(self,*,iHash:int) -> None:
-
+        """
+        Unregisters an registered notification. The notification needs to be identified by the hash, when it has been created
+        :param int iHash: The hash to identify the notification
+        :return: Nothing
+        """
         dEntry:Optional[Dict] = self.dNotificationsHash.get(iHash,None)
 
         if dEntry is not None:
@@ -89,6 +93,13 @@ class cNotifications:
             Logger.error("Tried to Degister notification with wrong hash")
 
     def SendNotification(self,*,uNotification:str, **kwargs) -> Dict:
+        """
+        Calls the function of all registered notifications for the notification name
+        If valuelinks are given, the results of a call are passed to the next called function
+        :param str uNotification: The notification
+        :param kwargs: The args to be passed to the called function
+        :return: A dict of function results
+        """
         dRet:Dict = {}
 
         # Format for dValueLinks

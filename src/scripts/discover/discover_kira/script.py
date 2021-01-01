@@ -30,6 +30,7 @@ import threading
 
 from kivy.logger                            import Logger
 from kivy.uix.button                        import Button
+from kivy.clock                             import Clock
 
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
@@ -51,8 +52,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover Keene Kira devices</description>
       <description language='German'>Erkennt sucht Keene Kira Geräte</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_kira</local>
@@ -100,6 +101,8 @@ class cScript(cDiscoverScriptTemplate):
         self.aResults:List[TypedQueryDict]      = []
         self.aThreads:List[threading.Thread]    = []
         self.dReq                               = TypedQueryDict()
+        self.bDoNotWait:bool                    = False
+        self.uScriptTitle                       = u"Keene Kira Discovery"
 
     def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
         """
@@ -116,19 +119,18 @@ class cScript(cDiscoverScriptTemplate):
         return ['$lvar(5029)','$lvar(5035)','$lvar(6002)']
 
     def ListDiscover(self) -> None:
+        self.SendStartNotification()
+        Clock.schedule_once(self.ListDiscover_Step2, 0)
+        return
+
+    def ListDiscover_Step2(self, *largs):
 
         dArgs:Dict                   = {"onlyonce": 0,
-                                      "ipversion": "IPv4Only"}
+                                        "ipversion": "IPv4Only",
+                                        "donotwait":1}
         dDevices:Dict[str,TypedQueryDict] = {}
         dDevice:TypedQueryDict
-
         self.Discover(**dArgs)
-
-        for dDevice in self.aResults:
-            uTageLine:str=dDevice.uFoundIP+dDevice.uFoundHostName+dDevice.uFoundPort
-            if dDevices.get(uTageLine) is None:
-               dDevices[uTageLine]=dDevice
-               self.AddLine([dDevice.uFoundIP,dDevice.uFoundHostName,dDevice.uFoundPort],dDevice)
         return
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
@@ -153,6 +155,7 @@ class cScript(cDiscoverScriptTemplate):
         fTimeOut:float               = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
         uIPVersion:str               = kwargs.get('ipversion',"IPv4Only")
         bOnlyOnce:bool               = ToBool(kwargs.get('onlyonce',"1"))
+        self.bDoNotWait              = ToBool(kwargs.get('donotwait',"0"))
 
         Logger.debug (u'Try to discover device by Kira Discovery (%s)' % uIPVersion)
 
@@ -169,15 +172,19 @@ class cScript(cDiscoverScriptTemplate):
                 self.aThreads.append(oThread)
                 self.aThreads[-1].start()
 
-            for oT in self.aThreads:
-                oT.join()
+            if not self.bDoNotWait:
+                for oT in self.aThreads:
+                    oT.join()
+                self.SendEndNotification()
 
-            if len(self.aResults)>0:
-                return {"Host":self.aResults[0].uFoundIP,
-                        "Hostname": self.aResults[0].uFoundHostName,
-                        'Exception': None}
+                if len(self.aResults)>0:
+                    return {"Host":self.aResults[0].uFoundIP,
+                            "Hostname": self.aResults[0].uFoundHostName,
+                            'Exception': None}
+                else:
+                    Logger.warning(u'Kira Discover: No device found' )
             else:
-                Logger.warning(u'Kira Discover: No device found' )
+                self.ClockCheck=Clock.schedule_interval(self.CheckFinished,0.1)
             return {"Host": "",
                     "Hostname": "",
                     'Exception': None}
@@ -278,7 +285,6 @@ class cThread_Discover_Kira(threading.Thread):
 
         if self.uIPVersion=="IPv4Only":
             uUDP_IP     = u'239.255.255.250'
-
             oSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)
             oSocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 20)

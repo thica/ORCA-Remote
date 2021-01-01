@@ -26,6 +26,7 @@ from ORCA.ui.RaiseQuestion              import ShowQuestionPopUp
 from ORCA.ui.ShowErrorPopUp             import ShowMessagePopUp
 from ORCA.utils.Atlas                   import ClearAtlas
 from ORCA.utils.TypeConvert             import ToInt
+from ORCA.utils.TypeConvert             import ToBool
 from ORCA.vars.Access                   import SetVar
 
 import ORCA.Globals as Globals
@@ -96,10 +97,7 @@ def OrcaConfigParser_On_Setting_Change(config:kivyConfig, section:str, key:str, 
         elif uKey == u'vibrate':
             Globals.bVibrate = (uValue == '1')
         elif uKey == u'button_configureinterface':
-            uValue = uValue.split(':')[1]
-            Globals.oTheScreen.uInterFaceToConfig = uValue
-            if Globals.oInterFaces.dInterfaces.get(uValue) is None:
-                Globals.oInterFaces.LoadInterface(uValue)
+            uButton,Globals.oTheScreen.uInterFaceToConfig,Globals.oTheScreen.uConfigToConfig=uValue.split(':')
             Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_InterfaceSettings')
         elif uKey == u'button_configurescripts':
             uAction:str
@@ -124,6 +122,8 @@ def OrcaConfigParser_On_Setting_Change(config:kivyConfig, section:str, key:str, 
                 Clock.schedule_once(Globals.oApp.Init_ReadConfig, 0)
             else:
                 ShowMessagePopUp(uMessage=u'$lvar(5011)')
+        elif uKey==u'sound_muteall':
+            Globals.oSound.bMute = ToBool(uValue)
         elif uKey.startswith(u'soundvolume_'):
             uSoundName = uKey[12:]
             Globals.oSound.SetSoundVolume(uSoundName=uSoundName,iValue=ToInt(uValue))

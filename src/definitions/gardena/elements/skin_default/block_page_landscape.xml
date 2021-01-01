@@ -34,6 +34,7 @@
                 <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_power.xml" parse="xml" />
                 <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_watering_control.xml" parse="xml" />
                 <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_irrigation.xml" parse="xml" />
+                <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_info_watering_computer.xml" parse="xml" />
             </element>
             <element name='Anchor Actions' type='ANCHOR' posx='%96' posy='of:bottom:Anchor Picture Gap' width='%30'  height='%54' >
                 <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_action_sensor.xml" parse="xml" />

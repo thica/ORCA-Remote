@@ -34,7 +34,7 @@ from typing import Optional
 
 from struct                                 import pack
 from kivy.uix.button                        import Button
-
+from kivy.clock                             import Clock
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
@@ -57,8 +57,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover EISCP/Onkyo devices</description>
       <description language='German'>Erkennt sucht EISCP/Onkyo Geräte über upnp</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_eiscp</local>
@@ -92,7 +92,7 @@ class cScript(cDiscoverScriptTemplate):
     |Discover only specific Onkyo models
     |-
     |timeout
-    |Specifies the timout for discover
+    |Specifies the timeout for discover
     |}</div>
 
     Blank options will not be used.
@@ -108,10 +108,12 @@ class cScript(cDiscoverScriptTemplate):
         super().__init__()
         self.uSubType:str                       = u'EISCP (Onkyo)'
         self.aResults:List[TypedQueryDict]      = []
-        self.aThreads:List[threading.Thread]    = []
+        self.dDevices:Dict[str,TypedQueryDict]  = {}
         self.dReq:TypedQueryDict                = TypedQueryDict()
         self.bOnlyOnce:bool                     = True
         self.uIPVersion:str                     = u'Auto'
+        self.bDoNotWait:bool                    = False
+        self.uScriptTitle                       = u'Onkyo/EISCP Discovery'
 
     def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
         """
@@ -128,20 +130,20 @@ class cScript(cDiscoverScriptTemplate):
         return ['$lvar(5029)','$lvar(6002)','$lvar(5031)','$lvar(5032)']
 
     def ListDiscover(self) -> None:
-        dArgs:Dict              = {"onlyonce": 0,
-                                   "ipversion": "All"}
-
-        dDevices:Dict[str,TypedQueryDict] = {}
-        dDevice:TypedQueryDict
-
-        self.Discover(**dArgs)
-
-        for dDevice in self.aResults:
-            uTageLine:str = dDevice.uFoundIP + dDevice.uFoundModel + dDevice.uFoundIdentifier
-            if dDevices.get(uTageLine) is None:
-               dDevices[uTageLine]=dDevice
-               self.AddLine([dDevice.uFoundIP, dDevice.uFoundPort, dDevice.uFoundModel, dDevice.uFoundIdentifier], dDevice)
+        self.SendStartNotification()
+        Clock.schedule_once(self.ListDiscover_Step2, 0)
         return
+
+    def ListDiscover_Step2(self, *largs):
+        """
+        Called by the timer to continue initialisation after appstart
+        More or less all actions after here will be executed by the scheduler/queue
+        """
+        dArgs:Dict              = {"onlyonce": 0,
+                                   "ipversion": "All",
+                                   "donotwait":1}
+        self.dDevices.clear()
+        self.Discover(**dArgs)
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
 
@@ -156,7 +158,6 @@ class cScript(cDiscoverScriptTemplate):
 
         ShowMessagePopUp(uMessage=uText)
 
-
     def Discover(self,**kwargs) -> Dict:
 
         self.dReq.clear()
@@ -166,6 +167,7 @@ class cScript(cDiscoverScriptTemplate):
         self.dReq.uModels               = kwargs.get('models',"")
         bOnlyOnce:bool                  = ToBool(kwargs.get('onlyonce',"1"))
         uIPVersion:str                  = kwargs.get('ipversion',"IPv4Only")
+        self.bDoNotWait                 = ToBool(kwargs.get('donotwait',"0"))
 
         self.ShowDebug(uMsg=u'Try to discover Onkyo device by EISCP:  Models: %s ' % self.dReq.uModels)
         del self.aResults[:]
@@ -182,13 +184,16 @@ class cScript(cDiscoverScriptTemplate):
                 self.aThreads.append(oThread)
                 self.aThreads[-1].start()
 
-            for oT in self.aThreads:
-                oT.join()
-
-            if len(self.aResults)>0:
-                return {'Model': self.aResults[0].uFoundModel, 'Host': self.aResults[0].uFoundIP,'Port': self.aResults[0].uFoundPort, 'Category': self.aResults[0].uFoundCategory, 'Exception': None}
+            if not self.bDoNotWait:
+                for oT in self.aThreads:
+                    oT.join()
+                self.SendEndNotification()
+                if len(self.aResults)>0:
+                    return {'Model': self.aResults[0].uFoundModel, 'Host': self.aResults[0].uFoundIP,'Port': self.aResults[0].uFoundPort, 'Category': self.aResults[0].uFoundCategory, 'Exception': None}
+                else:
+                    self.ShowWarning(uMsg='No device found, Models: %s' % self.dReq.uModels)
             else:
-                self.ShowWarning(uMsg='No device found, Models: %s' % self.dReq.uModels)
+                self.ClockCheck=Clock.schedule_interval(self.CheckFinished,0.1)
             return  {'Model':'','Host':'','Port':'','Category':'','Exception':None}
 
         except Exception as e:
@@ -225,7 +230,6 @@ class cThread_Discover_EISCP(threading.Thread):
                     '''
 
         self.bOnkyoMagic:bytes = self.CreateEISPPacket('!xECNQSTN\r')
-
 
     # noinspection PyMethodMayBeStatic
 
@@ -271,7 +275,6 @@ class cThread_Discover_EISCP(threading.Thread):
         byData:bytes
         tSenderAddr:Tuple
         oRet:TypedQueryDict
-
         oSocket:Optional[socket.socket] = None
         try:
             oSocket = self.SendDiscover()
@@ -289,6 +292,11 @@ class cThread_Discover_EISCP(threading.Thread):
                             self.oCaller.ShowInfo(uMsg=u'Discovered device %s:%s at %s:' % (dRet.uFoundIdentifier, dRet.uFoundModel, dRet.uFoundIP))
                             cThread_Discover_EISCP.oWaitLock.acquire()
                             self.oCaller.aResults.append(dRet)
+                            uTageLine:str = dRet.uFoundIP + dRet.uFoundModel + dRet.uFoundIdentifier
+                            if self.oCaller.dDevices.get(uTageLine) is None:
+                                self.oCaller.dDevices[uTageLine]=dRet
+                                Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTFOUND",**{"script":self,"scriptname":self.oCaller.uObjectName,"line":[dRet.uFoundIP, dRet.uFoundPort, dRet.uFoundModel, dRet.uFoundIdentifier],"device":dRet})
+
                             cThread_Discover_EISCP.oWaitLock.release()
                             if self.bOnlyOnce:
                                 oSocket.close()
@@ -320,7 +328,6 @@ class cThread_Discover_EISCP(threading.Thread):
                 IPPROTO_IPV6=socket.IPPROTO_IPV6
             except:
                 pass
-
 
             oSocket = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
             oSocket.settimeout(self.fTimeOut)

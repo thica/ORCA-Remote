@@ -10,8 +10,8 @@ cmd = command to send, -->
       <description language='English'>Power off command for Unraid NAS Server using Telnet</description>
       <description language='German'>Power off Befehl für Unraid NAS Server über Telnet</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/telnet/CODESET_telnet_UNRAID.xml</local>

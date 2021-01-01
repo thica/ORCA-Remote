@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name="Page_Tabs">
+  <page_parameter>
+    <!-- Interface and Config in this section are the default for all elements where these parameters have not been assigned to an ACTION -->
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+   <element name="Background Main Screen" type="BACKGROUND" picturenormal="background">
+     <xi:include href="$var(STANDARDELEMENTSPATH)/block_topline.xml" parse="xml" condition="$var(DEFINITIONNAME)==showcase"/>
+   </element>
+    <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
+    <element name='Anchor Tabs' type='ANCHOR' posx='center' posy='middle' width='%80' height='%60' >
+      <element name="Frame" type="PICTURE" posx="left" posy="top" picturenormal="background boxes" >
+        <element name='Anchor Buttons' type='ANCHOR' posx='left' posy='top' height='%10' >
+            <element name='Background Dimmed' type='RECTANGLE' backgroundcolor='$var(shadow)' />
+            <element name="Button Tab1" type="SWITCH" posx="left"    width="of:width:Anchor Buttons:*0.165"  action="FKT_SwitchTab" htextalign='center' vtextalign='middle' picturenormal="button wide*" group="TABGROUP" destvar="TAB_1" caption="$lvar(showcase_10203)" />
+            <element name="Button Tab2" type="SWITCH" posx="%20"     width="of:width:last"                   action="FKT_SwitchTab" htextalign='center' vtextalign='middle' picturenormal="button wide*" group="TABGROUP" destvar="TAB_2" caption="$lvar(showcase_10204)" />
+            <element name="Button Tab3" type="SWITCH" posx="%40"     width="of:width:last"                   action="FKT_SwitchTab" htextalign='center' vtextalign='middle' picturenormal="button wide*" group="TABGROUP" destvar="TAB_3" caption="$lvar(showcase_10205)" />
+            <element name="Button Tab4" type="SWITCH" posx="%60"     width="of:width:last"                   action="FKT_SwitchTab" htextalign='center' vtextalign='middle' picturenormal="button wide*" group="TABGROUP" destvar="TAB_4" caption="$lvar(showcase_10206)" />
+            <element name="Button Tab5" type="SWITCH" posx="%80"     width="of:width:last"                   action="FKT_SwitchTab" htextalign='center' vtextalign='middle' picturenormal="button wide*" group="TABGROUP" destvar="TAB_5" caption="$lvar(showcase_10206)" />
+            <element name="Button Tab6" type="SWITCH" posx="right"   width="of:width:last"                   action="FKT_SwitchTab" htextalign='center' vtextalign='middle' picturenormal="button wide*" group="TABGROUP" destvar="TAB_6" caption="$lvar(showcase_10206)" />
+        </element>
+        <element name='Anchor Content Tab1' type='ANCHOR' posx='left' enabled="1" posy='of:bottom:Anchor Buttons' height='%90' >
+            <xi:include href="$var(STANDARDELEMENTSPATH)/block_buttons_playpausestoprecord.xml" parse="xml" />
+        </element>
+        <element name='Anchor Content Tab2' type='ANCHOR' posx='left' enabled="0" posy='of:bottom:Anchor Buttons' height='%90' >
+            <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_align.xml" parse="xml" />
+        </element>
+        <element name='Anchor Content Tab3' type='ANCHOR' posx='left' enabled="0" posy='of:bottom:Anchor Buttons' height='%90' >
+                <element name="Frame"      type="PICTURE"    picturenormal="background boxes" />
+                <element name="ColorPicker" type="COLORPICKER" destvar="RECTANGLECOLOR" height="%90" posy="top"/>
+                <element name="Label" type="TEXTFIELD"  posy="bottom" height="%8" fontsize='%h90'  caption='$lvar(showcase_10017)' htextalign='center' vtextalign='middle' />
+        </element>
+        <element name='Anchor Content Tab4' type='ANCHOR' posx='left' enabled="0" posy='of:bottom:Anchor Buttons' height='%90' >
+            <element name="Knob Back"   type="PICTURE" posx="center" posy="middle" width="of:height:self" height="%80" picturenormal="knob back" />
+            <element name="Knob Volume" type="KNOB"    posx="center" posy="middle" width="of:height:self" height="%68" picturenormal="knob"  mindatavalue="0" maxdatavalue="100" leftboundaryangle="0" rightboundaryangle="0" destvar="knobvol" roundpos="1" />
+        </element>
+        <element name='Anchor Content Tab5' type='ANCHOR' posx='left' enabled="0" posy='of:bottom:Anchor Buttons' height='%90' >
+            <element name="Definition File" type="FILEVIEWER"  filename="$var(DEFINITIONPATH)/definition.ini" htextalign="left" vtextalign="top" backgroundcolor='#FFFFFFFF' fontsize='%w4' />
+        </element>
+        <element name='Anchor Content Tab6' type='ANCHOR' posx='left' enabled="0" posy='of:bottom:Anchor Buttons' height='%90' >
+            <element name="Dropdown"        type="DROPDOWN"  posy="top"  height="%20" width="%30" fontsize='%h50'  caption='$lvar(showcase_10016)'  captions='Option 1,Option 2,Option 3,Option 4' actions='ShowMessage_Option1,ShowMessage_Option2,ShowMessage_Option3,ShowMessage_Option4' htextalign='center' vtextalign='middle' picturenormal="button wide*" framecolor='$var(dimmed)' framewidth='%10'/>
+            <element name='Anchor3' type='ANCHOR' posx='center' posy='top' width='%30'  >
+                <elements>
+                    <element name="ScrollBox 2cnd right" type="SCROLLLIST" picturenormal="background boxes" container="list_3" rowheight="%20"  />
+                    <element name='Anchor3 Inner'   type='ANCHOR'  height='%20' >
+                        <element name="First Button 3"  type="TEXTFIELD"   posx="left"          width="%68" picturenormal='button wide*'   container="list_3" caption="$var(scrollcontent_movies_text[])" action="Show Page" actionpars='{"pagename":"Page_Main"}'  />
+                        <element name='Button Play 3'   type='BUTTON'   posx='right'         width='%16' picturenormal='button square*'    container="list_3" action='Send Play'         fontsize='%h30' iconfontsize='%h70'  caption='icon:media_play' />
+                        <element name='Button Delete 3' type='BUTTON'   posx='of:toleft:last' width='%16' picturenormal='button square*'   container="list_3" action='FKT_ScrollList_DeleteMovie'     fontsize='%h30' iconfontsize='%h70'  caption='icon:delete' />
+                    </element>
+                </elements>
+            </element>
+        </element>
+      </element>
+    </element>
+
+   </elements>
+</page>

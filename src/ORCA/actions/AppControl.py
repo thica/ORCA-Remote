@@ -98,7 +98,7 @@ class cEventActionsAppControl(cEventActionBase):
         elif uType=="actions":
             Globals.oActions.Dump(uFilter=uFilter)
         elif uType=="widgets":
-            Globals.oTheScreen.DumpWidgets(uFilter=uFilter)
+            Globals.oTheScreen.DumpWidgets(uPageName=uFilter)
         elif uType=="definitionvars":
             if uDefinitionName:
                 oDef=Globals.oDefinitions.get(uDefinitionName)
@@ -171,7 +171,7 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:TOCTitle:resumeapp
 
         = resumeapp =
-        This helper function enable to resume the app, in case thhis event is not fired or is missed by the sstem
+        This helper function enable to resume the app, in case this event is not fired or is missed by the system
         This action will not modify the error code
 
         <div style="overflow:auto; ">
@@ -216,7 +216,7 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:Page:Actions-WaitForConnectivity
         WikiDoc:TOCTitle:waitforconnectivity
         = waitforconnectivity =
-        Shows an dialog to wait, until network connectivity  is etablished. This will be called on android as part of the standard actions, on resume
+        Shows an dialog to wait, until network connectivity  is established. This will be called on android as part of the standard actions, on resume
         This action will not modify the error code
 
         <div style="overflow:auto; ">
@@ -239,7 +239,7 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:Page:Actions-DefineTimer
         WikiDoc:TOCTitle:definetimer
         = definetimer =
-        Sets or removes a timer for actions. With a timer, can can perfom actions in intervals. A predefined timer is a timer to update clock widgets.
+        Sets or removes a timer for actions. With a timer, you can perform actions in intervals. A predefined timer is a timer to update clock widgets.
         This action will modify the error code (0=success, 1=failure)
 
         <div style="overflow:auto; ">
@@ -373,7 +373,7 @@ class cEventActionsAppControl(cEventActionBase):
         WikiDoc:TOCTitle:modifyfile
         = modifyfile =
         Provides some common file operations like copy, rename, delete. All Operations can only be performed on files within the definition folder, so all pathes must be relative to the definition root folder. For copyfolder the abspath argument gives you access as a source for folder outside the definition folder
-        This action will modify the error code (0=success, 1=failure), existfile will not modify the error coee
+        This action will modify the error code (0=success, 1=failure), existfile will not modify the error code
 
         <div style="overflow:auto; ">
         {| class="wikitable"

@@ -8,8 +8,8 @@
       <description language='English'>English language strings</description>
       <description language='German'>Englische Zeichenketten</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/languages/English</local>
@@ -235,6 +235,8 @@
   <string id="617">Subnet V4</string>
   <string id="618">IP Address V6</string>
   <string id="619">MAC Address</string>
+  <string id="620">Mute</string>
+  <string id="621">Mute all sounds</string>
   <string id="624">Page effect type</string>
   <string id="625">Default page effect type</string>
   <string id="626">Page effect direction</string>
@@ -441,6 +443,12 @@
   <string id="1118">Audio Effect</string>
   <string id="1119">Functions</string>
 
+  <string id="1200">Downloads</string>
+  <string id="1201">Desktop</string>
+  <string id="1202">Documents</string>
+  <string id="1203">Pictures</string>
+  <string id="1204">Videos</string>
+  <string id="1205">Music</string>
 
   <string id="2000">Activities</string>
   <string id="2001">Devices</string>
@@ -604,6 +612,10 @@
   <string id="6034">Configure the setting for discover scripts</string>
   <string id="6035">Discover Script Name</string>
   <string id="6036">Name of the discover script to use</string>
+  <string id="6037">IPv6</string>
+  <string id="6038">Use IPv6</string>
+  <string id="6039">running</string>
+  <string id="6040">finished</string>
 
 
 </strings>

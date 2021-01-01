@@ -44,8 +44,8 @@ import ORCA.Globals as Globals
       <description language='English'>Sends commands to iTach devices to submit IR comands</description>
       <description language='German'>Sendet Befehle zu iTach Geräten um IR Befehle zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/iTach</local>

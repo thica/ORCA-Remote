@@ -21,6 +21,9 @@
 from typing import Dict
 from typing import List
 from typing import Union
+from typing import Optional
+
+import threading
 
 from kivy.uix.label         import Label
 from kivy.uix.button        import Button
@@ -41,9 +44,12 @@ class cDiscoverScriptTemplate(cBaseScript):
         self.dDevices:Dict[str,TypedQueryDict]  = {}
         self.uType:str                          = u'DEVICE_DISCOVER'
         self.iLineHeight:int                    = dp(35)
-        self.oGrid:Union[GridLayout,None]       = None
+        self.oGrid:Optional[GridLayout]         = None
         self.iDivide:int                        = 1
         self.bFirstLine:bool                    = True
+        self.aThreads:List[threading.Thread]    = []
+        self.ClockCheck:Optional[Clock.ClockEvent] = None
+
 
     def RunScript(self, *args, **kwargs) -> Dict:
         """ main entry point to run the script """
@@ -88,9 +94,6 @@ class cDiscoverScriptTemplate(cBaseScript):
         """ adds a line to the discover results """
         aButtons:List[Button] = []
 
-        if self.bFirstLine:
-            self.AddHeaders()
-
         for uText in aLine:
             oButton=Button(text=uText, text_size=(Globals.iAppWidth*0.9/(self.iDivide*1.2),self.iLineHeight*0.9), shorten=True)
             oButton.dDevice=dDevice
@@ -107,3 +110,19 @@ class cDiscoverScriptTemplate(cBaseScript):
     def CreateDiscoverList_ShowDetails(self,instance) -> None:
         """ empty placeholder """
         pass
+
+    def SendEndNotification(self):
+        Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTENDED",**{"script":self,"scriptname":self.uObjectName,"scriptstatus":"$lvar(6040)"})
+
+    def SendStartNotification(self):
+        Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTSTARTED",**{"script":self,"scriptname":self.uObjectName,"scripttitle":self.uScriptTitle,"scriptstatus":"$lvar(6039)", "grid":self.oGrid})
+
+    def CheckFinished(self,*largs):
+        # just for those discover scripts, who works with threads
+        bNotFinished=False
+        for oThread in self.aThreads:
+            if oThread.is_alive():
+                bNotFinished=True
+        if not bNotFinished:
+            self.ClockCheck.cancel()
+            self.SendEndNotification()

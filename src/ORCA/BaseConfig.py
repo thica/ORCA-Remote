@@ -62,14 +62,15 @@ class cBaseConfig:
     """
 
     def __init__(self, oObject:cBaseObject):
-        self.oObject:cBaseObject                        = oObject
-        self.oConfigParser:KivyConfigParser             = KivyConfigParser()
-        self.oFnConfig:Optional[cFileName]              = None
-        self.uCurrentSection:str                        = u''
-        self.uDefaultConfigName:str                     = u'DEFAULT'
-        self.oInputKeyboard:Optional[cInputKeyboard]    = None
+        self.aSections:List[str]                        = []
         self.dDefaultSettings:Dict[str,Dict]            = {}
         self.dSettingsCombined:Dict[str,Dict]           = {}
+        self.oConfigParser:KivyConfigParser             = KivyConfigParser()
+        self.oFnConfig:Optional[cFileName]              = None
+        self.oInputKeyboard:Optional[cInputKeyboard]    = None
+        self.oObject:cBaseObject                        = oObject
+        self.uCurrentSection:str                        = u''
+        self.uDefaultConfigName:str                     = u'DEFAULT'
         self.uType:str                                  = u''
         self.uWidgetName:str                            = u''
 
@@ -176,48 +177,80 @@ class cBaseConfig:
             self.WriteDefinitionConfigPar(uSectionName=uSectionName, uVarName=uKey, uVarValue=dSettings[uKey], bNowrite=True)
         self.oConfigParser.write()
 
-    def ConfigureKivySettings(self, *,oKivySetting:KivySettings) -> KivySettings:
+    def CreateSectionsJSONString(self) -> str:
+        """
+        Creates a list of all sections, suitable for the configuration JSON list
+
+        :return: a string representing the section list
+        """
+
+        self.GetSectionList()
+        uSettingsJSON:str       = u''
+        uValueString:str        = u''
+        for uSection in self.aSections:
+            uValueString+=u'\"'+uSection+u'\",'
+        uValueString = uValueString[:len(uValueString)-1]
+        uSettingsJSON+=uValueString
+        return uSettingsJSON
+
+    def GetSectionList(self) -> None:
+        """
+        Gets a list of all sections in an ini files
+        Will be stored directly in the config objects (aSections)
+        :return: None
+        """
+        self.aSections = self.oConfigParser.sections()
+        if len(self.aSections)==0:
+            self.CreateSection(uSectionName = self.uDefaultConfigName)
+            self.aSections = self.oConfigParser.sections()
+        return None
+
+
+    def ConfigureKivySettings(self, *,oKivySetting:KivySettings,uConfig:str="") -> KivySettings:
         """
         Create the JSON string for all sections and applies it to a kivy settings object
         Discover settings are excluded
 
         :param setting oKivySetting:
+        :param str uConfig: If we want a specific section, this is the name to provide
         :return: The KivySetting object
         """
-        RegisterSettingTypes(oKivySetting)
-        aSections:List[str] = self.oConfigParser.sections()
-        oSetting: cBaseSettings
 
-        if len(aSections)==0:
-            self.CreateSection(uSectionName = self.uDefaultConfigName)
-            aSections = self.oConfigParser.sections()
+        oSetting: cBaseSettings
+        bFoundSetting:bool = False
+        RegisterSettingTypes(oKivySetting)
+        self.GetSectionList()
+        SetVar(uVarName=u'SettingSectionList', oVarValue=self.CreateSectionsJSONString())
 
         if self.uType=="interface":
             # The Codeset List could be applied as a orca var, so set it to the list
             SetVar(uVarName=u'InterfaceCodesetList', oVarValue=self.oObject.CreateCodesetListJSONString())
 
-        for uSection in aSections:
-            # the Section list should be applied as a orca var
-            SetVar(uVarName=u'ObjectConfigSection', oVarValue=uSection)
-            # Let create a new temporary cSetting object to not harm the existing ones
-            oSetting = self.oObject.GetNewSettingObject()
-            # Read the ini file for this section
-            oSetting.ReadConfigFromIniFile(uConfigName=uSection)
-            # Create the setting string
-            dSettingsJSON:Dict[str,Dict] = self.CreateSettingJsonCombined(oSetting=oSetting, bIncludeDiscoverSettings=False)
-            uSettingsJSON = SettingDictToString(dSettingList=dSettingsJSON)
-            uSettingsJSON = ReplaceVars(uSettingsJSON)
+        for uSection in self.aSections:
+            if uConfig=="" or uConfig==uSection:
+                # the Section list should be applied as an orca var
+                SetVar(uVarName=u'ObjectConfigSection', oVarValue=uSection)
+                # Let create a new temporary cSetting object to not harm the existing ones
+                oSetting = self.oObject.GetNewSettingObject()
+                # Read the ini file for this section
+                oSetting.ReadConfigFromIniFile(uConfigName=uSection)
+                # Create the setting string
+                dSettingsJSON:Dict[str,Dict] = self.CreateSettingJsonCombined(oSetting=oSetting, bIncludeDiscoverSettings=False)
+                uSettingsJSON = SettingDictToString(dSettingList=dSettingsJSON)
+                uSettingsJSON = ReplaceVars(uSettingsJSON)
 
-            # if there is nothing to configure, then return
-            if uSettingsJSON == u'[]':
-                if self.uType == "interface":
-                    Globals.oNotifications.SendNotification(uNotification='closesetting_interface')
-                else:
-                    Globals.oNotifications.SendNotification(uNotification='closesetting_script')
-                return oKivySetting
+                if uSettingsJSON != u'[]':
+                    bFoundSetting = True
+                    # add the jSon to the Kivy Setting
+                    oKivySetting.add_json_panel(uSection, self.oConfigParser, data=uSettingsJSON)
 
-            # add the jSon to the Kivy Setting
-            oKivySetting.add_json_panel(uSection, self.oConfigParser, data=uSettingsJSON)
+        # if there is nothing to configure, then return
+        if not bFoundSetting:
+            if self.uType == "interface":
+                Globals.oNotifications.SendNotification(uNotification='closesetting_interface')
+            else:
+                 Globals.oNotifications.SendNotification(uNotification='closesetting_script')
+            return oKivySetting
 
         # Adds the action handler
         oKivySetting.bind(on_config_change=self.On_ConfigChange)
@@ -282,7 +315,11 @@ class cBaseConfig:
 
     def ShowSettings(self) -> None:
         """ Shows the settings page """
-        Globals.oTheScreen.AddActionToQueue(aActions=[{'string': 'updatewidget', 'widgetname': self.uWidgetName}])
+        Globals._app_settings = None
+        Globals.oApp.create_settings()
+
+        Globals.oTheScreen.AddActionToQueue(aActions=[{'string': 'showpage Page_Settings'},
+                                                      {'string': 'updatewidget Settings@Page_Settings'}])
 
     # noinspection PyMethodMayBeStatic
     def GetSettingParFromVar2(self,*, uObjectName:str, uConfigName:str, uSettingParName:str) -> str:
@@ -304,11 +341,9 @@ class cBaseConfig:
         the core object
 
         :rtype: dict
-        :keyword name: oSetting: an IterFaceSettins Object, needs to be cBaseSettings
+        :keyword name: oSetting: an InterFaceSettings Object, needs to be cBaseSettings
         :return: a dict of combined settings
         """
-
-        # oSetting:cBaseSettings   = kwargs.get("oSetting")
 
         if len(self.dSettingsCombined)!=0:
             return self.dSettingsCombined
@@ -340,7 +375,7 @@ def SettingDictToString(*,dSettingList:Dict[str,Dict]) -> str:
     """
 
     dLine:Dict
-    aSubList:List[str] = list(dSettingList.keys())
+    aSubList:List[str]  = list(dSettingList.keys())
     aSubList2:List[str] = sorted(aSubList, key=lambda entry: dSettingList[entry]['order'])
 
     uResult:str = u"["

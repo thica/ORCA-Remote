@@ -202,13 +202,12 @@ class cDefinition:
 
         SetDefinitionContext(uDefinitionName=self.uName)
         Globals.oTheScreen.LogToSplashScreen2(uText=self.uDefDescription)
-        Logger.info (u'Load Definition XmlFile:'+Globals.oDefinitionPathes.oFnDefinition)
+        Logger.info (u'Loading definition XmlFile:'+Globals.oDefinitionPathes.oFnDefinition)
 
         oET_Root:Element = self.oET_Root
-
         try:
             Logger.debug (u'Definition %s (%s): Loading xml includes' % (self.uName,self.uAlias))
-            Orca_include(oET_Root,orca_et_loader)
+            Orca_include(oElem=oET_Root,pLoader=orca_et_loader,uFileName=Globals.oDefinitionPathes.oFnDefinition.string)
             SetDefinitionContext(uDefinitionName=self.uName)
         except Exception as e:
             StartWait()
@@ -241,7 +240,12 @@ class cDefinition:
         return True
 
     def LoadFurtherXmlFile(self,*,oFnXml:cFileName) -> None:
-        # Loads pages from a further XML File
+        """
+        Loads pages from a further XML File
+        :param cFileName oFnXml: The filename of the xml to load
+        :return: None
+        """
+
         uET_Data = CachedFile(oFileName=oFnXml)
         uET_Data = ReplaceDefVars(uET_Data, self.oDefinitionVars)
         oET_Root:Element = Orca_FromString(uET_Data=uET_Data, oDef=self, uFileName=oFnXml.string)

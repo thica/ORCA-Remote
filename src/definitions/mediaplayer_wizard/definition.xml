@@ -58,8 +58,8 @@
       <description language='English'>Wizard for Mediaplayer devices, which allows you to pick a template</description>
       <description language='German'>Wizard für Mediaplayer Geräte, um aus einem Schablone eine Definition zu wählen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/mediaplayer_wizard</local>

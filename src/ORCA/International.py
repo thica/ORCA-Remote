@@ -52,12 +52,10 @@ from ORCA.utils.FileName import cFileName
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ORCA.definition.Definition import cDefinition
-else:
-    from typing import TypeVar
-    cDefinition = TypeVar("cDefinition")
+
 
 def find_first_not_of(uString:str,iStartPos:int,cChar:str) -> int:
-    """ Python adoption of C function to find the first character which is diffrent fom the given one """
+    """ Python adoption of C function to find the first character which is different fom the given one """
     i:int    = iStartPos
     iLen:int =len(uString)
     while i<iLen:
@@ -109,7 +107,7 @@ class cLocales:
             ShowErrorPopUp(uTitle='Fatal Error',uMessage=uMsg, bAbort=True)
 
     def __ParseXMLLocales(self,oXMLLocale:Element) -> None:
-        """ reads a single locales entry and stores it in the locles list """
+        """ reads a single locales entry and stores it in the locales list """
         oLocalesEntry:cLocalesEntry = cLocalesEntry()
         oLocalesEntry.ParseXMLLocales(oXMLLocale)
         self.oLocalesEntries[oLocalesEntry.uName]=oLocalesEntry
@@ -123,7 +121,7 @@ class cLanguage:
         self.oFnLanguagePrimary:Optional[cFileName]             = None
         self.oFnLanguageEnglish:Optional[cFileName]             = None
         self.oFnLanguageFallBackPrimary:Optional[cFileName]     = None
-        self.oFnLanguageFallBackEngLish:Optional[cFileName]     = None
+        self.oFnLanguageFallBackEnglish:Optional[cFileName]     = None
 
         # add some basic strings, even before we load the language files (for messages)
         self.SetString("5000", "Continue")
@@ -140,11 +138,14 @@ class cLanguage:
 
 
     def Init(self) -> None:
+        """
+        Implicitly initializes the language object
+        :return:
+        """
         self.oFnLanguagePrimary              = cFileName(Globals.oPathLanguageRoot + Globals.uLanguage) + u'strings.xml'
         self.oFnLanguageEnglish              = cFileName(Globals.oPathLanguageRoot + u'English') + u'strings.xml'
         self.oFnLanguageFallBackPrimary      = cFileName(Globals.oPathAppReal + u'languages/'+ Globals.uLanguage) + u'strings.xml'
-        self.oFnLanguageFallBackEngLish      = cFileName(Globals.oPathAppReal + u'languages/English') + u'strings.xml'
-
+        self.oFnLanguageFallBackEnglish      = cFileName(Globals.oPathAppReal + u'languages/English') + u'strings.xml'
 
     def SetString(self,uID:str,uText:str) -> None:
         """ sets a string """
@@ -210,6 +211,11 @@ class cLanguage:
 
     # noinspection PyMethodMayBeStatic
     def LoadXMLLanguageFont(self, oFnFile:cFileName) -> int:
+        """
+        Loads the Font definitions from an xml file
+        :param cFileName oFnFile: The filename of the xml font definition
+        :return: The number of fonts loaded from the file
+        """
         iCountFonts:int = 0
         try:
             uET_Data            = CachedFile(oFileName=oFnFile)
@@ -229,7 +235,7 @@ class cLanguage:
         if uType=="APP":
             if not self.oFnLanguageEnglish.Exists():
                 iCountFonts = self.LoadXMLLanguageFont(self.oFnLanguageFallBackPrimary)
-                self._LoadXmlFile(self.oFnLanguageFallBackEngLish)
+                self._LoadXmlFile(self.oFnLanguageFallBackEnglish)
                 if Globals.uLanguage != u'English' and iCountFonts == 0:
                     self._LoadXmlFile(self.oFnLanguageFallBackPrimary)
             else:

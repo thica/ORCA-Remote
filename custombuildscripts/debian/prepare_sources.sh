@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. "${SOURCEDIR}/custombuildscripts/android/prepare_sources.sh"  >> "$LOGFILE"
+source "${SOURCEDIR}/custombuildscripts/android/prepare_sources.sh"
 
 # mkdir "${TARGETDIR}/interfacestmp"
 # cp -L -f -R  "${SOURCEDIR}/src/interfaces" "${TARGETDIR}/interfacestmp"

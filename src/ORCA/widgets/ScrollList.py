@@ -142,12 +142,12 @@ class cWidgetScrollList(cWidgetPicture):
 
         # in case of recreation: Lets add the childs to the list of Screenpage widgets
         for oChild in self.aChilds:
-            self.oParentScreenPage.aWidgets.append(oChild)
+            self.oParentScreenPage.RegisterWidget(oWidget=oChild)
         # and remove the from the local list
         del self.aChilds[:]
 
         # save a copy of the screenpage widgets locally and mark them for deletion
-        for oWidget in self.oParentScreenPage.aWidgets:
+        for oWidget in self.oParentScreenPage.dWidgetsID.values():
             if oWidget.uContainer==self.uContainer and oWidget!=self:
                 aRet.append(oWidget)
                 self.aChilds.append(copy(oWidget))
@@ -233,8 +233,9 @@ class cWidgetScrollList(cWidgetPicture):
 
     def DeleteChilds(self):
         for oChild in self.aListChilds:
-            self.oParentScreenPage.aWidgets.remove(oChild)
             self.oObjectContent.remove_widget(oChild.oObject)
+            oChild.oObject = None
+            self.oParentScreenPage.RemoveWidget(oWidget=oChild)
         del self.aListChilds[:]
         self.iNumRows = 0
 
@@ -246,3 +247,13 @@ class cWidgetScrollList(cWidgetPicture):
             self.CreateScrollList()
             self.oParentScreenPage.PostHandleErrorWidgets()
         return
+
+    def EnableWidget(self, *, bEnable:bool) -> bool:
+        super(cWidgetScrollList, self).EnableWidget(bEnable=bEnable)
+        if self.oObjectScroll:
+            if bEnable:
+                self.oObjectScroll.opacity=1
+            else:
+                self.oObjectScroll.opacity=0
+
+        return self.bIsEnabled

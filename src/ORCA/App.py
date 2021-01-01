@@ -20,6 +20,7 @@
 """
 
 from typing import List
+from typing import Optional
 
 import logging
 import sys
@@ -35,6 +36,7 @@ from kivy.logger                           import FileHandler
 from kivy.logger                           import Logger
 from kivy.metrics                          import Metrics
 from kivy.uix.settings                     import SettingsWithSpinner
+from kivy.uix.widget                       import Widget
 from kivy.core.window                      import Window
 
 import ORCA.Globals as Globals
@@ -100,7 +102,7 @@ from ORCA.Queue                            import ClearQueue
 class ORCA_App(App):
     """ The Main Orca Class, here starts all """
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         """
         We initialize all App vars. Even as this is formally not required in python,
@@ -110,7 +112,7 @@ class ORCA_App(App):
         App.__init__(self)
 
         # Don't Move or change
-        self.sVersion="5.0.1"
+        self.sVersion="5.0.4"
         self.sBranch="Edinburgh"
 
         #todo: Remove in release
@@ -168,7 +170,7 @@ class ORCA_App(App):
         OS_GetWindowSize()
         Logger.info(u'Init: ORCA Remote Application started: Version %s (%s):' % (Globals.uVersion, Globals.uPlatform))
 
-    def build(self):
+    def build(self) -> Optional[Widget]:
         """
         Frame work function, which gets called on application start
         All Initialisation functions start here
@@ -176,15 +178,6 @@ class ORCA_App(App):
         and after that the schedule all init functions
         Init is scheduled to updated the splash screen for progress
         """
-
-        # from ORCA.utils.ParseResult_Test import ResultParser_Test
-        # oTest=ResultParser_Test()
-        # i=1
-        # exit(0)
-
-        # from ORCA.gardena import Gardena
-        # Gardena()
-        # exit(0)
 
         try:
             # Window.borderless = True
@@ -197,13 +190,13 @@ class ORCA_App(App):
             return Globals.oTheScreen.oRootSM               # And return the root object (black background at first instance)
         except Exception as e:
             ShowErrorPopUp(uTitle='build: Fatal Error', uMessage=u'build: Fatal Error running Orca', bAbort=True, uTextContinue='', uTextQuit=u'Quit', oException=e)
-
+        return None
     # noinspection PyUnusedLocal
-    def On_Size(self, win, size):
+    def On_Size(self, win, size) ->None:
         """ Function called by the Framework, when the size or rotation has changed """
 
         if self.tOldSize==size:
-            return
+            return None
 
         Logger.debug("Resize/rotation detected %d %d" % (size[0], size[1]))
         self.tOldSize = size
@@ -221,11 +214,12 @@ class ORCA_App(App):
         SetVar(uVarName = u'WAITFORROTATION', oVarValue= '0')
         Globals.bWaitForRotation = False
         Globals.oTheScreen.AdjustRatiosAfterResize()
+        return None
 
     # noinspection PyUnusedLocal
-    def Init_ReadConfig(self, *largs):
+    def Init_ReadConfig(self, *largs) ->bool:
         """
-        Called by the timer to continue initalisation after appstart
+        Called by the timer to continue initialisation after appstart
         More or less all actions after here will be executed by the scheduler/queue
         """
 
@@ -251,7 +245,7 @@ class ORCA_App(App):
         return False
 
     # noinspection PyMethodMayBeStatic
-    def DownloadDefinition(self, uDefinitionName):
+    def DownloadDefinition(self, uDefinitionName) -> bool:
         """
                 Downloads a specific definition and restarts after
         """
@@ -259,8 +253,7 @@ class ORCA_App(App):
         Globals.oDownLoadSettings.LoadDirect(uDirect=' :definitions:' + uDefinitionName, bForce=True)
         return False          # we do not proceed here as Downloader will restart
 
-
-    def RestartAfterDefinitionLoad(self):
+    def RestartAfterDefinitionLoad(self)->bool:
         """
         This function will get either called when we detect a new ORCA version we downloaded the updated ORCA repository files
         Or it will get called at the first time installation after we downloaded the setup definition
@@ -290,7 +283,7 @@ class ORCA_App(App):
         return True
 
     # noinspection PyUnusedLocal
-    def RestartAfterRepositoryUpdate(self, *largs):
+    def RestartAfterRepositoryUpdate(self, *largs)->bool:
         """
         Restarts ORCA, after a definition has been updated
         """
@@ -301,7 +294,7 @@ class ORCA_App(App):
         self.ReStart()
         return True
 
-    def CheckForOrcaFiles(self):
+    def CheckForOrcaFiles(self)->bool:
         """
         Checks, if ORCA files are available somewhere
         """
@@ -317,13 +310,12 @@ class ORCA_App(App):
             return False
         return True
 
-    def Init(self):
+    def Init(self) -> bool:
         """
         first real init step
         Sets some basic vars
         and find/sets the path to the orca files
         """
-
 
         try:
 
@@ -336,20 +328,14 @@ class ORCA_App(App):
 
             Globals.oPathAppReal    = OS_GetInstallationDataPath()
             Globals.oPathRoot       = OS_GetUserDataPath()
-            # Globals.uIPAddressV4, Globals.uIPGateWayAssumedV4, Globals.uIPSubNetAssumedV4 = GetLocalIPV4()
             Globals.uIPAddressV4    = OS_GetIPAddressV4()
             Globals.uIPSubNetV4     = OS_GetSubnetV4()
             Globals.uIPGateWayV4    = OS_GetGatewayV4()
-
-            # Globals.uIPAddressV6, Globals.uIPGateWayAssumedV6 = GetLocalIPV6()
             Globals.uIPAddressV6    = OS_GetIPAddressV6()
             Globals.uIPSubNetV6     = OS_GetSubnetV6()
             Globals.uIPGateWayV6    = OS_GetGatewayV6()
-
             Globals.uMACAddressColon, Globals.uMACAddressDash = OS_GetMACAddress()
-
-            # Globals.uMACAddressColon, Globals.uMACAddressDash = GetMACAddress()
-            Globals.oPathApp = cPath(os.getcwd())
+            Globals.oPathApp        = cPath(os.getcwd())
 
             if str(Globals.oParameter.oPathDebug):
                 Globals.oPathRoot     = Globals.oParameter.oPathDebug
@@ -368,7 +354,7 @@ class ORCA_App(App):
             if not self.InitAndReadSettingsPanel():
                 return False
 
-            Globals.oLanguage.Init()                    # Init the Languages (dont load them)
+            Globals.oLanguage.Init()                    # Init the Languages (doesn't load them)
             Globals.oInterFaces.LoadInterfaceList()     # load the list of all available interfaces
             Globals.oScripts.LoadScriptList()           # load the list of all available scripts
 
@@ -387,7 +373,7 @@ class ORCA_App(App):
             self.bOnError = True
             return 0
 
-    def InitAndReadSettingsPanel(self):
+    def InitAndReadSettingsPanel(self)->bool:
         """
         Reads the complete settings from the orca.ini file
         it will set setting defaults, if we do not have an ini file by now
@@ -433,6 +419,7 @@ class ORCA_App(App):
             self.InitRootDirs()
             Globals.iLastInstalledVersion = Config_GetDefault_Int(oConfig=oConfig, uSection=u'ORCA', uOption='lastinstalledversion',uDefaultValue= Globals.uVersion)
 
+            # The protected file /flag indicates, that we are in the development environment, so we will not download anything from the repository
             Globals.bProtected = (Globals.oPathRoot + u'protected').Exists()
             if Globals.bProtected:
                 SetVar(uVarName = "PROTECTED", oVarValue = "1")
@@ -549,30 +536,30 @@ class ORCA_App(App):
                 ClearAtlas()
 
             # Create and read the definition ini file
-            Globals.oDefinitionConfigParser = oConfig = OrcaConfigParser()
+            Globals.oDefinitionConfigParser = OrcaConfigParser()
 
-            oConfig.filename = Globals.oDefinitionPathes.oFnDefinitionIni.string
+            Globals.oDefinitionConfigParser.filename = Globals.oDefinitionPathes.oFnDefinitionIni.string
             if Globals.oDefinitionPathes.oFnDefinitionIni.Exists():
-                oConfig.read(Globals.oDefinitionPathes.oFnDefinitionIni.string)
+                Globals.oDefinitionConfigParser.read(Globals.oDefinitionPathes.oFnDefinitionIni.string)
             uSection = Globals.uDefinitionName
             uSection = uSection.replace(u' ', u'_')
-            if not oConfig.has_section(uSection):
-                oConfig.add_section(uSection)
+            if not Globals.oDefinitionConfigParser.has_section(uSection):
+                Globals.oDefinitionConfigParser.add_section(uSection)
             return True
 
         except Exception as e:
             uMsg = u'Global Init:Unexpected error reading settings:' + ToUnicode(e)
             Logger.critical(uMsg)
             ShowErrorPopUp(uTitle='InitAndReadSettingsPanel: Fatal Error', uMessage=uMsg, bAbort=True, uTextContinue='', uTextQuit=u'Quit')
-            return 0
+            return False
 
     # noinspection PyProtectedMember
-    def InitOrientationVars(self):
+    def InitOrientationVars(self)->None:
         """
         Getting the orientation of the App and sets to system vars for it
         """
         Logger.debug(
-            u'Setting Orientation Variables #1: Screen Size: [%s], Width: [%s], Heigth: [%s], Orientation: [%s]' % (
+            u'Setting Orientation Variables #1: Screen Size: [%s], Width: [%s], Height: [%s], Orientation: [%s]' % (
             str(Globals.fScreenSize), str(self._app_window._size[0]), str(self._app_window._size[1]),
             str(Globals.uDeviceOrientation)))
 
@@ -588,9 +575,9 @@ class ORCA_App(App):
         SetVar(uVarName = u'DEVICEORIENTATION', oVarValue = Globals.uDeviceOrientation)
         SetVar(uVarName = u'SCREENSIZE', oVarValue = str(Globals.fScreenSize))
 
-        Logger.debug(u'Setting Orientation Variables: Screen Size: [%s], Width: [%s], Heigth: [%s], Orientation: [%s]' % (str(Globals.fScreenSize), str(Globals.iAppWidth), str(Globals.iAppHeight), str(Globals.uDeviceOrientation)))
+        Logger.debug(u'Setting Orientation Variables: Screen Size: [%s], Width: [%s], Height: [%s], Orientation: [%s]' % (str(Globals.fScreenSize), str(Globals.iAppWidth), str(Globals.iAppHeight), str(Globals.uDeviceOrientation)))
 
-    def RepositoryUpdate(self):
+    def RepositoryUpdate(self)->None:
         """
         Updates all loaded repository files when a new ORCA version has been detected
         """
@@ -606,7 +593,7 @@ class ORCA_App(App):
             return True
         return False
 
-    def InitRootDirs(self):
+    def InitRootDirs(self)->None:
         """
         inits and creates the core pathes
         """
@@ -649,7 +636,7 @@ class ORCA_App(App):
 
         (Globals.oPathSharedDocuments + 'actions').Create()
 
-    def InitPathes(self):
+    def InitPathes(self)->None:
         """
         init all used pathes by the app (root pathes needs to be initialized)
         """
@@ -708,6 +695,7 @@ class ORCA_App(App):
         return self.open_settings()
 
     def On_CloseSetting(self, **kwArgs):
+        """ Override the defaults, does nothing """
         pass
 
     # noinspection PyUnusedLocal
@@ -724,7 +712,7 @@ class ORCA_App(App):
         Globals.aDefinitionList.remove('shared_documents')
         Globals.oTheScreen.UpdateSetupWidgets()
 
-    def ReStart(self):
+    def ReStart(self)->None :
         """
         Restarts the whole ORCA App
         """
@@ -757,7 +745,7 @@ class ORCA_App(App):
         Clock.schedule_once(self.Init_ReadConfig, 0)
 
     # noinspection PyMethodMayBeStatic
-    def DeInit(self):
+    def DeInit(self) ->None:
         """
         Call to stop Interfaces, Queues, Timer, Scripts
         """
@@ -765,7 +753,7 @@ class ORCA_App(App):
 
     def StopApp(self):
         """
-        Stops the ORAC App
+        Stops the ORCA App
         """
         Logger.debug("Quit App on request")
         # self.DeInit()
@@ -796,22 +784,28 @@ class ORCA_App(App):
         return True
 
     def on_resume(self):
-        # this is the normal entry point, if android would work
+        """ this is the normal entry point, if android would work """
         Globals.oNotifications.SendNotification(uNotification="on_resume")
         Globals.bOnSleep = False
         return True
 
     def open_settings(self, *largs):
-        # creates the settings panel (framework function)
+        """
+        Creates the settings panel (framework function)
+        :param largs:
+        :return:
+        """
         if Globals.oWinOrcaSettings is None:
             return App.open_settings(self, *largs)
         return False
 
     def close_settings(self, *largs):
-        # close the settings pages and shows the first page
-        # (if we did not start the definition, just continue with ini..)
+        """
+        close the settings pages and shows the first page
+        (if we did not start the definition, just continue with ini..)
+        """
 
-        # If initialisiation failed, maybe the user entered a different location for ORCA Files, so lets restart
+        # If initialisation failed, maybe the user entered a different location for ORCA Files, so lets restart
         if not Globals.bInit:
             self.ReStart()
 
@@ -862,7 +856,7 @@ class ORCA_App(App):
         """
         self.StopApp()
 
-    def on_stop(self):
+    def on_stop(self) ->bool:
         """
         System Callback, which will be called when the app terminates
         """

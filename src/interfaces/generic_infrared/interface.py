@@ -36,8 +36,8 @@ from ORCA.utils.FileName                    import cFileName
       <description language='English'>Base Interface Class for Infrared based Interfaces</description>
       <description language='German'>Basis Schnittstelle für Infrarot Schnittstellen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/generic_infrared</local>

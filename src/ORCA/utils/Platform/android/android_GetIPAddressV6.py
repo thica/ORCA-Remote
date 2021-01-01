@@ -22,7 +22,7 @@
 # this is temporary as long netifaces does not work on android
 
 import socket
-from kivy import Logger
+from kivy.logger          import Logger
 from ORCA.utils.LogError  import LogError
 
 

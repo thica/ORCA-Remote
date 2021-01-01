@@ -37,6 +37,7 @@
   <string id="showcase_10031">Up &amp; Down</string>
   <string id="showcase_10032">Repeat &amp; Double</string>
   <string id="showcase_10033">Colored Shapes</string>
+  <string id="showcase_10034">Checkbox</string>
 
   <string id="showcase_10040">Press me!</string>
   <string id="showcase_10041">File Browser</string>
@@ -55,6 +56,10 @@
   <string id="showcase_10200">Color</string>
   <string id="showcase_10201">An example how to set colors by colorpicker</string>
   <string id="showcase_10202">Back</string>
-  
+  <string id="showcase_10203">Includes</string>
+  <string id="showcase_10204">Align</string>
+  <string id="showcase_10205">Colorpicker</string>
+  <string id="showcase_10206">Knob</string>
+
   
 </strings>

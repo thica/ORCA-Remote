@@ -38,8 +38,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to convert IR Files from iTach format to Kira Keene formats</description>
       <description language='German'>Tool um IR Dateien vom iTach Format zum Kira Keene Format zu konvertieren</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

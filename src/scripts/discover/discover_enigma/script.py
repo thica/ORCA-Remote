@@ -35,6 +35,7 @@ import socket
 from time                                   import sleep
 from xml.etree.ElementTree                  import Element
 
+from kivy.clock                             import Clock
 from kivy.network.urlrequest                import UrlRequest
 from kivy.uix.button                        import Button
 
@@ -44,6 +45,7 @@ from ORCA.vars.QueryDict                    import TypedQueryDict
 from ORCA.utils.XML                         import GetXMLTextValue
 from ORCA.utils.XML                         import LoadXMLString
 
+import ORCA.Globals as Globals
 
 '''
 <root>
@@ -53,8 +55,8 @@ from ORCA.utils.XML                         import LoadXMLString
       <description language='English'>Discover Enigma Receiver via the webinterface</description>
       <description language='German'>Erkennt Enigma Reveiver mittels des Web Interfaces</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_enigma</local>
@@ -99,7 +101,8 @@ class cScript(cDiscoverScriptTemplate_Scan):
         self.uSubType:str                       = u'Enigma'
         self.iPort:int                          = 80
         self.bStopWait:bool                     = False
-        self.uNothingFoundMessage               = "Enigma-Discover: Could not find a Enigma Receiver on the network"
+        self.uNothingFoundMessage               = u"Enigma-Discover: Could not find a Enigma Receiver on the network"
+        self.uScriptTitle                       = u"Enigma Discovery local subnet"
 
     def GetHeaderLabels(self) -> List[str]:
         return ['$lvar(5029)','$lvar(5035)','$lvar(6002)','$lvar(5031)']
@@ -109,7 +112,7 @@ class cScript(cDiscoverScriptTemplate_Scan):
         uText:str = u"$lvar(5029): %s \n" \
                     u"$lvar(5035): %s \n" \
                     u"$lvar(6002): %s \n"\
-                    u"$lvar(5031): %s \n" % (dDevice.uFoundIP,dDevice.uFoundHostName,dDevice.uFoundPort,dDevice.uFoundModel)
+                    u"$lvar(5031): %s \n" % (dDevice.uIP,dDevice.uHostName,str(dDevice.iPort),dDevice.uModel)
 
         ShowMessagePopUp(uMessage=uText)
 
@@ -185,6 +188,7 @@ class cThread_CheckIP(threading.Thread):
                     dResult.uIPVersion   = "IPv4"
                     dResult.uHostName    = uFoundHostName
                     self.oCaller.aResults.append(dResult)
+                    Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTFOUND",**{"script":self,"scriptname":self.oCaller.uObjectName,"line":[dResult.uIP,dResult.uHostName, str(dResult.iPort), dResult.uModel],"device":dResult})
                     self.oCaller.ShowInfo(uMsg=u'Discovered Enigma device (V4) %s' % dResult.uIP)
                     try:
                         uIP = ""
@@ -201,6 +205,7 @@ class cThread_CheckIP(threading.Thread):
                             dResult.uIPVersion   = "IPv6"
                             dResult.uHostName    = uFoundHostName
                             self.oCaller.aResults.append(dResult)
+                            Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTFOUND",**{"script":self,"scriptname":self.oCaller.uObjectName,"line":[dResult.uIP,dResult.uHostName, str(dResult.iPort), dResult.uModel],"device":dResult})
                             self.oCaller.ShowInfo(uMsg=u'Discovered Enigma device (V6) %s' % dResult.uIP)
                     except Exception:
                         pass

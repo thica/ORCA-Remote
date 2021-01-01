@@ -40,15 +40,15 @@ import ORCA.Globals as Globals
 
 class cActions:
     """ The Actions Representation """
-    def __init__(self):
-        self.dActionsCommands:Dict       = {}
-        self.dActionsPageStart:Dict      = {}
-        self.dActionsPageStop:Dict       = {}
-        self.oActionType:cActionType     = cActionType()
-        self.iIndent:int                 = 0
+    def __init__(self)->None:
+        self.dActionsCommands:Dict[str,List[cAction]]   = {}
+        self.dActionsPageStart:Dict[str,List[cAction]]  = {}
+        self.dActionsPageStop:Dict[str,List[cAction]]   = {}
+        self.oActionType:cActionType                    = cActionType()
+        self.iIndent:int                            = 0
 
     def InitVars(self) -> None:
-        """ (re) Initialisises all Actions (also after a definition change) """
+        """ (re) Initialises all Actions (also after a definition change) """
         self.dActionsCommands.clear()
         self.dActionsPageStart.clear()
         self.dActionsPageStop.clear()
@@ -89,7 +89,7 @@ class cActions:
         if not bFound:
             aActions.append(cAction(pars=oXMLNode,functionname=uFunctionName))
 
-    def LoadActionsSub(self,*,oET_Root:Element,uSegmentTag:Optional[str], uListTag:str,dTargetDic:Dict,uFileName:Union[str,cFileName]=u'') -> None:
+    def LoadActionsSub(self,*,oET_Root:Element,uSegmentTag:Optional[str], uListTag:str,dTargetDic:Dict[str,List[cAction]],uFileName:Union[str,cFileName]=u'') -> None:
         """
             replaceoptions
             * appendtoexisting
@@ -179,31 +179,31 @@ class cActions:
         self.dActionsCommands[uActionName] = aActions
 
 
-    def GetActionList(self, *,uActionName, bNoCopy:bool) -> List[cAction]:
+    def GetActionList(self, *,uActionName:str, bNoCopy:bool) -> List[cAction]:
         """ Returns a (copy of an) action (list)  """
 
         if bNoCopy:
             return self.dActionsCommands.get(uActionName)
         else:
-            return self._CopyActonList(dActionList=self.dActionsCommands,uActionName=uActionName)
+            return self._CopyActionList(dActionList=self.dActionsCommands,uActionName=uActionName)
 
-    def GetPageStartActionList(self,*, uActionName, bNoCopy) -> List[cAction]:
+    def GetPageStartActionList(self,*, uActionName:str, bNoCopy:bool) -> List[cAction]:
         """ Returns a (copy of an) action (list)  """
 
         if bNoCopy:
             return self.dActionsPageStart.get(uActionName)
         else:
-            return self._CopyActonList(dActionList=self.dActionsPageStart,uActionName=uActionName)
+            return self._CopyActionList(dActionList=self.dActionsPageStart,uActionName=uActionName)
 
-    def GetPageStopActionList(self,*, uActionName, bNoCopy) -> List[cAction]:
+    def GetPageStopActionList(self,*, uActionName:str, bNoCopy:bool) -> List[cAction]:
         """ Returns a (copy of an) action (list)  """
         if bNoCopy:
             return self.dActionsPageStop.get(uActionName)
         else:
-            return self._CopyActonList(dActionList=self.dActionsPageStop,uActionName=uActionName)
+            return self._CopyActionList(dActionList=self.dActionsPageStop,uActionName=uActionName)
 
     @staticmethod
-    def _CopyActonList(*,dActionList:Dict, uActionName:str) -> Optional[List[cAction]]:
+    def _CopyActionList(*,dActionList:Dict[str,List[cAction]], uActionName:str) -> Optional[List[cAction]]:
         """ Creates a copy of an action list  """
         aList:List[cAction] = dActionList.get(uActionName)
         if aList is None:

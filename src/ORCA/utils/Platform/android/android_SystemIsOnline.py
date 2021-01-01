@@ -54,7 +54,7 @@ def SystemIsOnline() -> bool:
         LogError(uMsg='SystemIsOnline:',oException=e)
         return True
 
-
+'''
 def SystemIsOnlineOld():
     """
     verifies, if the system has a network connection by system APIs (not by ping)
@@ -69,4 +69,4 @@ def SystemIsOnlineOld():
     except Exception as e:
         LogError(uMsg='SystemIsOnline:',oException=e)
         return True
-
+'''

@@ -2,13 +2,16 @@
 <includes>
   <pagestartaction name="appstart">
       <!-- Load my passwords -->
-      <action name="Login To FTP Server"   string="executeftpcommand" command="connect" host="192.168.1.154" user="root" password="" ssl="0"/>
-      <action name="Download File to FTP Server"   string="executeftpcommand"     command="downloadfile" localfile="thicasecrets.xml" localbasefolder="$var(DOWNLOADSPATH)" remotebasefolder="/home/root"/>
-      <action name="Logout from FTP Server"   string="executeftpcommand" command="disconnect"  />
-      <action name="Load Secrets scripts"   string="loadactionfile" actionfilename="$var(DOWNLOADSPATH)/thicasecrets.xml"  />
-      <action name="set the secrets"   string="call setthicasecrets"  />
-
-      <action name="" string="getsaveorcasetting" configtype="ORCA" varname="locales" varvalue="Deutschland" condition="$var(STARTCOUNT)==1" />
+      <action name="on first start" string="if $var(STARTCOUNT)==1"/>"
+          <action name="Login To FTP Server"                string="executeftpcommand" command="connect" host="192.168.1.154" user="root" password="" ssl="0"/>
+          <action name="Download secrets from FTP Server"   string="executeftpcommand" command="downloadfile" localfile="thicasecrets.xml" localbasefolder="$var(DOWNLOADSPATH)" remotebasefolder="/home/root"/>
+          <action name="Download adbkey from FTP Server"    string="executeftpcommand" command="downloadfile" localfile="adbkey" localbasefolder="$var(DOWNLOADSPATH)" remotebasefolder="/home/root"/>
+          <action name="Download adbkey from FTP Server"    string="executeftpcommand" command="downloadfile" localfile="adbkey.pub" localbasefolder="$var(DOWNLOADSPATH)" remotebasefolder="/home/root"/>
+          <action name="Logout from FTP Server"             string="executeftpcommand" command="disconnect"  />
+          <action name="Load Secrets scripts"               string="loadactionfile" actionfilename="$var(DOWNLOADSPATH)/thicasecrets.xml"  />
+          <action name="set the secrets"                    string="call setthicasecrets"  />
+          <action name="Set language to German"             string="getsaveorcasetting" configtype="ORCA" varname="locales" varvalue="Deutschland" />
+      <action name="endif first start" string="endif" />
       <action name="" string="redirect" from="$var(STANDARDELEMENTSPATH)/block_topline.xml" to="$var(DEFINITIONPATHSKINELEMENTS[activity_template])/block_topline.xml" />
   </pagestartaction>
 
@@ -31,7 +34,6 @@
       <action name="Or Second Page"    string="setvar DEFINITIONSTARTPAGE=Page_Activities_$dvar(definition_activity_template)_2"   condition="$var(thica_startpage)==Lounge" />
 
       <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=$var(thica_bouquet)" />
-      <action name="set Bouquetnum" string="setvar $dvar(definition_alias_tvfavorites_shared)_bouquet=1" />
       <action name="Thica Definitions Ends here" />
   </pagestartaction>
 

@@ -126,12 +126,12 @@ class cWidgetBase(cWidgetBaseBase):
     |-
     |Relative size and positions
     |There are special options to set the size and position based on other wigets or based on itself. The widget attribute (posx,posy,width,height) has to start with "of:". Than you need to specify, what attribut you would like to refer to too. This can be one of the following words:
-    * top: You get the posy attribut from the referred widget
-    * left: You get the posx attribut from the referred widget
-    * bottom: You get the bottom attribut (posy+height) from the referred widget
-    * right: You get the right attribut (posx+width) from the referred widget
-    * width:  You get the width attribut from the referred widget
-    * height: You get the height attribut from the referred widget
+    * top: You get the posy attribute from the referred widget
+    * left: You get the posx attribute from the referred widget
+    * bottom: You get the bottom attribute (posy+height) from the referred widget
+    * right: You get the right attribute (posx+width) from the referred widget
+    * width:  You get the width attribute from the referred widget
+    * height: You get the height attribute from the referred widget
     * totop: Helpful to attach a widget on top on another: posy of the referred widget plus the own widget height
     * toleft:  Helpful to attach a widget to left on another: posy of the referred widget plus the own widget height
     The third element (after a colon) points to the referred widget. Can be either
@@ -151,10 +151,10 @@ class cWidgetBase(cWidgetBaseBase):
     |Specify, if a widget is enabled- By default all widgets are enabled. If a widget is disabled. it is not visible on the screen. There a actions to enable or disable widget at runtime. Please use "0" to disable a widget and "1" to enable a widget.
     |-
     |backgroundcolor
-    |The background color of the widget in hexedecimal RGBA format. It has to start with a pound sign (eg: #ff00ffff). Please use only low capital chars.
+    |The background color of the widget in hexadecimal RGBA format. It has to start with a pound sign (eg: #ff00ffff). Please use only low capital chars.
     |-
     |anchor
-    |You can specify an anchor to use for the xpos and ypos attributes. If you embedd the widget within a anchor, the anchor will be assigned automtic, otherwis you can specify the name of the nchor manually here.
+    |You can specify an anchor to use for the xpos and ypos attributes. If you embed the widget within a anchor, the anchor will be assigned automtic, otherwis you can specify the name of the nchor manually here.
     |-
     |action
     |If a widget supports action, you can specify the name of the action here. This is the singletap action
@@ -172,13 +172,13 @@ class cWidgetBase(cWidgetBaseBase):
     |If a widget supports action, you can specify the name of the action here. This is the action if you want to call something explicit on a touch up
     |-
     |actionpars
-    |If a widget supports action, you can specify additional paramater to pass the action as an json string. For calls and functions a variable will be created for each action par (see actions:call)
+    |If a widget supports action, you can specify additional parameter to pass the action as an json string. For calls and functions a variable will be created for each action par (see actions:call)
     |-
     |interface
     |Sets the interface for this action. You can either use the direct interface name, or, even better, use a variable which points to the interface name. Please refer to section "Variables" to understand, how to use variables. You should just set the interface, if it is different from the page default interface or from the anchor interface.
     |-
     |configname
-    |Sets the configuration for this action. You can either use the direct configuraton name, or, even better, use a variable which points to the configuration name. Please refer to section "Variables" to understand, how to use variables. You should just set the configuration name, if it is different from the page default configuration or from the anchor configuration.
+    |Sets the configuration for this action. You can either use the direct configuration name, or, even better, use a variable which points to the configuration name. Please refer to section "Variables" to understand, how to use variables. You should just set the configuration name, if it is different from the page default configuration or from the anchor configuration.
     |}</div>
 
     An example line for a widget could look like the example below.
@@ -218,6 +218,7 @@ class cWidgetBase(cWidgetBaseBase):
         bApplyWidth:bool
         fVar:float
         i:int
+        bAnchorEnabled:bool=True
 
         global uContainerContext
 
@@ -225,6 +226,8 @@ class cWidgetBase(cWidgetBaseBase):
             global oLastWidget
 
             self.GetWidgetTypeFromXmlNode(oXMLNode)
+            self.uFileName          = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag=u'linefilename', bMandatory=False, vDefault="unknown file")
+            self.uFileNames         = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag=u'linefilenames', bMandatory=False, vDefault="Unknown File")
 
             uDefinitionContext      = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag=u'definitioncontext', bMandatory=False, vDefault=Globals.uDefinitionContext)
             uAlias                  = oXMLNode.get('definitionalias')
@@ -262,7 +265,9 @@ class cWidgetBase(cWidgetBaseBase):
                     self.iAnchorPosY         = self.oTmpAnchor.iPosY
                     self.iAnchorWidth        = self.oTmpAnchor.iWidth
                     self.iAnchorHeight       = self.oTmpAnchor.iHeight
-                else:
+                    bAnchorEnabled           = self.oTmpAnchor.bIsEnabled
+
+            else:
                     self.oTmpAnchor=None
 
             # We parse for Text and change later to integer
@@ -277,7 +282,7 @@ class cWidgetBase(cWidgetBaseBase):
             if bApplyWidth:
                 self.iWidth = self._ParseDimPosValue(uWidth)
 
-            self.bIsEnabled         = GetXMLBoolAttribute(oXMLNode=oXMLNode, uTag=u'enabled',        bMandatory=False,  bDefault=True)
+            self.bIsEnabled         = GetXMLBoolAttribute(oXMLNode=oXMLNode, uTag=u'enabled',        bMandatory=False,  bDefault=bAnchorEnabled)
             self.uContainer         = GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'container',      bMandatory=False,  vDefault=u'')
 
             if (self.eWidgetType == eWidgetType.ScrollContainer or self.eWidgetType == eWidgetType.ScrollList) and self.uContainer == u'':
@@ -298,6 +303,9 @@ class cWidgetBase(cWidgetBaseBase):
             self.uInterFace         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'interface', bMandatory=False,        vDefault=u'')
             self.uConfigName        = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'configname',bMandatory=False,        vDefault=u'')
 
+            if oLastWidget:
+                self.uLastWidgetID  = oLastWidget.uID
+
             if not hasattr(self,'bIsDropButton'):
                 oLastWidget = self
 
@@ -305,11 +313,10 @@ class cWidgetBase(cWidgetBaseBase):
             self.iPosYInit      = self.iPosY
             self.iWidthInit     = self.iWidth
             self.iHeightInit    = self.iHeight
-
             return super().ParseXMLBaseNode (oXMLNode,oParentScreenPage, uAnchor)
 
         except Exception as e:
-            LogError(uMsg=u'Error parsing widget from element:['+self.uName+"",oException=e)
+            LogError(uMsg=u'Error parsing widget from element:[%s] [%s]' % (self.uName,self.uFileNames),oException=e, bTrackStack=True)
             return False
 
     def CalculatePosX(self,uPosX:str) -> int:
@@ -485,7 +492,7 @@ class cWidgetBase(cWidgetBaseBase):
                 else:
                     LogError(uMsg=u'Unknown Reference:'+uDim)
             else:
-                LogError(uMsg=u'Unknown Widget:'+self.oParentScreenPage+":"+tSplit[2])
+                LogError(uMsg=u'Unknown Widget: [%s][%s][%s]' % (self.oParentScreenPage.uPageName,tSplit[2],self.uFileNames))
 
         if len(tSplit) > 3:
             uOperator = tSplit[3]
@@ -548,7 +555,7 @@ class cWidgetBase(cWidgetBaseBase):
         if self.oObject is not None:
             if Globals.bShowBorders:
                 if self.oBorder is None:
-                    if (not isinstance(self.oObject, Layout)) and (not self._eWidgetType == eWidgetType.FileViewer) and (not self._eWidgetType == eWidgetType.Border):
+                    if (not isinstance(self.oObject, Layout)) and (not self.eWidgetType == eWidgetType.FileViewer) and (not self.eWidgetType == eWidgetType.Border):
                         self.oBorder = cBorder(**self.dKwArgs)
                         self.oObject.add_widget(self.oBorder)
             else:
@@ -558,9 +565,9 @@ class cWidgetBase(cWidgetBaseBase):
 
     def GetWidgetTypeFromXmlNode(self,oXMLNode:Element) -> None:
         self.uTypeString = GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'type',bMandatory=True,vDefault=u'')
-        self._eWidgetType = dWidgetTypeToId.get(self.uTypeString,eWidgetType.ERROR)
+        self.eWidgetType = dWidgetTypeToId.get(self.uTypeString,eWidgetType.ERROR)
         if not CheckCondition(oPar=oXMLNode):
-            self._eWidgetType = eWidgetType.SkipWidget
+            self.eWidgetType = eWidgetType.SkipWidget
 
     def EnableWidget(self, *, bEnable:bool) -> bool:
         oPage:cScreenPage
@@ -638,7 +645,7 @@ class cWidgetBase(cWidgetBaseBase):
         return False
 
     def __str__(self):
-        return "Name:%s Anchor:%s : Type:%s" % (self.uName,self.uAnchorName,str(self._eWidgetType))
+        return "Name:%s Anchor:%s : Type:%s" % (self.uName,self.uAnchorName,str(self.eWidgetType))
 
     def __repr__(self):
         return self.__str__()

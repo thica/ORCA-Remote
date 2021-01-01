@@ -7,7 +7,7 @@
             <setting name="FNCodeset" parameter="CODESET_android_adb_FIRETV.xml"/>
             <setting name="DiscoverScriptName" parameter="discover_upnp"/>
             <setting name="DISCOVER_UPNP_manufacturer" parameter="Amazon*"/>
-            <setting name="DISCOVER_UPNP_models" parameter="['FireTV']"/>
+            <setting name="DISCOVER_UPNP_models" parameter="['FireTV','AFTMM']"/>
         </configuration>
     </interface>
 </interface_setup>

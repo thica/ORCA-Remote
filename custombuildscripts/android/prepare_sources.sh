@@ -3,13 +3,17 @@
 # set -x
 
 cd "${HOME}"
-echo Preparing sources
+ECHO "Preparing sources ...."
 
 # Source Folder
 varSOURCE="${SOURCEDIR}/src"
 varWORKDIR="${TARGETDIR}"
 
-echo "copy from ${varSOURCE} to ${varWORKDIR}"
+
+ECHO "Removing work-copy of sources in ${varWORKDIR}"
+rm -r -f ${varWORKDIR}/* >> "$LOGFILE"
+
+ECHO "Copy from ${varSOURCE} to ${varWORKDIR}"
 
 # mkdir "${varSOURCE}
 
@@ -33,7 +37,7 @@ varORCAVERSION=`echo $varORCAVERSION | tr -d "\r"`
 varORCAVERSION="${varORCAVERSION%\"}"
 export varORCAVERSION="${varORCAVERSION#\"}"
 
-echo "Version Found: [$varORCAVERSION]"
+ECHO "Version Found: [$varORCAVERSION]"
 
 if [ -f $fil ]
 then
@@ -54,7 +58,7 @@ varORCABRANCH=`echo $varORCABRANCH | tr -d "\r"`
 varORCABRANCH="${varORCABRANCH%\"}"
 export varORCABRANCH="${varORCABRANCH#\"}"
 
-echo "Branch Found: [$varORCABRANCH]"
+ECHO "Branch Found: [$varORCABRANCH]"
 
 #set -x verbose #echo on
 
@@ -78,30 +82,30 @@ cp -L -f "${varSOURCE}"/*.py "${varWORKDIR}"
 
 cp -L -f "${varSOURCE}"/*.txt "${varWORKDIR}"
 if [ "$?" -ne "0" ]; then
-  echo "Copy sources failed"
+  ECHO "Copy sources failed"
   exit 1
 fi
 
 
 cp -L -f -R "${varSOURCE}"/languages "${varWORKDIR}"
 if [ "$?" -ne "0" ]; then
-  echo "Copy sources languages failed"
+  ECHO "Copy sources languages failed"
   exit 1
 fi
 
 cp -L -f -R "${varSOURCE}"/ORCA "${varWORKDIR}"
 if [ "$?" -ne "0" ]; then
-  echo "Copy sources subs failed"
+  ECHO "Copy sources subs failed"
   exit 1
 fi
 find ${varWORKDIR}/. -name "*.ini" -type f -delete
 
-mkdir "${varWORKDIR}"/actions
+mkdir -p "${varWORKDIR}"/actions
 cp -L -f "${varSOURCE}"/actions/actionsfallback.xml "${varWORKDIR}"/actions
 # cp -L -f "${varSOURCE}"\actions\actionsearly.xml "${varWORKDIR}"\src\actions
 if [ "$?" -ne "0" ]; then
-  echo "Copy actions subs failed"
+  ECHO "Copy actions subs failed"
   exit 1
 fi
 
-
+printf  "\r%s\n" "[${grn}  OK  ${end}] Prepared sources           "

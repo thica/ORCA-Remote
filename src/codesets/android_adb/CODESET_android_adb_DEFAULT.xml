@@ -7,8 +7,8 @@
       <description language='English'>Default commandset for Android by adb</description>
       <description language='German'>Standard Kommandos für Android über adb</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/android_adb/CODESET_android_adb_DEFAULT.xml</local>

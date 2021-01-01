@@ -75,7 +75,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
 
         self.oEventDispatcher.LogAction(uTxt=u'RegisterScriptGroup:',oAction=oAction)
         uGroupName:str = oAction.dActionPars.get("groupname","")
-        Globals.oScripts.RegisterScriptGroup(uGroupName)
+        Globals.oScripts.RegisterScriptGroup(uName=uGroupName)
         return eReturnCode.Nothing
 
     def ExecuteActionRunScript(self,oAction:cAction) -> eReturnCode:
@@ -147,7 +147,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         WikiDoc:Page:Actions-AddTrigger
         WikiDoc:TOCTitle:addtrigger
         = addtrigger =
-        Registers / Deregisters a trigger to an interface. If the interface supports triggers and support the registered trigger, the action assigned to the trigger, will get called. Do not forget to deregister the trigger, if your action will interact with screen elements on a specific page.
+        Registers a trigger to an interface. If the interface supports triggers and support the registered trigger, the action assigned to the trigger, will get called.
 
         <div style="overflow:auto; ">
         {| class="wikitable"
@@ -190,14 +190,62 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         else:
             self.oEventDispatcher.LogAction(uTxt=u'Del Trigger',oAction=oAction,uAddText=u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
 
-        oInterface:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterFace)
+        oInterface:cBaseInterFace = Globals.oInterFaces.GetInterface(uInterFace)
         if oInterface:
             if not oInterface.bIsInit:
                 oInterface.Init(uInterFace)
-            oInterface.AddTrigger(oAction)
+            oInterface.AddTrigger(oAction=oAction)
             return eReturnCode.Success
         else:
             LogError(uMsg=u'Action: Addtrigger: Interface not found:'+uInterFace)
+            return eReturnCode.Error
+
+    def ExecuteActionDeleteTrigger(self,oAction:cAction) -> eReturnCode:
+        """
+        WikiDoc:Doc
+        WikiDoc:Context:ActionsDetails
+        WikiDoc:Page:Actions-DeleteTrigger
+        WikiDoc:TOCTitle:deletetrigger
+        = deletetrigger =
+        Removes a trigger from an interface.
+
+        <div style="overflow:auto; ">
+        {| class="wikitable"
+        ! align="left" | Attribute
+        ! align="left" | Description
+        |-
+        |string
+        |deletetrigger
+        |-
+        |triggername
+        |Name of the interfacetrigger to remove
+        |-
+        |actionname
+        |Action which jas been registered to the inteferace
+        |}</div>
+        A short example:
+        <div style="overflow-x: auto;"><syntaxhighlight  lang="xml">
+        <action name="" string="deletetrigger" triggername ="Application.OnVolumeChanged" actionname="trigger_on_kodivolume" interface="kodi" configname="main" />
+        </syntaxhighlight></div>
+        WikiDoc:End
+        """
+
+        uInterFace:str
+        uConfigName:str
+        # uActionName:str
+        # uActionName = ReplaceVars(oAction.dActionPars.get("actionname",""))
+        uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction=oAction)
+
+        self.oEventDispatcher.LogAction(uTxt=u'Del Trigger',oAction=oAction,uAddText=u' Interface:{0} Config:{1}'.format(uInterFace,uConfigName))
+
+        oInterface:cBaseInterFace = Globals.oInterFaces.GetInterface(uInterFace)
+        if oInterface:
+            if not oInterface.bIsInit:
+                oInterface.Init(uInterFace)
+            oInterface.DelTrigger(oAction=oAction)
+            return eReturnCode.Success
+        else:
+            LogError(uMsg=u'Action: Deletetrigger: Interface not found:'+uInterFace)
             return eReturnCode.Error
 
     def ExecuteActionSendCommand(self,oAction:cAction) -> eReturnCode:
@@ -225,7 +273,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         |additional parameter to pass to interface/codeset
         |-
         |interface
-        |Interface to use. If not given, it will be used as gven in the following order: widget, anchor, page
+        |Interface to use. If not given, it will be used as given in the following order: widget, anchor, page
         |-
         |configname
         |Configuration to use
@@ -251,7 +299,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         try:
             uInterFace, uConfigName = self.oEventDispatcher.GetTargetInterfaceAndConfig(oAction=oAction)
 
-            oInterface:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterFace)
+            oInterface:cBaseInterFace = Globals.oInterFaces.GetInterface(uInterFace)
             if oInterface:
                 if not oInterface.bIsInit:
                     oInterface.Init(uInterFace)
@@ -347,7 +395,7 @@ class cEventActionsScriptsAndInterfaces(cEventActionBase):
         try:
             uInterFace  = oAction.dActionPars.get(u'interface')
             uConfigName = oAction.dActionPars.get(u'configname')
-            oInterface:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterFace)
+            oInterface:cBaseInterFace = Globals.oInterFaces.GetInterface(uInterFace)
             if oInterface:
                 Logger.debug (u'Action: codeset: [%s] Interface: %s Config: %s' % (oAction.uActionName, uInterFace,uConfigName))
                 oSetting:cBaseInterFaceSettings = oInterface.GetSettingObjectForConfigName(uConfigName=uConfigName)

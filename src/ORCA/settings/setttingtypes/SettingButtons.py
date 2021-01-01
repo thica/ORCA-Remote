@@ -21,7 +21,8 @@
 __all__ = ['SettingButtons']
 
 from typing                             import Dict
-from typing                             import Union
+from typing                             import List
+from typing                             import Optional
 from kivy.uix.settings                  import SettingItem
 from ORCA.widgets.core.MultiLineButton  import cMultiLineButton
 from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
@@ -34,12 +35,20 @@ class SettingButtons(SettingItem):
         self.register_event_type('on_release')
         # by purpose: we super to the settingitem directly, as SettingItem tries to read a non existing section
         super(SettingItem, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=SettingItem))
-        self.dKwArgs:Dict                                       = kwargs
-        self.aOptions                                           = kwargs.get('buttonoptions',None)
-        self.iButton:int                                        = 0
-        self.oScrollOptionsPopup:Union[ScrollOptionsPopUp,None] = None
+        self.dKwArgs:Dict                                           = kwargs
+        # Level 1 = Buttons, Level 2 = Options per Button
+        self.aOptions:Optional[List[List[str]]]                     = kwargs.get('buttonoptions',None)
+        # Level 1 = Buttons, Level 2 = Options per Button, Level 3 = Suboptions per options
+        self.aSubOptions:Optional[List[List[List[str]]]]            = kwargs.get('buttonsuboptions',None)
+        self.iButton:int                                            = 0
+        self.uOption                                                = u''
+        self.oScrollOptionsPopup:Optional[ScrollOptionsPopUp]       = None
+        self.oScrollSubOptionsPopup:Optional[ScrollOptionsPopUp]    = None
         aButton:Dict[str,str]
-        i:int                                                   = 0
+        i:int                                                       = 0
+
+        if self.aOptions is not None:
+            u=1
 
         for aButton in kwargs["buttons"]:
             oButton:cMultiLineButton = cMultiLineButton(text=aButton['title'], font_size= '15sp', halign='center', valign='middle')
@@ -63,7 +72,19 @@ class SettingButtons(SettingItem):
 
     def _set_option(self, oButton:cMultiLineButton):
         """ called when the first option is selected """
-        uValue:str = '%s:%s'% (self.dKwArgs["buttons"][self.iButton]['id'], oButton.text)
         self.oScrollOptionsPopup.popup.dismiss()
+        if self.aSubOptions is None:
+            uValue:str = '%s:%s'% (self.dKwArgs["buttons"][self.iButton]['id'], oButton.text)
+            self.panel.settings.dispatch('on_config_change', self.panel.config, self.section, self.key, uValue)
+        else:
+            self.dKwArgs['options'] = self.aSubOptions[self.iButton][oButton.iIndex]
+            self.uOption = oButton.text
+            self.oScrollSubOptionsPopup = ScrollOptionsPopUp(**self.dKwArgs)
+            self.oScrollSubOptionsPopup.CreatePopup(self.value, self._set_suboption, None)
+
+    def _set_suboption(self, oButton:cMultiLineButton):
+        """ called when the first option is selected """
+        self.oScrollSubOptionsPopup.popup.dismiss()
+        uValue: str = '%s:%s:%s' % (self.dKwArgs["buttons"][self.iButton]['id'],self.uOption,oButton.text)
         self.panel.settings.dispatch('on_config_change', self.panel.config, self.section, self.key, uValue)
 

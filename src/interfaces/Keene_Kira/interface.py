@@ -46,8 +46,8 @@ from ORCA.actions.ReturnCode    import eReturnCode
       <description language='English'>Sends commands to Keene Kira devices to submit IR comands</description>
       <description language='German'>Sendet Befehle zu Keene Kira Geräten um IR Befehle zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/Keene_Kira</local>

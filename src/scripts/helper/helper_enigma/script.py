@@ -82,8 +82,8 @@ typeServices       = Dict[str,typeServiceList]
       <description language='English'>Enigma Helper Script (for DVB Receiver)</description>
       <description language='German'>Enigma Hilfs - Skript (Für DVB Receiver)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -193,7 +193,7 @@ class cScript(cBaseScript):
             uConfigName:str                 = ReplaceVars(kwargs['configname'])
             uLogoPackFolderName             = ReplaceVars(kwargs['logopackfoldername'])
             bForce:bool                     = ReplaceVars(kwargs['force'])!='0'
-            oInterFace:cBaseInterFace       = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+            oInterFace:cBaseInterFace       = Globals.oInterFaces.GetInterface(uInterfaceName)
             oSetting:cBaseInterFaceSettings = oInterFace.GetSettingObjectForConfigName(uConfigName=uConfigName)
             uContext:str                    = oSetting.uContext
             uSection:str                    = Globals.uDefinitionName
@@ -275,7 +275,7 @@ class cScript(cBaseScript):
             uInterfaceName  = ReplaceVars(kwargs['interface'])
             uConfigName     = ReplaceVars(kwargs['configname'])
 
-            oInterFace      = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+            oInterFace      = Globals.oInterFaces.GetInterface(uInterfaceName)
             oSetting        = oInterFace.GetSettingObjectForConfigName(uConfigName=uConfigName)
             uContext        = oSetting.uContext
             uChannelNum     = ReplaceVars(uOrgIn=uChannelNum,uContext=uContext)
@@ -306,7 +306,7 @@ class cScript(cBaseScript):
             uInterfaceName:str              = ReplaceVars(kwargs['interface'])
             uConfigName:str                 = ReplaceVars(kwargs['configname'])
 
-            oInterFace:cBaseInterFace       = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+            oInterFace:cBaseInterFace       = Globals.oInterFaces.GetInterface(uInterfaceName)
             oSetting:cBaseInterFaceSettings = oInterFace.GetSettingObjectForConfigName(uConfigName=uConfigName)
             uContext:str                    = oSetting.uContext
             oXmlBouquet:Element
@@ -383,7 +383,7 @@ class cScript(cBaseScript):
             uConfigName:str                 = ReplaceVars(kwargs['configname'])
             uReturnVar:str                  = kwargs['retvar']
 
-            oInterFace:cBaseInterFace       = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+            oInterFace:cBaseInterFace       = Globals.oInterFaces.GetInterface(uInterfaceName)
             oSetting:cBaseInterFaceSettings = oInterFace.GetSettingObjectForConfigName(uConfigName=uConfigName)
             uContext:str                    = oSetting.uContext
             uXmlContent:str

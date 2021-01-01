@@ -2,11 +2,13 @@ How to create a virtual image for compiling the apk
 
 # Example for virtual box
 
-Create a ubuntu instance based on 18.04.03 minimal installation
+Create a ubuntu instance based on 20.04. standard desktop installation
 Choose "kivy" as the user name
 Install the guest tools
 
-Be aware: the build script is versioned on Ubuntu 18.04 libraries
+
+
+Be aware: the build script is versioned on Ubuntu 20.04 libraries
 
 Ensure the shared folder to the ORCA files are mounted
 Add the user to the Vbox group to grant access
@@ -25,7 +27,7 @@ sudo ln -s /media/sf_Orca/Development/snapshots /media/snapshots
 sudo ln -s /media/sf_Orca/Development/secrets /media/secrets
 sudo ln -s /media/sf_Orca/Development/ORCA/Deployment /media/upload
 
-This is tested for buildozer version downloaed 27.10.2019 from Master
+This is tested for buildozer version downloaded 27.10.2019 from Master
 
 * /media/secrets should point to a folder where to store the secrets
 
@@ -40,4 +42,9 @@ Folder contents:
 /media/upload:
     should point to a folder to store the compiled app
 
+
+for ubuntu 20.04 run this once before
+    remove unattended updates (unattanded updates might lock the install process)
+    sudo apt remove unattended-upgrades
+    sudo apt -y install software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
 

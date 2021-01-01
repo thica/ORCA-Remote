@@ -6,8 +6,10 @@
         <action name="Update Splash" string="showsplashtext" />
     </pagestartaction>
     <pagestartaction name="definitionstart">
-        <action name="Add Navigation Bar" string="call Add NavigationBar $dvar(definition_activity_template)"/>
-        <action name="Set Start Page" string="setvar DEFINITIONSTARTPAGE=Page_Devices_$dvar(definition_activity_template)" />
+        <action name="Add Navigation Bar"       string="call Add NavigationBar $dvar(definition_activity_template)"/>
+        <action name="Set Start Page"           string="setvar DEFINITIONSTARTPAGE=Page_Devices_$dvar(definition_activity_template)" />
+        <action name="Init Var"                 string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR=" />
+        <action name="Init Var"                 string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION=" />
     </pagestartaction>
     <pagestartaction name="Page_Devices_$dvar(definition_activity_template)">
       <action name="Disable Buttons on first page start" string="if $var(PAGESTARTCOUNT_$var(CURRENTPAGE))==1" />

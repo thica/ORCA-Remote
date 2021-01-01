@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ORCA>
  <actions>
-  <action name="Fkt Import_Export">
+  <action name="Fkt Export">
     <action name="show hourglass" string="showpage Page_Wait" effect="no" />
-    <action name="Export" string="sendnotification" notification="STARTSCRIPTIMPORTEXPORT-DOEXPORT" condition="$var(ORCA_IE_DIRECTION)==EXPORT" />
-    <action name="Import" string="sendnotification" notification="STARTSCRIPTIMPORTEXPORT-DOIMPORT" condition="$var(ORCA_IE_DIRECTION)==IMPORT" />
-    <command1 name="Return to last page" string="call gotolastpage" />
+    <action name="Export" string="sendnotification" notification="STARTSCRIPTIMPORTEXPORT-DOEXPORT"  />
     <action name="Close Export Window" string="showpage Page_Settings" />
   </action>
+
+ <action name="Fkt Import">
+     <action name="show hourglass" string="showpage Page_Wait" effect="no" />
+     <action name="Import" string="sendnotification" notification="STARTSCRIPTIMPORTEXPORT-DOIMPORT"  />
+     <action name="Close Export Window" string="showpage Page_Settings" />
+ </action>
+
+  <action name="ToggleCheckbox_EXPORT_CHANGE_LOCATION">
+     <action name="Invert the State Variable" string="modifyvar" varname="CHECKBOX_EXPORT_CHANGE_LOCATION"  operator="invert"/>
+     <action name="" string="updatewidget Checkbox_Export" />
+  </action>
+
+  <action name="ToggleCheckbox_IMPORT_CHANGE_LOCATION">
+     <action name="Invert the State Variable" string="modifyvar" varname="CHECKBOX_IMPORT_CHANGE_LOCATION"  operator="invert"/>
+     <action name="" string="updatewidget Checkbox_Import" />
+   </action>
+
  </actions>
 </ORCA>

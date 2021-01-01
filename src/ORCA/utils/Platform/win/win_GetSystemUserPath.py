@@ -19,8 +19,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from os.path import dirname, expanduser, isdir, join
+from os.path import dirname, expanduser
 from ORCA.utils.Path         import cPath
+from ORCA.utils.FileName     import cFileName
 
 def GetSystemUserPath() -> cPath:
     """
@@ -28,9 +29,10 @@ def GetSystemUserPath() -> cPath:
     """
 
     uUserPath:str = expanduser('~')
+    oCheckFile = cFileName(cPath(uUserPath))
+    oCheckFile=oCheckFile+"NTUSER.DAT"
 
-    if not isdir(join(uUserPath, 'Desktop')):
+    if not oCheckFile.Exists():
         uUserPath = dirname(uUserPath)
-
 
     return cPath(uUserPath)

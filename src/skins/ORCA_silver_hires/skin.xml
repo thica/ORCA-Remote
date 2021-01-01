@@ -22,6 +22,8 @@
     <pic name="button wide framed pressed" file="$var(SKINPATH)/pics/button wide framed pressed.png"/>
     <pic name="button square normal" file="$var(SKINPATH)/pics/button square normal.png"/>
     <pic name="button square pressed" file="$var(SKINPATH)/pics/button square pressed.png"/>
+    <pic name="checkbox square normal" file="$var(SKINPATH)/pics/checkbox square normal.png"/>
+    <pic name="checkbox square pressed" file="$var(SKINPATH)/pics/checkbox square pressed.png"/>
     <pic name="button square framed normal" file="$var(SKINPATH)/pics/button square framed normal.png"/>
     <pic name="button square framed pressed" file="$var(SKINPATH)/pics/button square framed pressed.png"/>
     <pic name="button round normal" file="$var(SKINPATH)/pics/button round normal.png"/>
@@ -92,8 +94,8 @@
       <description language='English'>ORCA Standard Skin, High Resolution, Silver Elements</description>
       <description language='German'>ORCA Standard Skin, Hohe Auflösung, Silberne Elemente</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/skins/ORCA_silver_hires</local>

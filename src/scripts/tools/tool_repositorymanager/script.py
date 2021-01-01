@@ -23,7 +23,7 @@
 from __future__                             import annotations
 from typing                                 import Dict
 from typing                                 import TYPE_CHECKING
-
+from typing                                 import TypeVar
 
 import sys
 import ORCA.Globals as Globals
@@ -43,12 +43,13 @@ from ORCA.vars.Helpers                      import GetEnvVar
 if TYPE_CHECKING:
     from scripts.tools.tool_repositorymanager.RepManager import RepositoryManager
     from scripts.tools.tool_repositorymanager.RepManager import CreateRepVarArray
+    from ORCA.utils.Path import cPath
 else:
     # noinspection PyUnresolvedReferences
     from RepManager                             import RepositoryManager
     # noinspection PyUnresolvedReferences
     from RepManager                             import CreateRepVarArray
-
+    cPath = TypeVar("cPath")
 
 '''
 <root>
@@ -58,8 +59,8 @@ else:
       <description language='English'>Tool to write the repository (internal tool)</description>
       <description language='German'>Tool um ein repository zu schreiben (internes Tool)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -105,6 +106,19 @@ class cScript(cToolsTemplate):
             self.aIniSettings.oPathRepSource  = oScript.oEnvParameter.oPathRepSource
             self.aIniSettings.uWWWServerPath  = oScript.oEnvParameter.uWWWServerPath
             self.aIniSettings.bFTPSSL         = ToBool(oScript.oEnvParameter.uFTPSSL)
+
+            if Globals.uPlatform=="linux":
+                self.aIniSettings.oPathRepSource_linux = oScript.oEnvParameter.oPathRepSource
+            elif Globals.uPlatform=="win":
+                self.aIniSettings.oPathRepSource_win = oScript.oEnvParameter.oPathRepSource
+            elif Globals.uPlatform=="android":
+                self.aIniSettings.oPathRepSource_android = oScript.oEnvParameter.oPathRepSource
+            elif Globals.uPlatform=="ios":
+                self.aIniSettings.oPathRepSource_ios = oScript.oEnvParameter.oPathRepSource
+            elif Globals.uPlatform=="macosx":
+                self.aIniSettings.oPathRepSource_macosx = oScript.oEnvParameter.oPathRepSource
+            else:
+                pass
 
             uVersion:str = str(Globals.iVersion)
             self.aIniSettings.uWWWServerPath  = self.aIniSettings.uWWWServerPath.replace(uVersion,"$var(REPVERSION)")
@@ -152,6 +166,9 @@ class cScript(cToolsTemplate):
             self.StartRepositoryManager(self, *args, **kwargs)
 
     def StartRepositoryManager(self, *args, **kwargs) -> None:
+
+        oPathRepSource:cPath
+
         oSetting:cBaseScriptSettings  = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
         SetVar(uVarName=u'REPOSITORYWWWPATH',  oVarValue=oSetting.aIniSettings.uWWWServerPath)
         SetVar(uVarName=u"REPMAN_FTPSERVER",   oVarValue=oSetting.aIniSettings.uHost)
@@ -164,7 +181,21 @@ class cScript(cToolsTemplate):
         else:
             SetVar(uVarName=u"REPMAN_FTPSSL",oVarValue=u"0")
 
-        RepositoryManager(oPathRepSource = oSetting.aIniSettings.oPathRepSource)
+
+        if Globals.uPlatform=="linux":
+            oPathRepSource = self.aIniSettings.oPathRepSource_linux
+        elif Globals.uPlatform=="win":
+            oPathRepSource = self.aIniSettings.oPathRepSource_win
+        elif Globals.uPlatform=="android":
+            oPathRepSource = self.aIniSettings.oPathRepSource_android
+        elif Globals.uPlatform=="ios":
+            oPathRepSource = self.aIniSettings.oPathRepSource_ios
+        elif Globals.uPlatform=="macosx":
+            oPathRepSource = self.aIniSettings.oPathRepSource_macosx
+        else:
+            oPathRepSource = oScript.oEnvParameter.oPathRepSource
+
+        RepositoryManager(oPathRepSource = oPathRepSource)
 
     # noinspection PyMethodMayBeStatic
     def CreateRepositoryVarArray(self,  *args, **kwargs) -> None:
@@ -187,8 +218,23 @@ class cScript(cToolsTemplate):
         return {}
 
     def GetConfigJSON(self) -> Dict:
-        return {"FTPPath":       {"type": "varstring", "active":"enabled", "order":16, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_5)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_6)", "key": "FTPPath",       "default": self.oEnvParameter.uFTPServerPath,            "section": "$var(ObjectConfigSection)"},
-                "FTPSSL":        {"type": "bool",      "active":"enabled", "order":17, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_7)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_8)", "key": "FTPSSL",        "default": ToBool(self.oEnvParameter.uFTPSSL),           "section": "$var(ObjectConfigSection)"},
-                "PathRepSource": {"type": "path",      "active":"enabled", "order":18, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"},
-                "WWWServerPath": {"type": "varstring", "active":"enabled", "order":19, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_11)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_12)","key": "WWWServerPath", "default": self.oEnvParameter.uWWWServerPath,            "section": "$var(ObjectConfigSection)"}
-                }
+
+        dRet:Dict[str,Dict] = {"FTPPath":       {"type": "varstring", "active":"enabled", "order":16, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_5)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_6)", "key": "FTPPath",       "default": self.oEnvParameter.uFTPServerPath,            "section": "$var(ObjectConfigSection)"},
+                               "FTPSSL":        {"type": "bool",      "active":"enabled", "order":17, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_7)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_8)", "key": "FTPSSL",        "default": ToBool(self.oEnvParameter.uFTPSSL),           "section": "$var(ObjectConfigSection)"},
+                               "WWWServerPath": {"type": "varstring", "active":"enabled", "order":19, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_11)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_12)","key": "WWWServerPath", "default": self.oEnvParameter.uWWWServerPath,            "section": "$var(ObjectConfigSection)"}
+                              }
+
+        if Globals.uPlatform == "win":
+            dRet["PathRepSource_win"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (win)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_win", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
+        elif Globals.uPlatform == "linux":
+            dRet["PathRepSource_linux"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (linux)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_linux", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
+        elif Globals.uPlatform == "android":
+            dRet["PathRepSource_android"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (android)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_android", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
+        elif Globals.uPlatform == "ios":
+            dRet["PathRepSource_ios"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (ios)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_ios", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
+        elif Globals.uPlatform == "macosx":
+            dRet["PathRepSource_ios"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (MAC osx)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_macosx", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
+        else:
+            dRet["PathRepSource"] = {"type": "path",      "active":"enabled", "order":18, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
+
+        return dRet

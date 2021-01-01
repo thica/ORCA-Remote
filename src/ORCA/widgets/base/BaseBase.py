@@ -19,11 +19,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
+import uuid
 
 from typing                            import Union
 from typing                            import Callable
 from typing                            import Any
+from typing                            import Optional
 from xml.etree.ElementTree             import Element
 from kivy.uix.widget                   import Widget
 from ORCA.widgets.core.Border          import cBorder
@@ -45,92 +46,68 @@ __all__ = ['cWidgetBaseBase']
 class cWidgetBaseBase:
     def __init__(self,**kwargs):
 
-        self._bEnabled:bool                             = True
-        self._bIsCreated:bool                           = False
-        self._uName:str                                 = u'noname'
-        self._uAnchorName: str                          = u''
-        self._eWidgetType:eWidgetType                   = eWidgetType.NoWidget
-
-        self._iAnchorHeight:int                         = 0
-        self._iAnchorPosX:int                           = 0
-        self._iAnchorPosY:int                           = 0
-        self._iAnchorWidth:int                          = 0
-
-        self._iGapX:int                                 = 0
-        self._iGapY:int                                 = 0
-        self._iHeight:int                               = 10
-        self._iHeightInit:int                           = 10
-        self._iPosX:int                                 = 0
-        self._iPosXInit:int                             = 0
-        self._iPosY:int                                 = 0
-        self._iPosYInit:int                             = 0
-        self._iWidth:int                                = 10
-        self._iWidthInit:int                            = 10
-        self._fRationX:float                            = 1.0
-        self._fRationY:float                            = 1.0
-        self._fScale:float                              = 1.0
-        self._fOrgOpacity:float                         = 1.0
-
-        self._oBorder:Union[cBorder,None]               = None
-        self._oDef:Union[cDefinition,None]              = None
-        self._oObject:Union[Widget,None]                = None         # oObject is the kivy Widget
-        self._oParent:Union[Widget,None]                = None
-        self._oParentScreenPage:Union[cScreenPage,None] = None
-
-    bIsCreated:bool          = property(lambda self: self._bIsCreated,     lambda self, value: setattr(self, '_bIsCreated', value))
-    bIsEnabled:bool          = property(lambda self: self._bEnabled,       lambda self, value: setattr(self, '_bEnabled',value))
-    uName:str                = property(lambda self: self._uName,          lambda self, value: setattr(self, '_uName',value))
-    uAnchorName:str          = property(lambda self: self._uAnchorName,    lambda self, value: setattr(self, '_uAnchorName',value))
-    eWidgetType:eWidgetType  = property(lambda self: self._eWidgetType,    lambda self, value: setattr(self, '_eWidgetType',value))
-
-    iAnchorHeight:int        = property(lambda self: self._iAnchorHeight,  lambda self, value: setattr(self, '_iAnchorHeight',value))
-    iAnchorWidth:int         = property(lambda self: self._iAnchorWidth,   lambda self, value: setattr(self, '_iAnchorWidth',value))
-    iAnchorPosX:int          = property(lambda self: self._iAnchorPosX,    lambda self, value: setattr(self, '_iAnchorPosX',value))
-    iAnchorPosY:int          = property(lambda self: self._iAnchorPosY,    lambda self, value: setattr(self, '_iAnchorPosY',value))
-    iGapX:int                = property(lambda self: self._iGapX,          lambda self, value: setattr(self, '_iGapX',value))
-    iGapY:int                = property(lambda self: self._iGapY,          lambda self, value: setattr(self, '_iGapY',value))
-    iHeight:int              = property(lambda self: self._iHeight,        lambda self, value: setattr(self, '_iHeight',value))
-    iHeightInit:int          = property(lambda self: self._iHeightInit,    lambda self, value: setattr(self, '_iHeightInit',value))
-    iWidth:int               = property(lambda self: self._iWidth,         lambda self, value: setattr(self, '_iWidth',value))
-    iWidthInit:int           = property(lambda self: self._iWidthInit,     lambda self, value: setattr(self, '_iWidthInit',value))
-    iPosX:int                = property(lambda self: self._iPosX,          lambda self, value: setattr(self, '_iPosX',value))
-    iPosXInit:int            = property(lambda self: self._iPosXInit,      lambda self, value: setattr(self, '_iPosXInit',value))
-    iPosY:int                = property(lambda self: self._iPosY,          lambda self, value: setattr(self, '_iPosY',value))
-    iPosYInit:int            = property(lambda self: self._iPosYInit,      lambda self, value: setattr(self, '_iPosYInit',value))
-    fRationX:float           = property(lambda self: self._fRationX,       lambda self, value: setattr(self, '_fRationX',value))
-    fRationY:float           = property(lambda self: self._fRationY,       lambda self, value: setattr(self, '_fRationY',value))
-    fScale:float             = property(lambda self: self._fScale,         lambda self, value: setattr(self, '_fScale',value))
-    fOrgOpacity:float        = property(lambda self: self._fOrgOpacity,    lambda self, value: setattr(self, '_fOrgOpacity',value))
-
-    oBorder:Union[cBorder, None]               = property(lambda self: self._oBorder,           lambda self, value: setattr(self, '_oBorder',value))
-    oDef:Union[cDefinition, None]              = property(lambda self: self._oDef,              lambda self, value: setattr(self, '_oDef',value))
-    oObject:Union[Widget, None]                = property(lambda self: self._oObject,           lambda self, value: setattr(self, '_oObject',value))
-    oParent:Union[Widget, None]                = property(lambda self: self._oParent,           lambda self, value: setattr(self, '_oParent',value))
-    oParentScreenPage:Union[cScreenPage, None] = property(lambda self: self._oParentScreenPage, lambda self, value: setattr(self, '_oParentScreenPage',value))
-
-    # as we can use most widgets as Anchors, we need to have interface and config generic
-    uConfigName:str          = property(lambda self: self._uConfigName,      lambda self, value: setattr(self, '_uConfigName',value))
-    uInterFace:str           = property(lambda self: self._uInterFace,       lambda self, value: setattr(self, '_uInterFace',value))
-
+        self.bEnabled:bool                             = True
+        self.bIsCreated:bool                           = False
+        self.eWidgetType:eWidgetType                   = eWidgetType.NoWidget
+        self.fOrgOpacity:float                         = 1.0
+        self.fRationX:float                            = 1.0
+        self.fRationY:float                            = 1.0
+        self.fScale:float                              = 1.0
+        self.iAnchorHeight:int                         = 0
+        self.iAnchorPosX:int                           = 0
+        self.iAnchorPosY:int                           = 0
+        self.iAnchorWidth:int                          = 0
+        self.iGapX:int                                 = 0
+        self.iGapY:int                                 = 0
+        self.iHeight:int                               = 10
+        self.iHeightInit:int                           = 10
+        self.iPosX:int                                 = 0
+        self.iPosXInit:int                             = 0
+        self.iPosY:int                                 = 0
+        self.iPosYInit:int                             = 0
+        self.iWidth:int                                = 10
+        self.iWidthInit:int                            = 10
+        self.oBorder:Union[cBorder,None]               = None
+        self.oDef:Union[cDefinition,None]              = None
+        self.oObject:Union[Widget,None]                = None         # oObject is the kivy Widget
+        self.oParent:Union[Widget,None]                = None
+        self.oParentScreenPage:Union[cScreenPage,None] = None
+        self.uAnchorName: str                          = u''
+        self.uConfigName:str                           = u''  # as we can use most widgets as Anchors, we need to have interface and config generic
+        self.uFileName:str                             = u''
+        self.uID                                       = str(uuid.uuid4())
+        self.uInterFace:str                            = u''  # as we can use most widgets as Anchors, we need to have interface and config generic
+        self.uLastWidgetID                             = u''
+        self.uName:str                                 = u'noname'
 
     def ParseXMLBaseNode (self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
+        # dummy
         return True
     def CreateBase(self,Parent:Widget,Class:Union[Callable,str]) -> bool:
+        # dummy
         return True
     def SetCaption(self,uCaption:str) -> bool:
+        # dummy
         return True
     def SetSecondCaption(self) -> bool:
+        # dummy
         return True
     def UpdateWidget(self) -> bool:
+        # dummy
         return True
     def UpdateWidgetSecondCaption(self) -> bool:
+        # dummy
         return True
     def SetWidgetFontStyle(self,bBold:Union[bool,None],bItalic:Union[bool,None],uColor:Union[str,None]) -> bool:
+        # dummy
         return True
     def GetWidgetFontStyle(self,uType:str) -> str:
+        # dummy
         return u""
     def GetCaption(self) -> str:
+        # dummy
         return u""
     def AddArg(self,uKey:str,oValue:Any) -> None:
+        # dummy
         return
 

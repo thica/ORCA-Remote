@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.mypy_cache" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <content url="file://$MODULE_DIR$/../custombuildscripts" />
     <content url="file://$MODULE_DIR$/../docs">
@@ -14,7 +15,10 @@
     <content url="file://$MODULE_DIR$/../src">
       <sourceFolder url="file://$MODULE_DIR$/../src" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.7 (kivy_venv)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (venv_kivy_3.9.1)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="PackageRequirementsSettings">
+    <option name="removeUnused" value="true" />
   </component>
 </module>

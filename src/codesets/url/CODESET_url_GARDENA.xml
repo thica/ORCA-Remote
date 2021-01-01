@@ -7,12 +7,12 @@
             <description language='English'>Cloud Control for Gardena devices</description>
             <description language='German'>Cloud Steuerung für Gardena Geräte</description>
             <author>Carsten Thielepape</author>
-            <version>5.0.1</version>
-            <minorcaversion>5.0.1</minorcaversion>
+            <version>5.0.4</version>
+            <minorcaversion>5.0.4</minorcaversion>
             <sources>
                 <source>
-                    <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_GARDENA_Cloud.xml</local>
-                    <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_GARDENA_Cloud.zip</sourcefile>
+                    <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_GARDENA.xml</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_GARDENA.zip</sourcefile>
                     <targetpath>codesets/url</targetpath>
                 </source>
             </sources>

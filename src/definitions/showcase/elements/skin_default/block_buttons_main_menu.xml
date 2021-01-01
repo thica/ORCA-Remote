@@ -3,7 +3,7 @@
   <element name="Frame" type="PICTURE" picturenormal="background boxes" />
   <element name="Anchor Main Menu Buttons" type="ANCHOR" posx="center" posy="middle" width="%90" height="%90">
     <elements>
-      <element name="Button Widgets Overview"           type="BUTTON" posx="left"   posy="top"              width="%50" height="%12.50"         picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Widget_Overview"}'  caption="$lvar(showcase_10100)" />
+      <element name="Button Widgets Overview"           type="BUTTON" posx="left"   posy="top"              width="%50" height="%11"            picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Widget_Overview"}'  caption="$lvar(showcase_10100)" />
       <element name="Button Widgets Alignment"          type="BUTTON" posx="right"  posy="top"              width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Widget_Alignment"}' caption="$lvar(showcase_10101)" />
       <element name="Button Anchors And Includes"       type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Anchors"}'          caption="$lvar(showcase_10102)" />
       <element name="Button Textfields and Text input"  type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_TextFields"}'       caption="$lvar(showcase_10103)" />
@@ -19,6 +19,8 @@
       <element name="Button International"              type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_International"}'    caption="International" />
       <element name="Button ScrollList"                 type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_ScrollList"}'       caption="Scroll List" />
       <element name="Button ScrollContainer"            type="BUTTON" posx="right"  posy="of:top:last"      width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_ScrollContainer"}'  caption="Scroll Container" />
+      <element name="Button Tabs"                       type="BUTTON" posx="left"   posy="of:bottom:last"   width="%50" height="of:height:last" picturenormal="button square*" action='Show Page' actionpars='{"pagename":"Page_Tabs"}'             caption="Tabs" />
+
     </elements>
   </element>
 </elements>

@@ -126,6 +126,7 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
             self.SetPicturePressed  (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'picturepressed', bMandatory=False, vDefault=u''))
             #self.SetPictureDisabled (GetXMLTextAttribute(oXMLNode,u'picturedisabled',    False,u''))
             self.bAutoHide  = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'autohide',bMandatory=False,bDefault=False)
+
             if self.bAutoHide:
                 if self.uCaption == u'':
                     self.EnableWidget(bEnable=False)
@@ -133,7 +134,6 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
                 if self.oFnButtonPicturePressed.IsEmpty():
                     self.oFnButtonPicturePressed.ImportFullPath(uFnFullName=self.oFnButtonPictureNormal.string.replace(u'*',u' pressed'))
                 self.oFnButtonPictureNormal.ImportFullPath(uFnFullName=self.oFnButtonPictureNormal.string.replace(u'*',u' normal'))
-
         return bRet
 
     # noinspection PyUnusedLocal

@@ -63,7 +63,7 @@ else:
 # noinspection PyMethodMayBeStatic
 class cTheScreenWithInit(cTheScreen):
     """ Just for better code readability
-        All Funtions to initialize the screen are here """
+        All Functions to initialize the screen are here """
     def __init__(self):
         super(cTheScreenWithInit,self).__init__()
         self.oSplashBox:Optional[BoxLayout]     = None
@@ -96,12 +96,12 @@ class cTheScreenWithInit(cTheScreen):
 
     def LogToSplashScreen(self,*,uText:str,uPercentage:str='') -> None:
         """ Logs a main text message to the splash screen """
+        fPercentage: float
         self.uSplashText                        = uText
         self.oSplashLogger.size                 = (Globals.iAppWidth*0.95,Globals.iAppHeight/3)
         self.oSplashLogger.text_size            = (Globals.iAppWidth*0.95,None)
         self.oSplashLogger.text                 = ReplaceVars(uText)
         if uPercentage!='':
-            fPercentage:float
             if uPercentage.startswith('+'):
                 fPercentage=self.oProgessBar.value+ToFloat(uPercentage[1:])
             else:
@@ -312,6 +312,7 @@ class cTheScreenWithInit(cTheScreen):
         for uDefName in Globals.oDefinitions:
             oDef = Globals.oDefinitions[uDefName]
             fRatio=float(float(Globals.iAppWidth)/float(Globals.iAppHeight))/float(float(oDef.iDefMaxX)/float(oDef.iDefMaxY))
+            # todo: Check, if we need to swap X/Y in the if clause
             if fRatio<1:
                 oDef.fRationX           = float(oDef.iDefMaxX)/float(Globals.iAppWidth)
                 oDef.fRationY           = float(oDef.iDefMaxY)/float(Globals.iAppHeight)

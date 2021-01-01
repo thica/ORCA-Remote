@@ -43,6 +43,8 @@ def _SetVarSub(uVarName:str, oVarValue:Any) -> None:
     :param string uVarName: Variable name to use
     :param Any oVarValue: Value to set, usually a unicode string, can be any other object
     """
+    if "$var(" in uVarName:
+        uVarName = ReplaceVars(uVarName)
     NewValue = oVarValue
     OldValue = ORCA.vars.Globals.dUserVars.get(uVarName)
     ORCA.vars.Globals.dUserVars[uVarName] = NewValue

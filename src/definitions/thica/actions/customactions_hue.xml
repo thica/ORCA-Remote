@@ -205,14 +205,6 @@
     <action name="Update Widget Dimmer" string="updatewidget $var(DIMMERSLIDER)" />
   </action>
 
-  <action name="Fkt DezToFS20DimSteps">
-    <action name="" string="modifyvar" varname="DIMVALUE" operator="divide"   parameter1="6.25"/>
-    <action name="" string="modifyvar" varname="DIMVALUE" operator="round"    parameter1="0"/>
-    <action name="" string="modifyvar" varname="DIMVALUE" operator="decrease" parameter1="0.05"/>
-    <action name="" string="modifyvar" varname="DIMVALUE" operator="multiply" parameter1="6.25"/>
-    <action name="" string="modifyvar" varname="DIMVALUE" operator="round"    parameter1="0"/>
-  </action>
-
   <action name="Fkt DezToHueDimSteps">
     <action name="" string="modifyvar" varname="DIMVALUE" operator="multiply" parameter1="2.55"/>
     <action name="" string="modifyvar" varname="DIMVALUE" operator="round"    parameter1="0"/>

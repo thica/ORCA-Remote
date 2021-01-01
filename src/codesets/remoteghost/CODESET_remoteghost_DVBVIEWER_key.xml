@@ -7,8 +7,8 @@
       <description language='English'>DVBViewer Control using Eventghost / Keystrokes</description>
       <description language='German'>DVBViewer Kontrolle über Eventghost / Tastaturbefehle</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/remoteghost/CODESET_remoteghost_DVBVIEWER_key.xml</local>

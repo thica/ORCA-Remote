@@ -208,7 +208,9 @@ class cFTP:
         uGetCmd:str = 'RETR %s' % uFileName
         try:
             if self.ChangeDir(oPath=oPathRemote):
-                self.oFTP.retrbinary(uGetCmd, open(str(oFnLocalFile), 'wb').write)
+                oStream:BinaryIO = open(str(oFnLocalFile), 'wb')
+                self.oFTP.retrbinary(uGetCmd, oStream.write)
+                oStream.close()
                 Logger.debug('FTP: Download done!')
             return True
         except Exception as e:

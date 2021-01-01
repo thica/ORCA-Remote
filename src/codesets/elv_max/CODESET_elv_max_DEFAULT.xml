@@ -8,8 +8,8 @@
       <description language='English'>Default commandset for ELV MAX</description>
       <description language='German'>Standard Kommandos für ELV MAX</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/elv_max/CODESET_elv_max_DEFAULT.xml</local>

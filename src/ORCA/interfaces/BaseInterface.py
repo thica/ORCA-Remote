@@ -171,16 +171,24 @@ class cBaseInterFace(cBaseObject):
         uGetVar:str     = oAction.dActionPars.get("getvar","")
         uConfigName:str = ReplaceVars(oAction.dActionPars.get("configname",""))
 
-        if uAction!=u'' or uRetVar!=u'':
-            self.ShowDebug(uMsg=u'Adding Trigger:'+uTrigger,uParConfigName=uConfigName)
-        else:
-            self.ShowDebug(uMsg=u'Delete Trigger:'+uTrigger,uParConfigName=uConfigName)
+        self.ShowDebug(uMsg=u'Adding Trigger:'+uTrigger,uParConfigName=uConfigName)
         oSetting=self.GetSettingObjectForConfigName(uConfigName=uConfigName)
+        oSetting.AddTrigger(uTrigger,uAction,uRetVar,uGetVar)
 
-        if uAction==u'' and uRetVar==u'':
-            oSetting.DelTrigger(uTrigger)
-        else:
-            oSetting.AddTrigger(uTrigger,uAction,uRetVar,uGetVar)
+    def DelTrigger(self,oAction:cAction) -> None:
+        """
+        Deletes a trigger
+
+        :param cAction oAction: The Action object to set a trigger
+        """
+
+        uTrigger:str    = ReplaceVars(oAction.dActionPars.get("triggername",""))
+        uActionName:str = ReplaceVars(oAction.dActionPars.get("actionname",""))
+        uConfigName:str = ReplaceVars(oAction.dActionPars.get("configname",""))
+
+        self.ShowDebug(uMsg=u'Delete Trigger:'+uTrigger,uParConfigName=uConfigName)
+        oSetting=self.GetSettingObjectForConfigName(uConfigName=uConfigName)
+        oSetting.DelTrigger(uTrigger=uTrigger,uActionName=uActionName)
 
     def OnPause(self,**kwargs) -> None:
         """

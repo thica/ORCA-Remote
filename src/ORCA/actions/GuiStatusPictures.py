@@ -36,7 +36,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:Page:Actions-SetTransmitterPicture
         WikiDoc:TOCTitle:settransmitterpicture
         = settransmitterpicture =
-        Sets the picture to activated while a interface is active. Good for indicating trasmit status. By default it will be set in the appstart actions, so it will be used as a default for all pages. Otherwise you can set it for each page individually by setting it in the pagestartactions, or even change it as part of a button action. To avoid, that the picture will be shown right from the start, you should disable it in your widget definition.
+        Sets the picture to activated while a interface is active. Good for indicating transmit status. By default it will be set in the appstart actions, so it will be used as a default for all pages. Otherwise you can set it for each page individually by setting it in the pagestartactions, or even change it as part of a button action. To avoid, that the picture will be shown right from the start, you should disable it in your widget definition.
         <div style="overflow:auto; ">
         {| class="wikitable"
         ! align="left" | Attribute

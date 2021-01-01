@@ -35,6 +35,7 @@ from ORCA.utils.Sleep               import fSleep
 
 try:
     import netifaces
+    Logger.debug("Loaded netifaces")
 except Exception as ex:
     Logger.error("Can't load netifaces:"+str(ex))
 
@@ -44,7 +45,7 @@ def GetIPAddressV4() -> str:
 
     uPreferredAdapter:str = u'eth0'
     uInet_Type:str        = u'AF_INET'
-    uRet:str              = u'127.0.0.0'
+    uRet:str              = u'127.0.0.1'
     aFound:List[str]      = []
     iInet_num:int
 
@@ -65,12 +66,15 @@ def GetIPAddressV4() -> str:
         Logger.error("Error on GetIPAddressV4:"+str(e))
 
     # we prefer a local subnet if given
-    if len(aFound)>0:
-        uRet = aFound[-1]
-
     for uFound in aFound:
         if uFound.startswith("192"):
             uRet=uFound
+            break
+        if not uFound.startswith("127"):
+            uRet=uFound
+
+    if uRet.startswith(u'127'):
+        uRet=GetLocalIPV4()
 
     return uRet
 
@@ -80,7 +84,7 @@ def GetLocalIPV4()->str:
     uMyIP:str
     s:socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        # Not necessary successfull
+        # Not necessary successful
         s.connect(('10.255.255.255', 0))
         uMyIP = s.getsockname()[0]
     except:

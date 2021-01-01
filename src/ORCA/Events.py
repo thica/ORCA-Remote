@@ -68,7 +68,7 @@ __all__ = ['cEvents']
 
 class cEvents:
     """ The core event objects which manages the queues and actions """
-    def __init__(self):
+    def __init__(self)->None:
         self.aEventActions:List[cEventActionBase] = [
                               cEventActionsFlowControl(self),
                               cEventActionsInternal(self),
@@ -85,7 +85,7 @@ class cEvents:
                              ]
 
         self.dActionFunctions:Dict[str,Callable]     = {}
-        self.aHiddenKeyWords:List[str]               = ['string','condition','name','taptype','interface','configname','conditionchecktype','conditionvar','conditionvalue','retvar','force','linefilename']
+        self.aHiddenKeyWords:List[str]               = ['string','condition','name','taptype','interface','configname','conditionchecktype','conditionvar','conditionvalue','retvar','force','linefilename','linefilenames']
         self.aProgressBars:List[cProgressBar]        = []
         self.bDoNext:bool                            = False
         self.bForceState:bool                        = False
@@ -102,8 +102,8 @@ class cEvents:
         for uFuncName in aFuncs:
             if uFuncName.startswith('ExecuteAction'):
                 uName:str = uFuncName[13:]
-                Globals.oActions.oActionType.RegisterAction(uName)
-                self.dActionFunctions[Globals.oActions.oActionType.ActionToId[uName.lower()]] = getattr(oEventActions, uFuncName)
+                Globals.oActions.oActionType.RegisterAction(uActionName=uName)
+                self.dActionFunctions[Globals.oActions.oActionType.dActionToId[uName.lower()]] = getattr(oEventActions, uFuncName)
 
     def DeInit(self) -> None:
         """ stops all timer """
@@ -120,7 +120,7 @@ class cEvents:
         Clock.schedule_once(partial(GetActiveQueue().WorkOnQueue,self.bForceState),0)
 
     def ExecuteActionsNewQueue(self,aActions:List[cAction], oParentWidget:Optional[cWidgetBase], bForce:bool=False) -> Union[bool,None]:
-        """ Execute all actions in a new queue, new queue will atomatic appended to the queue stack"""
+        """ Execute all actions in a new queue, new queue will automatic appended to the queue stack"""
         oQueue:cQueue           = GetNewQueue()
         oQueue.bForceState      = bForce
         bRet:Union[bool,None]   = self._ExecuteActions(aActions=aActions,oParentWidget=oParentWidget)
@@ -143,6 +143,7 @@ class cEvents:
 
         if not bForceState:
             Clock.schedule_once(partial(oQueue.WorkOnQueue,oQueue.bForceState), 0)
+            return None
         else:
             return oQueue.WorkOnQueue(bForce=oQueue.bForceState)
 

@@ -33,8 +33,8 @@ import ORCA.Globals as Globals
       <description language='English'>CEC Control using the Raspberry PI</description>
       <description language='German'>CEC Steuerung über den Raspberry PI</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/cec_rpi</local>

@@ -8,7 +8,7 @@
     <fontsize_button>%h30</fontsize_button>
     <fontsize_text>%h30</fontsize_text>
     <author>Carsten Thielepape</author>
-    <version>5.0.1</version>
+    <version>5.0.4</version>
     <orientations>portrait,landscape</orientations>
     <support>http://www.orca-remote.org/forum/</support>
     <definitionvars>{"definition_alias_unraid":"UNRAID"}</definitionvars>
@@ -69,8 +69,8 @@
       <description language='English'>Simple UNRAID remote to power on / off</description>
       <description language='German'>Einfache Unraid Fernbedienung, zum ein/ausschalten</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/unraid simple</local>

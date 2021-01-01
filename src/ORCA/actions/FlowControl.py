@@ -237,7 +237,7 @@ class cEventActionsFlowControl(cEventActionBase):
         |}</div>
 
         Actionpars:
-        If the call is triggred directly by a widget click, each action parameter from the widget will create a variable with name ActionName+"_parameter_"+parameter name. This enables the called function to receive parameters
+        If the call is triggered directly by a widget click, each action parameter from the widget will create a variable with name ActionName+"_parameter_"+parameter name. This enables the called function to receive parameters
 
 
         A short example:
@@ -319,7 +319,7 @@ class cEventActionsFlowControl(cEventActionBase):
             #for aActionParKey in oTmpFunction[0].dActionPars:
                 #SetVar(uActionName+"_parameter_"+aActionParKey,oTmpFunction[0].dActionPars[aActionParKey])
             for aActionParKey in oAction.dActionPars:
-                if aActionParKey != "linefilename" :
+                if aActionParKey != "linefilename" and aActionParKey != "linefilenames" :
                     # SetVar(uVarName = uActionName+"_parameter_"+aActionParKey, oVarValue = oAction.dActionPars[aActionParKey])
                     SetVar(uVarName = uActionName+"_parameter_"+aActionParKey, oVarValue = ReplaceVars(oAction.dActionPars[aActionParKey]))
 

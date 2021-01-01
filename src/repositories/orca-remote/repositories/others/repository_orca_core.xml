@@ -6,8 +6,8 @@
       <description language='English'>ORCA Core Files necessary for proper operation (fonts, pics, actions,..)</description>
       <description language='German'>Unentbehrliche ORCA Dateien (Schriften, Bilder, Aktionen)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(RESOURCEPATH)/irdbtranslation</local>

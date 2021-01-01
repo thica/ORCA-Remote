@@ -22,15 +22,16 @@ from typing import List
 from typing import Dict
 from typing import Union
 
-from kivy.logger            import Logger
+from kivy.logger                import Logger
 
-from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
-from ORCA.utils.FileName    import cFileName
-from ORCA.utils.LogError    import LogError
-from ORCA.vars.Replace      import ReplaceVars
+from ORCA.ui.ShowErrorPopUp     import ShowErrorPopUp
+from ORCA.utils.FileName        import cFileName
+from ORCA.utils.LogError        import LogError
+from ORCA.vars.Replace          import ReplaceVars
 from ORCA.interfaces.BaseInterface import cBaseInterFace
-from ORCA.utils.ModuleLoader import cModule
-from ORCA.actions.ReturnCode import eReturnCode
+from ORCA.utils.ModuleLoader    import cModule
+from ORCA.actions.ReturnCode    import eReturnCode
+from ORCA.BaseObject            import cBaseObjects
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -43,13 +44,11 @@ else:
 
 import ORCA.Globals as Globals
 
-class cInterFaces:
+class cInterFaces(cBaseObjects):
     """ A container class for all interfaces """
     def __init__(self):
+        cBaseObjects.__init__(self,uType="INTERFACES",uPrefix="INTERFACES")
         #list of all Interfaces
-        self.aInterfaceList:List[str]               = []
-        self.dInterfaces:Dict[str,cBaseInterFace]   = {}
-        self.dModules:[str,cModule]                 = {}
         self.uInterFaceListSettingString:str        = u''
         self.dUsedInterfaces:[str,bool]             = {}
 
@@ -57,30 +56,15 @@ class cInterFaces:
         """ Clears the list of interfaces """
         self.dUsedInterfaces.clear()
 
-    def Init(self) -> None:
-        """ dummy """
-        pass
-    def DeInit(self) -> None:
-        """ deinits the interfaces object """
-        uInterfaceName:str
-        for uInterfaceName in self.dInterfaces:
-            self.dInterfaces[uInterfaceName].DeInit()
-
-    def Clear(self) -> None:
-        """ clears the lst of interfaces """
-        self.DeInit()
-        del self.aInterfaceList[:]
-        self.dInterfaces.clear()
-
     def LoadInterfaceList(self) -> None:
-        """ loads the list of all inerfaces """
+        """ loads the list of all interfaces """
         Logger.debug (u'Interfaces: Loading Interface List')
         uInterFaceName:str
         self.uInterFaceListSettingString = u''
-        self.aInterfaceList = Globals.oPathInterface.GetFolderList()
-        self.aInterfaceList.sort(key = lambda x: x)
+        self.aObjectNameList = Globals.oPathInterface.GetFolderList()
+        self.aObjectNameList.sort(key = lambda x: x)
 
-        for uInterFaceName in self.aInterfaceList:
+        for uInterFaceName in self.aObjectNameList:
             self.uInterFaceListSettingString+=u'"{0}",'.format(uInterFaceName)
         self.uInterFaceListSettingString=self.uInterFaceListSettingString[:-1]
 
@@ -91,7 +75,7 @@ class cInterFaces:
         :param str uInterFaceName: The name of the interface
         :return: The interface class (cBaseInterface)
         """
-        return self.dInterfaces.get(uInterFaceName)
+        return self.dObjects.get(uInterFaceName)
 
 
     def LoadInterface(self,uInterFaceName:str) -> Union[cModule,None]:
@@ -103,7 +87,7 @@ class cInterFaces:
         """
 
         uInterFaceName:str
-        if uInterFaceName in self.dInterfaces:
+        if uInterFaceName in self.dObjects:
             return self.dModules.get(uInterFaceName)
 
         if uInterFaceName=="":
@@ -122,23 +106,11 @@ class cInterFaces:
             self.dModules[uInterFaceName] = oModule
             oInterface: cBaseInterFace=oModule.GetClass('cInterface')()
             oInterface.Init(uInterFaceName, oFnInterface)
-            self.dInterfaces[uInterFaceName]=oInterface
+            self.dObjects[uInterFaceName]=oInterface
             return oModule
         except Exception as e:
             ShowErrorPopUp(uTitle='Fatal Error',uMessage=LogError(uMsg=u'Interfaces: Fatal Error Loading Interface: '+uInterFaceName+ u' :',oException=e), bAbort=True)
             return None
-
-    def OnPause(self) -> None:
-        """ Entry for on Pause """
-        uInterfaceName:str
-        for uInterfaceName in self.dInterfaces:
-            self.dInterfaces[uInterfaceName].OnPause()
-
-    def OnResume(self) -> None:
-        """ Entry for on resume """
-        uInterfaceName:str
-        for uInterfaceName in self.dInterfaces:
-            self.dInterfaces[uInterfaceName].OnResume()
 
     def RegisterInterFaces(self,uInterFaceName:str,fSplashScreenPercentageStartValue:float) -> None:
 
@@ -155,7 +127,7 @@ class cInterFaces:
             aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList(aActions=[{'name':'Show Message the we register the interfaces','string':'showsplashtext','maintext':'$lvar(409)'}])
 
             #for Interface
-            for uInterFaceName in self.aInterfaceList:
+            for uInterFaceName in self.aObjectNameList:
                 for uKey in self.dUsedInterfaces:
                     uKey2=ReplaceVars(uKey)
                     if uKey2==uInterFaceName and uInterFaceName!=u'':
@@ -178,8 +150,8 @@ class cInterFaces:
         oSetting: cBaseInterFaceSettings
         if uInterFaceName == u'':
             aActions=[]
-            for uInterFaceName in self.dInterfaces:
-                oInterFace=self.dInterfaces[uInterFaceName]
+            for uInterFaceName in self.dObjects:
+                oInterFace=self.dObjects[uInterFaceName]
                 if oInterFace.oObjectConfig.oConfigParser.filename =='':
                     oInterFace.oObjectConfig.LoadConfig()
                 for uConfigName in oInterFace.oObjectConfig.oConfigParser.sections():
@@ -199,7 +171,7 @@ class cInterFaces:
             Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
             return eReturnCode.Success
         else:
-            oInterFace = self.dInterfaces.get(uInterFaceName)
+            oInterFace = self.GetInterface(uInterFaceName)
             if oInterFace:
                 oSetting = oInterFace.GetSettingObjectForConfigName(uConfigName=uConfigName)
                 if oSetting:

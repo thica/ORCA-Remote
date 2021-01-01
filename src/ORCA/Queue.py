@@ -121,16 +121,24 @@ def DumpQueue() -> None:
 
 
 def StopQueue() -> None:
+    """
+    Stops the queue (set it on pause)
+    :return: None
+    """
     global bStop
     bStop = True
 
 def ResumeQueue() -> None:
+    """
+    Restarts the queue
+    :return: None
+    """
     global bStop
     bStop = False
 
 class cQueue:
     """ represents a single queue object """
-    def __init__(self):
+    def __init__(self)->None:
         self.aActionQueue:List[cAction] = []
         self.bForceState:bool           = False
         self.iActionQueuePos:int        = 0
@@ -156,14 +164,14 @@ class cQueue:
         # We need to ensure, that only actions in the last queue will be executed
         # All other Queues are still scheduled, so just skip them
         if not self == aActiveQueueStack[-1]:
-            return
+            return None
         if IsWaiting() and not self.bForceState:
             Clock.schedule_once(partial(self.WorkOnQueue,bForce))
-            return
+            return None
 
         if Globals.oTheScreen.bIntransition and not self.bForceState:
             Clock.schedule_once(partial(self.WorkOnQueue,bForce))
-            return
+            return None
 
         fNextFrame:float = 0.0
         #fNextFrame=0.0001

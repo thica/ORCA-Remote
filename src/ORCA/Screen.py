@@ -110,7 +110,7 @@ class cTheScreen(EventDispatcher):
         self.InitVars()
 
     def InitVars(self) -> None:
-        """ (re) Initialisises all vars (also after a definition change) """
+        """ (re) Initialises all vars (also after a definition change) """
         InitSystemVars()
         Globals.oDefinitions.InitVars()
         SetVar(uVarName = u'REPVERSION', oVarValue = ToUnicode(Globals.iVersion))
@@ -380,9 +380,9 @@ class cTheScreen(EventDispatcher):
                     else:
                         if uPageNameRep!="*":
                             if not bIgnoreError:
-                                Logger.warning ("Can't find widget [%s] on  page [%s]" % (uWidgetNameRep,uPageName))
+                                Logger.warning ("Can't find widget [%s] on page [%s]" % (uWidgetNameRep,uPageName,))
                 else:
-                    for oWidget in oPage.aWidgets:
+                    for oWidget in oPage.dWidgetsID.values():
                         aRet.append(oWidget)
 
         if len(aRet)==0:
@@ -394,7 +394,11 @@ class cTheScreen(EventDispatcher):
         return aRet
 
     def DumpWidgets(self,uPageName:str):
-
+        """
+        Dump all widgets
+        :param str uPageName: The page name of the widgets, if empty, all widgets in all pages are dumped
+        :return:
+        """
         uPageNameRep:str
         aPages:List[str]
         oWidget:cWidgetBase
@@ -418,7 +422,7 @@ class cTheScreen(EventDispatcher):
                 uMsg:str=u'The Screen: Dump: Page [%s]not found: ' % uPageName
                 Logger.error (uMsg)
             else:
-                for oWidget in oPage.aWidgets:
+                for oWidget in oPage.dWidgetsID.values():
                     Logger.debug("Widget:[%s] Page:[%s]" % (oWidget.uName,oWidget.oParentScreenPage.uPageName))
                 Logger.debug("")
                 for uWidgetName in oPage.dWidgets:

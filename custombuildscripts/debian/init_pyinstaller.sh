@@ -1,63 +1,121 @@
 #!/bin/bash
 
-set +x
+# set -x
+
+red=$'\e[1;31m'
+grn=$'\e[1;32m'
+yel=$'\e[1;33m'
+blu=$'\e[1;34m'
+mag=$'\e[1;35m'
+cyn=$'\e[1;36m'
+end=$'\e[0m'
 
 function ECHO ()
 {
-  echo -e "$1"
-  echo "$1" >> "$LOGFILE"
+  printf  "%s\n" "[${yel} Info ${end}] $1"
+  printf [Info] %s $1 \n >> "$LOGFILE"
 }
+
+function ECHO_SILENT ()
+{
+  printf [Info] %s $1 \n >> "$LOGFILE"
+}
+
+function APT_INSTALL_SILENT ()
+{
+
+  printf  "%s" "[ Info ] Installing (apt) $1 ......" >> "$LOGFILE"
+  sudo apt install -y $1$2 >> "$LOGFILE" 2>>"$LOGFILE"
+  if [ $? -eq 0 ]; then
+    printf  " %s\n" "[ OK ]" >> "$LOGFILE"
+  else
+    printf  "\r%s\n" "[${red}Failed${end}] Install (apt)            $1"
+    printf  " %s\n" "[Failed]" >> "$LOGFILE"
+    exit 1
+  fi
+}
+
 
 function APT_INSTALL ()
 {
-  ECHO "\033[1;37mInstall (apt) $1$2  \033[s "
+
+  printf  "%s" "[${yel} Info ${end}] Installing (apt) $1 ....."
+  printf  "%s" "[ Info ] Installing (apt) $1 ......" >> "$LOGFILE"
   sudo apt install -y $1$2 >> "$LOGFILE" 2>>"$LOGFILE"
   if [ $? -eq 0 ]; then
-    ECHO '\033[u \033[1;32m -> OK\033[1;37m'
+    printf  "\r%s\n" "[${grn}  OK  ${end}] Installed (apt) $1          "
+    printf  " %s\n" "[ OK ]" >> "$LOGFILE"
   else
-    ECHO '\033[u \033[1;31m -> FAIL\033[1;37m'
+    printf  "\r%s\n" "[${red}Failed${end}] Install (apt)            $1"
+    printf  " %s\n" "[Failed]" >> "$LOGFILE"
     exit 1
   fi
 }
 
 function PIP_INSTALL ()
 {
-  ECHO "Install (pip3) $1$2 \033[s"
+  printf  "%s" "[${yel} Info ${end}] Installing (pip3) $1$2 ....."
+  printf  "%s" "[ Info ] Installing (pip3) $1$2 ......">> "$LOGFILE"
   pip3 install $3 $1$2  >> "$LOGFILE" 2>>"$LOGFILE"
   if [ $? -eq 0 ]; then
-    ECHO '\033[u \033[1;32m -> OK\033[1;37m'
+    printf  "\r%s\n" "[${grn}  OK  ${end}] Installed (pip3) $1$2         "
+    printf  " %s\n" "[ OK ]" >> "$LOGFILE"
   else
-    ECHO '\033[u \033[1;31m -> FAIL\033[1;37m'
+    printf  "\r%s\n" "[${red}Failed${end}] Install (pip3) $1$2           "
+    printf  " %s\n" "[Failed]" >> "$LOGFILE"
     exit 1
   fi
-
 }
 
 function PIP2_INSTALL ()
 {
-  echo "Install (PIP2) $1$2"
-  echo "Install (PIP2) $1$2" >> "$LOGFILE"
+  printf  "%s" "[${yel} Info ${end}] Installing (pip3) $1$2 ....."
+  printf  "%s" "[ Info ] Installing (pip3) $1$2 ......">> "$LOGFILE"
   pip install $3 $1$2  >> "$LOGFILE" 2>>"$LOGFILE"
   if [ $? -eq 0 ]; then
-    echo OK >> "$LOGFILE"
+    printf  "\r%s\n" "[${grn}  OK  ${end}] Installed (pip3) $1$2         "
+    printf  " %s\n" "[ OK ]" >> "$LOGFILE"
   else
-    echo FAIL
-    echo FAIL >> "$LOGFILE"
+    printf  "\r%s\n" "[${red}Failed${end}] Install (pip3) $1$2           "
+    printf  " %s\n" "[Failed]" >> "$LOGFILE"
     exit 1
   fi
+}
 
+
+function PYTHON39_Install
+{
+  # IF we want to update to to python 3.9
+
+  printf  "%s" "[${yel} Info ${end}] Installing (apt) Python3.9 ....."
+  printf  "%s" "[ Info ] Installing (apt) Python3.9 ......" >> "$LOGFILE"
+  printf  "%s" "[ Info ] apt update ......" >> "$LOGFILE"
+  sudo apt update >> "$LOGFILE" 2>/dev/null
+  APT_INSTALL_SILENT "software-properties-common"
+  printf  "%s" "[ Info ] add-apt-repository -y ppa:deadsnakes/ppa......" >> "$LOGFILE"
+  sudo add-apt-repository -y ppa:deadsnakes/ppa >> "$LOGFILE"
+
+  # We add kivy here to the repo
+  printf  "%s" "[ Info ] add-apt-repository -y ppa:kivy-team/kivy......"
+  sudo add-apt-repository -y ppa:kivy-team/kivy >> "$LOGFILE"
+
+  APT_INSTALL_SILENT "python3.9"
+  printf  "%s" "[ Info ] update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9......" >> "$LOGFILE"
+  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 3 >> "$LOGFILE"
+  APT_INSTALL_SILENT "python3.9-distutils"
+  # todo:check python version
+  printf  "\r%s\n" "[${grn}  OK  ${end}] Installed (apt) Python3.9          "
+  printf  " %s\n" "[ OK ] Python3.9" >> "$LOGFILE"
 }
 
 # just to activate sudo
 sudo ls > /dev/null
 export LOGFILE=${HOME}/logfile.txt
 # export LOGFILE=/dev/tty
-
+rm -f $LOGFILE
 ECHO "Logging to $LOGFILE"
 ECHO "Start Log"
 
-ECHO "Disable Screensaver"
-gsettings set org.gnome.desktop.screensaver lock-enabled false
 
 cd "${HOME}"
 export SOURCEDIR="${HOME}/githubsources"
@@ -89,12 +147,13 @@ export "FROMSCRATCH=1"
 
 if [ "$FROMSCRATCH" == "1" ]
 then
-    ECHO "Create Folder"
-    mkdir "${SOURCEDIR}" >> "$LOGFILE"
-    mkdir "${TARGETDIR}" >> "$LOGFILE"
-    mkdir "${BUILDDIR}" >> "$LOGFILE"
+  ECHO "Create Folder ${SOURCEDIR}"
+  mkdir "${SOURCEDIR}" >> "$LOGFILE"
+  ECHO "Create Folder ${TARGETDIR}"
+  mkdir "${TARGETDIR}" >> "$LOGFILE"
+  ECHO "Create Folder ${BUILDDIR}"
+  mkdir "${BUILDDIR}" >> "$LOGFILE"
 fi
-
 
 ECHO "Copy sources"
 cp -R /media/Master/. "${SOURCEDIR}" >> "$LOGFILE"
@@ -102,30 +161,31 @@ cp -R /media/Master/. "${SOURCEDIR}" >> "$LOGFILE"
 ECHO "Run custom script to prepare sources"
 # 'Prepare/Copy sources (Make the script excutable)'
 chmod +x "${SOURCEDIR}/custombuildscripts/debian/prepare_sources.sh"
-# do not remove the leading dot
-. "${SOURCEDIR}/custombuildscripts/debian/prepare_sources.sh"  >> "$LOGFILE"
+source "${SOURCEDIR}/custombuildscripts/debian/prepare_sources.sh"
 
 
 if [ "$FROMSCRATCH" == "1" ]
 then
 
-
   APT_INSTALL "p7zip-full"
+  # PYTHON39_Install
+  APT_INSTALL "python3-pip"
   APT_INSTALL "python3-dev"
   APT_INSTALL "python3-venv"
-  APT_INSTALL "python3-pip"
-  PIP_INSTALL "pip"
+  sudo add-apt-repository -y ppa:kivy-team/kivy >> "$LOGFILE"
+  # APT_INSTALL "python3-pip"
+  # PIP_INSTALL "pip"
 
-  sudo ln -sf /usr/bin/python3.7 /usr/bin/python3
-  cd "/usr/lib/python3/dist-packages"
-  sudo ln -s "/usr/lib/python3/dist-packages/apt_pkg.cpython-36m-x86_64-linux-gnu.so" "/usr/lib/python3/dist-packages/apt_pkg.so"
-  cd ~
+  # sudo ln -sf /usr/bin/python3.7 /usr/bin/python3
+  # cd "/usr/lib/python3/dist-packages"
+  # sudo ln -s "/usr/lib/python3/dist-packages/apt_pkg.cpython-36m-x86_64-linux-gnu.so" "/usr/lib/python3/dist-packages/apt_pkg.so"
+  # cd ~
 
   APT_INSTALL "zip"             "$VERSION_ZIP"
   APT_INSTALL "unzip"           "$VERSION_UNZIP"
 
   # install kivy
-  sudo add-apt-repository -y ppa:kivy-team/kivy
+  # sudo add-apt-repository -y ppa:kivy-team/kivy
   APT_INSTALL "git"
   APT_INSTALL "ffmpeg"
   APT_INSTALL "libsdl2-dev"
@@ -137,37 +197,30 @@ then
   APT_INSTALL "libavformat-dev"
   APT_INSTALL "libavcodec-dev"
   APT_INSTALL "zlib1g-dev"
-  APT_INSTALL "libgstreamer1.0"
+  APT_INSTALL "libgstreamer1.0-0"
   APT_INSTALL "gstreamer1.0-plugins-base"
   APT_INSTALL "gstreamer1.0-plugins-good"
   PIP_INSTALL "virtualenv"
   PIP_INSTALL "setuptools"
 
   export USE_X11=1
-  PIP_INSTALL Cython==0.29.10
-  PIP_INSTALL kivy==1.11.0
+  PIP_INSTALL Cython
+  PIP_INSTALL kivy[base]
+  PIP_INSTALL kivy_examples
   PIP_INSTALL git+https://github.com/kivy/buildozer.git@master
   PIP_INSTALL git+https://github.com/kivy/plyer.git@master
-
   PIP_INSTALL "pygments"
   PIP_INSTALL "docutils"
-
-  PIP_INSTALL kivy==1.11.0
-  #a short test
-  python3 -c "import pkg_resources; print(pkg_resources.resource_filename('kivy', '../share/kivy-examples'))"
-
+  # python3 -c "import pkg_resources; print(pkg_resources.resource_filename('kivy', '../share/kivy-examples'))"
   PIP_INSTALL "PyInstaller"
 
   ECHO "Run custom script to install further modules required by the app"
   chmod +x "${SOURCEDIR}/custombuildscripts/debian/install_modules.sh"
-  # do not remove the leading dot
-. "${SOURCEDIR}/custombuildscripts/debian/install_modules.sh"  >> "$LOGFILE"
-
+  source "${SOURCEDIR}/custombuildscripts/debian/install_modules.sh"
 
   ECHO "Prepare sources"
   chmod +x "${SOURCEDIR}/custombuildscripts/debian/prepare_sources.sh"
-  # do not remove the leading dot
-. "${SOURCEDIR}/custombuildscripts/debian/prepare_sources.sh"  >> "$LOGFILE"
+  source "${SOURCEDIR}/custombuildscripts/debian/prepare_sources.sh"
 
   cp -r ${SOURCEDIR}/custombuildscripts/debian/patch_kivy.1.11/pyinstaller_hooks ~/.local/lib/python3.7/site-packages/kivy/tools/packaging
 
@@ -205,7 +258,5 @@ ECHO "Found DEST: $BUILD_ZIP"
 # 'Prepare/Copy Binray (Make the script excutable)'
 ECHO "Finalize Binary"
 chmod +x "${SOURCEDIR}/custombuildscripts/debian/prepare_binaries.sh"
-. "${SOURCEDIR}/custombuildscripts/debian/prepare_binaries.sh"
-
-
+source "${SOURCEDIR}/custombuildscripts/debian/prepare_binaries.sh"
 ECHO "Done Finished"

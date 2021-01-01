@@ -136,9 +136,9 @@ class cWidgetSettings(cWidgetFileViewer):
             if self.uSettingsType==u'interface':
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
                     self.oParent.add_widget(self.oObject)
-                    oInterFace=Globals.oInterFaces.dInterfaces.get(Globals.oTheScreen.uInterFaceToConfig)
+                    oInterFace=Globals.oInterFaces.GetInterface(Globals.oTheScreen.uInterFaceToConfig)
                     if oInterFace:
-                        oInterFace.oObjectConfig.ConfigureKivySettings(oKivySetting=self.oObject)
+                        oInterFace.oObjectConfig.ConfigureKivySettings(oKivySetting=self.oObject,uConfig=Globals.oTheScreen.uConfigToConfig)
                         self.oObject.bind(on_close=self.On_SettingsClose)
                     return True
                 return False
@@ -147,7 +147,7 @@ class cWidgetSettings(cWidgetFileViewer):
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSpinner):
                     self.oParent.add_widget(self.oObject)
                     Globals.oScripts.LoadScript(Globals.oTheScreen.uScriptToConfig)
-                    oScript=Globals.oScripts.dScripts.get(Globals.oTheScreen.uScriptToConfig)
+                    oScript=Globals.oScripts.GetScript(Globals.oTheScreen.uScriptToConfig)
                     if oScript:
                         oScript.oObjectConfig.ConfigureKivySettings(oKivySetting=self.oObject)
                         self.oObject.bind(on_close=self.On_SettingsClose)
@@ -157,7 +157,7 @@ class cWidgetSettings(cWidgetFileViewer):
             if self.uSettingsType==u'interface_discover':
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
                     self.oParent.add_widget(self.oObject)
-                    oInterFace=Globals.oInterFaces.dInterfaces.get(Globals.oTheScreen.uInterFaceToConfig)
+                    oInterFace=Globals.oInterFaces.GetInterface(Globals.oTheScreen.uInterFaceToConfig)
                     uConfigName=Globals.oTheScreen.uConfigToConfig
                     if oInterFace:
                         oInterFace.oObjectConfigDiscover.ConfigureKivySettingsForDiscoverParameter(oKivySetting=self.oObject, uConfigName=uConfigName)
@@ -186,7 +186,7 @@ class cWidgetSettings(cWidgetFileViewer):
                                     oMenu.panel_names[uNewMenuName] = oMenu.panel_names.pop(uOldMenuName)
 
                     Globals.oApp._app_settings = self.oObject
-                    self.oObject.oOrcaWidget=   self
+                    self.oObject.oOrcaWidget =   self
                     self.oObject.size=oParent.size
                     self.oParent.add_widget(self.oObject)
                     Globals.oWinOrcaSettings=oParent
@@ -196,7 +196,6 @@ class cWidgetSettings(cWidgetFileViewer):
                 return False
 
             if self.uSettingsType=='definition':
-
                 if Globals.uDefinitionToConfigure=='':
                     return False
 
@@ -216,14 +215,13 @@ class cWidgetSettings(cWidgetFileViewer):
                     return True
                 return False
         except Exception as e:
-            LogError(uMsg="Fatal Error creating settings Panel",oException=e)
+            LogError(uMsg="Fatal Error creating settings Panel [%s]" % self.uSettingsType,oException=e)
             Logger.error(uSettingsJSON)
         return False
 
     def UpdateWidget(self) -> None:
 
         if self.oObject is None:
-            # pass
             return
 
         if self.oParent is not None:
@@ -238,13 +236,15 @@ class cWidgetSettings(cWidgetFileViewer):
 
             if (self.uSettingsType=='interface') or (self.uSettingsType=='script') or (self.uSettingsType=='download') or (self.uSettingsType=='definition') or (self.uSettingsType=='powerstati'):
                 self.oParent.remove_widget(self.oObject)
+                self.bIsCreated = False
                 Clock.schedule_once(self.Schedule_AssignNewObject,0)
                 return
 
             if self.uSettingsType=='orca':
                 self.oParent.remove_widget(self.oObject)
-                Globals.oApp.settings = None
-                Globals.oApp._app_settings  = None
+                self.bIsCreated = False
+                Clock.schedule_once(self.Schedule_AssignNewObject,0)
+                return
 
         self.Create(self.oParent)
 

@@ -23,6 +23,7 @@ from kivy.logger import Logger
 import ORCA.vars.Globals
 import ORCA.Globals as Globals
 from ORCA.utils.TypeConvert import ToDic
+from ORCA.utils.TypeConvert import ToUnicode
 from ORCA.vars.Globals import cLinkPar
 
 oLinkPar:cLinkPar=""
@@ -108,7 +109,7 @@ def TriggerLinkActions(uVarName:str) -> None:
         return
     if isinstance(aVarLinks, list):
         for uCmd in aVarLinks:
-            Logger.debug(u'Call Triggered Var Link Actions for:' + uVarName)
+            Logger.debug(u'Call Triggered Var Link Actions for: %s -> %s' %(uVarName,ToUnicode(uCmd)))
             if isinstance(uCmd, list):
                 Globals.oTheScreen.AddActionToQueue(aActions=uCmd, bNewQueue=True)
             else:

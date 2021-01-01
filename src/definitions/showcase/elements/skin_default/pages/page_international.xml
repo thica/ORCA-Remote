@@ -11,25 +11,25 @@
 
     <element name='Frame Left' type='ANCHOR' posx='%5' posy='%40' width='%45' height='%75' >
       <element name='Frame top' type='ANCHOR' posy='top' height="of:width:self:*0.45" >
-        <element name="Textblock" type="TEXTFIELD"  posy="top"              height="of:width:self:*0.1" fontsize='%h50'                  caption='Chinese:' htextalign='left' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='你好世界' htextalign='right' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Japanese:' htextalign='left' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='こんにちは世界' htextalign='right' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Korean:' htextalign='left' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='안녕 세상' htextalign='right' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Hindi:' htextalign='left' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='हैलो दुनिया' htextalign='right' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Greek:' htextalign='left' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='Γεια σου κόσμο' htextalign='right' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Arab:' htextalign='left' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='مرحبا بالعالم' htextalign='right' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Russian:' htextalign='left' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='Привет мир' htextalign='right' vtextalign='top' />
-        <element name="Textblock" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='And much more' htextalign='left' vtextalign='top' />
+        <element name="Textblock 01" type="TEXTFIELD"  posy="top"              height="of:width:self:*0.1" fontsize='%h50'                  caption='Chinese:' htextalign='left' vtextalign='top' />
+        <element name="Textblock 02" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='你好世界' htextalign='right' vtextalign='top' />
+        <element name="Textblock 03" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Japanese:' htextalign='left' vtextalign='top' />
+        <element name="Textblock 04" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='こんにちは世界' htextalign='right' vtextalign='top' />
+        <element name="Textblock 05" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Korean:' htextalign='left' vtextalign='top' />
+        <element name="Textblock 06" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='안녕 세상' htextalign='right' vtextalign='top' />
+        <element name="Textblock 07" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Hindi:' htextalign='left' vtextalign='top' />
+        <element name="Textblock 08" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='हैलो दुनिया' htextalign='right' vtextalign='top' />
+        <element name="Textblock 09" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Greek:' htextalign='left' vtextalign='top' />
+        <element name="Textblock 10" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='Γεια σου κόσμο' htextalign='right' vtextalign='top' />
+        <element name="Textblock 11" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Arab:' htextalign='left' vtextalign='top' />
+        <element name="Textblock 12" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='مرحبا بالعالم' htextalign='right' vtextalign='top' />
+        <element name="Textblock 13" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='Russian:' htextalign='left' vtextalign='top' />
+        <element name="Textblock 14" type="TEXTFIELD"  posy="of:top:last"      height="of:height:last"     fontsize='%h50' fontid="Unifont" caption='Привет мир' htextalign='right' vtextalign='top' />
+        <element name="Textblock 15" type="TEXTFIELD"  posy="of:bottom:last"   height="of:height:last"     fontsize='%h50'                  caption='And much more' htextalign='left' vtextalign='top' />
       </element>
     </element>
 
-    <element name="Textblock" type="TEXTFIELD" posx="%10" posy="%95" height="%12" width="%90"  fontsize='%h35'  caption='ORCA is supporting those languages, this does not mean, that the translations are available!' htextalign='left' vtextalign='top' />
+    <element name="Textblock 20" type="TEXTFIELD" posx="%10" posy="%95" height="%12" width="%90"  fontsize='%h35'  caption='ORCA is supporting those languages, this does not mean, that the translations are available!' htextalign='left' vtextalign='top' />
 
   </elements>
 </page>

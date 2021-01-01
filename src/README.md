@@ -11,21 +11,21 @@ https://www.orca-remote.org/mediawiki<br />
 Wiki on GIT: https://github.com/thica/ORCA-Remote/wiki
 
 
-What is ORCA
+What is ORCA?
 ORCA stands for Open Remote Control Application.
 
 ORCA is designed as an Open Source Framework to provide Remote Control Capabilities
 
 * OS Support: Android, IOS, Windows, Linux
 * Hardware Support: Tablets, Phones, PC‘s
-* Communication Support: (W)LAN, IR, (extendable by interface plugins, eg Bluetooth, Home Automatisation)
+* Communication Support: (W)LAN, IR, (extendable by interface plugins, e.g. Bluetooth, Home Automatisation)
 * Bi-Directional Support: ORCA can transmit and receive commands (if interface is bi-directional)
-* Control Target: Multimedia, Home Automatisation
+* Control Target: Multimedia, Home Automation
 * Open Source, Non Profit application
 
 Features
 * Skinnable: Look and feel can be adjusted to user needs
-* Adjustable Layout: The layout is not hardcode and be adjusted as requiered
+* Adjustable Layout: The layout is not hardcode and be adjusted as required
 * Multi Language Support: All screen messages are stored in external language files and can be selected
 * Unicode and 3rd party fonts support to support APAC region
 * Macro Support: Actions can be performed based on rule sets (far beyond Logitech Harmony capabilities)

@@ -17,7 +17,7 @@
             <element name="Knob Volume Limited"         type="KNOB"       posx="center"    posy="middle"  width="%82"  height="of:width:self" picturenormal="knob"  mindatavalue="0" maxdatavalue="100" leftboundaryangle="-135" rightboundaryangle="+135" destvar="LIMITEDKNOB" roundpos="0" />
             <element name="Knob Limited Textvalue#2"    type="TEXTFIELD"  posx="center"    posy="middle"  width="%30"  height="%30"  caption="$var(LIMITEDKNOB)"      fontsize='%h70'  vtextalign='middle' htextalign='center' />
           </element>
-          <element name="Label"                       type="TEXTFIELD"  posx="center" posy="bottom"                     height="%7" caption='Limited Knob'                 fontsize='%h70'  vtextalign='middle' htextalign='center'  />
+          <element name="Label 1"                     type="TEXTFIELD"  posx="center" posy="bottom"                     height="%7" caption='Limited Knob'                 fontsize='%h70'  vtextalign='middle' htextalign='center'  />
           <element name="Desc Limited Textdirection"  type="TEXTFIELD"  posx="left"   posy="of:totop:last"  width="%50" height="%7" caption="Direction:"                   fontsize='%h70'  vtextalign='top' htextalign='left' />
           <element name="Knob Limited Textdirection"  type="TEXTFIELD"  posx="right"  posy="of:top:last"    width="%50" height="%7" caption="$var(LIMITEDKNOB_direction)"  fontsize='%h70'  vtextalign='top' htextalign='center' />
           <element name="Desc Limited Textabsdegree"  type="TEXTFIELD"  posx="left"   posy="of:totop:last"  width="%50" height="%7" caption="Abs.Degree:"                  fontsize='%h70'  vtextalign='top' htextalign='left' />
@@ -32,10 +32,10 @@
      <element name='Anchor KNOB endles' type='ANCHOR' posx='%25' width='%19'>
         <elements>
           <element name='Anchor KNOB endless inner' type='ANCHOR' height='of:width:self'>
-            <element name="Knob Back Endless"           type="PICTURE"    picturenormal="knob back" />
-            <element name="Knob Volume Endless"         type="KNOB"       posx="center"    posy="middle"  width="%82" height="of:width:self" picturenormal="knob"  destvar="ENDLESSKNOB" roundpos="1" discardmoves="1" />
+            <element name="Knob Back Endless"         type="PICTURE"    picturenormal="knob back" />
+            <element name="Knob Volume Endless"       type="KNOB"       posx="center"    posy="middle"  width="%82" height="of:width:self" picturenormal="knob"  destvar="ENDLESSKNOB" roundpos="1" discardmoves="1" />
           </element>
-          <element name="Label"                       type="TEXTFIELD"  posx="center" posy="bottom"                     height="%7" caption='Endless Knob'                 fontsize='%h70'  vtextalign='middle' htextalign='center'  />
+          <element name="Label 2"                     type="TEXTFIELD"  posx="center" posy="bottom"                     height="%7" caption='Endless Knob'                 fontsize='%h70'  vtextalign='middle' htextalign='center'  />
           <element name="Desc Endless Textdirection"  type="TEXTFIELD"  posx="left"   posy="of:totop:last"  width="%50" height="%7" caption="Direction:"                   fontsize='%h70'  vtextalign='top' htextalign='left' />
           <element name="Knob Endless Textdirection"  type="TEXTFIELD"  posx="right"  posy="of:top:last"    width="%50" height="%7" caption="$var(ENDLESSKNOB_direction)"  fontsize='%h70'  vtextalign='top' htextalign='center' />
           <element name="Desc Endless Textabsdegree"  type="TEXTFIELD"  posx="left"   posy="of:totop:last"  width="%50" height="%7" caption="Abs.Degree:"                  fontsize='%h70'  vtextalign='top' htextalign='left' />
@@ -50,11 +50,11 @@
       <element name='Anchor KNOB endles 2' type='ANCHOR' posx='%50' width='%19'>
         <elements>
           <element name='Anchor KNOB endless inner v2' type='ANCHOR' height='of:width:self'>
-            <element name="Knob Back Endless v2"           type="PICTURE"    picturenormal="knob back" />
-            <element name="Knob Back2 v2"                  type="PICTURE"    posx="center"    posy="middle"  width="%82" height="of:width:self" picturenormal="knob without marker" />
-            <element name="Knob Volume Endless v2"         type="KNOB"       posx="center"    posy="middle"  width="%82" height="of:width:self" picturenormal="knob marker only"  />
+            <element name="Knob Back Endless v2"       type="PICTURE"    picturenormal="knob back" />
+            <element name="Knob Back2 v2"              type="PICTURE"    posx="center"    posy="middle"  width="%82" height="of:width:self" picturenormal="knob without marker" />
+            <element name="Knob Volume Endless v2"     type="KNOB"       posx="center"    posy="middle"  width="%82" height="of:width:self" picturenormal="knob marker only"  />
           </element>
-          <element name="Label"                       type="TEXTFIELD"  posx="center" posy="bottom"                      height="%7" caption='Knob different style'                 fontsize='%h70'  vtextalign='middle' htextalign='center'  />
+          <element name="Label 3"                      type="TEXTFIELD"  posx="center" posy="bottom"                      height="%7" caption='Knob different style'                 fontsize='%h70'  vtextalign='middle' htextalign='center'  />
         </elements>
       </element>
 
@@ -62,7 +62,7 @@
           <element name="Colorcicle"                      type="CIRCLE"     posx="center" posy="top" width="%50"  height="of:width:self"  backgroundcolor='#000000ff' />
           <element name='Anchor Slider 1 Gap'             type='ANCHOR'     height='%3'   posy="of:bottom:last"/>
           <element name="SliderHor"                       type="SLIDER"     posx="center" posy="of:bottom:last"  width="%90" height="of:width:self:*0.25" picturenormal="background boxes" picturebutton="button round normal" action="Update Slider Hor Values"  mindatavalue="0" maxdatavalue="100" destvar="SLIDERHOR"  roundpos="1" orientation="horizontal"/>
-          <element name="Label"                           type="TEXTFIELD"  posy="bottom"  height="%7"  caption='Horizontal Slider' htextalign='center' vtextalign='middle' fontsize='%h70'  />
+          <element name="Label 4"                         type="TEXTFIELD"  posy="bottom"  height="%7"  caption='Horizontal Slider' htextalign='center' vtextalign='middle' fontsize='%h70'  />
           <element name="Desc Hor Slider Textvalue"       type="TEXTFIELD"  posx="left"  posy="of:totop:last"  width="%50" height="%7" caption="Value:"  vtextalign='top' htextalign='left'  fontsize='%h70'  />
           <element name="Slider Hor Textvalue"            type="TEXTFIELD"  posx="right" posy="of:top:last"  width="%50" height="%7" caption="$var(SLIDERHOR)"   vtextalign='top' htextalign='center' fontsize='%h70'  />
       </element>
@@ -71,7 +71,7 @@
         <element name="Colorrectangle"                  type="RECTANGLE" posx="center" width='%50' height="of:width:self"  backgroundcolor='#ffff0080' />
         <element name='Anchor Slider21 Gap'             type='ANCHOR'     height='%3'   posy="of:bottom:last"/>
         <element name="SliderVer"                       type="SLIDER"    posx="center" width='%20' posy="of:bottom:last" height="%50" picturenormal="background boxes" picturebutton="button square normal" action="Update Slider Ver Values"  mindatavalue="-100" maxdatavalue="100" destvar="SLIDERVER"  roundpos="0" orientation="vertical" discardmoves="1"/>
-        <element name="Label"                           type="TEXTFIELD" posx="left"  posy="bottom"  height="%7" caption='Vertical Slider' htextalign='center' vtextalign='middle' fontsize='%h70' />
+        <element name="Label 5"                         type="TEXTFIELD" posx="left"  posy="bottom"  height="%7" caption='Vertical Slider' htextalign='center' vtextalign='middle' fontsize='%h70' />
         <element name="Desc Ver Slider Textvalue"       type="TEXTFIELD" posx="left"  posy="of:totop:last" width="%50" height="%7" caption="Value:" vtextalign='top' htextalign='left' fontsize='%h70'  />
         <element name="Slider Ver Textvalue"            type="TEXTFIELD" posx="right" posy="of:top:last" width="%50" height="%7" caption="$var(SLIDERVER)"  vtextalign='top' htextalign='center' fontsize='%h70'  />
       </element>

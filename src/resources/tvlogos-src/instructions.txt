@@ -4,9 +4,11 @@ Website: https://www.picons.eu/
 Use the hardlinks 220x132
 use: 
 
-dark.on.reflection: snp-full.220x132-190x102.dark.on.reflection_yyyy-mm-dd--hh-mm-ss.hardlink.tar.xz
-light.on.reflection
+dark.on.reflection
+light.on.transparent
 dark.on.transparent
+
+example: snp-full.220x132-190x102.dark.on.reflection_yyyy-mm-dd--hh-mm-ss.hardlink.tar.xz
 
 download:
 srp.index.txt from the github (https://github.com/picons/picons/tree/master/build-source) -> rename srp.index to srp.index.txt

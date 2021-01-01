@@ -71,7 +71,7 @@ def ToHex(iInt:int,iLen:int=2)->str:
     uTmp     = uTmp[iLen*-1:]
     return uTmp
 
-def ToBytes(uStr:str) -> bytes:
+def ToBytes(uStr:Union[str,bytes]) -> bytes:
     """
     Converts as string to bytes
 
@@ -80,7 +80,7 @@ def ToBytes(uStr:str) -> bytes:
     """
 
     if isinstance(uStr, bytes):
-        return cast(bytes,uStr)
+        return uStr
 
     byRet:bytes = cast(bytes,uStr)
     try:
@@ -98,10 +98,10 @@ def ToHexFromString(uString:str) -> str:
     """
     return ":".join("{:02x}".format(ord(c)) for c in uString)
 
-def DictToUnicode(vObj:Union[Dict,List,bool,str,None]) -> str:
+def DictToUnicode(vObj:Union[Dict[Any,Any],List[Any],bool,str,None]) -> str:
     """
     Converts a dict to a string, without the u' prefix for unicode strings
-    :return: The string represenation
+    :return: The string representation
     """
     try:
 
@@ -130,7 +130,7 @@ def DictToUnicode(vObj:Union[Dict,List,bool,str,None]) -> str:
         else:
             return ToUnicode(vObj)
     except Exception as e:
-        LogError(uMsg=u'DictToUnicode: Dictionary Conver error, using fallback',oException=e)
+        LogError(uMsg=u'DictToUnicode: Dictionary convert error, using fallback',oException=e)
         return ToUnicode(str(vObj))
 
 def ToString(uObj:str) -> bytes:
@@ -143,13 +143,13 @@ def ToString(uObj:str) -> bytes:
     return uObj.encode('ascii', 'xmlcharrefreplace')
 
 
-def ToUnicode(Obj):
+def ToUnicode(Obj:Any) ->str:
     """
     Converts an object into a unicode string
 
     :rtype: string
     :param Obj: any object to be converted
-    :return: A nunicode string of Obj
+    :return: A unicode string of Obj
     """
 
     if isinstance(Obj, dict):
@@ -175,11 +175,9 @@ def ToUnicode(Obj):
         print (type(Obj))
         if isinstance(Obj, str):
             for cChar in Obj:
-                print (ord(cChar)),
+                print (ord(cChar))
             print ('')
         return str(Obj)
-
-    return Obj
 
 def ToOrderedDic(uString:str) -> OrderedDict:
     """
@@ -214,7 +212,7 @@ def ToOrderedDic(uString:str) -> OrderedDict:
     return dDict
 
 
-def ToDic(uString:str) -> Dict:
+def ToDic(uString:Union[str,Dict]) -> Dict:
     """
     converts a (unicode) string into a dict
 
@@ -223,50 +221,60 @@ def ToDic(uString:str) -> Dict:
     :return: The dict
     """
 
-    dRet:Dict
+
+    """  
+    This is complex by purpose, as we might face "invalid" dic strings, from devices or by the system
+    eg quotes/double quotes 
+    eg backslashes in windows paths
+    So i try different tools 
+    """
+
+    dRet:Dict[Any,Any]
     uString2:str
+    bDoubleBack:bool = False
+
 
     if isinstance(uString, dict):
-        return cast(Dict,uString)
+        return uString
 
-    if uString==u'':
+    if uString==u'' or uString=="{}":
         return {}
 
+    if "\\" in uString:
+        uString2 = uString.replace("\\","***BaCkSlAsH***")
+        bDoubleBack = True
+    else:
+        uString2= cast(str,uString)
+
     try:
-        if uString.startswith(u'{'):
+        for i in range(2):
+            if i==1:
+                uString2 = uString2.replace("\'", "\"")
+
             try:
-                return json.loads(uString)
-            except Exception:
-                pass
-
-        try:
-            return demjson.decode(uString)
-        except Exception:
-            pass
-
-        try:
-            if "\\" in uString:
-                uString2 = uString.replace("\\","***BaCkSlAsH***")
-                dRet     = ast.literal_eval(uString2)
-                DictUnescaceBackslash(dRet)
+                dRet     = cast(Dict[Any,Any],json.loads(uString2))
+                if bDoubleBack:
+                    DictUnescaceBackslash(dRet)
                 return dRet
-            else:
-                return ast.literal_eval(uString)
-        except Exception:
-            pass
-
-        uString = uString.replace("\'", "\"")
-
-        if uString.startswith(u'{'):
-            try:
-                return json.loads(uString)
             except Exception:
                 pass
 
-        try:
-            return ast.literal_eval(uString)
-        except Exception:
-            pass
+            try:
+                dRet     = cast(Dict[Any,Any],demjson.decode(uString2))
+                if bDoubleBack:
+                    DictUnescaceBackslash(dRet)
+                return dRet
+            except Exception:
+                pass
+
+            try:
+                dRet     = ast.literal_eval(uString2)
+                if bDoubleBack:
+                    DictUnescaceBackslash(dRet)
+                return dRet
+            except Exception:
+                pass
+
 
         LogError(uMsg=u'ToDic: can\'t convert string to dic:'+uString)
         return {}
@@ -276,7 +284,7 @@ def ToDic(uString:str) -> Dict:
         LogErrorSmall(uMsg=uString)
     return {}
 
-def DictUnescaceBackslash(oDict:Dict) -> None:
+def DictUnescaceBackslash(oDict:Dict[str,Any]) -> None:
     """
     Unescapes previous escapes backslashes in dict strings
     :param dict oDict:
@@ -299,7 +307,7 @@ def DictUnescaceBackslash(oDict:Dict) -> None:
         LogError(uMsg=u'DictUnescaceBackslash',oException=e)
 
 
-def ToList(uString:str) -> List:
+def ToList(uString:Union[str,List]) -> List:
     """
     converts a (unicode) string into a list
     Standard format should be "['par1','par2']"
@@ -402,7 +410,7 @@ def ToFloat2(uValue:str) -> Tuple[float,bool]:
     :return: A tuple of the float value and a boolean value
     """
 
-    ''' converts a (unicode) string into a float and returns, if coversion was sucessfull '''
+    ''' converts a (unicode) string into a float and returns, if conversion was successful '''
     try:
         return float(uValue),True
     except Exception:
@@ -429,8 +437,8 @@ def ToStringVersion(iVersion:int) -> str:
 def ToIntVersion(uVersion:str) -> int:
     """
     converts a version string into a integer version number
-    maxium 2 dots (3 section are allowed
-    maxium 3 digits per section allowed
+    maximum 2 dots (3 section are allowed
+    maximum 3 digits per section allowed
     eg 1.1.10
 
     :rtype: int

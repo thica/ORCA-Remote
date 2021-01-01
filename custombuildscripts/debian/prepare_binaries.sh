@@ -7,8 +7,10 @@
 cd $BUILD_ZIP
 cd /home/kivy/builddest/dist
 # zip -r "/media/upload/${varAPPNAME4}-${varORCABRANCH}-${varORCAVERSION}-Debian.zip" ORCA
+
+ECHO "Creating PyInstaller Zip File: /media/upload/${varAPPNAME4}-${varORCABRANCH}-${varORCAVERSION}-Debian.7z"
 rm "/media/upload/${varAPPNAME4}-${varORCABRANCH}-${varORCAVERSION}-Debian.7z"
-7z a -r "/media/upload/${varAPPNAME4}-${varORCABRANCH}-${varORCAVERSION}-Debian.7z" ORCA
+7z a -r "/media/upload/${varAPPNAME4}-${varORCABRANCH}-${varORCAVERSION}-Debian.7z" ORCA >> "$LOGFILE" 2>>"$LOGFILE"
 
 # echo "Copy $BUILD_ZIP to /media/sf_Orca/Development/ORCA/Deployment/${varAPPNAME4}-${varORCABRANCH}-${varORCAVERSION}.zip"
 # cp "$BUILD_ZIP" "/media/upload/${varAPPNAME4}-${varORCABRANCH}-${varORCAVERSION}.zip"

@@ -194,10 +194,10 @@ class cEventActionsSettings(cEventActionBase):
         uVarName:str       = ReplaceVars(oAction.dActionPars.get("varname"      ,""))
         uVarValue:str      = ReplaceVars(oAction.dActionPars.get("varvalue"     ,""))
 
-        oInterFace:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+        oInterFace:cBaseInterFace = Globals.oInterFaces.GetInterface(uInterfaceName)
         if oInterFace is None:
             Globals.oInterFaces.LoadInterface(uInterfaceName)
-            oInterFace=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+            oInterFace=Globals.oInterFaces.GetInterface(uInterfaceName)
 
         if oInterFace is None:
             LogError(uMsg=u'Action: Save Interface Setting failed: Interface: %s  Interface not found!' % uInterfaceName)
@@ -247,10 +247,10 @@ class cEventActionsSettings(cEventActionBase):
         uVarName:str             = ReplaceVars(oAction.dActionPars.get("varname",""))
         uRetVar:str              = ReplaceVars(oAction.dActionPars.get("retvar",""))
 
-        oInterFace:cBaseInterFace = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+        oInterFace:cBaseInterFace = Globals.oInterFaces.GetInterface(uInterfaceName)
         if oInterFace is None:
             Globals.oInterFaces.LoadInterface(uInterfaceName)
-            oInterFace=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+            oInterFace=Globals.oInterFaces.GetInterface(uInterfaceName)
 
         if oInterFace is None:
             LogError(uMsg=u'Action: Get Interface Setting failed: Interface: %s  Interface not found!' % uInterfaceName)

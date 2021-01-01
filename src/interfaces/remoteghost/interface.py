@@ -48,8 +48,8 @@ from ORCA.actions.ReturnCode                import eReturnCode
       <description language='English'>Interface to send commands to EventGhost</description>
       <description language='German'>Interface um Kommandos an EventGhost zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/remoteghost</local>
@@ -201,6 +201,8 @@ class cInterface(cBaseInterFace):
             uResponses:str
             uResponse:str
             aResponses:List
+            aActionTrigger:List[cBaseTrigger]
+
             #Loop until closed by external flag
             try:
                 while not self.bStopThreadEvent:
@@ -226,9 +228,10 @@ class cInterface(cBaseInterFace):
                                             self.uMsg=u''
                                         else:
                                             # we have a notification issued by the device, so lets have a look, if we have a trigger assigned to it
-                                            oActionTrigger=self.GetTrigger(uResponse)
-                                            if oActionTrigger is not None:
-                                                self.CallTrigger(oActionTrigger,uResponse)
+                                            aActionTrigger=self.GetTrigger(uResponse)
+                                            if len(aActionTrigger)>0:
+                                                for oActionTrigger in aActionTrigger:
+                                                    self.CallTrigger(oActionTrigger,uResponse)
                                             else:
                                                 self.ShowDebug(uMsg=u'Discard message:'+uResponse)
 

@@ -8,8 +8,8 @@
   <description language='English'>Command Set for the video interface</description>
   <description language='German'>Befehlssatz für das Video Interface</description>
   <author>Carsten Thielepape</author>
-  <version>5.0.1</version>
-  <minorcaversion>5.0.1</minorcaversion>
+  <version>5.0.4</version>
+  <minorcaversion>5.0.4</minorcaversion>
   <sources>
     <source>
       <local>$var(APPLICATIONPATH)/codesets/orca_video/CODESET_orca_video_default.xml</local>

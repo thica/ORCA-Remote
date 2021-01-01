@@ -6,8 +6,8 @@
       <description language='English'>Sharp Aquos TV models for european market (Loewe based) (for mediaplayer template)</description>
       <description language='German'>Sharp Aquos TV Modelle für den europäischen Markt (Loewe basiert) (Für Mediaplayer Template)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/wizard templates/mediaplayer wizard/sharp_aquos_EU</local>

@@ -40,8 +40,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to Im/Export Orca files</description>
       <description language='German'>Tool um die Orca Files zu Im/Exportieren</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -79,12 +79,11 @@ class cScript(cToolsTemplate):
 
     def __init__(self):
         super().__init__()
-        self.uSubType           = u'IRDB'
+        self.uSubType           = u'EXPORT'
         self.uSortOrder         = u'auto'
         self.uSettingSection    = u'tools'
         self.uSettingTitle      = u'Import Export'
         self.uIniFileLocation   = u'none'
-
 
     def RunScript(self, *args, **kwargs) -> None:
         super().RunScript(*args, **kwargs)
@@ -94,15 +93,15 @@ class cScript(cToolsTemplate):
     def ShowPageExport(self, *args, **kwargs) -> None:
         SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="EXPORT")
         oEvents = Globals.oEvents
-        aActions=oEvents.CreateSimpleActionList(aActions=[{'name':'show page','string':'showpage','pagename':'Page_Export'},
-                                                          {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_8)', 'autoupdate':'1'}])
+        aActions=oEvents.CreateSimpleActionList(aActions=[{'name':'init var','string':'setvar CHECKBOX_EXPORT_CHANGE_LOCATION=0'},
+                                                          {'name':'show page','string':'showpage','pagename':'Page_Export'}])
         oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
     def ShowPageImport(self, *args, **kwargs) -> None:
         SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="IMPORT")
         oEvents = Globals.oEvents
-        aActions=oEvents.CreateSimpleActionList(aActions=[{'name':'show page','string':'showpage','pagename':'Page_Export'},
-                                                          {'name':'update title','string':'setwidgetattribute','widgetname':'Title','attributename':'caption', 'attributevalue':'$lvar(SCRIPT_TOOLS_IMPORTEXPORT_9)', 'autoupdate':'1'}])
+        aActions=oEvents.CreateSimpleActionList(aActions=[{'name':'init var','string':'setvar CHECKBOX_IMPORT_CHANGE_LOCATION=0'},
+                                                          {'name':'show page','string':'showpage','pagename':'Page_Import'}])
         oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
 
     def Register(self, *args, **kwargs) -> Dict:
@@ -141,15 +140,21 @@ class cScript(cToolsTemplate):
         if not Globals.oPathRoot.string in oPath.string:
             fIgnore = ignore_patterns('*.ini', 'ORCA', '*.py*')
             Globals.oPathRoot.Copy(oDest=oPath, fIgnoreFiles=fIgnore)
+            if GetVar(uVarName="CHECKBOX_EXPORT_CHANGE_LOCATION")=="1":
+                Globals.oOrcaConfigParser.set("ORCA", u'rootpath', oPath.string)
+                Globals.oOrcaConfigParser.write()
 
     def ImportOrcaFiles(self,*args,**kwargs) -> None:
-        """
-        Import all ORCA files from a given location
-        """
-        oPath:cPath = cPath(GetVar(uVarName="filebrowserfile"))
-        oFnCheckFile:cFileName = cFileName(oPath + 'actions') + 'actions.xml'
-        if oFnCheckFile.Exists():
-            if not Globals.bProtected:
-                oPath.Copy(oDest=Globals.oPathRoot)
+            """
+            Import all ORCA files from a given location
+            """
+            oPath:cPath = cPath(GetVar(uVarName="filebrowserfile"))
+            oFnCheckFile:cFileName = cFileName(oPath + 'actions') + 'actions.xml'
+            if oFnCheckFile.Exists():
+                if not Globals.bProtected:
+                    oPath.Copy(oDest=Globals.oPathRoot)
+                    if GetVar(uVarName="CHECKBOX_IMPORT_CHANGE_LOCATION")=="1":
+                        Globals.oOrcaConfigParser.set("ORCA", u'rootpath', '')
+                        Globals.oOrcaConfigParser.write()
 
 

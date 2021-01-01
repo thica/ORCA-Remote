@@ -9,5 +9,7 @@
      <string id="SCRIPT_TOOLS_IMPORTEXPORT_7">Importiere</string>
      <string id="SCRIPT_TOOLS_IMPORTEXPORT_8">Bitte wähle Export Verzeichnis (Ziel)</string>
      <string id="SCRIPT_TOOLS_IMPORTEXPORT_9">Bitte wähle Import Verzeichnis (Quelle)</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_10">Setze Orca Pfad zu neuem Pfad</string>
+     <string id="SCRIPT_TOOLS_IMPORTEXPORT_11">Ursprünglichen Orca Pfad wiederhersetllen</string>
 </strings>
 

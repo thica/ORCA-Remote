@@ -19,25 +19,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from os.path                 import expanduser
-from kivy.logger             import Logger
-from ORCA.utils.Path         import cPath
+from kivy.logger                            import Logger
+from ORCA.utils.Path                        import cPath
+from ORCA.utils.Platform.win.win_GetPlaces  import GetDownloadFolder
 
 def GetUserDownloadsDataPath() -> cPath:
     """ returns the path to the download folder """
 
-    oPathUserPath:cPath         = cPath(expanduser(u'~'))
-    oPathUserDownLoadTest:cPath = oPathUserPath + 'Downloads'
-    oPathDownLoad: cPath
+    oPath:cPath=GetDownloadFolder()
+    Logger.debug("Windows Download Folder  = "+oPath.string)
 
-    if oPathUserDownLoadTest.IsDir():
-        oPathDownLoad = oPathUserPath+"Downloads"
-    else:
-        oPathDownLoad = oPathUserPath
-
-    Logger.debug("Windows Download Folder  = "+oPathDownLoad.string)
-
-    if not oPathDownLoad.IsDir():
-        Logger.error("Downloadpath not valid:" + oPathDownLoad.string)
-    return oPathDownLoad
+    if not oPath.IsDir():
+        Logger.error("Downloadpath not valid:" + oPath.string)
+    return oPath
 

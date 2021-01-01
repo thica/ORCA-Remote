@@ -46,8 +46,8 @@ import ORCA.Globals as Globals
       <description language='English'>Helper Scripts to find TV Logos</description>
       <description language='German'>Hilfs Skript um TV-Logos zu finden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -112,7 +112,7 @@ class cScript(cBaseScript):
     |}</div>
 
     Remarks:
-    "get_tvlogofile": Return a logo filename for the give reference or channelname
+    "get_tvlogofile": Return a logo filename for the given reference or channelname
     "get_channelreference": Will return the channel reference for a channel number
     "assign_channels": Sets the TV Logos for the parsed channels
 

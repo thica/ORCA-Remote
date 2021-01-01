@@ -34,8 +34,8 @@ from ORCA.scripttemplates.Template_System import cSystemTemplate
       <description language='English'>Script to add timestamps to the logfile</description>
       <description language='German'>Script um einen Zeitstempel zum Logfile hinzuzufügen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

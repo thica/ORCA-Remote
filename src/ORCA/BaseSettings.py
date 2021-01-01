@@ -36,10 +36,20 @@ else:
     from typing import TypeVar
     cBaseObject = TypeVar("cBaseObject")
 
-
 class cObjectMonitoredSettings(cMonitoredSettings):
+    """
+    Base Class for a single monitored setting for an object.
+    Main ensures to provide the context for the vars
+    """
     def WriteVar(self,uName:str,vValue:Any) -> None:
+        """
+        Writes the CONTEXT var for a setting, when it has been changed
+        :param str uName: The name of the var
+        :param Any vValue: The var Value
+        :return: None
+        """
         self.oBaseSettings.SetContextVar(uVarName="CONFIG_" + uName.upper()[1:], uVarValue=vValue)
+        return None
 
 class cBaseSettings:
     """ A base class for the script settings """
@@ -140,7 +150,10 @@ class cBaseSettings:
         self.oObject.oObjectConfig.oConfigParser.write()
 
     def ReadCodeset(self) -> None:
-        # Dummy
+        """
+        #Dummy function, need to be overridden
+        :return:
+        """
         pass
 
     def ShowWarning(self,*,uMsg:str) -> str:
@@ -166,7 +179,7 @@ class cBaseSettings:
         iErrNo:int = 0
         if oException is not None:
             if hasattr(oException,'errno'):
-                iErrNo=oException.errno
+                iErrNo=ToInt(oException.errno)
         if iErrNo is None:
             iErrNo=-1
 

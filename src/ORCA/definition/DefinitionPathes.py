@@ -83,5 +83,9 @@ class cDefinitionPathes:
                     SetVar("MEDIATEMPLATESKINCONTEXT", "skin_default")
 
     def LanguageChange(self) -> None:
+        """
+        changes the filename of the definition language file
+        :return:
+        """
         self.oFnDefinitionLanguage            = cFileName(self.oPathDefinition + (u'languages/' + Globals.uLanguage)) + u'strings.xml'
         return None

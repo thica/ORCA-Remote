@@ -18,7 +18,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
+import                              multiprocessing
 import                              logging
 from typing                         import List
 from typing                         import Dict
@@ -430,12 +430,12 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
 
         elif uDefinitionName=="WRITEALLSETTINGS":
             for uInterfaceName in self.dInitInterfaceSettings:
-                if uInterfaceName in Globals.oInterFaces.aInterfaceList:
-                    oInterface = Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+                if uInterfaceName in Globals.oInterFaces.aObjectNameList:
+                    oInterface = Globals.oInterFaces.GetInterface(uInterfaceName)
                     if oInterface is None:
                         Logger.info('Need to load unrecognized Interface [%s] for configuration' % uInterfaceName)
                         Globals.oInterFaces.LoadInterface(uInterfaceName)
-                        oInterface=Globals.oInterFaces.dInterfaces.get(uInterfaceName)
+                        oInterface=Globals.oInterFaces.GetInterface(uInterfaceName)
                     if oInterface is not None:
                         for uConfigurationName in self.dInitInterfaceSettings[uInterfaceName]:
                             oInterface.oObjectConfig.WriteDefinitionConfig(uSectionName = uConfigurationName ,dSettings = self.dInitInterfaceSettings[uInterfaceName][uConfigurationName])

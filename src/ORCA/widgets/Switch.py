@@ -51,7 +51,7 @@ class cWidgetSwitch(cWidgetButton):
     WikiDoc:TOCTitle:Switch
     = SWITCH =
 
-    The switch widget action is based on the button widget, so refer the the button widget for further information. The switch widget can only be used for picture buttons, and it toggles the "normal" and the "pressed" pictures. The state of the button will passed to variable you have to provide, and toogles to '0" and '1"
+    The switch widget action is based on the button widget, so refer the the button widget for further information. The switch widget can only be used for picture buttons, and it toggles the "normal" and the "pressed" pictures. The state of the button will passed to variable you have to provide, and toggles to '0" and '1"
     The following attributes are additional attributes to button widget attributes
 
     <div style="overflow:auto; ">
@@ -130,7 +130,7 @@ class cWidgetSwitch(cWidgetButton):
         """ Switches the button as part of a button group """
         if self.uGroup!='':
             if GetVar(uVarName = self.uDestVar)=='1':
-                for oWidget in self.oParentScreenPage.aWidgets:
+                for oWidget in self.oParentScreenPage.dWidgetsID.values():
                     if oWidget.eWidgetType==eWidgetType.Switch:
                         if not oWidget== self:
                             oWidget=cast(cWidgetSwitch,oWidget)
@@ -152,7 +152,7 @@ class cWidgetSwitch(cWidgetButton):
     def AllButtonsOff(self):
         """ Sets all button / switches to off """
         if self.uGroup!='':
-            for oWidget in self.oParentScreenPage.aWidgets:
+            for oWidget in self.oParentScreenPage.dWidgetsID.values():
                 if oWidget.eWidgetType==eWidgetType.Switch:
                     # noinspection PyUnresolvedReferences
                     if oWidget.uGroup==self.uGroup:

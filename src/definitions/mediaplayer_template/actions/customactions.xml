@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
-  <!-- Local comamnds -->
+  <!-- Local commands -->
   <action name="SwitchAllOff">
     <action name="" string="call FKT SwitchAllOff" />
   </action>
@@ -21,7 +21,7 @@
       <action name="Set $dvar(definition_alias_mediaplayer_template) Power Off Action (MPT)" string="setwidgetattribute" widgetname="Button Power Off" attributename="action" attributevalue="FKT SwitchOff $dvar(definition_alias_mediaplayer_template) Force" ignoremissing="1"/>
       <action name="Set Gestures for Template" string="call Set Gestures $dvar(definition_alias_mediaplayer_template)" />
     <action name="endif" string="endif" />
-    <action1 name="[disabled] Dont do anything on first app start/ interfaces might not be configured" string="if $var(STARTCOUNT)>1"/>
+    <action1 name="[disabled] Don't do anything on first app start/ interfaces might not be configured" string="if $var(STARTCOUNT)>1"/>
       <action name="Set Triggers"         string="call Set Trigger $dvar(definition_alias_mediaplayer_template)" />
       <action name="Set Return Page"      string="setvar PAGEWAITRETURN=Page_Device_$dvar(definition_alias_mediaplayer_template)" />
       <action name="Wait to be ready"     string="call FKT WaitForReady_$dvar(definition_alias_mediaplayer_template)" />
@@ -123,10 +123,19 @@
     <action name="Set the volume var" string="setvar volumetoset=$var($dvar(definition_alias_mediaplayer_template)_mainvolume)" />
     <action name="Set the volume" string="Send Set Volume" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)"  />
     <action name="Update Volume text (Set Volume $dvar(definition_alias_mediaplayer_template) by Widget)" string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
+    <action name="Update Volume text (Set Volume $dvar(definition_alias_mediaplayer_template) by Widget)" string="updatewidget Main Volume Textvalue@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
     <action name="Get Volume" string="call FKT GetVolume_$dvar(definition_alias_mediaplayer_template)" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMENOTIFICATION)!=1"/>
   </action>
 
-  <action name="FKT Send Switch Channel $dvar(definition_alias_mediaplayer_template)">
+    <action name="Set Volume $dvar(definition_alias_mediaplayer_template)">
+        <action name="Set the volume var" string="setvar volumetoset=$par(volumetoset)" />
+        <action name="Set the volume" string="Send Set Volume" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)"  />
+        <action name="Update Volume text (Set Volume $dvar(definition_alias_mediaplayer_template))" string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
+        <action name="Update Volume text (Set Volume $dvar(definition_alias_mediaplayer_template))" string="updatewidget Main Volume Textvalue@Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+        <action name="Get Volume" string="call FKT GetVolume_$dvar(definition_alias_mediaplayer_template)" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMENOTIFICATION)!=1"/>
+    </action>
+
+    <action name="FKT Send Switch Channel $dvar(definition_alias_mediaplayer_template)">
     <action name="Switch Channel" string="sendcommand $var($dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD)" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var($dvar(definition_alias_mediaplayer_template)_CHANNELSELECT_CMD)!=NoAction"   /> />
   </action>
 

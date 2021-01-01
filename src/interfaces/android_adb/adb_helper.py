@@ -46,7 +46,7 @@ class cADB_Helper:
 
     def Connect(self,uHost:str, uPort:str ,fTimeOut:float) -> cADB_Helper:
         self.uHost   = uHost
-        self.oDevice = AdbDeviceTcp(uHost, int(uPort), default_timeout_s=fTimeOut)
+        self.oDevice = AdbDeviceTcp(uHost, int(uPort), default_transport_timeout_s=fTimeOut)
         self.oDevice.connect(rsa_keys=self.aGlobalRSA_KEYS, auth_timeout_s=20.1)
         return self
     def Load_RSA_KEYS(self) -> None:

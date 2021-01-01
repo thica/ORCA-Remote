@@ -23,6 +23,7 @@
 from __future__                             import annotations
 from typing                                 import Optional
 from typing                                 import Dict
+from typing                                 import List
 
 import telnetlib
 import socket
@@ -47,8 +48,8 @@ from ORCA.actions.ReturnCode                import eReturnCode
       <description language='English'>Interface to send telnet commands</description>
       <description language='German'>Interface um Telnet Kommandos zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/telnet</local>
@@ -213,6 +214,8 @@ class cInterface(cBaseInterFace):
         def Receive(self) -> None:
             #Main Listening Thread to receive Telnet messages
 
+            aActionTrigger:List[cBaseTrigger]
+
             #Loop until closed by external flag
             try:
                 while not self.bStopThreadEvent:
@@ -230,9 +233,10 @@ class cInterface(cBaseInterFace):
                             if not self.uRetVar==u'':
                                 SetVar(uVarName = self.uRetVar, oVarValue =  uRetVal)
                             # we have a notification issued by the device, so lets have a look, if we have a trigger assigned to it
-                            oActionTrigger=self.GetTrigger(uRetVal)
-                            if oActionTrigger is not None:
-                                self.CallTrigger(oActionTrigger,uRetVal)
+                            aActionTrigger=self.GetTrigger(uRetVal)
+                            if len(aActionTrigger)>0:
+                                for oActionTrigger in aActionTrigger:
+                                    self.CallTrigger(oActionTrigger,uRetVal)
                             else:
                                 self.ShowDebug(uMsg=u'Discard message:'+uRetVal+":"+self.uResponse)
                             StartWait(0)

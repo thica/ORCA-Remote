@@ -32,7 +32,11 @@
         <element name="GroupButton2"    type="SWITCH"    posy="%50"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10028)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" destvar="STATUSGROUP2" group="GROUP" />
         <element name="GroupButton3"    type="SWITCH"    posy="%60"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10029)'  htextalign='center' vtextalign='middle' picturenormal="button wide*" destvar="STATUSGROUP3" group="GROUP" />
         <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$lvar(showcase_10026)' htextalign='center' vtextalign='middle' />
+        <element name="Checkbox"        type="SWITCH"    posy="%80"             height="of:height:GroupButton1" width="of:height:self" picturenormal="checkbox square*" destvar="STATUSCHECKBOX" />
+        <element name="Label"           type="TEXTFIELD" posy="of:tobottom:last" height="of:height:last"  posx="right" width="%70" fontsize='%h40'  caption='$lvar(showcase_10034)' htextalign='left' vtextalign='middle' action="ToggleCheckbox" />
       </element>
+
+
 
       <element name='Anchor right2' posx='%66' type='ANCHOR' width='%20' >
         <element name="Button"          type="BUTTON"    posy="top"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' backgroundcolor='#ffff00ff'/>

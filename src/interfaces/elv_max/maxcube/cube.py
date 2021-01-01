@@ -214,7 +214,9 @@ class MaxCube(MaxDevice):
         for _ in range(0, num_rooms):
             room_id = tuple(data[pos:pos + 2])[0]
             name_length = tuple(data[pos:pos + 2])[1]
-            pos += 1
+            #cth adjusted
+            #pos += 1
+            pos += 2
             name = data[pos:pos + name_length].decode('utf-8')
             pos += name_length
             device_rf_address = self.parse_rf_address(data[pos: pos + 3])

@@ -34,6 +34,7 @@ from ORCA.utils.FileName            import cFileName
 from ORCA.vars.Replace              import ReplaceVars
 
 from typing                         import TYPE_CHECKING
+from typing                         import cast
 if TYPE_CHECKING:
     from ORCA.ScreenPage            import cScreenPage
 else:
@@ -77,17 +78,17 @@ class cWidgetFileViewer(cWidgetBase,cWidgetBaseText,cWidgetBaseBase):
 
     def __init__(self,**kwargs):
         super().__init__()
-        self.uFileName:str = "" #we don't  use cFileName by purpose to handle vars properly
+        self.uShowFileName:str = "" #we don't  use cFileName by purpose to handle vars properly
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        self.uFileName  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'filename', bMandatory=False, vDefault="")
+        self.uShowFileName  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'filename', bMandatory=False, vDefault="")
         self.bNoTextSize = True
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def LoadFile(self):
         """ loads a file to show """
-        oFn = cFileName('').ImportFullPath(uFnFullName=ReplaceVars(self.uFileName))
+        oFn = cFileName('').ImportFullPath(uFnFullName=ReplaceVars(self.uShowFileName))
         Logger.debug("Reading File:"+oFn)
         self.uCaption=LoadFile(oFileName=oFn)
 
@@ -105,3 +106,8 @@ class cWidgetFileViewer(cWidgetBase,cWidgetBaseText,cWidgetBaseBase):
         self.LoadFile()
         self.oObject.text   =   self.uCaption
 
+    def EnableWidget(self, *, bEnable:bool) -> bool:
+        super(cWidgetFileViewer, self).EnableWidget(bEnable=bEnable)
+        if self.oObject:
+            cast(cScrollableLabelLarge,self.oObject).EnableWidget(bEnable=bEnable)
+        return self.bIsEnabled

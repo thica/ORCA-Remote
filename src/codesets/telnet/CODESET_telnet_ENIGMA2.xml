@@ -9,8 +9,8 @@
       <description language='English'>Telnet Commands for Enigma2</description>
       <description language='German'>Telnet Befehle für Enigma 2</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/telnet/CODESET_telnet_ENIGMA2.xml</local>

@@ -50,7 +50,7 @@ class cFontDef:
     be able to be used by a definition
     """
 
-    def __init__(self):
+    def __init__(self)->None:
         self.uName:str                        = u''
         self.oFnNormal:cFileName              = cFileName(u'')
         self.oFnBold:cFileName                = cFileName(u'')
@@ -84,6 +84,10 @@ class cFontDef:
         return iCount
 
     def Register(self) -> None:
+        """
+        Registers Font in the app system
+        :return: None
+        """
         Logger.debug(u'Register Font: ' + self.oFnNormal)
 
         uFnNormal:Optional[str]        = self.oFnNormal.string
@@ -97,10 +101,11 @@ class cFontDef:
         if uFnBoldItalic =='':  uFnBoldItalic = None
 
         LabelBase.register(self.uName, uFnNormal, uFnItalic, uFnBold, uFnBoldItalic)
+        return None
 
 
 class cFonts:
-    """ Represents the Font Object """
+    """ Represents all Fonts Object """
     def __init__(self):
         self.dFonts:Dict[str,cFontDef]     = {}
         self.dUsedFonts:Dict[str,bool]     = {}
@@ -110,6 +115,9 @@ class cFonts:
         pass
 
     def ParseDirect(self,*,uFontName:str, uFontFileNormal:str) -> None:
+        """"
+        Adds a font object to the font list
+        """
         oTmpFont:cFontDef   = cFontDef()
         oTmpFont.uName      = uFontName
         oTmpFont.oFnNormal  = cFileName("").ImportFullPath(uFnFullName=uFontFileNormal)
@@ -117,6 +125,9 @@ class cFonts:
 
     # noinspection PyMethodMayBeStatic
     def ParseIconsFromXMLNode(self,*,oXMLNode:Element) -> None:
+        """
+        Parses all icon definitions from the xml objects
+        """
         oXMLIcons:Element = oXMLNode.find('icons')
         if oXMLIcons is not None:
             Logger.info(u'Loading Icons')
@@ -130,6 +141,9 @@ class cFonts:
                 Globals.oTheScreen.oFonts.ParseDirect(uFontName=uFontName, uFontFileNormal=oFnIconFont.string)
 
     def ParseFontFromXMLNode(self,*,oXMLNode:Element) -> int:
+        """
+        Parses all font definitions from the xml objects
+        """
         oXMLFonts:Element = oXMLNode.find('fonts')
         iCount:int = 0
         if oXMLFonts is not None:

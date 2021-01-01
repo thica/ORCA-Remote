@@ -80,8 +80,8 @@
       <description language='English'>Controls Kodi on Fire TV (using adb/TCP)</description>
       <description language='German'>Kodi Fernbedienung auf Fire TV(verwendet adb/TCP)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/kodi on android</local>

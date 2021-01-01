@@ -31,6 +31,7 @@ def GetSubnetV4() -> str:
     uPreferredAdapter:str = u'eth0'
     uInet_Type:str        = u'AF_INET'
     uRet:str              = u'192.168.1.255'
+    uMainIp:str
     aFound:List[Dict]     = []
     bLoaded:bool          = False
     dFound:Dict
@@ -40,6 +41,7 @@ def GetSubnetV4() -> str:
         try:
             import netifaces
             bLoaded = True
+            Logger.debug("GetSubnetV4: loaded netifaces")
         except Exception as ex:
             Logger.error("GetSubnetV4: Can't load netifaces, using fallback:"+str(ex))
 
@@ -58,18 +60,32 @@ def GetSubnetV4() -> str:
                         aFound = [dNetDetails]
                         break
 
+            if Globals.uIPAddressV4:
+                uMainIp = Globals.uIPAddressV4.split(".")[0]
+            else:
+                uMainIp="192"
+
             # we prefer a local subnet if given
             if len(aFound)>0:
                 uRet = aFound[-1]['broadcast']
 
             for dFound in aFound:
-                if dFound["addr"].startswith("192"):
+                if dFound["addr"].startswith(uMainIp):
                     uRet=dFound['broadcast']
                     break
         else:
             # Fallback on all platforms, if netifaces doesn't work
-            aIPV4:List=Globals.uIPAddressV4.split(".")
-            uRet  = aIPV4[0] + '.' + aIPV4[1] + '.' + aIPV4[2] + '.255'
+            if Globals.uIPAddressV4:
+                aIPV4:List=Globals.uIPAddressV4.split(".")
+                uRet  = aIPV4[0] + '.' + aIPV4[1] + '.' + aIPV4[2] + '.255'
+            else:
+                uRet = "192.168.1.255"
     except Exception as e:
         Logger.error("Error on GetSubnetV4:"+str(e))
+        if Globals.uIPAddressV4:
+            aIPV4: List = Globals.uIPAddressV4.split(".")
+            uRet = aIPV4[0] + '.' + aIPV4[1] + '.' + aIPV4[2] + '.255'
+        else:
+            uRet = "192.168.1.255"
+
     return uRet

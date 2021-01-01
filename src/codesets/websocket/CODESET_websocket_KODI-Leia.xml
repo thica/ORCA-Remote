@@ -8,8 +8,8 @@
       <description language='English'>KODI command set using JSON (Leia)</description>
       <description language='German'>KODI Befehlssatz über JSON (Leia) </description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

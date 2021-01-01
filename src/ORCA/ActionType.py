@@ -108,11 +108,16 @@ class cActionType:
     RegisterNotification_sub:int
     SendNotification:int
 
-    def __init__(self):
-        self.iValue:int         = 0
-        self.ActionToId:Dict    = {}
+    def __init__(self)->None:
+        self.iValue:int                 = 0
+        self.dActionToId:Dict[str,int]  = {}
 
-    def RegisterAction(self,uActionName:str) -> None:
+    def RegisterAction(self,*,uActionName:str) -> None:
+        """
+        Registers an Action
+        :param str uActionName: The name of the Action
+        :return: None
+        """
         setattr(self, uActionName, self.iValue)
-        self.ActionToId[uActionName.lower()] = self.iValue
+        self.dActionToId[uActionName.lower()] = self.iValue
         self.iValue+=1

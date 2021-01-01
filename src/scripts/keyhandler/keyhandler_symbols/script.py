@@ -31,8 +31,8 @@ from ORCA.scripttemplates.Template_Keyhandler import cKeyhandlerTemplate
       <description language='English'>Script to translate keycodes to symbolic names</description>
       <description language='German'>Script keycodes in symbolische Namen to ändern </description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

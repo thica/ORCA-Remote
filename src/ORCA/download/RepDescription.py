@@ -38,7 +38,7 @@ class cRepDescription:
 
     def ParseFromXMLNode(self,*,oXMLEntry:Element) -> None:
         """ Parses an xms string into object vars """
-        oXMLDescriptions:Element = oXMLEntry.findall('description')
+        oXMLDescriptions:List[Element] = oXMLEntry.findall('description')
         for oXMLDescription in oXMLDescriptions:
             uLanguage:str = GetXMLTextAttribute(oXMLNode=oXMLDescription,uTag='language',bMandatory=False,vDefault='English')
             self.dDescriptions[uLanguage]=GetXMLTextValue(oXMLNode=oXMLDescription, uTag='', bMandatory=False, vDefault='')

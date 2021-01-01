@@ -44,8 +44,8 @@ from IRDB                                   import ShowITachIRDB
       <description language='English'>Tool get IR Codes from the iTach Database</description>
       <description language='German'>Tool IR Codes von der iTach Datenbank zu beziehen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

@@ -13,7 +13,6 @@
     <action name="Add Trigger Album Name"       string="addtrigger" triggername ="NAL"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_albumname"         interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
     <action name="Add Trigger Title Name"       string="addtrigger" triggername ="NTI"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_titlename"         interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
     <action name="Add Trigger Net List"         string="addtrigger" triggername ="NLS"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_listtext"          interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-
     <action name="Add Trigger Stream Pos"       string="addtrigger" triggername ="NTM"  actionname=""                                                                           retvar="$dvar(definition_alias_mediaplayer_template)_streampos"         interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
     <action name="Add Trigger Picture"          string="addtrigger" triggername ="NJA"  actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_picturechange"      retvar="$dvar(definition_alias_mediaplayer_template)_mediapicture"      interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
     <action name="Add Trigger Info"             string="addtrigger" triggername ="NRI"  actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_infochange"         retvar="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS"    interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
@@ -61,19 +60,19 @@
   </action>
 
   <action name="FKT Delete Trigger $dvar(definition_alias_mediaplayer_template)">
-    <action name="Delete Trigger " string="addtrigger" triggername ="MVL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="CTL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="SWL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="LMD"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="IFA"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="IFV"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="NAT"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="NAL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="NTI"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="NTM"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="NJA"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="NLS"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
-    <action name="Delete Trigger " string="addtrigger" triggername ="NRI"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="MVL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_volume_main"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="CTL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="SWL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="IFA"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="IFV"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="NAT"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="NAL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="NTI"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="NLS"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="NTM"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="NJA"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_picturechange"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="NRI"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_infochange"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="LMD"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_effecttype"/>
   </action>
 
   <action name="Set Trigger $dvar(definition_alias_mediaplayer_template)_mainvolume">
@@ -81,7 +80,7 @@
   </action>
 
   <action name="Delete Trigger $dvar(definition_alias_mediaplayer_template)_mainvolume">
-    <action name="Delete Trigger " string="addtrigger" triggername ="MVL"  interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
+    <action name="Delete Trigger " string="deletetrigger" triggername ="MVL" actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)_volume_main" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"/>
   </action>
 
   <action name="trigger_on_$dvar(definition_alias_mediaplayer_template)_volume_main">

@@ -19,8 +19,14 @@
 """
 
 from kivy.logger            import Logger
-
 from ORCA.utils.Platform    import OS_GetRotationObject
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.utils.Platform.generic.generic_cRotation import cRotation
+else:
+    from typing import TypeVar
+    cRotation   = TypeVar("cRotation")
 
 __all__ = ['cRotation']
 
@@ -29,7 +35,7 @@ class cRotation:
     def __init__(self):
         Logger.debug (u'Loading Orientation Support' )
         self.bLocked:bool = False
-        self.oRotation = OS_GetRotationObject()
+        self.oRotation:cRotation = OS_GetRotationObject()
     def Lock(self):
         """ Locks the rotation on a device """
         Logger.debug (u'Orientation Lock' )

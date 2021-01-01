@@ -150,7 +150,6 @@ class cEventActionsGuiControl(cEventActionBase):
                 return eReturnCode.Success
             else:
                 return eReturnCode.Error
-
         else:
             return eReturnCode.Error
 

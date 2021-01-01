@@ -306,3 +306,4 @@ class cWidgetDropDown(cWidgetButton):
         super().EnableWidget(bEnable=bEnable)
         for oButton in self.aDropDownButtons:
             oButton.EnableWidget(bEnable=bEnable)
+        return True

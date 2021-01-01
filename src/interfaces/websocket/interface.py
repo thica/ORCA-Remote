@@ -23,6 +23,7 @@
 from __future__                                 import annotations
 from typing                                     import Dict
 from typing                                     import Optional
+from typing                                     import List
 
 from ws4py.client.threadedclient                import WebSocketClient
 from ORCA.interfaces.BaseInterface              import cBaseInterFace
@@ -44,8 +45,8 @@ from ORCA.actions.ReturnCode                    import eReturnCode
       <description language='English'>Sends commands via the Websocket protocol</description>
       <description language='German'>Sendet Befehle via dem Websocket protokoll</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -148,10 +149,11 @@ class cInterface(cBaseInterFace):
             return True
 
         def Receive(self, uResponse:str):
+            aActionTrigger:Optional[List[cBaseTrigger]]
             uResponse = ToUnicode(uResponse)
             if self.oAction is not None:
                 uCmd,uRetVal=self.oInterFace.ParseResult(self.oAction,uResponse,self)
-                self.ShowDebug(uMsg=u'Parsed Respones:'+uRetVal)
+                self.ShowDebug(uMsg=u'Parsed Responses:'+uRetVal)
                 if not self.uRetVar==u'' and not uRetVal==u'':
                     SetVar(uVarName = self.uRetVar, oVarValue = uRetVal)
                 # We do not need to wait for an response anymore
@@ -166,9 +168,10 @@ class cInterface(cBaseInterFace):
                             uCommand = uCommand[1]
 
                     # we have a notification issued by the device, so lets have a look, if we have a trigger assigned to it
-                    oActionTrigger=self.GetTrigger(uCommand)
-                    if oActionTrigger is not None:
-                        self.CallTrigger(oActionTrigger,uResponse)
+                    aActionTrigger=self.GetTrigger(uCommand)
+                    if aActionTrigger is not None:
+                        for oActionTrigger in oActionTrigger:
+                            self.CallTrigger(oActionTrigger,uResponse)
                     else:
                         self.ShowDebug(uMsg=u'Discard message:'+uCommand +':'+uResponse)
 

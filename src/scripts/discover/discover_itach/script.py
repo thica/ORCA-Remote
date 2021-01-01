@@ -55,8 +55,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover iTach devices</description>
       <description language='German'>Erkennt sucht iTach Geräte über beacon</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_itach</local>
@@ -99,14 +99,15 @@ class cScript(cDiscoverScriptTemplate):
 
     def __init__(self):
         super().__init__()
-        self.fTimeOut:float                         = 30
+        self.fTimeOut:float                         = 3
         self.uSubType:str                           = u'iTach (Global Cache)'
         self.aResults:List[TypedQueryDict]          = []
         self.aThreads:List[cThread_Discover_iTach]  = []
         self.iDiscoverCount:int                     = 0
-        self.iMaxDiscoverCount:int                   = 3
+        self.iMaxDiscoverCount:int                  = 3
         self.uIPVersion                             = u'IPv4Only'
         self.dReq:TypedQueryDict                    = TypedQueryDict()
+        self.uScriptTitle                           = u"Global Cache:iTach Discovery"
 
     def __del__(self):
         self.StopThread([])
@@ -148,14 +149,22 @@ class cScript(cDiscoverScriptTemplate):
         return ['$lvar(5029)','$lvar(5034)','$lvar(5031)','Revision']
 
     def ListDiscover(self) -> None:
+        self.SendStartNotification()
+        Clock.schedule_once(self.ListDiscover_Step2, 0)
+        return
+
+    def ListDiscover_Step2(self, *largs):
 
         oSetting:cBaseScriptSettings = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
 
-        if len(self.aResults)==0:
-            sleep(oSetting.aIniSettings.fTimeOut)
+        if len(self.aResults)>0:
+            for dDevice in self.aResults:
+                Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTFOUND",**{"script":self,"scriptname":self.uObjectName,"line":[dDevice.uIP , dDevice.uUUID , dDevice.uModel ,dDevice.uRevision ],"device":dDevice})
+            self.SendEndNotification()
+            return
 
-        for dDevice in self.aResults:
-            self.AddLine([dDevice.uIP , dDevice.uUUID , dDevice.uModel ,dDevice.uRevision ],dDevice)
+        self.ClockCheck=Clock.schedule_interval(self.CheckFinished,0.1)
+
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
 
@@ -171,14 +180,16 @@ class cScript(cDiscoverScriptTemplate):
 
     def Discover(self,**kwargs) -> Dict[str,str]:
 
-
         uConfigName:str                 = kwargs.get('configname',self.uConfigName)
         oSetting:cBaseScriptSettings    = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
         self.fTimeOut:float             = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
         self.dReq.uModels               = kwargs.get('models',"")
         self.uIPVersion:str             = kwargs.get('ipversion',"IPv4Only")
+        self.bDoNotWait                 = ToBool(kwargs.get('donotwait',"0"))
 
         self.ShowDebug(uMsg=u'Try to discover iTach device')
+
+        del self.aResults[:]
 
         try:
             oThread:cThread_Discover_iTach
@@ -190,19 +201,21 @@ class cScript(cDiscoverScriptTemplate):
 
             for oT in self.aThreads:
                 oT.join()
+            self.SendEndNotification()
 
             if len(self.aResults)>0:
                 return {"Host":self.aResults[0].uFoundIP}
 
             if len(self.aResults)>0:
-                return {'Model': self.aResults[0].uFoundModel, 'Host': self.aResults[0].uFoundIP,'Port': self.aResults[0].uFoundPort, 'Category': self.aResults[0].uFoundCategory, 'Exception': None}
+                #for dDevice in self.aResults:
+                #    Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTFOUND",**{"script":self,"scriptname":self.uObjectName,"line":[dDevice.uIP , dDevice.uUUID , dDevice.uModel ,dDevice.uRevision ],"device":dRet})
+                return {'Model': self.aResults[0].uModel, 'Host': self.aResults[0].uIP, 'Port': '4998',  'Exception': None}
             else:
                 self.ShowWarning(uMsg='No iTach device found')
         except Exception as e:
             self.ShowError(uMsg=u'No iTach device found, possible timeout',oException=e)
 
         return {"Host":""}
-
 
     def OnPause(self,**kwargs) -> None:
         cDiscoverScriptTemplate.OnPause(self)
@@ -265,6 +278,8 @@ class cThread_Discover_iTach(threading.Thread):
                             self.oCaller.aResults.append(diTachEntry)
                             cThread_Discover_iTach.oWaitLock.release()
                             self.oCaller.ShowInfo(uMsg="iTach-Discover: iTach found! IP: %s, UUID:%s, Model:%s, Revision:%s, Part number:%s, Status:%s" % (diTachEntry.uIP , diTachEntry.uUUID , diTachEntry.uModel , diTachEntry.uRevision , diTachEntry.uPartNumber ,  diTachEntry.uStatus ))
+                            # by now, we finished if we found one device
+                            break
         except Exception as e:
             self.oCaller.ShowError(uMsg="Error occured",oException=e)
         finally:

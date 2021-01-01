@@ -8,8 +8,8 @@
       <description language='English'>German language strings</description>
       <description language='German'>Deutsche Zeichenketten</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/languages/German</local>
@@ -222,6 +222,8 @@
   <string id="615">IP Adresse V4</string>
   <string id="618">IP Adresse V6</string>
   <string id="619">MAC Adresse</string>
+  <string id="620">Alles aus</string>
+  <string id="621">Alle Töne aus</string>
   <string id="624">Seiten Effekt Type</string>
   <string id="625">Standard Seiten Effect Typ</string>
   <string id="626">Seiten Effekt Richtung</string>
@@ -367,6 +369,13 @@
 
   <string id="1119">Funktionen</string>
 
+  <string id="1200">Downloads</string>
+  <string id="1201">Desktop</string>
+  <string id="1202">Dokumente</string>
+  <string id="1203">Bilder</string>
+  <string id="1204">Videos</string>
+  <string id="1205">Musik</string>
+
 
   <string id="2000">Aktivitäten</string>
   <string id="2001">Geräte</string>
@@ -461,5 +470,7 @@
   <string id="6036">Name des Discover / Autoerkennung Script welches verwendet werden soll</string>
   <string id="6037">IPv6</string>
   <string id="6038">IPv6 verwenden</string>
+  <string id="6039">ermittelt</string>
+  <string id="6040">beendet</string>
 
 </strings>

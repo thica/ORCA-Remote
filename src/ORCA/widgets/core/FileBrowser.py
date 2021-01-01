@@ -44,7 +44,7 @@ To create a FileBrowser which prints the currently selected file as well as
 the current text in the filename field when 'Select' is pressed, with
 a shortcut to the Documents directory added to the favorites bar::
 
-    ffrom kivy.app import App
+    from kivy.app import App
     from os.path import sep, expanduser, isdir, dirname
 
     class TestApp(App):
@@ -97,18 +97,22 @@ from kivy.utils import platform as core_platform
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
 from ORCA.utils.Platform import OS_GetDrives
+from ORCA.utils.Platform import OS_GetPlaces
 from ORCA.utils.Platform import OS_GetSystemUserPath
 
 
 __all__ = ('FileBrowser', )
 __version__ = '1.1'
 
-
 platform = core_platform
 
 class SettingSpacer(Widget):
     """ Internal class, not documented."""
     pass
+
+def get_places():
+    """ returns a list of all available places """
+    return OS_GetPlaces()
 
 def get_drives():
     """ returns a list of all available drives """
@@ -120,7 +124,6 @@ def get_home_directory():
 class FileBrowserIconView(IconView):
     """ pass """
     pass
-
 
 
 Builder.load_string('''
@@ -270,6 +273,7 @@ class LinkTree(TreeView):
     computer_string = StringProperty('')
 
     def fill_tree(self, fav_list):
+        '''
         if platform == 'win':
             user_path = expanduser(u'~')
             if not isdir(user_path + sep + 'Desktop'):
@@ -278,17 +282,25 @@ class LinkTree(TreeView):
                 user_path += sep
         else:
             user_path = expanduser(u'~') + sep
+        '''
         self._favs = self.add_node(TreeLabel(text=self.favorites_string, is_open=True,
                                              no_selection=True))
         self.reload_favs(fav_list)
 
-        libs = self.add_node(TreeLabel(text=self.libraries_string, is_open=True,
-                                       no_selection=True))
+        aPlaces = get_places()
+        if len(aPlaces):
+            libs = self.add_node(TreeLabel(text=self.libraries_string, is_open=True, no_selection=True))
+            for tPlace in aPlaces:
+                if tPlace[1].Exists():
+                    self.add_node(TreeLabel(text=tPlace[0], path=tPlace[1].string), libs)
+
+        '''
         places = ('Documents', 'Music', 'Pictures', 'Videos')
         for place in places:
             if isdir(user_path + place):
                 self.add_node(TreeLabel(text=place, path=user_path +
                                         place), libs)
+        '''
         self._computer_node = self.add_node(TreeLabel(text=self.computer_string,is_open=True, no_selection=True))
         self._computer_node.bind(on_touch_down=self._drives_touch)
         self.reload_drives()
@@ -334,7 +346,8 @@ class LinkTree(TreeView):
                 remove.append(node)
         for node in remove:
             self.remove_node(node)
-        places = ('Desktop', 'Downloads')
+        # places = ('Desktop', 'Downloads')
+        places = ()
         for place in places:
             if isdir(user_path + place):
                 self.add_node(TreeLabel(text=place, path=user_path +

@@ -101,6 +101,7 @@ class ScrollOptionsPopUp:
     def CreatePopup(self, uValue, fktButttonSelect, fktTextInputSelect):
 
         """ create the popup """
+        i:int                              = 0
         self.oContent:GridLayout           = GridLayout(cols=1, spacing='5dp')
         oScrollview:ScrollView             = ScrollView( do_scroll_x=False, bar_width='10dp',scroll_type=['bars','content'] )
         oScrollcontent:GridLayout          = GridLayout(cols=1,  spacing='5dp', size_hint=(None, None))
@@ -163,11 +164,14 @@ class ScrollOptionsPopUp:
                 self.options=aRet
 
         uid = "test"
+
         for option in self.options:
             state = 'down' if option == uValue else 'normal'
             btn = ToggleButton(text=option, state=state, group=uid, size=(self.popup.width, self.oButtonHeigth), size_hint=(None, None),text_size=(self.popup.width, self.oButtonHeigth), valign="middle",halign="center")
             btn.bind(on_release=fktButttonSelect)
+            btn.iIndex = i
             oScrollcontent.add_widget(btn)
+            i=i+1
 
         # finally, add a cancel button to return on the previous panel
         oScrollview.add_widget(oScrollcontent)

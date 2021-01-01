@@ -62,7 +62,7 @@ def CreateActionForSimpleActionList(dAction:Dict) -> cAction:
 
 def GetActionID(uID:str) -> int:
     """ Returns the action to an ID """
-    return Globals.oActions.oActionType.ActionToId.get(uID,Globals.oActions.oActionType.NoAction)
+    return Globals.oActions.oActionType.dActionToId.get(uID,Globals.oActions.oActionType.NoAction)
 
 
 class cAction:
@@ -89,6 +89,7 @@ class cAction:
         self.uGetVar:str                        = u''
         self.uGlobalDestVar:str                 = u''
         self.uLocalDestVar:str                  = u''
+        self.iCodeOK:int                        = 0  # used by some interfaces
         self.uFunctionContext:str
 
         if "actionname" in kwargs:
@@ -170,7 +171,6 @@ class cAction:
 
             if self.oParentWidget:
                 uInterFace         =  self.dActionPars.get(u'interface',oParentWidget.oParentScreenPage.uDefaultInterface)
-                # uConfigName        =  self.dActionPars.get(u'configname',oParentWidget.oParentScreenPage.iDefaultConfigName)
 
             uInterFace         =  self.dActionPars.get(u'interface',uInterFace)
 

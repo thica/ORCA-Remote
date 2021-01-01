@@ -38,10 +38,10 @@
         <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_menu_tv.xml" parse="xml" />
       </element>
     </element>
-    <element name='Anchor Volume Button' type='ANCHOR' posx='%87' posy='of:top:Anchor Media section' width='of:width:Button Channel Up' height='%71' interface='$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)' configname='$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)'>
+    <element name='Anchor Volume Button' type='ANCHOR' posx='%87' posy='of:top:Anchor Media section' width='of:width:Button Mute' height='%71' interface='$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)' configname='$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)'>
         <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_volume_buttons_ls_small.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Buttons"/>
     </element>
-    <element name='Anchor Volume Slider' type='ANCHOR' posx='%87' posy='of:top:Anchor Media section' width='of:width:Button Channel Up' height='%71' interface='$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)' configname='$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)'>
+    <element name='Anchor Volume Slider' type='ANCHOR' posx='%87' posy='of:top:Anchor Media section' width='of:width:Button Mute' height='%71' interface='$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_VOLUME)' configname='$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_VOLUME)'>
        <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_volume_slider_ls_small.xml" parse="xml" condition="$var($dvar(definition_alias_mediaplayer_template)_VOLUMECONTROLTYPE)==Slider" />
     </element>
     <element name='Anchor PowerOnOff' type='ANCHOR' posx='%98' posy='of:totop:Anchor BottomGap' width='of:height:self:*0.5' height='of:height:Anchor Play Buttons'>

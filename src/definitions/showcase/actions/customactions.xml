@@ -32,6 +32,11 @@
     <action name="" string="setwidgetattribute" widgetname="ButtonBiState" attributename="caption" attributevalue="Off" condition="$var(STATUSBUTTONBISTATE)==0"/>
   </action>
 
+  <action name="ToggleCheckbox">
+    <action name="Invert the State Variable" string="modifyvar" varname="STATUSCHECKBOX"  operator="invert"/>
+    <action name="" string="updatewidget Checkbox" />
+  </action>
+
   <action name="ToggleButtonTriState">
     <action name="Check if TriState is OFF"  string="goto ToggleButtonTriState_OFF to On" condition="$var(STATUSBUTTONTRISTATE)==OFF"/>
     <action name="Check if TriState is On"   string="goto ToggleButtonTriState_ON to Auto"  condition="$var(STATUSBUTTONTRISTATE)==ON"/>
@@ -44,7 +49,6 @@
     <action name="Goto Set Caption" string="goto ToggleButtonTriState_SETCAPTION" />
     <action name="ToggleButtonTriState_SETCAPTION" string="setwidgetattribute" widgetname="ButtonTriState" attributename="caption" attributevalue="$var(STATUSBUTTONTRISTATE)" />
   </action>
-
 
   <action name="Update Slider Hor Values">
     <action name="Update Widget Slider Text" string="updatewidget Slider Hor Textvalue" />
@@ -168,6 +172,21 @@
         <action name="Update ScrollView" string="updatewidget ScrollBox 2cnd right" />
     </action>
 
+    <action name="FKT_SwitchTab">
+        <action name="Disable Tab1"  string="setwidgetattribute" widgetname="Anchor Content Tab1" attributename="enable" attributevalue="0"/>
+        <action name="Disable Tab2"  string="setwidgetattribute" widgetname="Anchor Content Tab2" attributename="enable" attributevalue="0"/>
+        <action name="Disable Tab3"  string="setwidgetattribute" widgetname="Anchor Content Tab3" attributename="enable" attributevalue="0"/>
+        <action name="Disable Tab4"  string="setwidgetattribute" widgetname="Anchor Content Tab4" attributename="enable" attributevalue="0"/>
+        <action name="Disable Tab5"  string="setwidgetattribute" widgetname="Anchor Content Tab5" attributename="enable" attributevalue="0"/>
+        <action name="Disable Tab6"  string="setwidgetattribute" widgetname="Anchor Content Tab6" attributename="enable" attributevalue="0"/>
+        <action name="Enable Tab1"   string="setwidgetattribute" widgetname="Anchor Content Tab1" attributename="enable" attributevalue="1" condition="$var(TAB_1)=1"/>
+        <action name="Enable Tab2"   string="setwidgetattribute" widgetname="Anchor Content Tab2" attributename="enable" attributevalue="1" condition="$var(TAB_2)=1"/>
+        <action name="Enable Tab3"   string="setwidgetattribute" widgetname="Anchor Content Tab3" attributename="enable" attributevalue="1" condition="$var(TAB_3)=1"/>
+        <action name="Enable Tab4"   string="setwidgetattribute" widgetname="Anchor Content Tab4" attributename="enable" attributevalue="1" condition="$var(TAB_4)=1"/>
+        <action name="Enable Tab5"   string="setwidgetattribute" widgetname="Anchor Content Tab5" attributename="enable" attributevalue="1" condition="$var(TAB_5)=1"/>
+        <action name="Enable Tab6"   string="setwidgetattribute" widgetname="Anchor Content Tab6" attributename="enable" attributevalue="1" condition="$var(TAB_6)=1"/>
+
+    </action>
 
 
 </includes>

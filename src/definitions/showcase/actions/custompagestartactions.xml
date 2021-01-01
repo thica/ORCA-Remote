@@ -10,6 +10,7 @@
 
     <action name="" string="setvar STATUSBUTTONBISTATE=0" />
     <action name="" string="setvar STATUSBUTTONTRISTATE=ON" />
+    <action name="" string="setvar STATUSCHECKBOX=0" />
     <action name="" string="setvar LIMITEDKNOB=10" />
     <action name="" string="setvar LIMITEDKNOB_degree=0" />
     <action name="" string="setvar LIMITEDKNOB_absdegree=0" />
@@ -64,6 +65,14 @@
     <action name="" string="setvar scrollcontent_movies_text[9]=The Fog" />
     <action name="" string="setvar scrollcontent_movies_text[10]=Halloween" />
     <action name="" string="setvar scrollcontent_movies_text[11]=The Thing" />
+    <action name="" string="setvar scrollcontent_movies_text[11]=The Thing" />
+
+    <action name="" string="setvar TAB_1=1" />
+    <action name="" string="setvar TAB_2=0" />
+    <action name="" string="setvar TAB_3=0" />
+    <action name="" string="setvar TAB_4=0" />
+    <action name="" string="setvar TAB_5=0" />
+    <action name="" string="setvar TAB_6=0" />
 
   </pagestartaction>
   <pagestartaction name="definitionstart">
@@ -129,14 +138,17 @@
     <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
   </pagestartaction>
 
+  <pagestartaction name="Page_Tabs">
+    <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
+    <action name="Update Widget Logfile" string="updatewidget Definition File" />
+  </pagestartaction>
+
   <pagestartaction name="Page_ShowFileDemo">
     <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
     <action name="Update Widget Logfile" string="updatewidget Definition File1" />
     <action name="Update Widget Logfile" string="updatewidget Definition File2" />
     <action name="Update Widget Logfile" string="updatewidget Definition File3" />
-
   </pagestartaction>
-
 
   <pagestartaction name="Page_Gestures">
     <action name="Disable clock on Topline" string="setwidgetattribute" widgetname="Clock" attributename="enable" attributevalue="0"/>
@@ -168,10 +180,10 @@
   </pagestartaction>
 
   <pagestopaction name="Page_Video">
-    <action name="" string="addtrigger" triggername ="position"  interface="$var(VIDEO_INTERFACE_2)" configname="$var(VIDEO_CONFIGNAME_2)"/>
-    <action name="" string="addtrigger" triggername ="duration"  interface="$var(VIDEO_INTERFACE_2)" configname="$var(VIDEO_CONFIGNAME_2)"/>
-    <action name="" string="addtrigger" triggername ="position"  interface="$var(VIDEO_INTERFACE_1)" configname="$var(VIDEO_CONFIGNAME_1)"/>
-    <action name="" string="addtrigger" triggername ="duration"  interface="$var(VIDEO_INTERFACE_1)" configname="$var(VIDEO_CONFIGNAME_1)"/>
+    <action name="" string="deletetrigger" triggername ="position"  actionname="trigger_on_positionvideo2changed" interface="$var(VIDEO_INTERFACE_2)" configname="$var(VIDEO_CONFIGNAME_2)"/>
+    <action name="" string="deletetrigger" triggername ="duration"  actionname="trigger_on_durationvideo2changed" interface="$var(VIDEO_INTERFACE_2)" configname="$var(VIDEO_CONFIGNAME_2)"/>
+    <action name="" string="deletetrigger" triggername ="position"  actionname="trigger_on_positionvideo1changed" interface="$var(VIDEO_INTERFACE_1)" configname="$var(VIDEO_CONFIGNAME_1)"/>
+    <action name="" string="deletetrigger" triggername ="duration"  actionname="trigger_on_durationvideo1changed" interface="$var(VIDEO_INTERFACE_1)" configname="$var(VIDEO_CONFIGNAME_1)"/>
   </pagestopaction>
 
 

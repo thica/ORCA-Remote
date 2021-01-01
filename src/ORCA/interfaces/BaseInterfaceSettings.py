@@ -23,6 +23,7 @@ from typing                                     import List
 from typing                                     import Union
 from typing                                     import Any
 from typing                                     import Tuple
+from typing                                     import Optional
 
 from copy                                       import copy
 from xml.etree.ElementTree                      import Element
@@ -89,6 +90,7 @@ class cBaseInterFaceSettings(cBaseSettings):
         self.dStandardActions:Dict[str,Union[cAction,None]]     = {"ping":None,"defaultresponse":None}
         self.bStandardActionsLoaded:bool                        = False
         self.oResultParser:Union[cInterFaceResultParser,None]   = None
+        self.dNewTriggers:Dict[str,List[cBaseTrigger]]          = {}
 
     def ReadStandardActions(self) -> None:
         """ Reads the standard codeset codes eg ping """
@@ -343,19 +345,49 @@ class cBaseInterFaceSettings(cBaseSettings):
                 oTrigger.uTriggerName = oAction.uCmd
         '''
         self.dTriggers[uTrigger] = oTrigger
+        return self.AddTriggerNew(uTrigger,uActionName,uRetVar,uGetVar)
         return oTrigger
 
-    def DelTrigger(self,uTrigger:str) -> None:
+    def AddTriggerNew(self,uTrigger:str,uActionName:str,uRetVar:str,uGetVar:str) -> cBaseTrigger:
+        """
+        Adds a trigger
+
+        :rtype: cBaseTrigger
+        :param string uTrigger: The name of the trigger
+        :param string uActionName: The Action to call
+        :param string uRetVar: The return var
+        :param string uGetVar: The var to parse
+        :return: The trigger
+        """
+
+        oTrigger:cBaseTrigger               = cBaseTrigger()
+        oTrigger.uTriggerAction             = uActionName
+        oTrigger.uRetVar                    = uRetVar
+        oTrigger.uGetVar                    = uGetVar
+        oTrigger.uTriggerName               = uTrigger
+        oTrigger.uGlobalDestVar             = uRetVar
+        oTrigger.uLocalDestVar              = uRetVar
+
+        aCurrentTriggers:List[cBaseTrigger]=self.dNewTriggers.get(uTrigger,[])
+        aCurrentTriggers.append(oTrigger)
+        self.dNewTriggers[uTrigger]=aCurrentTriggers
+        return oTrigger
+
+    def DelTrigger(self,uTrigger:str,uActionName:str) -> None:
         """
         deletes a trigger
 
         :param string uTrigger: The Name of the trigger to delete
+        :param string uActionName: The Action which has been registered
         """
 
-        if uTrigger in self.dTriggers:
-            del self.dTriggers[uTrigger]
+        oTrigger:cBaseTrigger               = cBaseTrigger()
 
-    def GetTrigger(self,uTrigger:str) -> Union[cBaseTrigger,None]:
+        if uTrigger in self.dNewTriggers:
+            aCurrentTriggers:List[cBaseTrigger]=self.dNewTriggers.get(uTrigger,[])
+            aCurrentTriggers[:] = [oTrigger for oTrigger in aCurrentTriggers if oTrigger.uTriggerAction!=uActionName]
+
+    def GetTrigger(self,uTrigger:str) -> List[cBaseTrigger]:
         """
         We do not use the index, as the uTrigger might not reflect the Trigger Name,
         it could be an Trigger parsed by the result eg defined by an codesetcode
@@ -364,11 +396,16 @@ class cBaseInterFaceSettings(cBaseSettings):
         :return:
         """
 
-        for uTriggerIdx in self.dTriggers:
-            oTrigger = self.dTriggers[uTriggerIdx]
-            if oTrigger.uTriggerName == uTrigger[:len(oTrigger.uTriggerName)]:
-                return oTrigger
-        return None
+        aTriggers:List[cBaseTrigger]
+        aResult:List[cBaseTrigger] = []
+        oTrigger:cBaseTrigger
+
+        for uTriggerIdx in self.dNewTriggers:
+            aTriggers = self.dNewTriggers[uTriggerIdx]
+            for oTrigger in aTriggers:
+                if oTrigger.uTriggerName == uTrigger[:len(oTrigger.uTriggerName)]:
+                    aResult.append(oTrigger)
+        return aResult
 
     def CallTrigger(self,oTrigger:cBaseTrigger,uResponse:str) -> None:
         """
@@ -445,3 +482,29 @@ class cBaseInterFaceSettings(cBaseSettings):
         self.ShowDebug(uMsg=u'Closing Connection')
         Clock.unschedule(self.FktDisconnect)
         return True
+
+
+    def GetTriggerOld(self,uTrigger:str) -> Union[cBaseTrigger,None]:
+        """
+        We do not use the index, as the uTrigger might not reflect the Trigger Name,
+        it could be an Trigger parsed by the result eg defined by an codesetcode
+
+        :param string uTrigger:
+        :return:
+        """
+
+        for uTriggerIdx in self.dTriggers:
+            oTrigger = self.dTriggers[uTriggerIdx]
+            if oTrigger.uTriggerName == uTrigger[:len(oTrigger.uTriggerName)]:
+                return oTrigger
+        return None
+
+    def DelTriggerOld(self,uTrigger:str) -> None:
+        """
+        deletes a trigger
+
+        :param string uTrigger: The Name of the trigger to delete
+        """
+
+        if uTrigger in self.dTriggers:
+            del self.dTriggers[uTrigger]

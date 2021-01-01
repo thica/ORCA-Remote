@@ -34,8 +34,8 @@ import ORCA.Globals as Globals
       <description language='English'>Script to adding debugging fuctions on specific keys</description>
       <description language='German'>Script um debugging Funktionen auf einzelne Tasten zu legen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>

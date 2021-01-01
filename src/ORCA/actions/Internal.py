@@ -81,7 +81,7 @@ class cEventActionsInternal(cEventActionBase):
     def ExecuteActionCheckToRotate(self,oAction:cAction) -> eReturnCode:
         """
             checktorotate:
-            Checks, if rotation is required. Needs to be excecuted before any pages are loaded
+            Checks, if rotation is required. Needs to be executed before any pages are loaded
             Parameter:
             None
         """
@@ -154,7 +154,7 @@ class cEventActionsInternal(cEventActionBase):
         loadlanguages:
             Loads the core languages, which are there even without the online resources or a specific language file
             Parameter:
-            languagefilename: if give a specific language file will be loaded, otherwise the core languares are loaded
+            languagefilename: if give a specific language file will be loaded, otherwise the core languages are loaded
             definition: the definition name for the definition vars
         """
         self.oEventDispatcher.LogAction(uTxt=u'LoadLanguages',oAction=oAction)
@@ -439,9 +439,9 @@ class cEventActionsInternal(cEventActionBase):
             None
         """
 
-        bRet:bool = False
         self.oEventDispatcher.LogAction(uTxt=u'ExecuteFTPCommand',oAction=oAction)
 
+        bRet:bool               = False
         uCommand:str            = ReplaceVars(oAction.dActionPars.get("command",  ""))
         uHost:str               = ReplaceVars(oAction.dActionPars.get("host",     ""))
         uUsername:str           = ReplaceVars(oAction.dActionPars.get("user",     ""))
@@ -456,9 +456,9 @@ class cEventActionsInternal(cEventActionBase):
             Globals.oFTP = cFTP(ToBool(uSSL))
 
         if uCommand==u'connect':
-            bRet = Globals.oFTP.Connect(uServer = uHost)
+            bRet = Globals.oFTP.Connect(uServer=uHost)
             if bRet:
-                bRet=Globals.oFTP.Login(uUsername = uUsername, uPassword=uPassword )
+                bRet=Globals.oFTP.Login(uUsername=uUsername, uPassword=uPassword )
         elif uCommand==u'disconnect':
             bRet=Globals.oFTP.DisConnect()
         elif uCommand==u'uploadfile':

@@ -176,7 +176,7 @@ class cInterFaceConfigDiscover:
         uScriptSubTypeName:str
 
         for uScriptName in self.oInterFace.oObjectConfig.aDiscoverScriptList:
-            uScriptSubTypeName = Globals.oScripts.dScripts[uScriptName].uSubType
+            uScriptSubTypeName = Globals.oScripts.GetScript(uScriptName).uSubType
             if uScriptSubTypeName in self.oInterFace.aDiscoverScriptsBlackList:
                continue
             if len(self.oInterFace.aDiscoverScriptsWhiteList)>0:

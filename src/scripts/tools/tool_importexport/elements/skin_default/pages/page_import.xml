@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page name='Page_Import'>
+    <page_parameter>
+        <popup>1</popup>
+        <preventpreinit>1</preventpreinit>
+    </page_parameter>
+    <elements>
+        <element name='Background Dimmed' type='BACKGROUND' backgroundcolor='$var(black)' />
+        <element name="Button Back" type="BUTTON"    posx="right"  posy="top"            width="%4"   height="of:width:self" picturenormal="button wide*" action="gotosettingspage" fontsize='%40' caption="icon:close_window" />
+        <element name='Title'       type="TEXTFIELD" posx="center" posy="top"            width="%80"  height="of:height:Button Back"  fontsize='%h50' textcolor='$var(white)' caption='$lvar(SCRIPT_TOOLS_IMPORTEXPORT_9)' htextalign='center' vtextalign='top' />
+        <element name="Anchor"      type="ANCHOR"    posx="center" posy="of:bottom:last" width="%100" height="%90"  picturenormal='background boxes' >
+            <element name='Shadow'        type='RECTANGLE'    backgroundcolor='$var(black)' />
+            <element name="FileBrowser"   type="FILEBROWSER"  height="%92" dirselect="1" action="Fkt Import_Export" actioncancel="gotosettingspage"/>
+            <element name="Checkbox Import" type="SWITCH"       posx="%1"            posy="bottom"           width="of:height:self" height="of:height:Title" picturenormal="$var(RESOURCEPATH)/pics/kivypics/checkbox_off.png" picturepressed="$var(RESOURCEPATH)/pics/kivypics/checkbox_on.png" destvar="CHECKBOX_EXPORT_CHANGE_LOCATION" />
+            <element name="Anchor Gap"    type="ANCHOR"       posx="of:right:last" posy="of:tobottom:last" width="%1"             height="of:height:last"  />
+            <element name='Checkbox Text' type="TEXTFIELD"    posx="of:right:last" posy="of:tobottom:last" width="%94"            height="of:height:last"  fontsize='%h50' textcolor='$var(white)' caption='Rest Orca path to use original location' htextalign='left' action="ToggleCheckbox_IMPORT_CHANGE_LOCATION"/>
+        </element>
+    </elements>
+</page>

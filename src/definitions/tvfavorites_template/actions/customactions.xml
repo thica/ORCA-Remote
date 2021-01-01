@@ -48,7 +48,7 @@
 
     <action name="$dvar(definition_alias_tvfavorites_template)_switchchannel" >
       <action name="compose channel name part 1" string="setvar tmpchannelnum=$dvar(definition_alias_tvfavorites_template)_tvchannel[$var($dvar(definition_alias_tvfavorites_template)_bouquet)][$par(CHANNELNUM)]"   />
-      <action name="compose cannel  name part 2" string="modifyvar" operator="fromvar" varname="tmpchannelnum" />
+      <action name="compose channel name part 2" string="modifyvar" operator="fromvar" varname="tmpchannelnum" />
       <action name="Switch Channel" string="Send Channel Select" commandparameter='{"CHANNELNUM":"$var(tmpchannelnum)"}' />"
     </action>
 

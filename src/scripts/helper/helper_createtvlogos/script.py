@@ -42,8 +42,8 @@ import ORCA.Globals as Globals
       <description language='English'>Helper script to create TV Logos (internal)</description>
       <description language='German'>Hilfs - Skript zum Erstellen der TV Logos (internal)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <skip>1</skip>
       <sources>
         <source>
@@ -86,9 +86,7 @@ class cScript(cBaseScript):
         :param str uObjectName: The name of the script (to be passed to all scripts)
         :param cFileName oFnScript: The file of the script (to be passed to all scripts)
         """
-
         super().Init(uObjectName= uObjectName, oFnObject=oFnScript)
-
 
     def RunScript(self, *args:List, **kwargs:Dict) -> Union[Dict,None]:
         """ Main Entry point, parses the cmd_type and calls the relevant functions """

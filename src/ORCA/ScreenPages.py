@@ -20,8 +20,9 @@
 
 from typing                         import Union
 from typing                         import List
+from typing                         import Dict
 
-
+from dataclasses                    import dataclass
 from xml.etree.ElementTree          import Element
 from collections                    import deque
 from kivy.logger                    import  Logger
@@ -37,20 +38,25 @@ if TYPE_CHECKING:
     from ORCA.Action     import cAction
 else:
     from typing import TypeVar
-    cAction     = TypeVar("cAction")
+    # cAction     = TypeVar("cAction")
 
+@dataclass
 class cPageHistory:
-    def __init__(self, uCalledByPageName,uPageName):
-        self.uCalledByPageName  = uCalledByPageName
-        self.uPageName          = uPageName
+    """
+    A history object of the called page
+    """
+    uCalledByPageName:str
+    uPageName:str
 
-class cScreenPages(dict):
+
+class cScreenPages(Dict[str,cScreenPage]):
     """ Class which holds all Screen Pages """
     def __init__(self):
         dict.__init__(self)
         self.aPageHistory:deque[cPageHistory] = deque(maxlen=30)
 
     def DeInit(self) -> None:
+        """De-inits the list of pages"""
         self.clear()
         self.aPageHistory.clear()
 
@@ -110,7 +116,7 @@ class cScreenPages(dict):
                 # Scheduling Creating the pages
                 aActions=Globals.oEvents.CreateSimpleActionList(aActions=[{'string':'showsplashtext','maintext':'$lvar(410)'}])
 
-                for uPageName in self:
+                for uPageName in self.keys():
                     SetVar(uVarName = "PAGESTARTCOUNT_"+uPageName, oVarValue = "0")
                     if not uPageName=="Page_Settings":
                         Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showsplashtext','subtext':uPageName},
@@ -143,10 +149,9 @@ class cScreenPages(dict):
             Create the next page, which has not been init by now
             return true , if a page has been initialized, false if nothing left """
 
-        uPageName: str
+        oPage:cScreenPage
 
-        for uPageName in self:
-            oPage=self[uPageName]
+        for oPage in self.values():
             if not oPage.bIsInit and not oPage.bPreventPreInit:
                 oPage.Create()
                 return True

@@ -165,9 +165,10 @@ class cEventActionsVarControl(cEventActionBase):
         "Lowercase","Uppercase","Trim" works on string variables
         "Concatenate" , "Getpart", "Format" works on all variable types
         "Getlen" and "Find" are the only sub action, that will not modify the var, it will return the result in a different var
-        "Load" and "Save" are options to create persistant variables. You can sav a variable value and reload the value at the next application start.
+        "Load" and "Save" are options to create persistent variables. You can sav a variable value and reload the value at the next application start.
         Some note on "Getpart", which is to extract a part of string from a string. It follows python rules (eg.: string[start:end]) where start or end could be empty
-        Fromvar converts a variable name into its variable value
+        "Fromvar" converts a variable name into its variable value.
+        "Exists" checks if the variable exist or if a function name with the variable name exists
 
         <div style="overflow:auto; ">
         {| class="wikitable"
@@ -419,7 +420,7 @@ class cEventActionsVarControl(cEventActionBase):
             Var_LoadFile(uVarName = uVarName,uFileName = ReplaceVars(uParameter1))
             bNoVarDetails = True
         elif uOperator==u'exists':
-            if ExistVar(uVarName):
+            if ExistVar(uVarName) or uVarName in Globals.oActions.dActionsCommands:
                 SetVar(uParameter1,"1")
             else:
                 SetVar(uParameter1, "0")

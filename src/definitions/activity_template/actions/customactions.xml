@@ -2,16 +2,32 @@
 <includes  xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <action name="FKT SwitchOn Activity">
-        <action name="Pull Function Vars"                                        string="setvar ACTIVITY_GROUP=$var(FKT SwitchOn Activity_parameter_ACTIVITYGROUP)" />
-        <action name="Pull Function Vars"                                        string="setvar ACTIVITY_NUMBER=$var(FKT SwitchOn Activity_parameter_ACTIVITYNUMBER)" />
+        <action name="Pull Function Vars"                                        string="setvar ACTIVITY_GROUP=$par(ACTIVITYGROUP)" />
+        <action name="Pull Function Vars"                                        string="setvar ACTIVITY_NUMBER=$par(ACTIVITYNUMBER)" />
         <action name="Create Name for PowerStatus part 1"                        string="setvar TMP_POWERSTATUS=ACTIVITY_POWERSTATUS[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
         <action name="Create Name for PowerStatus part 2"                        string="modifyvar" varname="TMP_POWERSTATUS" operator="fromvar"  />
         <action name="Create Name for Start Page part 1"                         string="setvar ACTIVITY_STARTPAGE=ACTIVITY_STARTPAGE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
         <action name="Create Name for Start Page part 2"                         string="modifyvar" varname="ACTIVITY_STARTPAGE" operator="fromvar"  />
         <action name="Show Main Activity Page"                                   string="showpage $var(ACTIVITY_STARTPAGE)" />
-        <action name="if not allready on"                                        string="if $var(TMP_POWERSTATUS)!=ON"/>
-            <action name="Block the gui"                                         string="blockgui 1"/>
-            <action name="Dim Screen"                                            string="loadelement" filename="$var(STANDARDELEMENTSPATH)/block_dimmer.xml" pagename="$var(ACTIVITY_STARTPAGE)" />
+        <action name="if not already on"                                         string="if $var(TMP_POWERSTATUS)!=ON"/>
+            <action name="Block the gui"                                             string="blockgui 1"/>
+            <action name="Dim Screen"                                                string="loadelement" filename="$var(STANDARDELEMENTSPATH)/block_dimmer.xml" pagename="$var(ACTIVITY_STARTPAGE)" />
+            <!--  We try the detect the media player definition var so we can use the media player functions, if available -->
+            <action name="Init Var"                                                  string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR=" />
+            <action name="Init Var"                                                  string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION=" />
+            <action name="Find the definitionvar"                                    string="modifyvar" varname="$var(ACTIVITY_STARTPAGE)" operator="find" parameter1="Page_Device_" parameter2="findresult" />
+            <action name="if we found something"                                     string="if $var(findresult)==0" />
+                <action name="Set Definition var"                                    string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR=$var(ACTIVITY_STARTPAGE)" />
+                <action name="Adjust the definitionvar"                              string="modifyvar" varname="$dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR" operator="getpart" parameter1="12" parameter2="" />
+                <action name="Create Function Name"                                  string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION=Set Volume $var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR)" />
+                <action name="check if function exists"                              string="modifyvar" varname="$var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION)" operator="exists"  parameter1="TMPFUNCEXISTS" />
+                <action name="if we haven't found the function, reset the definition and function name" string="if $var(TMPFUNCEXISTS)==0" />
+                    <action name="Reset Var"                                         string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR=" />
+                    <action name="Reset Var"                                         string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION=" />
+                <action name="endif"                                                 string="endif" />
+            <action name="endif"                                                     string="endif" />
+
+
             <action name="Switch off all unused devices"                         string="call FKT SwitchOffUnusedActivityGroupDevices" />
             <action name="Pull Function name #1"                                 string="setvar ACTIVITY_PREPOWERONACTION=ACTIVITY_PREPOWERONACTION[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
             <action name="Create tmpar part  #2"                                 string="modifyvar" varname="ACTIVITY_PREPOWERONACTION" operator="fromvar"  />
@@ -75,8 +91,8 @@
         <action name="if we have a input selection"                                                                                string="if $var(inputaction)!=NoAction" />
           <action name="Find sendcommand "                                                                                         string="modifyvar" varname="$var(inputaction)" operator="find" parameter1="sendcommand " parameter2="findresult" />
           <action name="we have sendcommand so parse the command"                                                                  string="if $var(findresult)=0" />
-             <action name="parse the coommand part 1"                                                                              string="setvar tmp_sendcommand=$var(inputaction)" />
-             <action name="parse the coommand part 2 "                                                                             string="modifyvar" varname="tmp_sendcommand" operator="getpart" parameter1="12" parameter2="" />
+             <action name="parse the command part 1"                                                                               string="setvar tmp_sendcommand=$var(inputaction)" />
+             <action name="parse the command part 2 "                                                                              string="modifyvar" varname="tmp_sendcommand" operator="getpart" parameter1="12" parameter2="" />
              <action name="Select input by send command"                                                                           string="sendcommand $var(tmp_sendcommand)" interface="$var(DEVICEMAININTERFACE)" configname="$var(DEVICEMAINCONFIGNAME)"/>
           <action name="endif"                                                                                                     string="endif"/>
           <action name="if we will not use sendcommand"                                                                            string="if $var(findresult)=-1" />
@@ -87,11 +103,16 @@
         <action name="endif"                                                                                                       string="endif"/>
 
         <!-- Init Volume, if given-->
-        <action name="Init Volume, if given"                                                                                       string="if $var(volumetoset)!=-1" />
-           <action name="Set the volume var"                                                                                       string="setvar volumetoset=$var(volumetoset)" />
-           <action name="Set the volume"                                                                                           string="Send Set Volume" interface="$var(DEVICEVOLUMEINTERFACE)" configname="$var(DEVICEVOLUMECONFIGNAME)"  />
-           <action name="Update Volume text (FKT WaitFor Activity_Device)"                                                         string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
-        <action name="endif"                                                                                                       string="endif"/>
+        <action name="Init Volume, if given"                            string="if $var(volumetoset)!=-1" />
+            <action name="If we have a mediaplayer volume function"     string="if $var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION)!=" />
+              <action name="Set the volume by mediaplayer function"     string="call $var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION)" volumetoset="$var(volumetoset)"/>
+            <action name="endif"                                        string="endif"/>
+            <action name="If we do not have a mediaplayer volume function"  string="if $var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION)==" />
+              <action name="Set the volume var"                         string="setvar volumetoset=$var(volumetoset)" />
+              <action name="Set the volume"                             string="Send Set Volume" interface="$var(DEVICEVOLUMEINTERFACE)" configname="$var(DEVICEVOLUMECONFIGNAME)"  />
+              <action name="Update Volume text (FKT WaitFor Activity_Device)"  string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
+            <action name="endif"                                        string="endif"/>
+        <action name="endif"                                            string="endif"/>
     </action>
 
     <action name="FKT CreateArrayDevicesForActivityGroups">
@@ -99,7 +120,7 @@
     </action>
     <action name="FKT CreateArrayDevicesForActivityGroup">
         <action name="Increase n# of Groups"                         string="modifyvar" varname="ACTIVITY_CNTGROUPS" operator="increase"  parameter1="1" />
-        <action name="Init Numer of Activities per Group"            string="setvar ACTIVITY_GROUP_CNTACTIVITIES[$var(ACTIVITY_CNTGROUPS)]=0" />
+        <action name="Init Number of Activities per Group"           string="setvar ACTIVITY_GROUP_CNTACTIVITIES[$var(ACTIVITY_CNTGROUPS)]=0" />
         <action name="Set Group Index"                               string="setvar ACTIVITY_GROUP=$par(forin_index)" />
         <action name="Loop through all Activity-Devices to Power On" string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][]"  level="2" actionname="FKT CreateArrayDevicesForActivityGroup_Sub" />
         <action name="Count Activities"                              string="forin" varname="ACTIVITY_NAME[$var(ACTIVITY_GROUP)][]"   level="2" actionname="FKT CntActivitiesPerActivityGroup" />
@@ -115,9 +136,9 @@
     <action name="FKT SwitchOff Activity">
         <action name="Create Name for PowerStatus part 1"   string="setvar TMP_POWERSTATUS=ACTIVITY_POWERSTATUS[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
         <action name="Create Name for PowerStatus part 2"   string="modifyvar" varname="TMP_POWERSTATUS" operator="fromvar"  />
-        <action name="if not allready off"                  string="if $var(TMP_POWERSTATUS)!=OFF"/>
+        <action name="if not already off"                   string="if $var(TMP_POWERSTATUS)!=OFF"/>
             <action name="Pull Function name #1"            string="setvar ACTIVITY_PREPOWEROFFACTION=ACTIVITY_PREPOWEROFFACTION[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
-            <action name="Create tmpar part  #2"            string="modifyvar" varname="ACTIVITY_PREPOWEROFFACTION" operator="fromvar"  />
+            <action name="Create tmpvar part  #2"           string="modifyvar" varname="ACTIVITY_PREPOWEROFFACTION" operator="fromvar"  />
             <action name="Call PrePowerOff Action"          string="call $var(ACTIVITY_PREPOWEROFFACTION)" condition="$var(ACTIVITY_PREPOWEROFFACTION)!=NoAction" />
             <!-- not 100% correct:we switch of all activygroupdevices instead of devices of a activity.should result in the same-->
             <action name="Switch off Devices"               string="call FKT SwitchOffUsedActivityGroupDevices" />

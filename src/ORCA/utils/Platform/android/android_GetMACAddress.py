@@ -29,7 +29,13 @@ from ORCA.utils.Platform.android.android_helper     import GetAndroidModule
 
 __all__ = ['GetMACAddress']
 
-def GetMACAddress() -> List:
+def GetMACAddress() -> List[str]:
+
+    """
+    Retrieves the MAC Address on an Android device
+
+    :return: A List of MAC Addresses (strings): First with colon as separator, second with colon as separator
+    """
 
     uRetColon:str = u'00:00:00:00:00:00'
     uRetDash:str  = u'00-00-00-00-00-00'
@@ -42,6 +48,6 @@ def GetMACAddress() -> List:
         uRetColon            = oWifiManager.getConnectionInfo().getMacAddress()
         uRetDash             = uRetColon.replace(":","-")
     except Exception as e:
-        Logger.error("Error on GetMACAdress:"+str(e))
+        Logger.error("Error on GetMACAddress:"+str(e))
 
     return [uRetColon,uRetDash]

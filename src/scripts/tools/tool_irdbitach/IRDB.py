@@ -560,7 +560,7 @@ class ITachIRDB(cBasePopup):
     def Save_As_CCF(self,oSet):
         oRoot:Element
         oRootToUse:Element
-        oCodesetCode:SubElement()
+        oCodesetCode:SubElement
         oFunction:cIRCode
         uRepeat:str
         uString:str

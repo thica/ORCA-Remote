@@ -50,8 +50,8 @@ from ORCA.actions.ReturnCode               import eReturnCode
       <description language='English'>Interface to send web based commands</description>
       <description language='German'>Interface um webbasierte Kommandos zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/url</local>

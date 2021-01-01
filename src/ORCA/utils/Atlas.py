@@ -21,12 +21,15 @@
 
 import os
 
+from typing                 import Optional
+from typing                 import List
+
 from kivy.atlas             import Atlas
 from kivy.cache             import Cache
 from kivy.logger            import Logger
 
-from ORCA.utils.FileName import cFileName
-from ORCA.utils.Path import cPath
+from ORCA.utils.FileName    import cFileName
+from ORCA.utils.Path        import cPath
 from ORCA.utils.LogError    import LogError
 from ORCA.utils.TypeConvert import ToUnicode
 
@@ -41,9 +44,10 @@ def ToAtlas(*,oFileName: cFileName) -> str:
     :param cFileName oFileName:
     :return: Found FileName
     """
-    uRetFileName: str       = oFileName.string
-    oFnSkinPic: cFileName   = Globals.oTheScreen.oSkin.dSkinPics.get(uRetFileName)
+    uRetFileName: str               = oFileName.string
+    oFnSkinPic: Optional[cFileName] = Globals.oTheScreen.oSkin.dSkinPics.get(uRetFileName)
     oFn:cFileName
+    oAtlas:Atlas
 
     if not oFnSkinPic is None:
         uRetFileName = oFnSkinPic.string
@@ -60,7 +64,7 @@ def ToAtlas(*,oFileName: cFileName) -> str:
     else:
         return uRetFileName
 
-    oAtlas: Atlas = Cache.get('kv.atlas', oFn.string)
+    oAtlas = Cache.get('kv.atlas', oFn.string)
 
     if oAtlas:
         if not oAtlas.textures.get(uKey) is None:
@@ -77,6 +81,13 @@ def CreateAtlas(*,oPicPath: cPath,oAtlasFile: cFileName,uDebugMsg: str) -> None:
     :param string uDebugMsg: A Debug Message for the function
     :return:
     """
+
+    aExtensions:List[str]
+    aPicFiles:List[str]
+    aFileList:List[str]
+    uExtension:str
+    uFileName:str
+
     if Globals.bIgnoreAtlas:
         return
 
@@ -89,10 +100,10 @@ def CreateAtlas(*,oPicPath: cPath,oAtlasFile: cFileName,uDebugMsg: str) -> None:
             Logger.debug(uDebugMsg)
             #aExtensions=[u'.png',u'.jpg',u'.bmp',u'.gif']
             # we exclude gifs as they might be animated
-            aExtensions=[u'.png',u'.jpg',u'.bmp']
-            aPicFiles=[]
+            aExtensions = [u'.png',u'.jpg',u'.bmp']
+            aPicFiles   = []
 
-            aFileList=oPicPath.GetFileList(bSubDirs=False , bFullPath=True)
+            aFileList = oPicPath.GetFileList(bSubDirs=False , bFullPath=True)
             for uFileName in aFileList:
                 uExtension = os.path.splitext(uFileName)[1].lower()
                 if uExtension in aExtensions:
@@ -102,16 +113,21 @@ def CreateAtlas(*,oPicPath: cPath,oAtlasFile: cFileName,uDebugMsg: str) -> None:
                 Atlas.create(oAtlasFile.string[:-6],aPicFiles,1024)
             except Exception as e:
                 LogError(uMsg=u'Error creating Atlas File (1):', oException=e)
-                pass
     except Exception as e:
         LogError(uMsg=u'Error creating Atlas File (2):',oException=e)
 
 def ClearAtlas() -> None:
     """ deletes all atlas files """
     #we clear all cache files for all definitions by purpose
+
+    uSkinName:str
+    uDefinitionName:str
+    oPathAtlasSkin: cPath
+    oPathDefinitionAtlas: cPath
+
     for uSkinName in Globals.aSkinList:
-        oPathAtlasSkin: cPath = Globals.oPathRoot + ('skins/' + uSkinName + u'/atlas')
+        oPathAtlasSkin = Globals.oPathRoot + ('skins/' + uSkinName + u'/atlas')
         oPathAtlasSkin.Clear()
     for uDefinitionName in Globals.aDefinitionList:
-        oPathDefinitionAtlas: cPath = Globals.oPathRoot + ('definitions/' + uDefinitionName + u'/atlas')
+        oPathDefinitionAtlas = Globals.oPathRoot + ('definitions/' + uDefinitionName + u'/atlas')
         oPathDefinitionAtlas.Clear()

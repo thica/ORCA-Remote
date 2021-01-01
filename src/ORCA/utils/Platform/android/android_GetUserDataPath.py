@@ -22,11 +22,12 @@ from typing import List
 
 from kivy.logger             import Logger
 # noinspection PyUnresolvedReferences
-from jnius                   import autoclass
+# from jnius                   import autoclass
 from ORCA.utils.Platform     import OS_GetUserDownloadsDataPath
+from ORCA.utils.Platform     import OS_GetInstallationDataPath
+
 from ORCA.utils.Path         import cPath
 from ORCA.utils.FileName     import cFileName
-
 
 import ORCA.Globals as Globals
 
@@ -38,13 +39,10 @@ def Android_GetDataDir() -> cPath:
     and sets a default, if none has been found
     """
 
-    Environment = autoclass('android.os.Environment')
-    uRootPath:str = Environment.getRootDirectory().getPath()
-    Logger.debug("Android Root Folder = "+uRootPath)
-
+    oPathInst:cPath = OS_GetInstallationDataPath()
     uSubDir:str = u'OrcaRemote'
 
-    # on android 6 and higher kivy runs on and error we we fetch the kivy user_data_dir (kivy 1.10.1)
+    # on android 6 and higher kivy runs on and error we fetch the kivy user_data_dir (kivy 1.10.1)
     # replace with a working value
 
     uUserDataDir:str = OS_GetUserDownloadsDataPath()
@@ -57,7 +55,7 @@ def Android_GetDataDir() -> cPath:
     oPreferredUserDataPath.Create()
 
     # First try to Find existing Orca Data Dir
-    aTestDirs:List[cPath]=[oPreferredUserDataPath,cPath(OS_GetUserDownloadsDataPath())+uSubDir,cPath(uRootPath)+uSubDir,cPath("/data/data/org.orca.orca/files/app")]
+    aTestDirs:List[cPath]=[oPreferredUserDataPath,cPath(OS_GetUserDownloadsDataPath())+uSubDir,oPathInst]
     for oTestDir in aTestDirs:
         Logger.debug(u"Try to find Orca installations file at: " + oTestDir.string)
         if (cFileName(cPath(oTestDir)+'actions') + 'actions.xml').Exists():
@@ -70,7 +68,13 @@ def Android_GetDataDir() -> cPath:
         if (cFileName(cPath(oTestDir)+'actions') + 'actionsfallback.xml').Exists():
             Logger.debug(u"Found Orca installations file (Fallback) at " + oTestDir.string)
             if oTestDir != oPreferredUserDataPath and oPreferredUserDataPath.IsWriteable():
-                # lets copy the files outside of the Android App folder to make them accessable to users
+                # lets copy the files outside of the Android App folder to make them accessible to users
+                '''
+                TODO: Currently it just copies it to the sub folder OrcaRemote inm the user app folder, which is not outside of the app, 
+                as in Android 11 we will have further restrictions on placing Application data, this needs to be reworked
+                Also needs to be reworked, that the appstartearly is always taken from the installation folder
+                '''
+                Logger.debug(u"Copy Orca installations file (Fallback) from %s to %s" %(oTestDir.string,oPreferredUserDataPath.string))
                 oTmpSrcDir:cPath = oTestDir +"actions"
                 oTmpDstDir:cPath = oPreferredUserDataPath+"actions"
                 oTmpSrcDir.Copy(oDest=oTmpDstDir)
@@ -81,23 +85,25 @@ def Android_GetDataDir() -> cPath:
             return oTestDir
 
     Logger.error(u"Haven't found Orca installations file")
+
+    Logger.error("Folder content so far")
+    aContent:List[str]
+    uName:str
+    for oTestDir in aTestDirs:
+        Logger.error("Folder:"+oTestDir.string)
+        aContent=oTestDir.GetFolderList()
+        for uName in aContent:
+            Logger.error("Folder:"+uName)
+        aContent=oTestDir.GetFileList()
+        for uName in aContent:
+            Logger.error("File:"+uName)
+
+
     return cPath()
 
-    '''
-    # if we haven't found anything try to find the best writable location
-    Logger.error(u"Haven't found Orca installations file")
-
-    for oTestDir in aTestDirs:
-        if oTestDir.IsWriteable():
-            Logger.debug(u"Fallback: Trying Orca installations file at: " + oTestDir.string)
-            return oTestDir
-
-    #if we are here, we failed
-    return cPath(OS_GetUserDownloadsDataPath()+uSubDir)
-    '''
 
 
 def GetUserDataPath() -> cPath:
     """ Gets the path to the user folder """
-    # we alway keep the Orca Ini File on Android in SDcard Folder
+    # we always keep the Orca Ini File on Android in SD-Card Folder
     return Android_GetDataDir()

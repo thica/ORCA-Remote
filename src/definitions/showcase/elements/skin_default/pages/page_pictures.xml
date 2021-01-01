@@ -13,9 +13,9 @@
     <element name="Picture Orca 2" type="PICTURE" posx="%50"  posy="bottom" width="%13" height="of:width:self:*0.6" picturenormal="logo" action="ShowMessage_Singletap" actiondoubletap="ShowMessage_Doubletap"  />
     <element name="Picture Orca 3" type="PICTURE" posx="%90" posy="bottom" width="%29" height="of:width:self:*0.26" picturenormal="logo" action="ShowMessage_Singletap" actiondoubletap="ShowMessage_Doubletap" />
 
-    <element name="Picture Lion" type="PICTURE" posx="left" posy="%10" width="%31" height="of:width:self" picturenormal="$var(DEFINITIONPATH)/pics/Lion.png" />
-    <element name="Picture Lion" type="PICTURE" posx="%40" posy="%10"  width="%13" height="of:width:self" picturenormal="$var(DEFINITIONPATH)/pics/Lion.png" />
-    <element name="Picture Lion" type="PICTURE" posx="%85" posy="%10"  width="%29" height="of:width:self:*0.26" picturenormal="$var(DEFINITIONPATH)/pics/Lion.png" />
+    <element name="Picture Lion 1" type="PICTURE" posx="left" posy="%10" width="%31" height="of:width:self" picturenormal="$var(DEFINITIONPATH)/pics/Lion.png" />
+    <element name="Picture Lion 2" type="PICTURE" posx="%40" posy="%10"  width="%13" height="of:width:self" picturenormal="$var(DEFINITIONPATH)/pics/Lion.png" />
+    <element name="Picture Lion 3" type="PICTURE" posx="%85" posy="%10"  width="%29" height="of:width:self:*0.26" picturenormal="$var(DEFINITIONPATH)/pics/Lion.png" />
 
     <element name="Rectangle 1" type="RECTANGLE" posx="%70" posy="%10" width="%8" height="of:width:self:*1.2"  backgroundcolor='#00FF0040' />
     <element name="Rectangle 2" type="RECTANGLE" posx="%75" posy="%15" width="%8" height="of:width:self:*1.2"  backgroundcolor='#0000FF40' />
@@ -36,7 +36,6 @@
     <element name="Border 2" type="BORDER" posx="%45" posy="%50" width="%8" height="of:width:self"  backgroundcolor='#0000FFFF' linewidth="1"/>
     <element name="Border 3" type="BORDER" posx="%50" posy="%55" width="%8" height="of:width:self:*1.2"  backgroundcolor='#FF00FFFF' linewidth="of:width:self:*0.01"/>
     <element name="Border 4" type="BORDER" posx="%45" posy="%60" width="%8" height="of:width:self"  linewidth="d3" />
-
 
   </elements>
 </page>

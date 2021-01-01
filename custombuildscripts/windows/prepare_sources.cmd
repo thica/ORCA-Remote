@@ -1,10 +1,25 @@
-rem SETLOCAL EnableDelayedExpansion
+@echo off
+set licz=0
+setlocal
+for /f %%a in ('copy /Z "%~dpf0" nul') do @set "ASCII_13=%%a"
+for /F %%a in ('echo prompt $E ^| cmd') do @set "ESC=%%a"
+setlocal enabledelayedexpansion
+
+SET red=%ESC%[1;31m
+SET grn=%ESC%[1;32m
+SET yel=%ESC%[1;33m
+SET blu=%ESC%[1;34m
+SET mag=%ESC%[1;35m
+SET cyn=%ESC%[1;36m
+SET end=%ESC%[0m
+
+set WORKDIR=c:\BUILDTMP
+set LOGFILE=%WORKDIR%\logfile.txt
 
 call:GetORCAVersion
 call:GetORCABranch
 call:CleanPyInstallerDirs
 call:MakeCopyOfSources
-echo "Finished copy"
 goto:eof
 
 :GetORCAVersion
@@ -16,7 +31,7 @@ for /f "delims== tokens=2" %%v in ('findstr self.sVersion= %SOURCEDIR%\src\ORCA\
 :endfindORCAVersion
 set version=%version:"=%
 setx version %version% > nul
-echo Found ORCA Version: %version%
+call :ECHO "Found ORCA Version: %version%"
 goto:eof
 rem **************************************************************************************************************************************
 
@@ -28,40 +43,40 @@ for /f "delims== tokens=2" %%v in ('findstr self.sBranch= %SOURCEDIR%\src\ORCA\A
 :endfindORCABranch
 set branch=%branch:"=%
 setx branch %branch% > nul
-echo Found ORCA Branch: %branch%
+call :ECHO "Found ORCA Branch: %branch%"
 goto:eof
 rem **************************************************************************************************************************************
 
 :CleanPyInstallerDirs
 set zipsrcdir=%pyinstallerdir%\dist\ORCA
-Echo Cleaning files and folder
+call :ECHO "Cleaning files and folder"
 rem echo  ...(%TARGETDIR%%)
 rem del %TARGETDIR%%\*.* /S /Q > nul
-echo  ...(%TARGETDIR%)
-rmdir "%TARGETDIR% 1>nul 2>nul
-mkdir "%TARGETDIR%
-echo  ...(%BUILDDIR%\work)
+call :ECHO "...(%TARGETDIR%)"
+rmdir "%TARGETDIR%"  /S /Q 1>nul 2>nul
+mkdir "%TARGETDIR%"
+call :ECHO "...(%BUILDDIR%\work)"
 rmdir "%BUILDDIR%\src\work" /S /Q 1>nul 2>nul
-echo  ...(%BUILDDIR%\dist)
+call :ECHO "...(%BUILDDIR%\dist)"
 rmdir "%BUILDDIR%\dist" /S /Q 1>nul 2>nul
-echo  ...(%BUILDDIR%\build)
+call :ECHO "...(%BUILDDIR%\build)"
 rmdir "%BUILDDIR%\build" /S /Q 1>nul 2>nul
 rem mkdir %BUILDDIR%\work 1> nul 2>nul
-Echo Cleaning files and folder (Done)
+call :ECHO "Cleaning files and folder (Done)"
 goto:eof
 rem **************************************************************************************************************************************
 
 :MakeCopyOfSources
-echo Creating working copy of ORCA SRC files
-echo  ... Copy files and creating folder structure (%SOURCEDIR% to %TARGETDIR%%)
-xcopy /Y %SOURCEDIR%\src\*.py %TARGETDIR% /q
-xcopy /Y %SOURCEDIR%\src\*.txt %TARGETDIR%/q
+call :ECHO "Creating working copy of ORCA SRC files"
+call :ECHO "... Copy files and creating folder structure (%SOURCEDIR% to %TARGETDIR%%)"
+xcopy /Y %SOURCEDIR%\src\*.py %TARGETDIR% /q >> %LOGFILE%
+xcopy /Y %SOURCEDIR%\src\*.txt %TARGETDIR% /q >> %LOGFILE%
 mkdir %TARGETDIR%\languages
-xcopy /Y %SOURCEDIR%\src\languages %TARGETDIR%\languages /S /q
+xcopy /Y %SOURCEDIR%\src\languages %TARGETDIR%\languages /S /q >> %LOGFILE%
 mkdir %TARGETDIR%\actions
-copy /Y %SOURCEDIR%\src\actions\actionsfallback.xml %TARGETDIR%\actions
+copy /Y %SOURCEDIR%\src\actions\actionsfallback.xml %TARGETDIR%\actions >> %LOGFILE%
 mkdir %TARGETDIR%\ORCA
-xcopy /Y %SOURCEDIR%\src\ORCA %TARGETDIR%\ORCA /S /q
+xcopy /Y %SOURCEDIR%\src\ORCA %TARGETDIR%\ORCA /S /q >> %LOGFILE%
 rem mkdir %TARGETDIR%\interfacestmp
 rem xcopy /Y %SOURCEDIR%\src\interfaces %TARGETDIR%\interfacestmp /S /q
 rem mkdir %TARGETDIR%\scriptstmp
@@ -69,6 +84,41 @@ rem xcopy /Y %SOURCEDIR%\src\scripts %TARGETDIR%\scriptstmp /S /q
 rem mkdir %TARGETDIR%\Platform
 rem copy /Y %SOURCEDIR%\src\ORCA\utils\Platform %TARGETDIR%\Platform /S /q
 
-copy /Y "%SOURCEDIR%\custombuildscripts\windows\orcafullscreen.cmd" %TARGETDIR%
-echo Finished copy files
+copy /Y "%SOURCEDIR%\custombuildscripts\windows\orcafullscreen.cmd" %TARGETDIR% >> %LOGFILE%
+call :ECHO "Finished copy files"
 goto:eof
+
+:: Functions
+
+:printf
+set /p "=%~1!ASCII_13!" <NUL
+goto :eof
+
+:ECHO
+echo %end%[ %yel%Info%end% ] %~1!
+echo [ Info ] %~1! >>  %LOGFILE%
+rem call :printf  "[${yel} Info ${end}] %~1!"
+rem echo "[--Info] %~1!" >> "$LOGFILE"
+EXIT /B 0
+rem goto :eof
+
+:PIP_INSTALL
+call :printf "%end%[%yel% Info %end%] Installing (pip3) %~1 %~2 %~3 ....."
+pip install %~1 %~2 %~3 >>%LOGFILE%
+
+IF %ERRORLEVEL% EQU 0 (
+  call :printf "%end%[%grn%  OK  %end%] Installing (pip3) %~1 %~2 %~3         "
+  echo [
+  echo "[ OK ] Installed (pip3) %~1 %~2 %~3" >>%LOGFILE%
+) ELSE (
+  call :printf "%end%[%red%Failed%end%] Installing (pip3) %~1 %~2 %~3           "
+  echo [
+  echo "[Failed] Installing (pip3) %~1 %~2 %~3" >>%LOGFILE%
+  goto ABORT
+)
+EXIT /B 0
+
+
+:ABORT
+pause
+EXIT /B 999

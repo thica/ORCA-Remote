@@ -181,7 +181,7 @@ class cRepositoryManager:
         """ Gets all interface reps """
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
-        for uInterFaceName in Globals.oInterFaces.aInterfaceList:
+        for uInterFaceName in Globals.oInterFaces.aObjectNameList:
             oFn:cFileName=cFileName().ImportFullPath(uFnFullName='%s/interfaces/%s/interface.py' % (Globals.oPathRoot.string, uInterFaceName))
             oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
             if oRepManagerEntry.ParseFromSourceFile():

@@ -9,8 +9,8 @@
     </action>
 
     <action name="Delete Trigger $dvar(definition_alias_mediaplayer_template)">
-        <action name="Delete Trigger on Volume changed" string="addtrigger" triggername ="Application.OnVolumeChanged"  />
-        <action name="Delete Trigger on OnPlay"         string="addtrigger" triggername ="Player.OnPlay"                />
+        <action name="Delete Trigger on Volume changed" string="deletetrigger" triggername ="Application.OnVolumeChanged" actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)volume"  />
+        <action name="Delete Trigger on OnPlay"         string="deletetrigger" triggername ="Player.OnPlay"               actionname="trigger_on_$dvar(definition_alias_mediaplayer_template)onplay"  />
     </action>
 
     <action name="trigger_on_$dvar(definition_alias_mediaplayer_template)volume">

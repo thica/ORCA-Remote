@@ -23,6 +23,7 @@
 from __future__                             import annotations
 from typing                                 import Optional
 from typing                                 import Dict
+from typing                                 import List
 from typing                                 import cast
 from ORCA.Action                            import cAction
 from ORCA.interfaces.BaseInterface          import cBaseInterFace
@@ -41,8 +42,8 @@ import ORCA.Globals as Globals
       <description language='English'>Interface to show videos and streams (experimental)</description>
       <description language='German'>Interface um Videos und Streams anzuzeigen (experimental)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/orca_video</local>
@@ -110,14 +111,16 @@ class cInterface(cBaseInterFace):
         def Receive(self,uResponse:str) -> None:
             uCommand:str
             uRetVal:str
+            aActionTrigger:List[cBaseTrigger]
 
             try:
                 uCommand,uRetVal=self.oInterFace.ParseResult(self.oAction,uResponse,self)
                 self.ShowDebug(uMsg=u'Parsed Responses:'+uCommand+u':'+uRetVal)
 
-                oActionTrigger=self.GetTrigger(uCommand)
-                if oActionTrigger is not None:
-                    self.CallTrigger(oActionTrigger,uResponse)
+                aActionTrigger=self.GetTrigger(uCommand)
+                if len(aActionTrigger) > 0:
+                    for oActionTrigger in aActionTrigger:
+                        self.CallTrigger(oActionTrigger,uResponse)
                 else:
                     self.ShowDebug(uMsg=u'Discard message:'+uCommand +':'+uResponse )
             except Exception as e:

@@ -59,7 +59,7 @@ class cScrollableLabelLarge(Widget):
        Horizontal scrolling can be disabled by passing
        noxscroll = False
        Supports background color for the Label
-       As implementaion it is a Widget which contains a Background (if color is given)
+       As implementation, it is a Widget which contains a Background (if color is given)
        and a customized RecycleView
        """
 
@@ -114,6 +114,16 @@ class cScrollableLabelLarge(Widget):
     def _set_font_size(self, value):
         """Passes the change of font size """
         self.oScrollableLabelLargeInner.font_size = value
+
+    def EnableWidget(self, *, bEnable:bool) -> bool:
+        if bEnable:
+            if self.oBackGround:
+                self.oBackGround.opacity = self.oScrollableLabelLargeInner.oOrcaWidget.fOrgOpacity
+            self.oScrollableLabelLargeInner.opacity = self.oScrollableLabelLargeInner.oOrcaWidget.fOrgOpacity
+        else:
+            if self.oBackGround:
+                self.oBackGround.opacity = 0.0
+            self.oScrollableLabelLargeInner.opacity = 0.0
 
     font_size  = AliasProperty(_get_font_size, _set_font_size)
 
@@ -177,7 +187,7 @@ class cScrollableLabelLargeInner(RecycleView):
         if "font_size" in kwargs:
             self.on_font_size(None,kwargs["font_size"])
 
-        # Retieving the genuine font propertes of a label to pass only those arguments to the label (removing pos, hints, background colors , etc
+        # Retrieving the genuine font properties of a label to pass only those arguments to the label (removing pos, hints, background colors , etc
         self.aFontProperties             = Label._font_properties+("background_color",)
         # standard font args, if nothing is given
         self.kwFontArgs                  = {"halign" : "left","valign": "top", "max_lines":1,"font_size":20}
@@ -223,7 +233,7 @@ class cScrollableLabelLargeInner(RecycleView):
         self.fFontSize=fValue
 
     def on_textinner(self, instance, value):
-        """ helper to have a Label like funtionality to set the caption """
+        """ helper to have a Label like functionality to set the caption """
         self.update_size(None,None)
     def IncreaseFontSize(self,*args):
         """ Increase the Font size """
@@ -246,7 +256,7 @@ class cScrollableLabelLargeInner(RecycleView):
     def update_size(self, instance, value):
         """ Fits the text into layout_manager line.
         If noxscroll, all line with be split up to fit to the widget size.
-        if x scrolling is enabled, we look, if the the maximum line lenght exceed the TEXTURE SIZE.
+        if x scrolling is enabled, we look, if the the maximum line length exceed the TEXTURE SIZE.
         In that case we split the lines as well and set the scrolling window size to the texture size.
         if x scrolling is enabled, and all lines fit to the texture size, we pass the unchanged array """
 
@@ -338,3 +348,5 @@ class cScrollableLabelLargeInner(RecycleView):
             return "[{1}]{0}[/{1}]".format(uText,uMarkUp)
         else:
             return "[{1}={2}]{0}[/{1}]".format(uText,uMarkUp,uValue)
+
+

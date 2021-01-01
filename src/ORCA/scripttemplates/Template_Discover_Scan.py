@@ -26,10 +26,12 @@ from typing                                 import List
 from typing                                 import Union
 from typing                                 import Callable
 from typing                                 import Tuple
+from typing                                 import Optional
 
 import threading
 from kivy.logger                            import Logger
 from kivy.uix.button                        import Button
+from kivy.clock                             import Clock
 
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
@@ -56,8 +58,9 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
         self.uSubType:str                       = u''
         self.iPort:int                          = 80
         self.aResults:List[TypedQueryDict]      = []
-        self.aThreads:List[threading.Thread]    = []
-        self.uNothingFoundMessage               = u'Discover - Networkcan: Could not find a device on the network'
+        self.uNothingFoundMessage               = u'Discover - Networkscan: Could not find a device on the network'
+        self.uTitle                             = u''
+        self.bDoNotWait:bool                    = False
 
     def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
         """
@@ -70,20 +73,16 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
         self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
 
     def ListDiscover(self) -> None:
-        dArgs:Dict = {"onlyonce": 0}
+        self.SendStartNotification()
+        Clock.schedule_once(self.ListDiscover_Step2, 0)
+        return
+
+    def ListDiscover_Step2(self, *largs):
+        dArgs:Dict = {"onlyonce": 0,"donotwait":1}
         dDevice: TypedQueryDict
         dResult: TypedQueryDict
+        self.dDevices.clear()
         self.Discover(**dArgs)
-
-        try:
-            for dResult in self.aResults:
-                uTageLine,dDevice,aLine       = self.ParseResult(dResult)
-                if self.dDevices.get(uTageLine) is None:
-                    self.dDevices[uTageLine] = dDevice
-                    self.AddLine(aLine, dDevice)
-        except Exception as e:
-            LogErrorSmall(uMsg=u'Error on scan discover',oException=e)
-
 
     def Discover(self,**kwargs) -> Dict:
 
@@ -95,6 +94,7 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
         bOnlyOnce:bool                 = ToBool(kwargs.get('onlyonce', "1"))
         uIPSubNet:str                  = Globals.uIPGateWayV4
         uIPSubNet:str                  = uIPSubNet[:uIPSubNet.rfind(".")]+"."
+        self.bDoNotWait                = ToBool(kwargs.get('donotwait',0))
 
         del self.aResults[:]
         del self.aThreads[:]
@@ -105,14 +105,19 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
             self.aThreads.append(oThread)
             oThread.start()
 
-        for oThread in self.aThreads:
-            oThread.join()
-
-        if len(self.aResults) >0:
-            return self.CreateReturnDict(self.aResults[0])
-        else:
-            Logger.debug(self.uNothingFoundMessage)
+        if not self.bDoNotWait:
+            for oThread in self.aThreads:
+                oThread.join()
+            self.SendEndNotification()
+            if len(self.aResults) >0:
+                return self.CreateReturnDict(self.aResults[0])
+            else:
+                Logger.debug(self.uNothingFoundMessage)
             return self.CreateReturnDict(None)
+        else:
+            self.ClockCheck=Clock.schedule_interval(self.CheckFinished,0.1)
+            return self.CreateReturnDict(None)
+
 
     def GetHeaderLabels(self) -> List[str]:
         # Empty function

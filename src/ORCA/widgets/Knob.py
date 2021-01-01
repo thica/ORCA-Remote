@@ -299,3 +299,19 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
             self.oObject = oTmpObject
             self.oBorderInner = self.oBorder
             self.oBorder = oTmpBorder
+
+    def EnableWidget(self, *, bEnable:bool) -> bool:
+
+        oPage:cScreenPage
+        oWidget:cWidgetBase
+        if bEnable:
+            if self.oObject:
+                self.oObject.opacity        = self.fOrgOpacity
+                self.oObjectPicture.opacity = self.fOrgOpacity
+        else:
+            if self.oObject:
+                if self.oObject.opacity > 0:
+                    self.fOrgOpacity = self.oObject.opacity
+                    self.oObject.opacity = 0.0
+                    self.oObjectPicture.opacity = 0.0
+        self.bIsEnabled = bEnable

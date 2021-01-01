@@ -21,6 +21,8 @@
 
 from typing                 import Dict
 from typing                 import List
+from typing                 import Tuple
+from typing                 import Any
 from typing                 import cast
 from typing                 import Callable
 
@@ -30,6 +32,7 @@ from kivy.utils             import platform
 import kivy.core.window
 
 import ORCA.Globals as Globals
+from ORCA.utils.LogError import LogError
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -37,6 +40,8 @@ if TYPE_CHECKING:
 else:
     from typing import TypeVar
     cPath = TypeVar("cPath")
+
+
 
 __all__ = ['OS_ToPath',
            'OS_SystemIsOnline',
@@ -63,7 +68,8 @@ __all__ = ['OS_ToPath',
            'OS_GetSubnetV4',
            'OS_GetSubnetV6',
            'OS_GetMACAddress',
-           'OS_GetDrives'
+           'OS_GetDrives',
+           'OS_GetPlaces'
           ]
 
 # noinspection PyUnusedLocal
@@ -75,7 +81,8 @@ def FunctionDummy(**kwargs):
     """
     return None
 
-dFunctionCache:Dict[str,Callable]={}
+dFunctionCache:Dict[str,Callable]   = {}
+dResultCache:Dict[str,Any]          = {}
 
 def GetFunction(uFunctionName:str) -> Callable:
     """
@@ -85,35 +92,46 @@ def GetFunction(uFunctionName:str) -> Callable:
     """
     oFunction: Callable
     uModule:   str
+    uPlatform: str
+
+
+    # python 3.9 should look this this?
+    # if oFunction:=dFunctionCache.get(uFunctionName) is not None:
+    #    return oFunction
 
     oFunction=dFunctionCache.get(uFunctionName)
     if oFunction is not None:
         return oFunction
 
-    uModule =  u'%s.%s.%s_%s' % ("ORCA.utils.Platform",Globals.uPlatform,Globals.uPlatform,uFunctionName)
-    try:
-        oFunction = getattr(import_module(uModule), uFunctionName)
-        Logger.info(u"Loaded Platform Module "+uModule)
-        dFunctionCache[uFunctionName] = oFunction
-        return oFunction
-    except Exception:
-        # LogError ("loading failed:"+uModule,e)
-        pass
-    uModule =  '%s.%s.%s_%s' % ("ORCA.utils.Platform","generic","generic",uFunctionName)
-    try:
-        oFunction = getattr(import_module(uModule), uFunctionName)
-        Logger.info(u"Loaded Platform Module "+uModule)
-        dFunctionCache[uFunctionName] = oFunction
-        return oFunction
-    except Exception:
-        # LogError ("loading failed:"+uModule,e)
-        pass
+    for uPlatform in [Globals.uPlatform,"generic"]:
+        uModule =  u'%s.%s.%s_%s' % ("ORCA.utils.Platform",uPlatform,uPlatform,uFunctionName)
+        try:
+            oFunction = getattr(import_module(uModule), uFunctionName)
+            Logger.info(u"Loaded platform module "+uModule)
+            dFunctionCache[uFunctionName] = oFunction
+            return oFunction
+        except ModuleNotFoundError:
+            pass
+        except Exception as e:
+            LogError (uMsg="Loading platform module '%s' failed!" % uModule,oException=e)
+
     Logger.error("Can't load platform module "+ uFunctionName)
     dFunctionCache[uFunctionName] = FunctionDummy
     return FunctionDummy
 
+def CallFromCache(uFunctionName) -> Any:
+    """ Returns a value of a function from the cache if already called
+        Otherwise it will call the function a put the return value into the cache
+    """
+    oRet:Any
+    if dResultCache.get(uFunctionName) is not None:
+        return dResultCache.get(uFunctionName)
+    oRet = GetFunction(uFunctionName)()
+    dResultCache[uFunctionName] = oRet
+    return oRet
+
 def OS_CheckPermissions() -> bool:
-    """  check and retrieve requiered permissions """
+    """  check and retrieve required permissions """
     return cast(bool,GetFunction("CheckPermissions")())
 
 def OS_RequestPermissions() -> bool:
@@ -137,19 +155,19 @@ def OS_Ping(uHostname:str) -> bool:
 
 def OS_GetUserDataPath() -> cPath:
     """ Gets the path to the user folder (This might NOT be the OS User Folder"""
-    return cast(cPath,GetFunction("GetUserDataPath")())
+    return cast(cPath,CallFromCache("GetUserDataPath"))
 
 def OS_GetUserDownloadsDataPath() -> cPath:
     """ Gets the path to the user downloads folder """
-    return cast(cPath,GetFunction("GetUserDownloadsDataPath")())
+    return cast(cPath,CallFromCache("GetUserDownloadsDataPath"))
 
 def OS_GetSystemUserPath() -> cPath:
     """ Gets the path to the system user folder """
-    return cast(cPath,GetFunction("GetSystemUserPath")())
+    return cast(cPath,CallFromCache("GetSystemUserPath"))
 
 def OS_GetInstallationDataPath() -> cPath:
-    """ Gets the path to the folder, where the installler places the Orca Files"""
-    return cast(cPath,GetFunction("GetInstallationDataPath")())
+    """ Gets the path to the folder, where the installer places the Orca Files"""
+    return cast(cPath,CallFromCache("GetInstallationDataPath"))
 
 def OS_Vibrate(fDuration:float=0.05) -> bool:
     """ Vibrates a device """
@@ -157,18 +175,18 @@ def OS_Vibrate(fDuration:float=0.05) -> bool:
 
 def OS_GetDefaultNetworkCheckMode() -> str:
     """ returns the default way for an OS hpw to check if a device is online"""
-    return cast(str,GetFunction("GetDefaultNetworkCheckMode")())
+    return cast(str,CallFromCache("GetDefaultNetworkCheckMode"))
 
 def OS_GetDefaultStretchMode() -> str:
     """ Stretchmode: could be "STRETCH" or "CENTER" or "TOPLEFT" or "RESIZE" """
-    return cast(str,GetFunction("GetDefaultStretchMode")())
+    return cast(str,CallFromCache("GetDefaultStretchMode"))
 
 def OS_GetLocale() -> str:
     """
     Returns the current locale
     :return: the locale string
     """
-    return cast(str,GetFunction("GetLocale")())
+    return cast(str,CallFromCache("GetLocale"))
 
 def OS_GetRotationObject() -> Callable:
     """ returns the os-specific object to perform rotation tasks"""
@@ -203,58 +221,65 @@ def OS_GetIPAddressV4() -> str:
     Gets the V4 IP Address
     :return: a string representing the IP Address eg 192.168.1.100
     """
-    return cast(str,GetFunction("GetIPAddressV4")())
+    return cast(str,CallFromCache("GetIPAddressV4"))
 
 def OS_GetSubnetV4() -> str:
     """
     Gets the V4 Subnet
     :return: a string representing the subnet
     """
-    return cast(str,GetFunction("GetSubnetV4")())
+    return cast(str,CallFromCache("GetSubnetV4"))
 
 def OS_GetGatewayV4() -> str:
     """
     Gets the V4 Gateway
     :return: a string representing the gateway
     """
-    return cast(str,GetFunction("GetGatewayV4")())
+    return cast(str,CallFromCache("GetGatewayV4"))
 
 def OS_GetIPAddressV6() -> str:
     """
     Gets the V6 IP Address
     :return: a string representing the IP Address
     """
-    return cast(str,GetFunction("GetIPAddressV6")())
+    return cast(str,CallFromCache("GetIPAddressV6"))
 
 def OS_GetSubnetV6() -> str:
     """
     Gets the V6 Gateway
     :return: a string representing the gateway
     """
-    return cast(str,GetFunction("GetSubnetV6")())
+    return cast(str,CallFromCache("GetSubnetV6"))
 
 def OS_GetGatewayV6() -> str:
     """
     Gets the V6 Gateway. This is from a network view rubbish
     :return: a string representing the gateway
     """
-    return cast(str,GetFunction("GetGatewayV6")())
+    return cast(str,CallFromCache("GetGatewayV6"))
 
 def OS_GetMACAddress() -> List[str]:
     """
     Gets the Mac address of the device
     :return: A list, with both type of mac addresses (colon and dash separated)
     """
-    return cast(List[str],GetFunction("GetMACAddress")())
+    return cast(List[str],CallFromCache("GetMACAddress"))
 
-def OS_GetDrives() -> List[str]:
+def OS_GetDrives() -> List[Tuple[str,str]]:
     """
-    gets a list of local drives (drive letters on windows, /mnt and /media folder on Linux
-    :return: A list of drives
+    gets a list of local drives (drive letters on windows, /mnt and /media folder on Linux)
+    :return: A list of tuples of drives (Name,System representation)
     """
-    return cast(List[str],GetFunction("GetDrives")())
+    return cast(List[Tuple[str,str]],GetFunction("GetDrives")())
 
+def OS_GetPlaces() -> List[Tuple[str,cPath]]:
+    """
+    gets a list of user folders (ed Video, Music, ...)
+    :return: A list of folders (Name, Path)
+    """
+    return cast(List[Tuple[str,cPath]],GetFunction("GetPlaces")())
 
 def OS_GetSystemTmpPath() -> cPath:
     """ Gets the system temporary """
-    return cast(cPath,GetFunction("GetSystemTmpPath")())
+    return cast(cPath,CallFromCache("GetSystemTmpPath"))
+

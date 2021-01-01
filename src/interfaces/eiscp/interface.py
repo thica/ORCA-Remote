@@ -30,6 +30,7 @@ from typing                                import TYPE_CHECKING
 from time                                  import sleep
 from threading                             import Thread
 from threading                             import currentThread
+from copy                                  import copy
 
 import select
 import socket
@@ -60,8 +61,8 @@ import ORCA.Globals as Globals
       <description language='English'>Onkyo EISCP Interface (LAN/IP)</description>
       <description language='German'>Onkyo EISCP Interface (LAN/IP)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.1</version>
-      <minorcaversion>5.0.1</minorcaversion>
+      <version>5.0.4</version>
+      <minorcaversion>5.0.4</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/eiscp</local>
@@ -263,7 +264,9 @@ class cInterface(cBaseInterFace):
             aExceptional:List
             uCommand:str
             uResponse:str
-            oTmpAction: Union[cBaseTrigger,cAction]
+            oTmpAction:Union[cBaseTrigger,cAction]
+            aTmpAction:List[Union[cBaseTrigger,cAction]] = []
+            aActionTrigger:Optional[List[cBaseTrigger]]
 
             #Loop until closed by external flag
             try:
@@ -291,7 +294,7 @@ class cInterface(cBaseInterFace):
                                 # Get the Command and the payload
                                 uCommand,uResponse=oParent.UnpackEISPResponse(byResponseHeader)
 
-                                # print ("Receive:",uCommand,":",sResponse)
+                                # print ("Receive:",uCommand,":",uResponse)
 
                                 # This returns ASCII of sResponse, we will convert it one line later
                                 # we might get a response without dedicated requesting it, so lets use an action
@@ -299,43 +302,51 @@ class cInterface(cBaseInterFace):
 
                                 bHandleSpecialResponse:bool = False
                                 # Default is the last action (That is the command, where we MIGHT get the response from
-                                oTmpAction = self.oAction
+                                del aTmpAction[:]
+                                aTmpAction.append(self.oAction)
+
                                 if uCommand == self.uMsg[:3]:
                                     # if we have a response to the last action, lets store the action for future use
                                     # in case we got a response without requesting it
                                     # Not 100% logic, but should fit in 99.9 % of the cases
-                                    if oParent.GetTrigger(uCommand) is None:
-                                        oParent.dResponseActions[uCommand] = oTmpAction
+                                    if len(oParent.GetTrigger(uCommand))==0:
+                                        oParent.dResponseActions[uCommand] = copy(aTmpAction[0])
                                         bHandleSpecialResponse = True
 
-                                # Lets check , if we have an Trigger set for unrequested responses
-                                oActionTrigger:cBaseTrigger = oParent.GetTrigger(uCommand)
-                                if oActionTrigger:
-                                    oTmpAction=oActionTrigger
+                                # Lets check , if we have a trigger set for unrequested responses
+                                aActionTrigger = oParent.GetTrigger(uCommand)
+
+                                if len(aActionTrigger)>0:
+                                    aTmpAction=aActionTrigger
                                     bHandleSpecialResponse = True
                                 elif not bHandleSpecialResponse:
-                                    # If we dont have an trigger and its not a response to the action
+                                    # If we don't have an trigger and its not a response to the action
                                     # lets use the stored action, if we have it
                                     if uCommand in oParent.dResponseActions:
-                                        oTmpAction = oParent.dResponseActions[uCommand]
+                                        aTmpAction[0] = oParent.dResponseActions[uCommand]
                                         bHandleSpecialResponse = True
 
                                 if bHandleSpecialResponse:
                                     if uCommand==u'NLS':
                                         # This might return an adjusted Response
-                                        uCommand,uResponse=oParent.oInterFace.Handle_NLS(oTmpAction,uResponse,self)
+                                        # We don't support multiple triggers on NLS so we just take the first action
+                                        uCommand,uResponse=oParent.oInterFace.Handle_NLS(aTmpAction[0],uResponse,self)
                                 # uResponse=ToUnicode(uResponse)
                                 if bHandleSpecialResponse:
                                     if uCommand == u'NRI':
-                                        oParent.oInterFace.Handle_NRI(oTmpAction, uResponse, oParent)
+                                        for oTmpAction in aTmpAction:
+                                            oParent.oInterFace.Handle_NRI(oTmpAction, uResponse, oParent)
                                     elif uCommand==u'NJA':
-                                        uCommand,uResponse=oParent.oInterFace.Handle_NJA(oTmpAction,uResponse,oParent)
+                                        # multiple trigger on jacket infos (the picture split into multiple parts) not supported
+                                        uCommand,uResponse=oParent.oInterFace.Handle_NJA(aTmpAction[0],uResponse,oParent)
                                     elif uCommand==u'LMD':
                                         uResponse=oParent.oInterFace.ISCP_LMD_To_Text(uResponse)
                                     elif uCommand==u'IFA':
-                                        oParent.oInterFace.Split_IFA(oTmpAction,uResponse,oParent)
+                                        for oTmpAction in aTmpAction:
+                                            oParent.oInterFace.Split_IFA(oTmpAction,uResponse,oParent)
                                     elif uCommand==u'IFV':
-                                        oParent.oInterFace.Split_IFV(oTmpAction,uResponse,oParent)
+                                        for oTmpAction in aTmpAction:
+                                            oParent.oInterFace.Split_IFV(oTmpAction,uResponse,oParent)
                                     elif uCommand==u'MVL' or uCommand==u'CTL' or uCommand==u'SWL':
                                         if uResponse!=u'N/A':
                                             uResponse=str(int(uResponse, 16))
@@ -354,17 +365,18 @@ class cInterface(cBaseInterFace):
                                     # we got our response, all other responses are for somebody else
                                     #self.uMsg=''
                                 # we have a notification issued by the device, so lets have a look, if we have a trigger code to it
-                                oActionTrigger=oParent.GetTrigger(uCommand)
+                                aActionTrigger=oParent.GetTrigger(uCommand)
 
-                                if oActionTrigger:
+                                if len(aActionTrigger)>0:
                                     oParent.ShowInfo(uMsg=u'Calling Trigger for:' + uCommand)
-                                    oParent.CallTrigger(oActionTrigger,uResponse)
+                                    for oActionTrigger in aActionTrigger:
+                                        oParent.CallTrigger(oActionTrigger,uResponse)
                                 else:
                                     if not uCommand==oParent.uMsg[:3]:
                                         if not uCommand==u'LTN':
                                             if not uCommand==u'':
                                                 if not uCommand+ ':'+uResponse=="NST:p--":
-                                                    oParent.ShowDebug(uMsg=u'Discard message:'+uCommand+ ':'+uResponse+': Looking for ('+oParent.uMsg[:3]+')')
+                                                    oParent.ShowDebug(uMsg=u'Discard message: [%s]:[%s]: Looking for [%s]' %(uCommand,uResponse,oParent.uMsg[:3]))
 #                               self.uMsg=''
                                 # We do not need to wait for an response anymore
                                 StartWait(0)
@@ -373,7 +385,6 @@ class cInterface(cBaseInterFace):
                                 oParent.Disconnect()
                                 oParent.Connect()
                             self.bBusy = False
-
 
             except Exception as e:
                 self.ShowError(uMsg=u'Receive:Error Receiving Response:',oException=e)
@@ -521,7 +532,7 @@ class cInterface(cBaseInterFace):
 
     def NLSPage(self,oAction:cAction,uCmd:str) -> None:
 
-        oSetting:cInterface.cInterFaceSettings=self.GetSettingObjectForConfigName(uConfigName=oAction.dActionPars.get(u'configname',u''))
+        oSetting:cInterface.cInterFaceSettings = cast(cInterFaceSettings,self.GetSettingObjectForConfigName(uConfigName=oAction.dActionPars.get(u'configname',u'')))
         iSteps:int
 
         if uCmd=='favorite pgup':
@@ -589,7 +600,7 @@ class cInterface(cBaseInterFace):
                 uTmp=oAction.uGlobalDestVar
                 iIndex=int(uResponse[1])
 
-                #this is redundent, but sometimes the Receiver doesn't send a page clear
+                #this is redundant, but sometimes the Receiver doesn't send a page clear
                 if iIndex==0:
                     for i in range(10):
                         oSetting.oResultParser.SetVar2(uValue=u'', uLocalDestVar=oAction.uLocalDestVar, uGlobalDestVar=oAction.uGlobalDestVar, uDebugMessage=u'NLS Value', uAddName=u"[" + ToUnicode(i) + u"]")

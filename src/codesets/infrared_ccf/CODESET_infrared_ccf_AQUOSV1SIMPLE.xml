@@ -7,8 +7,8 @@
             <description language="English">Aquos (EU Models): Only power on command using IR</description>
             <description language="German">Aquos (EU Modelle): Nur der Power on Befehl über IR</description>
             <author>Carsten Thielepape</author>
-            <version>5.0.1</version>
-            <minorcaversion>5.0.1</minorcaversion>
+            <version>5.0.4</version>
+            <minorcaversion>5.0.4</minorcaversion>
             <sources>
                 <source>
                     <local>$var(APPLICATIONPATH)/codesets/infrared_ccf/CODESET_infrared_ccf_AQUOSV1SIMPLE.xml</local>

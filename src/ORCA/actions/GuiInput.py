@@ -51,7 +51,7 @@ class cEventActionsGuiInput(cEventActionBase):
         Shows a progressar popup, updates the progressbar value & bar or closes a progressbar popup
         * If title and message are given, it creates a new progressbar.
         * If title is not given, but current is given, it updates the progressbar
-        * If title, message and currrent are not not given, the progressbar is closed
+        * If title, message and current are not not given, the progressbar is closed
 
         <div style="overflow:auto; ">
         {| class="wikitable"

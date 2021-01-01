@@ -194,28 +194,22 @@ class cEventActionsWidgetControl(cEventActionBase):
         uWidgetName:str               = ReplaceVars(oAction.dActionPars.get("widgetname",""))
         uOption:str                   = ReplaceVars(oAction.dActionPars.get("option",""))
         bIgnoreMissing:bool           = ToBool(ReplaceVars(oAction.dActionPars.get("ignoremissing","0")))
-        iDateWidgetIndex:int
+        uWidgetID:str
         oWidget:cWidgetBase
         aWidgets:List[cWidgetBase]
 
         if uWidgetName==u'{pageclocks}':
             SetVar(u'LOCALTIME', Globals.oLanguage.GetLocalizedTime(Globals.bClockWithSeconds))
             if Globals.oTheScreen.oCurrentPage is not None:
-                for iClockWidgetIndex in Globals.oTheScreen.oCurrentPage.aClockWidgetsIndex:
-                    if iClockWidgetIndex < len(Globals.oTheScreen.oCurrentPage.aWidgets):
-                        Globals.oTheScreen.oCurrentPage.aWidgets[iClockWidgetIndex].UpdateWidget()
-                    else:
-                        LogError(uMsg="UpdateWidget: wrong index:[%s][%d]" % (Globals.oTheScreen.oCurrentPage.uPageName,iClockWidgetIndex))
+                for uWidgetID in Globals.oTheScreen.oCurrentPage.aClockWidgetsID:
+                    Globals.oTheScreen.oCurrentPage.dWidgetsID[uWidgetID].UpdateWidget()
             return eReturnCode.Nothing
 
         if uWidgetName==u'{pagedates}':
             SetVar(u'LOCALDATE', Globals.oLanguage.GetLocalizedDate(Globals.bLongDate, Globals.bLongMonth, Globals.bLongDay))
             if Globals.oTheScreen.oCurrentPage is not None:
-                for iDateWidgetIndex in Globals.oTheScreen.oCurrentPage.aDateWidgetsIndex:
-                    if iDateWidgetIndex < len(Globals.oTheScreen.oCurrentPage.aWidgets):
-                        Globals.oTheScreen.oCurrentPage.aWidgets[iDateWidgetIndex].UpdateWidget()
-                    else:
-                        LogError(uMsg="UpdateWidget: wrong index:[%s][%d]" % (Globals.oTheScreen.oCurrentPage.uPageName,iDateWidgetIndex))
+                for uWidgetID in Globals.oTheScreen.oCurrentPage.aDateWidgetsID:
+                    Globals.oTheScreen.oCurrentPage.dWidgetsID[uWidgetID].UpdateWidget()
             return eReturnCode.Nothing
 
         self.oEventDispatcher.LogAction(uTxt=u'UpdateWidget',oAction=oAction)

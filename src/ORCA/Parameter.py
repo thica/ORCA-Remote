@@ -30,7 +30,14 @@ import argparse
 
 __all__ = ['cParameter','cParserAction']
 
+"""
+Functions to parse and set given command line parameter
+"""
+
 class cParserAction(argparse.Action):
+    """
+    A Action object for the argparse parser
+    """
     def __init__(self, option_strings,  oParameter:cParameter, *args, **kwargs):
         self.oParameter:cParameter = oParameter
         self.HandleValue(kwargs.get("dest"),kwargs.get("default"))
@@ -38,7 +45,14 @@ class cParserAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         self.HandleValue(self.dest,values)
         setattr(namespace, self.dest, values)
-    def HandleValue(self,uName,uValue):
+    def HandleValue(self,uName:str,uValue:str):
+        """
+        Manages a given parameter of the command line
+        identifies boolean parameter and paths for the home user folder across OS
+        :param str uName: the name of the parameter
+        :param str uValue: The value of he parameter
+        :return:
+        """
         if uName.startswith("oPath"):
             uTmp = uValue
             if uTmp.startswith("~"):
@@ -50,6 +64,9 @@ class cParserAction(argparse.Action):
             self.oParameter[uName]=uValue
 
 class cParameter(TypedQueryDict):
+    """
+    Initializes and holds the the given command line parameter
+    """
     def __init__(self):
         super(cParameter, self).__init__()
         oParser:argparse.ArgumentParser = argparse.ArgumentParser(description='ORCA Open Remote Control Application')
@@ -58,16 +75,19 @@ class cParameter(TypedQueryDict):
         oParser.parse_args(aArgs)
 
     def AddParameter(self,oParser:argparse.ArgumentParser) -> None:
-
+        """
+        Adds all valid command line arguments to the parser object
+        :param oParser:
+        :return:
+        """
         oParser.add_argument('--debugpath',    default=GetEnvVar('DEBUGPATH'),       action=cParserAction, oParameter=self, dest="oPathDebug",     help='Changes the path for ORCA files (can be passed as DEBUGPATH environment var)')
         oParser.add_argument('--logpath',      default=GetEnvVar('ORCALOGPATH'),     action=cParserAction, oParameter=self, dest="oPathLog",       help='Changes the path for ORCA/Kivy log files (can be passed as ORCALOGPATH environment var)')
         oParser.add_argument('--tmppath',      default=GetEnvVar('ORCATMPPATH'),     action=cParserAction, oParameter=self, dest="oPathTmp",       help='Changes the path for ORCA temp folder (can be passed as ORCATMPPATH environment var)')
-        oParser.add_argument('--smallscreen',  default=GetEnvVar('ORCASMALL'),        action=cParserAction, oParameter=self, dest="bSmallScreen",   help='If set ORCA switches to small screen (can be passed as ORCASMALL environment var)')
-
-        # oParser.add_argument('--showborders',  default=GetEnvVar('ORCASHOWBORDERS'), action=cParserAction, oParameter=self, dest="bShowBorders",   help='Flag 0/1 to show borders around all widgets (can be passed as ORCASHOWBORDERS environment var)')
+        oParser.add_argument('--smallscreen',  default=GetEnvVar('ORCASMALL'),       action=cParserAction, oParameter=self, dest="bSmallScreen",   help='If set ORCA switches to small screen (can be passed as ORCASMALL environment var)')
 
     # noinspection PyMethodMayBeStatic
     def RemoveOtherArguments(self,oParser) -> List:
+        """ Removes all ORCA command line arguments from the command line, so it does not clash with kivy """
         aRet:List = []
         for uArg in sys.argv[1:]:
             # noinspection PyProtectedMember

@@ -48,7 +48,7 @@ def Build_Settings(oSettings:KivySettings) -> None:
     will be called, when showing the settings dialog
     We add a further panel for the orca.ini settings
     If we had a successful init, lets build the default full settings view
-    otherwise just build a very minimilistic settings dialog, where the user can just change the ini path
+    otherwise just build a very minimalistic settings dialog, where the user can just change the ini path
     """
     RegisterSettingTypes(oSettings)
     if Globals.bInit:
@@ -113,15 +113,20 @@ def BuildSettingsString() -> str:
     i:int
     aInterfaceList:List[str] = []
 
-
     for uInterFacename in Globals.oInterFaces.dUsedInterfaces:
         uInterFacename=ReplaceVars(uInterFacename)
         if not uInterFacename in aInterfaceList and uInterFacename!=u'':
             aInterfaceList.append(uInterFacename)
 
-    for uInterFacename  in Globals.oInterFaces.aInterfaceList:
+    for uInterFacename  in Globals.oInterFaces.aObjectNameList:
         if not uInterFacename in aInterfaceList:
             aInterfaceList.append(uInterFacename)
+
+    for uInterFacename in aInterfaceList:
+        if Globals.oInterFaces.GetInterface(uInterFacename) is None:
+            Globals.oInterFaces.LoadInterface(uInterFacename)
+
+    Globals.oInterFaces.CreateJsonSectionList(aObjectList=aInterfaceList)
 
     # put the templates to the end
     iLast=len(Globals.aDefinitionList)-1
@@ -137,8 +142,8 @@ def BuildSettingsString() -> str:
 
     BuildSettingOptionListVar(Globals.aLanguageList,                        "SETTINGS_LANGUAGELIST")
     BuildSettingOptionListVar(Globals.oLanguage.oLocales.oLocalesEntries,   "SETTINGS_LANGUAGELOCALES")
-    BuildSettingOptionListVar(Globals.oScripts.aScriptNameList,             "SETTINGS_SCRIPTNAMELIST")
-    BuildSettingOptionListVar(Globals.oScripts.aScriptNameListWithConfig,   "SETTINGS_SCRIPTNAMELISTWITHCONFIG")
+    BuildSettingOptionListVar(Globals.oScripts.aObjectNameList,             "SETTINGS_SCRIPTNAMELIST")
+    BuildSettingOptionListVar(Globals.oScripts.aObjectNameListWithConfig,   "SETTINGS_SCRIPTNAMELISTWITHCONFIG")
     BuildSettingOptionListVar(aInterfaceList,                               "SETTINGS_INTERFACENAMELIST")
     BuildSettingOptionListVar(Globals.oSound.aSoundsList,                   "SETTINGS_SOUNDLIST")
     BuildSettingOptionListVar(Globals.aSkinList,                            "SETTINGS_SKINLIST")

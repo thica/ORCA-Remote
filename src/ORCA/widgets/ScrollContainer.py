@@ -21,19 +21,11 @@
 
 from typing                         import List
 from typing                         import Optional
-from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
 from kivy.uix.scrollview            import ScrollView
 from kivy.uix.floatlayout           import FloatLayout
 from ORCA.widgets.base.Base         import cWidgetBase
 from ORCA.widgets.Picture           import cWidgetPicture
-
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
-else:
-    from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
 
 
 __all__ = ['cWidgetScrollContainer']
@@ -103,7 +95,7 @@ class cWidgetScrollContainer(cWidgetPicture):
          save a copy of the screenpage widgets locally
         """
 
-        for oWidget in self.oParentScreenPage.aWidgets:
+        for oWidget in self.oParentScreenPage.dWidgetsID.values():
             if oWidget.uContainer == self.uContainer and oWidget!=self:
                 oWidget.iPosXInit = oWidget.iPosXInit - self.iPosXInit
                 oWidget.iPosYInit = oWidget.iPosYInit - self.iPosYInit
