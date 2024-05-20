@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -33,12 +33,12 @@ from ORCA.utils.TypeConvert         import ToUnicode
 from ORCA.utils.TypeConvert         import UnEscapeUnicode
 from ORCA.utils.TypeConvert         import EscapeUnicode
 from ORCA.utils.TypeConvert         import ToBool
-from ORCA.Action                    import cAction
+from ORCA.action.Action import cAction
 from ORCA.definition.Definition     import cDefinition
 from ORCA.interfaces.BaseInterface  import cBaseInterFace
 from ORCA.actions.ReturnCode        import eReturnCode
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cEventActionsSettings']
 
@@ -82,15 +82,15 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'RemoveDefinitionSetting',oAction=oAction)
-        uDefinitionName:str = ReplaceVars(oAction.dActionPars.get("definitionname",""))
-        uSettingVar:str     = ReplaceVars(oAction.dActionPars.get("settingname",""))
-        uSettingVarOrg :str = oAction.dActionPars.get("settingname","")
+        self.oEventDispatcher.LogAction(uTxt='RemoveDefinitionSetting',oAction=oAction)
+        uDefinitionName:str = ReplaceVars(oAction.dActionPars.get('definitionname',''))
+        uSettingVar:str     = ReplaceVars(oAction.dActionPars.get('settingname',''))
+        uSettingVarOrg :str = oAction.dActionPars.get('settingname','')
         bFound:bool         = False
 
         oDef:cDefinition = Globals.oDefinitions[uDefinitionName]
         if oDef:
-            if uSettingVar==u'':
+            if uSettingVar=='':
                 oDef.dDefinitionSettingsJSON.clear()
                 bFound=True
             elif self.RemoveSettingSection(uSettingVarOrg,oDef):
@@ -125,11 +125,11 @@ class cEventActionsSettings(cEventActionBase):
                     oDef.dDefinitionSettingsJSON[uVisSection]=ToUnicode(json.dumps(aDefinitionSettingsJSON))
 
         else:
-            LogError(uMsg=u'Action: RemoveDefinitionSetting: Wrong definition name:'+uDefinitionName )
+            LogError(uMsg='Action: RemoveDefinitionSetting: Wrong definition name:'+uDefinitionName )
             Globals.oDefinitions.DumpDefinitionList()
             return eReturnCode.Error
         if not bFound:
-            LogError (uMsg=u'Action: RemoveDefinitionSetting: Cannot remove setting (not found) : %s [%s] [%s]' % (uSettingVar,uSettingVarOrg,uDefinitionName))
+            LogError (uMsg=f'Action: RemoveDefinitionSetting: Cannot remove setting (not found) : {uSettingVar} [{uSettingVarOrg}] [{uDefinitionName}]')
             return eReturnCode.Error
         return eReturnCode.Success
 
@@ -186,13 +186,13 @@ class cEventActionsSettings(cEventActionBase):
         """
 
         self.oEventDispatcher.aHiddenKeyWords.remove('configname')
-        self.oEventDispatcher.LogAction(uTxt=u'SaveInterfaceSetting',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='SaveInterfaceSetting',oAction=oAction)
         self.oEventDispatcher.aHiddenKeyWords.append('configname')
 
-        uInterfaceName:str = ReplaceVars(oAction.dActionPars.get("interfacename",""))
-        uConfigName:str    = ReplaceVars(oAction.dActionPars.get("configname"   ,""))
-        uVarName:str       = ReplaceVars(oAction.dActionPars.get("varname"      ,""))
-        uVarValue:str      = ReplaceVars(oAction.dActionPars.get("varvalue"     ,""))
+        uInterfaceName:str = ReplaceVars(oAction.dActionPars.get('interfacename',''))
+        uConfigName:str    = ReplaceVars(oAction.dActionPars.get('configname'   ,''))
+        uVarName:str       = ReplaceVars(oAction.dActionPars.get('varname'      ,''))
+        uVarValue:str      = ReplaceVars(oAction.dActionPars.get('varvalue'     ,''))
 
         oInterFace:cBaseInterFace = Globals.oInterFaces.GetInterface(uInterfaceName)
         if oInterFace is None:
@@ -200,7 +200,7 @@ class cEventActionsSettings(cEventActionBase):
             oInterFace=Globals.oInterFaces.GetInterface(uInterfaceName)
 
         if oInterFace is None:
-            LogError(uMsg=u'Action: Save Interface Setting failed: Interface: %s  Interface not found!' % uInterfaceName)
+            LogError(uMsg=f'Action: Save Interface Setting failed: Interface: {uInterfaceName}  Interface not found!')
             return eReturnCode.Error
         oInterFace.oObjectConfig.WriteDefinitionConfigPar(uSectionName=uConfigName, uVarName=uVarName, uVarValue=uVarValue, bForce=True)
         return eReturnCode.Success
@@ -240,12 +240,12 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'GetInterfaceSetting',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='GetInterfaceSetting',oAction=oAction)
 
-        uInterfaceName:str       = ReplaceVars(oAction.dActionPars.get("interfacename",""))
-        uConfigName:str          = ReplaceVars(oAction.dActionPars.get("configname",""))
-        uVarName:str             = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uRetVar:str              = ReplaceVars(oAction.dActionPars.get("retvar",""))
+        uInterfaceName:str       = ReplaceVars(oAction.dActionPars.get('interfacename',''))
+        uConfigName:str          = ReplaceVars(oAction.dActionPars.get('configname',''))
+        uVarName:str             = ReplaceVars(oAction.dActionPars.get('varname',''))
+        uRetVar:str              = ReplaceVars(oAction.dActionPars.get('retvar',''))
 
         oInterFace:cBaseInterFace = Globals.oInterFaces.GetInterface(uInterfaceName)
         if oInterFace is None:
@@ -253,7 +253,7 @@ class cEventActionsSettings(cEventActionBase):
             oInterFace=Globals.oInterFaces.GetInterface(uInterfaceName)
 
         if oInterFace is None:
-            LogError(uMsg=u'Action: Get Interface Setting failed: Interface: %s  Interface not found!' % uInterfaceName)
+            LogError(uMsg=f'Action: Get Interface Setting failed: Interface: {uInterfaceName}  Interface not found!')
             return eReturnCode.Error
 
         SetVar(uVarName = uRetVar, oVarValue = oInterFace.oObjectConfig.GetSettingParFromIni(uSectionName=uConfigName,uVarName=uVarName))
@@ -295,37 +295,37 @@ class cEventActionsSettings(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'GetSaveOrcaSetting',oAction=oAction)
-        uConfigType:str          = ReplaceVars(oAction.dActionPars.get("configtype",""))
-        uVarName:str             = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uVarValue:str            = oAction.dActionPars.get("varvalue","")
-        uRetVar:str              = ReplaceVars(oAction.dActionPars.get("retvar",""))
-        bNoWrite:bool            = ToBool(ReplaceVars(oAction.dActionPars.get("nowrite","")))
+        self.oEventDispatcher.LogAction(uTxt='GetSaveOrcaSetting',oAction=oAction)
+        uConfigType:str          = ReplaceVars(oAction.dActionPars.get('configtype',''))
+        uVarName:str             = ReplaceVars(oAction.dActionPars.get('varname',''))
+        uVarValue:str            = oAction.dActionPars.get('varvalue','')
+        uRetVar:str              = ReplaceVars(oAction.dActionPars.get('retvar',''))
+        bNoWrite:bool            = ToBool(ReplaceVars(oAction.dActionPars.get('nowrite','')))
         uSection:str
 
-        if uVarValue!= u'':
-            if not "$lvar(" in uVarValue:
+        if uVarValue!= '':
+            if not '$lvar(' in uVarValue:
                 uVarValue=ReplaceVars(uVarValue)
             else:
                 uVarValue=uVarValue
         else:
             uVarValue=GetVar(uVarName = uVarName)
 
-        # if uRetVar = "", we want to write
-        if uRetVar=="":
-            if uConfigType=="ORCA":
+        # if uRetVar = '', we want to write
+        if uRetVar=='':
+            if uConfigType=='ORCA':
                 Globals.oOrcaConfigParser.set(uConfigType, uVarName, uVarValue)
                 if not bNoWrite:
                     Globals.oOrcaConfigParser.write()
             else:
                 uSection = uConfigType
-                uSection = uSection.replace(u' ', u'_')
+                uSection = uSection.replace(' ', '_')
 
                 #todo: temporary hack to bypass configparser unicode error
                 uVarValue=EscapeUnicode(uVarValue)
 
                 Globals.oDefinitionConfigParser.set(uSection, uVarName, uVarValue)
-                Logger.debug("Writing Config Var [%s]:[%s] into [%s] " % (uVarName,uVarValue,uConfigType))
+                Logger.debug(f'Writing Config Var [{uVarName}]:[{uVarValue}] into [{uConfigType}] ')
                 if not bNoWrite:
                     Globals.oDefinitionConfigParser.write()
             SetVar(uVarName = uVarName, oVarValue = uVarValue)
@@ -333,24 +333,24 @@ class cEventActionsSettings(cEventActionBase):
 
         # otherwise we want to read
         try:
-            if uConfigType=="ORCA":
-                uVarValue = Globals.oOrcaConfigParser.get(u'ORCA', uVarName)
+            if uConfigType=='ORCA':
+                uVarValue = Globals.oOrcaConfigParser.get('ORCA', uVarName)
             else:
                 uSection = uConfigType
-                uSection = uSection.replace(u' ', u'_')
+                uSection = uSection.replace(' ', '_')
                 try:
                     uVarValue = Globals.oDefinitionConfigParser.get(uSection, uVarName)
                 except Exception:
-                    Logger.warning("getsaveorcasetting: not var to read: [%s] from [%s] into Var [%s], returning empty value" % (uVarName,uConfigType,uRetVar))
+                    Logger.warning(f'getsaveorcasetting: not var to read: [{uVarName}] from [{uConfigType}] into Var [{uRetVar}], returning empty value')
 
             #todo: temporary hack to bypass configparser unicode error
             uVarValue=UnEscapeUnicode(uVarValue)
             SetVar(uVarName = uRetVar, oVarValue = uVarValue)
             SetVar(uVarName = uRetVar, oVarValue = uVarValue, uContext = uConfigType)
-            Logger.debug("Pulled Config Var [%s]:[%s] from [%s] into Var [%s]" % (uVarName,uVarValue,uConfigType,uRetVar))
+            Logger.debug(f'Pulled Config Var [{uVarName}]:[{uVarValue}] from [{uConfigType}] into Var [{uRetVar}]')
         except Exception as e:
-            LogError(uMsg=u'Action: GetSaveOrcaSetting',oException=e )
-            SetVar(uVarName = uRetVar, oVarValue = u'')
+            LogError(uMsg='Action: GetSaveOrcaSetting',oException=e )
+            SetVar(uVarName = uRetVar, oVarValue = '')
         return eReturnCode.Nothing
 
 

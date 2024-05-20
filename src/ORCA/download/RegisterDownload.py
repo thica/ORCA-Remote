@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 from ORCA.download.InstalledReps  import cInstalledReps
 from ORCA.utils.TypeConvert       import ToUnicode
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['RegisterDownLoad']
 
@@ -35,18 +35,17 @@ def RegisterDownLoad(*,uType:str,uName:str,iVersion:int):
         oInstalledRep.uType    = uType
         oInstalledRep.uName    = uName
         oInstalledRep.iVersion = iVersion
-        uKey                   ='%s:%s'%(oInstalledRep.uType,oInstalledRep.uName)
+        uKey                   = f'{oInstalledRep.uType}:{oInstalledRep.uName}'
         Globals.dInstalledReps[uKey]=oInstalledRep
 
         i=0
         for oInstalledRepKey in Globals.dInstalledReps:
             oInstalledRep=Globals.dInstalledReps[oInstalledRepKey]
-            uKey=u'installedrep%i_type' % i
-            oConfig.set(u'ORCA', uKey, oInstalledRep.uType)
-            uKey=u'installedrep%i_name' % i
-            oConfig.set(u'ORCA', uKey, oInstalledRep.uName)
-            uKey=u'installedrep%i_version' % i
-            oConfig.set(u'ORCA', uKey, ToUnicode(oInstalledRep.iVersion))
-
+            uKey= f'installedrep{i:d}_type'
+            oConfig.set('ORCA', uKey, oInstalledRep.uType)
+            uKey= f'installedrep{i:d}_name'
+            oConfig.set('ORCA', uKey, oInstalledRep.uName)
+            uKey= f'installedrep{i:d}_version'
+            oConfig.set('ORCA', uKey, ToUnicode(oInstalledRep.iVersion))
             i+=1
         oConfig.write()

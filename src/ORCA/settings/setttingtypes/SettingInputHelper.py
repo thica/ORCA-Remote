@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -28,8 +28,8 @@ class SettingInputHelper(SettingString):
     # noinspection PyMissingConstructor,PyUnusedLocal
     def __init__(self, **kwargs):
         self.settings = None
-        self.action   = ""
-        self.title    = ""
+        self.action   = ''
+        self.title    = ''
         self.config   = None
 
     def GetInput(self, settings,config,section,key,title,action,value) -> None:

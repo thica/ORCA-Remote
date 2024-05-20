@@ -300,7 +300,7 @@
     <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[7][26]"      default="discover" />
     <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[7][27]"      default="discover" />
     <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[8][1]"       default="discover" />
-    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[8[2]"       default="discover" />
+    <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[8][2]"       default="discover" />
     <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[8][3]"       default="discover" />
     <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[8][4]"       default="discover" />
     <default var="$dvar(definition_alias_tvfavorites_template)_tvlogo[8][5]"       default="discover" />

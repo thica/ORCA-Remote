@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -25,12 +25,12 @@ from ORCA.widgets.base.Base         import cWidgetBase
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage = TypeVar("cScreenPage")
+    cScreenPage = TypeVar('cScreenPage')
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cWidgetAnchor']
 
@@ -43,7 +43,7 @@ class cWidgetAnchor(cWidgetBase):
     = ANCHOR =
     The anchor widget has not a screen representation. It is used to create a virtual rectangle, where you can place widgets into. All widget coordinates are relative to the anchor position.
 
-    There is only one additional attribute to common widget attributs
+    There is only one additional attribute to common widget attributes
 
     <div style="overflow:auto; ">
     {| class="wikitable"
@@ -76,7 +76,7 @@ class cWidgetAnchor(cWidgetBase):
     def Create(self,oParent:Widget) -> bool:
         """ Creates the Widget """
         if Globals.bShowBorders:
-            self.CreateBase(Parent=oParent,Class="")
+            self.CreateBase(Parent=oParent,Class='')
             self.oObject = self.oParent
             self.FlipBorder()
             self.oObject = None

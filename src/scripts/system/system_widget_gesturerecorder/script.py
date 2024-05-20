@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -35,10 +35,10 @@ from kivy.graphics                          import Line
 from ORCA.widgets.core.TouchRectangle       import cTouchRectangle
 from ORCA.widgets.core.ButtonBehaviour      import simplegesture
 from ORCA.widgets.base.Base                 import cWidgetBase
-from ORCA.ScreenPage                        import cScreenPage
+from ORCA.screen.ScreenPage import cScreenPage
 from ORCA.utils.TypeConvert                 import ToUnicode
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 '''
 <root>
@@ -48,8 +48,8 @@ import ORCA.Globals as Globals
       <description language='English'>Additional Widget to record gestures</description>
       <description language='German'>Zusätzliches Widgets um Gesten aufzuzeichnen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -109,7 +109,7 @@ class cGestureBoard(cTouchRectangle):
 
         g = simplegesture('',zip(touch.ud['line'].points[::2], touch.ud['line'].points[1::2]))
         # print "gesture representation:", ':',self.gdb.gesture_to_str(g)
-        uLogName:str=Globals.oFnGestureLog.string
+        uLogName:str=str(Globals.oFnGestureLog)
 
         oLogFile = open(uLogName, 'a')
         oLogFile.write('Gesturecode:'+ToUnicode(self.gdb.gesture_to_str(g))+'\n')
@@ -135,7 +135,7 @@ class cWidgetGestureRecorder(cWidgetBase):
     ! align="left" | Description
     |-
     |type
-    |fixed: needs to be "GESTURERECORDER". Capital letters!
+    |fixed: needs to be 'GESTURERECORDER'. Capital letters!
     |}</div>
 
     Below you see an example for a gesturerecorder widget
@@ -183,27 +183,27 @@ class cScript(cSystemTemplate):
 
     def __init__(self):
         super().__init__()
-        self.uSubType           = u'WIDGET'
-        self.uSortOrder         = u'auto'
-        self.uIniFileLocation   = u'none'
+        self.uSubType           = 'WIDGET'
+        self.uSortOrder         = 'auto'
+        self.uIniFileLocation   = 'none'
 
 
     def RunScript(self, *args, **kwargs) -> None:
-        Globals.oNotifications.RegisterNotification(uNotification="UNKNOWNWIDGET",fNotifyFunction=self.AddWidgetFromXmlNode,uDescription="Script Widget GestureRecorder")
+        Globals.oNotifications.RegisterNotification(uNotification='UNKNOWNWIDGET',fNotifyFunction=self.AddWidgetFromXmlNode,uDescription='Script Widget GestureRecorder')
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def AddWidgetFromXmlNode(self,*args,**kwargs) -> Union[Dict,None]:
-        oScreenPage:cScreenPage = kwargs.get("SCREENPAGE")
-        oXMLNode:Element        = kwargs.get("XMLNODE")
-        uAnchor:str             = kwargs.get("ANCHOR")
-        oWidget:cWidgetBase     = kwargs.get("WIDGET")
+        oScreenPage:cScreenPage = kwargs.get('SCREENPAGE')
+        oXMLNode:Element        = kwargs.get('XMLNODE')
+        uAnchor:str             = kwargs.get('ANCHOR')
+        oWidget:cWidgetBase     = kwargs.get('WIDGET')
 
         if uAnchor is None or oScreenPage is None or oXMLNode is None or oWidget is None:
             return None
 
-        if oWidget.uTypeString != "GESTURERECORDER":
+        if oWidget.uTypeString != 'GESTURERECORDER':
             return None
 
         Ret = oScreenPage.AddWidgetFromXmlNode_Class(oXMLNode=oXMLNode,  uAnchor=uAnchor,oClass=cWidgetGestureRecorder)
-        return {"ret":Ret}
+        return {'ret':Ret}
 

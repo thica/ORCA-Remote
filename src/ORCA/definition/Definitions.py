@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import                              multiprocessing
 import                              logging
 from typing                         import List
 from typing                         import Dict
@@ -32,7 +31,7 @@ from copy                           import copy
 from kivy.logger                    import Logger
 from kivy.config                    import Config
 
-from ORCA.Cookies                   import Var_Load
+from ORCA.utils.Cookies import Var_Load
 from ORCA.definition.Definition     import aLoadedFontFiles
 from ORCA.definition.Definition     import cDefinition
 from ORCA.definition.DefinitionContext import SetDefinitionContext
@@ -56,15 +55,15 @@ from ORCA.utils.TypeConvert         import UnEscapeUnicode
 from ORCA.utils.TypeConvert         import EscapeUnicode
 from ORCA.utils.TypeConvert         import ToOrderedDic
 from ORCA.utils.XML                 import LoadXMLString
-from ORCA.Cookies                   import GetCookieValue
+from ORCA.utils.Cookies import GetCookieValue
 from ORCA.definition.DefinitionVars import cDefinitionVars
 from ORCA.definition.DefinitionContext import SetDefinitionPathes
 from ORCA.definition.DefinitionContext import RestoreDefinitionContext
 from ORCA.vars.Access               import GetVar
 from ORCA.interfaces.BaseInterface  import cBaseInterFace
-from ORCA.Action                    import cAction
+from ORCA.action.Action import cAction
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cDefinitions','GetDefinitionFileNameByName']
 
@@ -76,10 +75,10 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
         self.dInitInterfaceSettings:Dict[str,Dict[str,Dict]]    = {}
         self.aSettingsVars:List[str]                            = []
         self.dSettingsDefaults:Dict[str,str]                    = {}
-        self.uInstallationHint:str                              = u''
-        self.uDefinitionAuthor:str                              = u''
-        self.uDefinitionSupport:str                             = u''
-        self.uDefinitionVersion:str                             = u''
+        self.uInstallationHint:str                              = ''
+        self.uDefinitionAuthor:str                              = ''
+        self.uDefinitionSupport:str                             = ''
+        self.uDefinitionVersion:str                             = ''
         self.dSettingFormatStrings:Dict[str,str]                = {}
         self.dInstallationsHints:Dict[str,str]                  = {}
 
@@ -90,7 +89,7 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
             else:
                 return cast(cDefinition,OrderedDict.__getitem__(self, key))
         except Exception as e:
-            LogError(uMsg="Wrong definition name or index given:"+str(key),oException=e)
+            LogError(uMsg='Wrong definition name or index given:'+str(key),oException=e)
             return None
 
     def InitVars(self) -> None:
@@ -101,10 +100,10 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
         self.dSettingsDefaults.clear()
         self.dInstallationsHints.clear()
         del self.aSettingsVars[:]
-        self.uInstallationHint  = u''
-        self.uDefinitionAuthor  = u''
-        self.uDefinitionSupport = u''
-        self.uDefinitionVersion = u''
+        self.uInstallationHint  = ''
+        self.uDefinitionAuthor  = ''
+        self.uDefinitionSupport = ''
+        self.uDefinitionVersion = ''
         self.dSettingFormatStrings={'options'       :',{{"type":"{type}","title":"{title}","desc":"{description}","section":"{section}","key":"{var}","allowtextinput":"{allowtextinput}","options":[{options}]}}',
                                     'numericslider' :',{{"type":"{type}","title":"{title}","desc":"{description}","section":"{section}","key":"{var}","min":"{min}", "max":"{max}","roundpos":"{roundpos}"}}',
                                     'title'         :',{{"type":"{type}","title":"{title}"}}',
@@ -115,9 +114,9 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
 
     def DumpDefinitionList(self) -> None:
         """ Dumps a list af all available definition (alias) names """
-        LogError(uMsg=u'Available Definition Names:')
+        LogError(uMsg='Available Definition Names:')
         for uKey in self:
-            LogError(uMsg=u'Available Name:'+uKey)
+            LogError(uMsg='Available Name:'+uKey)
         return None
 
     def AddDefinition(self,*,oDefinition:cDefinition) -> None:
@@ -145,15 +144,15 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                 else:
                     aCommands=[{'name':'Update Percentage and DefinitionName','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
                 if oDefinition.oDefinitionPathes.oFnDefinitionLanguageFallBack.Exists():
-                    aCommands.append({'name':'Load Default Language File','string':'loadlanguages','languagefilename':oDefinition.oDefinitionPathes.oFnDefinitionLanguageFallBack.string,'definition':oDefinition.uName,'definitionalias':oDefinition.uAlias})
-                if not Globals.uLanguage==u'English':
+                    aCommands.append({'name':'Load Default Language File','string':'loadlanguages','languagefilename':str(oDefinition.oDefinitionPathes.oFnDefinitionLanguageFallBack),'definition':oDefinition.uName,'definitionalias':oDefinition.uAlias})
+                if not Globals.uLanguage=='English':
                     oDefinition.oDefinitionPathes.LanguageChange()
                     if oDefinition.oDefinitionPathes.oFnDefinitionLanguage.Exists():
-                        aCommands.append({'name':'Load Requested Language File','string':'loadlanguages','languagefilename':oDefinition.oDefinitionPathes.oFnDefinitionLanguage.string,'definition':oDefinition.uName,'definitionalias':oDefinition.uAlias})
+                        aCommands.append({'name':'Load Requested Language File','string':'loadlanguages','languagefilename':str(oDefinition.oDefinitionPathes.oFnDefinitionLanguage),'definition':oDefinition.uName,'definitionalias':oDefinition.uAlias})
                 if len(aCommands)>0:
                     Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=aCommands)
 
-        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='loadlanguages')
         return None
 
     def LoadActions(self,*,fSplashScreenPercentageStartValue:float) -> None:
@@ -179,7 +178,7 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                 aCommands.append({'name': 'Load the Definition Actions', "string": "loaddefinitionactions", "definitionname": oDefinition.uAlias})
                 Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=aCommands)
 
-        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='loaddefinitions')
         return None
 
     def LoadFonts(self,*,uDefinitionName:str,fSplashScreenPercentageStartValue:float) -> None:
@@ -187,7 +186,7 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
 
         aCommands:List[Dict[str,str]]
 
-        if uDefinitionName=="":
+        if uDefinitionName=='':
             fSplashScreenPercentageRange:float      = 10.0
             fPercentage:float                       = fSplashScreenPercentageStartValue
             fPercentageStep:float                   = fSplashScreenPercentageRange/(len(self)+1)
@@ -207,14 +206,14 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
 
                 Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=aCommands)
 
-            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
-        elif uDefinitionName=="ORCA":
+            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='loadfonts')
+        elif uDefinitionName=='ORCA':
             aFontsFolders:List[str] = Globals.oPathFonts.GetFolderList(bFullPath=True)
             for uFontFolder in aFontsFolders:
-                oFnFontDefinition:cFileName = cFileName('').ImportFullPath(uFnFullName=uFontFolder+u"/fonts.xml")
-                if not oFnFontDefinition.string in aLoadedFontFiles:
-                    Logger.info(u'Loading Global Fonts: '+uFontFolder)
-                    aLoadedFontFiles.append(oFnFontDefinition.string)
+                oFnFontDefinition:cFileName = cFileName(uFontFolder+'/fonts.xml')
+                if not str(oFnFontDefinition) in aLoadedFontFiles:
+                    Logger.info(f'Loading Global Fonts: {uFontFolder}')
+                    aLoadedFontFiles.append(str(oFnFontDefinition))
                     LoadFontFromXML(oET_Root=LoadXMLFile(oFile=oFnFontDefinition))
         else:
             self[uDefinitionName].LoadFonts()
@@ -225,7 +224,7 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
 
         aCommands:List[Dict[str,str]]
 
-        if uDefinitionName=="":
+        if uDefinitionName=='':
             fSplashScreenPercentageRange:float  = 10.0
             fPercentage:float                   = fSplashScreenPercentageStartValue
             fPercentageStep:float               = fSplashScreenPercentageRange/len(self)
@@ -243,16 +242,16 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
 
                 if oDefinition.bImportActions:
                     Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=aCommands)
-            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='loaddefinitions')
         else:
             self[uDefinitionName].LoadGestures()
         return None
 
     def GetUsedDefinitions(self) -> None:
         """ Gets a list of all used definitions """
-        Logger.debug (u'Collecting used definitions...')
+        Logger.debug ('Collecting used definitions...')
         fSplashScreenPercentageRange:float = 10.0
-        Globals.oTheScreen.LogToSplashScreen(uText="Collecting used definitions",uPercentage=str(fSplashScreenPercentageRange))
+        Globals.oTheScreen.LogToSplashScreen(uText='Collecting used definitions',uPercentage=str(fSplashScreenPercentageRange))
         self.__GetUsedDefinitions_Sub(uDefinitionName=Globals.uDefinitionName,
                                       bImportActions=True,
                                       bImportLanguages=True,
@@ -261,8 +260,8 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                                       uParentDefinitionName=Globals.oTheScreen.uDefName,
                                       uParentDefinitionAlias=Globals.uDefinitionName,
                                       oDefinitionVarsFromParent=cDefinitionVars(),
-                                      uAlias=u'' )
-        Globals.uDefinitionContext="" # to ensure, root definitioncontext is loaded
+                                      uAlias='' )
+        Globals.uDefinitionContext='' # to ensure, root definitioncontext is loaded
         RestoreDefinitionContext()
         return None
 
@@ -273,13 +272,13 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
 
         if not uAlias in self:
             oDefinitionPathes:cDefinitionPathes = cDefinitionPathes(uDefinitionName=uDefinitionName)
-            SetVar(uVarName   = "DEFINITIONPATH[%s]" % uDefinitionName, oVarValue = oDefinitionPathes.oPathDefinition.string)
-            SetVar(uVarName   = "DEFINITIONPATHSKINELEMENTS[%s]" % uDefinitionName, oVarValue=oDefinitionPathes.oPathDefinitionSkinElements.string)
+            SetVar(uVarName   = f'DEFINITIONPATH[{uDefinitionName}]', oVarValue = str(oDefinitionPathes.oPathDefinition))
+            SetVar(uVarName   = f'DEFINITIONPATHSKINELEMENTS[{uDefinitionName}]', oVarValue=str(oDefinitionPathes.oPathDefinitionSkinElements))
             Globals.dDefinitionPathes[uDefinitionName]=oDefinitionPathes
             SetDefinitionPathes(uDefinitionName=uDefinitionName)
 
             oFnDefinition:cFileName = Globals.oDefinitionPathes.oFnDefinition
-            Logger.debug (u'TheScreen: Load Definition XmlFile:'+oFnDefinition)
+            Logger.debug (f'TheScreen: Load Definition XmlFile: {oFnDefinition}')
             oDefinition:cDefinition                = cDefinition(uDefinitionName=uDefinitionName,oDefinitions=self)
             oDefinition.uParentDefinitionName      = uParentDefinitionName
             oDefinition.bImportActions             = bImportActions
@@ -288,20 +287,20 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
             oDefinition.bImportSettings            = bImportSettings
             oDefinition.oDefinitionVarsFromParent  = oDefinitionVarsFromParent
 
-            #we read the definitionvars first with raw funtions
+            #we read the definitionvars first with raw functions
             uET_Data:str     = CachedFile(oFileName=Globals.oDefinitionPathes.oFnDefinition)
             oET_Root:Element = LoadXMLString(uXML=uET_Data)
             oRef = oET_Root.find('def_parameter')
             # And merge / Replace the existing Vars
             oDefinition.oDefinitionVars.clear()
-            oDefinition.oDefinitionVars.update(ToOrderedDic(GetXMLTextValue(oXMLNode=oRef,uTag=u'definitionvars',bMandatory=False,vDefault=u'{}')))
+            oDefinition.oDefinitionVars.update(ToOrderedDic(GetXMLTextValue(oXMLNode=oRef,uTag='definitionvars',bMandatory=False,vDefault='{}')))
 
             if len(oDefinitionVarsFromParent)>0:
                 for uVarName in oDefinition.oDefinitionVars:
                     if uVarName in oDefinition.oDefinitionVarsFromParent:
                         oDefinition.oDefinitionVars[uVarName]=oDefinition.oDefinitionVarsFromParent[uVarName]
                     else:
-                        Logger.warning("Importing definition %s from %s: Definition varname not passed: '%s', using default %s" % (oDefinition.uName, uParentDefinitionName, uVarName, oDefinition.oDefinitionVars[uVarName]))
+                        Logger.warning(f'Importing definition {oDefinition.uName} from {uParentDefinitionName}: Definition varname not passed: [{uVarName}], using default [{oDefinition.oDefinitionVars[uVarName]}]')
                 for uVarName in oDefinitionVarsFromParent:
                     if not uVarName in oDefinition.oDefinitionVars:
                         oDefinition.oDefinitionVars[uVarName]=oDefinition.oDefinitionVarsFromParent[uVarName]
@@ -309,11 +308,11 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
 
             for uKey in oDefinition.oDefinitionVars:
                 uVar:str=oDefinition.oDefinitionVars[uKey]
-                if "$cookie(" in uVar:
+                if '$cookie(' in uVar:
                     uValue:str=GetCookieValue(uVar)
                     oDefinition.oDefinitionVars[uKey]=uValue
 
-            if uAlias==u'':
+            if uAlias=='':
                 # this works on all python versions
                 for uKey in oDefinition.oDefinitionVars:
                     uAlias = oDefinition.oDefinitionVars[uKey]
@@ -323,11 +322,11 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                 uAlias=uDefinitionName
                 oDefinition.uDefPublicTitle=uDefinitionName
                 #create a default alias def var
-                uAliasDefVar:str="definition_alias_"+uAlias
+                uAliasDefVar:str='definition_alias_'+uAlias
                 if oDefinition.oDefinitionVars.get(uAliasDefVar) is None:
                     SetDefVar(uVarName = uAliasDefVar,uVarValue = uAlias,dArray = oDefinition.oDefinitionVars)
             else:
-                oDefinition.uDefPublicTitle="%s [%s]" % (uAlias,uDefinitionName)
+                oDefinition.uDefPublicTitle= f'{uAlias} [{uDefinitionName}]'
 
             oDefinition.uAlias = uAlias
 
@@ -335,15 +334,15 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                 # create defvars for import pages
                 oTmpDefinitionVars:cDefinitionVars=copy(oDefinition.oDefinitionVars)
                 for uVar in oTmpDefinitionVars:
-                    if not uVar.endswith("_IMPORTPAGES"):
+                    if not uVar.endswith('_IMPORTPAGES'):
                         if bImportPages:
-                            SetDefVar(uVarName = uVar + "_IMPORTPAGES",uVarValue = "1",dArray = oDefinition.oDefinitionVars)
+                            SetDefVar(uVarName = uVar + '_IMPORTPAGES',uVarValue = '1',dArray = oDefinition.oDefinitionVars)
                         else:
-                            SetDefVar(uVarName = uVar+"_IMPORTPAGES",uVarValue = "0",dArray = oDefinition.oDefinitionVars)
+                            SetDefVar(uVarName = uVar+'_IMPORTPAGES',uVarValue = '0',dArray = oDefinition.oDefinitionVars)
 
 
                 #and now again with adjusted definitionvars
-                oET_Root                        = Orca_FromString(uET_Data=uET_Data,oDef=oDefinition,uFileName="root")
+                oET_Root                        = Orca_FromString(uET_Data=uET_Data,oDef=oDefinition,uFileName='root')
                 oDefinition.oET_Root            = oET_Root
                 oDefinition.sET_Data            = uET_Data
 
@@ -352,14 +351,14 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                 oXMLIncludes       = oET_Root.find('definitionimports')
                 if oXMLIncludes is not None:
                     for oXMLInclude in oXMLIncludes.findall('definition'):
-                        uDefinitionNameImp  = GetXMLTextValue(oXMLNode=oXMLInclude,uTag=u'',bMandatory=True,vDefault='')
-                        bImportActionsImp   = GetXMLBoolAttribute(oXMLNode=oXMLInclude,uTag=u'importactions',bMandatory=False,bDefault=False)
-                        bImportLanguagesImp = GetXMLBoolAttribute(oXMLNode=oXMLInclude,uTag=u'importlanguages',bMandatory=False,bDefault=False)
-                        bImportPagesImp     = GetXMLBoolAttribute(oXMLNode=oXMLInclude,uTag=u'importpages',bMandatory=False,bDefault=False)
-                        bImportSettingsImp  = GetXMLBoolAttribute(oXMLNode=oXMLInclude,uTag=u'importsettings',bMandatory=False,bDefault=False)
-                        uAliasImp           = GetXMLTextAttribute(oXMLNode=oXMLInclude,uTag=u'alias',bMandatory=False,vDefault='')
+                        uDefinitionNameImp  = GetXMLTextValue(oXMLNode=oXMLInclude,uTag='',bMandatory=True,vDefault='')
+                        bImportActionsImp   = GetXMLBoolAttribute(oXMLNode=oXMLInclude,uTag='importactions',bMandatory=False,bDefault=False)
+                        bImportLanguagesImp = GetXMLBoolAttribute(oXMLNode=oXMLInclude,uTag='importlanguages',bMandatory=False,bDefault=False)
+                        bImportPagesImp     = GetXMLBoolAttribute(oXMLNode=oXMLInclude,uTag='importpages',bMandatory=False,bDefault=False)
+                        bImportSettingsImp  = GetXMLBoolAttribute(oXMLNode=oXMLInclude,uTag='importsettings',bMandatory=False,bDefault=False)
+                        uAliasImp           = GetXMLTextAttribute(oXMLNode=oXMLInclude,uTag='alias',bMandatory=False,vDefault='')
                         aDefinitionVarsImp  = cDefinitionVars()
-                        aDefinitionVarsImp.update(ToDic(GetXMLTextAttribute(oXMLNode=oXMLInclude,uTag=u'definitionvars',bMandatory=False,vDefault={})))
+                        aDefinitionVarsImp.update(ToDic(GetXMLTextAttribute(oXMLNode=oXMLInclude,uTag='definitionvars',bMandatory=False,vDefault={})))
 
                         # Pass Through of additional Definitionvars
                         for uVarName in dAdditionalDefVars:
@@ -368,9 +367,9 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
 
                         self.__GetUsedDefinitions_Sub(uDefinitionName=uDefinitionNameImp,bImportActions=bImportActionsImp,bImportLanguages=bImportLanguagesImp,bImportPages=bImportPagesImp,bImportSettings=bImportSettingsImp,uParentDefinitionName=oDefinition.uName, uParentDefinitionAlias=oDefinition.uAlias,oDefinitionVarsFromParent=aDefinitionVarsImp, uAlias=uAliasImp)
             else:
-                Logger.debug (u'GetUsedDefinitions: Skipping duplicate xml %s [%s]' %(uAlias,uDefinitionName))
+                Logger.debug (f'GetUsedDefinitions: Skipping duplicate xml {uAlias} [{uDefinitionName}]')
         else:
-            Logger.debug (u'GetUsedDefinitions: Skipping duplicate xml %s [%s]' %(uAlias,uDefinitionName))
+            Logger.debug (f'GetUsedDefinitions: Skipping duplicate xml {uAlias} [{uDefinitionName}]')
         return None
 
     def ParseXmlFiles(self,*,uDefinitionName:str,fSplashScreenPercentageStartValue:float) -> None:
@@ -390,11 +389,11 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                 if Logger.getEffectiveLevel() != logging.DEBUG:
                     aCommands = []
                 else:
-                    aCommands = [{'name':'Update Percentage and Definitioon Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
+                    aCommands = [{'name':'Update Percentage and Definition Name','string':'showsplashtext','subtext':oDefinition.uDefPublicTitle,'percentage':str(fPercentage)}]
                 aCommands.append({'name':'And parse the definition','string':'parsedefinitionxml','definitionname':oDefinition.uAlias})
                 Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=aCommands)
 
-            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='parsedefinitionxml')
         else:
             self[uDefinitionName].LoadXMLFile()
         return None
@@ -426,21 +425,21 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                                                                                  {'name':'Write all interface settings','string':'initinterfacesettings','definitionname':'WRITEALLSETTINGS'}
                                                                                 ])
 
-            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName="initinterfacesettings")
 
-        elif uDefinitionName=="WRITEALLSETTINGS":
+        elif uDefinitionName=='WRITEALLSETTINGS':
             for uInterfaceName in self.dInitInterfaceSettings:
                 if uInterfaceName in Globals.oInterFaces.aObjectNameList:
                     oInterface = Globals.oInterFaces.GetInterface(uInterfaceName)
                     if oInterface is None:
-                        Logger.info('Need to load unrecognized Interface [%s] for configuration' % uInterfaceName)
+                        Logger.info(f'Need to load unrecognized Interface [{uInterfaceName}] for configuration')
                         Globals.oInterFaces.LoadInterface(uInterfaceName)
                         oInterface=Globals.oInterFaces.GetInterface(uInterfaceName)
                     if oInterface is not None:
                         for uConfigurationName in self.dInitInterfaceSettings[uInterfaceName]:
                             oInterface.oObjectConfig.WriteDefinitionConfig(uSectionName = uConfigurationName ,dSettings = self.dInitInterfaceSettings[uInterfaceName][uConfigurationName])
                 else:
-                    Logger.warning('Interface [%s] not on device, so it will not be configured!' % uInterfaceName)
+                    Logger.warning(f'Interface [{uInterfaceName}] not on device, so it will not be configured!')
 
         else:
             oDef:cDefinition                        = self[uDefinitionName]
@@ -484,11 +483,11 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
             # Lets parse them (to init all default vars
             Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions = [{'name':'Parse all Settings and set defaults','string':'loaddefinitionsettings','definitionname':'PARSESETTINGS'}])
             #Execute the Queue
-            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='loadsettings')
             #just to put it somewhere
             for uHintKey in self.dInstallationsHints:
                 self.uInstallationHint+=self.dInstallationsHints[uHintKey]
-            SetVar(uVarName = "INSTALLATIONHINT", oVarValue = self.uInstallationHint)
+            SetVar(uVarName = 'INSTALLATIONHINT', oVarValue = self.uInstallationHint)
 
         else:
             oDefinition                          = self[uDefinitionName]
@@ -502,7 +501,7 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
         """ Creates the json string for the settings dialog AND reads/writes the defaults to the config file """
 
         uSection:str    = Globals.uDefinitionName
-        uSection        = uSection.replace(u' ', u'_')
+        uSection        = uSection.replace(' ', '_')
         uVisSection:str
         oConfig:Config  = Globals.oDefinitionConfigParser
 
@@ -514,12 +513,12 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                 for aSetting in oDef.aDefinitionsSettings:
                     uType:str = aSetting['type']
 
-                    if uType=="section":
+                    if uType=='section':
                         uVisSection=aSetting['title']
                         continue
                     if oDef.dDefinitionSettingsJSON.get(uVisSection) is None:
-                        oDef.dDefinitionSettingsJSON[uVisSection]=u'[{ "type": "title","title": "'+uTitle+'" }\n'
-                        #oDef.dDefinitionSettingsJSON[uVisSection]=u'['
+                        oDef.dDefinitionSettingsJSON[uVisSection]='[{ "type": "title","title": "%s" }\n' % uTitle
+                        #oDef.dDefinitionSettingsJSON[uVisSection]='['
 
                     aSetting['section']=uSection
                     uFormatString:str = self.dSettingFormatStrings.get(uType)
@@ -532,20 +531,20 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
                     #todo temporary hack to bypass configparser unicode bug
                     uDefault = EscapeUnicode(uDefault)
                     #check for cookies
-                    uCookie:str=aSetting["cookie"]
-                    if uCookie != u"" and uDefault=="":
-                        uDefault=Var_Load(uVarName=uCookie,uDefault="",uPrefix="")
+                    uCookie:str=aSetting['cookie']
+                    if uCookie != '' and uDefault=='':
+                        uDefault=Var_Load(uVarName=uCookie,uDefault='',uPrefix='')
 
                     # parse definition settings into vars
                     uValue:str   = ReplaceVars(Config_GetDefault_Str(oConfig=oConfig,uSection=uSection, uOption=uVar,vDefaultValue=uDefault))
                     #todo temporary hack to bypass configparser unicode bug
                     uValue = UnEscapeUnicode(uValue)
-                    # Logger.debug("Loading Definition Config Setting into var: [%s]=[%s]" %(uVar,uValue))
+                    # Logger.debug('Loading Definition Config Setting into var: [%s]=[%s]' %(uVar,uValue))
                     SetVar(uVarName = uVar, oVarValue = uValue)
                     self.aDefinitionSettingVars.append(uVar)
             for uVisSection in oDef.dDefinitionSettingsJSON:
                 if len(oDef.dDefinitionSettingsJSON[uVisSection])>0:
-                    oDef.dDefinitionSettingsJSON[uVisSection]+=u']'
+                    oDef.dDefinitionSettingsJSON[uVisSection]+=']'
         oConfig.write()
         return None
 
@@ -553,9 +552,9 @@ class cDefinitions(OrderedDict): # [str,cDefinition]
         for uDefinitionKey in self:
             oDefinition:cDefinition = cast(cDefinition,self[uDefinitionKey])
             uAddVar:str = oDefinition.uAlias
-            uDefinitionInterFace:str=GetVar(uAddVar+"_INTERFACE_MAIN")
+            uDefinitionInterFace:str=GetVar(uAddVar+'_INTERFACE_MAIN')
             if uDefinitionInterFace == uInterFaceName:
-                uDefinitionConfig:str = GetVar(uAddVar + "_CONFIGNAME_MAIN")
+                uDefinitionConfig:str = GetVar(uAddVar + '_CONFIGNAME_MAIN')
                 if uDefinitionConfig == uConfigName:
                     return oDefinition.uAlias
         return ""
@@ -568,7 +567,7 @@ def GetDefinitionFileNameByName(*,uDefinitionName:str) -> str:
         aDefinitionList:List[str] = Globals.oPathDefinitionRoot.GetFolderList()
         for uDir in aDefinitionList:
             if not uDir == 'shared_documents':
-                oFn:cFileName = cFileName(Globals.oPathDefinitionRoot + uDir) + u"definition.xml"
+                oFn:cFileName = cFileName(Globals.oPathDefinitionRoot + uDir) + 'definition.xml'
                 oRepManEntry:cRepManagerEntry = cRepManagerEntry(oFileName=oFn)
                 oRepManEntry.ParseFromXML()
                 uDefName:str = oRepManEntry.oRepEntry.uName
@@ -577,5 +576,5 @@ def GetDefinitionFileNameByName(*,uDefinitionName:str) -> str:
         return ''
 
     except Exception as e:
-        LogError(uMsg=u'GetDefinitionFileNameByName: Error:Load Definition XmlFile:', oException=e)
+        LogError(uMsg='GetDefinitionFileNameByName: Error:Load Definition XmlFile:', oException=e)
         return ''

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -46,25 +46,25 @@ def ParseDictAll(*,vObj:Union[List,Dict],uPrefix:str) -> Dict[str,str]:
         if isinstance(vObj, dict):
             for uFoundKey, vValue in vObj.items():
                 if isinstance(vValue, dict):
-                    Extract(vValue, dResult, uPrefix+"_"+uFoundKey,iLevel)
+                    Extract(vValue, dResult, uPrefix+'_'+uFoundKey,iLevel)
                 elif isinstance(vValue,list) and len(vValue) > 0 and isinstance(vValue[0], (dict,list)):
                     iIndex:int=0
                     for vValue2 in vValue:
-                        # Extract(vValue2, dResult, uPrefix+"_"+uFoundKey,iLevel)
-                        Extract(vValue2, dResult, uPrefix+"_"+uFoundKey+"[%d]"%iIndex,iLevel)
+                        # Extract(vValue2, dResult, uPrefix+'_'+uFoundKey,iLevel)
+                        Extract(vValue2, dResult, f'{uPrefix}_{uFoundKey}[{iIndex:d}]', iLevel)
                         iIndex+=1
                 elif isinstance(vValue,list):
                     iIndex:int=0
                     for uResult in vValue:
-                        dResult[uPrefix+"_"+uFoundKey+"[%d]"%iIndex]=ToUnicode(uResult)
+                        dResult[f'{uPrefix}_{uFoundKey}[iIndex:d]'] = ToUnicode(uResult)
                         iIndex+=1
                 else:
-                    dResult[uPrefix+"_"+uFoundKey]=ToUnicode(vValue)
+                    dResult[f'{uPrefix}_{uFoundKey}']=ToUnicode(vValue)
         elif isinstance(vObj, list):
             iIndex:int=0
             for vItem in vObj:
                 iOrgLevel =  iLevel
-                Extract(vItem, dResult, uPrefix+"[%d]"%iIndex, iLevel-1)
+                Extract(vItem, dResult, f'[{uPrefix}{iIndex:d}]', iLevel - 1)
                 iLevel = iOrgLevel
         return dResult
     return Extract(vObj, dResult, uPrefix,iLevel)

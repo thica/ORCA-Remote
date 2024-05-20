@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -26,10 +26,11 @@ from kivy.logger                import Logger
 from ORCA.actions.Base          import cEventActionBase
 from ORCA.vars.Replace          import ReplaceVars
 from ORCA.utils.TypeConvert     import ToDic
-from ORCA.Action                import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.ReturnCode    import eReturnCode
+from ORCA.action.ActionType import eReplaceOption
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cEventActionsNotifications']
 
@@ -60,12 +61,11 @@ class cEventActionsNotifications(cEventActionBase):
         WikiDoc:End
         """
 
-        uNotification:str                   = ReplaceVars(oAction.dActionPars.get("notification",""))
-
-        dActionPars:Dict                    = ToDic(ReplaceVars(oAction.dActionPars.get("actionpars","{}")))
+        uNotification:str                   = ReplaceVars(oAction.dActionPars.get('notification',''))
+        dActionPars:Dict                    = ToDic(ReplaceVars(oAction.dActionPars.get('actionpars','{}')))
         if not isinstance(dActionPars,dict):
-            dActionPars = ToDic(oAction.dActionPars.get("actionpars", "{}"))
-        self.oEventDispatcher.LogAction(uTxt=u'SendNotification',oAction=oAction)
+            dActionPars = ToDic(oAction.dActionPars.get('actionpars', '{}'))
+        self.oEventDispatcher.LogAction(uTxt='SendNotification',oAction=oAction)
 
         Globals.oNotifications.SendNotification(uNotification=uNotification,**dActionPars)
         return eReturnCode.Nothing
@@ -100,67 +100,67 @@ class cEventActionsNotifications(cEventActionBase):
         WikiDoc:End
         """
 
-        uPageName:str = ReplaceVars(oAction.dActionPars.get("filterpagename", ""))
-        self.oEventDispatcher.LogAction(uTxt=u'RegisterNotification',oAction=oAction)
+        uPageName:str = ReplaceVars(oAction.dActionPars.get('filterpagename', ''))
+        self.oEventDispatcher.LogAction(uTxt='RegisterNotification',oAction=oAction)
 
-        if uPageName == u"ALL":
+        if uPageName == 'ALL':
             for uPageKey in Globals.oTheScreen.oScreenPages:
                 oCopyAction:cAction = copy(oAction)
-                oCopyAction.dActionPars["filterpagename"] = uPageKey
+                oCopyAction.dActionPars['filterpagename'] = uPageKey
                 self.ExecuteActionRegisterNotification_sub(oCopyAction)
-        elif uPageName == u"NOPOPUP":
+        elif uPageName == 'NOPOPUP':
             for uPageKey in Globals.oTheScreen.oScreenPages:
                 if not Globals.oTheScreen.oScreenPages[uPageKey].bIsPopUp:
                     oCopyAction:cAction = copy(oAction)
-                    oCopyAction.dActionPars["filterpagename"] = uPageKey
+                    oCopyAction.dActionPars['filterpagename'] = uPageKey
                     self.ExecuteActionRegisterNotification_sub(oCopyAction)
-        elif uPageName == u"POPUP":
+        elif uPageName == 'POPUP':
             for uPageKey in Globals.oTheScreen.oScreenPages:
                 if Globals.oTheScreen.oScreenPages[uPageKey].bIsPopUp:
                     oCopyAction:cAction = copy(oAction)
-                    oCopyAction.dActionPars["filterpagename"] = uPageKey
+                    oCopyAction.dActionPars['filterpagename'] = uPageKey
                     self.ExecuteActionRegisterNotification_sub(oCopyAction)
         else:
             self.ExecuteActionRegisterNotification_sub(oAction)
         return eReturnCode.Nothing
 
     def ExecuteActionRegisterNotification_sub(self,oAction:cAction) -> eReturnCode:
-        uNotification:str                   = ReplaceVars(oAction.dActionPars.get("notification",""))
-        uActionName:str                     = ReplaceVars(oAction.dActionPars.get("notifyaction",""))
+        uNotification:str                   = ReplaceVars(oAction.dActionPars.get('notification',''))
+        uActionName:str                     = ReplaceVars(oAction.dActionPars.get('notifyaction',''))
 
-        uRegisterOption:str                 = oAction.dActionPars.get("registeroption","replace")
-        uFilterPageName:str                 = oAction.dActionPars.get("filterpagename","")
-        if uRegisterOption == "append":
-            Globals.oNotifications.RegisterNotification(uNotification=uNotification, fNotifyFunction=self.NotificationHandler, uDescription="Action:" + uActionName, bQuiet=True, **oAction.dActionPars)
+        uRegisterOption:str                 = oAction.dActionPars.get('registeroption','replace')
+        uFilterPageName:str                 = oAction.dActionPars.get('filterpagename','')
+        if uRegisterOption == 'append':
+            Globals.oNotifications.RegisterNotification(uNotification=uNotification, fNotifyFunction=self.NotificationHandler, uDescription='Action:' + uActionName, bQuiet=True, **oAction.dActionPars)
         else:
-            uKey:str = uNotification+"_"+uFilterPageName
+            uKey:str = uNotification+'_'+uFilterPageName
             iHash:int = Globals.oNotifications.dFilterPageNames.get(uKey,0)
             if iHash != 0:
                 Globals.oNotifications.UnRegisterNotification_ByHash(iHash=iHash)
-            Globals.oNotifications.RegisterNotification(uNotification=uNotification, fNotifyFunction=self.NotificationHandler, uDescription="Action:" + uActionName, bQuiet=True, **oAction.dActionPars)
+            Globals.oNotifications.RegisterNotification(uNotification=uNotification, fNotifyFunction=self.NotificationHandler, uDescription='Action:' + uActionName, bQuiet=True, **oAction.dActionPars)
         return eReturnCode.Nothing
 
     # noinspection PyMethodMayBeStatic
     def NotificationHandler(self,**kwargs):
-        uActionName:str     = kwargs["notifyaction"]
-        uFilterPageName:str = kwargs.get("filterpagename","")
+        uActionName:str     = kwargs['notifyaction']
+        uFilterPageName:str = kwargs.get('filterpagename','')
 
-        if uFilterPageName  == "FIRSTPAGE":
+        if uFilterPageName  == 'FIRSTPAGE':
             uFilterPageName=Globals.oTheScreen.uFirstPageName
-        if uFilterPageName  == "CURRENT":
+        if uFilterPageName  == 'CURRENT':
             uFilterPageName=Globals.oTheScreen.uCurrentPageName
-        if uActionName and ((uFilterPageName == Globals.oTheScreen.uCurrentPageName) or uFilterPageName==u"" ):
+        if uActionName and ((uFilterPageName == Globals.oTheScreen.uCurrentPageName) or uFilterPageName=='' ):
             aActions:List[cAction]=Globals.oActions.GetActionList(uActionName = uActionName, bNoCopy = False)
             if aActions is not None:
                 aTmpActions:List[cAction] = []
                 for oAction in aActions:
-                    Globals.oEvents.CopyActionPars(dTarget=oAction.dActionPars,dSource=kwargs,uReplaceOption="donotcopyempty")
+                    Globals.oEvents.CopyActionPars(dTarget=oAction.dActionPars,dSource=kwargs,enReplaceOption=eReplaceOption.eDoNotCopyEmpty)
                     aTmpActions.append(oAction)
-                Logger.debug(u'Notification: Execute Action for notification: %s, Action: %s' % (kwargs["notification"], uActionName))
+                Logger.debug('Notification: Execute Action for notification: %s, Action: %s' % (kwargs['notification'], uActionName))
                 Globals.oEvents.ExecuteActions( aActions=aTmpActions,oParentWidget=None)
                 return True
             else:
-                Logger.warning (u'Notification: Action handler not found: Notification: %s, Action: %s'%(kwargs["notification"],uActionName))
+                Logger.warning ('Notification: Action handler not found: Notification: %s, Action: %s'%(kwargs['notification'],uActionName))
         else:
             pass
-            # Logger.debug(u'Notification: Action not for this page:%s, Action: %s ' % (kwargs["notification"], uActionName))
+            # Logger.debug('Notification: Action not for this page:%s, Action: %s ' % (kwargs['notification'], uActionName))

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ from ORCA.utils.wait.StartWait      import StartWait
 from ORCA.utils.wait.StopWait       import StopWait
 from ORCA.vars.Access               import ExistLVar
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['HasPermissions','cCheckPermissions']
 
@@ -66,7 +66,7 @@ class cCheckPermissions(EventDispatcher):
     # noinspection PyUnusedLocal
     def on_permissionschecked(self, *largs):
         """ called, wehn the tsated has been checked """
-        # Logger.debug("Checking permissions")
+        # Logger.debug('Checking permissions')
         if not self.bIsWaiting:
             return
         if not self.bHasPermissions:
@@ -78,7 +78,7 @@ class cCheckPermissions(EventDispatcher):
     # noinspection PyUnusedLocal
     def StartNextThread(self,*largs):
         """ Starts the next thread to check, if online """
-        #Logger.debug("Checking for network connectivity start thread")
+        #Logger.debug('Checking for network connectivity start thread')
         #fSleep(0.01)
         #Clock.schedule_once(IsOnline, 0)
         #return
@@ -86,13 +86,13 @@ class cCheckPermissions(EventDispatcher):
         if self.oThread is not None:
             self.oThread.join()
 
-        self.oThread = threading.Thread(target=HasPermissions(), name="CheckPermissionsThread")
+        self.oThread = threading.Thread(target=HasPermissions(), name='CheckPermissionsThread')
         self.oThread.start()
 
     def Wait(self):
         """ Main entry point to wait """
 
-        Logger.debug("Checking for permissions")
+        Logger.debug('Checking for permissions')
         self.bIsWaiting    = True
         self.bCancel       = False
         self.bHasPermissions = OS_CheckPermissions()
@@ -104,13 +104,13 @@ class cCheckPermissions(EventDispatcher):
 
         bLangLoaded: bool = ExistLVar('5042')
         if bLangLoaded:
-            uMessage: str    = u'$lvar(5042)'
-            uGrant: str      = u'$lvar(5043)'
+            uMessage: str    = '$lvar(5042)'
+            uGrant: str      = '$lvar(5043)'
         else:
-            uMessage: str    = "ORCA requires write access, please grant"
-            uGrant: str      = "Grant Access"
+            uMessage: str    = 'ORCA requires write access, please grant'
+            uGrant: str      = 'Grant Access'
 
-        self.oPopup=ShowQuestionPopUp(uTitle=u'$lvar(5010)',uMessage= uMessage,fktYes=self.GrantAccess,fktNo=self.StopApp,uStringYes=uGrant,uStringNo=u'$lvar(5005)',uSound= u'message')
+        self.oPopup=ShowQuestionPopUp(uTitle='$lvar(5010)',uMessage= uMessage,fktYes=self.GrantAccess,fktNo=self.StopApp,uStringYes=uGrant,uStringNo='$lvar(5005)',uSound= 'message')
         Clock.schedule_once(self.StartNextThread, 0)
         return False
 
@@ -142,7 +142,7 @@ class cCheckPermissions(EventDispatcher):
 
     # noinspection PyUnusedLocal
     def GrantAccess(self, *largs):
-        """ Called, when the user pushes the grant accces button """
+        """ Called, when the user pushes the grant access button """
         self.StopWait()
         self.Wait()
         OS_RequestPermissions()

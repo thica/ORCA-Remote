@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@ from typing import Union
 
 import os
 import logging
+import codecs
 
 from os                     import remove
 from os                     import rename
@@ -40,32 +41,32 @@ from ORCA.utils.Path        import AdjustPathToUnix
 
 uSeparator = os.sep
 
-__all__ = ["cFileName"]
+__all__ = ['cFileName']
 
 
 class cFileName:
-    def __init__(self,uFile: Union[str,cPath,cFileName] = u''):
+    def __init__(self,uFile: Union[str,cPath,cFileName] = ''):
 
         self.oPath: cPath  = cPath()
-        self.uRaw: str
+        self.uRaw: str = ''
         if isinstance(uFile, str):
-            self.uRaw       = uFile
+            self.uRaw = uFile
+            if uFile:
+                for uChar in '/\\:':
+                    if uChar in self.uRaw:
+                        self.ImportFullPath(uFnFullName=uFile)
+                        break
+
         elif isinstance(uFile, cPath):
             self.oPath  = uFile
-            self.uRaw   = u''
+            self.uRaw   = ''
         elif isinstance(uFile, cFileName):
             self.oPath  = uFile.oPath
             self.uRaw = uFile.uRaw
         else:
-            LogError(uMsg="cFileName, illegal constructor:"+str(type(uFile)))
-        self.uFinal: str      = u''
+            LogError(uMsg=f'cFileName, illegal constructor: {type(uFile)}')
+        self.uFinal: str      = ''
         self.bDirty: bool     = True
-
-        if Logger.level==logging.DEBUG and False:
-            if self.uRaw:
-                for uChar in u"/\\:":
-                    if uChar in self.uRaw:
-                        LogError(uMsg="do not pass full strings to a filename (use import):"+str(uFile), bTrackStack=True)
 
     def __str__(self) ->str:
         if not self.bDirty:
@@ -81,19 +82,19 @@ class cFileName:
             oRet.bDirty  = True
 
             if Logger.level ==logging.DEBUG:
-                for uChar in u"/\\:":
+                for uChar in '/\\:':
                     if uChar in self.uRaw:
-                        LogError(uMsg="do not pass full strings to a filename (use import)", bTrackStack=True)
+                        LogError(uMsg='do not pass full strings to a filename (use import)', bTrackStack=True)
 
             return oRet
         else:
-            LogError(uMsg="cFileName, illegal add:"+str(type(uFile)))
+            LogError(uMsg=f'cFileName, illegal add: {str(type(uFile))}')
 
         return self
 
     def __radd__(self, uOther: str) ->str:
         if isinstance(uOther, str):
-            return uOther+self.string
+            return uOther+str(self)
         else:
             return uOther
 
@@ -111,22 +112,22 @@ class cFileName:
 
     @property
     def unixstring(self) ->str:
-        return AdjustPathToUnix(uPath=self.string)
+        return AdjustPathToUnix(uPath=str(self))
 
     @property
     def urlstring(self) ->str:
-        return AdjustPathToUnix(uPath=self.string).replace(":/", "://")
+        return AdjustPathToUnix(uPath=str(self)).replace(':/', '://')
 
     def _CreateFinal(self) ->None:
         self.bDirty = False
         if self.uRaw:
             self.uFinal = CleanUp(uFinal=ReplaceVars(self.oPath.uRaw)+ ReplaceVars(self.uRaw))
         else:
-            self.uFinal=u''
+            self.uFinal=''
 
     def Clear(self) ->cFileName:
-        self.oPath.uRaw = u''
-        self.uRaw       = u''
+        self.oPath.uRaw = ''
+        self.uRaw       = ''
         self.bDirty     = True
         return self
 
@@ -135,7 +136,7 @@ class cFileName:
         Checks, if a file exists
         :return: Returns True if the the given filename exists
         """
-        return isfile(self.string)
+        return isfile(str(self))
 
 
     def Copy(self,*,oNewFile: Union[cFileName,cPath]) ->bool:
@@ -148,20 +149,20 @@ class cFileName:
 
         try:
             if isinstance(oNewFile,cFileName):
-                copyfile(self.string,oNewFile.string)
+                copyfile(str(self),str(oNewFile))
             else:
                 oNewFileTmp=cFileName(oNewFile)+self.basename
-                copyfile(self.string, oNewFileTmp.string)
+                copyfile(str(self), str(oNewFileTmp))
             return True
         except Exception as e:
-            LogError (uMsg=u'can\'t copy file [%s] to [%s]' % (self.string,oNewFile.string),oException=e)
+            LogError (uMsg=f'can\'t copy file [{self}] to [{oNewFile}]', oException=e)
             return False
 
     def ImportFullPath(self,*,uFnFullName: str) ->cFileName:
-        if uFnFullName.startswith("$var("):
-            if uFnFullName.endswith(")"):
+        if uFnFullName.startswith('$var('):
+            if uFnFullName.endswith(')'):
                 if not uSeparator in uFnFullName:
-                    Logger.warning("Variable on FileName needs to replaced on import, is this what you want?:"+uFnFullName)
+                    Logger.warning(f'Variable on FileName needs to replaced on import, is this what you want?: {uFnFullName}')
                     uFnFullName = ReplaceVars(uFnFullName)
 
         self.oPath.ImportFullPath(uFnFullName=uFnFullName)
@@ -176,11 +177,12 @@ class cFileName:
         """
 
         try:
-            remove(self.string)
+            remove(str(self))
             return True
         except Exception as e:
-            uMsg=u'can\'t delete File %s:%s' % (ToUnicode(e),self.string)
-            Logger.warning (uMsg)
+            if self.Exists():
+                uMsg= f'can\'t delete file {ToUnicode(e)}:{self}'
+                Logger.warning (uMsg)
             return False
 
     def Rename(self,*,oNewFileName: cFileName) ->bool:
@@ -194,11 +196,11 @@ class cFileName:
         try:
             if self.Exists():
                 if not oNewFileName.Exists():
-                    rename(self.string,oNewFileName.string)
+                    rename(str(self),str(oNewFileName))
                     return True
             return False
         except Exception as e:
-            LogError (uMsg=u'can\'t rename file [%s] to [%s]' % (self.string,oNewFileName.string),oException=e)
+            LogError (uMsg=f'can\'t rename file [{self}] to [{oNewFileName}]', oException=e)
             return False
 
     def IsEmpty(self) ->bool:
@@ -206,7 +208,7 @@ class cFileName:
         Returns, if the FileName object is empty
         :return: True / False
         """
-        return self.uRaw==u''
+        return self.uRaw==''
 
     def Size(self) ->int:
         """
@@ -215,9 +217,9 @@ class cFileName:
         """
 
         try:
-            return os.path.getsize(self.string)
+            return os.path.getsize(str(self))
         except Exception as e:
-            LogError (uMsg=u'can\'t get filesize [%s]' % self.string, oException=e)
+            LogError (uMsg=f'can\'t get filesize [{self}]', oException=e)
             return -1
 
 
@@ -228,8 +230,39 @@ class cFileName:
         """
 
         try:
-            return os.path.splitext(self.string)[1]
+            return os.path.splitext(str(self))[1]
         except Exception as e:
-            LogError (uMsg=u'can\'t get file extension [%s]' % self.string, oException=e)
+            LogError (uMsg=f'can\'t get file extension [{self}]', oException=e)
             return ""
 
+    def Load(self):
+        """ returns a content of file as string (unicode on Py3)
+        :rtype: string
+        :return: The File Content as string
+        """
+
+        try:
+            f = None
+            try:
+                #should work for all xml files
+                f= codecs.open(str(self), 'r', encoding='utf-8')
+                read_data = f.read()
+            except Exception:
+                if f is not None:
+                    f.close()
+                # should work for common other files
+                try:
+                    f = codecs.open(str(self), 'r', encoding='latin1')
+                    read_data = f.read()
+                except Exception:
+                    #fallback
+                    if f is not None:
+                        f.close()
+                    f = codecs.open(str(self), 'r', encoding='utf-8', errors='ignore')
+                    read_data = f.read()
+            f.close()
+            return read_data
+        except Exception as e:
+            uMsg= f'can\'t load file [{self}] : {e}  '
+            Logger.error (uMsg)
+            return ''

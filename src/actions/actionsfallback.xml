@@ -7,7 +7,7 @@
       <action name="load core fonts"                          string="loaddefinitionfonts"    definitionname="ORCA"/>
       <action name="Update Splash"                            string="showsplashtext"         maintext="Loading Languages"/>
       <action name="Load core language"                       string="loadlanguages" />
-      <action1 name="Check Permissions"                        string="checkpermissions" />
+      <action name="Check Permissions"                        string="checkpermissions" />
       <action name="askifupdate"                              string="showquestion" title="$lvar(420)" message="$lvar(421)" actionyes="Fkt_LoadRepository" actionno="StopApp"  />
     </appstartaction>
   </appstartactions>

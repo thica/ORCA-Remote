@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,8 @@ from typing import Dict
 from typing import Union
 
 from kivy.config                        import ConfigParser as KivyConfigParser
-from ORCA.BaseConfig                    import cBaseConfig
-import ORCA.Globals as Globals
+from ORCA.settings.BaseConfig import cBaseConfig
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -33,9 +33,9 @@ if TYPE_CHECKING:
     from ORCA.scripts.BaseScript import cBaseScript
 else:
     from typing import TypeVar
-    cBaseInterFace = TypeVar("cBaseInterFace")
-    cBaseInterFaceSettings = TypeVar("cBaseInterFaceSettings")
-    cBaseScript = TypeVar("cBaseScript")
+    cBaseInterFace = TypeVar('cBaseInterFace')
+    cBaseInterFaceSettings = TypeVar('cBaseInterFaceSettings')
+    cBaseScript = TypeVar('cBaseScript')
 
 
 class cInterFaceConfig(cBaseConfig):
@@ -47,32 +47,34 @@ g
 
         super(cInterFaceConfig,self).__init__(oInterFace)
 
-        self.uType                          = "interface"
-        self.uWidgetName                    = "Interfacesettings"
-        self.uDefaultConfigName             = u'DEVICE_DEFAULT'
-        self.dDefaultSettings               = {"SettingTitle":               {"active": "enabled",  "order": 0,   "type": "title" ,         "title": "$lvar(560)"},
-                                               "Host":                       {"active": "disabled", "order": 1,   "type": "string",         "title": "$lvar(6004)", "desc": "$lvar(6005)", "section": "$var(ObjectConfigSection)", "key": "Host",                        "default": "192.168.1.2"},
-                                               "Port":                       {"active": "disabled", "order": 2,   "type": "string",         "title": "$lvar(6002)", "desc": "$lvar(6003)", "section": "$var(ObjectConfigSection)", "key": "Port",                        "default": "80"},
-                                               "User":                       {"active": "disabled", "order": 3,   "type": "string",         "title": "$lvar(6006)", "desc": "$lvar(6007)", "section": "$var(ObjectConfigSection)", "key": "User",                        "default": "root"},
-                                               "Password":                   {"active": "disabled", "order": 4,   "type": "string",         "title": "$lvar(6008)", "desc": "$lvar(6009)", "section": "$var(ObjectConfigSection)", "key": "Password",                    "default": ""},
-                                               "FNCodeset":                  {"active": "disabled", "order": 5,   "type": "scrolloptions",  "title": "$lvar(6000)", "desc": "$lvar(6001)", "section": "$var(ObjectConfigSection)", "key": "FNCodeset",                   "default": "Select",  "options": ["$var(InterfaceCodesetList)"]},
-                                               "ParseResult":                {"active": "disabled", "order": 6,   "type": "scrolloptions",  "title": "$lvar(6027)", "desc": "$lvar(6028)", "section": "$var(ObjectConfigSection)", "key": "ParseResult",                 "default": "store",    "options": ["no","tokenize","store","json","dict","xml"]},
-                                               "TokenizeString":             {"active": "disabled", "order": 7,   "type": "string",         "title": "$lvar(6029)", "desc": "$lvar(6030)", "section": "$var(ObjectConfigSection)", "key": "TokenizeString",              "default": ":"},
-                                               "TimeOut":                    {"active": "disabled", "order": 8,   "type": "numericfloat",   "title": "$lvar(6019)", "desc": "$lvar(6020)", "section": "$var(ObjectConfigSection)", "key": "TimeOut",                     "default": "1.0"},
-                                               "TimeToClose":                {"active": "disabled", "order": 9,   "type": "numeric",        "title": "$lvar(6010)", "desc": "$lvar(6011)", "section": "$var(ObjectConfigSection)", "key": "TimeToClose",                 "default": "10"},
-                                               "DisableInterFaceOnError":    {"active": "disabled", "order": 10,  "type": "bool",           "title": "$lvar(529)",  "desc": "$lvar(530)",  "section": "$var(ObjectConfigSection)", "key": "DisableInterFaceOnError",     "default": "0"},
-                                               "DisconnectInterFaceOnSleep": {"active": "disabled", "order": 11,  "type": "bool",           "title": "$lvar(533)",  "desc": "$lvar(534)",  "section": "$var(ObjectConfigSection)", "key": "DisconnectInterFaceOnSleep",  "default": "1"},
-                                               "DiscoverSettingButton":      {"active": "disabled", "order": 12,  "type": "buttons",        "title": "$lvar(6033)", "desc": "$lvar(6034)", "section": "$var(ObjectConfigSection)", "key": "DiscoverSettings",            "buttons": [{"title": "Discover Settings", "id": "button_discover"}]},
-                                               "ConfigChangeButtons":        {"active": "enabled",  "order": 999, "type": "buttons",        "title": "$lvar(565)",  "desc": "$lvar(566)",  "section": "$var(ObjectConfigSection)", "key": "configchangebuttons",         "buttons": [{"title": "$lvar(569)", "id": "button_add"}, {"title": "$lvar(570)", "id": "button_delete"}, {"title": "$lvar(571)", "id": "button_rename"}]}
+        self.uType                          = 'interface'
+        self.uWidgetName                    = 'Interfacesettings'
+        self.uDefaultConfigName             = 'DEVICE_DEFAULT'
+        self.dDefaultSettings               = {'SettingTitle':               {'active': 'enabled',  'order': 0,   'type': 'title' ,         'title': '$lvar(560)'},
+                                               'Host':                       {'active': 'disabled', 'order': 1,   'type': 'string',         'title': '$lvar(6004)', 'desc': '$lvar(6005)', 'section': '$var(ObjectConfigSection)', 'key': 'Host',                        'default': '192.168.1.2'},
+                                               'Port':                       {'active': 'disabled', 'order': 2,   'type': 'string',         'title': '$lvar(6002)', 'desc': '$lvar(6003)', 'section': '$var(ObjectConfigSection)', 'key': 'Port',                        'default': '80'},
+                                               'MAC':                        {'active': 'disabled', 'order': 3,   'type': 'string',         'title': "$lvar(619)",  'desc': "$lvar(6043)", 'section': '$var(ObjectConfigSection)', 'key': 'MAC',                         'default': 'aa:bb:cc:dd:ee:ff'},
+                                               'User':                       {'active': 'disabled', 'order': 4,   'type': 'string',         'title': '$lvar(6006)', 'desc': '$lvar(6007)', 'section': '$var(ObjectConfigSection)', 'key': 'User',                        'default': 'root'},
+                                               'Password':                   {'active': 'disabled', 'order': 5,   'type': 'string',         'title': '$lvar(6008)', 'desc': '$lvar(6009)', 'section': '$var(ObjectConfigSection)', 'key': 'Password',                    'default': ''},
+                                               'FNCodeset':                  {'active': 'disabled', 'order': 6,   'type': 'scrolloptions',  'title': '$lvar(6000)', 'desc': '$lvar(6001)', 'section': '$var(ObjectConfigSection)', 'key': 'FNCodeset',                   'default': 'Select',  'options': ['$var(InterfaceCodesetList)']},
+                                               'ParseResult':                {'active': 'disabled', 'order': 7,   'type': 'scrolloptions',  'title': '$lvar(6027)', 'desc': '$lvar(6028)', 'section': '$var(ObjectConfigSection)', 'key': 'ParseResult',                 'default': 'store',    'options': ['no','tokenize','store','json','dict','xml']},
+                                               'TokenizeString':             {'active': 'disabled', 'order': 8,   'type': 'string',         'title': '$lvar(6029)', 'desc': '$lvar(6030)', 'section': '$var(ObjectConfigSection)', 'key': 'TokenizeString',              'default': ':'},
+                                               'TimeOut':                    {'active': 'disabled', 'order': 9,   'type': 'numericfloat',   'title': '$lvar(6019)', 'desc': '$lvar(6020)', 'section': '$var(ObjectConfigSection)', 'key': 'TimeOut',                     'default': '1.0'},
+                                               'TimeToClose':                {'active': 'disabled', 'order': 10,   'type': 'numeric',        'title': '$lvar(6010)', 'desc': '$lvar(6011)', 'section': '$var(ObjectConfigSection)', 'key': 'TimeToClose',                 'default': '10'},
+                                               'RetryCount':                 {'active': 'disabled', 'order': 11,  'type': 'numeric',        'title': '$lvar(6041)', 'desc': '$lvar(6042)', 'section': '$var(ObjectConfigSection)', 'key': 'RetryCount',                  'default': '2'},
+                                               'DisableInterFaceOnError':    {'active': 'disabled', 'order': 12,  'type': 'bool',           'title': '$lvar(529)',  'desc': '$lvar(530)',  'section': '$var(ObjectConfigSection)', 'key': 'DisableInterFaceOnError',     'default': '0'},
+                                               'DisconnectInterFaceOnSleep': {'active': 'disabled', 'order': 13,  'type': 'bool',           'title': '$lvar(533)',  'desc': '$lvar(534)',  'section': '$var(ObjectConfigSection)', 'key': 'DisconnectInterFaceOnSleep',  'default': '1'},
+                                               'DiscoverSettingButton':      {'active': 'disabled', 'order': 14,  'type': 'buttons',        'title': '$lvar(6033)', 'desc': '$lvar(6034)', 'section': '$var(ObjectConfigSection)', 'key': 'DiscoverSettings',            'buttons': [{'title': 'Discover Settings', 'id': 'button_discover'}]},
+                                               'ConfigChangeButtons':        {'active': 'enabled',  'order': 999, 'type': 'buttons',        'title': '$lvar(565)',  'desc': '$lvar(566)',  'section': '$var(ObjectConfigSection)', 'key': 'configchangebuttons',         'buttons': [{'title': '$lvar(569)', 'id': 'button_add'}, {'title': '$lvar(570)', 'id': 'button_delete'}, {'title': '$lvar(571)', 'id': 'button_rename'}]}
                                               }
 
 
         self.aDiscoverScriptList:Union[List[str],None]        = None
         self.dGenericDiscoverSettings:Dict[str,Dict]  = \
-                                              { "DiscoverScriptName":          {"active": "hidden",   "order": 100,  "scriptsection": "$lvar(539)", "type": "scrolloptions",  "title": "$lvar(6035)", "desc": "$lvar(6036)", "section": "$var(ObjectConfigSection)", "key": "DiscoverScriptName",          "default": "", "options":["$var(DISCOVERSCRIPTLIST)"]},
-                                                "SaveDiscoveredIP":            {"active": "hidden",   "order": 101,  "scriptsection": "$lvar(539)", "type": "bool",           "title": "$lvar(6031)", "desc": "$lvar(6032)", "section": "$var(ObjectConfigSection)", "key": "SaveDiscoveredIP",            "default": "1"},
-                                                "OldDiscoveredIP":             {"active": "hidden",   "order": 102,  "scriptsection": "$lvar(539)", "type": "string",         "title": "$lvar(6021)", "desc": "$lvar(6022)", "section": "$var(ObjectConfigSection)", "key": "OldDiscoveredIP",             "default": ""},
-                                                "CheckDiscoverButton":         {"active": "disabled", "order": 103,  "scriptsection": "$lvar(539)", "type": "buttons",        "title": "Check Discover", "desc": "$lvar(6034)", "section": "$var(ObjectConfigSection)", "key": "CheckDiscover", "buttons": [{"title": "Check Discover", "id": "button_checkdiscover"}]},
+                                              { 'DiscoverScriptName':          {'active': 'hidden',   'order': 100,  'scriptsection': '$lvar(539)', 'type': 'scrolloptions',  'title': '$lvar(6035)', 'desc': '$lvar(6036)', 'section': '$var(ObjectConfigSection)', 'key': 'DiscoverScriptName',          'default': '', 'options':['$var(DISCOVERSCRIPTLIST)']},
+                                                'SaveDiscoveredIP':            {'active': 'hidden',   'order': 101,  'scriptsection': '$lvar(539)', 'type': 'bool',           'title': '$lvar(6031)', 'desc': '$lvar(6032)', 'section': '$var(ObjectConfigSection)', 'key': 'SaveDiscoveredIP',            'default': '1'},
+                                                'OldDiscoveredIP':             {'active': 'hidden',   'order': 102,  'scriptsection': '$lvar(539)', 'type': 'string',         'title': '$lvar(6021)', 'desc': '$lvar(6022)', 'section': '$var(ObjectConfigSection)', 'key': 'OldDiscoveredIP',             'default': ''},
+                                                'CheckDiscoverButton':         {'active': 'disabled', 'order': 103,  'scriptsection': '$lvar(539)', 'type': 'buttons',        'title': 'Check Discover', 'desc': '$lvar(6034)', 'section': '$var(ObjectConfigSection)', 'key': 'CheckDiscover', 'buttons': [{'title': 'Check Discover', 'id': 'button_checkdiscover'}]},
                                               }
 
 
@@ -89,10 +91,10 @@ g
 
         super().On_ConfigChange(oSettings, oConfig, uSection, uKey, uValue)
 
-        if uKey == u'DiscoverSettings':
+        if uKey == 'DiscoverSettings':
             Globals.oTheScreen.uConfigToConfig = uSection
-            Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_InterfaceSettingsDiscover')
-        elif uKey == u'FNCodeset':
+            Globals.oTheScreen.AddActionShowPageToQueue(uPageName='Page_InterfaceSettingsDiscover')
+        elif uKey == 'FNCodeset':
             oSetting = self.oObject.GetSettingObjectForConfigName(uConfigName=uSection)
             oSetting.aIniSettings[uKey] = uValue
             oSetting.ReadCodeset()
@@ -100,7 +102,7 @@ g
     def GetSettingParFromVar(self, uLink:str) -> str:
         """
         Returns a setting var of a an other interface or config
-        The Interfca must allready be initalized
+        The Interface must already be initialized
         syntax should be: linked:interfacename:configname:varname
 
         :rtype: str
@@ -130,8 +132,8 @@ g
         :return: a dict of combined settings
         """
 
-        oSetting:cBaseInterFaceSettings    = kwargs.get("oSetting")
-        bIncludeDiscoverSettings:bool      = kwargs.get("bIncludeDiscoverSettings",True)
+        oSetting:cBaseInterFaceSettings    = kwargs.get('oSetting')
+        bIncludeDiscoverSettings:bool      = kwargs.get('bIncludeDiscoverSettings',True)
         dRet:Dict[str,Dict]                = super().CreateSettingJsonCombined(**kwargs)
         iOrder:int
         iMax:int
@@ -140,16 +142,16 @@ g
         if 'DiscoverSettingButton' in dRet and bIncludeDiscoverSettings:
             dRet.update(self.dGenericDiscoverSettings)
             if self.aDiscoverScriptList is None:
-                self.aDiscoverScriptList = Globals.oScripts.GetScriptListForScriptType("DEVICE_DISCOVER")
+                self.aDiscoverScriptList = Globals.oScripts.GetScriptListForScriptType('DEVICE_DISCOVER')
             iLastOrder = 200
             for uDiscoverScriptName in self.aDiscoverScriptList:
                 oScript:cBaseScript = Globals.oScripts.LoadScript(uDiscoverScriptName)
-                dScriptJSONSettings:Dict[str,Dict] = oScript.GetClass("cScript").GetConfigJSONforParameters(oSetting.aIniSettings)
+                dScriptJSONSettings:Dict[str,Dict] = oScript.GetClass('cScript').GetConfigJSONforParameters(oSetting.aIniSettings)
                 iMax = 0
                 for uKey in dScriptJSONSettings:
-                    uTempKey:str                     = uDiscoverScriptName + "_" + uKey
+                    uTempKey:str                     = uDiscoverScriptName + '_' + uKey
                     dRet[uTempKey]                   = dScriptJSONSettings[uKey]
-                    dRet[uTempKey]['key']            = uDiscoverScriptName.upper() + "_" + dScriptJSONSettings[uKey]['key']
+                    dRet[uTempKey]['key']            = uDiscoverScriptName.upper() + '_' + dScriptJSONSettings[uKey]['key']
                     dRet[uTempKey]['scriptsection']  = uDiscoverScriptName
                     dRet[uTempKey]['active']         = 'hidden'
                     iOrder                           = dRet[uTempKey]['order']

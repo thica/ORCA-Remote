@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <elements xmlns:xi="http://www.w3.org/2001/XInclude">
     <element name="Anchor Info Frame Gateway" type="ANCHOR">
-        <element name="Backgound Info Gateway" type="PICTURE"  picturenormal="background boxes" enabled="0"/>
+        <element name="Background Info Gateway" type="PICTURE"  picturenormal="background boxes" enabled="0"/>
         <element name="Anchor Info Frame Gateway Inner" width="%90" heigth="%92" posx="center" posy="middle" type="ANCHOR" enabled="0">
 
             <element name='Label Device Gateway'                         type='TEXTFIELD'  posx='center'   posy='%2'              width='%100' height='of:width:self:*0.12' caption='$var($dvar(definition_alias_gardena)_DEVICENAME)' fontsize='%h70' enabled="0" shorten='1'/>

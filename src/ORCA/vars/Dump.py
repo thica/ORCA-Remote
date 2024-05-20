@@ -7,7 +7,7 @@ __all__ = ['DumpVars',
            'DumpDefinitionVars'
           ]
 
-def DumpDefinitionVars(dArray:Dict[str,str], uFilter:str="") -> None:
+def DumpDefinitionVars(dArray:Dict[str,str], uFilter:str='') -> None:
     """
     Dumps definition vars as debug messages
 
@@ -21,14 +21,14 @@ def DumpDefinitionVars(dArray:Dict[str,str], uFilter:str="") -> None:
 
     for uVarIdx in sorted(dArray):
         uTmp = dArray[uVarIdx]
-        if uFilter == "":
-            Logger.debug(u'DumpVar: DefVar:' + uVarIdx + '=' + uTmp)
+        if uFilter == '':
+            Logger.debug('DumpVar: DefVar:' + uVarIdx + '=' + uTmp)
         else:
             if uFilter in uVarIdx:
-                Logger.debug(u'DumpVar: DefVar:' + uVarIdx + '=' + uTmp)
+                Logger.debug('DumpVar: DefVar:' + uVarIdx + '=' + uTmp)
 
 
-def DumpVars(uFilter:str="") -> None:
+def DumpVars(uFilter:str='') -> None:
     """
     Dumps user vars as debug messages
     :param str uFilter: A filter to just return vars, which CONTAINS the filter string
@@ -38,11 +38,11 @@ def DumpVars(uFilter:str="") -> None:
 
     Logger.debug('Dumping Vars')
     for uVarIdx in sorted(ORCA.vars.Globals.dUserVars):
-        uTmp = u"Internal Object"
+        uTmp = 'Internal Object'
         if isinstance(ORCA.vars.Globals.dUserVars[uVarIdx], str):
             uTmp = ORCA.vars.Globals.dUserVars[uVarIdx]
-        if uFilter == "":
-            Logger.debug(u'DumpVar: Var:' + uVarIdx + '=' + uTmp)
+        if uFilter == '':
+            Logger.debug('DumpVar: Var:' + uVarIdx + '=' + uTmp)
         else:
             if uFilter in uVarIdx:
-                Logger.debug(u'DumpVar: Var:' + uVarIdx + '=' + uTmp)
+                Logger.debug('DumpVar: Var:' + uVarIdx + '=' + uTmp)

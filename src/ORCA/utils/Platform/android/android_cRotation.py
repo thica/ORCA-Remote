@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -20,14 +20,14 @@
 """
 
 from kivy.logger                           import Logger
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 try:
     # noinspection PyUnresolvedReferences
     from plyer import orientation
-    Logger.info("plyer/orientation available")
+    Logger.info('plyer/orientation available')
 except Exception as e:
-    Logger.info("plyer/orientation not available")
+    Logger.info('plyer/orientation not available')
 
 
 # noinspection PyMethodMayBeStatic
@@ -42,7 +42,7 @@ class cRotation:
 
     def lock(self) -> None:
         """ Locks to the current screen orientation. """
-        Logger.debug("Android Locking orienation to "+Globals.uDeviceOrientation)
+        Logger.debug('Android Locking orienation to '+Globals.uDeviceOrientation)
 
         if Globals.uDeviceOrientation=='landscape':
             orientation.set_landscape()

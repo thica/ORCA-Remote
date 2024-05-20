@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <action name="Add NavigationBar $dvar(definition_alias_fritz_sm_heating)">
+        <action name="Add Topline" string="loadelement" filename="$var($dvar(definition_alias_fritz_sm_heating)_NAVIGATIONBAR)" pagename="Page_Device_$dvar(definition_alias_fritz_sm_heating)" condition="$var($dvar(definition_alias_fritz_sm_heating)_NAVIGATIONBAR)!="/>
+    </action>
+
+    <action name="PageStart Page_Device_$dvar(definition_alias_fritz_sm_heating)">
+        <action name="Reset Var"                              string="setvar $dvar(definition_alias_fritz_sm_heating)_GROUP_AUTOMATIC=0" />
+        <action name="Reset Var"                              string="setvar $dvar(definition_alias_fritz_sm_heating)_GROUP_MANUAL=0" />
+        <action name="Init Var"                              string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_off=253" />
+        <action name="Init Var"                              string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_on=254" />
+        <action name="Set Trigger on first page start" string="if $var(PAGESTARTCOUNT_$var(CURRENTPAGE))==1" />
+            <action name="" string="addvarlink" varname="$dvar(definition_alias_fritz_sm_heating)_temp_current"         linktype="widget" widgetname="Temperatures Value Current" />
+            <action name="" string="addvarlink" varname="$dvar(definition_alias_fritz_sm_heating)_temp_eco"             linktype="widget" widgetname="Temperatures Value Eco" />
+            <action name="" string="addvarlink" varname="$dvar(definition_alias_fritz_sm_heating)_temp_target"          linktype="widget" widgetname="Temperatures Value Target" />
+            <action name="" string="addvarlink" varname="$dvar(definition_alias_fritz_sm_heating)_temp_comfort"         linktype="widget" widgetname="Temperatures Value Comfort" />
+            <action name="" string="addvarlink" varname="$dvar(definition_alias_fritz_sm_heating)_roomname"             linktype="widget" widgetname="Value Room Name" />
+            <action name="" string="addvarlink" varname="$dvar(definition_alias_fritz_sm_heating)_mode_current_text"    linktype="widget" widgetname="Mode Value Current" />
+            <action name="" string="addvarlink" varname="$dvar(definition_alias_fritz_sm_heating)_set_temperature"      linktype="widget" widgetname="Temp Knob Textvalue" />
+            <action name="" string="addvarlink" varname="$dvar(definition_alias_fritz_sm_heating)_set_temperature"      linktype="widget" widgetname="Knob Temp" />
+        <action string="endif" />
+
+        <action1 name="Discover with screen Output"        string="discover" interface="$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)" gui="1"/>
+        <action name="Get all Devices/rooms"               string="call $dvar(definition_alias_fritz_sm_heating)_GetAllValues"  />
+        <action name="Update the dropdown list of rooms"   string="updatewidget DropDown Rooms" ignoremissing="1" />
+        <action name="Update the dropdown list of devices" string="call $dvar(definition_alias_fritz_sm_heating)_OnWidgetChangeRoom" DROPDOWNVALUE="$var($dvar(definition_alias_fritz_sm_heating)_room_name[0])" roomindex="0" condition="$var($dvar(definition_alias_fritz_sm_heating)_room_name[0])!=$lvar(fritz_sm_heating_10100)"/>
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_GetAllValues">
+        <action name="Get all devices"                     string="sendcommand getalldevices" retvar='$dvar(definition_alias_fritz_sm_heating)_devices' interface="$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)"  />
+        <action name="Parse Results"                       string="call $dvar(definition_alias_fritz_sm_heating)_ParseResults"/>
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_OnWidgetChangeRoom">
+        <action name="Save Room Name"             string="setvar $dvar(definition_alias_fritz_sm_heating)_current_roomname=$par(DROPDOWNVALUE)"  />
+        <action name="Set Room Name"              string="setvar $dvar(definition_alias_fritz_sm_heating)_roomname=$par(DROPDOWNVALUE)"  />
+        <action name="Set Room Name #2"           string="setvar $dvar(definition_alias_fritz_sm_heating)_roomname2=$par(DROPDOWNVALUE)"  />
+
+        <action name="Save Room ID "              string="setvar $dvar(definition_alias_fritz_sm_heating)_current_roomindex=$par(DROPDOWNINDEX)"  />
+        <action name="Set Room ID #1"             string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_groups_id[$par(DROPDOWNINDEX)]"  />
+        <action name="Set Room ID #2"             string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set Room ID #3"             string="setvar $dvar(definition_alias_fritz_sm_heating)_roomindex2=$var(tmp)"  />
+        <action name="Set Room ID #4"             string="setvar current_room_id=$var(tmp)"  />
+        <action name="Get Room Parameter"          string="call $dvar(definition_alias_fritz_sm_heating)_GetRoomParameter" device_id="$var(current_room_id)" />
+        <action name="Update Textbox"             string="updatewidget Value Room Name" ignoremissing="1" />
+        <action name="Get all devices for  room"  string="call $dvar(definition_alias_fritz_sm_heating)_GetDevicesForRoom"   />
+        <action name="Update the dropdown list of devices"    string="updatewidget DropDown Devices" ignoremissing="1" />
+        <action name="Set Temperature linked"  string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_current=$var($dvar(definition_alias_fritz_sm_heating)_device_temperature_current_linked[1])" />
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_OnWidgetChangeDevice" >
+        <action name="Set device Name"                        string="setvar $dvar(definition_alias_fritz_sm_heating)_roomname=$var($dvar(definition_alias_fritz_sm_heating)_roomname2)&#10;$par(DROPDOWNVALUE)"  condition="$var($dvar(definition_alias_fritz_sm_heating)_roomname2)!=$par(DROPDOWNVALUE)"/>
+        <action name="Set device Name"                        string="setvar $dvar(definition_alias_fritz_sm_heating)_roomname=$var($dvar(definition_alias_fritz_sm_heating)_roomname2)"  condition="$var($dvar(definition_alias_fritz_sm_heating)_roomname2)==$par(DROPDOWNVALUE)"/>
+        <action name="Get DropDown List Index"                string="setvar TMPINDEX=$par(DROPDOWNINDEX)" />
+        <action name="increase DropDown List Index"           string="modifyvar" varname="TMPINDEX" operator="increase" parameter1="1"/>
+        <action name="Get Current Value"                      string="setvar $dvar(definition_alias_fritz_sm_heating)_CURVALUE=$par(DROPDOWNVALUE)" />
+        <action name="Compile Var Name"                       string="setvar tmpvarname=$dvar(definition_alias_fritz_sm_heating)_devices_id[$var(TMPINDEX)]" />
+        <action name="Get the device_id of the device"        string="modifyvar" operator="fromvar" varname="tmpvarname" />
+        <action name="save the device_id"                     string="setvar current_device_id=$var(tmpvarname)" />
+        <action name="Get Device Parameter"                   string="call $dvar(definition_alias_fritz_sm_heating)_GetDeviceParameter" device_id="$var(current_device_id)" condition="$var($dvar(definition_alias_fritz_sm_heating)_roomname2)!=$par(DROPDOWNVALUE)"/>
+        <action name="Get Room Parameter"                     string="call $dvar(definition_alias_fritz_sm_heating)_GetRoomParameter" device_id="$var(current_device_id)" condition="$var($dvar(definition_alias_fritz_sm_heating)_roomname2)==$par(DROPDOWNVALUE)"/>
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_ParseResults">
+        <!-- Keep the order, as we add Groups in ParseDevices -->
+        <action name="Parse Groups"  string="call $dvar(definition_alias_fritz_sm_heating)_ParseGroupsResult" />
+        <action name="Parse Devices" string="call $dvar(definition_alias_fritz_sm_heating)_ParseDevicesResult" />
+
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_ParseDevicesResult">
+        <action name="Loop" string="forin"  varname="$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[]_name" level="1" actionname="$dvar(definition_alias_fritz_sm_heating)_ParseDevicesResult_ParseSingleDevice" />
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_ParseDevicesResult_ParseSingleDevice">
+
+        <!-- Parse the Product Type -->
+        <action name="Name Get value #1"        string="setvar producttype=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[$par(forin_index)]_attributes_productname" />
+        <action name="Name Get value #2"        string="modifyvar" operator="fromvar" varname="producttype" />
+
+        <!-- Parse the id -->
+        <action name="ID Get value #1"  string="setvar tmp_id=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[$par(forin_index)]_attributes_id" />
+        <action name="ID Get value #2"  string="modifyvar" operator="fromvar" varname="tmp_id" />
+        <action name="ID Set value #3"  string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_id[$par(forin_index)]=$var(tmp_id)" />
+        <action name="ID Set value #4"  string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_idtmp=$var(tmp_id)" />
+
+        <!-- Parse the Name -->
+        <action name="Name Get value #1"            string="setvar tmp_name=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[$par(forin_index)]_name" />
+        <action name="Name Get value #2"            string="modifyvar" operator="fromvar" varname="tmp_name" />
+        <action name="Name Set value #3"            string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_name[$par(forin_index)]=$var(tmp_name)" />
+        <action name="Name Set value by ID"         string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_idname[$var($dvar(definition_alias_fritz_sm_heating)_devices_idtmp)]=$var(tmp_name)" />
+
+        <!-- Parse the identifier to ain -->
+        <action name="AIN Get value #1"             string="setvar tmp_ain=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[$par(forin_index)]_attributes_identifier" />
+        <action name="AIN Get value #2"             string="modifyvar" operator="fromvar" varname="tmp_ain" />
+        <action name="AIN Set value #3"             string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_ain[$par(forin_index)]=$var(tmp_ain)" />
+        <action name="AIN Set value by ID"          string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_idain[$var($dvar(definition_alias_fritz_sm_heating)_devices_idtmp)]=$var(tmp_ain)" />
+
+        <!-- Parse the temperature , this might fail if we have devices without temperature, but it is ok This is the temperature if it is linked-->
+        <action name="Temperature Get value #1"     string="setvar tmp_current=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[$par(forin_index)]_temperature_celsius" />
+        <action name="Temperature Get value #2"     string="modifyvar" operator="fromvar" varname="tmp_current" />
+        <action name="Temperature divide by 10"     string="modifyvar" operator="divide" varname="tmp_current" parameter1="10"/>
+        <action name="Temperature Set value #3"     string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_temperatures_current_linked[$par(forin_index)]=$var(tmp_current)" />
+        <action name="Temperature Set value by ID"  string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_current_linked[$var($dvar(definition_alias_fritz_sm_heating)_devices_idtmp)]=$var(tmp_current)" />
+
+        <!-- Get the current temperature -->
+        <action name="Temperature Get value #1"     string="setvar tmp_current=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[$par(forin_index)]_hkr_tist" />
+        <action name="Temperature Get value #2"     string="modifyvar" operator="fromvar" varname="tmp_current" />
+        <action name="adjust"                       string="call $dvar(definition_alias_fritz_sm_heating)_to_temperaturereal" fritztemperature="$var(tmp_current)" dstvar="tmp_current"/>
+        <action name="Temperature Set value #3"     string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_temperatures_current[$par(forin_index)]=$var(tmp_current)" />
+        <action name="Temperature Set value by ID"  string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_current[$var($dvar(definition_alias_fritz_sm_heating)_devices_idtmp)]=$var(tmp_current)" />
+
+        <!-- Get the target temperature -->
+        <action name="Temperature Get value #1"     string="setvar tmp_target=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[$par(forin_index)]_hkr_tsoll" />
+        <action name="Temperature Get value #2"     string="modifyvar" operator="fromvar" varname="tmp_target" />
+        <action name="adjust"                       string="call $dvar(definition_alias_fritz_sm_heating)_to_temperaturereal" fritztemperature="$var(tmp_target)" dstvar="tmp_target"/>
+        <action name="Temperature Set value #3"     string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_temperatures_target[$par(forin_index)]=$var(tmp_target)" />
+        <action name="Temperature Set value by ID"  string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_target[$var($dvar(definition_alias_fritz_sm_heating)_devices_idtmp)]=$var(tmp_target)" />
+
+        <!-- Get the eco/absenk temperature -->
+        <action name="Temperature Get value #1"     string="setvar tmp_eco=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[$par(forin_index)]_hkr_absenk" />
+        <action name="Temperature Get value #2"     string="modifyvar" operator="fromvar" varname="tmp_eco" />
+        <action name="adjust"                       string="call $dvar(definition_alias_fritz_sm_heating)_to_temperaturereal" fritztemperature="$var(tmp_eco)" dstvar="tmp_eco"/>
+        <action name="Temperature Get value #3"     string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_temperatures_eco[$par(forin_index)]=$var(tmp_eco)" />
+        <action name="Temperature Set value by ID"  string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_eco[$var($dvar(definition_alias_fritz_sm_heating)_devices_idtmp)]=$var(tmp_eco)" />
+
+        <!-- Get the comfort temperature -->
+        <action name="Temperature Get value #1"     string="setvar tmp_comfort=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_device[$par(forin_index)]_hkr_komfort" />
+        <action name="Temperature Get value #2"     string="modifyvar" operator="fromvar" varname="tmp_comfort" />
+        <action name="adjust"                       string="call $dvar(definition_alias_fritz_sm_heating)_to_temperaturereal" fritztemperature="$var(tmp_comfort)" dstvar="tmp_comfort"/>
+        <action name="Temperature Get value #3"     string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_temperatures_comfort[$par(forin_index)]=$var(tmp_comfort)" />
+        <action name="Temperature Set value by ID"  string="setvar $dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_comfort[$var($dvar(definition_alias_fritz_sm_heating)_devices_idtmp)]=$var(tmp_comfort)" />
+
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_ParseGroupsResult">
+        <action name="Loop" string="forin"  varname="$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[]_name" level="1" actionname="$dvar(definition_alias_fritz_sm_heating)_ParseGroupsResult_ParseSingleGroup" />
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_ParseGroupsResult_ParseSingleGroup">
+        <action name="Convert the group members to an array" string="modifyvar" operator="converttoarray" varname="$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$par(forin_index)]_groupinfo_members" />
+        <action name="Get value #1"  string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$par(forin_index)]_name" />
+        <action name="Get value #2"  string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Get value #3"   string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_name[$par(forin_index)]=$var(tmp)" />
+
+        <!-- Parse the id -->
+        <action name="ID Get value #1"  string="setvar tmp_id=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$par(forin_index)]_attributes_id" />
+        <action name="ID Get value #2"  string="modifyvar" operator="fromvar" varname="tmp_id" />
+        <action name="ID Set value #3"  string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_id[$par(forin_index)]=$var(tmp_id)" />
+        <action name="ID Set value #4"  string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_idtmp=$var(tmp_id)" />
+
+        <!-- Parse the Name -->
+        <action name="Name Get value #1"        string="setvar tmp_name=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$par(forin_index)]_name" />
+        <action name="Name Get value #2"        string="modifyvar" operator="fromvar" varname="tmp_name" />
+        <action name="Name Set value #3"        string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_name[$par(forin_index)]=$var(tmp_name)" />
+        <action name="Name Set value by ID"     string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_idname[$var($dvar(definition_alias_fritz_sm_heating)_groups_idtmp)]=$var(tmp_name)" />
+
+        <!-- Parse the identifier to ain -->
+        <action name="AIN Get value #1"         string="setvar tmp_ain=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$par(forin_index)]_attributes_identifier" />
+        <action name="AIN Get value #2"         string="modifyvar" operator="fromvar" varname="tmp_ain" />
+        <action name="AIN Set value #3"         string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_ain[$par(forin_index)]=$var(tmp_ain)" />
+        <action name="AIN Set value by ID"      string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_idain[$var($dvar(definition_alias_fritz_sm_heating)_groups_idtmp)]=$var(tmp_ain)" />
+
+        <!-- Get the current temperature -->
+        <action name="Temperature Get value #1"     string="setvar tmp_current=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$par(forin_index)]_hkr_tist" />
+        <action name="Temperature Get value #2"     string="modifyvar" operator="fromvar" varname="tmp_current" />
+        <action name="adjust"                       string="call $dvar(definition_alias_fritz_sm_heating)_to_temperaturereal" fritztemperature="$var(tmp_current)" dstvar="tmp_current"/>
+        <action name="Temperature Set value #3"     string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_temperatures_current[$par(forin_index)]=$var(tmp_current)" />
+        <action name="Temperature Set value by ID"  string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_idtemperature_current[$var($dvar(definition_alias_fritz_sm_heating)_groups_idtmp)]=$var(tmp_current)" />
+
+        <!-- Get the target temperature -->
+        <action name="Temperature Get value #1"     string="setvar tmp_target=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$par(forin_index)]_hkr_tsoll" />
+        <action name="Temperature Get value #2"     string="modifyvar" operator="fromvar" varname="tmp_target" />
+        <action name="adjust"                       string="call $dvar(definition_alias_fritz_sm_heating)_to_temperaturereal" fritztemperature="$var(tmp_target)" dstvar="tmp_target"/>
+        <action name="Temperature Set value #3"     string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_temperatures_target[$par(forin_index)]=$var(tmp_target)" />
+        <action name="Temperature Set value by ID"  string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_idtemperature_target[$var($dvar(definition_alias_fritz_sm_heating)_groups_idtmp)]=$var(tmp_target)" />
+
+        <!-- Get the eco/absenk temperature -->
+        <action name="Temperature Get value #1"     string="setvar tmp_eco=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$par(forin_index)]_hkr_absenk" />
+        <action name="Temperature Get value #2"     string="modifyvar" operator="fromvar" varname="tmp_eco" />
+        <action name="adjust"                       string="call $dvar(definition_alias_fritz_sm_heating)_to_temperaturereal" fritztemperature="$var(tmp_eco)" dstvar="tmp_eco"/>
+        <action name="Temperature Get value #3"     string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_temperatures_eco[$par(forin_index)]=$var(tmp_eco)" />
+        <action name="Temperature Set value by ID"  string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_idtemperature_eco[$var($dvar(definition_alias_fritz_sm_heating)_groups_idtmp)]=$var(tmp_eco)" />
+
+        <!-- Get the comfort temperature -->
+        <action name="Temperature Get value #1"     string="setvar tmp_comfort=$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$par(forin_index)]_hkr_komfort" />
+        <action name="Temperature Get value #2"     string="modifyvar" operator="fromvar" varname="tmp_comfort" />
+        <action name="adjust"                       string="call $dvar(definition_alias_fritz_sm_heating)_to_temperaturereal" fritztemperature="$var(tmp_comfort)" dstvar="tmp_comfort"/>
+        <action name="Temperature Get value #3"     string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_temperatures_comfort[$par(forin_index)]=$var(tmp_comfort)" />
+        <action name="Temperature Set value by ID"  string="setvar $dvar(definition_alias_fritz_sm_heating)_groups_idtemperature_comfort[$var($dvar(definition_alias_fritz_sm_heating)_groups_idtmp)]=$var(tmp_comfort)" />
+
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_GetDevicesForRoom">
+        <action name="Save Room Name"             string="setvar $dvar(definition_alias_fritz_sm_heating)_current_roomname=$par(DROPDOWNVALUE)"  />
+        <action name="Set Room Name"              string="setvar $dvar(definition_alias_fritz_sm_heating)_roomname=$par(DROPDOWNVALUE)"  />
+        <action name="Set Room Name #2"           string="setvar $dvar(definition_alias_fritz_sm_heating)_roomname2=$par(DROPDOWNVALUE)"  />
+        <action name="Update Textbox"             string="updatewidget Value Room Name" ignoremissing="1" />
+        <action name="Get the room index"         string="setvar $dvar(definition_alias_fritz_sm_heating)_current_roomindex=$par(DROPDOWNINDEX)" />
+        <action name="Delete array of device names" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_name[]" operator="delete" />
+        <action name="Delete array of device ids" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_id[]" operator="delete" />
+        <action name="Get all devices for room"   string="call $dvar(definition_alias_fritz_sm_heating)_GetDevicesForRoomIndex" roomindex="$var($dvar(definition_alias_fritz_sm_heating)_current_roomindex)"  />
+        <action name="Update the dropdown list of devices"    string="updatewidget DropDown Devices" ignoremissing="1" />
+        <action name="Update the device details"  string="call $dvar(definition_alias_fritz_sm_heating)_OnWidgetChangeDevice" DROPDOWNVALUE="$var($dvar(definition_alias_fritz_sm_heating)_device_name[0])" DROPDOWNINDEX="0" condition="$var($dvar(definition_alias_fritz_sm_heating)_room_name[0])!=$lvar(fritz_sm_heating_10100)"/>
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_GetDevicesForRoomIndex">
+        <action name="Save the roomindex" string="setvar roomindex=$par(roomindex)" />
+        <action name="Delete array" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_id[[]" operator="delete" />
+        <action name="Delete array" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_ain[]" operator="delete" />
+        <action name="Delete array" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_name[]" operator="delete" />
+        <action name="Delete array" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_current[]" operator="delete" />
+        <action name="Delete array" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_current_linked[]" operator="delete" />
+        <action name="Delete array" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_target[]" operator="delete" />
+        <action name="Delete array" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_eco[]" operator="delete" />
+        <action name="Delete array" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_comfort[]" operator="delete" />
+        <action name="Loop" string="forin"  varname="$dvar(definition_alias_fritz_sm_heating)_devices_devicelist_group[$var(roomindex)]_groupinfo_members[]" level="2" actionname="$dvar(definition_alias_fritz_sm_heating)_GetDevicesForRoomIndex_sub" />
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_GetDevicesForRoomIndex_sub">
+        <action name="get device index"         string="setvar deviceindex=$par(forin_value)" />
+        <action name="addtoarray of device ids" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_id[]" operator="addtoarray" parameter1="$var(deviceindex)"/>
+
+        <action name="compile device var #1"  string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idname[$var(deviceindex)]"  />
+        <action name="compile device var #2"  string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="addtoarray of device names" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_name[]" operator="addtoarray" parameter1="$var(tmp)"/>
+
+        <action name="compile device var #1"  string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_current[$var(deviceindex)]"  />
+        <action name="compile device var #2"  string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="addtoarray of device temperatures" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_current[]" operator="addtoarray" parameter1="$var(tmp)"/>
+
+        <action name="compile device var #1"  string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_current_linked[$var(deviceindex)]"  />
+        <action name="compile device var #2"  string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="addtoarray of device temperatures" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_current_linked[]" operator="addtoarray" parameter1="$var(tmp)"/>
+
+        <action name="compile device var #1"  string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_target[$var(deviceindex)]"  />
+        <action name="compile device var #2"  string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="addtoarray of device temperatures" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_target[]" operator="addtoarray" parameter1="$var(tmp)"/>
+
+        <action name="compile device var #1"  string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_eco[$var(deviceindex)]"  />
+        <action name="compile device var #2"  string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="addtoarray of device temperatures" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_eco[]" operator="addtoarray" parameter1="$var(tmp)"/>
+
+        <action name="compile device var #1"  string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_comfort[$var(deviceindex)]"  />
+        <action name="compile device var #2"  string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="addtoarray of device temperatures" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_temperature_comfort[]" operator="addtoarray" parameter1="$var(tmp)"/>
+
+        <action name="compile device var #1"  string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idain[$var(deviceindex)]"  />
+        <action name="compile device var #2"  string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="addtoarray of device ain" string="modifyvar" varname="$dvar(definition_alias_fritz_sm_heating)_device_ain[]" operator="addtoarray" parameter1="$var(tmp)"/>
+
+    </action>
+
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_GetDeviceParameter" >
+
+        <action name="Set Temperature #1"         string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_current[$par(device_id)]"  />
+        <action name="Set Temperature #2"         string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set Temperature #3"         string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_current=$var(tmp)" />
+
+        <action name="Set Temperature #1"         string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_target[$par(device_id)]"  />
+        <action name="Set Temperature #2"         string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set Temperature #3"         string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_target=$var(tmp)" />
+
+        <action name="Set Temperature #1"         string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_eco[$par(device_id)]"  />
+        <action name="Set Temperature #2"         string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set Temperature #3"         string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_eco=$var(tmp)" />
+
+        <action name="Set Temperature #1"         string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idtemperature_comfort[$par(device_id)]"  />
+        <action name="Set Temperature #2"         string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set Temperature #3"         string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_comfort=$var(tmp)" />
+
+        <action name="Set ain #1"                 string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_devices_idain[$par(device_id)]"  />
+        <action name="Set ain #2"                 string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set ain #3"                 string="setvar $dvar(definition_alias_fritz_sm_heating)_ain=$var(tmp)" />
+
+
+      <!--
+     <action name="Get eco temperature of device/room"     string="sendcommand getattribute" retvar='$dvar(definition_alias_fritz_sm_heating)_temp_eco'     commandparameter='{"device_id":"$par(device_id)","attributename":"eco_temperature"}'     interface="$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)"  />
+     <action name="Get target temperature of device/room"  string="sendcommand getattribute" retvar='$dvar(definition_alias_fritz_sm_heating)_temp_target'  commandparameter='{"device_id":"$par(device_id)","attributename":"target_temperature"}'  interface="$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)"  />
+     <action name="Get comfort temperature of device/room" string="sendcommand getattribute" retvar='$dvar(definition_alias_fritz_sm_heating)_temp_comfort' commandparameter='{"device_id":"$par(device_id)","attributename":"comfort_temperature"}' interface="$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)"  />
+     <action name="Get current mode of device/room"        string="sendcommand getattribute" retvar='$dvar(definition_alias_fritz_sm_heating)_mode_current' commandparameter='{"device_id":"$par(device_id)","attributename":"current_mode"}'        interface="$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)"  />
+
+
+     <action name="If we are on manual mode" string="if $var($dvar(definition_alias_fritz_sm_heating)_mode_current)==automatic"/>
+       <action name="Set Text Manual Mode on"              string="setvar $dvar(definition_alias_fritz_sm_heating)_mode_current_text=$lvar(fritz_sm_heating_10111)" />
+       <action name="Set Button Group Var"                 string="setvar $dvar(definition_alias_fritz_sm_heating)_GROUP_AUTOMATIC=1" />
+       <action name="Update Button Group"                  string="updatewidget Mode Switch Automatic" ignoremissing="1"/>
+      <action string="endif" />
+
+     <action name="If we are on manual mode" string="if $var($dvar(definition_alias_fritz_sm_heating)_mode_current)==manual"/>"
+       <action name="Set Text Manual Mode on"              string="setvar $dvar(definition_alias_fritz_sm_heating)_mode_current_text=$lvar(fritz_sm_heating_10112)" />
+       <action name="Set Button Group Var"                 string="setvar $dvar(definition_alias_fritz_sm_heating)_GROUP_MANUAL=1" />
+       <action name="Update Button Group"                  string="updatewidget Mode Switch Manual" ignoremissing="1"/>
+      <action string="endif" />
+
+     <action name="If we are on vacation mode" string="if $var($dvar(definition_alias_fritz_sm_heating)_mode_current)==vacation"/>"
+       <action name="Set Text Manual Mode on"              string="setvar $dvar(definition_alias_fritz_sm_heating)_mode_current_text=$lvar(fritz_sm_heating_10118)" />
+       <action name="Set Button Group Var"                 string="setvar $dvar(definition_alias_fritz_sm_heating)_GROUP_VACATION=1" />
+       <action name="Update Button Group"                  string="updatewidget Mode Switch Vacation" ignoremissing="1"/>
+      <action string="endif" />
+
+     <action name="If we are on boost mode" string="if $var($dvar(definition_alias_fritz_sm_heating)_mode_current)==boost"/>"
+       <action name="Set Text Manual Mode on"              string="setvar $dvar(definition_alias_fritz_sm_heating)_mode_current_text=$lvar(fritz_sm_heating_10117)" />
+     <action string="endif" />
+    -->
+
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_GetRoomParameter" >
+
+        <action name="Set Temperature #1"         string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_groups_idtemperature_current[$par(device_id)]"  />
+        <action name="Set Temperature #2"         string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set Temperature #3"         string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_current=$var(tmp)" />
+
+        <action name="Set Temperature #1"         string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_groups_idtemperature_target[$par(device_id)]"  />
+        <action name="Set Temperature #2"         string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set Temperature #3"         string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_target=$var(tmp)" />
+
+        <action name="Set Temperature #1"         string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_groups_idtemperature_eco[$par(device_id)]"  />
+        <action name="Set Temperature #2"         string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set Temperature #3"         string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_eco=$var(tmp)" />
+
+        <action name="Set Temperature #1"         string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_groups_idtemperature_comfort[$par(device_id)]"  />
+        <action name="Set Temperature #2"         string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set Temperature #3"         string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_comfort=$var(tmp)" />
+
+        <action name="Set ain #1"                 string="setvar tmp=$dvar(definition_alias_fritz_sm_heating)_groups_idain[$par(device_id)]"  />
+        <action name="Set ain #2"                 string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="Set ain #3"                 string="setvar $dvar(definition_alias_fritz_sm_heating)_ain=$var(tmp)" />
+
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_SetTemperatureToManual" >
+        <action name="Set device temperature"  string="call $dvar(definition_alias_fritz_sm_heating)_SetTemperatureToManual_sub" TEMPERATUREVAR="$par(TEMPERATUREVAR)" />
+    </action>
+
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_SetTemperatureToManual_sub" >
+        <action name="Set Var"                 string="setvar TMP=$par(TEMPERATUREVAR)" />
+        <action name="normalize"               string="call $dvar(definition_alias_fritz_sm_heating)_to_temperaturefritz" realtemperature="$par(TEMPERATUREVAR)" dstvar="TMP_TEMPERATURE"/>
+        <action name="Set Var"                 string="setvar TMP_AIN=$var($dvar(definition_alias_fritz_sm_heating)_ain)" />
+        <action name="normalize ain"          string="modifyvar" operator="regex_sub" varname="TMP_AIN" parameter1="\s" parameter2=""/>
+        <action name="Set Temperature Device"    string="sendcommand device_set_temperature_manual"   commandparameter='{"ain":"$var(TMP_AIN)","temperature":"$var(TMP_TEMPERATURE)"}'  interface="$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)"  />
+        <action name="Get all Devices/rooms"               string="call $dvar(definition_alias_fritz_sm_heating)_GetAllValues"  />
+        <action string="call $dvar(definition_alias_fritz_sm_heating)_GetDeviceParameter" device_id="$var(current_device_id)" />
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_SetModeToBoost" >
+        <action name="Set Var"                string="setvar TMP_AIN=$var($dvar(definition_alias_fritz_sm_heating)_ain)" />
+        <action name="normalize ain"          string="modifyvar" operator="regex_sub" varname="TMP_AIN" parameter1="\s" parameter2=""/>
+        <action name="Set Mode to Boost Device"  string="sendcommand device_set_temperature_boost_on"  commandparameter='{"ain":"$var(TMP_AIN)","seconds":"$var($dvar(definition_alias_fritz_sm_heating)_boosttime)"}'  interface="$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)" condition="$par(BOOST)==ON" />
+        <action name="Set Mode to Boost Device"  string="sendcommand device_set_temperature_boost_off" commandparameter='{"ain":"$var(TMP_AIN)"}'                  interface="$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)" condition="$par(BOOST)==OFF" />
+        <action string="call $dvar(definition_alias_fritz_sm_heating)_GetDeviceParameter" device_id="$var(current_device_id)" />
+    </action>
+
+    <action name="Send_Temp_Up_$dvar(definition_alias_fritz_sm_heating)" >
+        <action name="Increase Temp"    string="modifyvar $dvar(definition_alias_fritz_sm_heating)_set_temperature+1 $var($dvar(definition_alias_fritz_sm_heating)_max_temperature_knob)"/>
+    </action>
+
+    <action name="Send_Temp_Down_$dvar(definition_alias_fritz_sm_heating)" >
+        <action name="Decrease Temp"    string="modifyvar $dvar(definition_alias_fritz_sm_heating)_set_temperature-1 $var($dvar(definition_alias_fritz_sm_heating)_min_temperature_knob)"/>
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_Send_Select_Temp" >
+        <action name="Set Var"          string="setvar TMP_TEMPERATURE=$var($dvar(definition_alias_fritz_sm_heating)_set_temperature)" />
+        <action name="Set Temp"         string="call $dvar(definition_alias_fritz_sm_heating)_SetTemperatureToManual" TEMPERATUREVAR="TMP_TEMPERATURE"/>
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_to_temperaturereal" >
+        <action name="setit"          string="setvar loctmp=$par(fritztemperature)" />
+        <action name="if off #1"       string="setvar loctmp=ON" condition="$var(loctmp)==253"/>
+        <action name="if off #2"       string="exitaction" condition="$var(loctmp)==ON"/>
+        <action name="if on #1"        string="setvar loctmp=OFF" condition="$var(loctmp)==254"/>
+        <action name="if on #2"        string="exitaction" condition="$var(loctmp)==OFF"/>
+        <action name="divide by 2"     string="modifyvar loctmp/2" />
+        <action name="Set Var"         string="setvar $par(dstvar)=$var(loctmp)" />
+    </action>
+
+    <action name="$dvar(definition_alias_fritz_sm_heating)_to_temperaturefritz" >
+        <action name="setit"            string="setvar tmp=$par(realtemperature)" />
+        <action name="pull var"         string="modifyvar" operator="fromvar" varname="tmp" />
+        <action name="multiply by 2"    string="modifyvar tmp*2" />
+        <action name="Set Var"          string="setvar $par(dstvar)=$var(tmp)" />
+    </action>
+
+
+</includes>

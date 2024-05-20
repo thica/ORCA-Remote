@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -31,8 +31,8 @@ from ORCA.scripttemplates.Template_Keyhandler import cKeyhandlerTemplate
       <description language='English'>Script to translate keycodes to symbolic names</description>
       <description language='German'>Script keycodes in symbolische Namen to ändern </description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -71,9 +71,9 @@ class cScript(cKeyhandlerTemplate):
 
     def __init__(self):
         super().__init__()
-        self.uSubType           = u'SYSTEM'
-        self.uSortOrder         = u'first'
-        self.uIniFileLocation   = u'none'
+        self.uSubType           = 'SYSTEM'
+        self.uSortOrder         = 'first'
+        self.uIniFileLocation   = 'none'
 
         #this might get adjusted fo different platforms
         self.dTranslation:Dict = {   "27": "ESC",
@@ -94,6 +94,6 @@ class cScript(cKeyhandlerTemplate):
     def HandleKey(self,**kwargs) -> Dict:
         super().HandleKey(**kwargs)
 
-        uKey:str     = kwargs.get("key",0)
+        uKey:str     = kwargs.get('key',0)
         uKeyNew:str = self.dTranslation.get(uKey,uKey)
-        return {"key":uKeyNew}
+        return {'key':uKeyNew}

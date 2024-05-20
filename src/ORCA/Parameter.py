@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ class cParserAction(argparse.Action):
     """
     def __init__(self, option_strings,  oParameter:cParameter, *args, **kwargs):
         self.oParameter:cParameter = oParameter
-        self.HandleValue(kwargs.get("dest"),kwargs.get("default"))
+        self.HandleValue(kwargs.get('dest'),kwargs.get('default'))
         super(cParserAction, self).__init__(option_strings=option_strings,*args, **kwargs)
     def __call__(self, parser, namespace, values, option_string=None):
         self.HandleValue(self.dest,values)
@@ -53,13 +53,13 @@ class cParserAction(argparse.Action):
         :param str uValue: The value of he parameter
         :return:
         """
-        if uName.startswith("oPath"):
+        if uName.startswith('oPath'):
             uTmp = uValue
-            if uTmp.startswith("~"):
+            if uTmp.startswith('~'):
                 uTmp = OS_GetSystemUserPath() + uTmp[1:]
             self.oParameter[uName]=cPath(uTmp)
-        elif uName.startswith("b"):
-            self.oParameter[uName] = (uValue!="")
+        elif uName.startswith('b'):
+            self.oParameter[uName] = (uValue!='')
         else:
             self.oParameter[uName]=uValue
 
@@ -80,10 +80,10 @@ class cParameter(TypedQueryDict):
         :param oParser:
         :return:
         """
-        oParser.add_argument('--debugpath',    default=GetEnvVar('DEBUGPATH'),       action=cParserAction, oParameter=self, dest="oPathDebug",     help='Changes the path for ORCA files (can be passed as DEBUGPATH environment var)')
-        oParser.add_argument('--logpath',      default=GetEnvVar('ORCALOGPATH'),     action=cParserAction, oParameter=self, dest="oPathLog",       help='Changes the path for ORCA/Kivy log files (can be passed as ORCALOGPATH environment var)')
-        oParser.add_argument('--tmppath',      default=GetEnvVar('ORCATMPPATH'),     action=cParserAction, oParameter=self, dest="oPathTmp",       help='Changes the path for ORCA temp folder (can be passed as ORCATMPPATH environment var)')
-        oParser.add_argument('--smallscreen',  default=GetEnvVar('ORCASMALL'),       action=cParserAction, oParameter=self, dest="bSmallScreen",   help='If set ORCA switches to small screen (can be passed as ORCASMALL environment var)')
+        oParser.add_argument('--debugpath',    default=GetEnvVar('DEBUGPATH'),       action=cParserAction, oParameter=self, dest='oPathDebug',     help='Changes the path for ORCA files (can be passed as DEBUGPATH environment var)')
+        oParser.add_argument('--logpath',      default=GetEnvVar('ORCALOGPATH'),     action=cParserAction, oParameter=self, dest='oPathLog',       help='Changes the path for ORCA/Kivy log files (can be passed as ORCALOGPATH environment var)')
+        oParser.add_argument('--tmppath',      default=GetEnvVar('ORCATMPPATH'),     action=cParserAction, oParameter=self, dest='oPathTmp',       help='Changes the path for ORCA temp folder (can be passed as ORCATMPPATH environment var)')
+        oParser.add_argument('--smallscreen',  default=GetEnvVar('ORCASMALL'),       action=cParserAction, oParameter=self, dest='bSmallScreen',   help='If set ORCA switches to small screen (can be passed as ORCASMALL environment var)')
 
     # noinspection PyMethodMayBeStatic
     def RemoveOtherArguments(self,oParser) -> List:
@@ -92,7 +92,7 @@ class cParameter(TypedQueryDict):
         for uArg in sys.argv[1:]:
             # noinspection PyProtectedMember
             for uOption in oParser._option_string_actions:
-                if uOption.lstrip("-")==uArg.split("=")[0].lstrip("-"):
+                if uOption.lstrip('-')==uArg.split('=')[0].lstrip('-'):
                     aRet.append(uArg)
                     break
         return aRet

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -37,15 +37,15 @@ from ORCA.utils.XML                     import GetXMLTextAttribute
 from ORCA.utils.LogError                import LogError
 from ORCA.ui.ShowErrorPopUp             import ShowErrorPopUp
 from ORCA.utils.Path                    import cPath
-from ORCA.Action                        import cAction
-import ORCA.Globals as Globals
+from ORCA.action.Action import cAction
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 
 __all__ = ['cWidgetFileBrowser']
@@ -90,14 +90,14 @@ class cWidgetFileBrowser(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.oPathStart:cPath       = cPath()
-        self.uActionNameCancel:str  = ""
+        self.uActionNameCancel:str  = ''
         self.bDirSelect:bool        = False
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        self.oPathStart             = cPath(GetVar(uVarName = "filebrowserfile"))
-        self.uActionNameCancel      = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actioncancel',bMandatory=False,vDefault=u'')
-        self.bDirSelect             = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'dirselect',   bMandatory=False,bDefault=False)
+        self.oPathStart             = cPath(GetVar(uVarName = 'filebrowserfile'))
+        self.uActionNameCancel      = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='actioncancel',bMandatory=False,vDefault='')
+        self.bDirSelect             = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag='dirselect',   bMandatory=False,bDefault=False)
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def Create(self,oParent:Widget) -> bool:
@@ -112,13 +112,13 @@ class cWidgetFileBrowser(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         self.AddArg('iconview_string',  ReplaceVars('$lvar(5023)'))
         self.AddArg('transition ',      FadeTransition())
         self.AddArg('size_hint',        (1, 1))
-        self.AddArg('favorites',        [(Globals.oPathRoot.string, 'ORCA')])
+        self.AddArg('favorites',        [(str(Globals.oPathRoot), 'ORCA')])
         self.AddArg('show_fileinput',   False)
         self.AddArg('show_filterinput', False)
         self.AddArg('dirselect',        self.bDirSelect)
 
         if not self.oPathStart.IsEmpty():
-           self.AddArg('path',         self.oPathStart.string)
+           self.AddArg('path',         str(self.oPathStart))
 
         if self.CreateBase(Parent=oParent, Class=FileBrowser):
             self.oParent.add_widget(self.oObject)
@@ -133,18 +133,18 @@ class cWidgetFileBrowser(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
             oItem = cPath(instance.selection[0])
             if self.bDirSelect and not oItem.IsDir():
                 return
-            SetVar(uVarName = "filebrowserfile", oVarValue = oItem.string)
+            SetVar(uVarName = 'filebrowserfile', oVarValue = str(oItem))
             self.On_Button_Up(instance)
             return
 
     # noinspection PyUnusedLocal
     def On_Canceled(self, instance:FileBrowser) -> None:
         """ called, when the user cancelles """
-        if self.uActionNameCancel!=u'':
+        if self.uActionNameCancel!='':
             aActions:List[cAction] = Globals.oActions.GetActionList(uActionName = self.uActionNameCancel, bNoCopy = False)
             if aActions:
                 Globals.oEvents.ExecuteActions( aActions=aActions,oParentWidget=self)
-                Logger.debug (u'TheScreen: Single Tap Action queued for Object %s [%s]' %(self.uName,self.uActionNameCancel))
+                Logger.debug (f'TheScreen: Single Tap Action queued for Object {self.uName} [{self.uActionNameCancel}]')
             else:
-                ShowErrorPopUp(uTitle='Fatal Error', uMessage=LogError(uMsg=u'TheScreen: Action Not Found:' + self.uActionNameCancel), bAbort=True)
+                ShowErrorPopUp(uTitle='Fatal Error', uMessage=LogError(uMsg='TheScreen: Action Not Found:' + self.uActionNameCancel), bAbort=True)
 

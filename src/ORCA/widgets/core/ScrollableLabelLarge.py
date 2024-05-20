@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -68,16 +68,16 @@ class cScrollableLabelLarge(Widget):
     def __init__(self, **kwargs):
         kwargsInner={}
         for k in kwargs:
-            if k not in ["size_hint","size","pos","pos_hint"]:
+            if k not in ['size_hint','size','pos','pos_hint']:
                 kwargsInner[k]=kwargs[k]
         self.oScrollableLabelLargeInner=cScrollableLabelLargeInner(**kwargsInner)
         super(self.__class__, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=Widget))
 
         self.oBackGround         = None
-        if "background_color" in kwargs:
-            self.oBackGround=cTouchRectangle(size=self.size,pos=self.pos, background_color=kwargs["background_color"])
+        if 'background_color' in kwargs:
+            self.oBackGround=cTouchRectangle(size=self.size,pos=self.pos, background_color=kwargs['background_color'])
             self.add_widget(self.oBackGround)
-            del kwargs["background_color"]
+            del kwargs['background_color']
         self.oScrollableLabelLargeInner.size = self.size
         self.oScrollableLabelLargeInner.pos  = self.pos
         self.add_widget(self.oScrollableLabelLargeInner)
@@ -124,6 +124,7 @@ class cScrollableLabelLarge(Widget):
             if self.oBackGround:
                 self.oBackGround.opacity = 0.0
             self.oScrollableLabelLargeInner.opacity = 0.0
+        return bEnable
 
     font_size  = AliasProperty(_get_font_size, _set_font_size)
 
@@ -131,7 +132,7 @@ class cScrollableLabelLarge(Widget):
 # noinspection PyUnusedLocal
 class cLineLayoutBase(BoxLayout):
     """ embedded class to present a single line of text """
-    text = StringProperty("")
+    text = StringProperty('')
     font_size = NumericProperty(0)
     def __init__(self, **kwargs):
         super(self.__class__,self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=BoxLayout))
@@ -184,24 +185,24 @@ class cScrollableLabelLargeInner(RecycleView):
         self.iMaxCharwidth          = 0
         # The maximum  characters per line
         self.iMaxCharsPerLine       = 0
-        if "font_size" in kwargs:
-            self.on_font_size(None,kwargs["font_size"])
+        if 'font_size' in kwargs:
+            self.on_font_size(None,kwargs['font_size'])
 
         # Retrieving the genuine font properties of a label to pass only those arguments to the label (removing pos, hints, background colors , etc
-        self.aFontProperties             = Label._font_properties+("background_color",)
+        self.aFontProperties             = Label._font_properties+('background_color',)
         # standard font args, if nothing is given
-        self.kwFontArgs                  = {"halign" : "left","valign": "top", "max_lines":1,"font_size":20}
+        self.kwFontArgs                  = {'halign' : 'left','valign': 'top', 'max_lines':1,'font_size':20}
 
         # add / update the font args to be passed to the Label
         for k in kwargs:
             if k in self.aFontProperties:
                 self.kwFontArgs[k]=kwargs[k]
-        self.kwFontArgs["font_size"]=self.fFontSize
-        self.kwFontArgs.pop("text",None)
+        self.kwFontArgs['font_size']=self.fFontSize
+        self.kwFontArgs.pop('text',None)
 
         # Parameter Flag to disable horizontal scrolling
-        self.bNoXScroll = kwargs.get("noxscroll",False)
-        self.bMarkup = kwargs.get("markup", False)
+        self.bNoXScroll = kwargs.get('noxscroll',False)
+        self.bMarkup = kwargs.get('markup', False)
         #A dummy label to get th width a the larges character
         self.oLabel = Label(**RemoveNoClassArgs(dInArgs=self.kwFontArgs,oObject=Label))
 
@@ -214,12 +215,12 @@ class cScrollableLabelLargeInner(RecycleView):
         # we need to handle size changes
         self.bind(size=self.update_size)
         self.bind(text=self.on_textinner)
-        self.text = kwargs.get("text","")
+        self.text = kwargs.get('text','')
 
     def on_fFontSize(self, instance, value):
         """ Will handle font size changes  """
         if self.layout_manager is not None:
-            self.kwFontArgs["font_size"]=self.fFontSize
+            self.kwFontArgs['font_size']=self.fFontSize
             self.oLabel.font_size = self.fFontSize
             self.layout_manager.default_size = (None,self.oLabel._label.get_extents('W')[1])
             self.SetData(self.aData)
@@ -243,7 +244,7 @@ class cScrollableLabelLargeInner(RecycleView):
         self.fFontSize        -=1.0
     def SetData(self, aData):
         """ Passes the data to the Recycle view and sets the layout manager size """
-        self.data = [{'text': ToUnicode(x),"font_size":self.fFontSize} for x in aData]
+        self.data = [{'text': ToUnicode(x),'font_size':self.fFontSize} for x in aData]
 
         if self.bNoXScroll:
             self.layout_manager.width=self.width
@@ -301,7 +302,7 @@ class cScrollableLabelLargeInner(RecycleView):
                     aData=[]
                     for oLine in self.oLabel._label._cached_lines:
                         if len(oLine.words)>0:
-                            uText= u''
+                            uText= ''
                             for oWord in oLine.words:
                                 if self.bMarkup:
                                     uText+=self.AddMarkUps(oWord)
@@ -309,8 +310,8 @@ class cScrollableLabelLargeInner(RecycleView):
                                     uText+=oWord.text
                             aData.append(uText)
                         else:
-                            aData.append(u'')
-                    self.oLabel.text = ""
+                            aData.append('')
+                    self.oLabel.text = ''
 
             self.aData = aData
             self.SetData(aData)
@@ -321,32 +322,32 @@ class cScrollableLabelLargeInner(RecycleView):
     def AddMarkUps(self,oWord):
 
         uText=oWord.text
-        if oWord.options["bold"]:
-            uText=self.AddMarkUp(uText,"b")
-        if oWord.options["italic"]:
-            uText=self.AddMarkUp(uText,"i")
-        if oWord.options["underline"]:
-            uText=self.AddMarkUp(uText,"u")
-        if oWord.options["strikethrough"]:
-            uText=self.AddMarkUp(uText,"s")
-        if oWord.options["font_name"] != "Roboto":
-            uText=self.AddMarkUp(uText,"font",oWord.options["font_name"])
-        if oWord.options["font_size"] != self.fFontSize:
-            uText=self.AddMarkUp(uText,"size",ToUnicode(oWord.options["font_size"]))
+        if oWord.options['bold']:
+            uText=self.AddMarkUp(uText,'b')
+        if oWord.options['italic']:
+            uText=self.AddMarkUp(uText,'i')
+        if oWord.options['underline']:
+            uText=self.AddMarkUp(uText,'u')
+        if oWord.options['strikethrough']:
+            uText=self.AddMarkUp(uText,'s')
+        if oWord.options['font_name'] != 'Roboto':
+            uText=self.AddMarkUp(uText,'font',oWord.options['font_name'])
+        if oWord.options['font_size'] != self.fFontSize:
+            uText=self.AddMarkUp(uText,'size',ToUnicode(oWord.options['font_size']))
 
-        if oWord.options["color"] != [1,1,1,1]:
-            uHexColor = u''
-            for iColor in oWord.options["color"]:
+        if oWord.options['color'] != [1,1,1,1]:
+            uHexColor = ''
+            for iColor in oWord.options['color']:
                 uHexColor+=ToHex(int(iColor*255))
-            uText=self.AddMarkUp(uText,"color",'#'+uHexColor)
+            uText=self.AddMarkUp(uText,'color','#'+uHexColor)
 
         return uText
 
     # noinspection PyMethodMayBeStatic
     def AddMarkUp(self,uText,uMarkUp,uValue=None):
         if uValue is None:
-            return "[{1}]{0}[/{1}]".format(uText,uMarkUp)
+            return f'[{uMarkUp}]{uText}[/{uMarkUp}]'
         else:
-            return "[{1}={2}]{0}[/{1}]".format(uText,uMarkUp,uValue)
+            return f'[{uMarkUp}={uValue}]{uText}[/{uMarkUp}]'
 
 

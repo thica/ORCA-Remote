@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -27,14 +27,14 @@ class cSystemTemplate(cBaseScript):
     """ template class for discover scripts """
     def __init__(self):
         cBaseScript.__init__(self)
-        self.uType:str      = u'SYSTEM'
+        self.uType:str      = 'SYSTEM'
         self.iHash:int      = 0
 
     def RunScript(self, *args, **kwargs) -> Union[Dict,None]:
         """ main entry point to run the script """
-        if 'register' in args or kwargs.get("caller")=="appstart":
+        if 'register' in args or kwargs.get('caller')=='appstart':
             return self.Register(*args,**kwargs)
-        elif "unregister" in args:
+        elif 'unregister' in args:
             return self.UnRegister(*args,**kwargs)
         return None
 

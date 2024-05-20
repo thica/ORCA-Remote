@@ -6,8 +6,8 @@
             <description language="English">Octagon 1018HD receiver command set using IR (might work for other Octagons as well)</description>
             <description language="German">Octagon 1018HD Receiver Befehlssatz über IR (sollte auch für andere Octagon Modelle funkionieren)</description>
             <author>Carsten Thielepape</author>
-            <version>5.0.4</version>
-            <minorcaversion>5.0.4</minorcaversion>
+            <version>6.0.0</version>
+            <minorcaversion>6.0.0</minorcaversion>
             <sources>
                 <source>
                     <local>$var(APPLICATIONPATH)/codesets/infrared_ccf/CODESET_infrared_ccf_OCTAGON 1018 HD.xml</local>

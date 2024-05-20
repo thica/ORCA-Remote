@@ -3,12 +3,12 @@
   <pagestartaction name="appstart">
       <!-- Load my passwords -->
       <action name="on first start" string="if $var(STARTCOUNT)==1"/>"
-          <action name="Login To FTP Server"                string="executeftpcommand" command="connect" host="192.168.1.154" user="root" password="" ssl="0"/>
-          <action name="Download secrets from FTP Server"   string="executeftpcommand" command="downloadfile" localfile="thicasecrets.xml" localbasefolder="$var(DOWNLOADSPATH)" remotebasefolder="/home/root"/>
-          <action name="Download adbkey from FTP Server"    string="executeftpcommand" command="downloadfile" localfile="adbkey" localbasefolder="$var(DOWNLOADSPATH)" remotebasefolder="/home/root"/>
-          <action name="Download adbkey from FTP Server"    string="executeftpcommand" command="downloadfile" localfile="adbkey.pub" localbasefolder="$var(DOWNLOADSPATH)" remotebasefolder="/home/root"/>
+          <action name="Login To FTP Server"                string="executeftpcommand" command="connect" host="192.168.1.154" user="root" password="root" ssl="0"/>
+          <action name="Download secrets from FTP Server"   string="executeftpcommand" command="downloadfile" localfile="thicasecrets.xml" localbasefolder="$var(TMPPATH)" remotebasefolder="/home/root"/>
+          <action name="Download adbkey from FTP Server"    string="executeftpcommand" command="downloadfile" localfile="adbkey" localbasefolder="$var(TMPPATH)" remotebasefolder="/home/root"/>
+          <action name="Download adbkey from FTP Server"    string="executeftpcommand" command="downloadfile" localfile="adbkey.pub" localbasefolder="$var(TMPPATH)" remotebasefolder="/home/root"/>
           <action name="Logout from FTP Server"             string="executeftpcommand" command="disconnect"  />
-          <action name="Load Secrets scripts"               string="loadactionfile" actionfilename="$var(DOWNLOADSPATH)/thicasecrets.xml"  />
+          <action name="Load Secrets scripts"               string="loadactionfile" actionfilename="$var(TMPPATH)/thicasecrets.xml"  />
           <action name="set the secrets"                    string="call setthicasecrets"  />
           <action name="Set language to German"             string="getsaveorcasetting" configtype="ORCA" varname="locales" varvalue="Deutschland" />
       <action name="endif first start" string="endif" />

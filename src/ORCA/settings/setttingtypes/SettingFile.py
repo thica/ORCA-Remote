@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -28,7 +28,7 @@ from ORCA.utils.FileName            import cFileName
 from ORCA.vars.Replace              import ReplaceVars
 from ORCA.widgets.core.FileBrowser  import FileBrowser
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['SettingFile']
 
@@ -45,7 +45,7 @@ class SettingFile(SettingPath):
         uRoot, uName = split(self.value)
         uRoot = ReplaceVars(uRoot)
         if uRoot == '':
-            uRoot = Globals.oPathRoot.string
+            uRoot = str(Globals.oPathRoot)
         self.textinput = textinput = FileBrowser(select_string     = ReplaceVars('$lvar(563)'),
                                                  cancel_string     = ReplaceVars('$lvar(5009)'),
                                                  libraries_string  = ReplaceVars('$lvar(5018)'),
@@ -58,7 +58,7 @@ class SettingFile(SettingPath):
                                                  dirselect         = False,
                                                  transition        = FadeTransition(),
                                                  size_hint         = (1, 1),
-                                                 favorites         = [(Globals.oPathRoot.string, 'ORCA')],
+                                                 favorites         = [(str(Globals.oPathRoot), 'ORCA')],
                                                  show_fileinput    = False,
                                                  show_filterinput  = False,
                                                  )
@@ -76,18 +76,18 @@ class SettingFile(SettingPath):
         if len(oFileBrowser.selection)==0:
             self._dismiss()
             return
-        uValue=(cFileName().ImportFullPath(uFnFullName=oFileBrowser.selection[0])).string
+        uValue=str(cFileName().ImportFullPath(uFnFullName=oFileBrowser.selection[0]))
         for uKey in Globals.oTheScreen.oSkin.dSkinPics:
-            if Globals.oTheScreen.oSkin.dSkinPics[uKey].string == uValue:
+            if str(Globals.oTheScreen.oSkin.dSkinPics[uKey]) == uValue:
                 uValue = uKey
                 break
 
-        uValue=uValue.replace(Globals.oPathSkin.string,                           '$var(SKINPATH)')
-        uValue=uValue.replace(Globals.oPathResources.string,                      '$var(RESOURCEPATH')
-        uValue=uValue.replace(Globals.oDefinitionPathes.oPathDefinition.string,   '$var(DEFINITIONPATH)')
-        uValue=uValue.replace(Globals.oPathTmp.string,                            '$var(TMPPATH)')
-        uValue=uValue.replace(Globals.oPathRoot.string,                           '$var(APPLICATIONPATH)')
-        uValue=uValue.replace(str(Globals.iVersion),                              '$var(REPVERSION)')
+        uValue=uValue.replace(str(Globals.oPathSkin),                           '$var(SKINPATH)')
+        uValue=uValue.replace(str(Globals.oPathResources),                      '$var(RESOURCEPATH')
+        uValue=uValue.replace(str(Globals.oDefinitionPathes.oPathDefinition),   '$var(DEFINITIONPATH)')
+        uValue=uValue.replace(str(Globals.oPathTmp),                            '$var(TMPPATH)')
+        uValue=uValue.replace(str(Globals.oPathRoot),                           '$var(APPLICATIONPATH)')
+        uValue=uValue.replace(str(Globals.iVersion),                            '$var(REPVERSION)')
         uValue=uValue.replace('\\',"/")
         self.value=uValue
         self._dismiss()

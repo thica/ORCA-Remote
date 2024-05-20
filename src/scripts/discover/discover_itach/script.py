@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@ from __future__ import annotations
 
 from typing import Dict
 from typing import List
+from typing import Tuple
 from typing import Union
 
 import re
@@ -31,7 +32,6 @@ import select
 import socket
 import struct
 import threading
-from time                                   import sleep
 
 from kivy.clock                             import Clock
 from kivy.uix.button                        import Button
@@ -41,10 +41,11 @@ from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
 from ORCA.utils.TypeConvert                 import ToFloat
 from ORCA.utils.TypeConvert                 import ToUnicode
+from ORCA.utils.TypeConvert                 import ToBool
 from ORCA.vars.QueryDict                    import TypedQueryDict
 from ORCA.utils.FileName                    import cFileName
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 '''
@@ -55,8 +56,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover iTach devices</description>
       <description language='German'>Erkennt sucht iTach Geräte über beacon</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_itach</local>
@@ -100,14 +101,15 @@ class cScript(cDiscoverScriptTemplate):
     def __init__(self):
         super().__init__()
         self.fTimeOut:float                         = 3
-        self.uSubType:str                           = u'iTach (Global Cache)'
+        self.uSubType:str                           = 'iTach (Global Cache)'
         self.aResults:List[TypedQueryDict]          = []
         self.aThreads:List[cThread_Discover_iTach]  = []
         self.iDiscoverCount:int                     = 0
         self.iMaxDiscoverCount:int                  = 3
-        self.uIPVersion                             = u'IPv4Only'
+        self.uIPVersion                             = 'IPv4Only'
         self.dReq:TypedQueryDict                    = TypedQueryDict()
-        self.uScriptTitle                           = u"Global Cache:iTach Discovery"
+        self.uScriptTitle                           = 'Global Cache:iTach Discovery'
+        self.bDoNotWait:bool                        = False
 
     def __del__(self):
         self.StopThread([])
@@ -127,14 +129,14 @@ class cScript(cDiscoverScriptTemplate):
         # iTach just send beacons to the network, so we start listening immediately
 
         super().Init(uObjectName=uObjectName, oFnObject=oFnScript)
-        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = 'enabled'
         self.StartThread()
 
     def StartThread(self) -> None:
         if self.iDiscoverCount < self.iMaxDiscoverCount:
             self.iDiscoverCount += 1
-            if self.uIPVersion == "IPv4Only" or self.uIPVersion == "All" or (self.uIPVersion == "Auto" and Globals.uIPAddressV6 == ""):
-                self.ShowInfo(uMsg="Start Discover Thread V4")
+            if self.uIPVersion == 'IPv4Only' or self.uIPVersion == 'All' or (self.uIPVersion == 'Auto' and Globals.uIPAddressV6 == ''):
+                self.ShowInfo(uMsg='Start Discover Thread V4')
                 oThread = cThread_Discover_iTach(dReq=self.dReq,uIPVersion=self.uIPVersion, fTimeOut=self.fTimeOut, oCaller=self)
                 self.aThreads.append(oThread)
                 self.aThreads[-1].start()
@@ -153,13 +155,14 @@ class cScript(cDiscoverScriptTemplate):
         Clock.schedule_once(self.ListDiscover_Step2, 0)
         return
 
+    # noinspection PyUnusedLocal
     def ListDiscover_Step2(self, *largs):
 
-        oSetting:cBaseScriptSettings = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
+        # oSetting:cBaseScriptSettings = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
 
         if len(self.aResults)>0:
             for dDevice in self.aResults:
-                Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTFOUND",**{"script":self,"scriptname":self.uObjectName,"line":[dDevice.uIP , dDevice.uUUID , dDevice.uModel ,dDevice.uRevision ],"device":dDevice})
+                Globals.oNotifications.SendNotification(uNotification='DISCOVER_SCRIPTFOUND',**{'script':self,'scriptname':self.uObjectName,'line':[dDevice.uIP , dDevice.uUUID , dDevice.uModel ,dDevice.uRevision ],'device':dDevice})
             self.SendEndNotification()
             return
 
@@ -170,11 +173,11 @@ class cScript(cDiscoverScriptTemplate):
 
         dDevice:TypedQueryDict = oButton.dDevice
 
-        uText=  u"$lvar(5029): %s \n"\
-                u"$lvar(5034): %s \n"\
-                u"$lvar(5031): %s \n"\
-                u"\n"\
-                u"Revision: %s" % (dDevice.uIP,dDevice.uUUID,dDevice.uModel,dDevice.uRevision)
+        uText=  '$lvar(5029): %s \n' \
+                '$lvar(5034): %s \n' \
+                '$lvar(5031): %s \n' \
+                '\n' \
+                'Revision: %s' % (dDevice.uIP,dDevice.uUUID,dDevice.uModel,dDevice.uRevision)
 
         ShowMessagePopUp(uMessage=uText)
 
@@ -183,11 +186,11 @@ class cScript(cDiscoverScriptTemplate):
         uConfigName:str                 = kwargs.get('configname',self.uConfigName)
         oSetting:cBaseScriptSettings    = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
         self.fTimeOut:float             = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
-        self.dReq.uModels               = kwargs.get('models',"")
-        self.uIPVersion:str             = kwargs.get('ipversion',"IPv4Only")
-        self.bDoNotWait                 = ToBool(kwargs.get('donotwait',"0"))
+        self.dReq.uModels               = kwargs.get('models','')
+        self.uIPVersion:str             = kwargs.get('ipversion','IPv4Only')
+        self.bDoNotWait                 = ToBool(kwargs.get('donotwait','0'))
 
-        self.ShowDebug(uMsg=u'Try to discover iTach device')
+        self.ShowDebug(uMsg='Try to discover iTach device')
 
         del self.aResults[:]
 
@@ -204,7 +207,7 @@ class cScript(cDiscoverScriptTemplate):
             self.SendEndNotification()
 
             if len(self.aResults)>0:
-                return {"Host":self.aResults[0].uFoundIP}
+                return {'Host':self.aResults[0].uFoundIP}
 
             if len(self.aResults)>0:
                 #for dDevice in self.aResults:
@@ -213,7 +216,7 @@ class cScript(cDiscoverScriptTemplate):
             else:
                 self.ShowWarning(uMsg='No iTach device found')
         except Exception as e:
-            self.ShowError(uMsg=u'No iTach device found, possible timeout',oException=e)
+            self.ShowError(uMsg='No iTach device found, possible timeout',oException=e)
 
         return {"Host":""}
 
@@ -240,7 +243,7 @@ class cThread_Discover_iTach(threading.Thread):
     def run(self) -> None:
 
         self.bStopThreadEvent = False
-        self.oCaller.ShowDebug(uMsg=u'iTach Start Discover Thread')
+        self.oCaller.ShowDebug(uMsg='iTach Start Discover Thread')
 
         p = re.compile((r'AMXB<-UUID=GlobalCache_(?P<UUID>.{12}).+'
                         r'Model=iTach(?P<Model>.+?)>.+'
@@ -256,12 +259,12 @@ class cThread_Discover_iTach(threading.Thread):
             mreq = struct.pack('4sL', group, socket.INADDR_ANY)
             self.oSocket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
         except Exception as e:
-            self.oCaller.ShowError(uMsg=" -3: Error occured",oException= e)
+            self.oCaller.ShowError(uMsg=' -3: Error occured',oException= e)
 
         try:
             while not self.bStopThreadEvent:
                 if self.oSocket is not None:
-                    aReady:List = select.select([self.oSocket], [], [],int(self.fTimeOut))
+                    aReady:Tuple = select.select([self.oSocket], [], [],int(self.fTimeOut))
                     # the first element of the returned list is a list of readable sockets
                     if aReady[0]:
                         byData:bytes = self.oSocket.recv(1024)
@@ -277,16 +280,16 @@ class cThread_Discover_iTach(threading.Thread):
                             cThread_Discover_iTach.oWaitLock.acquire()
                             self.oCaller.aResults.append(diTachEntry)
                             cThread_Discover_iTach.oWaitLock.release()
-                            self.oCaller.ShowInfo(uMsg="iTach-Discover: iTach found! IP: %s, UUID:%s, Model:%s, Revision:%s, Part number:%s, Status:%s" % (diTachEntry.uIP , diTachEntry.uUUID , diTachEntry.uModel , diTachEntry.uRevision , diTachEntry.uPartNumber ,  diTachEntry.uStatus ))
+                            self.oCaller.ShowInfo(uMsg=f'iTach-Discover: iTach found! IP: {diTachEntry.uIP}, UUID:{diTachEntry.uUUID}, Model:{diTachEntry.uModel}, Revision:{diTachEntry.uRevision}, Part number:{diTachEntry.uPartNumber}, Status:{diTachEntry.uStatus}')
                             # by now, we finished if we found one device
                             break
         except Exception as e:
-            self.oCaller.ShowError(uMsg="Error occured",oException=e)
+            self.oCaller.ShowError(uMsg='Error occured',oException=e)
         finally:
             if len(self.oCaller.aResults)==0:
-                self.oCaller.ShowDebug (uMsg=u'Stop Discover Thread, nothing found')
+                self.oCaller.ShowDebug (uMsg='Stop Discover Thread, nothing found')
             else:
-                self.oCaller.ShowDebug (uMsg=u'Stop Discover Thread, device(s) found')
+                self.oCaller.ShowDebug (uMsg='Stop Discover Thread, device(s) found')
             self.oSocket.close()
             return
     def Close(self):

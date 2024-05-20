@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -38,10 +38,10 @@ from ORCA.widgets.core.ColorPicker import cColorPicker
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 
 __all__ = ['cWidgetColorPicker']
@@ -82,12 +82,12 @@ class cWidgetColorPicker(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         self.fOldValue:float                = 10000.23445
         self.fValue:float                   = 0.0
         self.oTrigger                       = Clock.create_trigger(self.On_Color_Wheel)
-        self.uDestVar:str                   = u''
+        self.uDestVar:str                   = ''
         self.oObjectColorPicker:cColorPicker= cColorPicker()
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        self.uDestVar = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'destvar', bMandatory=False,vDefault=u'colorpicker')
+        self.uDestVar = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='destvar', bMandatory=False,vDefault='colorpicker')
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def Create(self,oParent:Widget) -> bool:
@@ -130,18 +130,18 @@ class cWidgetColorPicker(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
             SetVar(uVarName = self.uDestVar+"_b", oVarValue = str(int(instance.color[2]*255) ))
             SetVar(uVarName = self.uDestVar+"_a", oVarValue = str(int(instance.color[3]*255) ))
 
-            Logger.debug("Setting Var:"+self.uDestVar+"="+str(self.fValue))
-            Logger.debug("Setting Var:"+self.uDestVar+"_hex"+"="+str(self.fValue))
-            Logger.debug("Setting Var:"+self.uDestVar+"_h"+"="+str(str(int(h*255))))
-            Logger.debug("Setting Var:"+self.uDestVar+"_s"+"="+str(str(int(s*255))))
-            Logger.debug("Setting Var:"+self.uDestVar+"_v"+"="+str(str(int(v*255))))
+            Logger.debug('Setting Var:'+self.uDestVar+'='+str(self.fValue))
+            Logger.debug('Setting Var:'+self.uDestVar+'_hex'+'='+str(self.fValue))
+            Logger.debug('Setting Var:'+self.uDestVar+'_h'+'='+str(str(int(h*255))))
+            Logger.debug('Setting Var:'+self.uDestVar+'_s'+'='+str(str(int(s*255))))
+            Logger.debug('Setting Var:'+self.uDestVar+'_v'+'='+str(str(int(v*255))))
 
-            Logger.debug("Setting Var:"+self.uDestVar+"_r"+"="+str(int(instance.color[0]*255)))
-            Logger.debug("Setting Var:"+self.uDestVar+"_g"+"="+str(int(instance.color[1]*255)))
-            Logger.debug("Setting Var:"+self.uDestVar+"_b"+"="+str(int(instance.color[2]*255)))
-            Logger.debug("Setting Var:"+self.uDestVar+"_a"+"="+str(int(instance.color[3]*255)))
+            Logger.debug('Setting Var:'+self.uDestVar+'_r'+'='+str(int(instance.color[0]*255)))
+            Logger.debug('Setting Var:'+self.uDestVar+'_g'+'='+str(int(instance.color[1]*255)))
+            Logger.debug('Setting Var:'+self.uDestVar+'_b'+'='+str(int(instance.color[2]*255)))
+            Logger.debug('Setting Var:'+self.uDestVar+'_a'+'='+str(int(instance.color[3]*255)))
 
-            #SetVar(self.uDestVar+"_rgba",instance.color)
+            #SetVar(self.uDestVar+'_rgba',instance.color)
 
         if self.uActionName:
             if self.fOldValue != self.fValue:
@@ -165,11 +165,11 @@ class cWidgetColorPicker(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         g:float
         a:float = 1.0
 
-        if not self.uDestVar==u'':
+        if not self.uDestVar=='':
 
-            uH=GetVar(uVarName = self.uDestVar+u'_h')
-            uS=GetVar(uVarName = self.uDestVar+u'_s')
-            uV=GetVar(uVarName = self.uDestVar+u'_v')
+            uH=GetVar(uVarName = self.uDestVar+'_h')
+            uS=GetVar(uVarName = self.uDestVar+'_s')
+            uV=GetVar(uVarName = self.uDestVar+'_v')
 
             if uH!='':
                 h=ToFloat(uH)/255
@@ -177,9 +177,9 @@ class cWidgetColorPicker(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
                 v=ToFloat(uV)/255
                 r,g,b=hsv_to_rgb(h,s,v)
             else:
-                uR=GetVar(uVarName = self.uDestVar+u'_r')
-                uG=GetVar(uVarName = self.uDestVar+u'_g')
-                uB=GetVar(uVarName = self.uDestVar+u'_b')
+                uR=GetVar(uVarName = self.uDestVar+'_r')
+                uG=GetVar(uVarName = self.uDestVar+'_g')
+                uB=GetVar(uVarName = self.uDestVar+'_b')
 
                 if uR=='':
                     r,g,b,a = GetColorFromHex(GetVar(uVarName=self.uDestVar))

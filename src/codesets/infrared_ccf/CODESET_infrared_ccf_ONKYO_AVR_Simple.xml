@@ -6,8 +6,8 @@
             <description language="English">ONKYO AVR: Only power on command using IR</description>
             <description language="German">ONKYO AVR: Nur der Power on Befehl über IR</description>
             <author>Carsten Thielepape</author>
-            <version>5.0.4</version>
-            <minorcaversion>5.0.4</minorcaversion>
+            <version>6.0.0</version>
+            <minorcaversion>6.0.0</minorcaversion>
             <sources>
                 <source>
                     <local>$var(APPLICATIONPATH)/codesets/infrared_ccf/CODESET_infrared_ccf_ONKYO_AVR_Simple.xml</local>

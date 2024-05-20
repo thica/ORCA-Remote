@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Anchor Temp Select" type="ANCHOR" >
+    <elements>
+      <element name="Background"     type="PICTURE"    picturenormal="background boxes" />
+      <element name='Anchor KNOB' type='ANCHOR'  posy='bottom'  height='of:width:self'>
+        <elements>
+          <element name="Amp Back" type="PICTURE" picturenormal="knob back" />
+          <element name="Knob Temp" type="KNOB" posx="%50" posy="%50"  width="%86"  height="of:width:self" picturenormal="knob" destvar="$dvar(definition_alias_fritz_sm_heating)_set_temperature" mindatavalue="$var($dvar(definition_alias_fritz_sm_heating)_min_temperature_knob)" maxdatavalue="$var($dvar(definition_alias_fritz_sm_heating)_max_temperature_knob)" leftboundaryangle="-135" rightboundaryangle="+135"  roundpos="0" discardmoves="1" />
+          <element name="Temp Knob Textvalue" type="TEXTFIELD" posx="center" posy="middle"    width="%80"  height="%30" caption="$var($dvar(definition_alias_fritz_sm_heating)_set_temperature)$var($dvar(definition_alias_fritz_sm_heating)_temperature_unit)" fontsize='%h70' vtextalign='middle' htextalign='center' />
+          <element name='Button Temp Up'          type='BUTTON'    posx='left'  posy='top'    width="%17"  height='of:width:self'   picturenormal='transparentpic' picturepressed="button round pressed" action='Send_Temp_Up_$dvar(definition_alias_fritz_sm_heating)'     fontsize='%h30'  iconfontsize='%h50' caption='icon:osd_up'     />
+          <element name='Button Temp Down'        type='BUTTON'    posx='right' posy='top'    width="%17"  height='of:width:self'   picturenormal='transparentpic' picturepressed="button round pressed" action='Send_Temp_Down_$dvar(definition_alias_fritz_sm_heating)'   fontsize='%h30'  iconfontsize='%h50' caption='icon:osd_down'  />
+          <element name='Button Set'              type='BUTTON'    posx='left'  posy='bottom' width="%17"  height='of:width:self'   picturenormal='transparentpic' picturepressed="button round pressed" action='$dvar(definition_alias_fritz_sm_heating)_Send_Select_Temp' actionlongtap="noaction" fontsize='%h50'  iconfontsize='%h50' caption='$lvar(fritz_sm_heating_10110)'  />
+        </elements>
+      </element>
+
+    </elements>
+  </element>
+</elements>

@@ -7,7 +7,7 @@
     <fontsize_button>%h50</fontsize_button>
     <fontsize_text>%h50</fontsize_text>
     <author>Carsten Thielepape</author>
-    <version>5.0.4</version>
+    <version>6.0.0</version>
     <support>http://www.orca-remote.org/forum/</support>
     <definitionvars>{"definition_alias_appfavorites_template":"App Favorites"}</definitionvars>
   </def_parameter>
@@ -42,11 +42,11 @@
     <setting title="$lvar(apptemplate_10502) #5"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[5]"  type="string" default="^(?=.*plex).*$" />
     <setting title="$lvar(apptemplate_10505) #5"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[5]"  type="string" default="^(?=.*plex).*$" />
     <setting title="$lvar(apptemplate_10500) #6"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[6]"   type="string" default="Amazon Prime" />
-    <setting title="$lvar(apptemplate_10502) #6"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[6]"  type="string" default="^(?=.*amazon)(?=.*video).*$" />
-    <setting title="$lvar(apptemplate_10505) #6"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[6]"  type="string" default="^(?=.*amazon)(?=.*video).*$" />
-    <setting title="$lvar(apptemplate_10500) #7"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[7]"   type="string" default="Google Music" />
-    <setting title="$lvar(apptemplate_10502) #7"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[7]"  type="string" default="^(?=.*google)(?=.*music).*$" />
-    <setting title="$lvar(apptemplate_10505) #7"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[7]"  type="string" default="^(?=.*google)(?=.*music).*$" />
+    <setting title="$lvar(apptemplate_10502) #6"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[6]"  type="string" default="android.intent.action.VIEW -n com.amazon.amazonvideo.livingroom/com.amazon.ignition.IgnitionActivity" />
+    <setting title="$lvar(apptemplate_10505) #6"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[6]"  type="string" default="android.intent.action.VIEW -n com.amazon.amazonvideo.livingroom/com.amazon.ignition.IgnitionActivity" />
+    <setting title="$lvar(apptemplate_10500) #7"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[7]"   type="string" default="" />
+    <setting title="$lvar(apptemplate_10502) #7"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[7]"  type="string" default="" />
+    <setting title="$lvar(apptemplate_10505) #7"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[7]"  type="string" default="" />
     <setting title="$lvar(apptemplate_10500) #8"  desc="$lvar(apptemplate_10501)"  var="$dvar(definition_alias_appfavorites_template)_appname[8]"   type="string" default="" />
     <setting title="$lvar(apptemplate_10502) #8"  desc="$lvar(apptemplate_10503)"  var="$dvar(definition_alias_appfavorites_template)_execname[8]"  type="string" default="" />
     <setting title="$lvar(apptemplate_10505) #8"  desc="$lvar(apptemplate_10506)"  var="$dvar(definition_alias_appfavorites_template)_stopname[8]"  type="string" default="" />
@@ -76,8 +76,8 @@
       <description language='English'>Standard Template to start applications, not for direct use</description>
       <description language='German'>Standard Template um Programme zu starten, nicht direkt verwenden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/appfavorites_template</local>

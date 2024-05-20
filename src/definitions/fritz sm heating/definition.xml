@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orca>
+  <def_parameter>
+    <maxx>19200</maxx>
+    <maxy>11280</maxy>
+    <defaultfont></defaultfont>
+    <fontsize_button>%h30</fontsize_button>
+    <fontsize_text>%h30</fontsize_text>
+    <support>http://www.orca-remote.org/forum/</support>
+    <installationhint></installationhint>
+    <orientations>landscape,portrait</orientations>
+    <definitionvars>{"definition_alias_fritz_sm_heating":"FRITZ_SM_HEATING"}</definitionvars>
+  </def_parameter>
+
+  <startskip condition="$dvar(definition_alias_fritz_sm_heating_IMPORTPAGES)=0"/>
+    <pages xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="$var(DEFINITIONPATH)/page_*" parse="xml"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/landscape_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_LL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/pages/portrait_largesize/page_*" parse="xml" condition="$var(SCREEN)==SCREEN_PL"></xi:include>
+      <xi:include href="$var(STANDARDPAGESPATH)/page_*" parse="xml" condition="$var(ORCASTANDARDPAGESINCLUDED)!=1"></xi:include>
+    </pages>
+  <stopskip/>
+
+  <interface_setup>
+      <interface name="url">
+        <configuration name ="DEVICE_$dvar(definition_alias_fritz_sm_heating)">
+          <setting name="Host" parameter="discover"/>
+          <setting name="FNCodeset" parameter="CODESET_url_FRITZ_SMARTHOME.xml"/>
+          <setting name="DiscoverScriptName" parameter="discover_upnp"/>
+          <setting name="DISCOVER_UPNP_manufacturer" parameter="AVM Berlin"/>
+          <setting name="DISCOVER_UPNP_models" parameter='["FRITZ!Box*"]'/>
+          <setting name="DISCOVER_UPNP_servicetypes" parameter='["upnp:rootdevice"]'/>
+          <setting name="SaveDiscoveredIP" parameter="1"/>
+          <setting name="OldDiscoveredIP" parameter=""/>
+        </configuration>
+      </interface>
+  </interface_setup>
+
+  <settings>
+    <!-- Interfaces -->
+    <setting title="$lvar(561)" type='section' />
+    <setting title="$lvar(700)"  desc="$lvar(701)" var="$dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN"     type="scrolloptions"    default="url" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(702)"  desc="$lvar(703)" var="$dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN"    type="string"           default="DEVICE_$dvar(definition_alias_fritz_sm_heating)" />
+    <setting title="$lvar(fritz_sm_heating_10200)"   type='title' />
+    <setting title="$lvar(fritz_sm_heating_10202)" desc="$lvar(fritz_sm_heating_10203)"    var="$dvar(definition_alias_fritz_sm_heating)_max_temperature" type="numericslider" default="28" min="9" max="28" roundpos="0"/>
+    <setting title="$lvar(fritz_sm_heating_10204)" desc="$lvar(fritz_sm_heating_10204)"    var="$dvar(definition_alias_fritz_sm_heating)_min_temperature" type="numericslider" default="8" min="8" max="27" roundpos="0"/>
+    <setting title="Boost Time" desc="$lvar(fritz_sm_heating_10204)"    var="$dvar(definition_alias_fritz_sm_heating)_boosttime" type="numericslider" default="300" min="60" max="1800" roundpos="0"/>
+
+    <setting title="$lvar(fritz_sm_heating_10240)" desc="$lvar(fritz_sm_heating_10241)"    var="$dvar(definition_alias_fritz_sm_heating)_NAVIGATIONBAR"   type="string"   default="$var(STANDARDELEMENTSPATH)/block_topline.xml" />
+    <setting title="$lvar(fritz_sm_heating_10242)" desc="$lvar(fritz_sm_heating_10243)"    var="$dvar(definition_alias_fritz_sm_heating)_DEVICEPICTURE"   type='string'   default='$var(DEFINITIONPATH[fritz sm heating])/pics/logo.png'  />
+  </settings>
+  <repositorymanager>
+    <entry>
+      <name>Fritz Smarthome Heating</name>
+      <description language='English'>Fritz heating control</description>
+      <description language='German'>Fritz Heizungs Steuerung</description>
+      <author>Carsten Thielepape</author>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/definitions/fritz sm heating</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/definitions/fritz sm heating.zip</sourcefile>
+          <targetpath>definitions</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>codesets</type>
+          <name>FRITZ Smarthome</name>
+        </dependency>
+        <dependency>
+          <type>scripts</type>
+          <name>Fritz Smarthome Helper Script</name>
+        </dependency>
+
+      </dependencies>
+      <skipfiles>
+        <file>$var(APPLICATIONPATH)/definitions/fritz sm heating/interfacesettings*</file>
+        <file>$var(APPLICATIONPATH)/definitions/fritz sm heating/atlas*</file>
+      </skipfiles>
+    </entry>
+  </repositorymanager>
+</orca>

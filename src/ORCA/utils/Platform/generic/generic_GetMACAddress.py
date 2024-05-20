@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -30,19 +30,19 @@ from kivy import Logger
 try:
     import netifaces
 except Exception as ex:
-    Logger.error("Can't load netifaces:"+str(ex))
+    Logger.error('Can\'t load netifaces:'+str(ex))
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['GetMACAddress']
 
 def GetMACAddress() -> List:
 
-    uInet_Type:str        = u'AF_INET'
+    uInet_Type:str        = 'AF_INET'
     iInet_num:int
 
-    uRetColon:str = u'00:00:00:00:00:00'
-    uRetDash:str  = u'00-00-00-00-00-00'
+    uRetColon:str = '00:00:00:00:00:00'
+    uRetDash:str  = '00-00-00-00-00-00'
 
     try:
         iInet_num = getattr(netifaces, uInet_Type)
@@ -52,16 +52,16 @@ def GetMACAddress() -> List:
             aNetDetails:List = dNetInfo.get(iInet_num)
             if aNetDetails is not None and len(aNetDetails)>0:
                 dNetDetails:Dict = aNetDetails[0]
-                if dNetDetails["addr"] == Globals.uIPAddressV4:
+                if dNetDetails['addr'] == Globals.uIPAddressV4:
                     uRetColon = netifaces.ifaddresses(uNetiface)[netifaces.AF_LINK][0]['addr']
-                    uRetDash  = uRetColon.replace(":","-")
+                    uRetDash  = uRetColon.replace(':','-')
                     return [uRetColon,uRetDash]
     except Exception:
         pass
 
     try:
-        uRetColon = u':'.join(re.findall('..', '%012x' % uuid.getnode()))
-        uRetDash  = u'-'.join(re.findall('..', '%012x' % uuid.getnode()))
+        uRetColon = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
+        uRetDash  = '-'.join(re.findall('..', '%012x' % uuid.getnode()))
     except Exception as e:
-        Logger.error("Error on GetMACAdress:"+str(e))
+        Logger.error('Error on GetMACAdress:'+str(e))
     return [uRetColon,uRetDash]

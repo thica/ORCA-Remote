@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -48,9 +48,9 @@ class cZipFile(cFileName):
         """
 
         try:
-            return is_zipfile(self.string)
+            return is_zipfile(str(self))
         except Exception as e:
-            LogError(uMsg=u'IsZipFile: Error for:'+self.string, oException=e)
+            LogError(uMsg=f'IsZipFile: Error for: {self}', oException=e)
             return False
 
     def ZipFile(self, oZipDest:cFileName, uRemovePath:str='') -> bool:
@@ -63,16 +63,16 @@ class cZipFile(cFileName):
         """
 
         try:
-            oZipFile:ZipFile = ZipFile(oZipDest.string, 'w', ZIP_DEFLATED)
+            oZipFile:ZipFile = ZipFile(str(oZipDest), 'w', ZIP_DEFLATED)
             if uRemovePath == '':
-                oZipFile.write(self.string)
+                oZipFile.write(str(self))
             else:
-                uArc:str = self.string[len(uRemovePath):]
-                oZipFile.write(self.string, uArc)
+                uArc:str = str(self)[len(uRemovePath):]
+                oZipFile.write(str(self), uArc)
             oZipFile.close()
             return True
         except Exception as e:
-            Logger.critical(u'Zip: Fatal Error Zipping File:' + ToUnicode(e))
+            Logger.critical(f'Zip: Fatal Error Zipping File: {ToUnicode(e)}')
             return False
 
     def Unzip(self, oPath:cPath) -> bool:
@@ -93,15 +93,15 @@ class cZipFile(cFileName):
 
         try:
 
-            Logger.debug(u'Extracting file [%s] to path [%s]' % (self.string, oPath.string))
+            Logger.debug(f'Extracting file [{self}] to path [{oPath}]')
 
-            oZip = ZipFile(self.string, 'r')
+            oZip = ZipFile(str(self), 'r')
             if not oPath.IsDir():
                 oPath.Create()
             for uEach in oZip.namelist():
                 # each=ToUnicode(each)
 
-                Logger.debug(u'Extracting ' + ToUnicode(basename(uEach)) + ' ...')
+                Logger.debug(f'Extracting {ToUnicode(basename(uEach))}  ...')
                 # Check to see if the item was written to the zip file with an
                 # archive name that includes a parent directory. If it does, create
                 # the parent folder in the output workspace and then write the file,
@@ -113,15 +113,15 @@ class cZipFile(cFileName):
                     if not oFolder.IsDir():
                         oFolder.Create()
                     oFn = cFileName(oFolder) + uName
-                    uFn = oFn.string
-                    Logger.debug(u'... Writing to ' + uFn)
+                    uFn = str(oFn)
+                    Logger.debug(f'... Writing to {uFn}')
                     oFile = open(uFn, 'wb')
                     oFile.write(oZip.read(uEach))
                     oFile.close()
             oZip.close()
             return True
         except Exception as e:
-            LogError(uMsg=u'Unzip: Fatal Error unzipping file',oException=e)
+            LogError(uMsg='Unzip: Fatal Error unzipping file',oException=e)
             try:
                 oZip.close()
             except Exception:
@@ -131,7 +131,7 @@ class cZipFile(cFileName):
 
 class cZipPath(cPath):
     # noinspection PyDefaultArgument
-    def ZipFolder(self, oFnZipDest:cFileName, uRemovePath:str=u'', aSkipFiles:List[str]=[])-> bool:
+    def ZipFolder(self, oFnZipDest:cFileName, uRemovePath:str='', aSkipFiles:List[str]=[])-> bool:
         """
         Zips a folder to a zip file
 
@@ -146,9 +146,9 @@ class cZipPath(cPath):
         aFiles:List[str]
 
         try:
-            Logger.debug(u'Zipping path [%s] to file [%s] , removing path [%s]' % (self.string, oFnZipDest.string, uRemovePath))
-            oZipFile:ZipFile = ZipFile(oFnZipDest.string, 'w')
-            for uRoot, uDirs, uFiles in walk(self.string):
+            Logger.debug(f'Zipping path [{self}] to file [{oFnZipDest}] , removing path [{uRemovePath}]')
+            oZipFile:ZipFile = ZipFile(str(oFnZipDest), 'w')
+            for uRoot, uDirs, uFiles in walk(str(self)):
                 for uFile in uFiles:
                     uFile      = join(uRoot, uFile)
                     uFile2:str = ''
@@ -159,12 +159,12 @@ class cZipPath(cPath):
                     if (uFile in aSkipFiles) or (uFile2 in aSkipFiles):
                         bSkip = True
                     for uSkipFile in aSkipFiles:
-                        if uSkipFile.endswith("*"):
+                        if uSkipFile.endswith('*'):
                             uSkipFile = uSkipFile[:-1]
                             if uFile.startswith(uSkipFile):
                                 bSkip = True
                                 break
-                        if uSkipFile.startswith("*"):
+                        if uSkipFile.startswith('*'):
                             if uFile.endswith(uSkipFile[1:]):
                                 bSkip = True
                                 break
@@ -181,11 +181,11 @@ class cZipPath(cPath):
                             uArc:str = uFile[len(uRemovePath):]
                             oZipFile.write(uFile, uArc)
                     else:
-                        Logger.debug(u'Skip Zipping File [%s]' % uFile)
+                        Logger.debug(f'Skip Zipping File [{uFile}]')
 
             oZipFile.close()
             return True
         except Exception as e:
-            uMsg = u'Zip: Fatal Error Zipping Directory:' + ToUnicode(e)
+            uMsg = 'Zip: Fatal Error Zipping Directory:' + ToUnicode(e)
             Logger.critical(uMsg)
             return False

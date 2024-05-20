@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -119,7 +119,7 @@ def get_drives():
     return OS_GetDrives()
 
 def get_home_directory():
-    return OS_GetSystemUserPath().string
+    return str(OS_GetSystemUserPath())
 
 class FileBrowserIconView(IconView):
     """ pass """
@@ -275,13 +275,13 @@ class LinkTree(TreeView):
     def fill_tree(self, fav_list):
         '''
         if platform == 'win':
-            user_path = expanduser(u'~')
+            user_path = expanduser('~')
             if not isdir(user_path + sep + 'Desktop'):
                 user_path = dirname(user_path) + sep
             else:
                 user_path += sep
         else:
-            user_path = expanduser(u'~') + sep
+            user_path = expanduser('~') + sep
         '''
         self._favs = self.add_node(TreeLabel(text=self.favorites_string, is_open=True,
                                              no_selection=True))
@@ -317,7 +317,7 @@ class LinkTree(TreeView):
         sig_new = []
         for path, name in get_drives():
             if platform == 'win':
-                text = u'{}({})'.format((name + ' ') if name else '', path)
+                text = '{}({})'.format((name + ' ') if name else '', path)
             else:
                 text = name
             nodes_new.append((text, path))
@@ -332,7 +332,7 @@ class LinkTree(TreeView):
 
     def reload_favs(self, fav_list):
         if platform == 'win':
-            user_path = expanduser(u'~')
+            user_path = expanduser('~')
             if not isdir(user_path + sep + 'Desktop'):
                 user_path = dirname(user_path) + sep
             else:
@@ -465,7 +465,7 @@ class FileBrowser(BoxLayout):
     .. versionchanged:: 1.1
     '''
 
-    path = StringProperty(u'/')
+    path = StringProperty('/')
     '''
     :class:`~kivy.properties.StringProperty`, defaults to the current working
     directory as a unicode string. It specifies the path on the filesystem that

@@ -14,28 +14,29 @@
       <action name="Get Current Config"                 string="call $dvar(definition_alias_philips_hue) Fkt Get Current Config" />"
       <action name="Get all configs"                    string="sendcommand get_config_alllights" retvar="$dvar(definition_alias_philips_hue)_status" interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  />
       <action name="Update the dropdown list of lights" string="updatewidget DropDown Lights HUE" ignoremissing="1"/>
+      <action name="Get the Index of the first Light"   string="setvar HUELIGHTNUM=$var($dvar(definition_alias_philips_hue)_status_index[0])" />
       <action name="Get config for Light"               string="call $dvar(definition_alias_philips_hue) FKT_OnHueLightnumVChanged" condition="$var($dvar(definition_alias_philips_hue)_status_index[0])!=-1"/>
     </action>
 
   <action name="$dvar(definition_alias_philips_hue) Set Lights Philips Hue by Widget">
       <action name="make xy from rgb" string="call RGBToXY" />
-      <action name="Set Lights for single light" string="sendcommand setlight_xy"       interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)" condition="$var(HUELIGHTCATEGORY)==Light" />
-      <action name="Set Lights for single group" string="sendcommand setlight_xy_group" interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)" condition="$var(HUELIGHTCATEGORY)==Group" />
+      <action name="Set Lights for single light" string="sendcommand setlight_xy"       commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)","x":"$var(hue_x)","y":"$var(hue_y)","transitiontime":"$var(hue_t)"}' interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)" condition="$var(HUELIGHTCATEGORY)==Light" />
+      <action name="Set Lights for single group" string="sendcommand setlight_xy_group" commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)","x":"$var(hue_x)","y":"$var(hue_y)","transitiontime":"$var(hue_t)"}' interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)" condition="$var(HUELIGHTCATEGORY)==Group" />
   </action>
 
   <action name="$dvar(definition_alias_philips_hue) Dim Lights Philips Hue by Widget">
-      <action name="Dim Lights for single light" string="sendcommand dimlight"       interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Light" />
-      <action name="Dim Lights for all lights"   string="sendcommand dimlight_group" interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Group" />
+      <action name="Dim Lights for single light" string="sendcommand dimlight"       commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)","dimvalue":"$var(DIMVALUE)","transitiontime":"$var(hue_t)"}' interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Light" />
+      <action name="Dim Lights for all lights"   string="sendcommand dimlight_group" commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)","dimvalue":"$var(DIMVALUE)","transitiontime":"$var(hue_t)"}' interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Group" />
   </action>
 
   <action name="$dvar(definition_alias_philips_hue) Fkt Philips Hue Power On">
-      <action name="Power On Lights for single light" string="sendcommand power_on"        interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Light" />
-      <action name="Power On Lights for all lights"   string="sendcommand power_on_group"  interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Group" />
+      <action name="Power On Lights for single light" string="sendcommand power_on"        commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)"}' interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Light" />
+      <action name="Power On Lights for all lights"   string="sendcommand power_on_group"  commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)"}' interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Group" />
   </action>
 
   <action name="$dvar(definition_alias_philips_hue) Fkt Philips Hue Power Off">
-      <action name="Power Off Lights for single light" string="sendcommand power_off"       interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Light" />
-      <action name="Power Off Lights for all lights"   string="sendcommand power_off_group" interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Group" />
+      <action name="Power Off Lights for single light" string="sendcommand power_off"       commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)"}' interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Light" />
+      <action name="Power Off Lights for all lights"   string="sendcommand power_off_group" commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)"}' interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)"  condition="$var(HUELIGHTCATEGORY)==Group" />
   </action>
 
   <action name="$dvar(definition_alias_philips_hue) Fkt Get Current Config">
@@ -43,8 +44,8 @@
   </action>
 
   <action name="$dvar(definition_alias_philips_hue) FKT_OnHueLightnumVChanged">
-    <action name="Get Config Light"    string="sendcommand get_config_lights" retvar="$dvar(definition_alias_philips_hue)_status" interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)" condition="$var(HUELIGHTCATEGORY)=Light"/>
-    <action name="OR Get Config Group" string="sendcommand get_config_groups" retvar="$dvar(definition_alias_philips_hue)_status" interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)" condition="$var(HUELIGHTCATEGORY)=Group"/>
+    <action name="Get Config Light"    string="sendcommand get_config_lights" commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)"}' retvar="$dvar(definition_alias_philips_hue)_status" interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)" condition="$var(HUELIGHTCATEGORY)=Light"/>
+    <action name="OR Get Config Group" string="sendcommand get_config_groups" commandparameter='{"LIGHTNUM":"$var(HUELIGHTNUM)"}' retvar="$dvar(definition_alias_philips_hue)_status" interface="$var($dvar(definition_alias_philips_hue)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_philips_hue)_CONFIGNAME_MAIN)" condition="$var(HUELIGHTCATEGORY)=Group"/>
 
     <action name="Validate respones" string="modifyvar" varname="$var(hue_light_bri)" operator="find" parameter1="error" parameter2="phresult"/>"
     <action name="Check if lamp existed" string="if '$var(phresult)'=='-1'" />"
@@ -162,7 +163,7 @@
         <action name="" string="if $var(DIMVALUE)&gt;10" />"
         <!-- Core funktion switch on if bright enough-->
         <action name="" string="call $dvar(definition_alias_philips_hue) Fkt Philips Hue Power On" />
-        <action name="Set Codeset Command dim Value"  string="setvar hue_v=$var(DIMVALUE)"/>
+
         <action name=""  string="call $dvar(definition_alias_philips_hue) Dim Lights Philips Hue by Widget"  />
         <action name=""  string="goto label_end"/>
         <action name="" string="endif" />

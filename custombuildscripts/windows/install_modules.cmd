@@ -29,6 +29,8 @@ call :PIP_INSTALL "netifaces"
 call :PIP_INSTALL "pillow"
 call :PIP_INSTALL "demjson"
 call :PIP_INSTALL "adb-shell"
+call :PIP_INSTALL "ifaddr"
+
 
 :: Functions
 

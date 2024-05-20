@@ -314,7 +314,7 @@ def add_dep_paths():
         try:
             mod = importer.find_module(modname).load_module(modname)
         except ImportError as e:
-            logging.warn("deps: Error importing dependency: {}".format(str(e)))
+            logging.warn('deps: Error importing dependency: {}'.format(str(e)))
             continue
 
         if hasattr(mod, 'dep_bins'):

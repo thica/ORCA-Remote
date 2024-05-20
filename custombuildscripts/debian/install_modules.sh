@@ -13,6 +13,6 @@ PIP_INSTALL  "pycparser"
 PIP_INSTALL  "mwclient"
 PIP_INSTALL  "netifaces"
 PIP_INSTALL  "pillow"
-PIP_INSTALL  "demjson"
 PIP_INSTALL  "adb-shell"
 PIP_INSTALL  "certifi"
+

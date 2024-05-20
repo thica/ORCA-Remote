@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ from ORCA.utils.Platform    import OS_GetSystemUserPath
 from ORCA.vars.Access       import GetVar
 from ORCA.vars.Access       import SetVar
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from adb_shell.adb_device import AdbDeviceTcp
 from adb_shell.auth.sign_pythonrsa import PythonRSASigner
@@ -54,11 +54,14 @@ class cADB_Helper:
         aKeyPathes:List[cPath] = [cPath(OS_GetSystemUserPath() + '.android/adbkey')]
 
         #default Android Path
-        if Globals.uPlatform==u'android':
+        if Globals.uPlatform=='android':
             aKeyPathes.append(cPath(OS_GetSystemUserPath()+'misc/adb/adb_keys/adbkey'))
 
         #Download path
         aKeyPathes.append(Globals.oPathUserDownload+"/adbkey")
+
+        #TMP path
+        aKeyPathes.append(Globals.oPathTmp+"/adbkey")
 
         for oPath in aKeyPathes:
             if oPath.Exists():
@@ -67,11 +70,11 @@ class cADB_Helper:
                         oPriv   = f.read()
                         oSigner = PythonRSASigner('', oPriv)
                         self.aGlobalRSA_KEYS.append(oSigner)
-                        Logger.info("RSA Keyfiles loaded from "+str(oPath))
+                        Logger.info('RSA Keyfiles loaded from '+str(oPath))
                 except Exception as e:
-                    Logger.error("Error Loading RSA Keys from "+str(oPath)+" "+str(e))
+                    Logger.error('Error Loading RSA Keys from '+str(oPath)+' '+str(e))
             else:
-                Logger.debug("No RSA Keyfiles at "+oPath)
+                Logger.debug('No RSA Keyfiles at '+oPath)
 
     # noinspection PyUnusedLocal
     def Shell(self, uCommand:str, fTimeOut:float=1.0) -> str:
@@ -82,16 +85,15 @@ class cADB_Helper:
         """fetches the list of all installed apps from an Android device
            The result will be saved for later calls
          """
-        uAppList: str = GetVar("ADB_APPLIST_" + self.uHost)
+        uAppList: str = GetVar('ADB_APPLIST_' + self.uHost)
         if uAppList=='':
             uAppList = self.Shell(uCommand=uCommand, fTimeOut=fTimeOut)
-            # Logger.debug("GetAppList:"+str(uAppList))
-            # print (uAppList)
-            SetVar("ADB_APPLIST_" + self.uHost, uAppList)
+            Logger.debug('GetAppList:'+str(uAppList))
+            SetVar('ADB_APPLIST_' + self.uHost, uAppList)
         return uAppList
 
     def GetAppName(self, uCommand:str, fTimeOut:float=1.0) -> str:
-        uAppList:str=GetVar("ADB_APPLIST_"+self.uHost)
+        uAppList:str=GetVar('ADB_APPLIST_'+self.uHost)
         return self.FindPackageName(uAppName=uCommand,uAppList=uAppList)
 
     # noinspection PyMethodMayBeStatic
@@ -99,34 +101,34 @@ class cADB_Helper:
 
         uAppName:str
         uAppDump:str
-        uIntent:str = u''
+        uIntent:str = ''
         uSearch:str
-        uAppName,uAppDump = uCommand.split("|||")
+        uAppName,uAppDump = uCommand.split('|||')
         uSearch = uAppName+"/."
         aDumpLines:List[str] = uAppDump.splitlines()
 
         for uLine in aDumpLines:
             if uSearch in uLine:
                 uIntent = uLine
-            if "android.intent.category.LAUNCHER" in uLine or "android.intent.category.LEANBACK_LAUNCHER" in uLine:
+            if 'android.intent.category.LAUNCHER' in uLine or 'android.intent.category.LEANBACK_LAUNCHER' in uLine:
                 break
         if uIntent:
-            uIntent = uIntent.strip().split(" ")[1]
+            uIntent = uIntent.strip().split(' ')[1]
         else:
             uSearch = uAppName
             for uLine in aDumpLines:
                 if uSearch in uLine:
                     uIntent = uLine
-                if "android.intent.category.LAUNCHER" in uLine or "android.intent.category.LEANBACK_LAUNCHER" in uLine:
+                if 'android.intent.category.LAUNCHER' in uLine or 'android.intent.category.LEANBACK_LAUNCHER' in uLine:
                     break
             if uIntent:
-                if "cmp=" in uIntent:
-                    uIntent = uIntent.strip().split("cmp=")[1]
+                if 'cmp=' in uIntent:
+                    uIntent = uIntent.strip().split('cmp=')[1]
                     uIntent = uIntent[:-1]
                     # something hacky until we identify why this is wrong identified from the dump
-                    uIntent=uIntent.replace(".nvidia","")
+                    uIntent=uIntent.replace('.nvidia','')
                 else:
-                    uIntent = uIntent.strip().split(" ")[1]
+                    uIntent = uIntent.strip().split(' ')[1]
         return uIntent
 
     def Close(self) -> None:
@@ -144,8 +146,8 @@ class cADB_Helper:
             if oResult:
                 # noinspection PyUnresolvedReferences
                 uResult=uAppList[oResult.regs[0][0]:oResult.regs[0][1]]
-                uPackageName = uResult.split(u"=")[-1]
+                uPackageName = uResult.split('=')[-1]
         except Exception as e:
-            Logger.info("FindPackageName: couldn't validate Appname as regex, returning the default value: %s (%s)" % (uAppName,str(e)))
+            Logger.info('FindPackageName: couldn\'t validate Appname as regex, returning the default value: %s (%s)' % (uAppName,str(e)))
         return uPackageName
 

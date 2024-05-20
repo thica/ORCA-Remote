@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 from typing import Dict
 from ORCA.scripttemplates.Template_Keyhandler import cKeyhandlerTemplate
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 '''
@@ -34,8 +34,8 @@ import ORCA.Globals as Globals
       <description language='English'>Script to adding debugging fuctions on specific keys</description>
       <description language='German'>Script um debugging Funktionen auf einzelne Tasten zu legen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -74,26 +74,26 @@ class cScript(cKeyhandlerTemplate):
 
     def __init__(self):
         super().__init__()
-        self.uSubType           = u'DEBUG'
-        self.uSortOrder         = u'last'
-        self.uIniFileLocation   = u'none'
+        self.uSubType           = 'DEBUG'
+        self.uSortOrder         = 'last'
+        self.uIniFileLocation   = 'none'
 
     def HandleKey(self,**kwargs) -> Dict:
         super().HandleKey(**kwargs)
 
-        uKey:str   = kwargs.get("key",0)
-        window     = kwargs.get("window",None)
+        uKey:str   = kwargs.get('key',0)
+        window     = kwargs.get('window',None)
 
         # On Windows: We emulate sleep and wake by F2 and F3
-        if uKey ==  "F2":
+        if uKey ==  'F2':
             Globals.oApp.on_pause()
-        elif uKey ==  "F3":
+        elif uKey ==  'F3':
             Globals.oApp.on_resume()
-        elif uKey ==  "F4":
+        elif uKey ==  'F4':
             Globals.bShowBorders=not Globals.bShowBorders
             Globals.oTheScreen.AddActionToQueue(aActions=[{'string': 'updatewidget *@*'}])
-        elif uKey == "F12" and window is not None:  # F12
+        elif uKey == 'F12' and window is not None:
             window.screenshot()
-        elif uKey == "F11" and window is not None:  # F11
+        elif uKey == 'F11' and window is not None:
             window.rotation += 90
         return kwargs

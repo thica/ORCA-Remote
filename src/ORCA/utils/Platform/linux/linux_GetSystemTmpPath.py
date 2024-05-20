@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 from ORCA.utils.Path        import cPath
 from ORCA.vars.Helpers      import GetEnvVar
 
@@ -27,27 +27,27 @@ def GetSystemTmpPath() -> cPath:
     """ Gets the path to the tmp folder """
     oPath:cPath
 
-    oPath = cPath(GetEnvVar(u"TMPDIR"))
+    oPath = cPath(GetEnvVar('TMPDIR'))
     if oPath.Exists():
         return oPath
 
-    oPath = cPath(GetEnvVar(u"TMP"))
+    oPath = cPath(GetEnvVar('TMP'))
     if oPath.Exists():
         return oPath
 
-    oPath = cPath(u"/var/tmp")
+    oPath = cPath('/var/tmp')
     if oPath.Exists():
         return oPath
 
-    oPath = cPath(u"/var/tmp")
+    oPath = cPath('/var/tmp')
     if oPath.Exists():
         return oPath
 
-    oPath = cPath(u"/tmp")
+    oPath = cPath('/tmp')
     if oPath.Exists():
         return oPath
 
-    oPath = Globals.oPathUserDownload+"orcatmp"
+    oPath = Globals.oPathUserDownload+'orcatmp'
 
     oPath.Create()
     return oPath

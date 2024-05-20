@@ -2,7 +2,7 @@
 #  Onkyo eiscp
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -49,9 +49,9 @@ from ORCA.utils.TypeConvert                import ToBytes
 
 from ORCA.utils.wait.StartWait             import StartWait
 from ORCA.utils.FileName                   import cFileName
-from ORCA.Action                           import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.ReturnCode               import eReturnCode
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 '''
 <root>
@@ -61,8 +61,8 @@ import ORCA.Globals as Globals
       <description language='English'>Onkyo EISCP Interface (LAN/IP)</description>
       <description language='German'>Onkyo EISCP Interface (LAN/IP)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/eiscp</local>
@@ -83,6 +83,8 @@ import ORCA.Globals as Globals
 </root>
 '''
 
+
+
 # noinspection PyMethodMayBeStatic
 class cInterface(cBaseInterFace):
 
@@ -91,42 +93,45 @@ class cInterface(cBaseInterFace):
             super().__init__(oInterFace)
             #cBaseInterFaceSettings.__init__(self,oInterFace)
             self.oSocket:Optional[socket.socket]            = None
-            self.uMsg:str                                   = u''
+            self.uMsg:str                                   = ''
             self.iBufferSize:int                            = 2048
 
             self.bHeader:bytes                              = b'ISCP'
             self.iHeaderSize:int                            = 16
             self.iVersion:int                               = 1
             self.bStopThreadEvent:bool                      = False
-            self.uRetVar:str                                = u''
+            self.uRetVar:str                                = ''
             self.dResponseActions:Dict                      = {}
             self.bBusy:bool                                 = False
 
-            self.aIniSettings.uHost                         = u"discover"
-            self.aIniSettings.uPort                         = u"60128"
-            self.aIniSettings.uFNCodeset                    = u"CODESET_eiscp_ONKYO_AVR.xml"
+            self.aIniSettings.uHost                         = 'discover'
+            self.aIniSettings.uPort                         = '60128'
+            self.aIniSettings.uFNCodeset                    = 'CODESET_eiscp_ONKYO_AVR.xml'
             self.aIniSettings.fTimeOut                      = 2.0
             self.aIniSettings.iTimeToClose                  = -1
-            self.aIniSettings.uDiscoverScriptName           = u'discover_eiscp'
-            self.aIniSettings.uParseResultOption            = u'store'
+            self.aIniSettings.uDiscoverScriptName           = 'discover_eiscp'
+            self.aIniSettings.uParseResultOption            = 'store'
             self.aIniSettings.fDISCOVER_EISCP_timeout       = 2.0
-            self.aIniSettings.uDISCOVER_EISCP_models        = u''
-            self.aIniSettings.uDISCOVER_UPNP_servicetypes   = u"upnp:rootdevice"
-            self.aIniSettings.uDISCOVER_UPNP_manufacturer   = u"Onkyo & Pioneer Corporation"
+            self.aIniSettings.uDISCOVER_EISCP_models        = ''
+            self.aIniSettings.uDISCOVER_UPNP_servicetypes   = 'upnp:rootdevice'
+            self.aIniSettings.uDISCOVER_UPNP_manufacturer   = 'Onkyo & Pioneer Corporation'
             self.oThread                                    = None
 
         def Connect(self) -> bool:
 
             if self.oResultParser is None:
                 # Initiate Resultparser
-                self.oInterFace.ParseResult(cAction(),"",self)
+                self.oInterFace.ParseResult(cAction(),'',self)
 
             # if not cBaseInterFaceSettings.Connect(self):
+
             if not super().Connect():
                 return False
 
-            if (self.aIniSettings.uHost=="") or (self.aIniSettings.uPort==u""):
-                self.ShowError(uMsg=u'Cannot connect on empty host of port ')
+            self.bIsConnected = False
+
+            if (self.aIniSettings.uHost=='') or (self.aIniSettings.uPort==''):
+                self.ShowError(uMsg='Cannot connect on empty host or port ')
                 self.bOnError=True
                 return False
 
@@ -137,21 +142,23 @@ class cInterface(cBaseInterFace):
                 self.oSocket.setsockopt( socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
                 self.oSocket.settimeout(self.aIniSettings.fTimeOut)
                 self.oSocket.connect((str(self.aIniSettings.uHost),int(self.aIniSettings.uPort)))
+
                 if self.oThread:
                     self.bStopThreadEvent = True
                     self.oThread.join()
                     self.oThread = None
 
-                self.oThread = Thread(target = self.Receive,)
+                if self.oThread is None:
+                    self.oThread = Thread(target = self.Receive,)
                 self.bStopThreadEvent = False
                 self.oThread.oParent = self
                 self.oThread.start()
             except socket.error as e:
-                self.ShowError(uMsg=u'Cannot open socket:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                self.ShowError(uMsg='Cannot open socket:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.oSocket.close()
                 self.oSocket = None
             except Exception as e:
-                self.ShowError(uMsg=u'Cannot open socket#2:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                self.ShowError(uMsg='Cannot open socket#2:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.bOnError=True
 
             if self.oSocket is None:
@@ -162,13 +169,15 @@ class cInterface(cBaseInterFace):
             return self.bIsConnected
 
         def Disconnect(self) -> bool:
-            if not super().Disconnect():
-                return False
 
             if self.oThread:
                 self.bStopThreadEvent = True
                 self.oThread.join()
                 self.oThread = None
+
+            if not super().Disconnect():
+                return False
+
             self.bOnError = False
             return True
 
@@ -181,7 +190,7 @@ class cInterface(cBaseInterFace):
             # struct.pack doesnt not work reliable on all Android Platform processors
             # bMessage = pack('!4sIIBxxx', self.bHeader, self.iHeaderSize, iDataSize, self.iVersion) + ToBytes(uMessage)
 
-            uMessage:str        = u'!' + str(self.aIniSettings.iUnitType) + uCmd + '\x0a'
+            uMessage:str        = '!' + str(self.aIniSettings.iUnitType) + uCmd + '\x0a'
             iDataSize:int       =  len(uMessage)
             iReserved:int       = 0
             bHeaderSize:bytes   = self.iHeaderSize.to_bytes(4, byteorder='big')
@@ -196,7 +205,7 @@ class cInterface(cBaseInterFace):
             byResponse:bytes=b''
 
             if len(byResponseIn)==0:
-                return u'', ''
+                return '', ''
 
             try:
                 byHeaderRet = byResponseIn[0:4]
@@ -206,17 +215,17 @@ class cInterface(cBaseInterFace):
                 # struct.unpack doesnt not work reliable on all Android Platform processors
                 # byHeaderRet, iHeaderSize, iDataSize, iVersionRet = unpack('!4sIIBxxx', byResponseIn[0:self.iHeaderSize])
                 if byHeaderRet != self.bHeader:
-                    self.ShowDebug(uMsg=u'Received packet not ISCP: '+ToUnicode(byHeaderRet))
-                    return u'',''
+                    self.ShowDebug(uMsg='Received packet not ISCP: '+ToUnicode(byHeaderRet))
+                    return '',''
                 if iVersionRet != self.iVersion:
-                    self.ShowDebug(uMsg=u'ISCP version not supported: '+ToUnicode(iVersionRet))
-                    return u'',''
+                    self.ShowDebug(uMsg='ISCP version not supported: '+ToUnicode(iVersionRet))
+                    return '',''
                 if len(byResponseIn)==16:
                     byResponse=self.Helper_ReceiveAll(self.oSocket,iDataSize)
                 else:
                     byResponse= byResponseIn[17:]
                 if byResponse:
-                    uMessage        = byResponse.decode("utf-8").rstrip('\x1a\r\n')
+                    uMessage        = byResponse.decode('utf-8').rstrip('\x1a\r\n')
                     iMessageSize    = len(uMessage)
                     # parse message
                     # sUnitType     = uMessage[1]
@@ -224,11 +233,11 @@ class cInterface(cBaseInterFace):
                     uParameter      = uMessage[5:iMessageSize]
                     return uCommand,uParameter
                 else:
-                    self.ShowDebug(uMsg=u'Got empty response: '+ToUnicode(byResponseIn))
+                    self.ShowDebug(uMsg='Got empty response: '+ToUnicode(byResponseIn))
                     return "", ""
             except Exception as e:
-                self.ShowError(uMsg=u'Cannot parse response:'+ToUnicode(byResponse)+":"+ToUnicode(byResponseIn),oException=e)
-                return u'',''
+                self.ShowError(uMsg='Cannot parse response:'+ToUnicode(byResponse)+':'+ToUnicode(byResponseIn),oException=e)
+                return '',''
 
         def Helper_ReceiveAll(self, oSocket:socket.socket, iSize:int) -> bytes:
             # Helper function to recv n bytes or return None if EOF is hit
@@ -243,12 +252,12 @@ class cInterface(cBaseInterFace):
                     byPacket = oSocket.recv(iMissing)
                     if not byPacket:
                         if len(byData)>0:
-                            self.ShowError(uMsg="Can''t get complete response 1 ({0}) ({1!r})".format(iMissing,byData) )
+                            self.ShowError(uMsg='Can\t get complete response 1 ({0}) ({1!r})'.format(iMissing,byData) )
                         return byData
                     byData += byPacket
                 return byData
             except Exception as e:
-                self.ShowError(uMsg=u"ReceiveAll:Can't receive response 2",oException=e)
+                self.ShowError(uMsg='ReceiveAll:Can\'t receive response 2',oException=e)
                 return byData
 
         def Receive(self):
@@ -294,7 +303,7 @@ class cInterface(cBaseInterFace):
                                 # Get the Command and the payload
                                 uCommand,uResponse=oParent.UnpackEISPResponse(byResponseHeader)
 
-                                # print ("Receive:",uCommand,":",uResponse)
+                                # print ('Receive:',uCommand,':',uResponse)
 
                                 # This returns ASCII of sResponse, we will convert it one line later
                                 # we might get a response without dedicated requesting it, so lets use an action
@@ -327,39 +336,39 @@ class cInterface(cBaseInterFace):
                                         bHandleSpecialResponse = True
 
                                 if bHandleSpecialResponse:
-                                    if uCommand==u'NLS':
+                                    if uCommand=='NLS':
                                         # This might return an adjusted Response
                                         # We don't support multiple triggers on NLS so we just take the first action
                                         uCommand,uResponse=oParent.oInterFace.Handle_NLS(aTmpAction[0],uResponse,self)
                                 # uResponse=ToUnicode(uResponse)
                                 if bHandleSpecialResponse:
-                                    if uCommand == u'NRI':
+                                    if uCommand == 'NRI':
                                         for oTmpAction in aTmpAction:
                                             oParent.oInterFace.Handle_NRI(oTmpAction, uResponse, oParent)
-                                    elif uCommand==u'NJA':
+                                    elif uCommand=='NJA':
                                         # multiple trigger on jacket infos (the picture split into multiple parts) not supported
                                         uCommand,uResponse=oParent.oInterFace.Handle_NJA(aTmpAction[0],uResponse,oParent)
-                                    elif uCommand==u'LMD':
+                                    elif uCommand=='LMD':
                                         uResponse=oParent.oInterFace.ISCP_LMD_To_Text(uResponse)
-                                    elif uCommand==u'IFA':
+                                    elif uCommand=='IFA':
                                         for oTmpAction in aTmpAction:
                                             oParent.oInterFace.Split_IFA(oTmpAction,uResponse,oParent)
-                                    elif uCommand==u'IFV':
+                                    elif uCommand=='IFV':
                                         for oTmpAction in aTmpAction:
                                             oParent.oInterFace.Split_IFV(oTmpAction,uResponse,oParent)
-                                    elif uCommand==u'MVL' or uCommand==u'CTL' or uCommand==u'SWL':
-                                        if uResponse!=u'N/A':
+                                    elif uCommand=='MVL' or uCommand=='CTL' or uCommand=='SWL':
+                                        if uResponse!='N/A':
                                             uResponse=str(int(uResponse, 16))
                                 # If the returned Command is a response to the send message
                                 if uCommand==oParent.uMsg[:3]:
                                     #uCmd,uRetVal=self.oInterFace.ParseResult(self.oAction,uResponse,self)
-                                    uRetVal:str = u''
-                                    if not oParent.uRetVar==u'':
+                                    uRetVal:str = ''
+                                    if not oParent.uRetVar=='':
                                         uTmp=oParent.oAction.uGlobalDestVar
                                         oParent.oAction.uGlobalDestVar=oParent.uRetVar
                                         uCmd,uRetVal=oParent.oInterFace.ParseResult(oParent.oAction,uResponse,oParent)
                                         oParent.oAction.uGlobalDestVar=uTmp
-                                    if not oParent.uRetVar==u'' and not uRetVal==u'':
+                                    if not oParent.uRetVar=='' and not uRetVal=='':
                                         SetVar(uVarName = self.uRetVar, oVarValue = uRetVal)
 
                                     # we got our response, all other responses are for somebody else
@@ -368,35 +377,40 @@ class cInterface(cBaseInterFace):
                                 aActionTrigger=oParent.GetTrigger(uCommand)
 
                                 if len(aActionTrigger)>0:
-                                    oParent.ShowInfo(uMsg=u'Calling Trigger for:' + uCommand)
+                                    oParent.ShowInfo(uMsg='Calling Trigger for:' + uCommand)
                                     for oActionTrigger in aActionTrigger:
-                                        oParent.CallTrigger(oActionTrigger,uResponse)
+                                        if uResponse!="N/A":
+                                            oParent.CallTrigger(oActionTrigger,uResponse)
+                                        else:
+                                            self.ShowError(uMsg="Wrong command syntax (Trigger Response):"+uCommand)
                                 else:
                                     if not uCommand==oParent.uMsg[:3]:
-                                        if not uCommand==u'LTN':
-                                            if not uCommand==u'':
+                                        if not uCommand=='LTN':
+                                            if not uCommand=='':
                                                 if not uCommand+ ':'+uResponse=="NST:p--":
-                                                    oParent.ShowDebug(uMsg=u'Discard message: [%s]:[%s]: Looking for [%s]' %(uCommand,uResponse,oParent.uMsg[:3]))
+                                                    oParent.ShowDebug(uMsg=f'Discard message: [{uCommand}]:[{uResponse}]: Looking for [{oParent.uMsg[:3]}]')
 #                               self.uMsg=''
                                 # We do not need to wait for an response anymore
                                 StartWait(0)
                             else:
-                                Logger.warning("Onkyo close request")
-                                oParent.Disconnect()
-                                oParent.Connect()
+                                Logger.warning('Onkyo close request')
+                                oParent.bStopThreadEvent = True
+                                # oParent.Disconnect()
+                                # oParent.Connect()
                             self.bBusy = False
 
             except Exception as e:
-                self.ShowError(uMsg=u'Receive:Error Receiving Response:',oException=e)
+                self.ShowError(uMsg='Receive:Error Receiving Response:',oException=e)
                 self.bIsConnected = False
                 self.bBusy = False
             try:
                 if self.oSocket is not None:
-                    self.ShowDebug(uMsg=u'Closing socket in Thread')
+                    self.ShowDebug(uMsg='Closing socket in thread')
+                    self.bIsConnected = False
                     self.oSocket.close()
                     self.oSocket = None
             except Exception as e:
-                self.ShowError(uMsg=u'Error closing socket in Thread',oException=e)
+                self.ShowError(uMsg='Error closing socket in Thread',oException=e)
 
     def __init__(self):
         super().__init__()
@@ -405,38 +419,39 @@ class cInterface(cBaseInterFace):
 
         self.dSettings:Dict[cInterFaceSettings]     = {}
         self.oSetting:Optional[cInterFaceSettings]  = None
-        self.uResponse:str                          = u''
+        self.uResponse:str                          = ''
         self.iBufferSize:int                        = 2048
         self.iWaitMs:int                            = 2000
-        self.uPictureType:str                       = u'.bmp'
-        self.uRetVar:str                            = u''
-        self.uPictureData:str                       = u''
+        self.uPictureType:str                       = '.bmp'
+        self.uRetVar:str                            = ''
+        self.uPictureData:str                       = ''
         self.iCursorPos:int                         = 0
         self.iCntNLS:int                            = 0
         self.dDeviceSettings:Dict                   = {}
         self.dLMD_Text:Dict[str,str]                = {}
         self.cDeviceSettings                        = None
         self.InitLVM()
-        self.aDiscoverScriptsBlackList:List         = ["iTach (Global Cache)","Keene Kira","ELVMAX","Enigma"]
+        self.aDiscoverScriptsBlackList:List         = ['iTach (Global Cache)','Keene Kira','ELVMAX','Enigma']
 
     def Init(self, uObjectName:str, oFnObject:Optional[cFileName]=None) -> None:
         super().Init(uObjectName= uObjectName,oFnObject=oFnObject)
-        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = 'enabled'
+        self.oObjectConfig.dDefaultSettings['RetryCount']['active']                  = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = 'enabled'
 
         if TYPE_CHECKING:
             from interfaces.eiscp.DeviceSettings import cDeviceSettings
             self.cDeviceSettings = cDeviceSettings
         else:
-            oFnDeviceSettings = cFileName(self.oPathMyCode) + u'DeviceSettings.py'
+            oFnDeviceSettings = cFileName(self.oPathMyCode) + 'DeviceSettings.py'
             oModule = Globals.oModuleLoader.LoadModule(oFnModule=oFnDeviceSettings,uModuleName='DeviceSettings')
-            self.cDeviceSettings = oModule.GetClass("cDeviceSettings")
+            self.cDeviceSettings = oModule.GetClass('cDeviceSettings')
 
     def DeInit(self, **kwargs) -> None:
         super().DeInit(**kwargs)
@@ -444,10 +459,10 @@ class cInterface(cBaseInterFace):
             self.dSettings[uSettingName].DeInit()
 
     def GetConfigJSON(self) -> Dict:
-        return {"UnitType": {"active": "enabled", "order": 3, "type": "numeric", "title": "$lvar(IFACE_EISCP_1)", "desc": "$lvar(IFACE_EISCP_2)", "section": "$var(ObjectConfigSection)","key": "UnitType", "default":"1" }}
+        return {'UnitType': {'active': 'enabled', 'order': 3, 'type': 'numeric', 'title': '$lvar(IFACE_EISCP_1)', 'desc': '$lvar(IFACE_EISCP_2)', 'section': '$var(ObjectConfigSection)','key': 'UnitType', 'default':'1' }}
 
     def DoAction(self,oAction:cAction) -> eReturnCode:
-        uCmd:str=oAction.dActionPars.get("commandname",'')
+        uCmd:str=oAction.dActionPars.get('commandname','')
         if uCmd=='favorite pgup' or uCmd=='favorite pgdn':
             self.NLSPage(oAction,uCmd)
         return super().DoAction(oAction=oAction)
@@ -467,16 +482,17 @@ class cInterface(cBaseInterFace):
             oAction.uGlobalDestVar=uRetVar
 
         uTst=uMsg[:3]
-        if uTst==u'MVL' and uMsg!=u'MVLUP' and uMsg!=u'MVLDOWN' and not uMsg.endswith("QSTN"):
+        if uTst=='MVL' and uMsg!='MVLUP' and uMsg!='MVLDOWN' and not uMsg.endswith('QSTN'):
             Var_Int2Hex(uVarName = self.uObjectName+'/'+oSetting.uConfigName+'volumetoset')
-        if (uTst==u'CTL' or uTst==u'SWL') and not uMsg.endswith("QSTN"):
+        if (uTst=='CTL' or uTst=='SWL') and not uMsg.endswith('QSTN'):
             uFormat='{:+03X}'
             uKey = oSetting.aIniSettings.uHost + oSetting.aIniSettings.uPort
             if uKey in self.dDeviceSettings:
-                if uTst == u'CTL':
+                if uTst == 'CTL':
                     uFormat=self.dDeviceSettings[uKey].uVar_CTLFormat
                 else:
                     uFormat = self.dDeviceSettings[uKey].uVar_SWLFormat
+
             Var_Int2Hex(uVarName = self.uObjectName + '/' + oSetting.uConfigName + 'volumetoset', uFormat = uFormat)
 
         uMsg             = ReplaceVars(uMsg,self.uObjectName+'/'+oSetting.uConfigName)
@@ -484,7 +500,7 @@ class cInterface(cBaseInterFace):
         oSetting.uMsg    = uMsg
         oSetting.uRetVar = uRetVar
 
-        if uTst == u"NRI":
+        if uTst == 'NRI':
             uKey = oSetting.aIniSettings.uHost + oSetting.aIniSettings.uPort
             if uKey in self.dDeviceSettings and False:
                 self.dDeviceSettings[uKey].WriteVars(uVarPrefix=uRetVar, oAction=oAction)
@@ -494,17 +510,16 @@ class cInterface(cBaseInterFace):
                 # we write the defaults to var, in case we can't connect to the receiver
                 self.dDeviceSettings[uKey].WriteVars(uVarPrefix=uRetVar, oAction=oAction)
 
-        #Logger.info (u'Interface '+self.uObjectName+': Sending Command: '+sCommand + ' to '+oSetting.sHost+':'+oSetting.sPort)
-        while iTryCount<self.iMaxTryCount:
+        #Logger.info ('Interface '+self.uObjectName+': Sending Command: '+uCommand + ' to '+oSetting.sHost+':'+oSetting.sPort)
+        while iTryCount<oSetting.aIniSettings.iRetryCount:
             iTryCount+=1
             oSetting.Connect()
-
             if oSetting.bIsConnected:
                 try:
                     oAction.uGetVar         = ReplaceVars(oAction.uGetVar,self.uObjectName+'/'+oSetting.uConfigName)
                     oAction.uGetVar         = ReplaceVars(oAction.uGetVar)
 
-                    self.ShowInfo (uMsg=u'Sending Command: '+uMsg + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,uParConfigName=oSetting.uConfigName)
+                    self.ShowInfo (uMsg='Sending Command: '+uMsg + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,uParConfigName=oSetting.uConfigName)
                     byMsg:bytes = oSetting.CreateEISPHeader(uMsg)
                     if oAction.bWaitForResponse:
                         #All response comes to receiver thread, so we should hold the queue until vars are set
@@ -516,23 +531,23 @@ class cInterface(cBaseInterFace):
                     eRet = eReturnCode.Success
                     break
                 except Exception as e:
-                    self.ShowError(uMsg = u'Can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
+                    self.ShowError(uMsg = 'Can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
                     eRet = eReturnCode.Error
                     oSetting.Disconnect()
-                    if not uRetVar==u'':
-                        SetVar(uVarName = uRetVar, oVarValue = u"Error")
+                    if not uRetVar=='':
+                        SetVar(uVarName = uRetVar, oVarValue = 'Error')
             else:
                 if iTryCount==self.iMaxTryCount:
-                    self.ShowWarning(uMsg=u'Nothing done,not connected! ->[%s]' % oAction.uActionName, uParConfigName=oSetting.uConfigName)
+                    self.ShowWarning(uMsg='Nothing done,not connected! ->[%s]' % oAction.uActionName, uParConfigName=oSetting.uConfigName)
                 if uRetVar:
-                    SetVar(uVarName = uRetVar, oVarValue = u"?")
+                    SetVar(uVarName = uRetVar, oVarValue = '?')
 
         self.CloseSettingConnection(oSetting=oSetting,bNoLogOut=bNoLogOut)
         return eRet
 
     def NLSPage(self,oAction:cAction,uCmd:str) -> None:
 
-        oSetting:cInterface.cInterFaceSettings = cast(cInterFaceSettings,self.GetSettingObjectForConfigName(uConfigName=oAction.dActionPars.get(u'configname',u'')))
+        oSetting:cInterface.cInterFaceSettings = cast(cInterface.cInterFaceSettings,self.GetSettingObjectForConfigName(uConfigName=oAction.dActionPars.get('configname','')))
         iSteps:int
 
         if uCmd=='favorite pgup':
@@ -549,24 +564,24 @@ class cInterface(cBaseInterFace):
     def Split_IFA(self,oAction:cAction,uResponse:str,oSetting:cInterFaceSettings) -> None:
         # handles the return of Audio Information Request
         uTmp:str=oAction.uGlobalDestVar
-        if not oSetting.uRetVar==u'':
+        if not oSetting.uRetVar=='':
             oAction.uGlobalDestVar=oSetting.uRetVar
 
         aResponses:List=uResponse.split(',')
 
         if len(aResponses)>1:
-            oSetting.oResultParser.SetVar2(aResponses[0], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Audio Input Selection', uAddName=u'_audio_input_selection')
-            oSetting.oResultParser.SetVar2(aResponses[1], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Audio Input Codec', uAddName=u'_audio_input_codec')
+            oSetting.oResultParser.SetVar2(aResponses[0], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Audio Input Selection', uAddName='_audio_input_selection')
+            oSetting.oResultParser.SetVar2(aResponses[1], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Audio Input Codec', uAddName='_audio_input_codec')
         if len(aResponses)>2:
-            oSetting.oResultParser.SetVar2(aResponses[2], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Audio Input Frequency', uAddName=u'_audio_input_frequency')
+            oSetting.oResultParser.SetVar2(aResponses[2], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Audio Input Frequency', uAddName='_audio_input_frequency')
         if len(aResponses)>3:
-            oSetting.oResultParser.SetVar2(aResponses[3], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Audio Input Channels', uAddName=u'_audio_input_channels')
+            oSetting.oResultParser.SetVar2(aResponses[3], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Audio Input Channels', uAddName='_audio_input_channels')
         if len(aResponses)>4:
-            oSetting.oResultParser.SetVar2(aResponses[4], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Audio Output Effect', uAddName=u'_audio_output_effect')
+            oSetting.oResultParser.SetVar2(aResponses[4], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Audio Output Effect', uAddName='_audio_output_effect')
         if len(aResponses)>5:
-            oSetting.oResultParser.SetVar2(aResponses[5], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Audio Output Channels', uAddName=u'_audio_output_channels')
+            oSetting.oResultParser.SetVar2(aResponses[5], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Audio Output Channels', uAddName='_audio_output_channels')
 
-        if uTmp!=u'':
+        if uTmp!='':
             oSetting.uRetVar=uTmp
 
     def Handle_NRI(self,oAction:cAction,uResponse:str,oSetting:cInterFaceSettings) -> None:
@@ -591,19 +606,19 @@ class cInterface(cBaseInterFace):
                 # if new page delete all old vars
                 if uResponse[2]=='P':
                     for i in range(10):
-                        oSetting.oResultParser.SetVar2(uValue=u'',uLocalDestVar=oAction.uLocalDestVar, uGlobalDestVar=oAction.uGlobalDestVar,uDebugMessage= u'NLS Value', uAddName=u"[" + ToUnicode(i) + u"]")
-                    return u'NLS',u''
-                return u'',u''
+                        oSetting.oResultParser.SetVar2(uValue='',uLocalDestVar=oAction.uLocalDestVar, uGlobalDestVar=oAction.uGlobalDestVar,uDebugMessage= 'NLS Value', uAddName='[' + ToUnicode(i) + ']')
+                    return 'NLS',''
+                return '',''
 
 
-            if uResponse[0]==u'U' or uResponse[0]==u'A':
+            if uResponse[0]=='U' or uResponse[0]=='A':
                 uTmp=oAction.uGlobalDestVar
                 iIndex=int(uResponse[1])
 
                 #this is redundant, but sometimes the Receiver doesn't send a page clear
                 if iIndex==0:
                     for i in range(10):
-                        oSetting.oResultParser.SetVar2(uValue=u'', uLocalDestVar=oAction.uLocalDestVar, uGlobalDestVar=oAction.uGlobalDestVar, uDebugMessage=u'NLS Value', uAddName=u"[" + ToUnicode(i) + u"]")
+                        oSetting.oResultParser.SetVar2(uValue='', uLocalDestVar=oAction.uLocalDestVar, uGlobalDestVar=oAction.uGlobalDestVar, uDebugMessage='NLS Value', uAddName='[' + ToUnicode(i) + ']')
 
                 sText=uResponse[3:]
                 uText=''
@@ -611,13 +626,13 @@ class cInterface(cBaseInterFace):
                     uText=ToUnicode(sText)
                 if uResponse[0]=='U':
                     uText=ToUnicode(sText)
-                oSetting.oResultParser.SetVar2(uValue=uText, uLocalDestVar=oAction.uLocalDestVar, uGlobalDestVar=oAction.uGlobalDestVar, uDebugMessage=u'NLS Value', uAddName=u"[" + ToUnicode(iIndex) + u"]")
-                if uTmp!=u'':
+                oSetting.oResultParser.SetVar2(uValue=uText, uLocalDestVar=oAction.uLocalDestVar, uGlobalDestVar=oAction.uGlobalDestVar, uDebugMessage='NLS Value', uAddName='[' + ToUnicode(iIndex) + ']')
+                if uTmp!='':
                     oSetting.uRetVar=uTmp
                 self.iCntNLS=iIndex
                 self.uRetVar=uTmp
-                return u'NLS',uText
-        return u"NLS",ToUnicode(uResponse[3:])
+                return 'NLS',uText
+        return 'NLS',ToUnicode(uResponse[3:])
 
     # noinspection PyUnusedLocal
     def Handle_NLT(self,oAction:cAction,uResponse:str,oSetting:cInterFaceSettings):
@@ -671,57 +686,57 @@ class cInterface(cBaseInterFace):
     def Handle_NJA(self,oAction:cAction,sResponse:str,oSetting:cInterFaceSettings) -> Tuple[str,str]:
 
         if len(sResponse)>1:
-            if sResponse[1]==u'0' or sResponse[1]==u'-':
+            if sResponse[1]=='0' or sResponse[1]=='-':
                 self.uPictureData=sResponse[2:]
-                self.uPictureType = u".bmp"
-                if sResponse[0]==u'1':
-                    self.uPictureType=u'.jpg'
-                if sResponse[0]==u'2':
-                    self.uPictureType=u'.href'
-            if sResponse[0]==u'n':
+                self.uPictureType = '.bmp'
+                if sResponse[0]=='1':
+                    self.uPictureType='.jpg'
+                if sResponse[0]=='2':
+                    self.uPictureType='.href'
+            if sResponse[0]=='n':
                 #todo: delete old file picture if we get a no picture response
-                Logger.debug("Onkyo Receiver has no picture to return")
-                return "NJA",""
+                Logger.debug('Onkyo Receiver has no picture to return')
+                return 'NJA',''
 
-            if sResponse[1]==u'1':
+            if sResponse[1]=='1':
                 self.uPictureData+=sResponse[2:]
-                return u"",u""
-            if sResponse[1]==u'2' or sResponse[1]==u'-':
-                if sResponse[1] == u'2':
+                return '',''
+            if sResponse[1]=='2' or sResponse[1]=='-':
+                if sResponse[1] == '2':
                     self.uPictureData=sResponse[2:]
 
                 try:
                     bHex = True
 
-                    if self.uPictureType == u'.href':
+                    if self.uPictureType == '.href':
                         self.uPictureData,self.uPictureType = self.GetPictureByUrl(self.uPictureData, oSetting)
                         bHex = False
 
                     if len(self.uPictureData)>0:
                         oFileName:cFileName = cFileName(Globals.oPathTmp) + oAction.uGlobalDestVar + self.uPictureType
 
-                        f = open(oFileName.string, 'wb')
+                        f = open(str(oFileName), 'wb')
                         if bHex:
                             f.write( binascii.a2b_hex(self.uPictureData))
                         else:
                             f.write(cast(bytes,self.uPictureData))
                         f.close()
-                        oSetting.oResultParser.SetVar2(oFileName.string, oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing MediaPicture')
-                        SetVar(uVarName = u'NJAPIC', oVarValue = oFileName.string)
-                        return u"NJA",oFileName.string
+                        oSetting.oResultParser.SetVar2(str(oFileName), oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing MediaPicture')
+                        SetVar(uVarName = 'NJAPIC', oVarValue = str(oFileName))
+                        return 'NJA',str(oFileName)
                     else:
-                        self.ShowWarning(uMsg=u'Skipping empty picture:', uParConfigName=oSetting.uConfigName)
-                        return u'', u''
+                        self.ShowWarning(uMsg='Skipping empty picture:', uParConfigName=oSetting.uConfigName)
+                        return '', ''
 
                 except Exception as e:
-                    self.ShowError(uMsg=u'Unexpected error writing file', uParConfigName=oSetting.uConfigName, oException=e)
+                    self.ShowError(uMsg='Unexpected error writing file', uParConfigName=oSetting.uConfigName, oException=e)
 
-        return u'',u''
+        return '',''
 
     def GetPictureByUrl(self, uUrl:str, oSetting:cInterFaceSettings) -> Tuple[str,str]:
 
-        uPictureData:str = u''
-        uPictureType:str = u''
+        uPictureData:str = ''
+        uPictureType:str = ''
         uHeader:str
         iPos:int
         iPosEnd:int
@@ -730,132 +745,132 @@ class cInterface(cBaseInterFace):
             oReq = UrlRequest(uUrl)
             oReq.wait()
             uPictureData = oReq.result
-            uHeader = oReq.resp_headers.get("content-type")
+            uHeader = oReq.resp_headers.get('content-type')
             if uHeader is None:
-                iPos = uPictureData.lower().find("content-type:")
-                iPosEnd = uPictureData.find("\n",iPos)
+                iPos = uPictureData.lower().find('content-type:')
+                iPosEnd = uPictureData.find('\n',iPos)
                 if iPos>-1 and iPosEnd>-1:
                     uHeader = uPictureData[iPos:iPosEnd]
-                    iPos = uPictureData.find("\n\n")
+                    iPos = uPictureData.find('\n\n')
                     if iPos > -1:
                         uPictureData=uPictureData[iPos+2:]
             if uHeader:
-                uPictureType = uHeader.split("/")[-1]
+                uPictureType = uHeader.split('/')[-1]
             else:
-                self.ShowWarning(uMsg="Invaid URL/Content Type when pulling picture from device:"+str(uHeader),uParConfigName=oSetting.uConfigName)
-                uPictureType = uUrl.split(".")[-1]
+                self.ShowWarning(uMsg='Invaid URL/Content Type when pulling picture from device:'+str(uHeader),uParConfigName=oSetting.uConfigName)
+                uPictureType = uUrl.split('.')[-1]
 
-            uPictureType = "."+uPictureType
+            uPictureType = '.'+uPictureType
 
         except Exception as e:
-            self.ShowError(uMsg=u'Unexpected error reading picture by URL:', uParConfigName=oSetting.uConfigName, oException=e)
+            self.ShowError(uMsg='Unexpected error reading picture by URL:', uParConfigName=oSetting.uConfigName, oException=e)
 
         return uPictureData,uPictureType
 
     def Split_IFV(self,oAction:cAction,uResponse:str,oSetting:cInterFaceSettings) -> None:
         # handles the return of Video Information Request
         uTmp:str=oAction.uGlobalDestVar
-        if not oSetting.uRetVar==u'':
+        if not oSetting.uRetVar=='':
             oAction.uGlobalDestVar=oSetting.uRetVar
 
         aResponses:List=uResponse.split(',')
         if len(aResponses)>1:
-            oSetting.oResultParser.SetVar2(aResponses[0], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Video Input Selection', uAddName=u"_video_input_selection")
-            oSetting.oResultParser.SetVar2(aResponses[1], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Video Input Resolution', uAddName=u"_video_input_resolution")
+            oSetting.oResultParser.SetVar2(aResponses[0], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Video Input Selection', uAddName='_video_input_selection')
+            oSetting.oResultParser.SetVar2(aResponses[1], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Video Input Resolution', uAddName='_video_input_resolution')
         if len(aResponses)>2:
-            oSetting.oResultParser.SetVar2(aResponses[2], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Video Input Color', uAddName=u"_video_input_color")
+            oSetting.oResultParser.SetVar2(aResponses[2], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Video Input Color', uAddName='_video_input_color')
         if len(aResponses)>3:
-            oSetting.oResultParser.SetVar2(aResponses[3], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Video Input Bits', uAddName=u"_video_input_bits")
+            oSetting.oResultParser.SetVar2(aResponses[3], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Video Input Bits', uAddName='_video_input_bits')
         if len(aResponses)>4:
-            oSetting.oResultParser.SetVar2(aResponses[4], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Video Output Selection', uAddName=u"_video_output_selection")
+            oSetting.oResultParser.SetVar2(aResponses[4], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Video Output Selection', uAddName='_video_output_selection')
         if len(aResponses)>5:
-            oSetting.oResultParser.SetVar2(aResponses[5], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Video Output Resolution', uAddName=u"_video_output_resolution")
+            oSetting.oResultParser.SetVar2(aResponses[5], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Video Output Resolution', uAddName='_video_output_resolution')
         if len(aResponses)>6:
-            oSetting.oResultParser.SetVar2(aResponses[6], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Video Output Color', uAddName=u"_video_output_color")
+            oSetting.oResultParser.SetVar2(aResponses[6], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Video Output Color', uAddName='_video_output_color')
         if len(aResponses)>7:
-            oSetting.oResultParser.SetVar2(aResponses[7], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Video Output Bits', uAddName=u"_video_output_bits")
+            oSetting.oResultParser.SetVar2(aResponses[7], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Video Output Bits', uAddName='_video_output_bits')
         if len(aResponses)>8:
-            oSetting.oResultParser.SetVar2(aResponses[8], oAction.uLocalDestVar, oAction.uGlobalDestVar, u'Storing Video Output Effect', uAddName=u"_video_output_bits")
+            oSetting.oResultParser.SetVar2(aResponses[8], oAction.uLocalDestVar, oAction.uGlobalDestVar, 'Storing Video Output Effect', uAddName='_video_output_bits')
 
-        if uTmp!=u'':
+        if uTmp!='':
             oSetting.uRetVar=uTmp
 
     def ISCP_LMD_To_Text(self,uLMD:str) -> str:
 
         uRet:str = self.dLMD_Text.get(uLMD)
         if uRet is None:
-            uRet=u"unknown"
+            uRet='unknown'
         return uRet
 
     def InitLVM(self) -> None:
-        self.dLMD_Text= {'00': u'STEREO',
-                         '01': u'DIRECT',
-                         '02': u'SURROUND',
-                         '03': u'FILM',
-                         '04': u'THX',
-                         '05': u'ACTION',
-                         '06': u'MUSICAL',
-                         '07': u'MONO MOVIE',
-                         '08': u'ORCHESTRA',
-                         '09': u'UNPLUGGED',
-                         '0A': u'STUDIO-MIX',
-                         '0B': u'TV LOGIC',
-                         '0C': u'ALL CH STEREO',
-                         '0D': u'THEATER-DIMENSIONAL',
-                         '0E': u'ENHANCED',
-                         '0F': u'MONO',
-                         '11': u'PURE AUDIO',
-                         '12': u'MULTIPLEX',
-                         '13': u'FULL MONO',
-                         '14': u'DOLBY VIRTUAL',
-                         '15': u'DTS Surround Sensation',
-                         '16': u'Audyssey DSX',
-                         '1F': u'Whole House Mode',
-                         '40': u'5.1ch Surround',
-                         '41': u'DTS ES',
-                         '42': u'THX Cinema',
-                         '43': u'THX Surround EX',
-                         '44': u'THX Music',
-                         '45': u'THX Games',
-                         '50': u'THX Cinema',
-                         '51': u'THX MusicMode',
-                         '52': u'THX Games Mode',
-                         '80': u'PLII/PLIIx Movie',
-                         '81': u'PLII/PLIIx Music',
-                         '82': u'Neo:X Cinema',
-                         '83': u'Neo:X Music',
-                         '84': u'PLII/PLIIx THX Cinema',
-                         '85': u'Neo:X THX Cinema',
-                         '86': u'PLII/PLIIx Game',
-                         '87': u'Neural Surr',
-                         '88': u'Neural THX',
-                         '89': u'PLII/PLIIx THX Games',
-                         '8A': u'Neo:X THX Games',
-                         '8B': u'PLII/PLIIx THX Music',
-                         '8C': u'Neo:X THX Music',
-                         '8D': u'Neural THX Cinema',
-                         '8E': u'Neural THX Music',
-                         '8F': u'Neural THX Games',
-                         '90': u'PLIIz Height',
-                         '91': u'Neo:6 Cinema DTS Surround Sensation',
-                         '92': u'Neo:6 Music DTS Surround Sensation',
-                         '93': u'Neural Digital Music',
-                         '94': u'PLIIz Height + THX Cinema',
-                         '95': u'PLIIz Height + THX Music',
-                         '96': u'PLIIz Height + THX Games',
-                         '97': u'PLIIz Height + THX U2/S2 Cinema',
-                         '98': u'PLIIz Height + THX U2/S2 Music',
-                         '99': u'PLIIz Height + THX U2/S2 Games',
-                         '9A': u'Neo:X Game',
-                         'A0': u'PLIIx/PLII Movie + Audyssey DSX',
-                         'A1': u'PLIIx/PLII Music + Audyssey DSX',
-                         'A2': u'PLIIx/PLII Game + Audyssey DSX',
-                         'A3': u'Neo:6 Cinema + Audyssey DSX',
-                         'A4': u'Neo:6 Music + Audyssey DSX',
-                         'A5': u'Neural Surround + Audyssey DSX',
-                         'A6': u'Neural Digital Music + Audyssey DSX',
-                         'A7': u'Dolby EX + Audyssey DSX',
-                         'FF': u'Auto Surround'}
+        self.dLMD_Text= {'00': 'STEREO',
+                         '01': 'DIRECT',
+                         '02': 'SURROUND',
+                         '03': 'FILM',
+                         '04': 'THX',
+                         '05': 'ACTION',
+                         '06': 'MUSICAL',
+                         '07': 'MONO MOVIE',
+                         '08': 'ORCHESTRA',
+                         '09': 'UNPLUGGED',
+                         '0A': 'STUDIO-MIX',
+                         '0B': 'TV LOGIC',
+                         '0C': 'ALL CH STEREO',
+                         '0D': 'THEATER-DIMENSIONAL',
+                         '0E': 'ENHANCED',
+                         '0F': 'MONO',
+                         '11': 'PURE AUDIO',
+                         '12': 'MULTIPLEX',
+                         '13': 'FULL MONO',
+                         '14': 'DOLBY VIRTUAL',
+                         '15': 'DTS Surround Sensation',
+                         '16': 'Audyssey DSX',
+                         '1F': 'Whole House Mode',
+                         '40': '5.1ch Surround',
+                         '41': 'DTS ES',
+                         '42': 'THX Cinema',
+                         '43': 'THX Surround EX',
+                         '44': 'THX Music',
+                         '45': 'THX Games',
+                         '50': 'THX Cinema',
+                         '51': 'THX MusicMode',
+                         '52': 'THX Games Mode',
+                         '80': 'PLII/PLIIx Movie',
+                         '81': 'PLII/PLIIx Music',
+                         '82': 'Neo:X Cinema',
+                         '83': 'Neo:X Music',
+                         '84': 'PLII/PLIIx THX Cinema',
+                         '85': 'Neo:X THX Cinema',
+                         '86': 'PLII/PLIIx Game',
+                         '87': 'Neural Surr',
+                         '88': 'Neural THX',
+                         '89': 'PLII/PLIIx THX Games',
+                         '8A': 'Neo:X THX Games',
+                         '8B': 'PLII/PLIIx THX Music',
+                         '8C': 'Neo:X THX Music',
+                         '8D': 'Neural THX Cinema',
+                         '8E': 'Neural THX Music',
+                         '8F': 'Neural THX Games',
+                         '90': 'PLIIz Height',
+                         '91': 'Neo:6 Cinema DTS Surround Sensation',
+                         '92': 'Neo:6 Music DTS Surround Sensation',
+                         '93': 'Neural Digital Music',
+                         '94': 'PLIIz Height + THX Cinema',
+                         '95': 'PLIIz Height + THX Music',
+                         '96': 'PLIIz Height + THX Games',
+                         '97': 'PLIIz Height + THX U2/S2 Cinema',
+                         '98': 'PLIIz Height + THX U2/S2 Music',
+                         '99': 'PLIIz Height + THX U2/S2 Games',
+                         '9A': 'Neo:X Game',
+                         'A0': 'PLIIx/PLII Movie + Audyssey DSX',
+                         'A1': 'PLIIx/PLII Music + Audyssey DSX',
+                         'A2': 'PLIIx/PLII Game + Audyssey DSX',
+                         'A3': 'Neo:6 Cinema + Audyssey DSX',
+                         'A4': 'Neo:6 Music + Audyssey DSX',
+                         'A5': 'Neural Surround + Audyssey DSX',
+                         'A6': 'Neural Digital Music + Audyssey DSX',
+                         'A7': 'Dolby EX + Audyssey DSX',
+                         'FF': 'Auto Surround'}
 
 
 
@@ -868,32 +883,32 @@ class cInterface(cBaseInterFace):
                 for sCommands in COMMANDS:
             # print sCommands
 
-            print "  <!--\n      Section:",sCommands+ "\n  -->"
+            print '  <!--\n      Section:',sCommands+ '\n  -->'
             for sSubCommand in COMMANDS[sCommands]:
                 # print sSubCommand
                 # print COMMANDS[sCommands][sSubCommand]
                 oItems=COMMANDS[sCommands][sSubCommand]
-                print "  <!--\n      Category:"+oItems['description']+ "\n  -->"
+                print '  <!--\n      Category:'+oItems['description']+ '\n  -->'
                 #for oItem in oItems:
                 if True:
                     for sValue in oItems['values']:
                         oValue=oItems['values'][sValue]
 
                         if not oValue['name']==None:
-                            if type(oValue['name']).__name__=="str":
+                            if type(oValue['name']).__name__=='str':
                                 sName=oValue['name']
                             else:
                                 sName=oValue['name'][0]
                         else:
-                            sName="!!!!!!!!!!!!!!!!!value!!!!!!!!!!!!!!!!"
+                            sName='!!!!!!!!!!!!!!!!!value!!!!!!!!!!!!!!!!'
 
-                        if not type(sValue).__name__=="str":
-                            sValue="Varrange from "+ str(sValue[0])+" to "+str(sValue[1])
+                        if not type(sValue).__name__=='str':
+                            sValue='Varrange from '+ str(sValue[0])+' to '+str(sValue[1])
 
                         sDescription=oValue['description']
-                        if type(sDescription).__name__=="unicode":
-                            sDescription=sDescription.encode("utf-8","replace")
+                        if type(sDescription).__name__=='unicode':
+                            sDescription=sDescription.encode('utf-8','replace')
 
-                        print "  <action string="codeset" name=\""+sCommands+"."+COMMANDS[sCommands][sSubCommand]['name']+"."+sName+"\" desc=\""+sDescription +  "\"  cmd=\""+sSubCommand+sValue+"\" />"
+                        print '  <action string='codeset' name=\''+sCommands+'.'+COMMANDS[sCommands][sSubCommand]['name']+'.'+sName+'\' desc=\''+sDescription +  '\'  cmd=\''+sSubCommand+sValue+'\' />'
         '''
 

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,18 +21,18 @@
 
 from typing import Dict
 from kivy import Logger
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 try:
     import netifaces
 except Exception as ex:
-    Logger.error("Can't load netifaces:"+str(ex))
+    Logger.error('Can\'t load netifaces:'+str(ex))
 
 __all__ = ['GetGatewayV4']
 
 def GetGatewayV4() -> str:
 
-    uFamily:str    = u'AF_INET'
+    uFamily:str    = 'AF_INET'
     iInet_num:int
 
     try:
@@ -41,6 +41,6 @@ def GetGatewayV4() -> str:
         # noinspection PyTypeChecker
         uIP  = dGateways['default'][iInet_num][0]
     except Exception as e:
-        Logger.error("Error on GetGatewayV4, using fallback:"+str(e))
-        uIP:str = Globals.uIPAddressV4[:Globals.uIPAddressV4.rfind(".")] + '.1'
+        Logger.error('Error on GetGatewayV4, using fallback:'+str(e))
+        uIP:str = Globals.uIPAddressV4[:Globals.uIPAddressV4.rfind('.')] + '.1'
     return uIP

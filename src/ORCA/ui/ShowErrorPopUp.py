@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -25,13 +25,13 @@ from ORCA.ui.RaiseQuestion          import cRaiseQuestion
 from ORCA.utils.wait.StartWait      import StartWait
 from ORCA.utils.wait.StopWait       import StopWait
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['ShowErrorPopUp','ShowMessagePopUp']
 
 class cShowErrorPopUp(cRaiseQuestion):
     """ Class to show an error popup """
-    def ShowError(self,*,uTitle:str=u'',uMessage:str=u'',bAbort:bool=False,uTextContinue:str=u'',uTextQuit:str=u'',uStringDetails:str=u'') -> None:
+    def ShowError(self,*,uTitle:str='',uMessage:str='',bAbort:bool=False,uTextContinue:str='',uTextQuit:str='',uStringDetails:str='') -> None:
         """Show an Error Message as Popup
         :param str uTitle: Title for Popup
         :param str uMessage: Message to Show
@@ -60,29 +60,29 @@ class cShowErrorPopUp(cRaiseQuestion):
         """ Stops waiting and continues ORCA """
         StopWait()
 
-def ShowErrorPopUp(*,uTitle:str='$lvar(5017)',uMessage:str=u'',bAbort:bool=False,uTextContinue:str=u'$lvar(5000)',uTextQuit:str=u'$lvar(5005)',uStringDetails:str=u'', oException=None) -> cShowErrorPopUp:
+def ShowErrorPopUp(*,uTitle:str='$lvar(5017)',uMessage:str='',bAbort:bool=False,uTextContinue:str='$lvar(5000)',uTextQuit:str='$lvar(5005)',uStringDetails:str='', oException=None) -> cShowErrorPopUp:
     """ Convenience function """
     oShowErrorPopUp:cShowErrorPopUp = cShowErrorPopUp()
     uTrace   = traceback.format_exc()
     uMsg:str = uMessage
 
-    if uStringDetails!=u'':
-        uMsg = uMessage + u"\n" + uStringDetails
+    if uStringDetails!='':
+        uMsg = uMessage + '\n' + uStringDetails
     else:
-        uMsg = uMsg + u"\n" + uTrace
+        uMsg = uMsg + '\n' + uTrace
 
     LogError(uMsg=uMsg,oException=oException)
 
-    if uStringDetails==u'':
+    if uStringDetails=='':
         uStringDetails = uTrace
 
-    Globals.oSound.PlaySound(uSoundName=u'error')
+    Globals.oSound.PlaySound(SoundName=Globals.oSound.eSounds.error)
     oShowErrorPopUp.ShowError(uTitle=uTitle, uMessage=uMessage, bAbort=bAbort, uTextContinue=uTextContinue, uTextQuit=uTextQuit,uStringDetails=uStringDetails)
     return oShowErrorPopUp
 
-def ShowMessagePopUp(*,uTitle:str=u'$lvar(5010)',uMessage:str=u'',uTextContinue:str=u'$lvar(5000)',uTextQuit:str=u'$lvar(5005)') -> cShowErrorPopUp:
+def ShowMessagePopUp(*,uTitle:str='$lvar(5010)',uMessage:str='',uTextContinue:str='$lvar(5000)',uTextQuit:str='$lvar(5005)') -> cShowErrorPopUp:
     """ Convinience function """
     oShowErrorPopUp:cShowErrorPopUp = cShowErrorPopUp()
-    Globals.oSound.PlaySound(uSoundName=u'message')
+    Globals.oSound.PlaySound(SoundName=Globals.oSound.eSounds.message)
     oShowErrorPopUp.ShowError(uTitle=uTitle, uMessage=uMessage, bAbort=False, uTextContinue=uTextContinue, uTextQuit=uTextQuit)
     return oShowErrorPopUp

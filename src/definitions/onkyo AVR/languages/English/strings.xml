@@ -13,6 +13,8 @@
   <string id="onkyoAVR_10011">Album</string>
   <string id="onkyoAVR_10012">Title</string>
   <string id="onkyoAVR_10013">Main</string>
+  <string id="onkyoAVR_10014">Device picture path</string>
+  <string id="onkyoAVR_10015">Path to device pictures</string>
 
   <string id="onkyoAVR_10506">Max volume amplifier</string>
   <string id="onkyoAVR_10507">Maximal volume for the amplifier</string>

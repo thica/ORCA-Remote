@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.Action                import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.Base          import cEventActionBase
 from ORCA.ui.InputKeyboard      import ShowKeyBoard
 from ORCA.ui.ProgressBar        import cProgressBar
@@ -30,7 +30,7 @@ from ORCA.vars.Replace          import ReplaceVars
 from ORCA.utils.TypeConvert     import ToInt
 from ORCA.actions.ReturnCode    import eReturnCode
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 __all__ = ['cEventActionsGuiInput']
 
 class cEventActionsGuiInput(cEventActionBase):
@@ -82,38 +82,38 @@ class cEventActionsGuiInput(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'ShowProgressBar',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='ShowProgressBar',oAction=oAction)
 
-        uTitle:str   = ReplaceVars(oAction.dActionPars.get("title",""))
-        uMessage:str = ReplaceVars(oAction.dActionPars.get("message",""))
-        uCurrent     = ReplaceVars(oAction.dActionPars.get("current",""))
+        uTitle:str   = ReplaceVars(oAction.dActionPars.get('title',''))
+        uMessage:str = ReplaceVars(oAction.dActionPars.get('message',''))
+        uCurrent     = ReplaceVars(oAction.dActionPars.get('current',''))
         iCurrent:int = ToInt(uCurrent)
-        uMax:str     = ReplaceVars(oAction.dActionPars.get("max",""))
+        uMax:str     = ReplaceVars(oAction.dActionPars.get('max',''))
         iMax:int     = ToInt(uMax)
         self.oEventDispatcher.bDoNext = False
 
-        if uTitle!=u'' and  iMax!=0:
+        if uTitle!='' and  iMax!=0:
             oProgressBar=cProgressBar()
             oProgressBar.Show(uTitle=uTitle,uMessage=uMessage,iMax=iMax)
             self.oEventDispatcher.aProgressBars.append(oProgressBar)
             return eReturnCode.Success
 
         if len(self.oEventDispatcher.aProgressBars)==0:
-            LogError(uMsg=u'Action: Showprogressbar Failed, no active progressar')
+            LogError(uMsg='Action: Showprogressbar Failed, no active progressar')
             return eReturnCode.Error
 
         oProgressBar=self.oEventDispatcher.aProgressBars[-1]
 
-        if uTitle==u'' and  uCurrent!='':
+        if uTitle=='' and  uCurrent!='':
             oProgressBar.Update(iCurrent,uMessage)
             return eReturnCode.Success
 
-        if uTitle==u'' and uMessage==u'' and iCurrent==0:
+        if uTitle=='' and uMessage=='' and iCurrent==0:
             oProgressBar.ClosePopup()
             self.oEventDispatcher.aProgressBars.pop()
             return eReturnCode.Success
 
-        LogError(uMsg=u'Action: Showprogressbar Failed, wrong parameter combination')
+        LogError(uMsg='Action: Showprogressbar Failed, wrong parameter combination')
 
         return eReturnCode.Error
 
@@ -146,8 +146,8 @@ class cEventActionsGuiInput(cEventActionBase):
         """
 
         self.oEventDispatcher.bDoNext = False
-        self.oEventDispatcher.LogAction(uTxt=u'ShowInputField: DestVar:',oAction=oAction)
-        uVarName:str = oAction.dActionPars.get("varname","")
+        self.oEventDispatcher.LogAction(uTxt='ShowInputField: DestVar:',oAction=oAction)
+        uVarName:str = oAction.dActionPars.get('varname','')
         self.oInputKeyboard = ShowKeyBoard(uDestVar=uVarName,oFktNotify=None)
         return eReturnCode.Nothing
 
@@ -194,14 +194,14 @@ class cEventActionsGuiInput(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'ShowQuestion',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='ShowQuestion',oAction=oAction)
 
-        oAction.uTitle     = ReplaceVars(oAction.dActionPars.get("title",""))
-        oAction.uMessage   = ReplaceVars(oAction.dActionPars.get("message",""))
-        oAction.uActionYes = ReplaceVars(oAction.dActionPars.get("actionyes",""))
-        oAction.uActionNo  = ReplaceVars(oAction.dActionPars.get("actionno",""))
-        uClose:str         = ReplaceVars(oAction.dActionPars.get("close",""))
-        uDontStopQueue:str = ReplaceVars(oAction.dActionPars.get("dontstopqueue",""))
+        oAction.uTitle     = ReplaceVars(oAction.dActionPars.get('title',''))
+        oAction.uMessage   = ReplaceVars(oAction.dActionPars.get('message',''))
+        oAction.uActionYes = ReplaceVars(oAction.dActionPars.get('actionyes',''))
+        oAction.uActionNo  = ReplaceVars(oAction.dActionPars.get('actionno',''))
+        uClose:str         = ReplaceVars(oAction.dActionPars.get('close',''))
+        uDontStopQueue:str = ReplaceVars(oAction.dActionPars.get('dontstopqueue',''))
         self.oEventDispatcher.bDoNext = False
 
         if uClose:
@@ -209,32 +209,33 @@ class cEventActionsGuiInput(cEventActionBase):
                 StopWait()
                 self.oQuestionAction.oQuestionPopup.ClosePopup()
                 return eReturnCode.Nothing
-        if uDontStopQueue=="":
+        if uDontStopQueue=='':
             StartWait()
         self.oQuestionAction=oAction
         if oAction.uActionYes=='' and oAction.uActionNo=='':
-            self.oQuestionAction.oQuestionPopup=ShowQuestionPopUp(uTitle=oAction.uTitle,uMessage=oAction.uMessage,uSound=u'message')
+            self.oQuestionAction.oQuestionPopup=ShowQuestionPopUp(uTitle=oAction.uTitle,uMessage=oAction.uMessage,uSound='message')
         elif oAction.uActionNo=='':
-            self.oQuestionAction.oQuestionPopup=ShowQuestionPopUp(uTitle=oAction.uTitle,uMessage = oAction.uMessage,fktYes = self.__fktExecuteActionShowQuestionOption1,uStringYes= '$lvar(5000)',uSound= u'message')
+            self.oQuestionAction.oQuestionPopup=ShowQuestionPopUp(uTitle=oAction.uTitle,uMessage = oAction.uMessage,fktYes = self.__fktExecuteActionShowQuestionOption1,uStringYes= '$lvar(5000)',uSound= 'message')
         else:
-            self.oQuestionAction.oQuestionPopup=ShowQuestionPopUp(uTitle=oAction.uTitle,uMessage = oAction.uMessage,fktYes = self.__fktExecuteActionShowQuestionOption1, fktNo = self.__fktExecuteActionShowQuestionOption2, uStringYes='$lvar(5001)',uStringNo='$lvar(5002)',uSound= u'message')
+            self.oQuestionAction.oQuestionPopup=ShowQuestionPopUp(uTitle=oAction.uTitle,uMessage = oAction.uMessage,fktYes = self.__fktExecuteActionShowQuestionOption1, fktNo = self.__fktExecuteActionShowQuestionOption2, uStringYes='$lvar(5001)',uStringNo='$lvar(5002)',uSound= 'message')
         self.oQuestionAction.oQuestionPopup.bPreventCloseOnEscKey=True
         return eReturnCode.Nothing
 
     # noinspection PyUnusedLocal
     def __fktExecuteActionShowQuestionOption1(self, *largs) -> None:
         StopWait()
-        if self.oQuestionAction.uActionYes!="" and self.oQuestionAction.uActionYes!=u'dummy':
+        if self.oQuestionAction.uActionYes!='' and self.oQuestionAction.uActionYes!='dummy':
             self.__fktExecuteActionShowQuestionOption(self.oQuestionAction.uActionYes)
 
     # noinspection PyUnusedLocal
     def __fktExecuteActionShowQuestionOption2(self, *largs) -> None:
         StopWait()
-        if self.oQuestionAction.uActionNo!="" and self.oQuestionAction.uActionNo!=u'dummy':
+        if self.oQuestionAction.uActionNo!='' and self.oQuestionAction.uActionNo!='dummy':
             self.__fktExecuteActionShowQuestionOption(self.oQuestionAction.uActionNo)
 
     # noinspection PyMethodMayBeStatic
     def __fktExecuteActionShowQuestionOption(self,uActionName:str) -> None:
-        if not uActionName==u'':
+        if not uActionName=='':
             aActions = Globals.oEvents.CreateSimpleActionList(aActions=[{'name': 'ShowQuestionTask', 'string': 'call', 'actionname': uActionName}])
-            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions, oParentWidget=None)
+            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions, oParentWidget=None,uQueueName='ShowQuestionOption')
+

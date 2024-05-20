@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 from typing import Tuple
 from typing import Dict
 
-from ORCA.Action import cAction
+from ORCA.action.Action import cAction
 from ORCA.utils.TypeConvert  import ToDic
 from ORCA.utils.ParseResult import cResultParser
 
@@ -33,9 +33,9 @@ class cEventScriptResultParser(cResultParser):
     def __init__(self,oAction: cAction):
         super().__init__()
         self.oAction: cAction    = oAction
-        uScriptName: str         = oAction.dActionPars.get("scriptname","")
-        self.uDebugContext: str  = "Action: % s , Script: %s:" % (oAction.uActionName,uScriptName)
-        self.uContext: str       = oAction.uActionName + '/' + uScriptName
+        uScriptName: str         = oAction.dActionPars.get('scriptname','')
+        self.uDebugContext: str  = f'Action: {oAction.uActionName} , Script: {uScriptName}:'
+        self.uContext: str       = f'{oAction.uActionName}/{uScriptName}'
 
     def ParseResult(self,*,uResponse: str, uParseOptions: str) -> Tuple[str,str]:
         """
@@ -45,14 +45,14 @@ class cEventScriptResultParser(cResultParser):
         :param string uParseOptions: A string representing the parse options (string of a dict)
         :return: The result of the parsing
         """
-        if uParseOptions!= u'':
+        if uParseOptions!= '':
             dParseOptions: Dict               = ToDic(uParseOptions)
-            uGetVar: str                      = dParseOptions.get('getvar',u'')
-            uGlobalDestVar: str               = dParseOptions.get('gdestvar',u'')
-            uLocalDestVar: str                = dParseOptions.get('ldestvar',u'')
-            uParseResultOption: str           = dParseOptions.get('parseoption',u'store')
-            uParseResultTokenizeString: str   = dParseOptions.get('parsetoken',u':')
-            uParseResultFlags: str            = dParseOptions.get('parseflags', u'')
+            uGetVar: str                      = dParseOptions.get('getvar','')
+            uGlobalDestVar: str               = dParseOptions.get('gdestvar','')
+            uLocalDestVar: str                = dParseOptions.get('ldestvar','')
+            uParseResultOption: str           = dParseOptions.get('parseoption','store')
+            uParseResultTokenizeString: str   = dParseOptions.get('parsetoken',':')
+            uParseResultFlags: str            = dParseOptions.get('parseflags', '')
 
             return self.Parse(uResponse=uResponse,
                               uGetVar=uGetVar,

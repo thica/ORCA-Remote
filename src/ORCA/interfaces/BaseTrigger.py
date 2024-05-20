@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -17,20 +17,26 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from typing                                     import Dict
+from typing                                     import List
 
-from dataclasses import dataclass
+from dataclasses                                import dataclass
 
-__all__ = ['cBaseTrigger']
+__all__ = ['cBaseTrigger','dTriggers']
 
 @dataclass
 class cBaseTrigger:
     """ a trigger representation """
-    uTriggerAction:str             = u''
-    uTriggerName:str               = u''
-    uGetVar:str                    = u''
-    uRetVar:str                    = u''
-    uGlobalDestVar:str             = u''
-    uLocalDestVar:str              = u''
+    uTriggerAction:str             = ''
+    uTriggerName:str               = ''
+    uGetVar:str                    = ''
+    uRetVar:str                    = ''
+    uGlobalDestVar:str             = ''
+    uLocalDestVar:str              = ''
+    uInterfaceName:str             = ''
     # just to have them defined, no usage
-    uCmd:str                       = u''
+    uCmd:str                       = ''
+    # for future extension
+    uConfigName:str                = ''
 
+dTriggers:Dict[str,List[cBaseTrigger]]             = {}

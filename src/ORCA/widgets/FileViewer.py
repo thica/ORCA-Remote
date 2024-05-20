@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -29,17 +29,16 @@ from ORCA.widgets.base.BaseBase     import cWidgetBaseBase
 from ORCA.widgets.base.BaseText     import cWidgetBaseText
 
 from ORCA.utils.XML                 import GetXMLTextAttribute
-from ORCA.utils.LoadFile            import LoadFile
 from ORCA.utils.FileName            import cFileName
 from ORCA.vars.Replace              import ReplaceVars
 
 from typing                         import TYPE_CHECKING
 from typing                         import cast
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 __all__ = ['cWidgetFileViewer']
 
 
@@ -78,19 +77,19 @@ class cWidgetFileViewer(cWidgetBase,cWidgetBaseText,cWidgetBaseBase):
 
     def __init__(self,**kwargs):
         super().__init__()
-        self.uShowFileName:str = "" #we don't  use cFileName by purpose to handle vars properly
+        self.uShowFileName:str = '' #we don't  use cFileName by purpose to handle vars properly
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        self.uShowFileName  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'filename', bMandatory=False, vDefault="")
+        self.uShowFileName  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='filename', bMandatory=False, vDefault='')
         self.bNoTextSize = True
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def LoadFile(self):
         """ loads a file to show """
-        oFn = cFileName('').ImportFullPath(uFnFullName=ReplaceVars(self.uShowFileName))
-        Logger.debug("Reading File:"+oFn)
-        self.uCaption=LoadFile(oFileName=oFn)
+        oFn = cFileName(ReplaceVars(self.uShowFileName))
+        Logger.debug(f'Reading File: {oFn}')
+        self.uCaption=oFn.Load()
 
     def Create(self,oParent:Widget) -> bool:
         """ creates the Widget """

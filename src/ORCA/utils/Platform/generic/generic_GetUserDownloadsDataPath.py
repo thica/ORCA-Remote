@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -28,12 +28,12 @@ from ORCA.utils.Path         import cPath
 def GetUserDownloadsDataPath() -> cPath:
     """ returns the path to the download folder """
     oRetPath = cPath(OS_ToPath(expanduser('~') + sep + 'Downloads'))
-    Logger.debug("Download Folder  = "+oRetPath.string)
+    Logger.debug(f'Download Folder  = {oRetPath}')
 
     if oRetPath.Exists():
         return oRetPath
 
-    Logger.error("Downloadpath not valid:"+oRetPath.string)
+    Logger.error(f'Downloadpath not valid: {oRetPath}')
     return cPath('')
 
 
@@ -48,13 +48,13 @@ def GetUserDownloadsDataPath():
     uRetPath=u"/"
     try:
         uRetPath = storagepath.get_downloads_dir
-        Logger.debug("Android Download Folder = "+uRetPath)
+        Logger.debug('Android Download Folder = '+uRetPath)
     except Exception as e:
-        Logger.error("GetUserDownloadsDataPath for Android failed:"+str(e))
+        Logger.error('GetUserDownloadsDataPath for Android failed:'+str(e))
     oRetPath = cPath(uRetPath)
 
     if not oRetPath.IsDir():
-        Logger.error("Android Download path not valid:" + oRetPath.string)
+        Logger.error(f'Android Download path not valid: {oRetPath}')
 
     return oRetPath
 '''

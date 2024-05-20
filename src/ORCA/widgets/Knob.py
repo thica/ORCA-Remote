@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -46,10 +46,10 @@ from ORCA.widgets.core.Border           import cBorder
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 __all__ = ['cWidgetKnob']
 
@@ -132,22 +132,22 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         self.oBorderInner:Union[cBorder,None]        = None
         self.bDiscardMoves:bool                      = True
         self.fOldValue:float                         = -1.0
-        self.uDestVar:str                            = u''
+        self.uDestVar:str                            = ''
         self.iRoundPos:int                           = 0
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
-            self.oFnPictureNormal           = cFileName("").ImportFullPath(uFnFullName=GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'picturenormal',bMandatory=False,uDefault=u''))
-            self.fMin                       = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'mindatavalue',    bMandatory=False,fDefault=0.0)
-            self.fMax                       = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'maxdatavalue',    bMandatory=False,fDefault=100.0)
-            self.iLeftBoundaryAngle         = GetXMLIntAttributeVar(oXMLNode=oXMLNode,uTag=u'leftboundaryangle', bMandatory=False,iDefault=0)
-            self.iRightBoundaryAngle        = GetXMLIntAttributeVar(oXMLNode=oXMLNode,uTag=u'rightboundaryangle', bMandatory=False,iDefault=0)
-            self.uDestVar                   = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'destvar',    bMandatory=False,vDefault=u'knob')
-            self.bDiscardMoves              = GetXMLBoolAttributeVar(oXMLNode=oXMLNode,uTag=u'discardmoves',bMandatory=False,bDefault=False)
+            self.oFnPictureNormal           = cFileName(GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag='picturenormal',bMandatory=False,uDefault=''))
+            self.fMin                       = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag='mindatavalue',    bMandatory=False,fDefault=0.0)
+            self.fMax                       = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag='maxdatavalue',    bMandatory=False,fDefault=100.0)
+            self.iLeftBoundaryAngle         = GetXMLIntAttributeVar(oXMLNode=oXMLNode,uTag='leftboundaryangle', bMandatory=False,iDefault=0)
+            self.iRightBoundaryAngle        = GetXMLIntAttributeVar(oXMLNode=oXMLNode,uTag='rightboundaryangle', bMandatory=False,iDefault=0)
+            self.uDestVar                   = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='destvar',    bMandatory=False,vDefault='knob')
+            self.bDiscardMoves              = GetXMLBoolAttributeVar(oXMLNode=oXMLNode,uTag='discardmoves',bMandatory=False,bDefault=False)
             #roundpos: the position, the  number should be rounded
-            self.iRoundPos                  = GetXMLIntAttribute(oXMLNode=oXMLNode,uTag=u'roundpos', bMandatory=False,iDefault=0)
+            self.iRoundPos                  = GetXMLIntAttribute(oXMLNode=oXMLNode,uTag='roundpos', bMandatory=False,iDefault=0)
             self.fValue                     = 0.0
             self.fOldValue                  = 10000.23445
             self.iAbsAngle                  = 0
@@ -196,7 +196,7 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
             self.oObject.bind(on_widget_turned=self.OnNotifyChange)
 
             # Capability to click on Knobs as well (seems not to work by now)
-            if not self.uActionName==u'':
+            if not self.uActionName=='':
                 self.oObject.bind(on_q_release=self.On_Button_Up)
                 self.oObject.bind(on_q_press  =self.On_Button_Down)
 
@@ -212,10 +212,10 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         iRangePos:int
         fRangeProz:float
 
-        if self.bDiscardMoves and (instance.uMoveType == u'move'):
+        if self.bDiscardMoves and (instance.uMoveType == 'move'):
             return
 
-        if not self.uDestVar==u'':
+        if not self.uDestVar=='':
             iRangePos=self.oObject.iAngle-self.iLeftBoundaryAngle
 
             if not self.iRange==0:
@@ -242,7 +242,7 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
                 self.iAbsAngle= self.iAbsAngle % 360
 
             self.UpdateVars()
-            if not self.uActionName==u'':
+            if not self.uActionName=='':
                 if self.fOldValue!=self.fValue or (self.iLeftBoundaryAngle == self.iRightBoundaryAngle):
                     self.fOldValue=self.fValue
                     self.On_Button_Up(instance)
@@ -256,7 +256,7 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         fNewDegree:float
         uValue:str
 
-        if not self.uDestVar==u'':
+        if not self.uDestVar=='':
             if not self.fDataRange==0:
                 uValue      = GetVar(uVarName = self.uDestVar)
                 fNewValue   = ToFloat(uValue)
@@ -268,12 +268,12 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
 
     def UpdateVars(self) -> None:
         """ updates the destination vars """
-        if not self.uDestVar==u'':
+        if not self.uDestVar=='':
             SetVar(uVarName = self.uDestVar, oVarValue = ToUnicode(self.fValue))
             if self.oObject:
-                SetVar(uVarName = self.uDestVar+u'_degree',    oVarValue = ToUnicode(self.oObject.iAngle))
-                SetVar(uVarName = self.uDestVar+u'_direction', oVarValue = ToUnicode(self.oObject.uDirection))
-            SetVar(uVarName = self.uDestVar+u'_absdegree', oVarValue = ToUnicode(self.iAbsAngle))
+                SetVar(uVarName = self.uDestVar+'_degree',    oVarValue = ToUnicode(self.oObject.iAngle))
+                SetVar(uVarName = self.uDestVar+'_direction', oVarValue = ToUnicode(self.oObject.uDirection))
+            SetVar(uVarName = self.uDestVar+'_absdegree', oVarValue = ToUnicode(self.iAbsAngle))
 
     def SetMax(self,fMax:float) -> None:
         """ Set the upper limit """
@@ -315,3 +315,4 @@ class cWidgetKnob(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
                     self.oObject.opacity = 0.0
                     self.oObjectPicture.opacity = 0.0
         self.bIsEnabled = bEnable
+        return self.bIsEnabled

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -27,6 +27,8 @@ from typing             import Dict
 # noinspection PyUnresolvedReferences
 from jnius              import autoclass
 
+from kivy.logger        import Logger
+
 from ORCA.utils.Path    import cPath
 from ORCA.vars.Replace  import ReplaceVars
 dPlaces:Dict[str,cPath] = {}
@@ -37,33 +39,33 @@ def GetAllKnownFolders():
     try:
         Environment = autoclass('android.os.Environment')
         aPlaces:List[Tuple[str,str,str]] = \
-            [("$lvar(1200)",Environment.DIRECTORY_DOWNLOADS,'Downloads'),
-             ("$lvar(1202)",Environment.DIRECTORY_DOCUMENTS,'Documents'),
-             ("$lvar(1205)",Environment.DIRECTORY_MUSIC,'Music'),
-             ("$lvar(1203)",Environment.DIRECTORY_PICTURS,'Pictures'),
-             ("$lvar(1204)",Environment.DIRECTORY_MOVIES,'Videos'),
+            [('$lvar(1200)',Environment.DIRECTORY_DOWNLOADS,'Downloads'),
+             ('$lvar(1202)',Environment.DIRECTORY_DOCUMENTS,'Documents'),
+             ('$lvar(1205)',Environment.DIRECTORY_MUSIC,'Music'),
+             ('$lvar(1203)',Environment.DIRECTORY_PICTURS,'Pictures'),
+             ('$lvar(1204)',Environment.DIRECTORY_MOVIES,'Videos'),
             ]
         for tPlace in aPlaces:
             uRetPath = Environment.getExternalStoragePublicDirectory(tPlace[1]).getPath()
             dPlaces[tPlace[0]]=cPath(uRetPath)
-            Logger.debug("Android %s Folder = %s" % (tPlace[2],uRetPath))
+            Logger.debug('Android %s Folder = %s' % (tPlace[2],uRetPath))
     except Exception as e:
-        Logger.error("GetPath for Android failed:"+str(e))
+        Logger.error('GetPath for Android failed:'+str(e))
 
 def GetDownloadFolder() -> cPath:
-    return dPlaces.get("$lvar(1200)",cPath(""))
+    return dPlaces.get('$lvar(1200)',cPath(''))
 
 def GetDocumentsFolder() -> cPath:
-    return dPlaces.get("$lvar(1202)",cPath(""))
+    return dPlaces.get('$lvar(1202)',cPath(''))
 
 def GetPicturesFolder() -> cPath:
-    return dPlaces.get("$lvar(1203)",cPath(""))
+    return dPlaces.get('$lvar(1203)',cPath(''))
 
 def GetVideosFolder() -> cPath:
-    return dPlaces.get("$lvar(1204)",cPath(""))
+    return dPlaces.get('$lvar(1204)',cPath(''))
 
 def GetMusicFolder() -> cPath:
-    return dPlaces.get("$lvar(1205)",cPath(""))
+    return dPlaces.get('$lvar(1205)',cPath(''))
 
 def GetPlaces() -> List[Tuple[str,cPath]]:
     """
@@ -75,24 +77,24 @@ def GetPlaces() -> List[Tuple[str,cPath]]:
     uPlace:str
 
     oPath=GetDownloadFolder()
-    if oPath.string is not "":
-        aLocPlaces.append((ReplaceVars("$lvar(1200)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1200)'),oPath))
 
     oPath=GetDocumentsFolder()
-    if oPath.string is not "":
-        aLocPlaces.append((ReplaceVars("$lvar(1202)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1202)'),oPath))
 
     oPath=GetPicturesFolder()
-    if oPath.string is not "":
-        aLocPlaces.append((ReplaceVars("$lvar(1203)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1203)'),oPath))
 
     oPath=GetVideosFolder()
-    if oPath.string is not "":
-        aLocPlaces.append((ReplaceVars("$lvar(1204)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1204)'),oPath))
 
     oPath=GetMusicFolder()
-    if oPath.string is not "":
-        aLocPlaces.append((ReplaceVars("$lvar(1205)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1205)'),oPath))
 
     return aLocPlaces
 

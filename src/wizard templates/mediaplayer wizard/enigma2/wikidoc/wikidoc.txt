@@ -19,7 +19,7 @@ Remarks:
 
 * The Engima Webinterface must be installed on the receiver
 * Password protected Webinterface is not tested
-* You should install the "TV Logo Pack Dark Silver Backgound" or a different one first
+* You should install the "TV Logo Pack Dark Silver Background" or a different one first
 * It pulls the first 29 channels from each of the first 4 bouquets
 * In the definition settings you can reload the channel settings if you changed them on your receiver
 * Some settings requre root telnet access, so you need to configure it the interface settings

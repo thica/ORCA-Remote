@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -40,9 +40,9 @@ def LogError(*,uMsg:str, oException:Any=None, bTrackStack:bool = False)-> str:
     """ Logging an error with traceback """
 
     if uMsg is None:
-        uMsg = ""
+        uMsg = ''
 
-    uStackText:str  = u''
+    uStackText:str  = ''
     uRet:str        = uMsg
     uRet2:str
 
@@ -53,10 +53,10 @@ def LogError(*,uMsg:str, oException:Any=None, bTrackStack:bool = False)-> str:
             uStackText = ''.join(traceback.format_list(traceback.extract_stack())[:-2])
 
     if oException is not None:
-        uRet=uMsg+u' : '+str(oException)
+        uRet=uMsg+' : '+str(oException)
 
     if bTrackStack:
-        uRet2 = uRet+ u"\n\n"+uStackText
+        uRet2 = uRet+ '\n\n'+uStackText
     else:
         uRet2 = uRet
 

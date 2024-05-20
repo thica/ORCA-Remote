@@ -9,38 +9,20 @@
         <action name="Create Name for Start Page part 1"                         string="setvar ACTIVITY_STARTPAGE=ACTIVITY_STARTPAGE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
         <action name="Create Name for Start Page part 2"                         string="modifyvar" varname="ACTIVITY_STARTPAGE" operator="fromvar"  />
         <action name="Show Main Activity Page"                                   string="showpage $var(ACTIVITY_STARTPAGE)" />
-        <action name="if not already on"                                         string="if $var(TMP_POWERSTATUS)!=ON"/>
-            <action name="Block the gui"                                             string="blockgui 1"/>
-            <action name="Dim Screen"                                                string="loadelement" filename="$var(STANDARDELEMENTSPATH)/block_dimmer.xml" pagename="$var(ACTIVITY_STARTPAGE)" />
-            <!--  We try the detect the media player definition var so we can use the media player functions, if available -->
-            <action name="Init Var"                                                  string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR=" />
-            <action name="Init Var"                                                  string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION=" />
-            <action name="Find the definitionvar"                                    string="modifyvar" varname="$var(ACTIVITY_STARTPAGE)" operator="find" parameter1="Page_Device_" parameter2="findresult" />
-            <action name="if we found something"                                     string="if $var(findresult)==0" />
-                <action name="Set Definition var"                                    string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR=$var(ACTIVITY_STARTPAGE)" />
-                <action name="Adjust the definitionvar"                              string="modifyvar" varname="$dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR" operator="getpart" parameter1="12" parameter2="" />
-                <action name="Create Function Name"                                  string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION=Set Volume $var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR)" />
-                <action name="check if function exists"                              string="modifyvar" varname="$var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION)" operator="exists"  parameter1="TMPFUNCEXISTS" />
-                <action name="if we haven't found the function, reset the definition and function name" string="if $var(TMPFUNCEXISTS)==0" />
-                    <action name="Reset Var"                                         string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_DEFINITIONVAR=" />
-                    <action name="Reset Var"                                         string="setvar $dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION=" />
-                <action name="endif"                                                 string="endif" />
-            <action name="endif"                                                     string="endif" />
-
-
+        <action name="if not allready on"                                        string="if $var(TMP_POWERSTATUS)!=ON"/>
+            <action name="Dim Screen"                                            string="loadelement" filename="$var(STANDARDELEMENTSPATH)/block_dimmer.xml" pagename="$var(ACTIVITY_STARTPAGE)" />
             <action name="Switch off all unused devices"                         string="call FKT SwitchOffUnusedActivityGroupDevices" />
-            <action name="Pull Function name #1"                                 string="setvar ACTIVITY_PREPOWERONACTION=ACTIVITY_PREPOWERONACTION[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
-            <action name="Create tmpar part  #2"                                 string="modifyvar" varname="ACTIVITY_PREPOWERONACTION" operator="fromvar"  />
-            <action name="Call PrePower Action"                                  string="call $var(ACTIVITY_PREPOWERONACTION)" condition="$var(ACTIVITY_PREPOWERONACTION)!=NoAction" />
+            <action name="Pull Function name #1"                                 string="setvar FKT_ACTIVITY_PREPOWERONACTION=ACTIVITY_PREPOWERONACTION[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
+            <action name="Create tmpar part  #2"                                 string="modifyvar" varname="FKT_ACTIVITY_PREPOWERONACTION" operator="fromvar"  />
+            <action name="Call PrePower Action"                                  string="call $var(FKT_ACTIVITY_PREPOWERONACTION)" condition="$var(FKT_ACTIVITY_PREPOWERONACTION)!=NoAction" />
             <action name="Loop through all Activity-Devices to Power On"         string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][]"  level="3" actionname="FKT SwitchOn Activity_Device"/>
             <action name="Loop through all Activities-Devices to Wait"           string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][]"  level="3" actionname="FKT WaitFor Activity_Device"/>
-            <action name="Pull Function name #1"                                 string="setvar ACTIVITY_POSTPOWERONACTION=ACTIVITY_POSTPOWERONACTION[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
-            <action name="Create tmpvar part  #2"                                string="modifyvar" varname="ACTIVITY_POSTPOWERONACTION" operator="fromvar"  />
-            <action name="Call PostPower Action"                                 string="call $var(ACTIVITY_POSTPOWERONACTION)" condition="$var(ACTIVITY_POSTPOWERONACTION)!=NoAction" />
+            <action name="Pull Function name #1"                                 string="setvar FKT_ACTIVITY_POSTPOWERONACTION=ACTIVITY_POSTPOWERONACTION[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
+            <action name="Create tmpvar part  #2"                                string="modifyvar" varname="FKT_ACTIVITY_POSTPOWERONACTION" operator="fromvar"  />
+            <action name="Call PostPower Action"                                 string="call $var(FKT_ACTIVITY_POSTPOWERONACTION)" condition="$var(FKT_ACTIVITY_POSTPOWERONACTION)!=NoAction" />
             <action name="Loop through all Activities to set Powerstatus to off" string="forin" varname="ACTIVITY_POWERSTATUS[$var(ACTIVITY_GROUP)][]"  level="2" actionname="FKT SwitchAllOffActivityGroup_SetActivityStatusOff"/>
             <action name="Set Powerstatus Activity to on"                        string="setvar ACTIVITY_POWERSTATUS[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]=ON" />
             <action name="Undim screen"                                          string="setwidgetattribute" widgetname="Dimmer Element@$var(ACTIVITY_STARTPAGE)" attributename="remove" />
-            <action name="UnBlock the gui"                                       string="blockgui 0"/>
         <action name=""                                                          string="endif" />
     </action>
 
@@ -52,7 +34,7 @@
         <!-- we disable the wait for device in case we want a parallel switch on-->
         <action name="if parallel"                                                 string="if $var(ACTIVITY_POWERONOPTION[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)])==parallel"/>
             <action name="Create tmpar part 1"                                     string="setvar tmp_waitfordevice=$par(forin_value)_WAITFORDEVICE" />
-            <action name="Create tmpar part 2"                                     string="modifyvar" varname="tmp_waitfordevice" operator="fromvar"  />
+            <action1 name="Create tmpar part 2"                                     string="modifyvar" varname="tmp_waitfordevice" operator="fromvar"  />
             <action name="Set to nowait       "                                    string="setvar $par(forin_value)_WAITFORDEVICE=0" />
         <action name="endif"                                                       string="endif" />
         <action name="Create Name for PowerStatus part 1"                          string="setvar TMP_POWERSTATUS=POWERSTATUS_$par(forin_value)" />
@@ -103,24 +85,20 @@
         <action name="endif"                                                                                                       string="endif"/>
 
         <!-- Init Volume, if given-->
-        <action name="Init Volume, if given"                            string="if $var(volumetoset)!=-1" />
-            <action name="If we have a mediaplayer volume function"     string="if $var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION)!=" />
-              <action name="Set the volume by mediaplayer function"     string="call $var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION)" volumetoset="$var(volumetoset)"/>
-            <action name="endif"                                        string="endif"/>
-            <action name="If we do not have a mediaplayer volume function"  string="if $var($dvar(definition_activity_template)_ACTIVITY_MEDIAPLAYER_VOLUMEFUNCTION)==" />
-              <action name="Set the volume var"                         string="setvar volumetoset=$var(volumetoset)" />
-              <action name="Set the volume"                             string="Send Set Volume" interface="$var(DEVICEVOLUMEINTERFACE)" configname="$var(DEVICEVOLUMECONFIGNAME)"  />
-              <action name="Update Volume text (FKT WaitFor Activity_Device)"  string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
-            <action name="endif"                                        string="endif"/>
-        <action name="endif"                                            string="endif"/>
+        <action name="Init Volume, if given"                                                                                       string="if $var(volumetoset)!=-1" />
+           <action name="Set the volume var"                                                                                       string="setvar volumetoset=$var(volumetoset)" />
+           <action name="Set the volume"                                                                                           string="Send Set Volume" interface="$var(DEVICEVOLUMEINTERFACE)" configname="$var(DEVICEVOLUMECONFIGNAME)" condition="$var(PERSISTENCESTART)!=TRUE" />
+           <action name="Update Volume text (FKT WaitFor Activity_Device)"                                                         string="updatewidget Main Volume Textvalue@$var(CURRENTPAGE)" />
+        <action name="endif"                                                                                                       string="endif"/>
     </action>
 
     <action name="FKT CreateArrayDevicesForActivityGroups">
         <action name="Loop through all ActivitieGroups" string="forin" varname="ACTIVITYGROUPNAME[]"  level="1" actionname="FKT CreateArrayDevicesForActivityGroup" />
     </action>
+
     <action name="FKT CreateArrayDevicesForActivityGroup">
         <action name="Increase n# of Groups"                         string="modifyvar" varname="ACTIVITY_CNTGROUPS" operator="increase"  parameter1="1" />
-        <action name="Init Number of Activities per Group"           string="setvar ACTIVITY_GROUP_CNTACTIVITIES[$var(ACTIVITY_CNTGROUPS)]=0" />
+        <action name="Init Numer of Activities per Group"            string="setvar ACTIVITY_GROUP_CNTACTIVITIES[$var(ACTIVITY_CNTGROUPS)]=0" />
         <action name="Set Group Index"                               string="setvar ACTIVITY_GROUP=$par(forin_index)" />
         <action name="Loop through all Activity-Devices to Power On" string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][]"  level="2" actionname="FKT CreateArrayDevicesForActivityGroup_Sub" />
         <action name="Count Activities"                              string="forin" varname="ACTIVITY_NAME[$var(ACTIVITY_GROUP)][]"   level="2" actionname="FKT CntActivitiesPerActivityGroup" />
@@ -130,15 +108,15 @@
     </action>
 
     <action name="FKT CntActivitiesPerActivityGroup">
-        <action name="Increase n# of Activies per Groups" string="modifyvar" varname="ACTIVITY_GROUP_CNTACTIVITIES[$var(ACTIVITY_CNTGROUPS)]" operator="increase"  parameter1="1" />
+        <action name="Increase n# of Activities per Groups" string="modifyvar" varname="ACTIVITY_GROUP_CNTACTIVITIES[$var(ACTIVITY_CNTGROUPS)]" operator="increase"  parameter1="1" />
     </action>
 
     <action name="FKT SwitchOff Activity">
         <action name="Create Name for PowerStatus part 1"   string="setvar TMP_POWERSTATUS=ACTIVITY_POWERSTATUS[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
         <action name="Create Name for PowerStatus part 2"   string="modifyvar" varname="TMP_POWERSTATUS" operator="fromvar"  />
-        <action name="if not already off"                   string="if $var(TMP_POWERSTATUS)!=OFF"/>
+        <action name="if not allready off"                  string="if $var(TMP_POWERSTATUS)!=OFF"/>
             <action name="Pull Function name #1"            string="setvar ACTIVITY_PREPOWEROFFACTION=ACTIVITY_PREPOWEROFFACTION[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
-            <action name="Create tmpvar part  #2"           string="modifyvar" varname="ACTIVITY_PREPOWEROFFACTION" operator="fromvar"  />
+            <action name="Create tmpar part  #2"            string="modifyvar" varname="ACTIVITY_PREPOWEROFFACTION" operator="fromvar"  />
             <action name="Call PrePowerOff Action"          string="call $var(ACTIVITY_PREPOWEROFFACTION)" condition="$var(ACTIVITY_PREPOWEROFFACTION)!=NoAction" />
             <!-- not 100% correct:we switch of all activygroupdevices instead of devices of a activity.should result in the same-->
             <action name="Switch off Devices"               string="call FKT SwitchOffUsedActivityGroupDevices" />
@@ -149,69 +127,33 @@
         <action name="endif" string="endif"/>
     </action>
 
-    <action name="FKT SwitchOffUnusedActivityGroupDevices">
-        <!-- make a temporary copy of array of all used group devices-->
-        <action name="Delete elements of temporary array"   string="forin" varname="TMP_ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"               level="2" actionname="FKT SwitchOffUnusedActivityGroupDevices_DeleteTemp"/>
-        <action name="Add elements to temporary array"      string="forin" varname="ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"                   level="2" actionname="FKT SwitchOffUnusedActivityGroupDevices_CopyTemp"/>
-        <action name="Remove all used Activity Devices"     string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][]"  level="3" actionname="FKT SwitchOffUnusedActivityGroupDevices_RemoveUsed"/>
-        <!-- Now we have a temporary list of all unused devices for this activity-->
-        <action name="Set Power Off Volume"                 string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][]"  level="3" actionname="FKT SwitchOffUnusedActivityGroupDevices_SetPowerOffVolume"/>
-        <action name="Switch off all unused devices"        string="forin" varname="TMP_ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"               level="2" actionname="FKT SwitchOffUnusedActivityGroupDevices_SwitchOffDevice"/>
-    </action>
-    <action name="FKT SwitchOffUnusedActivityGroupDevices_SetPowerOffVolume">
-        <action name="Save Var"  string="setvar GROUPDEVICE_value=$par(forin_value)" />
-        <action name="Save Var"  string="setvar GROUPDEVICE_index=$par(forin_index)" />
-        <action name="For devices to be switched off"        string="forin" varname="TMP_ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"  level="2" actionname="FKT SwitchOffUnusedActivityGroupDevices_SetPowerOffVolume_Sub"/>
-    </action>
-
-    <action name="FKT SwitchOffUnusedActivityGroupDevices_SetPowerOffVolume_Sub">
-        <action name="If Device is part of Poweroff Devices"  string="call FKT SwitchOffActivityGroupDevice_SetPowerOffVolume" condition="$var(GROUPDEVICE_value)==$par(forin_value)"/>
-    </action>
-
-    <action name="FKT SwitchOffUnusedActivityGroupDevices_DeleteTemp">
-        <action name="Delete Element" string="modifyvar" varname="$par(forin_var)" operator="delete"  />
-    </action>
-    <action name="FKT SwitchOffUnusedActivityGroupDevices_CopyTemp">
-        <action name="Add Element" string="setvar TMP_$par(forin_var)=$par(forin_value)"/>
-    </action>
-    <action name="FKT SwitchOffUnusedActivityGroupDevices_RemoveUsed">
-        <action name="Delete Element" string="modifyvar" varname="TMP_ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]" operator="removefromarray" parameter1="$par(forin_value)" />
-    </action>
-
-    <action name="FKT SwitchOffUnusedActivityGroupDevices_SwitchOffDevice">
-        <action name="Create Name for PowerStatus part 1" string="setvar TMP_POWERSTATUS=POWERSTATUS_$par(forin_value)" />
-        <action name="Create Name for PowerStatus part 2" string="modifyvar" varname="TMP_POWERSTATUS" operator="fromvar"  />
-        <action name="Switch off Device"                  string="call FKT SwitchOff $par(forin_value)" condition="$var(TMP_POWERSTATUS)==ON"/>
-    </action>
-
     <action name="FKT SwitchOffUsedActivityGroupDevices">
-        <action name="Loop through all used Activity Devices"     string="forin" varname="ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"  level="2" actionname="FKT SwitchOffUsedActivityGroupDevices_SwitchOffSingleDevice"/>
+        <action name="Loop through all used Activity Devices"     string="forin" varname="ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"  dstvarname="GROUPDEVICE" level="2" actionname="FKT SwitchOffUsedActivityGroupDevices_SwitchOffSingleDevice"/>
     </action>
     <action name="FKT SwitchOffUsedActivityGroupDevices_SwitchOffSingleDevice">
+        <action name="Save Var"  string="setvar GROUPDEVICEtmp=$par(forin_value)" />
         <action name="Save Var"  string="setvar GROUPDEVICE_value=$par(forin_value)" />
         <action name="Save Var"  string="setvar GROUPDEVICE_index=$par(forin_index)" />
         <action name="Set Power Off Volume"  string="call FKT SwitchOffActivityGroupDevice_SetPowerOffVolume"/>
-        <action name="Create Name for PowerStatus part 1"     string="setvar TMP_POWERSTATUS=POWERSTATUS_$par(forin_value)" />
+
+        <action name="Save Var"  string="setvar GROUPDEVICE=$var(GROUPDEVICEtmp)" />
+        <action name="Save Var"  string="setvar GROUPDEVICE_value=$par(forin_value)" />
+        <action name="Save Var"  string="setvar GROUPDEVICE_index=$par(forin_index)" />
+        <action name="Create Name for PowerStatus part 1"     string="setvar TMP_POWERSTATUS=POWERSTATUS_$var(GROUPDEVICE)" />
         <action name="Create Name for PowerStatus part 2"     string="modifyvar" varname="TMP_POWERSTATUS" operator="fromvar"  />
-        <action name="Switch off Device"     string="call FKT SwitchOff $par(forin_value)" condition="$var(TMP_POWERSTATUS)==ON"/>
+        <action name="Switch off Device"     string="call FKT SwitchOff $var(GROUPDEVICE)" condition="$var(TMP_POWERSTATUS)==ON"/>
     </action>
 
     <action name="FKT SwitchAllOffActivityGroup_SetPowerOffVolume_Activity">
         <action name="Set Activity Number"                    string="setvar ACTIVITY_NUMBER=$var(ACTIVITY_NUMBER_index)" />
         <action name="Create Name for PowerStatus part 1"     string="setvar TMP_POWERSTATUS=ACTIVITY_POWERSTATUS[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)]" />
         <action name="Create Name for PowerStatus part 2"     string="modifyvar" varname="TMP_POWERSTATUS" operator="fromvar"  />
-        <action name="Set Volume for all devices in Activity" string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][]" level="3" actionname="FKT SwitchOffActivityGroupDevice_SetPowerOffVolume_Helper" condition="$var(TMP_POWERSTATUS)==ON"/>
-    </action>
-
-    <action name="FKT SwitchOffActivityGroupDevice_SetPowerOffVolume_Helper">
-        <action name="Save Var"    string="setvar GROUPDEVICE_value=$par(forin_value)" />
-        <action name="Save Var"    string="setvar GROUPDEVICE_index=$par(forin_index)" />
-        <action name="Set Volume"  string="call FKT SwitchOffActivityGroupDevice_SetPowerOffVolume"/>
+        <action name="Set Volume for all devices in Activity" string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][]"  dstvarname="GROUPDEVICE" level="3" actionname="FKT SwitchOffActivityGroupDevice_SetPowerOffVolume" condition="$var(TMP_POWERSTATUS)==ON"/>
     </action>
 
     <action name="FKT SwitchAllOffActivityGroup">
-        <action name="Pull Function Vars"                  string="setvar ACTIVITY_GROUP=$var(FKT SwitchAllOffActivityGroup_parameter_ACTIVITYGROUP)" />
-        <action name="Loop through all Activities"         string="forin" varname="ACTIVITY_NAME[$var(ACTIVITY_GROUP)][]"  level="2" actionname="FKT SwitchAllOffActivityGroup_SwitchOffSingleActivity"/>
+        <action name="Pull Function Vars"                  string="setvar ACTIVITY_GROUP=$par(ACTIVITYGROUP)" />
+        <action name="Loop through all Activities"         string="forin" varname="ACTIVITY_NAME[$var(ACTIVITY_GROUP)][]"  dstvarname="ACTIVITY_SINGLE" level="2" actionname="FKT SwitchAllOffActivityGroup_SwitchOffSingleActivity"/>
         <action name="Create Name for Start Page part 1"   string="setvar ACTIVITYGROUP_STARTPAGE=ACTIVITYGROUPHOMEPAGE[$var(ACTIVITY_GROUP)]" />
         <action name="Create Name for Start Page part 2"   string="modifyvar" varname="ACTIVITYGROUP_STARTPAGE" operator="fromvar"  />
         <action name="Show Main Activity Page"             string="showpage $var(ACTIVITYGROUP_STARTPAGE)" />
@@ -223,23 +165,6 @@
     <action name="FKT SwitchAllOffActivityGroup_SwitchOffSingleActivity">
         <action name="Pull Function Vars"  string="setvar ACTIVITY_NUMBER=$par(forin_index)" />
         <action name="Switch Of Activity" string="call FKT SwitchOff Activity"  />
-    </action>
-
-    <action name="FKT SwitchOffActivityGroupDevice_SetPowerOffVolume">
-        <action name="Create Name for PowerStatus part 1"     string="setvar TMP_POWERSTATUS=POWERSTATUS_$var(GROUPDEVICE_value)" />
-        <action name="Create Name for PowerStatus part 2"     string="modifyvar" varname="TMP_POWERSTATUS" operator="fromvar"  />
-        <action name="If On"                                  string="if $var(TMP_POWERSTATUS)==ON"/>
-            <action name="Create Volume part 1"               string="setvar volumetoset=ACTIVITYDEVICE_DEINITVOLUME[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][$var(GROUPDEVICE_index)]" />
-            <action name="Create Volume part 2"               string="modifyvar" varname="volumetoset" operator="fromvar"  />
-            <action name="Set Volume, if given"               string="if $var(volumetoset)!=-1" />
-                <action name="Create Volume InterFaceName #1" string="setvar DEVICEVOLUMEINTERFACE=$var(GROUPDEVICE_value)_INTERFACE_VOLUME" />
-                <action name="Create Volume InterFaceName #2" string="modifyvar" varname="DEVICEVOLUMEINTERFACE" operator="fromvar"  />
-                <action name="Create Volume InterFaceName #1" string="setvar DEVICEVOLUMECONFIGNAME=$var(GROUPDEVICE_value)_CONFIGNAME_VOLUME" />
-                <action name="Create Volume InterFaceName #2" string="modifyvar" varname="DEVICEVOLUMECONFIGNAME" operator="fromvar"  />
-                <action name="Set the volume var"             string="setvar volumetoset=$var(volumetoset)" />
-                <action name="Set the volume"                 string="Send Set Volume" interface="$var(DEVICEVOLUMEINTERFACE)" configname="$var(DEVICEVOLUMECONFIGNAME)"  />
-            <action name="endif"                              string="endif"/>
-        <action name="endif"                                  string="endif"/>
     </action>
 
     <action name="FKT SwitchAllOffActivityGroup_SetActivityStatusOff">
@@ -267,6 +192,58 @@
            <action name="Add ESC Key Handler"    string="registernotification" filterpagename="$par(forin_value)"  notification="on_key_ESC" notifyaction="Show Page" actionpars='{"pagename":"Page_Devices_$dvar(definition_activity_template)"}' />
         <action name="endif" string="endif"/>
     </action>
+
+
+
+    <action name="FKT SwitchOffUnusedActivityGroupDevices">
+        <!-- make a temporary copy of array of all used group devices-->
+        <action name="Delete elements of temporary array"   string="forin" varname="TMP_ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"               level="2" actionname="FKT SwitchOffUnusedActivityGroupDevices_DeleteTemp"/>
+        <action name="Add elements to temporary array"      string="forin" varname="ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"                   level="2" actionname="FKT SwitchOffUnusedActivityGroupDevices_CopyTemp"/>
+        <action name="Remove all used Activity Devices"     string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][]"  level="3" actionname="FKT SwitchOffUnusedActivityGroupDevices_RemoveUsed"/>
+        <!-- Now we have a temporary list of all unused devices for this activity-->
+        <action name="Set Power Off Volume"                 string="forin" varname="ACTIVITYDEVICE[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][]"  dstvarname="GROUPDEVICE" level="3" actionname="FKT SwitchOffUnusedActivityGroupDevices_SetPowerOffVolume"/>
+        <action name="Switch off all unused devices"        string="forin" varname="TMP_ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"               dstvarname="GROUPDEVICE" level="2" actionname="FKT SwitchOffUnusedActivityGroupDevices_SwitchOffDevice"/>
+    </action>
+
+    <action name="FKT SwitchOffUnusedActivityGroupDevices_DeleteTemp">
+        <action name="Delete Element" string="modifyvar" varname="$par(forin_var)" operator="delete"  />
+    </action>
+    <action name="FKT SwitchOffUnusedActivityGroupDevices_CopyTemp">
+        <action name="Add Element" string="setvar TMP_$par(forin_var)=$par(forin_value)"/>
+    </action>
+    <action name="FKT SwitchOffUnusedActivityGroupDevices_RemoveUsed">
+        <action name="Delete Element" string="modifyvar" varname="TMP_ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]" operator="removefromarray" parameter1="$par(forin_value)" />
+    </action>
+    <action name="FKT SwitchOffUnusedActivityGroupDevices_SetPowerOffVolume">
+        <action name="store group device name"           string="setvar GROUPDEVICE=$par(forin_value)" />
+        <action name="For devices to be switched off"    string="forin" varname="TMP_ACTIVITYGROUPDEVICES[$var(ACTIVITY_GROUP)][]"  level="2" actionname="FKT SwitchOffUnusedActivityGroupDevices_SetPowerOffVolume_Sub"/>
+    </action>
+    <action name="FKT SwitchOffUnusedActivityGroupDevices_SetPowerOffVolume_Sub">
+        <action name="If Device is part of Poweroff Devices"  string="call FKT SwitchOffActivityGroupDevice_SetPowerOffVolume" condition="$var(GROUPDEVICE)==$par(forin_value)"/>
+    </action>
+    <action name="FKT SwitchOffActivityGroupDevice_SetPowerOffVolume">
+        <action name="Create Name for PowerStatus part 1"       string="setvar TMP_POWERSTATUS=POWERSTATUS_$var(GROUPDEVICE)" />
+        <action name="Create Name for PowerStatus part 2"       string="modifyvar" varname="TMP_POWERSTATUS" operator="fromvar"  />
+        <action name="If On"                                    string="if $var(TMP_POWERSTATUS)==ON"/>
+            <action name="Create Volume part 1"                 string="setvar volumetoset=ACTIVITYDEVICE_DEINITVOLUME[$var(ACTIVITY_GROUP)][$var(ACTIVITY_NUMBER)][$var(GROUPDEVICE_index)]" />
+            <action name="Create Volume part 2"                 string="modifyvar" varname="volumetoset" operator="fromvar"  />
+            <action name="Set Volume, if given"                 string="if $var(volumetoset)!=-1" />
+                <action name="Create Volume InterFaceName #1"   string="setvar DEVICEVOLUMEINTERFACE=$var(GROUPDEVICE)_INTERFACE_VOLUME" />
+                <action name="Create Volume InterFaceName #2"   string="modifyvar" varname="DEVICEVOLUMEINTERFACE" operator="fromvar"  />
+                <action name="Create Volume InterFaceName #1"   string="setvar DEVICEVOLUMECONFIGNAME=$var(GROUPDEVICE)_CONFIGNAME_VOLUME" />
+                <action name="Create Volume InterFaceName #2"   string="modifyvar" varname="DEVICEVOLUMECONFIGNAME" operator="fromvar"  />
+                <action name="Set the volume var"               string="setvar volumetoset=$var(volumetoset)" />
+                <action name="Set the volume"                   string="Send Set Volume" interface="$var(DEVICEVOLUMEINTERFACE)" configname="$var(DEVICEVOLUMECONFIGNAME)"  />
+            <action name="endif"                                string="endif"/>
+        <action name="endif"                                    string="endif"/>
+    </action>
+
+    <action name="FKT SwitchOffUnusedActivityGroupDevices_SwitchOffDevice">
+        <action name="Create Name for PowerStatus part 1" string="setvar TMP_POWERSTATUS=POWERSTATUS_$par(forin_value)" />
+        <action name="Create Name for PowerStatus part 2" string="modifyvar" varname="TMP_POWERSTATUS" operator="fromvar"  />
+        <action name="Switch off Device"                  string="call FKT SwitchOff $par(forin_value)" condition="$var(TMP_POWERSTATUS)==ON"/>
+    </action>
+
 
 </includes>
 

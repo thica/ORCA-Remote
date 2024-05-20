@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <pagestartaction name="appstart">
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_room_name[0]=$lvar(fritz_sm_heating_10100)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_device_name[0]=$lvar(fritz_sm_heating_10100)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_comfort=0" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_eco=0" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_target=0" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_temp_current=0" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_roomname=$lvar(fritz_sm_heating_10120)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_devicename=$lvar(fritz_sm_heating_10121)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_mode_current_text=$lvar(fritz_sm_heating_10111)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_temperature_unit=&#176;C" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_max_temperature_knob=$var($dvar(definition_alias_fritz_sm_heating)_max_temperature)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_min_temperature_knob=$var($dvar(definition_alias_fritz_sm_heating)_min_temperature)" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_set_temperature=20" />
+    <action name="Initialize Var"                     string="setvar $dvar(definition_alias_fritz_sm_heating)_text_set_temperature=$var($dvar(definition_alias_fritz_sm_heating)_set_temperature)" />
+  </pagestartaction>
+
+  <pagestartaction name="definitionstart">
+    <action name="Add Navigation Bar" string="call Add NavigationBar $dvar(definition_alias_fritz_sm_heating)" />
+    <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Device_$dvar(definition_alias_fritz_sm_heating)" />
+  </pagestartaction>
+
+  <pagestartaction name="Page_Device_$dvar(definition_alias_fritz_sm_heating)">
+    <action name="" string="call PageStart Page_Device_$dvar(definition_alias_fritz_sm_heating)" />
+  </pagestartaction>
+
+
+</includes>

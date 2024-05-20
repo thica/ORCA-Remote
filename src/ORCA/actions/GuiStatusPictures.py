@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 
 from ORCA.vars.Replace          import ReplaceVars
 from ORCA.actions.Base          import cEventActionBase
-from ORCA.Action                import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.ReturnCode    import eReturnCode
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 __all__ = ['cEventActionsGuiStatusPictures']
 
 class cEventActionsGuiStatusPictures(cEventActionBase):
@@ -55,8 +55,8 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        uPictureName:str = ReplaceVars(oAction.dActionPars.get("picturename",""))
-        self.oEventDispatcher.LogAction(uTxt=u'SetTransmitterPicture',oAction=oAction)
+        uPictureName:str = ReplaceVars(oAction.dActionPars.get('picturename',''))
+        self.oEventDispatcher.LogAction(uTxt='SetTransmitterPicture',oAction=oAction)
         if oAction.oParentWidget is not None:
             oAction.oParentWidget.oParentScreenPage.SetTransmitterPicture(uTransmitterPictureName=uPictureName)
         else:
@@ -90,8 +90,8 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        uPictureName:str = ReplaceVars(oAction.dActionPars.get("picturename",""))
-        self.oEventDispatcher.LogAction(uTxt=u'SetWaitPicture',oAction=oAction)
+        uPictureName:str = ReplaceVars(oAction.dActionPars.get('picturename',''))
+        self.oEventDispatcher.LogAction(uTxt='SetWaitPicture',oAction=oAction)
         if oAction.oParentWidget is not None:
             oAction.oParentWidget.oParentScreenPage.SetWaitPicture(uWaitPictureName=uPictureName)
         else:
@@ -122,7 +122,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'EnableTransmitterPicture',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='EnableTransmitterPicture',oAction=oAction)
         self.oEventDispatcher.bDoNext = False
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit is not None:
@@ -154,7 +154,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         """
 
         self.oEventDispatcher.bDoNext = False
-        self.oEventDispatcher.LogAction(uTxt=u'DisableTransmitterPicture',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='DisableTransmitterPicture',oAction=oAction)
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit is not None:
                 Globals.oTheScreen.oCurrentPage.oWidgetPictureTransmit.EnableWidget(bEnable=False)
@@ -184,7 +184,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'EnableWaitPicture',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='EnableWaitPicture',oAction=oAction)
         self.oEventDispatcher.bDoNext = False
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureWait is not None:
@@ -215,7 +215,7 @@ class cEventActionsGuiStatusPictures(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'DisableWaitPicture',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='DisableWaitPicture',oAction=oAction)
         self.oEventDispatcher.bDoNext = False
         if Globals.oTheScreen.oCurrentPage is not None:
             if Globals.oTheScreen.oCurrentPage.oWidgetPictureWait is not None:

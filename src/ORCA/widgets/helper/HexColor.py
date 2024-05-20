@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ from ORCA.vars.Replace                 import ReplaceVars
 
 __all__ = ['GetColorFromHex','GetHexFromColor','aColorUndefined','uColorUndefined']
 
-uColorUndefined:str         = "#00000001"
+uColorUndefined:str         = '#00000001'
 
 def GetColorFromHex(uColor:str) -> List[float]:
     """
@@ -56,7 +56,7 @@ def GetHexFromColor(aColor:List[float]) -> str:
     try:
         return ''.join('{:02x}'.format(int(x*255)) for x in aColor)
     except Exception:
-        return u"00000000"
+        return '00000000'
 
 
 aColorUndefined:List[float]   = GetColorFromHex(uColorUndefined)

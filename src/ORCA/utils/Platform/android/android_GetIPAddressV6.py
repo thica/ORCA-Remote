@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ def GetIPAddressV6() -> str:
 
     # Under construction
 
-    uIP:str       = u''
+    uIP:str       = ''
 
     # Fast but not safe
     try:
@@ -41,10 +41,10 @@ def GetIPAddressV6() -> str:
         s.connect(('2001:0db8:85a3:0000:0000:8a2e:0370:7334', 1))
         uIP = s.getsockname()[0]
     except Exception as e:
-        LogError(uMsg="Failure on GetIPAddressV6", oException=e)
+        LogError(uMsg='Failure on GetIPAddressV6', oException=e)
         return uIP
     s.close()
 
-    Logger.debug("Found IPv6 Address:"+uIP)
+    Logger.debug('Found IPv6 Address:'+uIP)
 
     return uIP

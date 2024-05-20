@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 from typing import Tuple
 from typing import Union
 from ORCA.utils.ParseResult import cResultParser
-from ORCA.Action            import cAction
+from ORCA.action.Action import cAction
 
 
 from typing import TYPE_CHECKING
@@ -30,8 +30,8 @@ if TYPE_CHECKING:
     from ORCA.interfaces.BaseInterface          import cBaseInterFace
 else:
     from typing import TypeVar
-    cBaseInterFace = TypeVar("cBaseInterFace")
-    cBaseInterFaceSettings = TypeVar("cBaseInterFaceSettings")
+    cBaseInterFace = TypeVar('cBaseInterFace')
+    cBaseInterFaceSettings = TypeVar('cBaseInterFaceSettings')
 
 class cInterFaceResultParser(cResultParser):
     """ Resultparser object for Interfaces  """
@@ -40,7 +40,7 @@ class cInterFaceResultParser(cResultParser):
         self.oInterFace:cBaseInterFace                  = oInterFace
         self.uConfigName:str                            = uConfigName
         self.uObjectName                                = oInterFace.uObjectName
-        self.uDebugContext                              = "Interface: % s , Config: %s:" % (self.uObjectName,self.uConfigName)
+        self.uDebugContext                              = f'Interface {self.uObjectName}/{self.uConfigName}'
         self.uContext                                   = self.uObjectName + '/' + self.uConfigName
         self.oAction:cAction                            = Union[cAction,None]
         self.oSetting:Union[cBaseInterFaceSettings,None]= None

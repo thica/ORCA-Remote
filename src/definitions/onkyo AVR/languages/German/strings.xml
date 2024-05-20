@@ -7,7 +7,8 @@
   <string id="onkyoAVR_10003">Eingänge</string>
   <string id="onkyoAVR_10004">Effekte</string>
   <string id="onkyoAVR_10009">Kann den Receiver nicht initialisieren (nicht gefunden). Manche Funktionen sind ggf. eingeschränkt</string>
-
-  <string id="onkyoAVR_10506">Max Lautstärke des Verstärker</string>
+  <string id="onkyoAVR_10014">Gerätebild Pfad</string>
+  <string id="onkyoAVR_10015">Pfad zu den Gerätebildern</string>
+  <string id="onkyoAVR_10506">Max. Lautstärke </string>
   <string id="onkyoAVR_10507">Maximale Lautstärke des Verstärkers</string>
 </strings>

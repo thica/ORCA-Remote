@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ from kivy.uix.scatter               import Scatter
 from kivy.vector                    import Vector
 from kivy.graphics.transformation   import Matrix
 from ORCA.utils.RemoveNoClassArgs   import RemoveNoClassArgs
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cRotateScatter']
 
@@ -38,7 +38,7 @@ class cRotateScatter(Scatter):
         self.iAngle:int                 = 0
         self.iLeftBoundaryAngle:int     = 0
         self.iRightBoundaryAngle:int    = 0
-        self.uDirection:str             = u'right'
+        self.uDirection:str             = 'right'
         self.iRightBoundaryAngle:int    = 90
         self.uMoveType:str              = ''
         self.xx:int                     = 0
@@ -48,12 +48,12 @@ class cRotateScatter(Scatter):
         """ dummy """
         pass
     def transform_with_touch(self, touch):
-        self.uMoveType =u'move'
+        self.uMoveType ='move'
         self.On_Rotate(touch)
     def on_touch_up(self, touch):
         # no need for test on collide as we might get the up outside of the button
         if not Globals.oTheScreen.GuiIsBlocked():
-            self.uMoveType =u'up'
+            self.uMoveType ='up'
             self.On_Rotate(touch)
             return super(cRotateScatter, self).on_touch_up(touch)
         else:
@@ -72,7 +72,7 @@ class cRotateScatter(Scatter):
 
         points = [Vector(self._last_touch_pos[t]) for t in self._touches]
         if len(points)==0:
-            # LogError(u'cRotateScatter: On_Rotate shouldnt get called')
+            # LogError('cRotateScatter: On_Rotate shouldnt get called')
             return
 
         anchor= Vector(self.xx+self.width/2,self.yy+self.height/2)
@@ -107,9 +107,9 @@ class cRotateScatter(Scatter):
                     return
 
         if fRad>0.0:
-            self.uDirection=u'left'
+            self.uDirection='left'
         else:
-            self.uDirection=u'right'
+            self.uDirection='right'
         self.fTotalAngle += fRad
         self.iAngle       = int(degrees(self.fTotalAngle))*-1
         anchor            = (self.xx+self.width/2,self.yy+self.height/2)

@@ -47,7 +47,7 @@
 
 
     <action replaceoption="appendtoexisting" name="Set Trigger $dvar(definition_activityalias_mediaplayer_kodi1)">
-        <action name="Set Trigger to Onkyo" string="call Set Trigger $dvar(definition_alias_mediaplayer_onkyoavr)" />
+        <action1 name="Set Trigger to Onkyo" string="call Set Trigger $dvar(definition_alias_mediaplayer_onkyoavr)" />
     </action>
 
 

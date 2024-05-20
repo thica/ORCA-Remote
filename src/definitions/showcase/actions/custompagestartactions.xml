@@ -74,6 +74,8 @@
     <action name="" string="setvar TAB_5=0" />
     <action name="" string="setvar TAB_6=0" />
 
+    <action1 string="call TestTheArray" />
+
   </pagestartaction>
   <pagestartaction name="definitionstart">
     <action name="" string="setvar DEFINITIONSTARTPAGE=Page_Main" />

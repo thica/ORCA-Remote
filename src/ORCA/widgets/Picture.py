@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -35,14 +35,14 @@ from ORCA.definition.DefinitionContext  import SetDefinitionContext
 from ORCA.definition.DefinitionContext  import RestoreDefinitionContext
 from ORCA.vars.Replace                  import ReplaceVars
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 __all__ = ['cWidgetPicture']
 
@@ -81,22 +81,22 @@ class cWidgetPicture(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         super().__init__(**kwargs)
         self.oFnPictureNormal:cFileName               = cFileName('')
         # we dont use a cFileName object by purpose, as we might need to handle vars and skin reference
-        self.uFnPictureNormalVar:str            = ""
+        self.uFnPictureNormalVar:str            = ''
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
 
         """ Reads further Widget attributes from a xml node """
         bRet:bool = self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
-        self.SetPictureNormal (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'picturenormal',bMandatory=False,vDefault=u''))
+        self.SetPictureNormal (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='picturenormal',bMandatory=False,vDefault=''))
         return bRet
 
     def SetPictureNormal(self,uFnPictureNormal:str,bClearCache:bool=False) -> bool:
         """ sets the picture """
 
         try:
-            uNewDefinitionContext:str=u''
+            uNewDefinitionContext:str=''
 
-            if "DEFINITIONPATH[" in uFnPictureNormal:
+            if 'DEFINITIONPATH[' in uFnPictureNormal:
                 uNewDefinitionContext,uFnPictureNormal=GetSetDefinitionName(uText=uFnPictureNormal)
             elif Globals.uDefinitionContext!=self.uDefinitionContext:
                 uNewDefinitionContext = self.uDefinitionContext
@@ -111,19 +111,20 @@ class cWidgetPicture(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
             if uNewDefinitionContext != '':
                 RestoreDefinitionContext()
         except Exception as e:
-            LogError(uMsg=u"Can't set picture:"+uFnPictureNormal, oException=e)
+            LogError(uMsg='Can\'t set picture:'+uFnPictureNormal, oException=e)
             return False
 
         return True
 
     def Create(self, oParent: Widget) -> bool:
         """ creates the Widget """
-        self.AddArg('allow_stretch',True)
-        self.AddArg('keep_ratio',False)
+        #self.AddArg('allow_stretch',True)
+        #self.AddArg('keep_ratio',False)
+        self.AddArg('fit_mode', "fill")
         self.AddArg('source',ToAtlas(oFileName=self.oFnPictureNormal))
 
         if self.CreateBase(Parent=oParent, Class=cTouchImage):
-            if self.uActionName !=u'' or self.uActionNameDoubleTap !=u'' :
+            if self.uActionName !='' or self.uActionNameDoubleTap !='' :
                 self.oObject.bind(on_q_release  = self.On_Button_Up)
                 self.oObject.bind(on_q_press    = self.On_Button_Down)
             self.oObject.bind(on_gesture=self.On_Gesture)

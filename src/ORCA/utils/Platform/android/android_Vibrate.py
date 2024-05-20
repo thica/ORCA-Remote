@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -38,9 +38,9 @@ try:
     vibrator            = activity.getSystemService(Context.VIBRATOR_SERVICE)
     VibrationEffect     = autoclass('android.os.VibrationEffect')
 except Exception as e1:
-    Logger.error("Can't load Android Vibrator from jnius:"+str(e1))
+    Logger.error('Can\'t load Android Vibrator from jnius:'+str(e1))
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 def Vibrate(fDuration:float=0.05) -> None:
     """ Vibrates a device """
@@ -52,4 +52,4 @@ def Vibrate(fDuration:float=0.05) -> None:
             try:
                 vibrator.vibrate(VibrationEffect.createOneShot(1000 * fDuration, VibrationEffect.DEFAULT_AMPLITUDE))
             except Exception as e:
-                Logger.error("Error in Vibrate:"+str(e))
+                Logger.error('Error in Vibrate:'+str(e))

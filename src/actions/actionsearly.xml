@@ -13,7 +13,7 @@
              -->
 
             <action name="If we are not protected (development)"    string="if $var(PROTECTED)!=1" />
-              <action name="askifupdate"                            string="showquestion" title="Found new ORCA version" message="ORCA needs do download central components (skins,fonts,languages, etc). This can take up to 25 MB of files. Would you like to to continue?" actionyes="Fkt_UpdateRepository" actionno="StopApp"  condition="$var(LASTVERSION)!=$var(VERSION)"/>
+              <action name="askifupdate"                            string="showquestion" title="Found new ORCA version" message="ORCA needs do download central components (skins,fonts,languages, etc). This can take up to 30 MB of files. Would you like to to continue?" actionyes="Fkt_UpdateRepository" actionno="StopApp"  condition="$var(LASTVERSION)!=$var(VERSION)"/>
             <action name="endif"                                    string="endif"                />
 
 
@@ -45,7 +45,7 @@
             <action name="Update Splash"                            string="showsplashtext"  maintext="Loading Languages" percentage="+2"/>
             <action name="load core languages"                      string="loadlanguages" />
 
-            <action1 name="Check Permissions"                        string="checkpermissions" />
+            <action name="Check Permissions"                        string="checkpermissions" />
 
             <action name="Update Splash"                            string="showsplashtext"             maintext="$lvar(423)" percentage="+1"/>
             <action name="Register KeyHandler Scripts"              string="registerscriptgroup"        groupname="KEYHANDLER"/>

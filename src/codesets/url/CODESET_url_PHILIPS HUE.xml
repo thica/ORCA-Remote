@@ -3,11 +3,11 @@
   <repositorymanager>
     <entry>
       <name>Philips HUE</name>
-      <description language='English'>Philips HUE control by Webserver/URL</description>
-      <description language='German'>Philips HUE Kontrolle über Webserver/URL</description>
+      <description language='English'>Philips HUE control by Webserver/URL (API 1.0)</description>
+      <description language='German'>Philips HUE Kontrolle über Webserver/URL (API 1.0)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_PHILIPS HUE.xml</local>
@@ -31,33 +31,33 @@
   <!-- Translates Orca Actions to Interface Commands action = Orca Action    -->
 
   <action string="noaction" name="init"  />
-  <action1 string="codeset" name='add_user'             type="string" waitforresponse='1' requesttype='POST' cmd='/api' headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"devicetype":"$cvar(CONFIG_USER)#ORCAREMOTE", "username":"$cvar(CONFIG_USER)"}' parseoption='json'  ldestvar='pairresponse' gdestvar='pairresponse' getvar='dummy,success,username' />
+  <action_old string="codeset" name='add_user'             type="string" waitforresponse='1' requesttype='POST' cmd='/api' headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"devicetype":"$cvar(CONFIG_USER)#ORCAREMOTE", "username":"$cvar(CONFIG_USER)"}' parseoption='json'  ldestvar='pairresponse' gdestvar='pairresponse' getvar='dummy,success,username' />
   <action string="codeset" name='add_user'             type="string" waitforresponse='1' requesttype='POST' cmd='/api' headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"devicetype":"$cvar(CONFIG_USER)#ORCAREMOTE"}' parseoption='json'  ldestvar='pairresponse' gdestvar='pairresponse' getvar='dummy,success,username' />
 
-  <action string="codeset" name='power_off'            type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":false}' />
-  <action string="codeset" name='power_on'             type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":true}'  />
+  <action string="codeset" name='power_off'            type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$cvar(LIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":false}' />
+  <action string="codeset" name='power_on'             type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$cvar(LIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":true}'  />
   <action string="codeset" name='get_config'           type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)/config'                           headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='json' ldestvar='"hue_name","hue_apiversion"' gdestvar='"hue_name","hue_apiversion"' getvar='"name","apiversion"' parseflags='L'/>
-  <action string="codeset" name='setlight_hsv'         type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"hue":$var(hue_h),"sat":$var(hue_s),"bri":$var(hue_v),"transitiontime":$var(hue_t)}'  />
-  <action string="codeset" name='setlight_xy'          type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"xy": [$var(hue_x),$var(hue_y)],"transitiontime":$var(hue_t)}'  />
-  <action string="codeset" name='setlight_hsv_group'   type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$var(HUELIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"hue":$var(hue_h),"sat":$var(hue_s),"bri":$var(hue_v),"transitiontime":$var(hue_t)}'  />
-  <action string="codeset" name='setlight_xy_group'    type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$var(HUELIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"xy": [$var(hue_x),$var(hue_y)],"transitiontime":$var(hue_t)}'  />
+  <action string="codeset" name='setlight_hsv'         type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$cvar(LIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"hue":$cvar(hue),"sat":$cvar(sat),"bri":$cvar(bri),"transitiontime":$cvar(transitiontime")}'  />
+  <action string="codeset" name='setlight_xy'          type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$cvar(LIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"xy": [$cvar(x),$var(y)],"transitiontime":$cvar(transitiontime)}'  />
+  <action string="codeset" name='setlight_hsv_group'   type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$cvar(LIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"hue":$cvar(hue),"sat":$cvar(sat),"bri":$cvar(bri),"transitiontime":$cvar(transitiontime")}'  />
+  <action string="codeset" name='setlight_xy_group'    type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$cvar(LIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"xy": [$cvar(x),$var(y)],"transitiontime":$cvar(transitiontime)}'  />
   <action name="get_config_lights" >
     <action string="setvar RESULT=" />
-    <action string="codeset" name='get_config_lights_sub'    type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)'         headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='store' />
-    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_light","result":"$var(RESULT)","index":"$var(HUELIGHTNUM)"}' condition="$var(RESULT)!="/>
+    <action string="codeset" name='get_config_lights_sub'    type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$cvar(LIGHTNUM)'         headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='store' />
+    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_light","result":"$var(RESULT)","index":"$cvar(LIGHTNUM)"}' condition="$var(RESULT)!="/>
   </action>
   <action name="get_config_groups" >
     <action string="setvar RESULT=" />
-    <action string="codeset" name='get_config_groups_sub'    type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$var(HUELIGHTNUM)'         headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='store' />
-    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_group","result":"$var(RESULT)","index":"$var(HUELIGHTNUM)"}' condition="$var(RESULT)!="/>
+    <action string="codeset" name='get_config_groups_sub'    type="string" waitforresponse='1' requesttype='GET' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$cvar(LIGHTNUM)'         headers='{"Content-Type": "application/json", "Accept": "application/json"}'  parseoption='store' />
+    <action name='Parse Result into Vars' string="runscript" scriptname="helper_hue" commandparameter='{"cmd_type":"evaluate_group","result":"$var(RESULT)","index":"$cvar(LIGHTNUM)"}' condition="$var(RESULT)!="/>
   </action>
 
 
-  <action string="codeset" name='dimlight'             type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"bri":$var(hue_v),"transitiontime":$var(hue_t)}'  />
-  <action string="codeset" name='dim'                  type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$var(HUELIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"bri":$var(hue_v),"transitiontime":$var(hue_t)}'  />
-  <action string="codeset" name='dimlight_group'       type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$var(HUELIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"bri":$var(hue_v),"transitiontime":$var(hue_t)}'  />
-  <action string="codeset" name='power_off_group'      type="string" waitforresponse='1' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$var(HUELIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":false}' />
-  <action string="codeset" name='power_on_group'       type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$var(HUELIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":true}'  />
+  <action string="codeset" name='dimlight'             type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$cvar(LIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"bri":$cvar(dimvalue),"transitiontime":$cvar(transitiontime)}'  />
+  <action string="codeset" name='dim'                  type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/lights/$cvar(LIGHTNUM)/state'   headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"bri":$cvar(dimvalue),"transitiontime":$cvar(transitiontime)}'  />
+  <action string="codeset" name='dimlight_group'       type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$cvar(LIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"bri":$cvar(dimvalue),"transitiontime":$cvar(transitiontime)}'  />
+  <action string="codeset" name='power_off_group'      type="string" waitforresponse='1' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$cvar(LIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":false}' />
+  <action string="codeset" name='power_on_group'       type="string" waitforresponse='0' requesttype='PUT' cmd='/api/$cvar(CONFIG_PASSWORD)/groups/$cvar(LIGHTNUM)/action'  headers='{"Content-Type": "application/json", "Accept": "application/json"}'  params='{"on":true}'  />
   <action string="codeset" name='delete_user'          type="string" waitforresponse='0' requesttype='DELETE' cmd='/api/$cvar(CONFIG_PASSWORD)/config/whitelist/$var(HUEUSERDELETE)' headers='{"Content-Type": "application/json", "Accept": "application/json"}'  />
   <action name="get_config_alllights" >
      <action string="setvar RESULT=" />

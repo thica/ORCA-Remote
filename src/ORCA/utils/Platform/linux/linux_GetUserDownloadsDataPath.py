@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -27,9 +27,9 @@ def GetUserDownloadsDataPath() -> cPath:
     """ returns the path to the download folder """
 
     oPath:cPath=GetDownloadFolder()
-    Logger.debug("Linux Download Folder  = "+oPath.string)
+    Logger.debug(f'Linux Download Folder  = {oPath}')
 
     if not oPath.IsDir():
-        Logger.error("Downloadpath not valid:" + oPath.string)
+        Logger.error(f'Downloadpath not valid: {oPath}')
     return oPath
 

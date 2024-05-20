@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -29,10 +29,10 @@ from ORCA.vars.Replace              import ReplaceVars
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 __all__ = ['cWidgetGeoClass']
 
@@ -50,7 +50,7 @@ class cWidgetGeoClass(cWidgetBase,cWidgetBaseAction,cWidgetBaseBase):
         """ creates the Widget """
         self.AddArg('background_color',self.aBackGroundColor)
         if self.CreateBase(Parent=oParent, Class=self.oGeoClass):
-            if self.uActionName !=u'' or self.uActionNameDoubleTap !=u'' :
+            if self.uActionName !='' or self.uActionNameDoubleTap !='' :
                 self.oObject.bind(on_q_release  = self.On_Button_Up)
                 self.oObject.bind(on_q_press    = self.On_Button_Down)
             self.oObject.bind(on_gesture=self.On_Gesture)

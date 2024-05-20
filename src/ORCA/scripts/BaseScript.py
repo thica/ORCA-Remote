@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,10 +23,11 @@ from __future__ import annotations
 from typing     import Union
 from typing     import Dict
 from xml.etree.ElementTree            import Element
-
+from abc        import ABC
+from abc        import abstractmethod
 from kivy.logger                      import Logger
 
-from ORCA.BaseObject                  import cBaseObject
+from ORCA.settings.BaseObject import cBaseObject
 from ORCA.scripts.ScriptConfig        import cScriptConfig
 from ORCA.scripts.BaseScriptSettings  import cBaseScriptSettings
 from ORCA.utils.FileName              import cFileName
@@ -34,7 +35,7 @@ from ORCA.utils.ParseResult           import cResultParser
 from ORCA.utils.XML                   import Orca_FromString
 from ORCA.utils.CachedFile            import CachedFile
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 class cScriptResultParser(cResultParser):
     """ Resultparser object for Scripts  """
@@ -42,10 +43,10 @@ class cScriptResultParser(cResultParser):
         super().__init__()
         self.oScript:cBaseScript  = oScript
         self.uObjectName:str      = oScript.uObjectName
-        self.uDebugContext        = "Script: % s :" % self.uObjectName
+        self.uDebugContext        = f'Script: {self.uObjectName} :'
         self.uContext             = self.uObjectName
 
-class cBaseScript(cBaseObject):
+class cBaseScript(cBaseObject,ABC):
     """ basic script class to inherit all scripts from """
 
     class cScriptSettings(cBaseScriptSettings):
@@ -70,25 +71,25 @@ class cBaseScript(cBaseObject):
         super().__init__()
 
         # self.oFnConfig                            = None
-        self.uConfigName                            = "SCRIPTDEFAULT"
-        self.uObjectType                            = "script"
-        self.uIniFileLocation                       = "global"
+        self.uConfigName                            = 'SCRIPTDEFAULT'
+        self.uObjectType                            = 'script'
+        self.uIniFileLocation                       = 'global'
 
-        self.uSection:str                           = u''
+        self.uSection:str                           = ''
         self.oFnAction:Union[cFileName,None]        = None
-        self.uSortOrder:str                         = u'auto'
-        self.uSubType:str                           = u'Generic'
-        self.uType:str                              = u'Generic'
+        self.uSortOrder:str                         = 'auto'
+        self.uSubType:str                           = 'Generic'
+        self.uType:str                              = 'Generic'
         self.oResultParser:cScriptResultParser      = cScriptResultParser(self)
 
     def Init(self,uObjectName:str,oFnObject:Union[cFileName,None]=None) -> None:
         """ Initializes the script """
         super().Init(uObjectName,oFnObject)
-        self.oFnAction            = cFileName(self.oPathMyCode+"actions")+"customactions.xml"
+        self.oFnAction            = cFileName(self.oPathMyCode+'actions')+'customactions.xml'
         self.oObjectConfig        = cScriptConfig(self)
         self.oObjectConfig.Init()
 
-
+    @abstractmethod
     def RunScript(self, *args, **kwargs) -> Union[Dict,None]:
         """ Dummy """
         return {}
@@ -101,11 +102,11 @@ class cBaseScript(cBaseObject):
 
     def LoadActions(self) -> None:
         """ parses the definition specific actions """
-        Logger.info (u'Loading Actions for script:'+self.uObjectName)
+        Logger.info ('Loading Actions for script:'+self.uObjectName)
         if self.oFnAction.Exists():
             uET_Data = CachedFile(oFileName=self.oFnAction)
-            oET_Root:Element = Orca_FromString(uET_Data=uET_Data, oDef=None, uFileName=self.oFnAction.string)
-            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag=u'actions',uListTag=u'action',dTargetDic=Globals.oActions.dActionsCommands,uFileName=self.oFnAction.string)
+            oET_Root:Element = Orca_FromString(uET_Data=uET_Data, oDef=None, uFileName=str(self.oFnAction))
+            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag='actions',uListTag='action',dTargetDic=Globals.oActions.dActionsCommands,uFileName=str(self.oFnAction))
 
     def GetNewSettingObject(self) -> cBaseScriptSettings:
         return self.cScriptSettings(self)

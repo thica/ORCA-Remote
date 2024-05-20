@@ -7,8 +7,8 @@
       <description language='English'>Default commandset for Android by adb</description>
       <description language='German'>Standard Kommandos für Android über adb</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/android_adb/CODESET_android_adb_DEFAULT.xml</local>
@@ -83,7 +83,7 @@ WikiDoc:End
     <action  string="codeset" name='getappname_int'    waitforresponse='1' cmd='GetAppName' params="$var(startapp)" ldestvar="appnamereal"  />
     <action  string="codeset" name='dump_app'          waitforresponse='1' cmd='Shell'             params="pm dump $cvar(appnamereal)" ldestvar="appdump" />
     <action  string="codeset" name='get-intent'        waitforresponse='1' cmd='GetAppIntent'      params="$cvar(appnamereal)|||$cvar(appdump)" ldestvar="appintent" />
-    <action  string="codeset" name='startapp_byintent' waitforresponse='1' cmd='Shell'      params="am start -a android.intent.action.VIEW -d -n $cvar(appintent)" />
+    <action  string="codeset" name='startapp_byintent' waitforresponse='1' cmd='Shell'      params="am start -a android.intent.action.MAIN -d -n $cvar(appintent)" />
   </action>
 
   <action string="codeset" name='startapp_oldapi'      waitforresponse='0' cmd='Shell'  params="am start -n $var(startapp)" />

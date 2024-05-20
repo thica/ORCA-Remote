@@ -8,8 +8,8 @@
       <description language='English'>German language strings</description>
       <description language='German'>Deutsche Zeichenketten</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/languages/German</local>
@@ -228,7 +228,9 @@
   <string id="625">Standard Seiten Effect Typ</string>
   <string id="626">Seiten Effekt Richtung</string>
   <string id="627">Standard Richtung für Seiten Effekte</string>
-
+  <string id="628">Netzwerk Adapter (OS)</string>
+  <string id="629">Netzwerk Adapter (Phys)</string>
+  <string id="630">Netzwerk Adapter (Nice)</string>
   <string id="633">Sonstiges</string>
   <string id="634">Töne</string>
   <string id="635">Wähle Töne</string>
@@ -334,8 +336,8 @@
 
 
     <!--Button Strings -->
-  <string id="1001">Einschalten</string>
-  <string id="1002">Ausschaltem</string>
+  <string id="1001">Ein</string>
+  <string id="1002">Aus</string>
   <string id="1003">Ein/Ausschalten</string>
   <string id="1026">Zurück</string>
   <string id="1038">Letzter Kanal</string>
@@ -429,6 +431,8 @@
   <string id="5042">ORCA benötigt Schreib Zugriff, bitte gewähren</string>
   <string id="5043">Zugriff gewähren</string>
   <string id="5044">Soll diese Einstellung gelöscht werden?</string>
+  <string id="5045">Discover Prozese aktiv</string>
+
 
   <!--Generic Interfaces Config Strings for multi interface use-->
   <string id="6000">Zuordnung/Codeset</string>
@@ -472,5 +476,8 @@
   <string id="6038">IPv6 verwenden</string>
   <string id="6039">ermittelt</string>
   <string id="6040">beendet</string>
+  <string id="6041">Wiederholungen</string>
+  <string id="6042">Wie oft soll ein Kommando bei Fehlern wiederholt werden</string>
+  <string id="6043">MAC-Adresse des Gerätes</string>
 
 </strings>

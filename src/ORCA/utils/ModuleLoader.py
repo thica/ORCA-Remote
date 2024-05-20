@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -52,11 +52,11 @@ class cModuleLoader:
             return self.dModules[uModuleName]
         try:
             # noinspection PyDeprecation
-            oModule                    = imp.load_source(uModuleName, oFnModule.string)
+            oModule                    = imp.load_source(uModuleName, str(oFnModule))
             self.dModules[uModuleName] = cModule(oModule)
             return self.dModules[uModuleName]
         except Exception as e:
-            uMsg: str = LogError(uMsg=u'ModulLoader: Fatal Error loading module %s from file %s : ' % (uModuleName,oFnModule.string), oException=e)
+            uMsg: str = LogError(uMsg=f'ModulLoader: Fatal Error loading module {uModuleName} from file: {oFnModule}', oException=e)
             ShowErrorPopUp(uMessage=uMsg)
             return None
 

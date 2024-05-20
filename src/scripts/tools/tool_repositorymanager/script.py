@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -26,9 +26,9 @@ from typing                                 import TYPE_CHECKING
 from typing                                 import TypeVar
 
 import sys
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 import argparse
-sys.path.append(Globals.oScripts.dScriptPathList[u"tool_repositorymanager"].string)
+sys.path.append(str(Globals.oScripts.dScriptPathList['tool_repositorymanager']))
 
 from ORCA.scripts.Scripts                   import cScriptSettingPlugin
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
@@ -49,7 +49,7 @@ else:
     from RepManager                             import RepositoryManager
     # noinspection PyUnresolvedReferences
     from RepManager                             import CreateRepVarArray
-    cPath = TypeVar("cPath")
+    cPath = TypeVar('cPath')
 
 '''
 <root>
@@ -59,8 +59,8 @@ else:
       <description language='English'>Tool to write the repository (internal tool)</description>
       <description language='German'>Tool um ein repository zu schreiben (internes Tool)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -135,18 +135,18 @@ class cScript(cToolsTemplate):
             oParser.add_argument('--ftpuser',           default=GetEnvVar('ORCAFTPUSER'),                                action=cParserAction, oParameter=self, dest="uFTPUser",        help='Set the username for the FTP Server for the repository manager (can be passed as ORCAFTPUSER environment var)')
             oParser.add_argument('--ftppassword',       default=GetEnvVar('ORCAFTPPW'),                                  action=cParserAction, oParameter=self, dest="uFTPPassword",    help='Set the password for the FTP Server for the repository manager (can be passed as ORCAFTPPW environment var)')
             oParser.add_argument('--ftpssl',            default=GetEnvVar('ORCAFTPSSL'),                                 action=cParserAction, oParameter=self, dest="uFTPSSL",         help='Flag 0/1 to use SSL to connect to the FTP server (can be passed as ORCAFTPSSL environment var)')
-            oParser.add_argument('--repsourcepath',     default=GetEnvVar('ORCAREPSOURCEPATH',Globals.oPathRoot.string), action=cParserAction, oParameter=self, dest="oPathRepSource",  help='Changes the path for repository manager where to find the repositry files to upload (can be passed as ORCAREPSOURCEPATH environment var)')
+            oParser.add_argument('--repsourcepath',     default=GetEnvVar('ORCAREPSOURCEPATH',str(Globals.oPathRoot)),   action=cParserAction, oParameter=self, dest="oPathRepSource",  help='Changes the path for repository manager where to find the repositry files to upload (can be passed as ORCAREPSOURCEPATH environment var)')
             oParser.add_argument('--wwwserverpath',     default=GetEnvVar('ORCAWWWSERVERPATH'),                          action=cParserAction, oParameter=self, dest="uWWWServerPath",  help='Set the WWW Server path for the repository manager  (can be passed as ORCAWWWSERVERPATH environment var)')
 
     def __init__(self):
         cToolsTemplate.__init__(self)
-        self.uSubType         = u'REPOSITORY'
-        self.uSortOrder       = u'auto'
-        self.uSettingSection  = u'tools'
-        self.uSettingTitle    = u"Repository Manager"
+        self.uSubType         = 'REPOSITORY'
+        self.uSortOrder       = 'auto'
+        self.uSettingSection  = 'tools'
+        self.uSettingTitle    = 'Repository Manager'
         self.oEnvParameter    = self.cScriptParameter()
 
-    def Init(self,uObjectName:str,uScriptFile:str=u'') -> Dict:
+    def Init(self,uObjectName:str,uScriptFile:str='') -> Dict:
         """
         Init function for the script
 
@@ -155,14 +155,14 @@ class cScript(cToolsTemplate):
         """
 
         super().Init(uObjectName= uObjectName, oFnObject=uScriptFile)
-        self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
-        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
+        self.oObjectConfig.dDefaultSettings['User']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['Password']['active']                    = 'enabled'
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = 'enabled'
         return {}
 
     def RunScript(self, *args, **kwargs) -> None:
         cToolsTemplate.RunScript(self,*args, **kwargs)
-        if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
+        if kwargs.get('caller') == 'settings' or kwargs.get('caller') == 'action':
             self.StartRepositoryManager(self, *args, **kwargs)
 
     def StartRepositoryManager(self, *args, **kwargs) -> None:
@@ -170,71 +170,71 @@ class cScript(cToolsTemplate):
         oPathRepSource:cPath
 
         oSetting:cBaseScriptSettings  = self.GetSettingObjectForConfigName(uConfigName=self.uConfigName)
-        SetVar(uVarName=u'REPOSITORYWWWPATH',  oVarValue=oSetting.aIniSettings.uWWWServerPath)
-        SetVar(uVarName=u"REPMAN_FTPSERVER",   oVarValue=oSetting.aIniSettings.uHost)
-        SetVar(uVarName=u"REPMAN_FTPPATH",     oVarValue=oSetting.aIniSettings.uFTPPath)
-        SetVar(uVarName=u"REPMAN_FTPUSER",     oVarValue=oSetting.aIniSettings.uUser)
-        SetVar(uVarName=u"REPMAN_FTPPASSWORD", oVarValue=oSetting.aIniSettings.uPassword)
+        SetVar(uVarName='REPOSITORYWWWPATH',  oVarValue=oSetting.aIniSettings.uWWWServerPath)
+        SetVar(uVarName='REPMAN_FTPSERVER',   oVarValue=oSetting.aIniSettings.uHost)
+        SetVar(uVarName='REPMAN_FTPPATH',     oVarValue=oSetting.aIniSettings.uFTPPath)
+        SetVar(uVarName='REPMAN_FTPUSER',     oVarValue=oSetting.aIniSettings.uUser)
+        SetVar(uVarName='REPMAN_FTPPASSWORD', oVarValue=oSetting.aIniSettings.uPassword)
 
         if oSetting.aIniSettings.bFTPSSL:
-            SetVar(uVarName=u"REPMAN_FTPSSL",oVarValue=u"1")
+            SetVar(uVarName='REPMAN_FTPSSL',oVarValue='1')
         else:
-            SetVar(uVarName=u"REPMAN_FTPSSL",oVarValue=u"0")
+            SetVar(uVarName='REPMAN_FTPSSL',oVarValue='0')
 
 
-        if Globals.uPlatform=="linux":
-            oPathRepSource = self.aIniSettings.oPathRepSource_linux
-        elif Globals.uPlatform=="win":
-            oPathRepSource = self.aIniSettings.oPathRepSource_win
-        elif Globals.uPlatform=="android":
-            oPathRepSource = self.aIniSettings.oPathRepSource_android
-        elif Globals.uPlatform=="ios":
-            oPathRepSource = self.aIniSettings.oPathRepSource_ios
-        elif Globals.uPlatform=="macosx":
-            oPathRepSource = self.aIniSettings.oPathRepSource_macosx
+        if Globals.uPlatform=='linux':
+            oPathRepSource = oSetting.aIniSettings.oPathRepSource_linux
+        elif Globals.uPlatform=='win':
+            oPathRepSource = oSetting.aIniSettings.oPathRepSource_win
+        elif Globals.uPlatform=='android':
+            oPathRepSource = oSetting.aIniSettings.oPathRepSource_android
+        elif Globals.uPlatform=='ios':
+            oPathRepSource = oSetting.aIniSettings.oPathRepSource_ios
+        elif Globals.uPlatform=='macosx':
+            oPathRepSource = oSetting.aIniSettings.oPathRepSource_macosx
         else:
-            oPathRepSource = oScript.oEnvParameter.oPathRepSource
+            oPathRepSource = self.oEnvParameter.oPathRepSource
 
         RepositoryManager(oPathRepSource = oPathRepSource)
 
     # noinspection PyMethodMayBeStatic
     def CreateRepositoryVarArray(self,  *args, **kwargs) -> None:
-        uBaseLocalDir  = ReplaceVars(kwargs.get("baselocaldir",(Globals.oPathTmp + "RepManager").string))
+        uBaseLocalDir  = ReplaceVars(kwargs.get('baselocaldir',str(Globals.oPathTmp + 'RepManager')))
         CreateRepVarArray(uBaseLocalDir)
 
     def Register(self, *args, **kwargs) -> Dict:
         cToolsTemplate.Register(self,*args, **kwargs)
-        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTREPOSITORYMANAGER", fNotifyFunction=self.StartRepositoryManager,   uDescription="Script Repository Manager")
-        Globals.oNotifications.RegisterNotification(uNotification="CREATEREPOSITORYVARARRAY",     fNotifyFunction=self.CreateRepositoryVarArray, uDescription="Script Repository Manager")
+        Globals.oNotifications.RegisterNotification(uNotification='STARTSCRIPTREPOSITORYMANAGER', fNotifyFunction=self.StartRepositoryManager,   uDescription="Start Script Repository Manager")
+        Globals.oNotifications.RegisterNotification(uNotification='CREATEREPOSITORYVARARRAY',     fNotifyFunction=self.CreateRepositoryVarArray, uDescription="Script Repository Manager: Create Repository")
 
         oScriptSettingPlugin:cScriptSettingPlugin = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName
-        oScriptSettingPlugin.uSettingName  = "TOOLS"
-        oScriptSettingPlugin.uSettingPage  = "$lvar(699)"
-        oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_REPMANAGER_4)"
-        oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_REPMANAGER_1)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_REPMANAGER_3)","id":"button_notification_STARTSCRIPTREPOSITORYMANAGER"}]}']
+        oScriptSettingPlugin.uSettingName  = 'TOOLS'
+        oScriptSettingPlugin.uSettingPage  = '$lvar(699)'
+        oScriptSettingPlugin.uSettingTitle = '$lvar(SCRIPT_TOOLS_REPMANAGER_4)'
+        oScriptSettingPlugin.aSettingJson  = ['{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_REPMANAGER_1)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_REPMANAGER_3)","id":"button_notification_STARTSCRIPTREPOSITORYMANAGER"}]}']
         Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
         self.LoadActions()
         return {}
 
     def GetConfigJSON(self) -> Dict:
 
-        dRet:Dict[str,Dict] = {"FTPPath":       {"type": "varstring", "active":"enabled", "order":16, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_5)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_6)", "key": "FTPPath",       "default": self.oEnvParameter.uFTPServerPath,            "section": "$var(ObjectConfigSection)"},
-                               "FTPSSL":        {"type": "bool",      "active":"enabled", "order":17, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_7)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_8)", "key": "FTPSSL",        "default": ToBool(self.oEnvParameter.uFTPSSL),           "section": "$var(ObjectConfigSection)"},
-                               "WWWServerPath": {"type": "varstring", "active":"enabled", "order":19, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_11)","desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_12)","key": "WWWServerPath", "default": self.oEnvParameter.uWWWServerPath,            "section": "$var(ObjectConfigSection)"}
+        dRet:Dict[str,Dict] = {'FTPPath':       {'type': 'varstring', 'active':'enabled', 'order':16, 'title': '$lvar(SCRIPT_TOOLS_REPMANAGER_5)', 'desc': '$lvar(SCRIPT_TOOLS_REPMANAGER_6)', 'key': 'FTPPath',       'default': self.oEnvParameter.uFTPServerPath,            'section': '$var(ObjectConfigSection)'},
+                               'FTPSSL':        {'type': 'bool',      'active':'enabled', 'order':17, 'title': '$lvar(SCRIPT_TOOLS_REPMANAGER_7)', 'desc': '$lvar(SCRIPT_TOOLS_REPMANAGER_8)', 'key': 'FTPSSL',        'default': ToBool(self.oEnvParameter.uFTPSSL),           'section': '$var(ObjectConfigSection)'},
+                               'WWWServerPath': {'type': 'varstring', 'active':'enabled', 'order':19, 'title': '$lvar(SCRIPT_TOOLS_REPMANAGER_11)','desc': '$lvar(SCRIPT_TOOLS_REPMANAGER_12)','key': 'WWWServerPath', 'default': self.oEnvParameter.uWWWServerPath,            'section': '$var(ObjectConfigSection)'}
                               }
 
-        if Globals.uPlatform == "win":
-            dRet["PathRepSource_win"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (win)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_win", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
-        elif Globals.uPlatform == "linux":
-            dRet["PathRepSource_linux"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (linux)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_linux", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
-        elif Globals.uPlatform == "android":
-            dRet["PathRepSource_android"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (android)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_android", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
-        elif Globals.uPlatform == "ios":
-            dRet["PathRepSource_ios"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (ios)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_ios", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
-        elif Globals.uPlatform == "macosx":
-            dRet["PathRepSource_ios"] = {"type": "path", "active":"enabled", "order":20, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9) (MAC osx)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource_macosx", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
+        if Globals.uPlatform == 'win':
+            dRet['PathRepSource_win'] = {'type': 'path', 'active':'enabled', 'order':20, 'title': '$lvar(SCRIPT_TOOLS_REPMANAGER_9) (win)', 'desc': '$lvar(SCRIPT_TOOLS_REPMANAGER_10)','key': 'PathRepSource_win', 'default': self.oEnvParameter.oPathRepSource.unixstring, 'section': '$var(ObjectConfigSection)'}
+        elif Globals.uPlatform == 'linux':
+            dRet['PathRepSource_linux'] = {'type': 'path', 'active':'enabled', 'order':20, 'title': '$lvar(SCRIPT_TOOLS_REPMANAGER_9) (linux)', 'desc': '$lvar(SCRIPT_TOOLS_REPMANAGER_10)','key': 'PathRepSource_linux', 'default': self.oEnvParameter.oPathRepSource.unixstring, 'section': '$var(ObjectConfigSection)'}
+        elif Globals.uPlatform == 'android':
+            dRet['PathRepSource_android'] = {'type': 'path', 'active':'enabled', 'order':20, 'title': '$lvar(SCRIPT_TOOLS_REPMANAGER_9) (android)', 'desc': '$lvar(SCRIPT_TOOLS_REPMANAGER_10)','key': 'PathRepSource_android', 'default': self.oEnvParameter.oPathRepSource.unixstring, 'section': '$var(ObjectConfigSection)'}
+        elif Globals.uPlatform == 'ios':
+            dRet['PathRepSource_ios'] = {'type': 'path', 'active':'enabled', 'order':20, 'title': '$lvar(SCRIPT_TOOLS_REPMANAGER_9) (ios)', 'desc': '$lvar(SCRIPT_TOOLS_REPMANAGER_10)','key': 'PathRepSource_ios', 'default': self.oEnvParameter.oPathRepSource.unixstring, 'section': '$var(ObjectConfigSection)'}
+        elif Globals.uPlatform == 'macosx':
+            dRet['PathRepSource_ios'] = {'type': 'path', 'active':'enabled', 'order':20, 'title': '$lvar(SCRIPT_TOOLS_REPMANAGER_9) (MAC osx)', 'desc': '$lvar(SCRIPT_TOOLS_REPMANAGER_10)','key': 'PathRepSource_macosx', 'default': self.oEnvParameter.oPathRepSource.unixstring, 'section': '$var(ObjectConfigSection)'}
         else:
-            dRet["PathRepSource"] = {"type": "path",      "active":"enabled", "order":18, "title": "$lvar(SCRIPT_TOOLS_REPMANAGER_9)", "desc": "$lvar(SCRIPT_TOOLS_REPMANAGER_10)","key": "PathRepSource", "default": self.oEnvParameter.oPathRepSource.unixstring, "section": "$var(ObjectConfigSection)"}
+            dRet['PathRepSource'] = {'type': 'path',      'active':'enabled', 'order':18, 'title': '$lvar(SCRIPT_TOOLS_REPMANAGER_9)', 'desc': '$lvar(SCRIPT_TOOLS_REPMANAGER_10)','key': 'PathRepSource', 'default': self.oEnvParameter.oPathRepSource.unixstring, 'section': '$var(ObjectConfigSection)'}
 
         return dRet

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -27,10 +27,10 @@ __all__ = ['cGesture']
 class cGesture:
     """ Gesture Abstraction Object """
     def __init__(self):
-        self.uGestureName:str           =  u''
+        self.uGestureName:str           =  ''
         self.oGesture:Gesture           =  Gesture()
-        self.uGestureString:str         =  u''
+        self.uGestureString:str         =  ''
     def ParseGestureFromXMLNode(self,*,oXMLNode:Element) -> None:
         """ Parses a gesture from an xml object """
-        self.uGestureName               =  GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'')
-        self.uGestureString             =  GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'data',bMandatory=True,vDefault=u'')
+        self.uGestureName               =  GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='name',bMandatory=True,vDefault='')
+        self.uGestureString             =  GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='data',bMandatory=True,vDefault='')

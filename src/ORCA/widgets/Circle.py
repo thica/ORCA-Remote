@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -30,10 +30,10 @@ from ORCA.utils.XML                     import GetXMLTextAttributeVar
 from ORCA.utils.FileName                import cFileName
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 __all__ = ['cWidgetCircle']
 
@@ -84,12 +84,12 @@ class cWidgetCircle(cWidgetGeoClass):
         self.oGeoClass:Callable      = cTouchCircle
         self.fStartAngle:float       = 0.0
         self.fEndAngle:float         = 360.0
-        self.oFnPictureNormal        = cFileName(u"")
+        self.oFnPictureNormal        = cFileName('')
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
-        self.oFnPictureNormal           = cFileName("").ImportFullPath(uFnFullName=GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'picturenormal',bMandatory=False,uDefault=u''))
-        self.fStartAngle                = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'startangle', bMandatory=False, fDefault=0.0)
-        self.fEndAngle                  = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag=u'stopangle',  bMandatory=False, fDefault=0.0)
+        self.oFnPictureNormal           = cFileName(GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag='picturenormal',bMandatory=False,uDefault=''))
+        self.fStartAngle                = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag='startangle', bMandatory=False, fDefault=0.0)
+        self.fEndAngle                  = GetXMLFloatAttributeVar(oXMLNode=oXMLNode,uTag='stopangle',  bMandatory=False, fDefault=0.0)
         return self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
 
     def Create(self,oParent:Widget) -> bool:
@@ -103,7 +103,7 @@ class cWidgetCircle(cWidgetGeoClass):
         self.AddArg('angle_start',  self.fStartAngle)
         self.AddArg('angle_end',    self.fEndAngle)
         if self.oObject is None:
-            Logger.error("Can't modify Angle of Circle before its created:"+self.uName)
+            Logger.error('Can\'t modify Angle of Circle before its created:'+self.uName)
             return False
         return self.oObject.ModifyAngle(**self.dKwArgs)
     def UpdateWidget(self) -> None:

@@ -5,6 +5,8 @@ How to create a virtual image for compiling the apk
 Create a ubuntu instance based on 20.04. standard desktop installation
 Choose "kivy" as the user name
 Install the guest tools
+    sudo apt-get update
+    sudo apt-get install build-essential gcc make perl dkms
 
 
 
@@ -26,6 +28,9 @@ sudo ln -s /media/sf_Orca/Development/ORCA/Master /media/Master
 sudo ln -s /media/sf_Orca/Development/snapshots /media/snapshots
 sudo ln -s /media/sf_Orca/Development/secrets /media/secrets
 sudo ln -s /media/sf_Orca/Development/ORCA/Deployment /media/upload
+
+For compiling the showcase
+sudo ln -s /media/sf_Orca/kivyshowcase /media/Master_sc
 
 This is tested for buildozer version downloaded 27.10.2019 from Master
 

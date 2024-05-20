@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,6 @@
 """
 from typing import Dict
 from typing import List
-from typing import Union
 from typing import Optional
 
 import threading
@@ -29,26 +28,28 @@ from kivy.uix.label         import Label
 from kivy.uix.button        import Button
 from kivy.uix.gridlayout    import GridLayout
 from kivy.metrics           import dp
+from kivy.clock             import ClockEvent
 
 from ORCA.utils.LogError    import LogError
 from ORCA.scripts.BaseScript import cBaseScript
 from ORCA.vars.Replace      import ReplaceVars
 from ORCA.vars.QueryDict    import TypedQueryDict
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 class cDiscoverScriptTemplate(cBaseScript):
     """ template class for discover scripts """
     def __init__(self):
         cBaseScript.__init__(self)
         self.dDevices:Dict[str,TypedQueryDict]  = {}
-        self.uType:str                          = u'DEVICE_DISCOVER'
+        self.uType:str                          = 'DEVICE_DISCOVER'
         self.iLineHeight:int                    = dp(35)
         self.oGrid:Optional[GridLayout]         = None
         self.iDivide:int                        = 1
         self.bFirstLine:bool                    = True
         self.aThreads:List[threading.Thread]    = []
-        self.ClockCheck:Optional[Clock.ClockEvent] = None
+        self.ClockCheck:Optional[ClockEvent]    = None
+        self.uScriptTitle:str                   = ''
 
 
     def RunScript(self, *args, **kwargs) -> Dict:
@@ -78,7 +79,7 @@ class cDiscoverScriptTemplate(cBaseScript):
             self.dDevices.clear()
             self.ListDiscover()
         except Exception as e:
-            LogError (uMsg="Template_Discover: Critical Error",oException=e)
+            LogError (uMsg='Template_Discover: Critical Error',oException=e)
 
         return self.dDevices
 
@@ -112,11 +113,12 @@ class cDiscoverScriptTemplate(cBaseScript):
         pass
 
     def SendEndNotification(self):
-        Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTENDED",**{"script":self,"scriptname":self.uObjectName,"scriptstatus":"$lvar(6040)"})
+        Globals.oNotifications.SendNotification(uNotification='DISCOVER_SCRIPTENDED', uDescription=f"from {self.uScriptTitle}", **{'script':self,'scriptname':self.uObjectName,'scriptstatus':'$lvar(6040)'})
 
     def SendStartNotification(self):
-        Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTSTARTED",**{"script":self,"scriptname":self.uObjectName,"scripttitle":self.uScriptTitle,"scriptstatus":"$lvar(6039)", "grid":self.oGrid})
+        Globals.oNotifications.SendNotification(uNotification='DISCOVER_SCRIPTSTARTED',uDescription=f"from {self.uScriptTitle}",**{'script':self,'scriptname':self.uObjectName,'scripttitle':self.uScriptTitle,'scriptstatus':'$lvar(6039)', 'grid':self.oGrid})
 
+    # noinspection PyUnusedLocal
     def CheckFinished(self,*largs):
         # just for those discover scripts, who works with threads
         bNotFinished=False

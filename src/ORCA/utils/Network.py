@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 import threading
 
+from typing                         import List
 from kivy.clock                     import Clock
 from kivy.logger                    import Logger
 from kivy.event                     import EventDispatcher
@@ -32,7 +33,7 @@ from ORCA.utils.wait.StartWait      import StartWait
 from ORCA.utils.wait.StopWait       import StopWait
 from ORCA.vars.Access               import ExistLVar
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cWaitForConnectivity','Ping']
 
@@ -46,16 +47,16 @@ def Ping(*,uHostname:str) ->bool:
 def IsOnline(*largs):
     """ checks, if the device is connected to the network """
     if not Globals.bConfigCheckForNetwork:
-        Logger.debug("Skipping wait for connecivity")
+        Logger.debug('Skipping wait for connecivity')
         Globals.oWaitForConnectivity.bIsOnline = True
-    elif Globals.uNetworkCheckType=="ping":
-        Logger.debug("Checking for network connectivity (ping)")
+    elif Globals.uNetworkCheckType=='ping':
+        Logger.debug('Checking for network connectivity (ping)')
         uPingAddress:str=Globals.uConfigCheckNetWorkAddress
-        if uPingAddress=="auto":
+        if uPingAddress=='auto':
             uPingAddress=Globals.uIPGateWayV4
-        Logger.debug("Pinging "+uPingAddress)
+        Logger.debug(f'Pinging {uPingAddress}')
         Globals.oWaitForConnectivity.bIsOnline = Ping(uHostname=uPingAddress)
-    elif Globals.uNetworkCheckType=="system":
+    elif Globals.uNetworkCheckType=='system':
         Globals.oWaitForConnectivity.bIsOnline = OS_SystemIsOnline()
     else:
         Globals.oWaitForConnectivity.bIsOnline = True
@@ -79,13 +80,13 @@ class cWaitForConnectivity(EventDispatcher):
         """ sub function to test, if online """
 
         if not Globals.bConfigCheckForNetwork:
-            Logger.debug("Skipping wait for connecivity")
+            Logger.debug('Skipping wait for connecivity')
             self.bIsOnline = True
-        elif Globals.uNetworkCheckType=="ping":
-            Logger.debug("Checking for network connectivity (ping)")
-            Logger.debug("Pinging "+Globals.uConfigCheckNetWorkAddress)
+        elif Globals.uNetworkCheckType=='ping':
+            Logger.debug('Checking for network connectivity (ping)')
+            Logger.debug('Pinging '+Globals.uConfigCheckNetWorkAddress)
             self.bIsOnline = Ping(uHostname=Globals.uConfigCheckNetWorkAddress)
-        elif Globals.uNetworkCheckType=="system":
+        elif Globals.uNetworkCheckType=='system':
             self.bIsOnline=OS_SystemIsOnline()
         else:
             self.bIsOnline = True
@@ -95,7 +96,7 @@ class cWaitForConnectivity(EventDispatcher):
     # noinspection PyUnusedLocal
     def on_onlinestatechecked(self, *largs)-> None:
         """ called, when the tsated has been checked """
-        Logger.debug("Checking for network connectivity online state checked")
+        Logger.debug('Checking for network connectivity online state checked')
         if not self.bIsWaiting:
             return
         if not self.bIsOnline:
@@ -107,7 +108,7 @@ class cWaitForConnectivity(EventDispatcher):
     # noinspection PyUnusedLocal
     def StartNextThread(self,*largs)-> None:
         """ Starts the next thread to check, if online """
-        #Logger.debug("Checking for network connectivity start thread")
+        #Logger.debug('Checking for network connectivity start thread')
         #fSleep(0.01)
         #Clock.schedule_once(IsOnline, 0)
         #return
@@ -115,12 +116,12 @@ class cWaitForConnectivity(EventDispatcher):
         if self.oThread is not None:
             self.oThread.join()
 
-        self.oThread = threading.Thread(target=IsOnline, name="WaitNetworkThread")
+        self.oThread = threading.Thread(target=IsOnline, name='WaitNetworkThread')
         self.oThread.start()
 
     def Wait(self)-> bool:
         """ Main entry point to wait """
-        Logger.debug("Checking for network connectivity")
+        Logger.debug('Checking for network connectivity')
         self.bIsWaiting    = True
         self.bCancel       = False
         StartWait()
@@ -128,11 +129,11 @@ class cWaitForConnectivity(EventDispatcher):
 
         bLangLoaded = ExistLVar('5012')
         if bLangLoaded:
-            uMessage    = u'$lvar(5012)'
+            uMessage    = '$lvar(5012)'
         else:
-            uMessage    = "Waiting for network connectivity"
+            uMessage    = 'Waiting for network connectivity'
 
-        self.oPopup=ShowQuestionPopUp(uTitle=u'$lvar(5010)',uMessage= uMessage,fktYes=self.CancelWaitForConnectivity,uStringYes=u'$lvar(5009)',uSound= u'message')
+        self.oPopup=ShowQuestionPopUp(uTitle='$lvar(5010)',uMessage= uMessage,fktYes=self.CancelWaitForConnectivity,uStringYes='$lvar(5009)',uSound= 'message')
         Clock.schedule_once(self.StartNextThread, 0)
         return False
 
@@ -165,8 +166,8 @@ def GetLocalIPV6()->Tuple:
 
     # Under construction
 
-    uMyIP:str       = u''
-    uMyGateway:str  = u'2a00:1450:4001:808::200e' # this is wrong (IPv6 Google, we leave it as long I have not found a way to detect it)
+    uMyIP:str       = ''
+    uMyGateway:str  = '2a00:1450:4001:808::200e' # this is wrong (IPv6 Google, we leave it as long I have not found a way to detect it)
 
     # Fast but not safe
     s:socket.socket = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
@@ -207,7 +208,7 @@ def GetLocalIPV4_FallBack() ->str:
         tAddress: Tuple
         try:
             oInSocket:socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            oInSocket.bind(("0.0.0.0", 18888))
+            oInSocket.bind(('0.0.0.0', 18888))
             oInSocket.setblocking(False)
             while True:
                 tResult:Tuple = select.select([oInSocket],[],[])
@@ -217,11 +218,11 @@ def GetLocalIPV4_FallBack() ->str:
                     break
             oInSocket.close()
         except Exception as exc:
-            LogError(uMsg=u'GetLocalIp:udp_listening_server:',oException=exc)
-            return u'127.0.0.0'
+            LogError(uMsg='GetLocalIp:udp_listening_server:',oException=exc)
+            return '127.0.0.0'
 
     try:
-        Logger.debug("Using Fallback to detect V4 IP Address")
+        Logger.debug('Using Fallback to detect V4 IP Address')
         aIP:List  = []
         oThread:threading.Thread = threading.Thread(target=udp_listening_server)
         oThread.aIP = aIP
@@ -230,7 +231,7 @@ def GetLocalIPV4_FallBack() ->str:
         oOutSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         i:int = 0
         while len(aIP)==0:
-            oOutSocket.sendto(b'ORCAIPREQUEST', ("255.255.255.255", 18888))
+            oOutSocket.sendto(b'ORCAIPREQUEST', ('255.255.255.255', 18888))
             fSleep(0.1)
             i+=1
             if i==10:
@@ -239,23 +240,23 @@ def GetLocalIPV4_FallBack() ->str:
         if len(aIP)>0:
             return aIP[0]
         else:
-            return u'127.0.0.0'
+            return '127.0.0.0'
     except Exception as e:
         LogError(uMsg='GetLocalIpV4:',oException=e)
-        return u'127.0.0.0'
+        return '127.0.0.0'
 
 
 def GetMACAddress()->Tuple:
     """ gets the mac adrress of the device """
-    uRetColon:str = u'00:00:00:00:00:00'
-    uRetDash:str  = u'00-00-00-00-00-00'
+    uRetColon:str = '00:00:00:00:00:00'
+    uRetDash:str  = '00-00-00-00-00-00'
 
     #todo: Temporary disabled due to LINUX issues
     # return uRetColon,uRetDash
 
     try:
-        uRetColon = u':'.join(re.findall('..', '%012x' % uuid.getnode()))
-        uRetDash  = u'-'.join(re.findall('..', '%012x' % uuid.getnode()))
+        uRetColon = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
+        uRetDash  = '-'.join(re.findall('..', '%012x' % uuid.getnode()))
     except Exception as e:
         LogError(uMsg='GetMACAdress:',oException=e)
     return uRetColon,uRetDash

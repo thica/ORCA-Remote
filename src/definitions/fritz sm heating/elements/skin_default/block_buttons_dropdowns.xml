@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elements>
+  <element name="Anchor Dropdown Inner" type="ANCHOR" >
+    <elements>
+      <element name ='DropDown Rooms'   type='DROPDOWN'  sorted='0' posy='top'  height="%50"  picturenormal='button wide*' caption="$lvar(fritz_sm_heating_10101):::$dvar(definition_alias_fritz_sm_heating)_groups_name[]"  actions='$dvar(definition_alias_fritz_sm_heating)_OnWidgetChangeRoom'  />
+      <element name ='DropDown Devices' type='DROPDOWN'  sorted='0' posy='of:bottom:last'  height="of:height:last"  picturenormal='button wide*' caption="$lvar(fritz_sm_heating_10102):::$dvar(definition_alias_fritz_sm_heating)_device_name[]"  actions='$dvar(definition_alias_fritz_sm_heating)_OnWidgetChangeDevice'  />
+    </elements>
+  </element>
+</elements>

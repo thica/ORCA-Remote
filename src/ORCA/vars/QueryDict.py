@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,14 +23,14 @@ from typing import Dict
 
 from kivy.logger            import Logger
 from ORCA.utils.LogError    import LogError
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.BaseSettings import cBaseSettings
+    from ORCA.settings.BaseSettings import cBaseSettings
 else:
     from typing import TypeVar
-    cBaseSettings = TypeVar("cBaseSettings")
+    cBaseSettings = TypeVar('cBaseSettings')
 
 
 __all__ = ['QueryDict','TypedQueryDict','cMonitoredSettings']
@@ -45,9 +45,9 @@ class QueryDict(dict):
         try:
             return self.__getitem__(attr)
         except KeyError:
-            if attr!="__name__":
-                LogError(uMsg=u'QueryDict: can''t find attribute:'+attr)
-            return u''
+            if attr!='__name__':
+                LogError(uMsg='QueryDict: can\'t find attribute:'+attr)
+            return ''
     def __setattr__(self, attr, value):
         self.__setitem__(attr, value)
 
@@ -65,13 +65,13 @@ class TypedQueryDict(QueryDict):
 
     def queryget(self,item:Any) -> Any:
         """
-        Returns the value an item, independent of its type prefix, This enable easier handling of ini files, where you usually will not use a type prefix
+        Returns the value an item, independent of its type prefix, This enables easier handling of ini files, where you usually will not use a type prefix
         :param item: The key of the item
         :return: The value or none
         """
         ret = dict.get(self,item)
         if ret is not None: return ret
-        for pre in "uifboad":
+        for pre in 'uifboad':
             ret = dict.get(self,pre+item)
             if ret is not None: return ret
         return None
@@ -86,31 +86,31 @@ class TypedQueryDict(QueryDict):
         key:str
         for key in self:
             if key.upper() in dCheck:
-                Logger.error("Duplicate Key with mismatch spelling:"+ key+" "+dCheck[key.upper()])
+                Logger.error('Duplicate Key with mismatch spelling:'+ key+' '+dCheck[key.upper()])
                 return
             dCheck[key.upper()]=key
 
         for key in self:
             if key[1:].upper() in dCheck:
-                Logger.error("Duplicate Key with mismatch type:"+ key+" "+dCheck[key.upper()])
+                Logger.error('Duplicate Key with mismatch type:' + key + ' ' + dCheck[key.upper()])
                 return
             dCheck[key[1:].upper()]=key
 
         for key in self:
-            if key[0] == "u" and not isinstance(self[key],str):
-                Logger.error("TypedQueryDict Wrong str type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
-            elif key[0] == "í" and not isinstance(self[key],int):
-                Logger.error("TypedQueryDict Wrong int type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
-            elif key[0] == "f" and not isinstance(self[key],float):
-                Logger.error("TypedQueryDict Wrong float type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
-            elif key[0] == "b" and not isinstance(self[key],bool):
-                Logger.error("TypedQueryDict Wrong bool type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
-            elif key[0] == "a" and not isinstance(self[key],list):
-                Logger.error("TypedQueryDict Wrong list type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
-            elif key[0] == "d" and not isinstance(self[key],dict):
-                Logger.error("TypedQueryDict Wrong dict type:" + key + " " + str(self[key]) + " " + str(type(self[key])))
+            if key[0] == 'u' and not isinstance(self[key],str):
+                Logger.error('TypedQueryDict Wrong str type:' + key + ' ' + str(self[key]) + ' ' + str(type(self[key])))
+            elif key[0] == 'í' and not isinstance(self[key],int):
+                Logger.error('TypedQueryDict Wrong int type:' + key + ' ' + str(self[key]) + ' ' + str(type(self[key])))
+            elif key[0] == 'f' and not isinstance(self[key],float):
+                Logger.error('TypedQueryDict Wrong float type:' + key + ' ' + str(self[key]) + ' ' + str(type(self[key])))
+            elif key[0] == 'b' and not isinstance(self[key],bool):
+                Logger.error('TypedQueryDict Wrong bool type:' + key + ' ' + str(self[key]) + ' ' + str(type(self[key])))
+            elif key[0] == 'a' and not isinstance(self[key],list):
+                Logger.error('TypedQueryDict Wrong list type:' + key + ' ' + str(self[key]) + ' ' + str(type(self[key])))
+            elif key[0] == 'd' and not isinstance(self[key],dict):
+                Logger.error('TypedQueryDict Wrong dict type:' + key + ' ' + str(self[key]) + ' ' + str(type(self[key])))
             elif key[0].islower() and not key[1].isupper():
-                Logger.error("TypedQueryDict Wrong key name (not lower/Uppercase) " + key)
+                Logger.error('TypedQueryDict Wrong key name (not lower/Uppercase) ' + key)
 
 class cMonitoredSettings(TypedQueryDict):
     """
@@ -131,7 +131,7 @@ class cMonitoredSettings(TypedQueryDict):
         :param uName: The key name
         :param vValue: The value
         """
-        Logger.error("cMonitoredSettings: Overload for WriteVar is missing")
+        Logger.error('cMonitoredSettings: Overload for WriteVar is missing')
         pass
 
     def __setitem__(self, k, v):
@@ -168,6 +168,6 @@ def NormalizeName(uName:str,vValue:Any) ->str:
         elif isinstance(vValue,object):
             uPre = 'o'
         else:
-            Logger.error("Unknown Type for cMonitoredSettings:"+uName)
+            Logger.error('Unknown Type for cMonitoredSettings:'+uName)
 
     return str(uPre+uName)

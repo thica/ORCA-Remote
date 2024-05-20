@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,16 +23,16 @@ from xml.etree.ElementTree          import Element
 from kivy.uix.widget                import Widget
 from ORCA.widgets.Rectangle         import cWidgetRectangle
 from ORCA.widgets.Picture           import cWidgetPicture
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage = TypeVar("cScreenPage")
+    cScreenPage = TypeVar('cScreenPage')
 
 
 __all__ = ['cWidgetBackGround']
@@ -86,13 +86,13 @@ class cWidgetBackGround(cWidgetPicture,cWidgetRectangle):
         super().__init__(**kwargs)
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage,uAnchor:str='') -> bool:
-        bRet1:bool      = cWidgetPicture.InitWidgetFromXml(self,oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=u'')
-        bRet2:bool      = cWidgetRectangle.InitWidgetFromXml(self,oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=u'')
+        bRet1:bool      = cWidgetPicture.InitWidgetFromXml(self,oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor='')
+        bRet2:bool      = cWidgetRectangle.InitWidgetFromXml(self,oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor='')
         self.iPosX      = 0
         self.iPosY      = 0
         self.iHeight    = int(Globals.iAppHeight * self.oDef.fRationY)
         self.iWidth     = int(Globals.iAppWidth * self.oDef.fRationX)
-        self.uName      = u'Background'
+        self.uName      = 'Background'
 
         if bRet1 and bRet2:
             return True

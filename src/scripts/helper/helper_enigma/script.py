@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -32,6 +32,7 @@ from datetime                               import datetime
 from datetime                               import timezone
 import urllib
 from xml.etree.ElementTree                  import Element
+from urllib.parse import quote
 
 from ORCA.scripts.BaseScript                import cBaseScript
 from ORCA.vars.Access                       import GetVar
@@ -44,7 +45,7 @@ from ORCA.utils.FileName                    import cFileName
 from ORCA.utils.XML                         import GetXMLTextValue
 from ORCA.utils.XML                         import LoadXMLString
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -52,8 +53,8 @@ if TYPE_CHECKING:
     from ORCA.interfaces.BaseInterfaceSettings import cBaseInterFaceSettings
 else:
     from typing import TypeVar
-    cBaseInterFace          = TypeVar("cBaseInterFace")
-    cBaseInterFaceSettings  = TypeVar("cBaseInterFaceSettings")
+    cBaseInterFace          = TypeVar('cBaseInterFace')
+    cBaseInterFaceSettings  = TypeVar('cBaseInterFaceSettings')
 
 typeReference       = Dict[str,str]
 typeReferences      = Dict[str,typeReference]
@@ -82,8 +83,8 @@ typeServices       = Dict[str,typeServiceList]
       <description language='English'>Enigma Helper Script (for DVB Receiver)</description>
       <description language='German'>Enigma Hilfs - Skript (Für DVB Receiver)</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -151,8 +152,8 @@ class cScript(cBaseScript):
 
     def __init__(self):
         super().__init__()
-        self.uType:str                  = u'HELPERS'
-        self.uIniFileLocation:str       = u'none'
+        self.uType:str                  = 'HELPERS'
+        self.uIniFileLocation:str       = 'none'
         self.dServices                  = {}
         self.dMovies:typeMovieList      = {}
 
@@ -166,19 +167,19 @@ class cScript(cBaseScript):
         try:
             if 'cmd_type' in kwargs:
                 uCmdType = kwargs['cmd_type']
-                if uCmdType == u'parse_services':
+                if uCmdType == 'parse_services':
                     return self.ParseServices(**kwargs)
-                if uCmdType == u'parse_movielist':
+                if uCmdType == 'parse_movielist':
                     return self.ParseMovieList(**kwargs)
-                if uCmdType == u'get_channelreference':
+                if uCmdType == 'get_channelreference':
                     self.GetChannelReference(**kwargs)
                     return None
-                if uCmdType == u'assign_channels':
+                if uCmdType == 'assign_channels':
                     self.AssignChannels(**kwargs)
                     return None
             return None
         except Exception as e:
-            self.ShowError(uMsg="Can''t run Enigma Helper script, invalid parameter",uParConfigName=self.uConfigName,oException=e)
+            self.ShowError(uMsg='Can\'t run Enigma Helper script, invalid parameter',uParConfigName=self.uConfigName,oException=e)
             return {"ret":1}
 
     def AssignChannels(self, **kwargs) -> None:
@@ -209,37 +210,37 @@ class cScript(cBaseScript):
             dChannels:Dict[int,Dict]
 
             dServices:Dict[str,Union[Dict,List]] = self.dServices.get(uContext,{})
-            aBouquets:typeBouquetsList = dServices.get("Bouquets",[])
+            aBouquets:typeBouquetsList = dServices.get('Bouquets',[])
 
-            if uLogoPackFolderName==u'':
+            if uLogoPackFolderName=='':
                 uLogoPackFolderName=self.GetLogoPack()
 
             for dBouquetDetail in aBouquets:
-                iBouquetNumber = dBouquetDetail["BouquetNum"]
+                iBouquetNumber = dBouquetDetail['BouquetNum']
                 if iBouquetNumber <=iMaxBouquets:
-                    uBouquetName   = dBouquetDetail["Name"]
-                    uVarName = uAlias + "_bouquet_name["+str(iBouquetNumber)+"]"
+                    uBouquetName   = dBouquetDetail['Name']
+                    uVarName = uAlias + '_bouquet_name['+str(iBouquetNumber)+']'
                     uVarValue = uBouquetName
                     Globals.oDefinitionConfigParser.set(uSection, uVarName, EscapeUnicode(uVarValue))
                     SetVar(uVarName=uVarName, oVarValue=uVarValue)
-                    dChannels = dBouquetDetail.get("Channels",{})
+                    dChannels = dBouquetDetail.get('Channels',{})
                     for iBouquetChannelNum in dChannels:
                         if iBouquetChannelNum<=iMaxChannelsPerBouquets:
                             dChannel = dChannels[iBouquetChannelNum]
-                            uVarName = uAlias+"%s[%d][%d]" % ("_tvlogo",iBouquetNumber,iBouquetChannelNum)
-                            if Globals.oDefinitionConfigParser.get(uSection, uVarName) == "discover" or bForce:
-                                uVarValue = self.FindChannelLogo(uChannelName=dChannel["ChannelName"],uReference=dChannel["Reference"],uLogoPackFolderName=uLogoPackFolderName)
+                            uVarName = uAlias+'%s[%d][%d]' % ('_tvlogo',iBouquetNumber,iBouquetChannelNum)
+                            if Globals.oDefinitionConfigParser.get(uSection, uVarName) == 'discover' or bForce:
+                                uVarValue = self.FindChannelLogo(uChannelName=dChannel['ChannelName'],uReference=dChannel['Reference'],uLogoPackFolderName=uLogoPackFolderName)
                                 Globals.oDefinitionConfigParser.set(uSection, uVarName, EscapeUnicode(uVarValue))
                                 SetVar(uVarName=uVarName, oVarValue=uVarValue)
-                                uVarName = uAlias+"%s[%d][%d]" % ("_tvchannel",iBouquetNumber,iBouquetChannelNum)
-                                uVarValue = str(dChannel["ChannelNum"])
+                                uVarName = uAlias+'%s[%d][%d]' % ('_tvchannel',iBouquetNumber,iBouquetChannelNum)
+                                uVarValue = str(dChannel['ChannelNum'])
                                 Globals.oDefinitionConfigParser.set(uSection, uVarName, uVarValue)
                                 SetVar(uVarName=uVarName, oVarValue=uVarValue)
             Globals.oDefinitionConfigParser.write()
             return None
 
         except Exception as e:
-            self.ShowError(uMsg="Can''t assign channel numbers", uParConfigName=self.uConfigName,oException=e)
+            self.ShowError(uMsg='Can\'t assign channel numbers', uParConfigName=self.uConfigName,oException=e)
             return None
 
     def GetLogoPack(self) -> str:
@@ -251,8 +252,8 @@ class cScript(cBaseScript):
         if Globals.aLogoPackFolderNames:
             return Globals.aLogoPackFolderNames[0]
         else:
-            self.ShowError(uMsg="Script TV-Logos: No TV Logos available")
-            return ""
+            self.ShowError(uMsg='Script TV-Logos: No TV Logos available')
+            return ''
 
 
     def GetChannelReference(self, **kwargs) -> None:
@@ -262,8 +263,8 @@ class cScript(cBaseScript):
         :param kwargs: argument dic, need to have retvar, channelnum, interface, configname
         """
 
-        uContext:str    = u''
-        uChannelNum:str = u''
+        uContext:str    = ''
+        uChannelNum:str = ''
         uDstVarName:str
         uInterfaceName:str
         uConfigName:str
@@ -279,18 +280,18 @@ class cScript(cBaseScript):
             oSetting        = oInterFace.GetSettingObjectForConfigName(uConfigName=uConfigName)
             uContext        = oSetting.uContext
             uChannelNum     = ReplaceVars(uOrgIn=uChannelNum,uContext=uContext)
-            uReference      = self.dServices[uContext]["Channels"][int(uChannelNum)]["Reference"]
+            uReference      = quote(self.dServices[uContext]['Channels'][int(uChannelNum)]['Reference'])
             SetVar(uVarName=uDstVarName , uContext=uContext, oVarValue=uReference)
             return None
         except Exception as e:
-            self.ShowError(uMsg="Can''t find channelreference:"+uChannelNum+" context:"+uContext, uParConfigName=self.uConfigName, oException=e)
+            self.ShowError(uMsg='Can\'t find channelreference: %s, context %s ' % (uChannelNum,uContext), uParConfigName=self.uConfigName, oException=e)
             if not uContext in self.dServices:
-                self.ShowError(uMsg="Context not found, available context:")
+                self.ShowError(uMsg='Context not found, available context:')
                 for uKey in self.dServices:
                     self.ShowError(uMsg=uKey)
             else:
-                self.ShowError(uMsg="Channel not found, available channels:")
-                for iChannelNum in self.dServices[uContext]["Channels"]:
+                self.ShowError(uMsg='Channel not found, available channels:')
+                for iChannelNum in self.dServices[uContext]['Channels']:
                     self.ShowError(uMsg=str(iChannelNum))
             return None
 
@@ -311,10 +312,10 @@ class cScript(cBaseScript):
             uContext:str                    = oSetting.uContext
             oXmlBouquet:Element
 
-            self.ShowInfo(uMsg="Parsing Services into "+uContext)
+            self.ShowInfo(uMsg='Parsing Services into '+uContext)
 
             if self.dServices.get(uContext) is not None:
-                return {"ret":1}
+                return {'ret':1}
 
             uXmlContent:str = GetVar(uResultVar)
             uXmlContent = EscapeUnicode(uXmlContent)
@@ -338,35 +339,35 @@ class cScript(cBaseScript):
                         dBouquetDetails:typeBouquetDetails     = {}    # Element to decribe a single bouquet (number , name, containing channels)
                         dBouquetChannels:typeBouquetChannels   = {}    # Dict of all channels in a single bouquet, index is Bouquechannelnum
                         iBouquetChannelNum = 0
-                        uBouquetName = GetXMLTextValue(oXMLNode=oXmlBouquet,uTag="e2servicename",bMandatory=False,vDefault="NoName"+str(iBouquetNum))
+                        uBouquetName = GetXMLTextValue(oXMLNode=oXmlBouquet,uTag='e2servicename',bMandatory=False,vDefault='NoName'+str(iBouquetNum))
                         iBouquetNum+=1
-                        oXmlServices = cast(Element,oXmlBouquet.find("e2servicelist"))
+                        oXmlServices = cast(Element,oXmlBouquet.find('e2servicelist'))
                         for oXmlServiceDetails in oXmlServices:
                             dSingleChannel:typeSingleChannel  = {}   # details of a channel
                             iChannelNum             += 1   # absolute channel num within all bouquets
                             iBouquetChannelNum      += 1   # relative channel num in bouquet
-                            uReference   = GetXMLTextValue(oXMLNode=oXmlServiceDetails, uTag="e2servicereference" , bMandatory=True,  vDefault="NoName")
-                            uChannelName = GetXMLTextValue(oXMLNode=oXmlServiceDetails, uTag="e2servicename",       bMandatory=False, vDefault="NoName"+str(iChannelNum))
-                            dSingleChannel["ChannelName"]        = uChannelName
-                            dSingleChannel["Reference"]          = uReference
-                            dSingleChannel["ChannelNum"]         = iChannelNum
-                            dSingleChannel["BouquetChannelNum"]  = iBouquetChannelNum
+                            uReference   = GetXMLTextValue(oXMLNode=oXmlServiceDetails, uTag='e2servicereference' , bMandatory=True,  vDefault='NoName')
+                            uChannelName = GetXMLTextValue(oXMLNode=oXmlServiceDetails, uTag='e2servicename',       bMandatory=False, vDefault='NoName'+str(iChannelNum))
+                            dSingleChannel['ChannelName']        = uChannelName
+                            dSingleChannel['Reference']          = uReference
+                            dSingleChannel['ChannelNum']         = iChannelNum
+                            dSingleChannel['BouquetChannelNum']  = iBouquetChannelNum
                             dBouquetChannels[iBouquetChannelNum] = dSingleChannel
                             dChannels[iChannelNum]               = dSingleChannel
-                            # SetVar(uVarName=uDstVarName+"_channelservice["+str(iChannelNum)+"]",uContext=uContext,oVarValue=str(iChannelNum))
-                        dBouquetDetails["Channels"]   = dBouquetChannels
-                        dBouquetDetails["Name"]       = uBouquetName
-                        dBouquetDetails["BouquetNum"] = iBouquetNum
+                            # SetVar(uVarName=uDstVarName+'_channelservice['+str(iChannelNum)+']',uContext=uContext,oVarValue=str(iChannelNum))
+                        dBouquetDetails['Channels']   = dBouquetChannels
+                        dBouquetDetails['Name']       = uBouquetName
+                        dBouquetDetails['BouquetNum'] = iBouquetNum
                         aBouquets.append(dBouquetDetails)
 
                 self.dServices[uContext] = {}
-                self.dServices[uContext]["Bouquets"]=aBouquets
-                self.dServices[uContext]["Channels"]=dChannels
-                return {"ret":1}
+                self.dServices[uContext]['Bouquets']=aBouquets
+                self.dServices[uContext]['Channels']=dChannels
+                return {'ret':1}
             else:
-                self.ShowError(uMsg="No Services Data in Source Var:"+uResultVar)
+                self.ShowError(uMsg='No Services Data in Source Var:'+uResultVar)
         except Exception as e:
-            self.ShowError(uMsg="Can''t parse services, invalid xml", uParConfigName=self.uConfigName, oException=e)
+            self.ShowError(uMsg='Can\'t parse services, invalid xml', uParConfigName=self.uConfigName, oException=e)
         return {"ret":0}
 
     # noinspection PyUnresolvedReferences
@@ -390,7 +391,7 @@ class cScript(cBaseScript):
             iMovieNum:int
             uMovieReference:str
 
-            self.ShowInfo(uMsg="Parsing movies into "+uContext)
+            self.ShowInfo(uMsg='Parsing movies into '+uContext)
 
             # cache disabled
             # if self.dMovies.get(uContext) is not None:
@@ -405,62 +406,62 @@ class cScript(cBaseScript):
                 self.dMovies[uContext]   = {}
                 dMovies:typeMovies       = {}
 
-                Var_DelArray("%s_%s[]" % (uReturnVar,'reference'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'title'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'description'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'descriptionex'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'servicename'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'url_reference'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'time'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'date'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'date_time'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'length'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'filename'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'url_filename'))
-                Var_DelArray("%s_%s[]" % (uReturnVar,'index'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'reference'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'title'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'description'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'descriptionex'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'servicename'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'url_reference'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'time'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'date'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'date_time'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'length'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'filename'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'url_filename'))
+                Var_DelArray('%s_%s[]' % (uReturnVar,'index'))
 
                 for oXmlMovie in oXmlMovies:
                     if oXmlMovie.tag=='e2movie': # we might get services as well
                         dMovieDetails:typeMoviedetails  = {}  # Element to describe a single movie (number , name, containing channels)
                         iMovieNum                       += 1   # absolute channel num within all bouquets
-                        uMovieReference                 = GetXMLTextValue(oXMLNode=oXmlMovie, uTag="e2servicereference", bMandatory=True, vDefault="N/A")
-                        dMovieDetails["reference"]      = uMovieReference
+                        uMovieReference                 = GetXMLTextValue(oXMLNode=oXmlMovie, uTag='e2servicereference', bMandatory=True, vDefault='N/A')
+                        dMovieDetails['reference']      = uMovieReference
                         # noinspection Mypy
-                        dMovieDetails["url_reference"]  = urllib.parse.quote(uMovieReference)
-                        dMovieDetails["title"]          = GetXMLTextValue(oXMLNode=oXmlMovie, uTag="e2title", bMandatory=False, vDefault="No Title")
-                        dMovieDetails["description"]    = GetXMLTextValue(oXMLNode=oXmlMovie, uTag="e2description", bMandatory=False, vDefault="")
-                        dMovieDetails["descriptionex"]  = GetXMLTextValue(oXMLNode=oXmlMovie, uTag="e2descriptionextended", bMandatory=False, vDefault="")
-                        dMovieDetails["servicename"]    = GetXMLTextValue(oXMLNode=oXmlMovie, uTag="e2servicename", bMandatory=False, vDefault="")
-                        dMovieDetails["time"]           = GetXMLTextValue(oXMLNode=oXmlMovie, uTag="e2time", bMandatory=False, vDefault="")
-                        dMovieDetails["length"]         = GetXMLTextValue(oXMLNode=oXmlMovie, uTag="e2length", bMandatory=False, vDefault="0:00")
-                        dMovieDetails["filename"]       = GetXMLTextValue(oXMLNode=oXmlMovie, uTag="e2filename", bMandatory=False, vDefault="")
+                        dMovieDetails['url_reference']  = urllib.parse.quote(uMovieReference)
+                        dMovieDetails['title']          = GetXMLTextValue(oXMLNode=oXmlMovie, uTag='e2title', bMandatory=False, vDefault='No Title')
+                        dMovieDetails['description']    = GetXMLTextValue(oXMLNode=oXmlMovie, uTag='e2description', bMandatory=False, vDefault='')
+                        dMovieDetails['descriptionex']  = GetXMLTextValue(oXMLNode=oXmlMovie, uTag='e2descriptionextended', bMandatory=False, vDefault='')
+                        dMovieDetails['servicename']    = GetXMLTextValue(oXMLNode=oXmlMovie, uTag='e2servicename', bMandatory=False, vDefault='')
+                        dMovieDetails['time']           = GetXMLTextValue(oXMLNode=oXmlMovie, uTag='e2time', bMandatory=False, vDefault='')
+                        dMovieDetails['length']         = GetXMLTextValue(oXMLNode=oXmlMovie, uTag='e2length', bMandatory=False, vDefault='0:00')
+                        dMovieDetails['filename']       = GetXMLTextValue(oXMLNode=oXmlMovie, uTag='e2filename', bMandatory=False, vDefault='')
                         # noinspection Mypy
-                        dMovieDetails["url_filename"]   = urllib.parse.quote(dMovieDetails["filename"])
-                        dMovieDetails["index"]          = ("000"+str(iMovieNum))[-3]
+                        dMovieDetails['url_filename']   = urllib.parse.quote(dMovieDetails['filename'])
+                        dMovieDetails['index']          = ('000'+str(iMovieNum))[-3]
 
-                        iTime:int                       = ToInt(dMovieDetails["time"])
+                        iTime:int                       = ToInt(dMovieDetails['time'])
                         oTime:struct_time               = datetime.fromtimestamp(iTime, timezone.utc).timetuple()
                         sTime:str                       = Globals.oLanguage.GetLocalizedTime(bWithSeconds=False, oTime=oTime)
                         sDate:str                       = Globals.oLanguage.GetLocalizedDate(bLongDate=False,bLongDay=False,bLongMonth=False, oTime=oTime)
 
-                        dMovieDetails["time"]           = sTime
-                        dMovieDetails["date"]           = sDate
-                        dMovieDetails["date_time"]      = sDate+" "+sTime
+                        dMovieDetails['time']           = sTime
+                        dMovieDetails['date']           = sDate
+                        dMovieDetails['date_time']      = sDate+' '+sTime
 
                         for uKey in dMovieDetails:
-                            uTag = "%s_%s[%s]" % (uReturnVar,uKey,iMovieNum)
+                            uTag = '%s_%s[%s]' % (uReturnVar,uKey,iMovieNum)
                             SetVar(uTag,dMovieDetails[uKey] )
-                            self.ShowDebug(uMsg="Got MovieDetail:"+uTag+":"+dMovieDetails[uKey])
+                            self.ShowDebug(uMsg='Got MovieDetail:'+uTag+':'+dMovieDetails[uKey])
 
                         dMovies[uMovieReference]    = dMovieDetails
 
                 self.dMovies[uContext] = dMovies
-                return {"ret":1}
+                return {'ret':1}
             else:
-                self.ShowError(uMsg="No Movies Data in Source Var:"+uResultVar)
+                self.ShowError(uMsg='No Movies Data in Source Var:'+uResultVar)
         except Exception as e:
-            self.ShowError(uMsg="Can''t parse movies, invalid xml", uParConfigName=self.uConfigName, oException=e)
-        return {"ret":0}
+            self.ShowError(uMsg='Can\'t parse movies, invalid xml', uParConfigName=self.uConfigName, oException=e)
+        return {'ret':0}
 
     def FindChannelLogo(self,*,uChannelName:str, uReference:str, uLogoPackFolderName:str) -> str:
         """
@@ -474,12 +475,12 @@ class cScript(cBaseScript):
 
         dRet:Dict
 
-        if uLogoPackFolderName==u'':
+        if uLogoPackFolderName=='':
             uLogoPackFolderName=self.GetLogoPack()
 
-        kwargs = {"cmd_type": "get_tvlogofile","channelname":uChannelName,"reference":uReference,"logopackfoldername":uLogoPackFolderName }
-        dRet=Globals.oScripts.RunScript("helper_gettvlogo",**kwargs)
-        return dRet.get("filename","")
+        kwargs = {'cmd_type': 'get_tvlogofile','channelname':uChannelName,'reference':uReference,'logopackfoldername':uLogoPackFolderName }
+        dRet=Globals.oScripts.RunScript('helper_gettvlogo',**kwargs)
+        return dRet.get('filename','')
 
 
 '''
@@ -501,6 +502,24 @@ class cScript(cBaseScript):
     </e2filename>
     <e2filesize>1397197200</e2filesize>
 </e2movie>
+'''
+
+'''
+        <e2bouquet>
+            <e2servicereference>1:7:1:0:0:0:0:0:0:0:FROM BOUQUET "userbouquet.dbe00.tv" ORDER BY bouquet</e2servicereference>
+            <e2servicename>Unitymedia SD</e2servicename>
+            <e2servicelist>
+            <e2service>
+                <e2servicereference>1:0:19:2B5C:41B:A401:FFFF0000:0:0:0:</e2servicereference>
+                <e2servicename>Das Erste HD</e2servicename>
+            </e2service>
+            
+            <e2service>
+                <e2servicereference>4097:0:1:0:0:0:0:0:0:0:http%3a//unencoded URL</e2servicereference>
+                <e2servicename>Stream Service Name</e2servicename>
+            </e2service>
+
+    
 '''
 
 

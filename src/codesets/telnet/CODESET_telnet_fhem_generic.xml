@@ -10,8 +10,8 @@
       <description language='English'>Command set to send generic Commands to FHEM using telnet</description>
       <description language='German'>Befehlssatz für allgemeine Befehle an FHEM über Telnet</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/telnet/CODESET_telnet_fhem_generic.xml</local>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ from typing                                  import Tuple
 from kivy.logger                             import Logger
 from kivy.clock                              import Clock
 
-from ORCA.BaseObject                         import cBaseObject
+from ORCA.settings.BaseObject import cBaseObject
 from ORCA.interfaces.BaseInterfaceSettings   import cBaseInterFaceSettings
 from ORCA.interfaces.InterfaceResultParser   import cInterFaceResultParser
 from ORCA.interfaces.InterfaceConfig         import cInterFaceConfig
@@ -37,10 +37,10 @@ from ORCA.utils.Path                         import cPath
 from ORCA.utils.TypeConvert                  import ToDic
 from ORCA.vars.Replace                       import ReplaceVars
 from ORCA.vars.Access                        import SetVar
-from ORCA.Action                             import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.ReturnCode                 import eReturnCode
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cBaseInterFace']
 
@@ -58,7 +58,7 @@ class cBaseInterFace(cBaseObject):
 
         self.oObjectConfig:Optional[cInterFaceConfig]                    = None
         self.oObjectConfigDiscover:Optional[cInterFaceConfigDiscover]    = None
-        self.uObjectType:str                                             = "interface"
+        self.uObjectType:str                                             = 'interface'
 
         self.aDiscoverScriptsBlackList:List[str]                         = []
         self.aDiscoverScriptsWhiteList:List[str]                         = []
@@ -86,14 +86,14 @@ class cBaseInterFace(cBaseObject):
         :param cAction oAction:
         :return: 0 if successful, 1 one exception error, -10 if codeset not found
         """
-        uConfigName:str                     = oAction.dActionPars.get(u'configname',u'')
+        uConfigName:str                     = oAction.dActionPars.get('configname','')
         oSetting:cBaseInterFaceSettings     = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        uCmdName:str                        = ReplaceVars(oAction.dActionPars.get('commandname',""))
+        uCmdName:str                        = ReplaceVars(oAction.dActionPars.get('commandname',''))
         uCmdNameLocal:str                   = oSetting.MakeLocalActionName(uActionName=uCmdName)
         aActions:List[cAction]              = Globals.oActions.GetActionList(uActionName = uCmdNameLocal, bNoCopy = False)
 
         if aActions is None:
-            self.ShowError(uMsg="Action not found:"+uCmdName,uParConfigName=uConfigName,uParAdd=oSetting.aIniSettings.uFNCodeset)
+            self.ShowError(uMsg='Action not found:'+uCmdName,uParConfigName=uConfigName,uParAdd=oSetting.aIniSettings.uFNCodeset)
             return eReturnCode.NotFound
 
         for uKey in oAction.dCommandParameter:
@@ -102,17 +102,17 @@ class cBaseInterFace(cBaseObject):
 
         aExecActions:List[cAction] = []
 
-        uCmd:str = u''
+        uCmd:str = ''
 
         try:
             for oTmpAction in aActions:
                 uCmd=oTmpAction.uCmd
                 if uCmd.startswith('{"REPEAT":'):
                     dRepeatCmds:Dict[str,Dict]    = ToDic(uCmd)
-                    uRepeatCmd:str     = dRepeatCmds["REPEAT"]["REPEATCMD"]
-                    uRepeatVarName:str = dRepeatCmds["REPEAT"]["REPEATVAR"]
-                    uRepeatVar:str     = ReplaceVars(uRepeatVarName,self.uObjectName+u'/'+oSetting.uConfigName)
-                    if uRepeatVar == "":
+                    uRepeatCmd:str     = dRepeatCmds['REPEAT']['REPEATCMD']
+                    uRepeatVarName:str = dRepeatCmds['REPEAT']['REPEATVAR']
+                    uRepeatVar:str     = ReplaceVars(uRepeatVarName,self.uObjectName+'/'+oSetting.uConfigName)
+                    if uRepeatVar == '':
                         uRepeatVar = ReplaceVars(uRepeatVarName)
                     iLen:int = len(uRepeatVar)
                     for i in range(iLen):
@@ -125,7 +125,7 @@ class cBaseInterFace(cBaseObject):
                                     oRepeatAction.dActionPars['nologout']='1'
                                 aExecActions.append(oRepeatAction)
                         else:
-                            Logger.error(u'Error Parsing/Sending Repeats, RepeatCommand not found %s' % uKey2)
+                            Logger.error(f'Error Parsing/Sending Repeats, RepeatCommand not found {uKey2}')
 
                     oTmpAction1:cAction
                     for oTmpAction1 in reversed(aExecActions):
@@ -138,10 +138,10 @@ class cBaseInterFace(cBaseObject):
                     aExecActions.append(oTmpAction)
 
         except Exception as e:
-            self.ShowError(uMsg= u'Error Parsing/Sending Repeats %s' % uCmd,uParConfigName= "",oException=e)
+            self.ShowError(uMsg=f'Error Parsing/Sending Repeats {uCmd}', uParConfigName='', oException=e)
             return eReturnCode.Error
 
-        Globals.oEvents.ExecuteActionsNewQueue(aExecActions, oAction.oParentWidget)
+        Globals.oEvents.ExecuteActionsNewQueue(aExecActions, oAction.oParentWidget,uQueueName="interface_doaction")
         return eReturnCode.Success
 
     def SendCommand(self,*,oAction:cAction,oSetting:cBaseInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
@@ -156,6 +156,12 @@ class cBaseInterFace(cBaseObject):
         """
         oSetting.oAction     = oAction
         oSetting.oLastAction = oAction
+
+        oSetting.SetContextVar(uVarName='codeset_interfacename', uVarValue=self.uObjectName)
+        oSetting.SetContextVar(uVarName='codeset_configname', uVarValue=oSetting.uConfigName)
+        SetVar(uVarName='codeset_interfacename', oVarValue=self.uObjectName)
+        SetVar(uVarName='codeset_configname', oVarValue=oSetting.uConfigName)
+
         return eReturnCode.Success
 
     def AddTrigger(self,oAction:cAction) -> None:
@@ -165,13 +171,13 @@ class cBaseInterFace(cBaseObject):
         :param cAction oAction: The Action object to set a trigger
         """
 
-        uTrigger:str    = ReplaceVars(oAction.dActionPars.get("triggername",""))
-        uAction:str     = ReplaceVars(oAction.dActionPars.get("actionname",""))
-        uRetVar:str     = oAction.dActionPars.get("retvar","")
-        uGetVar:str     = oAction.dActionPars.get("getvar","")
-        uConfigName:str = ReplaceVars(oAction.dActionPars.get("configname",""))
+        uTrigger:str    = ReplaceVars(oAction.dActionPars.get('triggername',''))
+        uAction:str     = ReplaceVars(oAction.dActionPars.get('actionname',''))
+        uRetVar:str     = oAction.dActionPars.get('retvar','')
+        uGetVar:str     = oAction.dActionPars.get('getvar','')
+        uConfigName:str = ReplaceVars(oAction.dActionPars.get('configname',''))
 
-        self.ShowDebug(uMsg=u'Adding Trigger:'+uTrigger,uParConfigName=uConfigName)
+        self.ShowDebug(uMsg='Adding Trigger:'+uTrigger,uParConfigName=uConfigName)
         oSetting=self.GetSettingObjectForConfigName(uConfigName=uConfigName)
         oSetting.AddTrigger(uTrigger,uAction,uRetVar,uGetVar)
 
@@ -182,11 +188,11 @@ class cBaseInterFace(cBaseObject):
         :param cAction oAction: The Action object to set a trigger
         """
 
-        uTrigger:str    = ReplaceVars(oAction.dActionPars.get("triggername",""))
-        uActionName:str = ReplaceVars(oAction.dActionPars.get("actionname",""))
-        uConfigName:str = ReplaceVars(oAction.dActionPars.get("configname",""))
+        uTrigger:str    = ReplaceVars(oAction.dActionPars.get('triggername',''))
+        uActionName:str = ReplaceVars(oAction.dActionPars.get('actionname',''))
+        uConfigName:str = ReplaceVars(oAction.dActionPars.get('configname',''))
 
-        self.ShowDebug(uMsg=u'Delete Trigger:'+uTrigger,uParConfigName=uConfigName)
+        self.ShowDebug(uMsg='Delete Trigger:'+uTrigger,uParConfigName=uConfigName)
         oSetting=self.GetSettingObjectForConfigName(uConfigName=uConfigName)
         oSetting.DelTrigger(uTrigger=uTrigger,uActionName=uActionName)
 
@@ -195,7 +201,7 @@ class cBaseInterFace(cBaseObject):
         entry for the onpause event
 
         """
-        self.ShowInfo(uMsg=u'OnPause')
+        self.ShowInfo(uMsg='OnPause')
 
         uSettingName:str
 
@@ -211,7 +217,7 @@ class cBaseInterFace(cBaseObject):
         entry for the onresume event
 
         """
-        self.ShowInfo(uMsg=u'OnResume')
+        self.ShowInfo(uMsg='OnResume')
 
         uSettingName:str
 
@@ -264,7 +270,7 @@ class cBaseInterFace(cBaseObject):
             oSetting.oResultParser.uGlobalParseResultOption = oSetting.aIniSettings.uParseResultOption
             oSetting.oResultParser.uGlobalTokenizeString    = oSetting.aIniSettings.uParseResultTokenizeString
             if oAction is None:
-                return "",""
+                return '',''
         return oSetting.oResultParser.ParseResult(oAction,uResponse,oSetting)
 
     def GetConfigCodesetList(self) -> List[str]:
@@ -274,7 +280,7 @@ class cBaseInterFace(cBaseObject):
         :return: A list of all codeset files for an interface
         """
         aCodesetFiles:List[str] = []
-        uPattern:str            = u"CODESET_"+self.uObjectName
+        uPattern:str            = 'CODESET_'+self.uObjectName
         oPathFolder:cPath       = Globals.oPathCodesets + self.uObjectName
         uFile:str
 
@@ -297,10 +303,10 @@ class cBaseInterFace(cBaseObject):
         """
 
         aCodesetFiles:List[str] = self.GetConfigCodesetList()
-        uSettingsJSON:str       = u''
-        uValueString:str        = u''
+        uSettingsJSON:str       = ''
+        uValueString:str        = ''
         for uCodesetFile in aCodesetFiles:
-            uValueString+=u'\"'+uCodesetFile+u'\",'
+            uValueString+=f'"{uCodesetFile}",'
         uValueString = uValueString[1:len(uValueString)-2]
         uSettingsJSON+=uValueString
         return uSettingsJSON

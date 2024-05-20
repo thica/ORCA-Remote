@@ -10,7 +10,7 @@
     <element name="Button Back" type="BUTTON" posx="left" posy="top" width="of:width:Button QuitApp" height1="%7" height="of:height:Button QuitApp" picturenormal='transparentpic' picturepressed="button wide pressed"  action="Show Page" actionpars='{"pagename":"Page_Main"}' fontsize='%h40'  caption="$lvar(showcase_10202)" />
 
     <element name='Frame' type='ANCHOR' posx='center' posy='%40' width='%90' height='%70' >
-        <element name='Button 01' type='BUTTON' posx='left'          posy='top'            width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='12345' />
+        <element name='Button 01' type='BUTTON' posx='left'          posy='top'            width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='' />
         <element name='Button 02' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_play' />
         <element name='Button 03' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_pause' />
         <element name='Button 04' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:media_stop' />
@@ -31,7 +31,7 @@
         <element name='Button 17' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:power_off color:$var(red)'/>
 
 
-        <element name='Button 18' type='BUTTON' posx='left'          posy='of:bottom:last' width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='12345' />
+        <element name='Button 18' type='BUTTON' posx='left'          posy='of:bottom:last' width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='' />
         <element name='Button 19' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1004)' />
         <element name='Button 20' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1006)' />
         <element name='Button 21' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1007)' />
@@ -52,7 +52,7 @@
         <element name='Button 34' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1002)' />
 
         <element name=''       type='ANCHOR' posx='left'          posy='of:bottom:last' width='%1' height='of:width:self'  />
-        <element name='Button 35' type='BUTTON' posx='left'          posy='of:bottom:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='12345' />
+        <element name='Button 35' type='BUTTON' posx='left'          posy='of:bottom:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='' />
         <element name='Button 36' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd_up' />
         <element name='Button 37' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd_down' />
         <element name='Button 38' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:osd_left' />
@@ -69,7 +69,7 @@
         <element name='Button 48' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='icon:delete' />
 
 
-        <element name='Button 49' type='BUTTON' posx='left'          posy='of:bottom:last' width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='12345' />
+        <element name='Button 49' type='BUTTON' posx='left'          posy='of:bottom:last' width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h50' caption='' />
         <element name='Button 50' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1020)' />
         <element name='Button 51' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1021)' />
         <element name='Button 52' type='BUTTON' posx='of:right:last' posy='of:top:last'    width='%5' height='of:width:self' picturenormal='button square*' fontsize='%h30' iconfontsize='%h70' caption='$lvar(1018)' />

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -57,7 +57,7 @@ def Round(fValue:Union[float,None],iPos:int) -> Union[float,int]:
     return fRet
 
 
-def GetVarList(uFilter:str=u'') -> Dict[str,Any]:
+def GetVarList(uFilter:str='') -> Dict[str,Any]:
     """
     Returns a dict of uservars
 
@@ -66,7 +66,7 @@ def GetVarList(uFilter:str=u'') -> Dict[str,Any]:
     """
 
     dRet:Dict[str,Any] = {}
-    if uFilter==u'':
+    if uFilter=='':
         for uVarIdx in ORCA.vars.Globals.dUserVars:
             dRet[uVarIdx]=ORCA.vars.Globals.dUserVars[uVarIdx]
     else:
@@ -90,7 +90,7 @@ def UnSplit(aVars:List) ->None:
         i+=1
 
 
-def GetEnvVar(uVarName:str,uDefault:str="") -> str:
+def GetEnvVar(uVarName:str,uDefault:str='') -> str:
     """
     Returns the value of an environment var
 
@@ -132,5 +132,5 @@ def CopyDict(dSrc:Dict) -> Dict:
     try:
         return json.loads(json.dumps(dSrc))
     except Exception:
-        Logger.warning("Can't copy dict the preferred way:"+str(dSrc))
+        Logger.warning('Can\'t copy dict the preferred way:'+str(dSrc))
         return deepcopy(dSrc)

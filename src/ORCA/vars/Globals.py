@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -24,19 +24,58 @@ from typing import List
 from typing import Any
 from typing import Union
 
+from xml.etree.ElementTree      import Element
+from xml.etree.ElementTree      import SubElement
+# from ORCA.utils.XML             import GetXMLTextValue
+
 
 cLinkPar = Union[str,List[Dict]]
-oLinkPar:cLinkPar = ""
+oLinkPar:cLinkPar = ''
 
 dUserVars:Dict[str,Any]                     = {}
 dUserVarLinks:Dict[str,List[cLinkPar]]      = {}
 dDefVars:Dict[str,str]                      = {}
-uRepContext:str                             = u''
+uRepContext:str                             = ''
 
 
 def InitSystemVars() -> None:
     """
-    Initializies the variable system. Should only called once
+    Initializes the variable system. Should only be called once
     """
     dUserVars.clear()
     dUserVarLinks.clear()
+
+
+def Vars_Persistence_WriteToXMLNode(*,oXMLNode:Element) -> None:
+    """ writes object vars to a xml node """
+
+    oXMLVars: Element
+    oXMLVar:Element
+    oXmlVarEntry: Element
+    oXmlVarEntryName: Element
+    oXmlVarEntryValue: Element
+
+    oXMLVarLinks:Element
+    uVarName:str
+
+    oXMLVars: Element = SubElement(oXMLNode, 'vars')
+    for uVarName in dUserVars.keys():
+        oXmlVarEntry = SubElement(oXMLVars, 'var')
+        oXmlVarEntryName= SubElement(oXmlVarEntry, 'name')
+        oXmlVarEntryName.text=uVarName
+        oXmlVarEntryValue= SubElement(oXmlVarEntry, 'value')
+        oXmlVarEntryValue.text=dUserVars[uVarName]
+
+
+def Vars_Persistence_ReadFromXMLNode(*,oXMLNode:Element) -> None:
+
+    oXMLVars: Element
+    oXMLVar:Element
+    uVarName:str
+
+    oXMLVars: Element = oXMLNode.find('vars')
+    if oXMLVars is not None:
+        for oXMLVar in oXMLVars.findall('var'):
+            uVarName = oXMLVar.find('name').text
+            dUserVars[uVarName]=oXMLVar.find('value').text
+

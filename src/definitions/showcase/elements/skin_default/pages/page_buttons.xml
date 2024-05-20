@@ -36,14 +36,12 @@
         <element name="Label"           type="TEXTFIELD" posy="of:tobottom:last" height="of:height:last"  posx="right" width="%70" fontsize='%h40'  caption='$lvar(showcase_10034)' htextalign='left' vtextalign='middle' action="ToggleCheckbox" />
       </element>
 
-
-
       <element name='Anchor right2' posx='%66' type='ANCHOR' width='%20' >
         <element name="Button"          type="BUTTON"    posy="top"             height="of:width:self:*0.25" fontsize='%h50'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' backgroundcolor='#ffff00ff'/>
         <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.20" fontsize='%h40'  caption='$lvar(showcase_10010)' htextalign='center' vtextalign='top' />
         <element name="Button"          type="BUTTON"    posy="%20" width="%60" posx="center" height="of:width:self"       fontsize='%h25'  caption='$lvar(showcase_10004)'  htextalign='center' vtextalign='middle' picturenormal="button round*"/>
         <element name="Label"           type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.20" fontsize='%h40'  caption='$lvar(showcase_10011)' htextalign='center' vtextalign='top' />
-        <element name="Button_Long"     type="BUTTON"    posy="of:bottom:last"  height="of:width:self:*0.25" fontsize='%h40'  caption='$lvar(showcase_10030)'  htextalign='center' vtextalign='middle' picturenormal="button wide framed*" action="ShowMessage_Singletap" actiondoubletap="ShowMessage_Doubletap" actionlongtap="ShowMessage_Longtap"/>
+        <element name="Button_Long"     type="BUTTON"    posy="of:bottom:last"  height="of:width:self:*0.25" fontsize='%h40'  caption='$lvar(showcase_10030)'  htextalign='center' vtextalign='middle' picturenormal="button wide framed*" action="Increase_Number_Repeat" action1="ShowMessage_Singletap" actiondoubletap="ShowMessage_Doubletap" actionlongtap="ShowMessage_Longtap"/>
         <element name="Button_UpDown"   type="BUTTON"    posy="of:bottom:last"  height="of:width:self:*0.25" fontsize='%h40'  caption='$lvar(showcase_10031)'  htextalign='center' vtextalign='middle' picturenormal="button wide framed*" actiondownonly="TextDown" actionuponly="TextUp" actionlongtap="NoAction"/>
         <element name="Label_UpDown"    type="TEXTFIELD" posy="of:bottom:last"  height="of:width:self:*0.2"  fontsize='%h40'  caption='$var(UPDOWN)' htextalign='center' vtextalign='middle' />
       </element>

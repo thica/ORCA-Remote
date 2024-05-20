@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_WIKIDOC_1">WikiDoc</string>
+     <string id="SCRIPT_TOOLS_WIKIDOC_2">Creates ORCA Wiki Documentation</string>
+     <string id="SCRIPT_TOOLS_WIKIDOC_3">Create WikiDoc</string>
+     <string id="SCRIPT_TOOLS_WIKIDOC_4">WikiDoc</string>
+     <string id="SCRIPT_TOOLS_WIKIDOC_5">Wikipedia Path</string>
+     <string id="SCRIPT_TOOLS_WIKIDOC_6">Path on Host to Wikipedia</string>
+     <string id="SCRIPT_TOOLS_WIKIDOC_7">Local Path</string>
+     <string id="SCRIPT_TOOLS_WIKIDOC_8">Local Path for Wikimedia files</string>
+  </strings>
+

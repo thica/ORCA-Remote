@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ from ORCA.utils.FileName                    import cFileName
 from ORCA.utils.Path                        import cPath
 from ORCA.utils.TypeConvert                 import ToBool
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 '''
@@ -46,8 +46,8 @@ import ORCA.Globals as Globals
       <description language='English'>Helper Scripts to find TV Logos</description>
       <description language='German'>Hilfs Skript um TV-Logos zu finden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -121,8 +121,8 @@ class cScript(cBaseScript):
 
     def __init__(self):
         super().__init__()
-        self.uType:str                  = u'HELPERS'
-        self.uIniFileLocation:str       = u'none'
+        self.uType:str                  = 'HELPERS'
+        self.uIniFileLocation:str       = 'none'
         self.dLogoPackFolder:Dict[str,cLogosForFolder] =  {}
         self.dReferences:typeReferences = {}
 
@@ -136,15 +136,15 @@ class cScript(cBaseScript):
         try:
             if 'cmd_type' in kwargs:
                 uCmdType = kwargs['cmd_type']
-                if uCmdType == u'get_tvlogofile':
+                if uCmdType == 'get_tvlogofile':
                     return self.GetTVLogoFile(**kwargs)
-                elif uCmdType == u'normalize_reference':
+                elif uCmdType == 'normalize_reference':
                     return self.NormalizeReference(**kwargs)
-                elif uCmdType == u'normalize_channelname':
+                elif uCmdType == 'normalize_channelname':
                     return self.GetTVLogoFile(**kwargs)
             return None
         except Exception as e:
-            self.ShowError(uMsg="Can''t run Get TV-Logos Helper script, invalid parameter",uParConfigName=self.uConfigName,oException=e)
+            self.ShowError(uMsg='Can\'t run Get TV-Logos Helper script, invalid parameter',uParConfigName=self.uConfigName,oException=e)
             return {"ret":1}
 
     def GetTVLogoFile(self, **kwargs) -> Dict:
@@ -162,11 +162,11 @@ class cScript(cBaseScript):
             self.CollectAllChannelLogos(uLogoPackFolderName=uLogoPackFolderName)
             uFnChannel=self.FindChannelLogo(uLogoPackFolderName=uLogoPackFolderName,uChannelName=uChannelName,uReference=uReference)
 
-            return {"ret":0,"filename":uFnChannel}
+            return {'ret':0,'filename':uFnChannel}
 
         except Exception as e:
-            self.ShowError(uMsg="Can''t find TV Logos", uParConfigName="",oException=e)
-            return {"ret":1,"filename":""}
+            self.ShowError(uMsg='Can\'t find TV Logos', uParConfigName='',oException=e)
+            return {'ret':1,'filename':''}
 
     def FindChannelLogo(self,*,uChannelName:str, uReference:str, uLogoPackFolderName:str) -> str:
         """
@@ -177,14 +177,14 @@ class cScript(cBaseScript):
         :param str uLogoPackFolderName: the name of the folder (only the folder name, not the fullpath) in "recources" , below "tvlogos"
         :return: The logo file name (full path), or "text:Channelname" if logo file can't be found
         """
-        iPos = uChannelName.find("/")
+        iPos = uChannelName.find('/')
         if iPos>0:
             uChannelName=uChannelName[:iPos]
 
         uFnLogo = self.FindChannelLogo_sub(uChannelName=uChannelName,uReference=uReference,uLogoPackFolderName=uLogoPackFolderName)
-        if uFnLogo == u"" or uFnLogo is None:
-            uFnLogo = u"text:"+uChannelName
-            Logger.warning("Can't find logo [%s] [%s] in [%s]:" % ( uChannelName,uReference,uLogoPackFolderName))
+        if uFnLogo == '' or uFnLogo is None:
+            uFnLogo = 'text:'+uChannelName
+            Logger.warning('Can\'t find logo [%s] [%s] in [%s]:' % ( uChannelName,uReference,uLogoPackFolderName))
         return uFnLogo
 
     def FindChannelLogo_sub(self,*,uChannelName:str, uReference:str, uLogoPackFolderName:str) -> str:
@@ -257,7 +257,7 @@ class cScript(cBaseScript):
             oLogoItem = cLogoItem(uLogoKey=uFileBaseNameStandard,uFnLogo=uFnLogo)
             dLogosForFolder[oLogoItem.uLogoKey]    = oLogoItem
             # if the filename is a reference, normalize it and add it
-            if uBaseName.count("_")>3:
+            if uBaseName.count('_')>3:
                 oLogoItem = cLogoItem(uLogoKey=NormalizeReference(uReference=uFileBaseNameStandard),uFnLogo=uFnLogo)
                 dLogosForFolder[oLogoItem.uLogoKey]    = oLogoItem
 
@@ -278,32 +278,67 @@ class cScript(cBaseScript):
         if dReferences is not None:
             uFnLogo = dReferences.get(NormalizeReference(uReference=uReference))
             if uFnLogo is not None:
-                uFnReference:str = NormalizeName(uName=uFnLogo.replace("\n",""))+".png"
+                uFnReference:str = NormalizeName(uName=uFnLogo.replace('\n',''))+'.png'
                 oLogosForFolder:Optional[cLogosForFolder] = self.dLogoPackFolder.get(uLogoPackFolderName)
                 if oLogosForFolder is not None:
                     oLogoItem = oLogosForFolder.get(uFnReference)
                     if oLogoItem is None:
                         oLogoItem = oLogosForFolder.get(NormalizeReference(uReference=uReference))
                     if oLogoItem is not None:
-                        return oLogoItem.uFnLogo.replace(Globals.oPathResources.string, '$var(RESOURCEPATH)')
+                        return oLogoItem.uFnLogo.replace(str(Globals.oPathResources), '$var(RESOURCEPATH)')
         return ""
 
     def FindLogoByChannelName(self,*,uLogoPackFolderName:str, uChannelName:str) -> str:
         """
         Finds a logo by channel name
         :param uLogoPackFolderName: the logo pack name to use
-        :param uChannelName: The name of of the channel to check for
+        :param uChannelName: The name of the channel to check for
         :return: the logo file name of the channel logo
         """
         oLogoItem:Optional[cLogoItem] = None
         oLogosForFolder:Optional[cLogosForFolder] = self.dLogoPackFolder.get(uLogoPackFolderName)
 
+        uName= uName=uChannelName+".png"
+
         if oLogosForFolder is not None:
-            oLogoItem = oLogosForFolder.get(NormalizeName(uName=uChannelName+".png",bRemoveHD=False))
-            if oLogoItem is None:
-                oLogoItem = oLogosForFolder.get(NormalizeName(uName=uChannelName+".png", bRemoveHD=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=False, bRemoveBlanks=False,bAddHD=False,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=False, bRemoveBlanks=False,bAddHD=False,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=True, bRemoveBlanks=False,bAddHD=False,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=True, bRemoveBlanks=False,bAddHD=False,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=False, bRemoveBlanks=True,bAddHD=False,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=False, bRemoveBlanks=True,bAddHD=False,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=True, bRemoveBlanks=True,bAddHD=False,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=True, bRemoveBlanks=True,bAddHD=False,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=False, bRemoveBlanks=False,bAddHD=True,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=False, bRemoveBlanks=False,bAddHD=True,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=True, bRemoveBlanks=False,bAddHD=True,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=True, bRemoveBlanks=False,bAddHD=True,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=False, bRemoveBlanks=True,bAddHD=True,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=False, bRemoveBlanks=True,bAddHD=True,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=True, bRemoveBlanks=True,bAddHD=True,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=True, bRemoveBlanks=True,bAddHD=True,bRemoveNumbers=False))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=False, bRemoveBlanks=False,bAddHD=False,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=False, bRemoveBlanks=False,bAddHD=False,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=True, bRemoveBlanks=False,bAddHD=False,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=True, bRemoveBlanks=False,bAddHD=False,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=False, bRemoveBlanks=True,bAddHD=False,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=False, bRemoveBlanks=True,bAddHD=False,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=True, bRemoveBlanks=True,bAddHD=False,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=True, bRemoveBlanks=True,bAddHD=False,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=False, bRemoveBlanks=False,bAddHD=True,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=False, bRemoveBlanks=False,bAddHD=True,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=True, bRemoveBlanks=False,bAddHD=True,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=True, bRemoveBlanks=False,bAddHD=True,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=False, bRemoveBlanks=True,bAddHD=True,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=False, bRemoveBlanks=True,bAddHD=True,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=False,bStripPre=True, bRemoveBlanks=True,bAddHD=True,bRemoveNumbers=True))
+            if oLogoItem is None: oLogoItem = oLogosForFolder.get(NormalizeName(uName=uName,bRemoveHD=True,bStripPre=True, bRemoveBlanks=True,bAddHD=True,bRemoveNumbers=True))
+
         if oLogoItem:
-            return oLogoItem.uFnLogo.replace(Globals.oPathResources.string, '$var(RESOURCEPATH)')
+            return oLogoItem.uFnLogo.replace(str(Globals.oPathResources), '$var(RESOURCEPATH)')
+        else:
+            self.ShowDebug(uMsg= f'Channellogo not found: "{uChannelName}"')
+
         return ""
 
     def NormalizeChannelName(self, **kwargs) -> Dict:
@@ -317,7 +352,7 @@ class cScript(cBaseScript):
             bRemoveHD:bool                    = ToBool(ReplaceVars(kwargs['removehd']))
             return {"ret":1,"channelname":NormalizeName(uName=uChannelName,bRemoveHD=bRemoveHD)}
         except Exception as e:
-            self.ShowError(uMsg="Can''t run NormalizeChannelName, invalid parameter",uParConfigName=self.uConfigName,oException=e)
+            self.ShowError(uMsg='Can\'t run NormalizeChannelName, invalid parameter',uParConfigName=self.uConfigName,oException=e)
             return {"ret":1}
 
     def NormalizeReference(self, **kwargs) -> Dict:
@@ -330,13 +365,13 @@ class cScript(cBaseScript):
             uReference:str                  = ReplaceVars(kwargs['reference'])
             return {"ret":1,"reference":NormalizeReference(uReference=uReference)}
         except Exception as e:
-            self.ShowError(uMsg="Can''t run NormalizeReference, invalid parameter",uParConfigName=self.uConfigName,oException=e)
+            self.ShowError(uMsg='Can\'t run NormalizeReference, invalid parameter',uParConfigName=self.uConfigName,oException=e)
             return {"ret":1}
 
     def LoadReferences(self,*,oPath:cPath,uLogoPackFolderName:str) -> None:
         """
         Loads References from a file. A reference file matches a logo file name to a SAT/DVB:C service id, the file name is fixed "srp.index.txt"
-        :param oPath: the path to the icon root foolder
+        :param oPath: the path to the icon root folder
         :param uLogoPackFolderName: the logo pack folder name
         :return:
         """
@@ -350,15 +385,15 @@ class cScript(cBaseScript):
 
         self.dReferences[uLogoPackFolderName] = {}
 
-        oFnReferences = cFileName(oPath) + "srp.index.txt"
+        oFnReferences = cFileName(oPath) + 'srp.index.txt'
         if oFnReferences.Exists():
-            oFile = open(oFnReferences.string,"r")
+            oFile = open(str(oFnReferences),'r')
             aLines = oFile.readlines()
             oFile.close()
             for uLine in aLines:
-                uReference,uFileName=uLine.split("=")
+                uReference,uFileName=uLine.split('=')
                 uReference= NormalizeReference(uReference=uReference)
-                self.dReferences[uLogoPackFolderName][uReference] = uFileName.split("-")[0]
+                self.dReferences[uLogoPackFolderName][uReference] = uFileName.split('-')[0]
 
 def NormalizeReference(*,uReference:str) -> str:
     """
@@ -368,14 +403,15 @@ def NormalizeReference(*,uReference:str) -> str:
     :return: normalized reference
     """
 
-    if ":" in uReference:
-        aParts = uReference.split(":")
+    if ':' in uReference:
+        aParts = uReference.split(':')
         uReference = aParts[3]+aParts[4]+aParts[5]+aParts[6]
-    uReference=uReference.replace("_","")
-    # uReference = uReference.replace("0", "")
+    uReference=uReference.replace('_','')
+    # uReference = uReference.replace('0', '')
+
     return uReference
 
-def NormalizeName(*,uName:str, bRemoveHD:bool = False) -> str:
+def NormalizeName(*,uName:str, bRemoveHD:bool = False,bStripPre:bool=False,bRemoveBlanks:bool=False,bAddHD:bool=False,bRemoveNumbers:bool=False) -> str:
     """
     Helper function to increase the match rate of icon names to channel names by removing blanks and special characters
 
@@ -384,10 +420,35 @@ def NormalizeName(*,uName:str, bRemoveHD:bool = False) -> str:
     :return: normalized file name
     """
 
-    uName = uName.lower().replace(" ", "").replace("/","").replace("\\","").replace("+","plus").replace("-","").replace("_","")
+
+    uName = uName.lower().replace('/','').replace('\\','').replace('+','plus').replace('-','').replace('_','')
+
+    if bAddHD:
+        iPos:int=uName.find('.')
+        if iPos!=-1:
+            uName=uName[:iPos]+" hd"+uName[iPos:]
+
+    if bRemoveBlanks:
+        uName = uName.replace(' ','')
+
+    # special handling for naming convention, if channelname starts with eg. '|US| CNN'
+    if uName.startswith('|') and uName.count('|')==2:
+        uName=uName[uName.find('|',2)+1:].strip()
 
     if bRemoveHD:
-        uName = uName.replace("uhd.",".").replace("sd.",".").replace("hd.",".")
+        uName = uName.replace('uhd.','.').replace('fhd.','.').replace('sd.','.').replace('hd.','.')
+
+    if bStripPre:
+        iPos:int=uName.find(':')
+        if iPos!=-1:
+            uName=uName[iPos+1:]
+
+    if bRemoveNumbers:
+        uName = uName.translate(uName.maketrans('', '', '1234567890'))
+
+    #  if "warner" in uName:
+    #    print(f"Name: {uName}")
+
     return remove_umlaut(string=uName)
 
 
@@ -397,13 +458,13 @@ def remove_umlaut(*,string:str) -> str:
     :param string: string to remove umlauts from
     :return: unumlauted string
     """
-    string = string.replace(u"ü", u'ue')
-    string = string.replace(u"Ü", u'Ue')
-    string = string.replace(u"ä", u'ae')
-    string = string.replace(u"Ä", u'Ae')
-    string = string.replace(u"ö", u'oe')
-    string = string.replace(u"Ö", u'Oe')
-    string = string.replace(u"ß", u'ss')
+    string = string.replace('ü', 'ue')
+    string = string.replace('Ü', 'Ue')
+    string = string.replace('ä', 'ae')
+    string = string.replace('Ä', 'Ae')
+    string = string.replace('ö', 'oe')
+    string = string.replace('Ö', 'Oe')
+    string = string.replace('ß', 'ss')
 
     return string
 

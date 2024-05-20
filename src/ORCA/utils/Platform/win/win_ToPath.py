@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -20,11 +20,10 @@
 """
 
 from os.path                    import normpath
-from ORCA.utils.TypeConvert     import ToUnicode
 
 def ToPath(uPath:str) -> str:
     """ converts a path to a valid os specific path string (Windows Style Version)"""
     if uPath:
         #Normpath does not convert from backslash to slash on non win environment
-        return ToUnicode(normpath(uPath.replace('/','\\')))
+        return normpath(uPath.replace('/','\\'))
     return uPath

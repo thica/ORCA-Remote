@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ if TYPE_CHECKING:
     from ORCA.definition.Definition import cDefinition
 else:
     from typing import TypeVar
-    cDefinition = TypeVar("cDefinition")
+    cDefinition = TypeVar('cDefinition')
 
 import logging
 from copy                            import copy
@@ -60,12 +60,13 @@ from ORCA.utils.TypeConvert          import ToDic
 from ORCA.utils.TypeConvert          import ToFloat
 from ORCA.utils.TypeConvert          import ToInt
 from ORCA.utils.TypeConvert          import ToUnicode
+from ORCA.utils.TypeConvert          import EscapeUnicode
 from ORCA.vars.Replace               import ReplaceDefVars
 from ORCA.vars.Replace               import ReplaceVars
 from ORCA.utils.FileName             import cFileName
 from ORCA.utils.Path                 import cPath
 from ORCA.utils.Wildcard             import MatchWildCard
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 bBlockInclude = False
 
@@ -136,9 +137,9 @@ def LoadXMLFile(*,oFile:cFileName, oParser:Optional[XMLParser]=None, bNoCache=Fa
         if not bNoCache:
             return fromstring(CachedFile(oFileName=oFile))
         else:
-            return ET().parse(source=oFile.string)
+            return ET().parse(source=str(oFile))
     else:
-        return ET().parse(source=oFile.string, parser=oParser)
+        return ET().parse(source=str(oFile), parser=oParser)
 
 def LoadXMLString(*,uXML:str)-> Element:
     """
@@ -161,10 +162,10 @@ def WriteXMLFile(*,oFile:cFileName,oElem:Element)-> bool:
     """
     try:
         oET=ET(oElem)
-        oET.write(oFile.string, encoding="UTF-8",xml_declaration=True)
+        oET.write(str(oFile), encoding='UTF-8',xml_declaration=True)
         return True
     except Exception as e:
-        LogError(uMsg='Can''t write XML File:'+oFile.string,oException=e)
+        LogError(uMsg=f'Can\'t write XML File: {oFile}',oException=e)
         return False
 
 
@@ -178,12 +179,13 @@ def XMLPrettify(*,oElem:Element)-> str:
 
     iNum:int
     uRough_string:str           = tostring(oElem, 'utf-8')
+
     oReparsed:minidom.Document  = minidom.parseString(uRough_string)
-    uFinal:str                  = oReparsed.toprettyxml(indent="    ")
-    uFinal                      = uFinal.replace(">\n",">")
-    uFinal                      = uFinal.replace("\n\n","")
+    uFinal:str                  = oReparsed.toprettyxml(indent='    ')
+    # uFinal                      = uFinal.replace('>\n','>')
+    # uFinal                      = uFinal.replace('\n\n','')
     for iNum in range(10):
-        uFinal = uFinal.replace("\n"+" "*iNum+"\n", "\n")
+        uFinal = uFinal.replace('\n'+' '*iNum+'\n', '\n')
     return uFinal
 
 def AddFileNames(*,oElem:Element,uFnFile:str):
@@ -198,7 +200,7 @@ def AddFileNames(*,oElem:Element,uFnFile:str):
 
     if uFileName:
         if not uFnFileShort in uParentFiles:
-            uParentFiles=uParentFiles+"|" + uFnFileShort
+            uParentFiles=uParentFiles+'|' + uFnFileShort
             oElem.set('linefilenames',uParentFiles)
         else:
             oElem.set('linefilenames',uFileName)
@@ -209,9 +211,9 @@ def AddFileNames(*,oElem:Element,uFnFile:str):
 def ShortenFileName(*,uFnFile:str) -> str:
     #temporary disabled
     return uFnFile
-    return uFnFile.replace(Globals.oPathRoot.string,"[ORCA]")
+    #return uFnFile.replace(str(Globals.oPathRoot),'[ORCA]')
 
-def orca_et_loader(uFile:str, uParse:str, uEncoding:str="xml",oReplacementVars:Optional[cDefinitionVars]=None) -> List[Element]:
+def orca_et_loader(uFile:str, uParse:str, uEncoding:str='xml',oReplacementVars:Optional[cDefinitionVars]=None) -> List[Element]:
     """Custom Loader for ElementTree Include to add definition path to includes
         and to make make bulk include using placeholder possible
     """
@@ -231,37 +233,37 @@ def orca_et_loader(uFile:str, uParse:str, uEncoding:str="xml",oReplacementVars:O
         oReplacementVars = cDefinitionVars()
 
     if "*"  in uFile or "?" in uFile:
-        oFn                     = cFileName("").ImportFullPath(uFnFullName=uFile)
+        oFn                     = cFileName(uFile)
         oDir:cPath              = oFn.oPath
         aFolderFiles            = oDir.GetFileList(bFullPath=True,bSubDirs=False)
         for uFolderFile in aFolderFiles:
-            if MatchWildCard(uValue=uFolderFile,uMatchWithWildCard=oFn.string):
-                aFiles.append(cFileName("").ImportFullPath(uFnFullName=uFolderFile))
+            if MatchWildCard(uValue=uFolderFile,uMatchWithWildCard=str(oFn)):
+                aFiles.append(cFileName(uFolderFile))
     else:
-        oFn = cFileName("").ImportFullPath(uFnFullName=uFile)
+        oFn = cFileName(uFile)
         if oFn.Exists():
-            aFiles.append(cFileName("").ImportFullPath(uFnFullName=uFile))
+            aFiles.append(cFileName(uFile))
         else:
-            Logger.debug (u'XML: Skipping XML Include (File not found):'+oFn.string)
+            Logger.debug (f'XML: Skipping XML Include (File not found): File: {oFn}')
 
     for oFnLoad in aFiles:
-        oFnLoadFileRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get(oFnLoad.string)
+        oFnLoadFileRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get(str(oFnLoad))
         if oFnLoadFileRedirect is not None:
             oFnLoad = oFnLoadFileRedirect
-        Logger.debug (u'XML: Loading XML Include:' + oFnLoad)
+        Logger.debug ('XML: Loading XML Include:' + oFnLoad)
         #uRaw= ElementInclude.default_loader(uLoadFile, "text", encoding)
         uRaw      = CachedFile(oFileName=oFnLoad)
         uRaw      = ReplaceDefVars(uRaw,oReplacementVars)
         aRet.append(fromstring(uRaw))
-        uFnFileShort = ShortenFileName(uFnFile=oFnLoad.string)
-        if aRet[-1].get("linefilename","") == "":
-            aRet[-1].set("linefilename",uFnFileShort)
+        uFnFileShort = ShortenFileName(uFnFile=str(oFnLoad))
+        if aRet[-1].get('linefilename','') == '':
+            aRet[-1].set('linefilename',uFnFileShort)
             for oElement in aRet[-1]:
-                oElement.set("linefilename",uFnFileShort)
+                oElement.set('linefilename',uFnFileShort)
 
     return aRet
 
-def Orca_FromString(*,uET_Data:str, oDef:Optional[cDefinition], uFileName:str="Unknown") -> Union[Element,None]:
+def Orca_FromString(*,uET_Data:str, oDef:Optional[cDefinition], uFileName:str='Unknown') -> Union[Element,None]:
     """  reads xml from a string and sets the definition context vars
     :param str uET_Data: The string representing a xml
     :param cDefinition oDef: The definition, where the xml belongs to
@@ -288,7 +290,7 @@ def Orca_FromString(*,uET_Data:str, oDef:Optional[cDefinition], uFileName:str="U
             LogError(uMsg=ReplaceDefVars(uET_Data,oDef.oDefinitionVars))
     return None
 
-def Orca_include(oElem, pLoader: Callable,uFileName:str = "")-> None:
+def Orca_include(oElem, pLoader: Callable,uFileName:str = '')-> None:
     """  heavily customized loader for includes in xml files"""
     uAlias = oElem.get('definitionalias')
     oDef = None
@@ -302,7 +304,7 @@ def Orca_include(oElem, pLoader: Callable,uFileName:str = "")-> None:
         AddFileNames(oElem=oElem, uFnFile=uFileName)
     RestoreDefinitionContext()
 
-def Orca_includesub(oElem:Union[Element,List[Element]], pLoader: Callable,uOrgDefinitionContext: str, oDef:cDefinition, uFileName:str="Unknown Filename") -> Element:
+def Orca_includesub(oElem:Union[Element,List[Element]], pLoader: Callable,uOrgDefinitionContext: str, oDef:cDefinition, uFileName:str='Unknown Filename') -> Element:
     """ sub function for the include loader """
     global bBlockInclude
 
@@ -334,22 +336,22 @@ def Orca_includesub(oElem:Union[Element,List[Element]], pLoader: Callable,uOrgDe
             if CheckCondition(oPar=e) and not bBlockInclude:
 
                 # process xinclude directive
-                uHref:str  = e.get("href")
+                uHref:str  = e.get('href')
                 uHref = ReplaceVars(uHref)
-                uParse:str = e.get("parse", None)
+                uParse:str = e.get('parse', None)
                 if uParse is None:
-                    uParse="xml"
+                    uParse='xml'
 
-                if uParse == "xml":
-                    uNewDefinitionContext = u''
-                    if "DEFINITIONPATH[" in uHref:
+                if uParse == 'xml':
+                    uNewDefinitionContext = ''
+                    if 'DEFINITIONPATH[' in uHref:
                         uNewDefinitionContext,uHref=GetSetDefinitionName(uText=uHref)
 
-                    oTmpReplacementVars=e.get("definitionvars")
+                    oTmpReplacementVars=e.get('definitionvars')
                     if oTmpReplacementVars is None:
                         oTmpReplacementVars=oReplacementVars
 
-                    aIncludeReplacementVars = e.get("includedefinitionvars")
+                    aIncludeReplacementVars = e.get('includedefinitionvars')
                     if aIncludeReplacementVars is None:
                         aIncludeReplacementVars=cDefinitionVars()
                     else:
@@ -374,7 +376,7 @@ def Orca_includesub(oElem:Union[Element,List[Element]], pLoader: Callable,uOrgDe
                         i -= 1
                     else:
                         uHref2=uHref
-                        if  uNewDefinitionContext==u'':
+                        if  uNewDefinitionContext=='':
                             oNodes = Orca_includesub(aNodes, pLoader,uOrgDefinitionContext,oDef,uHref2)
                         else:
                             oNodes = Orca_includesub(aNodes, pLoader,uNewDefinitionContext,oDef,uHref2)
@@ -384,7 +386,7 @@ def Orca_includesub(oElem:Union[Element,List[Element]], pLoader: Callable,uOrgDe
                             if oDef:
                                 oDef.oDefinitionVars=oSaveReplacementVars
 
-                        if uNewDefinitionContext!=u'':
+                        if uNewDefinitionContext!='':
                             SetDefinitionContext(uDefinitionName=uOrgDefinitionContext)
 
                         # we got a valid list of nodes
@@ -419,11 +421,11 @@ def GetXMLTextValue(*,oXMLNode:Element,uTag:str,bMandatory:bool,vDefault:Any) ->
         oObj=oXMLNode
     if oObj is None:
         if bMandatory:
-            ShowErrorPopUp(uMessage=LogError(uMsg=u'XML Error: Attribut [' + uTag + '] missing:'+ToUnicode(tostring(oXMLNode))),bAbort=True)
+            ShowErrorPopUp(uMessage=LogError(uMsg='XML Error: Attribut [' + uTag + '] missing:'+ToUnicode(tostring(oXMLNode))),bAbort=True)
         return vDefault
     uTmp=oObj.text
     if uTmp is None:
-        uTmp=u''
+        uTmp=''
     return uTmp
 
 def GetXMLIntValue(*,oXMLNode:Element,uTag:str,bMandatory:bool,iDefault:int) -> int:
@@ -453,7 +455,7 @@ def GetXMLTextAttribute(*,oXMLNode:Element,uTag:str,bMandatory:bool,vDefault:Any
     oObj:str=oXMLNode.get(uTag)
     if oObj is None:
         if bMandatory:
-            ShowErrorPopUp(uMessage=LogError(uMsg=u'XML Error: Attribut [' + uTag + '] missing'),bAbort=True)
+            ShowErrorPopUp(uMessage=LogError(uMsg='XML Error: Attribut [' + uTag + '] missing'),bAbort=True)
         return vDefault
     # oObj=ToUnicode(oObj)
     return oObj
@@ -497,7 +499,7 @@ def SplitMax(uPar:str) -> Tuple[float,float]:
     """splits an xml value in the format aa:bb into a tuple
        returns a tuple for aa as well """
 
-    tRet=uPar.split(u":")
+    tRet=uPar.split(':')
     if len(tRet)>1:
         return float(tRet[0]), float(tRet[1])
     else:

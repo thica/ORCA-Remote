@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,8 @@ from typing                     import List
 from typing                     import Dict
 from typing                     import Union
 
-from ORCA.Cookies               import Var_Load
-from ORCA.Cookies               import Var_Save
+from ORCA.utils.Cookies import Var_Load
+from ORCA.utils.Cookies import Var_Save
 from ORCA.actions.Base          import cEventActionBase
 from ORCA.utils.LogError        import LogError
 from ORCA.utils.TypeConvert     import ToFloat2
@@ -55,6 +55,8 @@ from ORCA.vars.Actions          import Var_Round
 from ORCA.vars.Actions          import Var_StringToHexString
 from ORCA.vars.Actions          import Var_StringToTime
 from ORCA.vars.Actions          import Var_ToVar
+from ORCA.vars.Actions          import Var_ToArray
+from ORCA.vars.Actions          import Var_Regex_sub
 from ORCA.vars.Actions          import Var_Trim
 from ORCA.vars.Actions          import Var_UpperCase
 from ORCA.vars.Helpers          import Find_nth_Character
@@ -62,11 +64,12 @@ from ORCA.vars.Links            import DelVarLink
 from ORCA.vars.Links            import SetVarLink
 from ORCA.vars.Links            import VarHasLinks
 from ORCA.vars.Replace          import ReplaceVars
-from ORCA.Action                import cAction
+from ORCA.action.Action import cAction
 from ORCA.definition.Definition import cDefinition
 from ORCA.actions.ReturnCode    import eReturnCode
+from ORCA.action.Queue import GetActiveQueue
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cEventActionsVarControl']
 
@@ -112,10 +115,10 @@ class cEventActionsVarControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'SetVar',oAction=oAction)
-        uVarName:str    = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uVarValue:str   = ReplaceVars(oAction.dActionPars.get("varvalue",""))
-        uVarContext:str = ReplaceVars(oAction.dActionPars.get("varcontext",""))
+        self.oEventDispatcher.LogAction(uTxt='SetVar',oAction=oAction)
+        uVarName:str    = ReplaceVars(oAction.dActionPars.get('varname',''))
+        uVarValue:str   = ReplaceVars(oAction.dActionPars.get('varvalue',''))
+        uVarContext:str = ReplaceVars(oAction.dActionPars.get('varcontext',''))
         SetVar(uVarName = uVarName, oVarValue = uVarValue, uContext = uVarContext)
         self.oEventDispatcher.bDoNext = not VarHasLinks(uVarName=uVarName)
         return eReturnCode.Nothing
@@ -131,25 +134,25 @@ class cEventActionsVarControl(cEventActionBase):
             definitionname: Name of the definition
         """
 
-        uVarName:str        = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uVarValue:str       = ReplaceVars(oAction.dActionPars.get("varvalue",""))
-        uDefinitionName:str = ReplaceVars(oAction.dActionPars.get("definitionname",""))
+        uVarName:str        = ReplaceVars(oAction.dActionPars.get('varname',''))
+        uVarValue:str       = ReplaceVars(oAction.dActionPars.get('varvalue',''))
+        uDefinitionName:str = ReplaceVars(oAction.dActionPars.get('definitionname',''))
         oDef:cDefinition
 
-        self.oEventDispatcher.LogAction(uTxt=u'SetDefinitionVar',oAction=oAction)
-        if uDefinitionName=="":
+        self.oEventDispatcher.LogAction(uTxt='SetDefinitionVar',oAction=oAction)
+        if uDefinitionName=='':
             oDef=Globals.oDefinitions[0]
         else:
             oDef=Globals.oDefinitions[uDefinitionName]
         if oDef:
-            if uVarValue!=u'':
+            if uVarValue!='':
                 oDef.oDefinitionVars[uVarName]=uVarValue
             else:
                 if uVarName in oDef.oDefinitionVars:
                     del oDef.oDefinitionVars[uVarName]
             return eReturnCode.Nothing
         else:
-            LogError(uMsg=u'Action: SetDefinitionVar: Can''t find definition:'+uDefinitionName )
+            LogError(uMsg='Action: SetDefinitionVar: Can\'t find definition:'+uDefinitionName )
         return eReturnCode.Error
 
     def ExecuteActionModifyVar(self,oAction:cAction) -> eReturnCode:
@@ -216,6 +219,8 @@ class cEventActionsVarControl(cEventActionBase):
         * "tovar"
         * "addtoarray"
         * "removefromarray"
+        * "converttoarray"
+        * "regex"
         * "exists"
         |}</div>
 
@@ -304,6 +309,14 @@ class cEventActionsVarControl(cEventActionBase):
         |The var value to be removed
         |
         |-
+        |converttoarray
+        |The seperator for the array values
+        |
+        |-
+        |regex_sub
+        |The regex string to apply to the var, for substitution
+        |The substitute string
+        |-
         |exist
         |The var name to return, if the var exists (0/1)
         |
@@ -316,10 +329,10 @@ class cEventActionsVarControl(cEventActionBase):
         WikiDoc:End
         """
 
-        uVarName:str       = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uParameter1:str    = oAction.dActionPars.get("parameter1","")
-        uParameter2:str    = oAction.dActionPars.get("parameter2","")
-        uOperator:str      = ReplaceVars(oAction.dActionPars.get("operator",""))
+        uVarName:str       = ReplaceVars(oAction.dActionPars.get('varname',''))
+        uParameter1:str    = oAction.dActionPars.get('parameter1','')
+        uParameter2:str    = oAction.dActionPars.get('parameter2','')
+        uOperator:str      = ReplaceVars(oAction.dActionPars.get('operator',''))
         bNoVarDetails:bool = False
         iLevel:int
         aVars:List[str]
@@ -332,106 +345,88 @@ class cEventActionsVarControl(cEventActionBase):
         uNewVarName:str
         uTmp:str
 
-        if uOperator==u'increase':
-            Var_Increase(uVarName = uVarName,uStep = ReplaceVars(uParameter1), uMax = ReplaceVars(uParameter2))
-        elif uOperator==u'decrease':
-            Var_Decrease(uVarName = uVarName,uStep = ReplaceVars(uParameter1), uMin = ReplaceVars(uParameter2))
-        elif uOperator==u'multiply':
-            Var_Multiply(uVarName = uVarName, uFactor = ReplaceVars(uParameter1))
-        elif uOperator==u'divide':
-            Var_Divide(uVarName = uVarName, uDivisor =  ReplaceVars(uParameter1))
-        elif uOperator==u'power':
-            Var_Power(uVarName = uVarName, uPower = ReplaceVars(uParameter1))
-        elif uOperator==u'invert':
-            Var_Invert(uVarName = uVarName)
-        elif uOperator==u'delete':
-            if uVarName.endswith(u'[]'):
-                Var_DelArray(uVarName = uVarName)
-            else:
-                DelVar(uVarName = uVarName)
-        elif uOperator==u'round':
-            Var_Round(uVarName = uVarName, uPos = uParameter1)
-        elif uOperator==u'lowercase':
-            Var_LowerCase(uVarName = uVarName)
-        elif uOperator==u'uppercase':
-            Var_UpperCase(uVarName = uVarName)
-        elif uOperator==u'trim':
-            Var_Trim(uVarName = uVarName)
-        elif uOperator==u'fromvar':
-            uOldVar=GetVar(uVarName = uVarName)
-            Var_FromVar(uVarName = uVarName, uContext = ReplaceVars(uParameter1))
-            Logger.debug(u'FromVar: '+uVarName+"="+GetVar(uVarName = uVarName)+ u" ["+uOldVar+u"]")
-        elif uOperator==u'tovar':
-            uVarName = oAction.dActionPars.get("varname","")
-            Var_ToVar(uVarName = uVarName, uNewVarName = uParameter1)
-            Logger.debug(u'ToVar: '+uVarName+"="+uParameter1)
-        elif uOperator==u'concatenate':
-            Var_Concatenate(uVarName = uVarName,uAddVar = ReplaceVars(uParameter1))
-        elif uOperator==u'getpart':
-            Var_Part(uVarName = uVarName,uStart = uParameter1, uEnd = uParameter2)
-        elif uOperator==u'getlen':
-            Var_Len(uVarName = uVarName,uDestVar = uParameter1)
-        elif uOperator==u'find':
-            Var_Find(uVarName = uVarName,uFindVar = uParameter1, uDestVar = uParameter2)
-        elif uOperator==u'format':
-            Var_Format(uVarName = uVarName,uFormat = uParameter1)
-        elif uOperator==u'hex2int':
-            Var_Hex2Int(uVarName = uVarName)
-        elif uOperator==u'hexstringtostring':
-            Var_HexStringToString(uVarName = uVarName)
-        elif uOperator == u'totime':
-            Var_StringToTime(uVarName = uVarName,uFormat=ReplaceVars(uParameter1),uGap=ReplaceVars(uParameter2))
-        elif uOperator == u'stringtohexstring':
-            Var_StringToHexString(uVarName = uVarName)
-        elif uOperator==u'load':
-            Var_Load(uVarName=uVarName, uDefault=ReplaceVars(uParameter1),uPrefix=ReplaceVars(uParameter2))
-        elif uOperator==u'save':
-            Var_Save(uVarName=uVarName,uPrefix=ReplaceVars(uParameter1))
-        elif uOperator==u'addtoarray':
-            iLevel = uVarName.count('[')
-            aVars  = sorted(Var_GetArray(uVarName = uVarName, iLevel = iLevel))
-            uValue = ReplaceVars(uParameter1)
-            if uParameter2=="1":
+        match uOperator:
+            case 'increase':    Var_Increase(uVarName = uVarName,uStep = ReplaceVars(uParameter1), uMax = ReplaceVars(uParameter2))
+            case 'decrease':    Var_Decrease(uVarName = uVarName,uStep = ReplaceVars(uParameter1), uMin = ReplaceVars(uParameter2))
+            case 'multiply':    Var_Multiply(uVarName = uVarName, uFactor = ReplaceVars(uParameter1))
+            case 'divide':      Var_Divide(uVarName = uVarName, uDivisor =  ReplaceVars(uParameter1))
+            case 'power':       Var_Power(uVarName = uVarName, uPower = ReplaceVars(uParameter1))
+            case 'invert':      Var_Invert(uVarName = uVarName)
+            case 'round':       Var_Round(uVarName = uVarName, uPos = uParameter1)
+            case 'lowercase':   Var_LowerCase(uVarName = uVarName)
+            case 'uppercase':   Var_UpperCase(uVarName = uVarName)
+            case 'trim':        Var_Trim(uVarName = uVarName)
+            case 'concatenate': Var_Concatenate(uVarName = uVarName,uAddVar = ReplaceVars(uParameter1))
+            case 'getpart':     Var_Part(uVarName = uVarName,uStart = uParameter1, uEnd = uParameter2)
+            case 'getlen':      Var_Len(uVarName = uVarName,uDestVar = uParameter1)
+            case 'find':        Var_Find(uVarName = uVarName,uFindVar = uParameter1, uDestVar = uParameter2)
+            case 'format':      Var_Format(uVarName = uVarName,uFormat = uParameter1)
+            case 'hex2int':     Var_Hex2Int(uVarName = uVarName)
+            case 'hexstringtostring': Var_HexStringToString(uVarName = uVarName)
+            case  'totime':     Var_StringToTime(uVarName = uVarName,uFormat=ReplaceVars(uParameter1),uGap=ReplaceVars(uParameter2))
+            case 'stringtohexstring': Var_StringToHexString(uVarName = uVarName)
+            case 'load':        Var_Load(uVarName=uVarName, uDefault=ReplaceVars(uParameter1),uPrefix=ReplaceVars(uParameter2))
+            case 'save':        Var_Save(uVarName=uVarName,uPrefix=ReplaceVars(uParameter1))
+            case 'converttoarray': Var_ToArray(uVarName = uVarName,uSeparator = ReplaceVars(uParameter1))
+            case 'regex_sub':   Var_Regex_sub(uVarName=uVarName, uFormat=ReplaceVars(uParameter1), uReplace=ReplaceVars(uParameter2))
+            case 'delete':
+                if uVarName.endswith('[]'):
+                    Var_DelArray(uVarName = uVarName)
+                else:
+                    DelVar(uVarName = uVarName)
+            case 'fromvar':
+                uOldVar=GetVar(uVarName = uVarName)
+                Var_FromVar(uVarName = uVarName, uContext = ReplaceVars(uParameter1))
+                Logger.debug('FromVar: '+uVarName+'='+GetVar(uVarName = uVarName)+ ' ['+uOldVar+']')
+            case 'tovar':
+                uVarName = oAction.dActionPars.get('varname','')
+                Var_ToVar(uVarName = uVarName, uNewVarName = uParameter1)
+                Logger.debug('ToVar: '+uVarName+'='+uParameter1)
+            case 'addtoarray':
+                iLevel = uVarName.count('[')
+                aVars  = sorted(Var_GetArray(uVarName = uVarName, iLevel = iLevel))
+                uValue = ReplaceVars(uParameter1)
+                if uParameter2=='1':
+                    for uTmp in aVars:
+                        if GetVar(uVarName = uTmp)==uValue:
+                            return eReturnCode.Nothing
+
+                uMax = '1'
+                if len(aVars):
+                    uLast = aVars[-1]
+                    uMax  = uLast[uLast.rfind('[')+1:][:-1]
+                    if ToFloat2(uMax):
+                        uMax=str(ToInt(uMax)+1)
+                    else:
+                        Logger.warning('addtoarray:'+uVarName+' Array contains non numeric indices')
+
+                uNewVarName = uVarName[:-2]+'['+uMax+']'
+                SetVar(uVarName = uNewVarName, oVarValue = uValue)
+                Logger.debug('addtoarray:'+uNewVarName+'='+uValue)
+            case 'removefromarray':
+                iLevel = uVarName.count('[')
+                aVars  = sorted(Var_GetArray(uVarName = uVarName,iLevel = iLevel))
+                uValue = ReplaceVars(uParameter1)
                 for uTmp in aVars:
                     if GetVar(uVarName = uTmp)==uValue:
-                        return eReturnCode.Nothing
-
-            uMax = "1"
-            if len(aVars):
-                uLast = aVars[-1]
-                uMax  = uLast[uLast.rfind("[")+1:][:-1]
-                if ToFloat2(uMax):
-                    uMax=str(ToInt(uMax)+1)
+                        DelVar(uVarName = uTmp)
+            case 'loadfile':
+                Var_LoadFile(uVarName = uVarName,uFileName = ReplaceVars(uParameter1))
+                bNoVarDetails = True
+            case 'exists':
+                if ExistVar(uVarName) or uVarName in Globals.oActions.dActionsCommands:
+                    SetVar(uParameter1,'1')
                 else:
-                    Logger.warning(u'addtoarray:'+uVarName+" Array contains non numeric indices")
+                    SetVar(uParameter1, '0')
+                bNoVarDetails = True
+            case _:
+                LogError(uMsg='Action: ModifyVar: Wrong modifier:'+uOperator )
+                return eReturnCode.Error
 
-            uNewVarName = uVarName[:-2]+"["+uMax+"]"
-            SetVar(uVarName = uNewVarName, oVarValue = uValue)
-            Logger.debug(u'addtoarray:'+uNewVarName+"="+uValue)
-        elif uOperator==u'removefromarray':
-            iLevel = uVarName.count('[')
-            aVars  = sorted(Var_GetArray(uVarName = uVarName,iLevel = iLevel))
-            uValue = ReplaceVars(uParameter1)
-            for uTmp in aVars:
-                if GetVar(uVarName = uTmp)==uValue:
-                    DelVar(uVarName = uTmp)
-
-        elif uOperator==u'loadfile':
-            Var_LoadFile(uVarName = uVarName,uFileName = ReplaceVars(uParameter1))
-            bNoVarDetails = True
-        elif uOperator==u'exists':
-            if ExistVar(uVarName) or uVarName in Globals.oActions.dActionsCommands:
-                SetVar(uParameter1,"1")
-            else:
-                SetVar(uParameter1, "0")
-            bNoVarDetails = True
-        else:
-            LogError(uMsg=u'Action: ModifyVar: Wrong modifier:'+uOperator )
-            return eReturnCode.Error
         if bNoVarDetails:
-            self.oEventDispatcher.LogAction(uTxt=u'ModifyVar',oAction=oAction)
+            self.oEventDispatcher.LogAction(uTxt='ModifyVar',oAction=oAction)
         else:
-            self.oEventDispatcher.LogAction(uTxt=u'ModifyVar',oAction=oAction,uAddText="Result:"+GetVar(uVarName = uVarName))
+            self.oEventDispatcher.LogAction(uTxt='ModifyVar',oAction=oAction,uAddText='Result:'+GetVar(uVarName = uVarName))
 
         return eReturnCode.Nothing
 
@@ -483,26 +478,26 @@ class cEventActionsVarControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'AddVarLink',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='AddVarLink',oAction=oAction)
 
-        uLinkType:str      = oAction.dActionPars.get("linktype","")
-        uVarName:str       = ReplaceVars(oAction.dActionPars.get("varname",""))
-        uDelete:str        = ReplaceVars(oAction.dActionPars.get("delete",""))
+        uLinkType:str      = oAction.dActionPars.get('linktype','')
+        uVarName:str       = ReplaceVars(oAction.dActionPars.get('varname',''))
+        uDelete:str        = ReplaceVars(oAction.dActionPars.get('delete',''))
         uActionName:str
         uWidgetName:str
-        vCmd:Union[List[Dict[str,str]],str] = ""
+        vCmd:Union[List[Dict[str,str]],str] = ''
 
         if uLinkType=='widget':
-            uWidgetName = ReplaceVars(oAction.dActionPars.get("widgetname",""))
+            uWidgetName = ReplaceVars(oAction.dActionPars.get('widgetname',''))
             vCmd =            [
-                               {"name":"Check if widget exists on current page (varlink)","string":"getwidgetattribute","widgetname":uWidgetName,"attributename":"exists","retvar":"TMPWIDGETEXISTS"},
-                               {"name":"Update If Exists (varlink)"                      ,"string":"updatewidget", "widgetname":uWidgetName,"condition":"$var(TMPWIDGETEXISTS)==1"}
+                               {'name':'Check if widget exists on current page (varlink)','string':'getwidgetattribute','widgetname':uWidgetName,'attributename':'exists','retvar':'TMPWIDGETEXISTS'},
+                               {'name':'Update If Exists (varlink)'                      ,'string':'updatewidget', 'widgetname':uWidgetName,'condition':'$var(TMPWIDGETEXISTS)==1'}
                               ]
         elif uLinkType=='call':
-            uActionName     = ReplaceVars(oAction.dActionPars.get("actionname",""))
+            uActionName     = ReplaceVars(oAction.dActionPars.get('actionname',''))
             vCmd            = '{"string":"call %s"}' % uActionName
         elif uLinkType=='action':
-            vCmd            = ReplaceVars(oAction.dActionPars.get("parameters",""))
+            vCmd            = ReplaceVars(oAction.dActionPars.get('parameters',''))
 
         if not vCmd:
             return eReturnCode.Error
@@ -585,16 +580,16 @@ class cEventActionsVarControl(cEventActionBase):
 
         WikiDoc:End
         """
-        self.oEventDispatcher.LogAction(uTxt=u'ForIn',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='ForIn',oAction=oAction)
 
-        uVarName:str            = ReplaceVars(oAction.dActionPars.get("varname",""))
-        iLevel:int              = ToInt(oAction.dActionPars.get("level","1"))
-        uActionName:str         = ReplaceVars(oAction.dActionPars.get("actionname",""))
-        uBreakVar:str           = ReplaceVars(oAction.dActionPars.get("breakvar",""))
+        uVarName:str            = ReplaceVars(oAction.dActionPars.get('varname',''))
+        iLevel:int              = ToInt(oAction.dActionPars.get('level','1'))
+        uActionName:str         = ReplaceVars(oAction.dActionPars.get('actionname',''))
+        uBreakVar:str           = ReplaceVars(oAction.dActionPars.get('breakvar',''))
         aActions:List[cAction]  = []
         aVars:List[str]         = Var_GetArray(uVarName = uVarName,iLevel = iLevel,bSort=True)
 
-        SetVar(uVarName = uBreakVar, oVarValue = "0")
+        SetVar(uVarName = uBreakVar, oVarValue = '0')
 
         uVar:str
         uVarCore:str
@@ -603,15 +598,15 @@ class cEventActionsVarControl(cEventActionBase):
         iPosEnd:int
 
         for uVar in aVars:
-            uVarCore  = u""
-            uVarIndex = u""
-            iPosStart = Find_nth_Character(uVar,"[",iLevel)
-            iPosEnd   = Find_nth_Character(uVar,"]",iLevel)
+            uVarCore  = ''
+            uVarIndex = ''
+            iPosStart = Find_nth_Character(uVar,'[',iLevel)
+            iPosEnd   = Find_nth_Character(uVar,']',iLevel)
             if iPosEnd>iPosStart:
                 uVarCore  = uVar[:iPosStart]
                 uVarIndex = uVar[iPosStart+1:iPosEnd]
 
-            if uBreakVar == u'':
+            if uBreakVar == '':
                 self.oEventDispatcher.AddToSimpleActionList(aActionList=aActions,
                                                             aActions=[{'name':'Call ForIn Action',
                                                                        'string':'call','actionname':uActionName,
@@ -623,12 +618,12 @@ class cEventActionsVarControl(cEventActionBase):
                 self.oEventDispatcher.AddToSimpleActionList(aActionList=aActions,
                                                             aActions=[{'name':'Call ForIn Action',
                                                                        'string':'call','actionname':uActionName,
-                                                                       "forin_value":GetVar(uVarName = uVar),
-                                                                       "forin_var":uVar,
-                                                                       "forin_varcore":uVarCore,
-                                                                       "forin_index":uVarIndex,
-                                                                       "condition":"$var("+uBreakVar+")==0"}])
+                                                                       'forin_value':GetVar(uVarName = uVar),
+                                                                       'forin_var':uVar,
+                                                                       'forin_varcore':uVarCore,
+                                                                       'forin_index':uVarIndex,
+                                                                       'condition':'$var('+uBreakVar+')==0'}])
 
 
-        self.oEventDispatcher.ExecuteActionsNewQueue(aActions,None)
+        self.oEventDispatcher.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName=f'{GetActiveQueue().uName}_ForIn')
         return eReturnCode.Nothing

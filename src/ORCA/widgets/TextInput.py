@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -27,15 +27,15 @@ from ORCA.vars.Access               import GetVar
 from ORCA.utils.XML                 import GetXMLTextAttribute
 from ORCA.widgets.TextField         import cWidgetTextField
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 __all__ = ['cWidgetTextInput']
 
 
@@ -76,12 +76,12 @@ class cWidgetTextInput(cWidgetTextField):
 
     def __init__(self,**kwargs):
         super().__init__()
-        self.uDestVar:str       = u''
+        self.uDestVar:str       = ''
         self.oInputKeyboard = None
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet:bool = super(cWidgetTextInput, self).InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=uAnchor)
-        self.uDestVar = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'destvar', bMandatory=False,vDefault=u'inputstring')
+        self.uDestVar = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='destvar', bMandatory=False,vDefault='inputstring')
         uTmp:str = GetVar(uVarName = self.uDestVar)
         if uTmp:
             self.uCaption=uTmp

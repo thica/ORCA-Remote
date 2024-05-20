@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -24,5 +24,5 @@ from android.permissions import request_permissions, Permission
 
 
 def RequestPermissions() -> bool:
-    request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
+    request_permissions([Permission.READ_EXTERNAL_STORAGE,Permission.WRITE_EXTERNAL_STORAGE])
     return True

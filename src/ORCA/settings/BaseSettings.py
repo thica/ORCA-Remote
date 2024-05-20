@@ -1,0 +1,197 @@
+# -*- coding: utf-8 -*-
+"""
+    ORCA Open Remote Control Application
+    Copyright (C) 2013-2024  Carsten Thielepape
+    Please contact me by : http://www.orca-remote.org/
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+from typing import Any
+from typing import Dict
+
+from ORCA.vars.QueryDict    import cMonitoredSettings
+from kivy.logger import Logger
+from ORCA.utils.ConfigHelpers               import Config_GetDefault_Str
+from ORCA.utils.LogError                    import LogErrorSmall
+from ORCA.utils.TypeConvert                 import ToInt, ToFloat, ToBool, ToUnicode
+from ORCA.vars.Access                       import SetVar
+from ORCA.vars.Access                       import GetVar
+from ORCA.vars.Replace                      import ReplaceVars
+from ORCA.utils.Path                        import cPath
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.settings.BaseObject import cBaseObject
+else:
+    from typing import TypeVar
+    cBaseObject = TypeVar('cBaseObject')
+
+class cObjectMonitoredSettings(cMonitoredSettings):
+    """
+    Base Class for a single monitored setting for an object.
+    Main ensures to provide the context for the vars
+    """
+    def WriteVar(self,uName:str,vValue:Any) -> None:
+        """
+        Writes the CONTEXT var for a setting, when it has been changed
+        :param str uName: The name of the var
+        :param Any vValue: The var Value
+        :return: None
+        """
+        self.oBaseSettings.SetContextVar(uVarName=f'CONFIG_{uName.upper()[1:]}', uVarValue=vValue)
+        return None
+
+class cBaseSettings:
+    """ A base class for the script settings """
+    def __init__(self, oObject:cBaseObject ):
+        # some default settings, which should be there even if not configured by the Object
+        # use the exact spelling as in the settings json
+
+        self.oObject:cBaseObject                                = oObject
+        self.uConfigName:str                                    = 'DEFAULT'
+        self.uContext:str                                       = ''
+        self.uSection:str                                       = ''
+        self.aIniSettings:cObjectMonitoredSettings              = cObjectMonitoredSettings(self)
+        self.aIniSettings.bInitCompleted                        = False
+        self.bOnError:bool                                      = False
+        self.uType:str                                          = ''
+
+
+    def SetContextVar(self,*,uVarName:str,uVarValue:str) -> None:
+        """ Sets a var within the interface context
+
+        :param str uVarName: The name of the var
+        :param str uVarValue: The value if the var
+        """
+        SetVar(uVarName = uVarName, oVarValue = ToUnicode(uVarValue), uContext = self.oObject.uObjectName+'/'+self.uConfigName)
+
+    def GetContextVar(self,*,uVarName:str) -> str:
+        """ Gets a var within the interface context
+
+        :param str uVarName: The name of the var
+        """
+
+        return ReplaceVars(uOrgIn=uVarName,uContext = self.oObject.uObjectName+'/'+self.uConfigName)
+
+    def ReadConfigFromIniFile(self,*,uConfigName:str) -> None:
+        """
+        Reads the object config file
+
+        :param string uConfigName: The configuration name to read
+        :return: None
+        """
+
+        if self.aIniSettings.bInitCompleted:
+            return
+        self.aIniSettings.bInitCompleted = True
+
+        if uConfigName != '':
+            self.uConfigName = uConfigName
+            self.uContext= f'{self.oObject.uObjectName}/{self.uConfigName}'
+            self.SetContextVar(uVarName='context',uVarValue=self.uContext)
+
+        self.uSection = self.uConfigName
+
+        try:
+            self.oObject.oObjectConfig.LoadConfig()
+
+            if self.oObject.uObjectType == 'interface':
+                SetVar(uVarName = 'InterfaceCodesetList',   oVarValue = self.oObject.CreateCodesetListJSONString())
+            SetVar(uVarName = 'ObjectConfigSection', oVarValue = uConfigName)
+            dIniDef:Dict[str,Dict] = self.oObject.oObjectConfig.CreateSettingJsonCombined(oSetting=self)
+
+            for uKey2 in dIniDef:
+                dLine:Dict   = dIniDef[uKey2]
+                uType:str    = dLine.get('type')
+                uKey:str     = dLine.get('key')
+                uDefault:str = dLine.get('default')
+
+                if uKey is None or uDefault is None:
+                    continue
+
+                # we replace JSON defaults by interface-settings defaults, if exists
+                if self.aIniSettings.queryget(uKey) is not None:
+                    uDefault = self.aIniSettings.queryget(uKey)
+
+                uResult:str     = Config_GetDefault_Str(oConfig=self.oObject.oObjectConfig.oConfigParser,uSection=self.uSection, uOption=uKey,vDefaultValue=uDefault)
+
+                if uType == 'scrolloptions' or uType == 'string':
+                    self.aIniSettings[uKey]=ReplaceVars(uResult)
+                elif uType == 'numeric' or uType == 'numericslider':
+                    self.aIniSettings[uKey]=ToInt(uResult)
+                elif uType == 'numericfloat' :
+                    self.aIniSettings[uKey]=ToFloat(uResult)
+                elif uType == 'bool':
+                    self.aIniSettings[uKey]=ToBool(uResult)
+                elif uType == 'varstring':
+                    self.aIniSettings[uKey] = ReplaceVars(uResult)
+                elif uType=='path':
+                    if isinstance(uResult,str):
+                        self.aIniSettings[uKey]=cPath(uResult)
+                    else:
+                        self.aIniSettings[uKey] = uResult
+                elif uType == 'title' or uType=='buttons':
+                    pass
+                else:
+                    self.ShowError(uMsg=f'Cannot read config name (base), wrong attribute: {self.oObject.oObjectConfig.oFnConfig}  Section: {self.uSection} Type: {dLine["type"]}')
+
+                if uKey == 'FNCodeset':
+                    self.ReadCodeset()
+
+            self.oObject.oObjectConfig.oConfigParser.write()
+        except Exception as e:
+            self.ShowError(uMsg=f'Cant read config name (base): {self.oObject.oObjectConfig.oFnConfig} Section: {self.uSection}', oException=e)
+            return
+
+    def WriteConfigToIniFile(self) -> None:
+        """ Writes changes to the object config file """
+        self.oObject.oObjectConfig.oConfigParser.write()
+
+    def ReadCodeset(self) -> None:
+        """
+        #Dummy function, need to be overridden
+        :return:
+        """
+        pass
+
+    def ShowWarning(self,*,uMsg:str) -> str:
+        """ Shows a warning """
+        uRet:str = f'{self.uType.capitalize()} {self.oObject.uObjectName}/{self.uConfigName}:{uMsg}'
+        Logger.warning (uRet)
+        return uRet
+
+    def ShowInfo(self,*,uMsg:str) -> str:
+        """ Shows a warning """
+        uRet:str = f'{self.uType.capitalize()} {self.oObject.uObjectName}/{self.uConfigName}:{uMsg}'
+        Logger.info (uRet)
+        return uRet
+
+    def ShowDebug(self,*,uMsg:str)-> str:
+        """ Shows a debug message """
+        uRet:str = f'{self.uType.capitalize()} {self.oObject.uObjectName}/{self.uConfigName}:{uMsg}'
+        Logger.debug (uRet)
+        return uRet
+
+    def ShowError(self,*,uMsg:str, oException:Exception=None) -> str:
+        """ Shows an error"""
+        iErrNo:int = 0
+        if oException is not None:
+            if hasattr(oException,'errno'):
+                iErrNo=ToInt(oException.errno)
+        if iErrNo is None:
+            iErrNo=-1
+
+        uRet:str = LogErrorSmall (uMsg=f'{self.uType.capitalize()} {self.oObject.uObjectName}/{self.uConfigName} {uMsg} ({iErrNo:d}):', oException=oException)
+
+        return uRet

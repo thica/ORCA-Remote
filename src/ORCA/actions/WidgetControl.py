@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -25,8 +25,8 @@ from typing                             import cast
 
 from kivy.logger                        import Logger
 
-from ORCA.Action                        import cAction
-from ORCA.ScreenPage                    import cScreenPage
+from ORCA.action.Action import cAction
+from ORCA.screen.ScreenPage import cScreenPage
 from ORCA.actions.Base                  import cEventActionBase
 from ORCA.actions.ReturnCode            import eReturnCode
 from ORCA.definition.Definition         import cDefinition
@@ -46,9 +46,8 @@ from ORCA.widgets.Picture               import cWidgetPicture
 from ORCA.widgets.Slider                import cWidgetSlider
 from ORCA.widgets.Switch                import cWidgetSwitch
 from ORCA.widgets.Video                 import cWidgetVideo
-from ORCA.widgets.helper.WidgetType     import eWidgetType
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cEventActionsWidgetControl']
 
@@ -97,38 +96,38 @@ class cEventActionsWidgetControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'LoadElement',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='LoadElement',oAction=oAction)
         oDef:Optional[cDefinition] = None
         uFnElement: str
         oFileRedirect: cFileName
 
-        uFnElement = oAction.dActionPars.get("filename","")
+        uFnElement = oAction.dActionPars.get('filename','')
         ' twice by purpose'
-        oFileRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get((cFileName('').ImportFullPath(uFnFullName=ReplaceVars(uFnElement))).string)
+        oFileRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get(str(cFileName(ReplaceVars(uFnElement))))
         if oFileRedirect is not None:
-            uFnElement = oFileRedirect.string
+            uFnElement = str(oFileRedirect)
         uFnElement = ReplaceVars(uFnElement)
-        oFileRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get((cFileName('').ImportFullPath(uFnFullName=uFnElement)).string)
+        oFileRedirect = Globals.oTheScreen.oSkin.dSkinRedirects.get(str(cFileName(uFnElement)))
         if oFileRedirect is not None:
-            uFnElement = oFileRedirect.string
+            uFnElement = str(oFileRedirect)
 
-        uPage:str                   = ReplaceVars(oAction.dActionPars.get("pagename",""))
-        uAnchor:str                 = ReplaceVars(oAction.dActionPars.get("anchor",""))
-        uWidgetName:str             = ReplaceVars(oAction.dActionPars.get("widgetname",""))
-        uDefinitionVarContext:str   = oAction.dActionPars.get("definitionvarcontext",None)
+        uPage:str                   = ReplaceVars(oAction.dActionPars.get('pagename',''))
+        uAnchor:str                 = ReplaceVars(oAction.dActionPars.get('anchor',''))
+        uWidgetName:str             = ReplaceVars(oAction.dActionPars.get('widgetname',''))
+        uDefinitionVarContext:str   = oAction.dActionPars.get('definitionvarcontext',None)
         oPage:cScreenPage           = Globals.oTheScreen.oScreenPages.get(uPage)
 
         if uDefinitionVarContext is not None:
             oDef=Globals.oDefinitions[uDefinitionVarContext]
             if oDef is None:
-                LogError(uMsg=u'Action: loadelelement: Can''t find Definition:'+uDefinitionVarContext)
+                LogError(uMsg='Action: loadelelement: Can\'t find Definition:'+uDefinitionVarContext)
 
         if oPage is None:
-            LogError(uMsg=u'Action: LoadElement: Wrong page name:'+uPage )
+            LogError(uMsg='Action: LoadElement: Wrong page name:'+uPage )
             Globals.oTheScreen.DumpPages()
             return eReturnCode.Error
         if oPage.bIsInit and uWidgetName!='':
-            LogError(uMsg=u'Action: LoadElement: Can''t replace elements of initialized page:'+uPage )
+            LogError(uMsg='Action: LoadElement: Can\'t replace elements of initialized page:'+uPage )
             return eReturnCode.Error
         if uWidgetName=='':
             if oPage.LoadElement(uFnElement=uFnElement, uAnchor=uAnchor, oDefinition=oDef):
@@ -191,28 +190,28 @@ class cEventActionsWidgetControl(cEventActionBase):
         """
 
         self.oEventDispatcher.bDoNext = False
-        uWidgetName:str               = ReplaceVars(oAction.dActionPars.get("widgetname",""))
-        uOption:str                   = ReplaceVars(oAction.dActionPars.get("option",""))
-        bIgnoreMissing:bool           = ToBool(ReplaceVars(oAction.dActionPars.get("ignoremissing","0")))
+        uWidgetName:str               = ReplaceVars(oAction.dActionPars.get('widgetname',''))
+        uOption:str                   = ReplaceVars(oAction.dActionPars.get('option',''))
+        bIgnoreMissing:bool           = ToBool(ReplaceVars(oAction.dActionPars.get('ignoremissing','0')))
         uWidgetID:str
         oWidget:cWidgetBase
         aWidgets:List[cWidgetBase]
 
-        if uWidgetName==u'{pageclocks}':
-            SetVar(u'LOCALTIME', Globals.oLanguage.GetLocalizedTime(Globals.bClockWithSeconds))
+        if uWidgetName=='{pageclocks}':
+            SetVar('LOCALTIME', Globals.oLanguage.GetLocalizedTime(Globals.bClockWithSeconds))
             if Globals.oTheScreen.oCurrentPage is not None:
                 for uWidgetID in Globals.oTheScreen.oCurrentPage.aClockWidgetsID:
                     Globals.oTheScreen.oCurrentPage.dWidgetsID[uWidgetID].UpdateWidget()
             return eReturnCode.Nothing
 
-        if uWidgetName==u'{pagedates}':
-            SetVar(u'LOCALDATE', Globals.oLanguage.GetLocalizedDate(Globals.bLongDate, Globals.bLongMonth, Globals.bLongDay))
+        if uWidgetName=='{pagedates}':
+            SetVar('LOCALDATE', Globals.oLanguage.GetLocalizedDate(Globals.bLongDate, Globals.bLongMonth, Globals.bLongDay))
             if Globals.oTheScreen.oCurrentPage is not None:
                 for uWidgetID in Globals.oTheScreen.oCurrentPage.aDateWidgetsID:
                     Globals.oTheScreen.oCurrentPage.dWidgetsID[uWidgetID].UpdateWidget()
             return eReturnCode.Nothing
 
-        self.oEventDispatcher.LogAction(uTxt=u'UpdateWidget',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='UpdateWidget',oAction=oAction)
         if oAction.oParentWidget is None:
             oParentScreenPage=Globals.oTheScreen.oCurrentPage
         else:
@@ -221,13 +220,13 @@ class cEventActionsWidgetControl(cEventActionBase):
         aWidgets = Globals.oTheScreen.FindWidgets(uPageName=oParentScreenPage.uPageName,uWidgetName=uWidgetName, bIgnoreError=bIgnoreMissing)
         if len(aWidgets)>0:
             for oWidget in aWidgets:
-                if uOption == u'':
+                if uOption == '':
                     oWidget.UpdateWidget()
-                elif uOption == "second":
+                elif uOption == 'second':
                     oWidget.UpdateWidgetSecondCaption()
         else:
             if not bIgnoreMissing:
-                Logger.warning("UpdateWidget: wrong widget name:[%s][%s]" % (oParentScreenPage.uPageName, uWidgetName))
+                Logger.warning(f'UpdateWidget: wrong widget name:[{oParentScreenPage.uPageName}][{uWidgetName}]')
         return eReturnCode.Nothing
 
     def ExecuteActionAddGesture(self,oAction:cAction) -> eReturnCode:
@@ -265,15 +264,15 @@ class cEventActionsWidgetControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'AddGestures',oAction=oAction)
-        uWidgetName:str    = ReplaceVars(oAction.dActionPars.get("widgetname",""))
-        uGestureName:str   = ReplaceVars(oAction.dActionPars.get("gesturename",""))
-        uActionName:str    = ReplaceVars(oAction.dActionPars.get("actionname",""))
+        self.oEventDispatcher.LogAction(uTxt='AddGestures',oAction=oAction)
+        uWidgetName:str    = ReplaceVars(oAction.dActionPars.get('widgetname',''))
+        uGestureName:str   = ReplaceVars(oAction.dActionPars.get('gesturename',''))
+        uActionName:str    = ReplaceVars(oAction.dActionPars.get('actionname',''))
         oWidget:cWidgetBase
 
-        if uWidgetName==u'Background':
+        if uWidgetName=='Background':
             oBackGround=Globals.oTheScreen.oCurrentPage.oWidgetBackGround
-            oBackGround.oObject.AddGesture(uGestureName,uActionName,oAction.dActionPars.get(u'interface',u''),oAction.dActionPars.get(u'configname',u''))
+            oBackGround.oObject.AddGesture(uGestureName,uActionName,oAction.dActionPars.get('interface',''),oAction.dActionPars.get('configname',''))
             return eReturnCode.Nothing
         aWidgets:List[cWidgetBase] = Globals.oTheScreen.FindWidgets(uPageName = oAction.oParentWidget.oParentScreenPage.uPageName,uWidgetName = uWidgetName)
         for oWidget in aWidgets:
@@ -343,14 +342,14 @@ class cEventActionsWidgetControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'SetWidgetAttribute',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='SetWidgetAttribute',oAction=oAction)
 
-        uWidgetName:str       = ReplaceVars(oAction.dActionPars.get("widgetname",""))
-        uAttributeName:str    = ReplaceVars(oAction.dActionPars.get("attributename",""))
-        uAttributeValue:str   = ReplaceVars(oAction.dActionPars.get("attributevalue",""))
-        uTouchType:str        = ReplaceVars(oAction.dActionPars.get("touchtype",""))
-        uAutoUpDate:str       = ReplaceVars(oAction.dActionPars.get("autoupdate",""))
-        bIgnoreMissing:bool   = ToBool(ReplaceVars(oAction.dActionPars.get("ignoremissing","0")))
+        uWidgetName:str       = ReplaceVars(oAction.dActionPars.get('widgetname',''))
+        uAttributeName:str    = ReplaceVars(oAction.dActionPars.get('attributename',''))
+        uAttributeValue:str   = ReplaceVars(oAction.dActionPars.get('attributevalue',''))
+        uTouchType:str        = ReplaceVars(oAction.dActionPars.get('touchtype',''))
+        uAutoUpDate:str       = ReplaceVars(oAction.dActionPars.get('autoupdate',''))
+        bIgnoreMissing:bool   = ToBool(ReplaceVars(oAction.dActionPars.get('ignoremissing','0')))
         oWidget:cWidgetBase
         uPageName:str
         bRet:bool
@@ -358,80 +357,54 @@ class cEventActionsWidgetControl(cEventActionBase):
 
         self.oEventDispatcher.bDoNext = False
         try:
-            uPageName = u''
+            uPageName = ''
             if oAction.oParentWidget is not None:
                 uPageName = oAction.oParentWidget.oParentScreenPage.uPageName
 
             aWidgets = Globals.oTheScreen.FindWidgets(uPageName = uPageName,uWidgetName = uWidgetName, bIgnoreError=bIgnoreMissing)
             for oWidget in aWidgets:
                 bRet = True
-                if uAttributeName==u'bold':
-                    bRet = oWidget.SetWidgetFontStyle(uAttributeValue=='1',None,None)
-                elif uAttributeName==u'italic':
-                    bRet = oWidget.SetWidgetFontStyle(None,uAttributeValue=='1',None)
-                elif uAttributeName==u'textcolor':
-                    bRet = oWidget.SetWidgetFontStyle(None,None,uAttributeValue)
-                elif uAttributeName==u'caption':
-                    bRet =  oWidget.SetCaption(uAttributeValue)
-                elif uAttributeName==u'fontsize':
-                    oWidget.oObject.font_size = uAttributeValue
-                    bRet = True
-                elif uAttributeName==u'picturenormal':
-                    if oWidget.eWidgetType == eWidgetType.Picture or oWidget.eWidgetType == eWidgetType.Button or oWidget.eWidgetType == eWidgetType.Switch:
-                        bRet = cast(Union[cWidgetPicture, cWidgetButton, cWidgetSwitch],oWidget).SetPictureNormal (uAttributeValue,True)
-                elif uAttributeName==u'picturepressed':
-                    if oWidget.eWidgetType == eWidgetType.Picture or oWidget.eWidgetType == eWidgetType.Button  or oWidget.eWidgetType == eWidgetType.Switch:
-                        bRet = cast(Union[cWidgetPicture, cWidgetButton, cWidgetSwitch],oWidget).SetPicturePressed (uAttributeValue)
-                elif uAttributeName==u'color':
-                    bRet = oWidget.SetWidgetColor (uAttributeValue)
-                elif uAttributeName==u'transparancy':
-                    bRet = oWidget.SetTransparancy (ToFloat(uAttributeValue))
-                elif uAttributeName==u'filename':
-                    if oWidget.eWidgetType == eWidgetType.Video:
-                        bRet = cast(cWidgetVideo,oWidget).SetFileName(uAttributeValue)
-                elif uAttributeName==u'enable':
-                    bRet =  oWidget.EnableWidget(bEnable=(uAttributeValue==u'1'))
-                elif uAttributeName==u'remove':
-                    bRet =  oWidget.oParentScreenPage.RemoveWidget(oWidget=oWidget)
-                elif uAttributeName==u'setfocus':
-                    bRet =  oWidget.SetFocus()
-                elif uAttributeName==u'allbuttonsoff':
-                    if oWidget.eWidgetType==eWidgetType.Switch:
-                        cast(cWidgetSwitch,oWidget).AllButtonsOff()
-                elif uAttributeName==u'startangle':
-                    if oWidget.eWidgetType==eWidgetType.Circle:
-                        cast(cWidgetCircle,oWidget).fStartAngle=ToFloat(uAttributeValue)
-                elif uAttributeName==u'endangle':
-                    if oWidget.eWidgetType==eWidgetType.Circle:
-                        cast(cWidgetCircle,oWidget).fEndAngle=ToFloat(uAttributeValue)
-                elif uAttributeName==u'min':
-                    if oWidget.eWidgetType==eWidgetType.Knob or oWidget.eWidgetType==eWidgetType.Slider:
-                        cast(Union[cWidgetKnob, cWidgetSlider],oWidget).SetMin(ToFloat(uAttributeValue))
-                elif uAttributeName==u'max':
-                    if oWidget.eWidgetType==eWidgetType.Knob or oWidget.eWidgetType==eWidgetType.Slider:
-                        cast(Union[cWidgetKnob, cWidgetSlider],oWidget).SetMax(ToFloat(uAttributeValue))
-                elif uAttributeName==u'action':
-                    self.oEventDispatcher.bDoNext = True
-                    oWidget.uActionString=uAttributeValue
-                    if uTouchType=='':
-                        oWidget.uActionName=uAttributeValue
-                    elif uTouchType=='double':
-                        oWidget.uActionNameDoubleTap=uAttributeValue
-                    elif uTouchType=='up':
-                        oWidget.uActionNameUpOnly=uAttributeValue
-                    elif uTouchType=='down':
-                        oWidget.uActionNameUpDownOnly=uAttributeValue
-                    elif uTouchType=='long':
-                        oWidget.uActionNameLong=uAttributeValue
-                    else:
-                        uMsg=u'Action: SetWidgetAttribute: Action not set %s %s %s :' % (uWidgetName,uAttributeName,uAttributeValue)
+
+                #we allow to set attributes to unsupported widget, and then run on an error
+
+                match uAttributeName:
+                    case 'bold':            bRet = oWidget.SetWidgetFontStyle(bBold=uAttributeValue=='1',bItalic=None,uColor=None)
+                    case 'italic':          bRet = oWidget.SetWidgetFontStyle(bBold=None,bItalic=uAttributeValue=='1',uColor=None)
+                    case 'textcolor':       bRet = oWidget.SetWidgetFontStyle(bBold=None,bItalic=None,uColor=uAttributeValue)
+                    case 'caption':         bRet = oWidget.SetCaption(uAttributeValue)
+                    case 'color':           bRet = oWidget.SetWidgetColor (uAttributeValue)
+                    case 'fontsize':        oWidget.oObject.font_size = uAttributeValue
+                    case 'transparancy':    bRet = oWidget.SetTransparancy (ToFloat(uAttributeValue))
+                    case 'enable':          bRet =  oWidget.EnableWidget(bEnable=(uAttributeValue=='1'))
+                    case 'remove':          bRet =  oWidget.oParentScreenPage.RemoveWidget(oWidget=oWidget)
+                    case 'setfocus':        bRet =  oWidget.SetFocus()
+                    case 'picturenormal':   bRet = cast(Union[cWidgetPicture, cWidgetButton, cWidgetSwitch],oWidget).SetPictureNormal (uAttributeValue,True)
+                    case 'picturepressed':  bRet = cast(Union[cWidgetPicture, cWidgetButton, cWidgetSwitch],oWidget).SetPicturePressed (uAttributeValue)
+                    case 'filename':        bRet = cast(cWidgetVideo,oWidget).SetFileName(uAttributeValue)
+                    case 'allbuttonsoff':   cast(cWidgetSwitch,oWidget).AllButtonsOff()
+                    case 'startangle':      cast(cWidgetCircle,oWidget).fStartAngle=ToFloat(uAttributeValue)
+                    case 'endangle':        cast(cWidgetCircle,oWidget).fEndAngle=ToFloat(uAttributeValue)
+                    case 'min':             cast(Union[cWidgetKnob, cWidgetSlider],oWidget).SetMin(ToFloat(uAttributeValue))
+                    case 'max':             cast(Union[cWidgetKnob, cWidgetSlider],oWidget).SetMax(ToFloat(uAttributeValue))
+                    case 'action':
+                        self.oEventDispatcher.bDoNext = True
+                        oWidget.uActionString=uAttributeValue
+                        match uTouchType:
+                            case '':            oWidget.uActionName=uAttributeValue
+                            case 'double':      oWidget.uActionNameDoubleTap=uAttributeValue
+                            case 'up':          oWidget.uActionNameUpOnly=uAttributeValue
+                            case 'down':        oWidget.uActionNameUpDownOnly=uAttributeValue
+                            case 'long':        oWidget.uActionNameLong=uAttributeValue
+                            case _:
+                                uMsg= f'Action: SetWidgetAttribute: Action not set {uWidgetName} {uAttributeName} {uAttributeValue} :'
+                                Logger.error (uMsg)
+                                ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
+                                bRet = False
+                    case _:
+                        uMsg= f'Action: SetWidgetAttribute: Attribute not Found {uWidgetName} {uAttributeName}'
                         Logger.error (uMsg)
                         ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
-                else:
-                    uMsg=u'Action: SetWidgetAttribute: Attribute not Found %s %s' %(uWidgetName,uAttributeName)
-                    Logger.error (uMsg)
-                    ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
-                    return eReturnCode.Error
+                        return eReturnCode.Error
                 # Auto Update Widget
                 if uAutoUpDate=='1':
                     bRet=(self.ExecuteActionUpdateWidget(oAction)==eReturnCode.Success)
@@ -441,7 +414,7 @@ class cEventActionsWidgetControl(cEventActionBase):
                     return eReturnCode.Error
             return eReturnCode.Error
         except Exception as e:
-            ShowErrorPopUp(uTitle='Warning',uMessage=LogError(uMsg='Action: SetWidgetAttribute: Could not set Attribute: %s:%s' % (uWidgetName,uAttributeName),oException=e))
+            ShowErrorPopUp(uTitle='Warning', uMessage=LogError(uMsg=f'Action: SetWidgetAttribute: Could not set attribute: {uWidgetName}:{uAttributeName}', oException=e))
             return eReturnCode.Error
 
     def ExecuteActionGetWidgetAttribute(self,oAction:cAction) -> eReturnCode:
@@ -496,78 +469,57 @@ class cEventActionsWidgetControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'GetWidgetAttribute',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='GetWidgetAttribute',oAction=oAction)
 
-        uWidgetName:str       = ReplaceVars(oAction.dActionPars.get("widgetname",""))
-        uAttributeName:str    = ReplaceVars(oAction.dActionPars.get("attributename",""))
-        uRetVar:str           = ReplaceVars(oAction.dActionPars.get("retvar",""))
-        # uTouchType:str        = ReplaceVars(oAction.dActionPars.get("touchtype",""))
-        bIgnoreMissing:bool   = ToBool(ReplaceVars(oAction.dActionPars.get("ignoremissing","0")))
+        uWidgetName:str       = ReplaceVars(oAction.dActionPars.get('widgetname',''))
+        uAttributeName:str    = ReplaceVars(oAction.dActionPars.get('attributename',''))
+        uRetVar:str           = ReplaceVars(oAction.dActionPars.get('retvar',''))
+        # uTouchType:str        = ReplaceVars(oAction.dActionPars.get('touchtype',''))
+        bIgnoreMissing:bool   = ToBool(ReplaceVars(oAction.dActionPars.get('ignoremissing','0')))
 
-        uRet:str               = "error"
+        uRet:str               = 'error'
         eRet:eReturnCode       = eReturnCode.Success
 
-        bIgnoreError:bool     = (uAttributeName == u'exists')
+        bIgnoreError:bool     = (uAttributeName == 'exists')
         oWidget:cWidgetBase
         aWidgets:List[cWidgetBase]
 
         try:
-            uPageName:str=u''
+            uPageName:str=''
             if oAction.oParentWidget is not None:
                 uPageName=oAction.oParentWidget.oParentScreenPage.uPageName
 
             aWidgets=Globals.oTheScreen.FindWidgets(uPageName=uPageName,uWidgetName=uWidgetName, bIgnoreError=(bIgnoreError | bIgnoreMissing))
             if len(aWidgets)==1:
                 oWidget=aWidgets[0]
-                if uAttributeName==u'bold' or uAttributeName==u'italic' or uAttributeName==u'textcolor':
-                    uRet = oWidget.GetWidgetFontStyle(uAttributeName)
-                elif uAttributeName==u'caption':
-                    uRet =  oWidget.GetCaption()
-                elif uAttributeName==u'picturenormal':
-                    if oWidget.eWidgetType == eWidgetType.Picture or oWidget.eWidgetType == eWidgetType.Button or oWidget.eWidgetType == eWidgetType.Switch:
-                        uRet = cast(Union[cWidgetPicture, cWidgetButton, cWidgetSwitch],oWidget).oFnPictureNormal.string
-                elif uAttributeName==u'picturepressed':
-                    if oWidget.eWidgetType == eWidgetType.Button or oWidget.eWidgetType == eWidgetType.Switch:
-                        uRet = cast(Union[cWidgetButton, cWidgetSwitch],oWidget).oFnButtonPicturePressed.string
-                elif uAttributeName==u'color':
-                    uRet =  oWidget.uBackGroundColor
-                elif uAttributeName==u'fontsize':
-                    uRet =  ToUnicode(oWidget.oObject.font_size)
-                elif uAttributeName==u'transparancy':
-                    uRet =  ToUnicode(oWidget.fOrgOpacity )
-                elif uAttributeName==u'filename':
-                    if oWidget.eWidgetType == eWidgetType.Video:
-                        uRet =  cast(cWidgetVideo,oWidget).uFileName
-                elif uAttributeName==u'enabled':
-                    uRet = u"0"
-                    if oWidget.bIsEnabled:
-                        uRet= u"1"
-                elif uAttributeName==u'startangle':
-                    if oWidget.eWidgetType == eWidgetType.Circle:
-                        uRet = ToUnicode(cast(cWidgetCircle,oWidget).fStartAngle)
-                elif uAttributeName==u'endangle':
-                    if oWidget.eWidgetType == eWidgetType.Circle:
-                        uRet = ToUnicode(cast(cWidgetCircle,oWidget).fEndAngle)
-                elif uAttributeName==u'action':
-                    if hasattr(oWidget,"uActionName"):
-                        uRet = oWidget.uActionName
-                    else:
-                        uRet = ""
-                elif uAttributeName == u'exists':
-                    uRet = "1"
-                else:
-                    uMsg=u'Action: GetWidgetAttribute: Attribute not Found %s %s' %(uWidgetName,uAttributeName)
-                    Logger.error (uMsg)
-                    ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
-                    eRet = eReturnCode.Error
+                #we allow to collect attribute from unsupported widget and the run on an error
+                match uAttributeName:
+                    case 'bold' | 'italic' | 'textcolor':   uRet = oWidget.GetWidgetFontStyle(uAttributeName)
+                    case 'caption':                         uRet =  oWidget.GetCaption()
+                    case 'picturenormal':                   uRet = str(cast(Union[cWidgetPicture, cWidgetButton, cWidgetSwitch],oWidget).oFnPictureNormal)
+                    case 'picturepressed':                  uRet = str(cast(Union[cWidgetButton, cWidgetSwitch],oWidget).oFnButtonPicturePressed)
+                    case 'color':                           uRet =  oWidget.uBackGroundColor
+                    case 'fontsize':                        uRet =  ToUnicode(oWidget.oObject.font_size)
+                    case 'transparancy':                    uRet =  ToUnicode(oWidget.fOrgOpacity )
+                    case 'filename':                        uRet =  cast(cWidgetVideo,oWidget).uFileName
+                    case 'enabled':                         uRet = ('0' if not oWidget.bIsEnabled else '1')
+                    case 'startangle':                      uRet = ToUnicode(cast(cWidgetCircle,oWidget).fStartAngle)
+                    case 'endangle':                        uRet = ToUnicode(cast(cWidgetCircle,oWidget).fEndAngle)
+                    case 'action':                          uRet = (oWidget.uActionName if hasattr(oWidget,'uActionName') else '')
+                    case 'exists':                          uRet = '1'
+                    case _:
+                        uMsg= f'Action: GetWidgetAttribute: Attribute not Found {uWidgetName} {uAttributeName}'
+                        Logger.error (uMsg)
+                        ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
+                        eRet = eReturnCode.Error
             else:
-                if uAttributeName == u'exists':
-                    uRet="0"
+                if uAttributeName == 'exists':
+                    uRet='0'
                 else:
                     eRet = eReturnCode.Error
 
         except Exception as e:
-            ShowErrorPopUp(uTitle='Warning',uMessage=LogError(uMsg='Action: GetWidgetAttribute: Could not set Attribut: %s:%s' % (uWidgetName,uAttributeName),oException=e))
+            ShowErrorPopUp(uTitle='Warning', uMessage=LogError(uMsg=f'Action: GetWidgetAttribute: Could not get attribute: {uWidgetName}:{uAttributeName}', oException=e))
             eRet = eReturnCode.Error
 
         SetVar(uRetVar,uRet)

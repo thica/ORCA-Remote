@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ from ORCA.vars.Access                   import SetVar
 from ORCA.utils.XML                     import GetXMLTextValue
 from ORCA.utils.FileName                import cFileName
 from ORCA.utils.Path                    import cPath
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from ORCA.download.DownloadObject       import cDownLoadObject
 from ORCA.download.RepEntry             import cRepEntry
@@ -38,12 +38,12 @@ from ORCA.download.LoadOnlineResource   import cLoadOnlineResource
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.Events import cEvents
-    from ORCA.Action import cAction
+    from ORCA.action.Events import cEvents
+    from ORCA.action.Action import cAction
 else:
     from typing import TypeVar
-    cEvents     = TypeVar("cEvents")
-    cAction     = TypeVar("cAction")
+    cEvents     = TypeVar('cEvents')
+    cAction     = TypeVar('cAction')
 
 # Helper class to hold all installed resources like definitions, , etc
 
@@ -57,17 +57,17 @@ class cRepository(EventDispatcher):
     """
     def __init__(self, *args, **kwargs):
         super(cRepository, self).__init__(*args, **kwargs)
-        self.uRepType:str                       = u''
-        self.uName:str                          = u''
-        self.uDescription:str                   = u''
+        self.uRepType:str                       = ''
+        self.uName:str                          = ''
+        self.uDescription:str                   = ''
         self.aRepEntries:List[cRepEntry]        = []
         self.oPath:Union[cPath,None]            = None
-        self.uUrl:str                           = u''
-        self.uDest:str                          = u''
+        self.uUrl:str                           = ''
+        self.uDest:str                          = ''
         self.aDownloads:List                    = []
         self.oDownloader:cLoadOnlineResource    = cLoadOnlineResource(oRepository=self)
         self.bCancel:bool                       = False
-        self.uVersion:str                       = u''
+        self.uVersion:str                       = ''
 
     def Init(self):
         """ Inits the Objects """
@@ -79,12 +79,12 @@ class cRepository(EventDispatcher):
         oXMLEntries:Element
 
         try:
-            self.uDescription   = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'description',bMandatory=True, vDefault=u'')
-            self.uVersion       = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'version',    bMandatory=False,vDefault=u'unknown')
-            self.uRepType       = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'type',       bMandatory=False,vDefault=u'unknown')
-            oXMLEntries =  oXMLNode.find(u'entries')
+            self.uDescription   = GetXMLTextValue(oXMLNode=oXMLNode,uTag='description',bMandatory=True, vDefault='')
+            self.uVersion       = GetXMLTextValue(oXMLNode=oXMLNode,uTag='version',    bMandatory=False,vDefault='unknown')
+            self.uRepType       = GetXMLTextValue(oXMLNode=oXMLNode,uTag='type',       bMandatory=False,vDefault='unknown')
+            oXMLEntries =  oXMLNode.find('entries')
             if not oXMLEntries is None:
-                for oXMLEntry in oXMLEntries.findall(u'entry'):
+                for oXMLEntry in oXMLEntries.findall('entry'):
                     oRepEntry:cRepEntry=cRepEntry()
                     oRepEntry.ParseFromXMLNode(oXMLEntry=oXMLEntry)
                     if not oRepEntry.bSkip:
@@ -93,9 +93,9 @@ class cRepository(EventDispatcher):
                         if oRepEntry.iMinOrcaVersion<=Globals.iVersion:
                             self.aRepEntries.append(oRepEntry)
                         else:
-                            Logger.warning("Skip dependency as it needs a newer ORCA Version, Minimum: %d, Orca: %d" %(oRepEntry.iMinOrcaVersion , Globals.iVersion))
+                            Logger.warning(f'Skip dependency as it needs a newer ORCA Version, Minimum: {oRepEntry.iMinOrcaVersion:d}, Orca: {Globals.iVersion:d}')
         except Exception as e:
-            LogError(uMsg=u'Can\'t parse repository:'+self.uUrl,oException=e)
+            LogError(uMsg='Can\'t parse repository:'+self.uUrl,oException=e)
 
     def WriteToXMLNode(self,*,uType:str) -> None:
         """ writes object vars to an xml node """
@@ -119,7 +119,7 @@ class cRepository(EventDispatcher):
     def LoadAllSubReps(self,*,uPath:str,aSubReps:List,bDoNotExecute:bool) -> List:
         """ Load all sub reposities (dependencies) """
 
-        Logger.debug('Repository: Request to download reposity description: [%s]' % uPath)
+        Logger.debug('Repository: Request to download repository description: [%s]' % uPath)
 
         bDoRefresh=False
 
@@ -134,15 +134,15 @@ class cRepository(EventDispatcher):
         for uSubRep in aSubReps:
             uRepType                            = uSubRep[1]
             uRepPrettyName                      = uSubRep[0]
-            uUrl                                = '%s/%s/repository.xml' % (uPath,uRepType)
+            uUrl                                = f'{uPath}/{uRepType}/repository.xml'
             oDownLoadObject.dPars['Url']        = uUrl
             oDownLoadObject.dPars['Type']       = uRepType
-            oDownLoadObject.dPars['Dest']       = (cFileName(Globals.oPathTmp) + 'download.xml').string
-            oDownLoadObject.dPars['Finalize']   = "REPOSITORY XML"
+            oDownLoadObject.dPars['Dest']       = str(cFileName(Globals.oPathTmp) + 'download.xml')
+            oDownLoadObject.dPars['Finalize']   = 'REPOSITORY XML'
             oDownLoadObject.dPars['PrettyName'] = uRepPrettyName
 
             oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showprogressbar','message':uUrl,'current':'0'},
-                                                                         {'string':'loadresource','resourcereference':oDownLoadObject.ToString(),'condition':"$var(DOWNLOADERROR)==0"}])
+                                                                         {'string':'loadresource','resourcereference':oDownLoadObject.ToString(),'condition':'$var(DOWNLOADERROR)==0'}])
 
 
         oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showprogressbar'}])
@@ -153,14 +153,14 @@ class cRepository(EventDispatcher):
         oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'showquestion','title':'$lvar(595)','message':'$lvar(698)','actionyes':'dummy','condition':'$var(DOWNLOADERROR)==1'}])
 
         #Execute the Queue
-        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='loadallsubreps')
 
         return aActions
 
     # noinspection PyMethodMayBeStatic
     def CancelLoading(self):
         """ Set a flag when loading has been cancelled """
-        SetVar(uVarName = "DOWNLOADERROR", oVarValue = "1")
+        SetVar(uVarName = 'DOWNLOADERROR', oVarValue = '1')
 
 
 oRepository:cRepository = cRepository()

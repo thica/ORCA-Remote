@@ -15,6 +15,11 @@
 {"type": "info","title": "$lvar(615)","section": "ORCA","info":"$var(IP_ADDRESSV4)"},
 {"type": "info","title": "$lvar(616)","section": "ORCA","info":"$var(IP_GATEWAYV4)"},
 {"type": "info","title": "$lvar(617)","section": "ORCA","info":"$var(IP_SUBNETV4)"},
-{"type": "info","title": "$lvar(618)","section": "ORCA","info":"$var(IP_ADDRESSV6)"},
-{"type": "info","title": "$lvar(619)","section": "ORCA","info":"$var(MAC_ADDRESS_COLON)"}
+{"type": "info","title": "$lvar(618)","section": "ORCA","info":"$var(IP_ADDRESSV6FULL)"},
+{"type": "info","title": "$lvar(622)","section": "ORCA","info":"$var(IP_GATEWAYV6)"},
+{"type": "info","title": "$lvar(623)","section": "ORCA","info":"$var(IP_SUBNETV6)"},
+{"type": "info","title": "$lvar(619)","section": "ORCA","info":"$var(MAC_ADDRESS_COLON)"},
+{"type": "info","title": "$lvar(628)","section": "ORCA","info":"$var(IP_INTERFACENAME_OS)"},
+{"type": "info","title": "$lvar(629)","section": "ORCA","info":"$var(IP_INTERFACENAME_PHYS)"},
+{"type": "info","title": "$lvar(630)","section": "ORCA","info":"$var(IP_INTERFACENAME_NICE)"}
 ]

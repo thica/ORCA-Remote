@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -33,12 +33,12 @@ from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
 
 from ORCA.vars.Replace      import ReplaceVars
 from ORCA.utils.TypeConvert import ToFloat2
-from ORCA.Action            import cAction
+from ORCA.action.Action import cAction
 
 
 
 # One Character Conditions at the end
-aConditions: List[str] = [u'==', u'!=', u'<>', u'>=', u'<=', u'=', u'<', u'>']
+aConditions: List[str] = ['==', '!=', '<>', '>=', '<=', '=', '<', '>']
 
 def SplitCondition(*,uCondition: str) -> Tuple[str,str,str]:
     """
@@ -54,8 +54,8 @@ def SplitCondition(*,uCondition: str) -> Tuple[str,str,str]:
             uConditionValue:str     = aRsp[1]
             return uConditionCheckType,uConditionVar,uConditionValue
 
-    Logger.error(u'Wrong Condition:', uCondition)
-    return "", "", ""
+    Logger.error('Wrong Condition:', uCondition)
+    return '', '', ''
 
 def CheckCondition(*,oPar: Union[Dict,cAction,Element]) -> bool:
     """
@@ -70,22 +70,22 @@ def CheckCondition(*,oPar: Union[Dict,cAction,Element]) -> bool:
     """
 
     oAction: cAction
-    if oPar.__class__.__name__ == "cAction":
+    if oPar.__class__.__name__ == 'cAction':
         oAction = oPar
         oPar = oAction.dActionPars
     else:
         oAction = cAction()
 
-    uConditionCheckType: str = cast(Dict,oPar).get(u'conditionchecktype')
-    uCondition: str          = cast(Dict,oPar).get(u'condition')
-    uContext: str            = cast(Dict,oPar).get(u"varcontext", "")
+    uConditionCheckType: str = cast(Dict,oPar).get('conditionchecktype')
+    uCondition: str          = cast(Dict,oPar).get('condition')
+    uContext: str            = cast(Dict,oPar).get('varcontext', '')
 
     if uConditionCheckType is None:
         if uCondition is None:
             return True
 
-    uConditionVar: str   = cast(Dict,oPar).get(u'conditionvar')
-    uConditionValue: str = cast(Dict,oPar).get(u'conditionvalue')
+    uConditionVar: str   = cast(Dict,oPar).get('conditionvar')
+    uConditionValue: str = cast(Dict,oPar).get('conditionvalue')
 
     if uCondition != '' and uCondition is not None:
         uConditionCheckType, uConditionVar, uConditionValue = SplitCondition(uCondition=uCondition)
@@ -94,15 +94,15 @@ def CheckCondition(*,oPar: Union[Dict,cAction,Element]) -> bool:
 
     try:
         if not oAction.oParentWidget is None:
-            if not oAction.uActionTapType == u'both':
-                if oAction.uActionTapType == u'single':
+            if not oAction.uActionTapType == 'both':
+                if oAction.uActionTapType == 'single':
                     if oAction.oParentWidget.bDoubleTap:
                         return bRet
-                if oAction.uActionTapType == u'double':
+                if oAction.uActionTapType == 'double':
                     if not oAction.oParentWidget.bDoubleTap:
                         return bRet
 
-        if uConditionCheckType == u'':
+        if uConditionCheckType == '':
             return True
         uVar: str = ReplaceVars(uConditionVar, uContext)
         if uVar.startswith('$var('):
@@ -110,37 +110,40 @@ def CheckCondition(*,oPar: Union[Dict,cAction,Element]) -> bool:
 
         uValue: str              = ReplaceVars(uConditionValue, uContext)
         uConditionCheckType      = ReplaceVars(uConditionCheckType, uContext)
-        if uConditionCheckType == u'==' or uConditionCheckType == u'=':
-            if uVar == uValue:
-                bRet = True
-        elif uConditionCheckType == u'!=' or uConditionCheckType == u'<>':
-            if uVar != uValue:
-                bRet = True
-        else:
-            fValue: float
-            bIsValue: bool
-            fVar: float
-            bIsVar: bool
-            fValue, bIsValue = ToFloat2(uValue)
-            fVar, bIsVar     = ToFloat2(uVar)
 
-            if bIsValue and bIsVar:
-                if uConditionCheckType == u'>':
-                    if fVar > fValue:
-                        bRet = True
-                elif uConditionCheckType == u'>=':
-                    if fVar >= fValue:
-                        bRet = True
-                elif uConditionCheckType == u'<':
-                    if fVar < fValue:
-                        bRet = True
-                elif uConditionCheckType == u'<=':
-                    if fVar <= fValue:
-                        bRet = True
+        match uConditionCheckType:
+            case '==' | '=':
+                if uVar == uValue:
+                    bRet = True
+            case '!=' | '<>':
+                if uVar != uValue:
+                    bRet = True
+            case _:
+                fValue: float
+                bIsValue: bool
+                fVar: float
+                bIsVar: bool
+                fValue, bIsValue = ToFloat2(uValue)
+                fVar, bIsVar     = ToFloat2(uVar)
+
+                if bIsValue and bIsVar:
+                    match uConditionCheckType:
+                        case '>':
+                            if fVar > fValue:
+                                bRet = True
+                        case '>=':
+                            if fVar >= fValue:
+                                bRet = True
+                        case '<':
+                            if fVar < fValue:
+                                bRet = True
+                        case '<=':
+                            if fVar <= fValue:
+                                bRet = True
     except Exception as e:
-        ShowErrorPopUp(uMessage=LogError(uMsg=u'CheckCondition: Cannot validate option: %s %s %s' % (uConditionVar, uConditionCheckType, uConditionValue), oException=e))
+        ShowErrorPopUp(uMessage=LogError(uMsg=f'CheckCondition: Cannot validate option: {uConditionVar} {uConditionCheckType} {uConditionValue}', oException=e))
         return False
 
-    Logger.debug("Checking condition [%s]:[%s][%s][%s] returns %s" % (uConditionVar, uVar, uConditionCheckType, uValue[:100], str(bRet)))
+    Logger.debug(f'Checking condition [{uConditionVar}]:[{uVar}][{uConditionCheckType}][{uValue[:100]}] returns {str(bRet)}')
 
     return bRet

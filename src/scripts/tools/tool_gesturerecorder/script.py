@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -24,16 +24,16 @@ from typing                                 import List
 
 from ORCA.scripts.Scripts                   import cScriptSettingPlugin
 from ORCA.scripttemplates.Template_Tools    import cToolsTemplate
-from ORCA.Action                            import cAction
+from ORCA.action.Action import cAction
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ORCA.definition.Definition import cDefinition
 else:
     from typing import TypeVar
-    cDefinition = TypeVar("cDefinition")
+    cDefinition = TypeVar('cDefinition')
 
 
 
@@ -45,8 +45,8 @@ else:
       <description language='English'>Tool to record gestures</description>
       <description language='German'>Tool um Gesten aufzuzeichnen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -90,31 +90,31 @@ class cScript(cToolsTemplate):
 
     def __init__(self):
         super().__init__()
-        self.uSubType           = u'GESTURERECORCER'
-        self.uSortOrder         = u'auto'
-        self.uSettingSection    = u'tools'
-        self.uSettingTitle      = u'Gestures'
-        self.uIniFileLocation   = u'none'
+        self.uSubType           = 'GESTURERECORCER'
+        self.uSortOrder         = 'auto'
+        self.uSettingSection    = 'tools'
+        self.uSettingTitle      = 'Gestures'
+        self.uIniFileLocation   = 'none'
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def ShowPageGestureRecorder(self, *args, **kwargs) -> None:
-        Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_GestureRecorder')
+        Globals.oTheScreen.AddActionShowPageToQueue(uPageName='Page_GestureRecorder')
 
     def RunScript(self, *args, **kwargs)  -> None:
         super().RunScript(*args, **kwargs)
-        if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
+        if kwargs.get('caller') == 'settings' or kwargs.get('caller') == 'action':
             self.ShowPageGestureRecorder(self, *args, **kwargs)
 
     def Register(self, *args, **kwargs) -> Dict:
         super().Register(*args, **kwargs)
-        Globals.oNotifications.RegisterNotification(uNotification="DEFINITIONPAGESLOADED",      fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools GestureRecorder")
-        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTGESTURERECORDER", fNotifyFunction=self.ShowPageGestureRecorder, uDescription="Script Tools GestureRecorder")
+        Globals.oNotifications.RegisterNotification(uNotification='DEFINITIONPAGESLOADED',      fNotifyFunction=self.LoadScriptPages, uDescription='Script Tools GestureRecorder')
+        Globals.oNotifications.RegisterNotification(uNotification='STARTSCRIPTGESTURERECORDER', fNotifyFunction=self.ShowPageGestureRecorder, uDescription='Script Tools GestureRecorder')
         oScriptSettingPlugin:cScriptSettingPlugin = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName
-        oScriptSettingPlugin.uSettingName  = "ORCA"
-        oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
-        oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_GESTURERECORDER_4)"
-        oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_GESTURERECORDER_1)","desc": "$lvar(SCRIPT_TOOLS_GESTURERECORDER_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_GESTURERECORDER_3)","id":"button_notification_STARTSCRIPTGESTURERECORDER"}]}']
+        oScriptSettingPlugin.uSettingName  = 'ORCA'
+        oScriptSettingPlugin.uSettingPage  = '$lvar(572)'
+        oScriptSettingPlugin.uSettingTitle = '$lvar(SCRIPT_TOOLS_GESTURERECORDER_4)'
+        oScriptSettingPlugin.aSettingJson  = ['{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_GESTURERECORDER_1)","desc": "$lvar(SCRIPT_TOOLS_GESTURERECORDER_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_GESTURERECORDER_3)","id":"button_notification_STARTSCRIPTGESTURERECORDER"}]}']
         Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
         ''' If we press ESC on the Gestureboard page, goto to the settings page
@@ -122,12 +122,12 @@ class cScript(cToolsTemplate):
 
         aActions:List[cAction]=Globals.oEvents.CreateSimpleActionList(aActions=[{'name':'ESC Key Handler Gestureboard','string':'registernotification','filterpagename':'Page_GestureRecorder','notification':'on_key_ESC','notifyaction':'gotosettingspage'},
                                                                                 {'name':'Button Close Gestureboard Key Handler Settings','string':'registernotification','filterpagename':'Page_GestureRecorder','notification':'closesetting_gesturerecorder','notifyaction':'gotosettingspage'}])
-        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='registerscript')
         return {}
 
     # noinspection PyUnusedLocal
     def LoadScriptPages(self,*args,**kwargs) -> None:
-        oDefinition:cDefinition = kwargs.get("definition")
+        oDefinition:cDefinition = kwargs.get('definition')
 
         if oDefinition.uName == Globals.uDefinitionName:
             if self.oFnXML.Exists():

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ from ORCA.utils.Path         import cPath
 from ORCA.utils.FileName     import cFileName
 
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 def Linux_GetDataDir() -> cPath:
     """
@@ -35,10 +35,10 @@ def Linux_GetDataDir() -> cPath:
     and sets a default, if none has been found
     """
 
-    uRootPath:str       = u"/"
-    uSubDir:str         = u'OrcaRemote'
+    uRootPath:str       = '/'
+    uSubDir:str         = 'OrcaRemote'
     uUserDataDir:str    = OS_GetUserDownloadsDataPath()
-    Logger.debug("Linux Root Folder = "+uRootPath)
+    Logger.debug('Linux Root Folder = '+uRootPath)
 
     try:
         uUserDataDir = Globals.oApp.user_data_dir
@@ -48,25 +48,25 @@ def Linux_GetDataDir() -> cPath:
     # First try to Find existing Orca Data Dir
     aTestDirs:List[cPath]=[cPath(uUserDataDir)+uSubDir,cPath(OS_GetUserDownloadsDataPath())+uSubDir,cPath(uRootPath)+uSubDir,cPath(os.getcwd())]
     for oTestDir in aTestDirs:
-        Logger.debug(u"Try to find Orca installations file at: " + oTestDir.string)
+        Logger.debug(f'Try to find Orca installations file at: {oTestDir}')
         if (cFileName(cPath(oTestDir)+'actions') + 'actions.xml').Exists():
-            Logger.debug(u"Found Orca installations file at " + oTestDir.string)
+            Logger.debug(f'Found Orca installations file at {oTestDir}')
             return oTestDir
 
 
     # First try to Find existing Orca Data Dir
     for oTestDir in aTestDirs:
-        Logger.debug(u"Try to find Orca installations file (Fallback) at: " + oTestDir.string)
+        Logger.debug(f'Try to find Orca installations file (Fallback) at: {oTestDir}')
         if (cFileName(cPath(oTestDir)+'actions') + 'actionsfallback.xml').Exists():
-            Logger.debug(u"Found Orca installations file (Fallback) at " + oTestDir.string)
+            Logger.debug(f'Found Orca installations file (Fallback) at {oTestDir}')
             return oTestDir
 
     # if we haven't found anything try to find the best writable location
-    Logger.error(u"Haven't found Orca installations file")
+    Logger.error('Haven\'t found Orca installations file')
 
     for oTestDir in aTestDirs:
         if oTestDir.IsWriteable():
-            Logger.debug(u"Fallback: Trying Orca installations file at: " + oTestDir.string)
+            Logger.debug(f'Fallback: Trying Orca installations file at: {oTestDir}')
             return oTestDir
 
     #if we are here, we failed

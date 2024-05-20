@@ -188,6 +188,14 @@
 
     </action>
 
+    <action name="TestTheArray">
+        <action name="loop through vars" string="forin" varname="scrollcontent_movies_text[]" dstvarname="elementname" level="1" actionname="TestTheArray_Sub"/>
+    </action>
+
+    <action name="TestTheArray_Sub">
+        <action name="showme" string="setvar tt=$par(forin_value)" />
+    </action>
+
 
 </includes>
 

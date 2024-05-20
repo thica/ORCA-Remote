@@ -94,8 +94,8 @@
       <description language='English'>ORCA Standard Skin, High Resolution, Silver Elements</description>
       <description language='German'>ORCA Standard Skin, Hohe Auflösung, Silberne Elemente</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/skins/ORCA_silver_hires</local>

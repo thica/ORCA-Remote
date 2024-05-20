@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -46,10 +46,10 @@ uSeparator = os.sep
 __all__ = ["CleanUp", "cPath","AdjustPathToUnix"]
 
 def CleanUp(*,uFinal:str) -> str:
-    while "//" in uFinal:
-        uFinal = uFinal.replace("//", "/")
-    while "\\\\" in uFinal:
-        uFinal = uFinal.replace("\\\\", "\\")
+    while '//' in uFinal:
+        uFinal = uFinal.replace('//', '/')
+    while '\\\\' in uFinal:
+        uFinal = uFinal.replace('\\\\', '\\')
 
     return AdjustPathToOs(uPath=ReplaceVars(uFinal))
 
@@ -62,12 +62,12 @@ def AdjustPathToUnix(*,uPath:str) ->str:
     """
 
     if uPath:
-        return uPath.replace(u'\\',u'/')
+        return uPath.replace('\\','/')
     return uPath
 
 
 class cPath:
-    def __init__(self, vPath:Union[str,cPath]=u''):
+    def __init__(self, vPath:Union[str,cPath]=''):
         """
         :param unicode|cPath vPath:
         """
@@ -76,12 +76,12 @@ class cPath:
             self.uRaw        = vPath
         elif isinstance(vPath, cPath):
             self.uRaw = vPath.uRaw
-        self.uFinal:str      = u''
+        self.uFinal:str      = ''
         self.bDirty:bool     = True
 
         if Logger.level==logging.DEBUG:
-            if "." in self.uRaw[-4:]:
-                LogError(uMsg="do not pass full filenames to a path | "+self.uRaw, bTrackStack=True)
+            if '.' in self.uRaw[-4:]:
+                LogError(uMsg='do not pass full filenames to a path | '+self.uRaw, bTrackStack=True)
 
         self.Normalize()
 
@@ -96,15 +96,15 @@ class cPath:
 
     def __radd__(self, uOther:str) -> str:
         if isinstance(uOther, str):
-            return uOther+self.string
+            return uOther+str(self)
         else:
-            LogError(uMsg="You can only add strings to a path:" + str(uOther),bTrackStack=True)
+            LogError(uMsg=f'You can only add strings to a path: {str(uOther)}' ,bTrackStack=True)
             return uOther
 
     def Normalize(self):
         if self.uRaw:
             # self.uRaw+=uSeparator
-            self.uRaw += "/"
+            self.uRaw += '/'
 
     def ImportFullPath(self,*,uFnFullName:str) -> cPath:
         self.uRaw=os.path.dirname(uFnFullName)
@@ -130,19 +130,19 @@ class cPath:
         :return: True, if successful
         """
 
-        uPath:str = self.string
+        uPath:str = str(self)
 
         try:
             makedirs(uPath)
             Logger.debug('Created folder:' + uPath)
             if not self.Exists():
-                Logger.error('Could not create folder: %s unknown reason' % uPath)
+                Logger.error(f'Could not create folder: {uPath} unknown reason')
                 return False
             return True
         except Exception as e:
             # noinspection PyUnresolvedReferences
             if not e.errno == 17:
-                Logger.warning('Could not create folder: %s  reason: %s' % (uPath, str(e)))
+                Logger.warning(f'Could not create folder: {uPath}  reason: {str(e)}')
             return False
 
     def GetFolderList(self,*,bFullPath:bool=False) -> List:
@@ -154,13 +154,13 @@ class cPath:
         """
 
         oDirList:List = []
-        uRootDir:str = u''
+        uRootDir:str = ''
         uItem:str
         try:
 
             # stdout_encoding = sys.getfilesystemencoding()
             # print 'stdout_encoding:', stdout_encoding
-            uRootDir = CleanUp(uFinal=self.string)
+            uRootDir = CleanUp(uFinal=str(self))
             for uItem in listdir(uRootDir):
                 if isdir(join(uRootDir, uItem)):
                     if not bFullPath:
@@ -168,7 +168,7 @@ class cPath:
                     else:
                         oDirList.append(AdjustPathToOs(uPath=uRootDir + '/' + uItem))
         except Exception as e:
-            Logger.warning(u'can\'t get Dirlist ' + ToUnicode(e) + " " + uRootDir)
+            Logger.warning('can\'t get Dirlist ' + ToUnicode(e) + ' ' + uRootDir)
         return oDirList
 
     def GetFileList(self,*,bSubDirs:bool=False, bFullPath:bool=False) -> List:
@@ -181,7 +181,7 @@ class cPath:
         """
 
         oDirList:List = []
-        uRootDir:str = self.string
+        uRootDir:str  = str(self)
         uItem:str
         try:
             for uItem in listdir(uRootDir):
@@ -194,7 +194,7 @@ class cPath:
                     if bSubDirs:
                         oDirList.extend((cPath(uRootDir) + uItem).GetFileList(bSubDirs= bSubDirs,bFullPath=bFullPath))
         except Exception as e:
-            Logger.debug(u'can\'t get File list:' + ToUnicode(str(e)) + " :" + uRootDir)
+            Logger.debug('can\'t get File list:' + ToUnicode(str(e)) + ' :' + uRootDir)
 
         return oDirList
 
@@ -205,16 +205,16 @@ class cPath:
 
         :return: Returns True if the the given path name exists
         """
-        return exists(self.string)
+        return exists(str(self))
 
-    def Delete(self) -> bool:
+    def Delete(self, bSilent:bool=False) -> bool:
         """
         Deletes a folder (Needs to be inside the Orca folder structure)
-
+        :param bool bSilent: If set, no warning is displayed
         :return: True, if successful
         """
 
-        uPath:str=self.string
+        uPath:str = str(self)
 
         if uPath=='':
             return False
@@ -229,7 +229,8 @@ class cPath:
             rmtree(uPath,False)
             return True
         except Exception as e:
-            Logger.warning (msg=u'can\'t remove folder [%s]: %s  ' % (uPath,ToUnicode(e)))
+            if not bSilent:
+                Logger.warning (msg=f'can\'t remove folder [{uPath}]: {ToUnicode(e)}  ')
             return False
 
     def Copy(self,*,oDest:cPath, fIgnoreFiles:Union[Callable,None]=None) -> bool:
@@ -251,11 +252,11 @@ class cPath:
 
             aFiles = self.GetFileList(bSubDirs=False,bFullPath=False)
             if fIgnoreFiles is not None:
-                aIgnored = fIgnoreFiles(self.string, aFiles)
+                aIgnored = fIgnoreFiles(str(self), aFiles)
             else:
                 aIgnored = set()
 
-            if self.string in aIgnored:
+            if str(self) in aIgnored:
                 return True
 
             aFolders = self.GetFolderList(bFullPath=False)
@@ -271,22 +272,22 @@ class cPath:
 
             return True
         except Exception as e:
-            LogError (uMsg=u'can\'t copy folder [%s] to [%s]' % (self.string,oDest.string),oException=e)
+            LogError (uMsg=f'can\'t copy folder [{self}] to [{oDest}]', oException=e)
             return False
 
     def GetBaseFolder(self) -> str:
         """
         Returns the name of the last/base folder
 
-        :return: the base folder name (eg: GetBaseFolder("c:/foo/bar") returns bar)
+        :return: the base folder name (eg: GetBaseFolder('c:/foo/bar') returns bar)
         """
 
-        uTmp:str = self.string
+        uTmp:str = str(self)
         uRet:str
         if "/" in uTmp:
-            uRet = uTmp[uTmp.rfind("/",0,-1)+1:]
+            uRet = uTmp[uTmp.rfind('/',0,-1)+1:]
         else:
-            uRet = uTmp[uTmp.rfind("\\",0,-1)+1:]
+            uRet = uTmp[uTmp.rfind('\\',0,-1)+1:]
         return uRet
 
 
@@ -295,10 +296,10 @@ class cPath:
         Returns the parent folder name,
 
         :param bool bFullPath: True/False to return the full path or just the folder name
-        :return: the base folder name (eg: GetParentFolder("c:/foo/bar",True) returns c:/foo)
+        :return: the base folder name (eg: GetParentFolder('c:/foo/bar',True) returns c:/foo)
         """
 
-        uTmp:str            = self.string
+        uTmp:str            = str(self)
         uBaseFolder:str     = self.GetBaseFolder()
         uParentFolder:str   = uTmp[0:-len(uBaseFolder)-1]
 
@@ -331,13 +332,13 @@ class cPath:
         """
 
         try:
-            return isdir(self.string)
+            return isdir(str(self))
         except Exception:
             return False
 
     def Clear(self) -> bool:
         """
-        Clear just removes the files within a folder
+        Clear() just removes the files within a folder
         It is not deleting the folder itself, and is not handling sub folders
 
         :return: True, if successful
@@ -356,14 +357,26 @@ class cPath:
         """
         Checks, if we have write access to a folder
 
-        :return: True, if the a directory has write access
+        :return: True, if the directory has write access
         """
-        oTestDir:cPath = cPath(self.string) +'orcatestdir'
-        if oTestDir.Create():
-            if oTestDir.Delete():
-                return True
+        uTestFile:str = 'orcatestfile'
+        oTestDir:cPath = cPath(str(self)) +'orcatestdir'
+
+        try:
+            oTestDir.Delete(bSilent=True)
+            if oTestDir.Create():
+                if oTestDir.Exists():
+                    uTestFile = str(oTestDir)+uSeparator+uTestFile
+                    oFile=open(uTestFile,'w+')
+                    oFile.write("ORCA")
+                    oFile.close()
+                    oFile=open(uTestFile,'r+')
+                    oFile.read(1)
+                    oFile.close()
+                    if oTestDir.Delete():
+                        return True
             return False
-        else:
+        except Exception as e:
             return False
 
     def Rename(self,*,oNewPath:cPath) -> bool:
@@ -377,15 +390,15 @@ class cPath:
         try:
             if self.Exists():
                 if oNewPath.Exists():
-                    rename(self.string,oNewPath.string)
+                    rename(str(self),str(oNewPath))
                     return True
             return False
         except Exception as e:
-            LogError (uMsg=u'can\'t rename folder [%s] to [%s]' % (self.string,oNewPath.string),oException=e)
+            LogError (uMsg=f'can\'t rename folder [{self}] to [{oNewPath}]', oException=e)
             return False
 
     def IsEmpty(self) -> bool:
         """
         Returns, if the Path object is empty
         """
-        return self.uRaw==u''
+        return self.uRaw==''

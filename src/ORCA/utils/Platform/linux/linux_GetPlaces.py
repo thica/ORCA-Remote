@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -36,8 +36,8 @@ def GetAllKnownFolders():
 
     # /etc/xdg/user-dirs.defaults, or if it exists $HOME/.config/user-dirs.dirs.
 
-    # GetAllKnownFoldersSub(oFnFile=cFileName("/etc/xdg/user-dirs.defaults"))
-    GetAllKnownFoldersSub(oFnFile=cFileName(expanduser("~/.config/user-dirs.dirs")))
+    # GetAllKnownFoldersSub(oFnFile=cFileName('/etc/xdg/user-dirs.defaults'))
+    GetAllKnownFoldersSub(oFnFile=cFileName(expanduser('~/.config/user-dirs.dirs')))
 
 def GetAllKnownFoldersSub(*,oFnFile:cFileName) -> None:
 
@@ -49,14 +49,14 @@ def GetAllKnownFoldersSub(*,oFnFile:cFileName) -> None:
     uSuffix:str
 
     try:
-        oFile = open(oFnFile.string, "r")
+        oFile = open(str(oFnFile), "r")
         aLines:List[str]=oFile.readlines()
         for uLine in aLines:
-            if not uLine.rstrip().startswith("#"):
-                uXDGPlace,uPathPlace = uLine.split("=")
-                uPrefix,uName,uSuffix=uLine.split("_")
+            if not uLine.rstrip().startswith('#'):
+                uXDGPlace,uPathPlace = uLine.split('=')
+                uPrefix,uName,uSuffix=uLine.split('_')
                 if uName in aPlaces:
-                    uPathPlace=uPathPlace.replace("$HOME","~").replace('"',"").replace("'","").replace("\n","")
+                    uPathPlace=uPathPlace.replace('$HOME','~').replace('"','').replace("'",'').replace('\n','')
                     dPlaces[uName]= cPath(expanduser(uPathPlace))
         oFile.close()
     except:
@@ -64,22 +64,22 @@ def GetAllKnownFoldersSub(*,oFnFile:cFileName) -> None:
 
 
 def GetDownloadFolder() -> cPath:
-    return dPlaces.get("DOWNLOAD",cPath(""))
+    return dPlaces.get('DOWNLOAD',cPath(''))
 
 def GetDocumentsFolder() -> cPath:
-    return dPlaces.get("DOCUMENTS",cPath(""))
+    return dPlaces.get('DOCUMENTS',cPath(''))
 
 def GetDesktopFolder() -> cPath:
-    return dPlaces.get("DESKTOP",cPath(""))
+    return dPlaces.get('DESKTOP',cPath(''))
 
 def GetPicturesFolder() -> cPath:
-    return dPlaces.get("PICTURES",cPath(""))
+    return dPlaces.get('PICTURES',cPath(''))
 
 def GetVideosFolder() -> cPath:
-    return dPlaces.get("VIDEOS",cPath(""))
+    return dPlaces.get('VIDEOS',cPath(''))
 
 def GetMusicFolder() -> cPath:
-    return dPlaces.get("MUSIC",cPath(""))
+    return dPlaces.get('MUSIC',cPath(''))
 
 def GetPlaces() -> List[Tuple[str,cPath]]:
     """
@@ -91,28 +91,28 @@ def GetPlaces() -> List[Tuple[str,cPath]]:
     uPlace:str
 
     oPath=GetDownloadFolder()
-    if oPath.string != "":
-        aLocPlaces.append((ReplaceVars("$lvar(1200)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1200)'),oPath))
 
     oPath=GetDocumentsFolder()
-    if oPath.string != "":
-        aLocPlaces.append((ReplaceVars("$lvar(1202)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1202)'),oPath))
 
     oPath=GetDesktopFolder()
-    if oPath.string != "":
-        aLocPlaces.append((ReplaceVars("$lvar(1201)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1201)'),oPath))
 
     oPath=GetPicturesFolder()
-    if oPath.string != "":
-        aLocPlaces.append((ReplaceVars("$lvar(1203)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1203)'),oPath))
 
     oPath=GetVideosFolder()
-    if oPath.string != "":
-        aLocPlaces.append((ReplaceVars("$lvar(1204)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1204)'),oPath))
 
     oPath=GetMusicFolder()
-    if oPath.string != "":
-        aLocPlaces.append((ReplaceVars("$lvar(1205)"),oPath))
+    if not oPath.IsEmpty():
+        aLocPlaces.append((ReplaceVars('$lvar(1205)'),oPath))
 
     return aLocPlaces
 

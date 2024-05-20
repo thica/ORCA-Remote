@@ -9,7 +9,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -27,15 +27,19 @@
 """
 
 from typing                                     import Dict
+from typing                                     import Optional
+
 from wakeonlan                                  import send_magic_packet
 from kivy.logger                                import Logger
 from ORCA.interfaces.BaseInterface              import cBaseInterFace
 from ORCA.interfaces.BaseInterfaceSettings      import cBaseInterFaceSettings
-from ORCA.Action                                import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.ReturnCode                    import eReturnCode
+from ORCA.utils.FileName                        import cFileName
+
 
 import struct, socket
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 '''
@@ -46,8 +50,8 @@ import ORCA.Globals as Globals
       <description language='English'>Interface to send a WOL command to device</description>
       <description language='German'>Interface ein WOL Kommando an ein Gerät zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/wake_on_lan</local>
@@ -64,28 +68,48 @@ import ORCA.Globals as Globals
 
 class cInterface(cBaseInterFace):
 
+
+    # noinspection PyUnusedLocal
+    # we us it, as it handles some configuration topics on connect
+    class cInterFaceSettings(cBaseInterFaceSettings):
+        pass
+
     def __init__(self):
         super().__init__()
         self.dSettings:Dict   = {}
+        self.oSetting       = None
 
-    def GetConfigJSON(self) -> Dict:
-        return {"MAC": {"active": "enabled", "order": 0, "type": "string", "title": "$lvar(IFACE_WOL_3)", "desc": "$lvar(IFACE_WOL_4)",  "section": "$var(ObjectConfigSection)","key": "MAC",  "default":"aa:bb:cc:dd:ee:ff"}
-                }
+
+    def Init(self, uObjectName: str, oFnObject: Optional[cFileName] = None) -> None:
+        super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['MAC']['active']                         = 'enabled'
+
 
     def DoAction(self,oAction:cAction) -> eReturnCode:
-        self.ShowDebug(uMsg=u'Request Action Wakeup')
-        uConfigName:str = oAction.dActionPars.get(u'configname',u'')
+        self.ShowDebug(uMsg='Request Action Wakeup')
+        uConfigName:str = oAction.dActionPars.get('configname','')
         oSetting:cBaseInterFaceSettings = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
-        if oAction.dActionPars.get("commandname")=="power_on":
-            return self.WakeOnLan(oSetting.aIniSettings.uMAC, uConfigName)
+        oSetting.Connect()
+        oSetting.Disconnect()
+        if oAction.dActionPars.get('commandname')=='power_on':
+            return self.WakeOnLan(uMacAddress=oSetting.aIniSettings.uMAC, uHost=oSetting.aIniSettings.uHost,uConfigName=uConfigName)
         else:
-            Logger.error("wake_lan interface only supports the power_on command")
+            Logger.error('wake_lan interface only supports the power_on command')
             return eReturnCode.Error
 
-    def WakeOnLan(self,uMacAddress,uConfigName:str) -> eReturnCode:
-        self.ShowInfo(uMsg=u'Sending Magic Package for '+uMacAddress)
+
+    def WakeOnLan(self,*,uMacAddress:str,uHost:str,uConfigName:str) -> eReturnCode:
+        ''' We do it on different ways to bypass windows x multihomed broadcast problems'''
+        self.ShowInfo(uMsg='Sending Magic Package for '+uMacAddress)
         uMacAddressNorm:str=self.NormalizeMac(uMacAddress,uConfigName)
         send_magic_packet(uMacAddressNorm)
+        send_magic_packet(uMacAddressNorm,  ip_address=uHost)
+        send_magic_packet(uMacAddressNorm, ip_address=Globals.uIPSubNetV4)
+        send_magic_packet(uMacAddressNorm, ip_address=Globals.uIPGateWayV4)
+        # this is required on multihomed devives but does not work on windows
+        #send_magic_packet(uMacAddressNorm, interface=Globals.uIPGateWayV4)
+
         self.wake_on_lan(uMacAddressNorm)
         return eReturnCode.Success
 
@@ -107,19 +131,24 @@ class cInterface(cBaseInterFace):
         """ As usual, Microsoft is not able to code properly, so we need some more code to get it working on Windows """
 
         i:int
-        # Pad the synchronization stream
-        byData = b'FFFFFFFFFFFF' + (uMacAddress * 20).encode()
-        bySend_data = b''
 
-        # Split up the hex values in pack
-        for i in range(0, len(byData), 2):
-            bySend_data += struct.pack('!B', int(byData[i: i + 2], 16))
+
+        # Pad the synchronization stream.
+        uData = ''.join(['FFFFFFFFFFFF', uMacAddress* 20])
+        bySend_data =  b''
+
+        # Split up the hex values and pack.
+        for i in range(0, len(uData), 2):
+            bySend_data = b''.join([bySend_data, struct.pack('B', int(uData[i: i + 2], 16))])
 
         # Broadcast it to the LAN
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         sock.sendto(bySend_data, ('255.255.255.255', 9))
         sock.sendto(bySend_data, (Globals.uIPSubNetV4, 9)) # This should do it, the rest is fallback
+        sock.sendto(bySend_data, ("192.168.1.150", 9))  # This should do it, the rest is fallback
+        sock.sendto(bySend_data, (Globals.uIPGateWayV4, 7))
         sock.sendto(bySend_data, ('255.255.255.255', 7))
         sock.sendto(bySend_data, (Globals.uIPSubNetV4, 7))
+
         sock.close()

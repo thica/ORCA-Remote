@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -49,7 +49,7 @@ class cBorder(Widget):
         with self.canvas:
             Color(self.aBackGroundColor[0],self.aBackGroundColor[1], self.aBackGroundColor[2],self.aBackGroundColor[3])
             # noinspection PyArgumentList
-            self.oLine = Line(points=[self.pos[0],self.pos[1], self.pos[0]+self.width, self.pos[1],self.pos[0]+self.width,self.pos[1]+self.height,self.pos[0],self.pos[1]+self.height], close=True, width=self.fLineWidth, cap="none")
+            self.oLine = Line(points=[self.pos[0],self.pos[1], self.pos[0]+self.width, self.pos[1],self.pos[0]+self.width,self.pos[1]+self.height,self.pos[0],self.pos[1]+self.height], close=True, width=self.fLineWidth, cap='none')
             # self.oLine: Line = Line(rectangle=(self.pos[0], self.pos[1],self.width,self.height), width=self.fLineWidth)
 
     def update_graphics_pos(self, instance, value) -> None:

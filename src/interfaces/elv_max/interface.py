@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -49,10 +49,10 @@ from ORCA.utils.TypeConvert         import ToFloat
 from ORCA.utils.TypeConvert         import ToDic
 from ORCA.utils.TypeConvert         import ToList
 from ORCA.vars.Actions              import Var_DelArray
-from ORCA.Action                    import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.ReturnCode        import eReturnCode
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 if TYPE_CHECKING:
     from interfaces.elv_max.maxcube.cube        import MaxCube
@@ -75,8 +75,8 @@ else:
       <description language='English'>Interface control ELV MAX</description>
       <description language='German'>Interface um ALV MAX Geräte zu steuern</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/elv_max</local>
@@ -105,14 +105,14 @@ class cInterface(cBaseInterFace):
 
         def __init__(self,oInterFace):
             super().__init__(oInterFace)
-            self.aIniSettings.uHost                       = u"discover"
-            self.aIniSettings.uPort                       = u"62910"
-            self.aIniSettings.uFNCodeset                  = u"CODESET_elv_max_DEFAULT.xml"
-            self.aIniSettings.uParseResultOption          = u'dict'
+            self.aIniSettings.uHost                       = 'discover'
+            self.aIniSettings.uPort                       = '62910'
+            self.aIniSettings.uFNCodeset                  = 'CODESET_elv_max_DEFAULT.xml'
+            self.aIniSettings.uParseResultOption          = 'dict'
             self.aIniSettings.iTimeToClose                = -1
-            self.aIniSettings.uDiscoverScriptName         = u"discover_elvmax"
-            self.aIniSettings.uDISCOVER_ELVMAX_serialnumber = ""
-            self.oDevice:Optional[MaxCube]               = None
+            self.aIniSettings.uDiscoverScriptName         = 'discover_elvmax'
+            self.aIniSettings.uDISCOVER_ELVMAX_serialnumber = ''
+            self.oDevice:Optional[MaxCube]                = None
 
 
         def Disconnect(self) -> bool:
@@ -123,7 +123,7 @@ class cInterface(cBaseInterFace):
                     self.oDevice.connection.disconnect()
                 return super().Disconnect()
             except Exception as e:
-                self.ShowError(uMsg=u'Cannot diconnect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                self.ShowError(uMsg='Cannot diconnect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 return super().Disconnect()
 
         def Connect(self) -> bool:
@@ -140,7 +140,7 @@ class cInterface(cBaseInterFace):
                     self.oDevice = MaxCube(MaxCubeConnection(host=self.aIniSettings.uHost, port=ToInt(self.aIniSettings.uPort)))
 
                 # self.oDevice.connect()
-                self.oInterFace.oObjectConfig.WriteDefinitionConfigPar(uSectionName = self.uSection, uVarName= u'OldDiscoveredIP', uVarValue = self.aIniSettings.uHost)
+                self.oInterFace.oObjectConfig.WriteDefinitionConfigPar(uSectionName = self.uSection, uVarName= 'OldDiscoveredIP', uVarValue = self.aIniSettings.uHost)
                 self.bIsConnected=True
                 return self.bIsConnected
             except Exception as e:
@@ -148,9 +148,9 @@ class cInterface(cBaseInterFace):
                     # noinspection Mypy
                     if e.errno==10051:
                         self.bOnError=True
-                        self.ShowWarning(uMsg=u'Cannot connect (No Network):'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
+                        self.ShowWarning(uMsg='Can\' connect (No Network):'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                         return False
-                self.ShowError(uMsg=u'Cannot connect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                self.ShowError(uMsg='Can\'t connect:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.bOnError=True
                 return False
 
@@ -158,7 +158,7 @@ class cInterface(cBaseInterFace):
         super().__init__()
         self.dSettings:Dict                                 = {}
         self.oSetting:Optional[cBaseInterFaceSettings]      = None
-        self.aDiscoverScriptsBlackList:List[str]            = ["iTach (Global Cache)","Keene Kira","UPNP","Enigma","EISCP (Onkyo)"]
+        self.aDiscoverScriptsBlackList:List[str]            = ['iTach (Global Cache)','Keene Kira','UPNP','Enigma','EISCP (Onkyo)']
         self.dInterfaceFunctions:Dict[str,Callable]         = {}
         self.RegisterInterfaceActions()
 
@@ -171,13 +171,13 @@ class cInterface(cBaseInterFace):
         """
 
         super().Init(uObjectName=uObjectName,oFnObject=oFnObject)
-        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = 'enabled'
 
     def DeInit(self, **kwargs) -> None:
         super().DeInit(**kwargs)
@@ -197,8 +197,8 @@ class cInterface(cBaseInterFace):
             oAction.uGlobalDestVar=uRetVar
 
         dCmd:Dict     = ToDic(oAction.uCmd)
-        uCmd:str      = dCmd["method"]
-        dParams:Dict  = dCmd["params"]
+        uCmd:str      = dCmd['method']
+        dParams:Dict  = dCmd.get('params',{})
 
         while iTryCount<self.iMaxTryCount:
             iTryCount+=1
@@ -217,11 +217,11 @@ class cInterface(cBaseInterFace):
                         uGlobalDestVarSave:str      = oAction.uGlobalDestVar
                         uLocalDestVarSave:str       = oAction.uLocalDestVar
 
-                        if u'L' in oAction.uParseResultFlags:
+                        if 'L' in oAction.uParseResultFlags:
                             aTmpGlobalDestVar:List  = ToList(oAction.uGlobalDestVar)
                             aTmpLocalDestVar:List   = ToList(oAction.uLocalDestVar)
-                            oAction.uGlobalDestVar  = "".join('"'+e+dLine.uVarSuffix+'",' for e in aTmpGlobalDestVar)[:-1]
-                            oAction.uLocalDestVar   = "".join('"'+e+dLine.uVarSuffix+'",'  for e in aTmpLocalDestVar)[:-1]
+                            oAction.uGlobalDestVar  = ''.join('"'+e+dLine.uVarSuffix+'",' for e in aTmpGlobalDestVar)[:-1]
+                            oAction.uLocalDestVar   = ''.join('"'+e+dLine.uVarSuffix+'",'  for e in aTmpLocalDestVar)[:-1]
                         else:
                             oAction.uGlobalDestVar  = oAction.uGlobalDestVar + dLine.uVarSuffix
                             oAction.uLocalDestVar   = oAction.uLocalDestVar + dLine.uVarSuffix
@@ -233,7 +233,7 @@ class cInterface(cBaseInterFace):
                     eRet = eReturnCode.Success
                     break
                 except Exception as e:
-                    self.ShowError(uMsg=u'can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
+                    self.ShowError(uMsg='can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
                     eRet = eReturnCode.Error
             else:
                 oSetting.bIsConnected=False
@@ -294,8 +294,8 @@ class cInterface(cBaseInterFace):
         """
         aRet:List               = []
         dLine:TypedQueryDict    = TypedQueryDict()
-        dLine.uVarSuffix        = ""
-        dLine.dValue            = {"result": uResult}
+        dLine.uVarSuffix        = ''
+        dLine.dValue            = {'result': uResult}
         aRet.append(dLine)
         return aRet
 
@@ -312,11 +312,11 @@ class cInterface(cBaseInterFace):
 
         aRet:List        = []
         i:int            = 0
-        uRoom:str        = ReplaceVars(dParams["room"],self.uObjectName+u'/'+oSetting.uConfigName)
+        uRoom:str        = ReplaceVars(dParams['room'],self.uObjectName+'/'+oSetting.uConfigName)
 
         aTmpDestVar:List = ToList(oAction.uGlobalDestVar)
         for uVarName in aTmpDestVar:
-            Var_DelArray(uVarName=uVarName+u'[]')
+            Var_DelArray(uVarName=uVarName+'[]')
 
         oRoom:MaxRoom
         dLine:TypedQueryDict
@@ -325,17 +325,17 @@ class cInterface(cBaseInterFace):
             if oRoom.name == uRoom:
                 if bAddRoom:
                     dLine                       = TypedQueryDict()
-                    dLine.uVarSuffix            = "[" + str(i) + "]"
+                    dLine.uVarSuffix            = '[' + str(i) + ']'
                     uRfAddress:str              = str(oRoom.rf_address)
-                    dLine.dValue                = {"name": oRoom.name, "rf_address": uRfAddress}
+                    dLine.dValue                = {'name': oRoom.name, 'rf_address': uRfAddress}
                     aRet.append(dLine)
                     i += 1
 
                 for oDevice in oSetting.oDevice.devices_by_room(oRoom):
                     dLine                       = TypedQueryDict()
-                    dLine.uVarSuffix            = "[" + str(i) + "]"
+                    dLine.uVarSuffix            = '[' + str(i) + ']'
                     uRfAddress                  = str(oDevice.rf_address)
-                    dLine.dValue                = {"name": oDevice.name,"rf_address": uRfAddress}
+                    dLine.dValue                = {'name': oDevice.name,'rf_address': uRfAddress}
                     aRet.append(dLine)
                     i += 1
                 break
@@ -352,7 +352,7 @@ class cInterface(cBaseInterFace):
         :return: dict: key:result=Error or maxcube result
         """
 
-        uRet:str                    = "Error"
+        uRet:str                    = 'Error'
         kwArgs:Dict                 = {}
         oRoom:Optional[MaxRoom]   = None
         uRoom:str
@@ -361,16 +361,16 @@ class cInterface(cBaseInterFace):
         uRF_Address:str
 
         try:
-            uRF_Address = dParams.get("rf_address")
+            uRF_Address = dParams.get('rf_address')
             if uRF_Address:
-                uRF_Address = ReplaceVars(uRF_Address, self.uObjectName + u'/' + oSetting.uConfigName)
+                uRF_Address = ReplaceVars(uRF_Address, self.uObjectName + '/' + oSetting.uConfigName)
 
-            uRoom = dParams.get("room")
+            uRoom = dParams.get('room')
             if uRoom:
-                uRoom = ReplaceVars(uRoom, self.uObjectName + u'/' + oSetting.uConfigName)
+                uRoom = ReplaceVars(uRoom, self.uObjectName + '/' + oSetting.uConfigName)
 
             if uRoom is None and uRF_Address is None:
-                self.ShowError(uMsg="set_mode:Invalid Parameter, not a room or rf_address given")
+                self.ShowError(uMsg='set_mode:Invalid Parameter, not a room or rf_address given')
                 return self._CreateSimpleResult(uRet)
 
             if uRF_Address is None:
@@ -380,9 +380,9 @@ class cInterface(cBaseInterFace):
             if uRoom is None:
                 oRoom = self._GetRoomForRfAddress(uRF_Address, oSetting)
 
-            uTemperature= dParams.get("temperature")
+            uTemperature= dParams.get('temperature')
             if uTemperature is not None:
-                fTemperature = ToFloat(ReplaceVars(uTemperature,self.uObjectName+u'/'+oSetting.uConfigName))
+                fTemperature = ToFloat(ReplaceVars(uTemperature,self.uObjectName+'/'+oSetting.uConfigName))
 
             if oRoom:
                 if uTemperature is not None:
@@ -391,10 +391,10 @@ class cInterface(cBaseInterFace):
                 else:
                     uRet = str(oSetting.oDevice.set_mode(oRoom, bMode))
             else:
-                self.ShowError(uMsg="set_mode:Invalid Parameter")
+                self.ShowError(uMsg='set_mode:Invalid Parameter')
 
         except Exception as e:
-            self.ShowError(uMsg="room_set_mode: Internal Error",uParConfigName=oSetting.uConfigName,oException=e)
+            self.ShowError(uMsg='room_set_mode: Internal Error',uParConfigName=oSetting.uConfigName,oException=e)
 
         return self._CreateSimpleResult(uRet)
 
@@ -417,7 +417,7 @@ class cInterface(cBaseInterFace):
         # fSleep(0.5)
         oSetting.Connect()
 
-        return self._CreateSimpleResult("OK")
+        return self._CreateSimpleResult('OK')
 
     def ELV_getrooms(self,oSetting:cInterFaceSettings,oAction:cAction, dParams:Dict) -> List:
         """
@@ -435,8 +435,8 @@ class cInterface(cBaseInterFace):
 
         for oRoom in oSetting.oDevice.rooms:
             dLine:TypedQueryDict            = TypedQueryDict()
-            dLine.uVarSuffix                = "[" + str(i) + "]"
-            dLine.dValue                    = {"name": oRoom.name, "rf_address": str(oRoom.rf_address)}
+            dLine.uVarSuffix                = '[' + str(i) + ']'
+            dLine.dValue                    = {'name': oRoom.name, 'rf_address': str(oRoom.rf_address)}
             aRet.append(dLine)
             i += 1
 
@@ -454,18 +454,18 @@ class cInterface(cBaseInterFace):
 
         oDevice:MaxCube
 
-        uRF_Address:str                         = ReplaceVars(dParams["rf_address"],self.uObjectName+u'/'+oSetting.uConfigName)
-        uAttribute:str                          = ReplaceVars(dParams["attributename"],self.uObjectName+u'/'+oSetting.uConfigName)
+        uRF_Address:str                         = ReplaceVars(dParams['rf_address'],self.uObjectName+'/'+oSetting.uConfigName)
+        uAttribute:str                          = ReplaceVars(dParams['attributename'],self.uObjectName+'/'+oSetting.uConfigName)
 
         try:
             oDevice = oSetting.oDevice.device_by_rf(uRF_Address)
             uRet:str = getattr(oDevice, uAttribute, "N/A")
             if uRet is None:
-                uRet="N/A"
+                uRet='N/A'
         except Exception as e:
-            uRet = "N/A"
+            uRet = 'N/A'
 
-        if uRet=="N/A":
+        if uRet=='N/A':
             Logger.error(uAttribute)
 
         return self._CreateSimpleResult(uRet)

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String
+     cmd = command to send, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>Telnet2 FHEM / FS20 Command Set</name>
+      <description language='English'>Command set to send FS20 Commands to FHEM using telnet</description>
+      <description language='German'>Befehlssatz für FS20 Befehle an FHEM über Telnet</description>
+      <author>Carsten Thielepape</author>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/telnet2/CODESET_telnet2_fhem_fs20.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_telnet2_fhem_fs20.zip</sourcefile>
+          <targetpath>codesets/telnet2</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Telne2t</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+  <action string="codeset" name='power_on' waitforresponse='0' cmd='set $cvar(dimmer) on' />
+  <action string="codeset" name='power_on_to' waitforresponse='0' cmd='set $cvar(dimmer) on $cvar(device)' />
+  <action string="codeset" name='power_off' waitforresponse='0' cmd='set $cvar(dimmer) off' />
+  <action string="codeset" name='power_toggle' waitforresponse='0' cmd='set $cvar(dimmer) toggle' />
+  <action string="codeset" name='dim' waitforresponse='0' cmd='set $cvar(dimmer) dim $cvar(dimvalue)%' />
+  <action string="codeset" name='dim_down' waitforresponse='0' cmd='set $cvar(dimmer) dimdown' />
+  <action string="codeset" name='dim_up' waitforresponse='0' cmd='set $cvar(dimmer) dimup' />
+  <action string="codeset" name='dim_updown' waitforresponse='0' cmd='set $cvar(dimmer) dimupdown' />
+  <action string="codeset" name='off_for_timer' waitforresponse='0' cmd='set $cvar(dimmer) off-for-timer' />
+  <action string="codeset" name='ramp_on_time' waitforresponse='0' cmd='set $cvar(dimmer) ramp-on-time $cvar(time)' />
+  <action string="codeset" name='ramp_off_time' waitforresponse='0' cmd='set $cvar(dimmer) ramp-off-time $cvar(time)' />
+  <action string="codeset" name='sendstate' waitforresponse='0' cmd='set $cvar(dimmer) sendstate' />
+  <action string="codeset" name='timer' waitforresponse='0' cmd='set $cvar(dimmer) timer $cvar(time)%' />
+  <action string="codeset" name='on_till' waitforresponse='0' cmd='set $cvar(dimmer) on-till' />
+</includes>

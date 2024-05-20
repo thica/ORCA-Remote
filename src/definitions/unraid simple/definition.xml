@@ -8,7 +8,7 @@
     <fontsize_button>%h30</fontsize_button>
     <fontsize_text>%h30</fontsize_text>
     <author>Carsten Thielepape</author>
-    <version>5.0.4</version>
+    <version>6.0.0</version>
     <orientations>portrait,landscape</orientations>
     <support>http://www.orca-remote.org/forum/</support>
     <definitionvars>{"definition_alias_unraid":"UNRAID"}</definitionvars>
@@ -27,7 +27,7 @@
   <stopskip/>
 
   <settings>
-    <setting title="$lvar(700) (telnet)" desc="$lvar(701)" var="$dvar(definition_alias_unraid)_INTERFACE_MAIN" type="scrolloptions" default="telnet" options='$var(INTERFACENAMES)'/>
+    <setting title="$lvar(700) (telnet2)" desc="$lvar(701)" var="$dvar(definition_alias_unraid)_INTERFACE_MAIN" type="scrolloptions" default="telnet2" options='$var(INTERFACENAMES)'/>
     <setting title="$lvar(702)" desc="$lvar(703)" var="$dvar(definition_alias_unraid)_CONFIGNAME_MAIN" type="string" default="DEVICE_$dvar(definition_alias_unraid)" />
     <setting title="$lvar(705) (wake on lan)" desc="$lvar(705)" var="$dvar(definition_alias_unraid)_INTERFACE_POWERON" type="scrolloptions" default="wake_on_lan" options='$var(INTERFACENAMES)'/>
     <setting title="$lvar(706)" desc="$lvar(707)" var="$dvar(definition_alias_unraid)_CONFIGNAME_POWERON" type="string" default="DEVICE_$dvar(definition_alias_unraid)" />
@@ -36,7 +36,7 @@
   </settings>
 
   <interface_setup>
-    <interface name="telnet">
+    <interface name="telnet2">
       <configuration name ="DEVICE_$dvar(definition_alias_unraid)">
         <setting name="Port" parameter="23"/>
         <setting name="Host" parameter="tower"/>
@@ -47,7 +47,7 @@
         <setting name="ResultEndString" parameter="[LF]"/>
         <setting name="TimeToClose" parameter="120"/>
         <setting name="TerminalType" parameter="linux"/>
-        <setting name="FNCodeset" parameter="CODESET_telnet_UNRAID.xml"/>
+        <setting name="FNCodeset" parameter="CODESET_telnet2_UNRAID.xml"/>
         <setting name="DisableInterFaceOnError" parameter="0"/>
         <setting name="DisconnectInterFaceOnSleep" parameter="0"/>
       </configuration>
@@ -69,8 +69,8 @@
       <description language='English'>Simple UNRAID remote to power on / off</description>
       <description language='German'>Einfache Unraid Fernbedienung, zum ein/ausschalten</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/unraid simple</local>
@@ -81,7 +81,7 @@
       <dependencies>
         <dependency>
           <type>codesets</type>
-          <name>Unraid Power off / Telnet</name>
+          <name>Unraid Power off / Telnet2</name>
         </dependency>
         <dependency>
           <type>interfaces</type>

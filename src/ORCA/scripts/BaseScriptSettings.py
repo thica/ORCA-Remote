@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -18,14 +18,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ORCA.BaseSettings                      import cBaseSettings
+from ORCA.settings.BaseSettings import cBaseSettings
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ORCA.scripts.BaseScript import cBaseScript
 else:
     from typing import TypeVar
-    cBaseScript=TypeVar("cBaseScript")
+    cBaseScript=TypeVar('cBaseScript')
 
 
 class cBaseScriptSettings(cBaseSettings):
@@ -36,5 +36,5 @@ class cBaseScriptSettings(cBaseSettings):
 
         super(cBaseScriptSettings,self).__init__(oScript)
         self.oScript                                            = oScript
-        self.uConfigName                                        = "SCRIPTDEFAULT"
-        self.uType                                              = "script"
+        self.uConfigName                                        = 'SCRIPTDEFAULT'
+        self.uType                                              = 'script'

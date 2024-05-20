@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,10 +21,10 @@
 from ORCA.vars.Replace          import ReplaceVars
 from ORCA.actions.Base          import cEventActionBase
 from ORCA.utils.Sleep           import fSleep
-from ORCA.Action                import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.ReturnCode    import eReturnCode
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cEventActionsGuiControl']
 
@@ -72,12 +72,12 @@ class cEventActionsGuiControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'ShowPage',oAction=oAction)
-        uEffect:str                     = ReplaceVars(oAction.dActionPars.get("effect",""))
-        uDirection:str                  = ReplaceVars(oAction.dActionPars.get("direction",""))
-        uPageName:str                   = ReplaceVars(oAction.dActionPars.get("pagename",""))
-        uCurrentDirection:str           = ""
-        uCurrentEffect:str              = ""
+        self.oEventDispatcher.LogAction(uTxt='ShowPage',oAction=oAction)
+        uEffect:str                     = ReplaceVars(oAction.dActionPars.get('effect',''))
+        uDirection:str                  = ReplaceVars(oAction.dActionPars.get('direction',''))
+        uPageName:str                   = ReplaceVars(oAction.dActionPars.get('pagename',''))
+        uCurrentDirection:str           = ''
+        uCurrentEffect:str              = ''
         self.oEventDispatcher.bDoNext   = False
 
         if uEffect:
@@ -141,9 +141,9 @@ class cEventActionsGuiControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'SetPageEffect',oAction=oAction)
-        uEffect:str    = ReplaceVars(oAction.dActionPars.get("effect",""))
-        uDirection:str = ReplaceVars(oAction.dActionPars.get("direction",""))
+        self.oEventDispatcher.LogAction(uTxt='SetPageEffect',oAction=oAction)
+        uEffect:str    = ReplaceVars(oAction.dActionPars.get('effect',''))
+        uDirection:str = ReplaceVars(oAction.dActionPars.get('direction',''))
 
         if Globals.oTheScreen.SetPageEffect(uEffect=uEffect):
             if Globals.oTheScreen.SetPageEffectDirection(uDirection=uDirection):

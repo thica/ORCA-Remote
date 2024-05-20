@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -29,14 +29,14 @@ from ORCA.utils.TypeConvert         import ToUnicode
 from ORCA.utils.LogError            import LogError
 from ORCA.utils.FileName            import cFileName
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 __all__ = ['cWidgetVideo']
 
@@ -92,7 +92,7 @@ class cWidgetVideo(cWidgetBase):
                 return True
             return False
         except Exception as e:
-            LogError(uMsg=u'Widget:Video:Error on Create',oException=e)
+            LogError(uMsg='Widget:Video:Error on Create',oException=e)
             return False
 
     # noinspection PyUnusedLocal
@@ -102,7 +102,7 @@ class cWidgetVideo(cWidgetBase):
             iPosition:int=int(value)
             if not iPosition==self.iOldPosition:
                 self.iOldPosition = iPosition
-                self.oConnection.Receive(u'position:'+ToUnicode(iPosition))
+                self.oConnection.Receive('position:'+ToUnicode(iPosition))
 
     # noinspection PyUnusedLocal
     def On_Duration_Change(self,instance:Video, value:str) -> None:
@@ -111,7 +111,7 @@ class cWidgetVideo(cWidgetBase):
             iDuration:int=int(value)
             if iDuration!=self.iOldDuration:
                 self.iOldDuration = iDuration
-                self.oConnection.Receive(u'duration:'+ToUnicode(iDuration))
+                self.oConnection.Receive('duration:'+ToUnicode(iDuration))
 
     def SetFileName(self,uFileName:str) -> bool:
         """ Sets the filename or stream """
@@ -121,18 +121,18 @@ class cWidgetVideo(cWidgetBase):
                 self.oObject.source=self.NormalizeStream(uFileName)
                 return True
             else:
-                Logger.warning('Widget Video: You can''t set Filename before object is created:'+uFileName)
+                Logger.warning('Widget Video: You can\'t set Filename before object is created:'+uFileName)
 
         except Exception as e:
-            LogError(uMsg=u'Widget:Video:Error on SetFileName:'+uFileName,oException=e)
+            LogError(uMsg='Widget:Video:Error on SetFileName:'+uFileName,oException=e)
 
         return False
     # noinspection PyMethodMayBeStatic
     def NormalizeStream(self,uStream:str) -> str:
         """ Normalizes the stream name """
         if not uStream.startswith('rtsp') and uStream.startswith('http'):
-            uStream  = (cFileName(u'').ImportFullPath(uFnFullName=uStream)).string
-        if Globals.uPlatform!='win' and Globals.uPlatform!="linux":
+            uStream  = str((cFileName(uStream)))
+        if Globals.uPlatform!='win' and Globals.uPlatform!='linux':
             # prevent bug in ffmpeg (Android) not able to deal with unicode strings
             # todo: check with later kivy/ffmpeg versions
             uStream=uStream.encode('utf8')
@@ -141,43 +141,43 @@ class cWidgetVideo(cWidgetBase):
     def StatusControl(self,uStatus:str,uStream:str) -> Tuple[int,str]:
         """ Controls the video stream """
         try:
-            if uStatus==u'play':
+            if uStatus=='play':
                 self.oObject.source=self.NormalizeStream(uStream)
                 self.oObject.state = 'play'
                 return 0,''
-            if uStatus==u'stop':
+            if uStatus=='stop':
                 self.oObject.state = 'stop'
                 return 0,''
-            if uStatus==u'pause':
+            if uStatus=='pause':
                 self.oObject.state = 'pause'
                 return 0,''
-            if uStatus==u'getvolume':
+            if uStatus=='getvolume':
                 return 0,ToUnicode(self.oObject.volume)
-            if uStatus==u'volume_down':
+            if uStatus=='volume_down':
                 self.oObject.volume=max(0.0,self.oObject.volume-0.05)
                 return 0,ToUnicode(self.oObject.volume)
-            if uStatus==u'volume_up':
+            if uStatus=='volume_up':
                 self.oObject.volume=min(1.0,self.oObject.volume+0.05)
                 return 0,ToUnicode(self.oObject.volume)
-            if uStatus==u'repeat_toggle':
+            if uStatus=='repeat_toggle':
                 self.bRepeat=not self.bRepeat
                 return 0,ToUnicode(self.bRepeat)
-            if uStatus==u'repeat_on':
+            if uStatus=='repeat_on':
                 self.bRepeat=True
                 return 0,ToUnicode(self.bRepeat)
-            if uStatus==u'repeat_off':
+            if uStatus=='repeat_off':
                 self.bRepeat=False
                 return 0,ToUnicode(self.bRepeat)
-            if uStatus==u'mute_on':
+            if uStatus=='mute_on':
                 if self.oObject.volume!=0:
                     self.fOldVolume=self.oObject.volume
                     self.oObject.volume=0
                 return 0,ToUnicode(self.oObject.volume)
-            if uStatus==u'mute_off':
+            if uStatus=='mute_off':
                 if self.fOldVolume!=-1:
                     self.oObject.volume=self.fOldVolume
                 return 0,ToUnicode(self.oObject.volume)
-            if uStatus==u'mute_toggle':
+            if uStatus=='mute_toggle':
                 if self.oObject.volume!=0:
                     self.fOldVolume=self.oObject.volume
                     self.oObject.volume=0
@@ -185,6 +185,6 @@ class cWidgetVideo(cWidgetBase):
                     self.oObject.volume=self.fOldVolume
                 return 0,ToUnicode(self.oObject.volume)
         except Exception as e:
-            LogError(uMsg=u'Widget:Video:Error on Statuscontrol:'+uStatus,oException=e)
+            LogError(uMsg='Widget:Video:Error on Statuscontrol:'+uStatus,oException=e)
 
         return 0,''

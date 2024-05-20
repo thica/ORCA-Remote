@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 from typing                             import List
 from kivy.uix.widget                    import Widget
 from kivy.uix.settings                  import SettingItem
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['SettingSpacer',
            'SettingHidden',
@@ -48,7 +48,7 @@ def GetLanguageList() -> List[str]:
     if "aList" not in vars(GetLanguageList):
         GetLanguageList.aList=[]
         for uKey in Globals.oLanguage.dIDToString:
-            uValue="%s [[%s]]" % (Globals.oLanguage.dIDToString[uKey],uKey)
+            uValue='%s [[%s]]' % (Globals.oLanguage.dIDToString[uKey],uKey)
             if not uValue in GetLanguageList.aList or True:
                 GetLanguageList.aList.append(uValue)
         GetLanguageList.aList.sort()
@@ -93,7 +93,7 @@ def GetSendActionList() -> List[str]:
     if "aList" not in vars(GetSendActionList):
         GetSendActionList.aList=[]
         for uKey in Globals.oActions.dActionsCommands:
-            if uKey.startswith("Send "):
+            if uKey.startswith('Send '):
                 GetSendActionList.aList.append(uKey)
         GetSendActionList.aList.sort()
     return GetSendActionList.aList

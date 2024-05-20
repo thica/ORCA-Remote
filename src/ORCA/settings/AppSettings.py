@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -32,13 +32,12 @@ from ORCA.settings.BuildSettingOptionList       import BuildSettingOptionListDic
 from ORCA.settings.BuildSettingOptionList       import BuildSettingOptionListVar
 from ORCA.settings.setttingtypes.Public         import RegisterSettingTypes
 from ORCA.utils.FileName                        import cFileName
-from ORCA.utils.LoadFile                        import LoadFile
 from ORCA.utils.TypeConvert                     import ToStringVersion
 from ORCA.vars.Access                           import GetVar
 from ORCA.vars.Helpers                          import GetVarList
 from ORCA.vars.Replace                          import ReplaceVars
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 __all__ = ['Build_Settings','BuildSettingsStringPowerStatus']
@@ -54,7 +53,7 @@ def Build_Settings(oSettings:KivySettings) -> None:
     if Globals.bInit:
 
         uOrcaSettingsJSON:str = BuildSettingsString()
-        oSettings.add_json_panel(u'ORCA', Globals.oOrcaConfigParser, data=uOrcaSettingsJSON)
+        oSettings.add_json_panel('ORCA', Globals.oOrcaConfigParser, data=uOrcaSettingsJSON)
 
         uBuildSettingsStringDefinitionList:str = BuildSettingsStringDefinitionList()
         if uBuildSettingsStringDefinitionList != '':
@@ -74,14 +73,20 @@ def Build_Settings(oSettings:KivySettings) -> None:
 
     else:
         # just build the small settings
-        oSettings.add_json_panel(u'ORCA', Globals.oOrcaConfigParser, data=BuildSmallSettingsString())
+        oSettings.add_json_panel('ORCA', Globals.oOrcaConfigParser, data=BuildSmallSettingsString())
 
 def GetJsonFromSettingFileName(uSettingFileName:str) -> str:
-    oFnSetting:cFileName = cFileName(Globals.oPathAppReal + "ORCA/settings/settingstrings") + uSettingFileName
+    """
+    Returns the string, which represents an Kiy/Orca setting from a given Filename
+    Looks on several locations to find the setting file
+    :param str uSettingFileName:
+    :return: A string, representing a json setting object (vars replaced)
+    """
+    oFnSetting:cFileName = cFileName(Globals.oPathAppReal + 'ORCA/settings/settingstrings') + uSettingFileName
     if not oFnSetting.Exists():
-        oFnSetting: cFileName = cFileName(Globals.oPathApp + "ORCA/settings/settingstrings") + uSettingFileName
+        oFnSetting: cFileName = cFileName(Globals.oPathApp + 'ORCA/settings/settingstrings') + uSettingFileName
 
-    return ReplaceVars(LoadFile(oFileName=oFnSetting))
+    return ReplaceVars(oFnSetting.Load())
 
 def ScanDefinitionNames() -> Dict:
     """
@@ -93,7 +98,7 @@ def ScanDefinitionNames() -> Dict:
     oRepManagerEntry:cRepManagerEntry
     dDefinitionReps:Dict={}
 
-    aHide:List[str] = ["appfavorites_template","cmdfavorites_template","tvfavorites_template","activity_template"]
+    aHide:List[str] = ['appfavorites_template','cmdfavorites_template','tvfavorites_template','activity_template']
 
     for uDefinitionName in Globals.aDefinitionList:
         if not uDefinitionName in aHide:
@@ -115,7 +120,7 @@ def BuildSettingsString() -> str:
 
     for uInterFacename in Globals.oInterFaces.dUsedInterfaces:
         uInterFacename=ReplaceVars(uInterFacename)
-        if not uInterFacename in aInterfaceList and uInterFacename!=u'':
+        if not uInterFacename in aInterfaceList and uInterFacename!='':
             aInterfaceList.append(uInterFacename)
 
     for uInterFacename  in Globals.oInterFaces.aObjectNameList:
@@ -133,31 +138,31 @@ def BuildSettingsString() -> str:
     for i in range(0,len(Globals.aDefinitionList)):
         if i>=iLast:
             break
-        if Globals.aDefinitionList[i].endswith(u"_template"):
+        if Globals.aDefinitionList[i].endswith('_template'):
             Globals.aDefinitionList[i],Globals.aDefinitionList[iLast]=Globals.aDefinitionList[iLast],Globals.aDefinitionList[i]
             iLast -= 1
 
     dDefinitionReps:Dict=ScanDefinitionNames()
     Globals.oScripts.LoadScripts()
 
-    BuildSettingOptionListVar(Globals.aLanguageList,                        "SETTINGS_LANGUAGELIST")
-    BuildSettingOptionListVar(Globals.oLanguage.oLocales.oLocalesEntries,   "SETTINGS_LANGUAGELOCALES")
-    BuildSettingOptionListVar(Globals.oScripts.aObjectNameList,             "SETTINGS_SCRIPTNAMELIST")
-    BuildSettingOptionListVar(Globals.oScripts.aObjectNameListWithConfig,   "SETTINGS_SCRIPTNAMELISTWITHCONFIG")
-    BuildSettingOptionListVar(aInterfaceList,                               "SETTINGS_INTERFACENAMELIST")
-    BuildSettingOptionListVar(Globals.oSound.aSoundsList,                   "SETTINGS_SOUNDLIST")
-    BuildSettingOptionListVar(Globals.aSkinList,                            "SETTINGS_SKINLIST")
-    BuildSettingOptionListVar(Globals.aTransitionTypes,                     "SETTINGS_TRANSITIONTYPES")
-    BuildSettingOptionListVar(Globals.aTransitionDirections,                "SETTINGS_TRANSITIONDIRECTIONS")
-    BuildSettingOptionListDictVar(dDefinitionReps,                          "SETTINGS_DEFINITIONLIST")
-    return GetJsonFromSettingFileName("setting_orca.txt")
+    BuildSettingOptionListVar(Globals.aLanguageList,                        'SETTINGS_LANGUAGELIST')
+    BuildSettingOptionListVar(Globals.oLanguage.oLocales.oLocalesEntries,   'SETTINGS_LANGUAGELOCALES')
+    BuildSettingOptionListVar(Globals.oScripts.aObjectNameList,             'SETTINGS_SCRIPTNAMELIST')
+    BuildSettingOptionListVar(Globals.oScripts.aObjectNameListWithConfig,   'SETTINGS_SCRIPTNAMELISTWITHCONFIG')
+    BuildSettingOptionListVar(aInterfaceList,                               'SETTINGS_INTERFACENAMELIST')
+    BuildSettingOptionListVar(Globals.oSound.aSoundsList,                   'SETTINGS_SOUNDLIST')
+    BuildSettingOptionListVar(Globals.aSkinList,                            'SETTINGS_SKINLIST')
+    BuildSettingOptionListVar(Globals.aTransitionTypes,                     'SETTINGS_TRANSITIONTYPES')
+    BuildSettingOptionListVar(Globals.aTransitionDirections,                'SETTINGS_TRANSITIONDIRECTIONS')
+    BuildSettingOptionListDictVar(dDefinitionReps,                          'SETTINGS_DEFINITIONLIST')
+    return GetJsonFromSettingFileName('setting_orca.txt')
 
 def BuildSettingsStringDefinitionList() -> str:
     """ Build the settings for the ORCA DefinitionList """
 
-    uMainSetting:str       = u''
-    uSubSetting:str        = u''
-    uOrcaSettingsJSON:str  = u''
+    uMainSetting:str       = ''
+    uSubSetting:str        = ''
+    uOrcaSettingsJSON:str  = ''
 
     uPublicTitle:str
     oDef:cDefinition
@@ -176,17 +181,17 @@ def BuildSettingsStringDefinitionList() -> str:
             if iStart != -1 :
                 uPublicTitle = uPublicTitle[:iStart]
             if oDef==Globals.oDefinitions[0]:
-                uMainSetting= u'{"type": "buttons","title": "%s","desc": "%s","section": "ORCA","key": "button_changedefinitionsetting","buttons":[{"title":"$lvar(716)","id":"button_%s"}]}'  %(uPublicTitle,oDef.uDefDescription,oDef.uAlias)
+                uMainSetting= '{"type": "buttons","title": "%s","desc": "%s","section": "ORCA","key": "button_changedefinitionsetting","buttons":[{"title":"$lvar(716)","id":"button_%s"}]}'  %(uPublicTitle,oDef.uDefDescription,oDef.uAlias)
             else:
-                uSubSetting+= u'{"type": "buttons","title": "%s","desc": "%s","section": "ORCA","key": "button_changedefinitionsetting","buttons":[{"title":"$lvar(716)","id":"button_%s"}]},' %(uPublicTitle,oDef.uDefDescription,oDef.uAlias )
+                uSubSetting+= '{"type": "buttons","title": "%s","desc": "%s","section": "ORCA","key": "button_changedefinitionsetting","buttons":[{"title":"$lvar(716)","id":"button_%s"}]},' %(uPublicTitle,oDef.uDefDescription,oDef.uAlias )
 
-    if uMainSetting != u'':
-        uOrcaSettingsJSON  =u'[{ "type": "title","title":  "$lvar(717)" },\n %s]' % uMainSetting
-        if uSubSetting!=u'':
-            uOrcaSettingsJSON = u'%s,{ "type": "title","title":  "$lvar(718)" },\n %s]' % (uOrcaSettingsJSON[:-1],uSubSetting[:-1])
+    if uMainSetting != '':
+        uOrcaSettingsJSON  = f'[{{ "type": "title","title":  "$lvar(717)" }},\n {uMainSetting}]'
+        if uSubSetting!='':
+            uOrcaSettingsJSON = f'{uOrcaSettingsJSON[:-1]},{{ "type": "title","title":  "$lvar(718)" }},\n {uSubSetting[:-1]}]'
     else:
-        if uSubSetting!=u'':
-            uOrcaSettingsJSON = u'[{ "type": "title","title":  "$lvar(718)" },\n %s]' % (uSubSetting[:-1])
+        if uSubSetting!='':
+            uOrcaSettingsJSON = f'[{{ "type": "title","title":  "$lvar(718)" }},\n {uSubSetting[:-1]}]'
 
     uOrcaSettingsJSON=uOrcaSettingsJSON.replace("'","\'")
     uOrcaSettingsJSON=ReplaceVars(uOrcaSettingsJSON)
@@ -194,18 +199,18 @@ def BuildSettingsStringDefinitionList() -> str:
 
 def BuildSettingsStringInfo() -> str:
     """ Build the settings for the ORCA Info panel """
-    return GetJsonFromSettingFileName("setting_info.txt")
+    return GetJsonFromSettingFileName('setting_info.txt')
 
 
 def BuildSettingsStringTools() -> str:
     """ Build the settings for the ORCA tools """
-    uOrcaSettingsJSON  =u'[{ "type": "title","title": "$lvar(573)" },\n' \
-                        u'{"type": "buttons","title": "$lvar(574)","desc": "$lvar(575)","section": "ORCA","key": "button_clear_atlas","buttons":[{"title":"$lvar(576)","id":"button_clear_atlas"}]},\n' \
-                        u'{ "type": "title","title": "$lvar(633)" },\n' \
-                        u'{"type": "buttons","title": "$lvar(720)","desc": "$lvar(721)","section": "ORCA","key": "button_discover_results","buttons":[{"title":"$lvar(722)","id":"button_discover_results"}]},\n' \
-                        u'{"type": "buttons","title": "$lvar(760)","desc": "$lvar(761)","section": "ORCA","key": "button_discover_rediscover","buttons":[{"title":"$lvar(722)","id":"button_discover_rediscover"},{"title":"$lvar(729)","id":"button_discover_rediscover_force"}]}]'
+    uOrcaSettingsJSON  ='[{ "type": "title","title": "$lvar(573)" },\n' \
+                        '{"type": "buttons","title": "$lvar(574)","desc": "$lvar(575)","section": "ORCA","key": "button_clear_atlas","buttons":[{"title":"$lvar(576)","id":"button_clear_atlas"}]},\n' \
+                        '{ "type": "title","title": "$lvar(633)" },\n' \
+                        '{"type": "buttons","title": "$lvar(720)","desc": "$lvar(721)","section": "ORCA","key": "button_discover_results","buttons":[{"title":"$lvar(722)","id":"button_discover_results"}]},\n' \
+                        '{"type": "buttons","title": "$lvar(760)","desc": "$lvar(761)","section": "ORCA","key": "button_discover_rediscover","buttons":[{"title":"$lvar(722)","id":"button_discover_rediscover"},{"title":"$lvar(729)","id":"button_discover_rediscover_force"}]}]'
 
-    uOrcaSettingsJSON=AddScriptSetting(uSettingName="ORCA",uSettingPage=ReplaceVars("$lvar(572)"),uOrcaSettingsJSON=uOrcaSettingsJSON)
+    uOrcaSettingsJSON=AddScriptSetting(uSettingName='ORCA',uSettingPage=ReplaceVars('$lvar(572)'),uOrcaSettingsJSON=uOrcaSettingsJSON)
     uOrcaSettingsJSON=ReplaceVars(uOrcaSettingsJSON)
 
     return uOrcaSettingsJSON
@@ -225,14 +230,14 @@ def BuildSettingsStringOnlineResources() -> str:
             iCountBlanks+=1
             if iCountBlanks>1:
                 continue
-        uReps+=u'{"type": "string","title":    "$lvar(671)","desc": "$lvar(672)","section": "ORCA","key": "repository%d"},\n' % i
+        uReps+= f'{{"type": "string","title":    "$lvar(671)","desc": "$lvar(672)","section": "ORCA","key": "repository{i:d}"}},\n'
 
 
-    uOrcaSettingsJSON  =u'[{ "type": "title","title":  "$lvar(670)" },\n' \
+    uOrcaSettingsJSON  ='[{ "type": "title","title":  "$lvar(670)" },\n' \
                         '%s' \
-                        u'{ "type": "title","title": "$lvar(680)" },\n' \
-                        u'{"type": "buttons","title": "$lvar(681)","desc": "$lvar(682)","section": "ORCA","key": "button_getonline","buttons":[{"title":"$lvar(678)","id":"button_getonline"}]}' \
-                        u']' % uReps
+                        '{ "type": "title","title": "$lvar(680)" },\n' \
+                        '{"type": "buttons","title": "$lvar(681)","desc": "$lvar(682)","section": "ORCA","key": "button_getonline","buttons":[{"title":"$lvar(678)","id":"button_getonline"}]}' \
+                        ']' % uReps
 
 
     if len(Globals.dInstalledReps)>0:
@@ -244,32 +249,32 @@ def BuildSettingsStringOnlineResources() -> str:
             aSubList.append(oInstalledRep)
         aSubList.sort(key = lambda x: x.uType)
 
-        uOldType:str = u''
-        uOrcaSettingsJSON+=u',{ "type": "title","title": "$lvar(679)" },\n'
+        uOldType:str = ''
+        uOrcaSettingsJSON+=',{ "type": "title","title": "$lvar(679)" },\n'
         for oInstalledRep in aSubList:
             if uOldType!=oInstalledRep.uType:
                 uOldType=oInstalledRep.uType
-                uName="???"
+                uName='???'
                 for tTup in Globals.aRepNames:
                     if tTup[1]==oInstalledRep.uType:
                         uName=tTup[0]
-                uOrcaSettingsJSON+=u'{ "type": "title","title": "-> %s" },\n' % uName
+                uOrcaSettingsJSON+='{ "type": "title","title": "-> %s" },\n' % uName
 
-            uOrcaSettingsJSON+=u'{"type": "buttons","title": "%s","desc": "$lvar(751): %s","section": "ORCA","key": "button_installed_reps","buttons":[{"title":"$lvar(752)","id":"button_updaterep:%s:%s"}]},\n' % (oInstalledRep.uName,ToStringVersion(oInstalledRep.iVersion),oInstalledRep.uType,oInstalledRep.uName)
+            uOrcaSettingsJSON+='{"type": "buttons","title": "%s","desc": "$lvar(751): %s","section": "ORCA","key": "button_installed_reps","buttons":[{"title":"$lvar(752)","id":"button_updaterep:%s:%s"}]},\n' % (oInstalledRep.uName,ToStringVersion(oInstalledRep.iVersion),oInstalledRep.uType,oInstalledRep.uName)
         uOrcaSettingsJSON=uOrcaSettingsJSON[:-2]
-        uOrcaSettingsJSON+=u']'
+        uOrcaSettingsJSON+=']'
 
     uOrcaSettingsJSON=uOrcaSettingsJSON.replace("'","\'")
 
-    uOrcaSettingsJSON=AddScriptSetting(uSettingName="TOOLS",uSettingPage=ReplaceVars("$lvar(699)"),uOrcaSettingsJSON=uOrcaSettingsJSON)
+    uOrcaSettingsJSON=AddScriptSetting(uSettingName='TOOLS',uSettingPage=ReplaceVars('$lvar(699)'),uOrcaSettingsJSON=uOrcaSettingsJSON)
     uOrcaSettingsJSON=ReplaceVars(uOrcaSettingsJSON)
     return uOrcaSettingsJSON
 
 def BuildSmallSettingsString() -> str:
     """ just build the small settings """
-    uOrcaSettingsJSON=u'[{ "type": "title","title": "Initialisation" },\n' \
-                      u'{"type": "path","title":    "Path to Orca Files","desc": "Sets the file root path for Orca files (Definitions, etc)","section": "ORCA","key": "rootpath"}\n' \
-                      u']'
+    uOrcaSettingsJSON='[{ "type": "title","title": "Initialisation" },\n' \
+                      '{"type": "path","title":    "Path to Orca Files","desc": "Sets the file root path for Orca files (Definitions, etc)","section": "ORCA","key": "rootpath"}\n' \
+                      ']'
     return uOrcaSettingsJSON
 
 def BuildSettingsStringPowerStatus() -> str:
@@ -286,72 +291,79 @@ def BuildSettingsStringPowerStatus() -> str:
     iLeftBracketPos:int
     iRightBracketPos:int
 
-    uPowerStatusJSON:str =u'['
+    uPowerStatusJSON:str ='['
 
-    aPowerList=sorted(GetVarList(uFilter = "POWERSTATUS"))
+    aPowerList=sorted(GetVarList(uFilter = 'POWERSTATUS'))
     for uKey in aPowerList:
-        if uKey.startswith("POWERSTATUS_"):
+        if uKey.startswith('POWERSTATUS_'):
             aPowerListDevices.append(uKey)
     for uKey in aPowerList:
-        if u"ACTIVITY_POWERSTATUS[" in uKey:
+        if 'ACTIVITY_POWERSTATUS[' in uKey:
             aPowerListActivities.append(uKey)
 
     uSection = Globals.uDefinitionName
-    uSection = uSection.replace(u' ', u'_')
+    uSection = uSection.replace(' ', '_')
     oConfig=Globals.oDefinitionConfigParser
 
     if len(aPowerListDevices):
-        uPowerStatusJSON+=ReplaceVars(u'{ "type": "title","title": "$lvar(2001)" },\n')
+        uPowerStatusJSON+=ReplaceVars('{ "type": "title","title": "$lvar(2001)" },\n')
         for uVarNameKey in aPowerListDevices:
-            uPowerStatusJSON+= u'{"type": "bool","title": "%s","desc": "","section": "%s","key": "powerstatus_%s"},\n' %(uVarNameKey,uSection,uVarNameKey.lower())
-            if GetVar(uVarName = uVarNameKey)=="ON":
-                oConfig.set(uSection, "powerstatus_"+uVarNameKey.lower(), "1")
+            uPowerStatusJSON+= f'{{"type": "bool","title": "{uVarNameKey}","desc": "","section": "{uSection}","key": "powerstatus_{uVarNameKey.lower()}"}},\n'
+            if GetVar(uVarName = uVarNameKey)=='ON':
+                oConfig.set(uSection, 'powerstatus_'+uVarNameKey.lower(), '1')
             else:
-                oConfig.set(uSection, "powerstatus_"+uVarNameKey.lower(), "0")
+                oConfig.set(uSection, 'powerstatus_'+uVarNameKey.lower(), '0')
 
 
     if len(aPowerListActivities):
-        uPowerStatusJSON+=ReplaceVars(u'{ "type": "title","title": "$lvar(2000)" },\n')
+        uPowerStatusJSON+=ReplaceVars('{ "type": "title","title": "$lvar(2000)" },\n')
         for uVarNameKey in aPowerListActivities:
             iLeftBracketPos=uVarNameKey.find('[')
             if iLeftBracketPos != -1:
                 iRightBracketPos = uVarNameKey.find(']',iLeftBracketPos)
                 if iRightBracketPos != -1:
                     uIndexGroup=uVarNameKey[iLeftBracketPos+1:iRightBracketPos]
-                    uActivityGroupName=GetVar(uVarName = "ACTIVITYGROUPNAME["+uIndexGroup+"]")
-                    uActivityName=GetVar(uVarName = "ACTIVITY_NAME"+uVarNameKey[iLeftBracketPos:])
+                    uActivityGroupName=GetVar(uVarName = 'ACTIVITYGROUPNAME['+uIndexGroup+']')
+                    uActivityName=GetVar(uVarName = 'ACTIVITY_NAME'+uVarNameKey[iLeftBracketPos:])
                     if uActivityName:
-                        uPowerStatusJSON+= u'{"type": "bool","title": "%s %s","desc": "%s","section": "%s","key": "powerstatus_%s"},\n' %(uActivityGroupName,uActivityName,uVarNameKey,uSection,uVarNameKey.lower())
-                        if GetVar(uVarName = uVarNameKey)=="ON":
-                            oConfig.set(uSection, "powerstatus_"+uVarNameKey.lower(), "1")
+                        uPowerStatusJSON+= '{"type": "bool","title": "%s %s","desc": "%s","section": "%s","key": "powerstatus_%s"},\n' %(uActivityGroupName,uActivityName,uVarNameKey,uSection,uVarNameKey.lower())
+                        if GetVar(uVarName = uVarNameKey)=='ON':
+                            oConfig.set(uSection, 'powerstatus_'+uVarNameKey.lower(), '1')
                         else:
-                            oConfig.set(uSection, "powerstatus_"+uVarNameKey.lower(), "0")
+                            oConfig.set(uSection, 'powerstatus_'+uVarNameKey.lower(), '0')
 
     if len(uPowerStatusJSON)>1:
         uPowerStatusJSON=uPowerStatusJSON[:-2]
-        uPowerStatusJSON+=u']'
+        uPowerStatusJSON+=']'
     else:
-        uPowerStatusJSON=u'[]'
+        uPowerStatusJSON='[]'
 
     oConfig.write()
     return uPowerStatusJSON
 
-def AddScriptSetting(uSettingName,uSettingPage,uOrcaSettingsJSON):
+def AddScriptSetting(uSettingName:str,uSettingPage:str,uOrcaSettingsJSON:str) ->str:
+    """
+    Adds all script settings to a given setting object
+    :param str uSettingName: The Name of the setting (ORCA; TOOLS, ...)
+    :param str uSettingPage: The Page of the setting within the settings
+    :param str uOrcaSettingsJSON:
+    :return:
+    """
     dTitleSettings = {}
-    uTmp = u","
+    uTmp = ','
     for uScripKey in Globals.oScripts.dScriptSettingPlugins:
         oScriptSettingPlugins = Globals.oScripts.dScriptSettingPlugins[uScripKey]
         if oScriptSettingPlugins.uSettingName==uSettingName and ReplaceVars(oScriptSettingPlugins.uSettingPage)==uSettingPage:
             uSettingTitle = ReplaceVars(oScriptSettingPlugins.uSettingTitle)
             if dTitleSettings.get(uSettingTitle) is None:
-                dTitleSettings[uSettingTitle]=[u'{ "type": "title","title": "%s" }' % oScriptSettingPlugins.uSettingTitle]
+                dTitleSettings[uSettingTitle]=['{ "type": "title","title": "%s" }' % oScriptSettingPlugins.uSettingTitle]
             for uSettingJson in oScriptSettingPlugins.aSettingJson:
                 dTitleSettings[uSettingTitle].append(uSettingJson)
     if len(dTitleSettings)>0:
         for uKey in dTitleSettings:
             for uLine in dTitleSettings[uKey]:
-                uTmp=uTmp+uLine+",\n"
-        uOrcaSettingsJSON=uOrcaSettingsJSON[:-1]+uTmp[:-2]+u"]"
+                uTmp=uTmp+uLine+',\n'
+        uOrcaSettingsJSON=uOrcaSettingsJSON[:-1]+uTmp[:-2]+']'
     return uOrcaSettingsJSON
 
 

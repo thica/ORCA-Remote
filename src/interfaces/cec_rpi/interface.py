@@ -2,7 +2,7 @@
 # cec_rpi
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@ from __future__             import annotations
 from typing                 import Dict
 from ORCA.vars.Access       import SetVar
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 '''
 <root>
@@ -33,8 +33,8 @@ import ORCA.Globals as Globals
       <description language='English'>CEC Control using the Raspberry PI</description>
       <description language='German'>CEC Steuerung über den Raspberry PI</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/cec_rpi</local>
@@ -59,17 +59,17 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from interfaces.telnet.interface import cInterface as cInterFaceTelnet
 else:
-    cInterFaceTelnet = Globals.oInterFaces.LoadInterface('telnet').GetClass("cInterface")
+    cInterFaceTelnet = Globals.oInterFaces.LoadInterface('telnet').GetClass('cInterface')
 
 class cInterface(cInterFaceTelnet):
     class cInterFaceSettings(cInterFaceTelnet.cInterFaceSettings):
         def __init__(self,oInterFace:cInterface):
             super().__init__(oInterFace)
-            self.aIniSettings.uSource_DeviceType      =  u"Recording 1"
-            self.aIniSettings.uSource_DeviceID        =  u"00000"
-            self.aIniSettings.uDestination_DeviceType =  u"TV"
-            self.aIniSettings.uFNCodeset              =  u"CODESET_cec_rpi_telnet.xml"
-            self.uTarget:str                          =  u''
+            self.aIniSettings.uSource_DeviceType      =  'Recording 1'
+            self.aIniSettings.uSource_DeviceID        =  '00000'
+            self.aIniSettings.uDestination_DeviceType =  'TV'
+            self.aIniSettings.uFNCodeset              =  'CODESET_cec_rpi_telnet.xml'
+            self.uTarget:str                          =  ''
 
         def ReadConfigFromIniFile(self,uConfigName:str) -> None:
 
@@ -78,8 +78,8 @@ class cInterface(cInterFaceTelnet):
             try:
                 self.SetContextVar(uVarName='SOURCEID',uVarValue=self.aIniSettings.uSource_DeviceID)
 
-                uSourceDevice:str      = u'1'
-                uDestinationDevice:str = u'0'
+                uSourceDevice:str      = '1'
+                uDestinationDevice:str = '0'
 
                 for uKey in self.oInterFace.aTargets:
                     if self.oInterFace.aTargets[uKey]==self.aIniSettings.uSource_DeviceType:
@@ -92,22 +92,22 @@ class cInterface(cInterFaceTelnet):
                 self.uTarget = uSourceDevice+uDestinationDevice
                 self.SetContextVar(uVarName='TARGET' ,uVarValue=self.uTarget)
             except Exception as e:
-                self.ShowError(uMsg=u'Cannot read config name:'+str(self.oInterFace.oObjectConfig.oFnConfig) + u' Section:'+self.uSection,oException=e)
+                self.ShowError(uMsg='Cannot read config name:'+str(self.oInterFace.oObjectConfig.oFnConfig) + ' Section:'+self.uSection,oException=e)
 
     def __init__(self):
         super().__init__()
         self.dTargets:Dict[str,str] = {'0':'TV','1':'Recording 1','2':'Recording 2','3':'Tuner 1','4':'Playback 1','5':'Audio system','6':'Tuner 2','7':'Tuner 3','8':'Playback 2','9':'Playback 3','A':'Tuner 4','B':'Playback 3','C':'Reserved (C)','D':'Reserved (D)','E':'Reserved (E)','F':'Unregistered'}
-        uValueString:str = u''
+        uValueString:str = ''
         for uKey in self.dTargets:
-            uValueString+=u'\"'+self.dTargets[uKey]+u'\",'
+            uValueString+='\"'+self.dTargets[uKey]+'\",'
         uValueString = uValueString[1:-2]
-        SetVar(uVarName = "VALUESTRING", oVarValue = uValueString)
+        SetVar(uVarName = 'VALUESTRING', oVarValue = uValueString)
 
     def GetConfigJSON(self) -> Dict:
         dRet:Dict = super().GetConfigJSON()
-        dAdd:Dict = {"Source_DeviceType":      {"active": "enabled", "order": 10, "type": "scrolloptions",  "title": "Source Device Type",      "desc": "$lvar(6005)",  "section": "$var(ObjectConfigSection)","key": "Source_DeviceType",           "default":"Recording 1", "options":["$var(VALUESTRING)"]},
-                     "Source_DeviceID":        {"active": "enabled", "order": 11, "type": "string",         "title": "Source Device ID",        "desc": "$lvar(6005)",  "section": "$var(ObjectConfigSection)","key": "Source_DeviceID",             "default":"00000"       },
-                     "Destination_DeviceType": {"active": "enabled", "order": 12, "type": "scrolloptions",  "title": "Destination Device Type", "desc": "$lvar(6003)",  "section": "$var(ObjectConfigSection)","key": "Destination_DeviceType",      "default":"TV", "options":["$var(VALUESTRING)"]}
+        dAdd:Dict = {'Source_DeviceType':      {'active': 'enabled', 'order': 10, 'type': 'scrolloptions',  'title': 'Source Device Type',      'desc': '$lvar(6005)',  'section': '$var(ObjectConfigSection)','key': 'Source_DeviceType',           'default':'Recording 1', 'options':['$var(VALUESTRING)']},
+                     'Source_DeviceID':        {'active': 'enabled', 'order': 11, 'type': 'string',         'title': 'Source Device ID',        'desc': '$lvar(6005)',  'section': '$var(ObjectConfigSection)','key': 'Source_DeviceID',             'default':'00000'       },
+                     'Destination_DeviceType': {'active': 'enabled', 'order': 12, 'type': 'scrolloptions',  'title': 'Destination Device Type', 'desc': '$lvar(6003)',  'section': '$var(ObjectConfigSection)','key': 'Destination_DeviceType',      'default':'TV', 'options':['$var(VALUESTRING)']}
                     }
 
         dRet.update(dAdd)

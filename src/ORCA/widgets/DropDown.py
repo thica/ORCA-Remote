@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -40,10 +40,10 @@ from ORCA.utils.Path                    import cPath
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 __all__ = ['cWidgetDropDown']
 
@@ -88,8 +88,7 @@ class cWidgetDropDown(cWidgetButton):
     |(0/1) If set, the captions of the dropdown will be sorted, It will not sort the actions, so use it only if you use the same action for each item
     |-
     |setcaption
-    |(0/1) If set, the caption of the main button will be set o the selected dropdown value
-
+    |(0/1) If set, the caption of the main button will be set to the selected dropdown value
     |}</div>
 
     Below you see an example for a dropdown widget
@@ -104,13 +103,13 @@ class cWidgetDropDown(cWidgetButton):
         self.aDropDownButtons:List[cWidgetButton]   = []
         self.aCaptions:List[str]                    = []
         self.aSecondCaptions:List[str]              = []
-        self.uOrgCaptions:str                       = u''
+        self.uOrgCaptions:str                       = ''
         self.aOrgActionNames:List[str]              = []
         self.aActionNames:List[str]                 = []
         self.oObjectDropDown:Union[DropDown,None]   = None
         self.oDimmer:Union[cTouchRectangle,None]    = None
         self.iFrameWidth:int                        = 0
-        self.uActionNames:str                       = u''
+        self.uActionNames:str                       = ''
         self.aFrameColor:List[float]                = aColorUndefined
         self.bSorted:bool                           = False
         self.oXMLNode:Union[Element,None]           = None
@@ -120,23 +119,23 @@ class cWidgetDropDown(cWidgetButton):
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
 
-        uCaption:str = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag="caption",bMandatory=False,vDefault="")
+        uCaption:str = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='caption',bMandatory=False,vDefault='')
         bRet:bool    = super().InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=uAnchor)
         bDummy:bool
 
-        oXMLNode.set("caption", uCaption)
+        oXMLNode.set('caption', uCaption)
 
         if bRet:
-            self.aFrameColor        = GetColorFromHex(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'framecolor',bMandatory=False,vDefault=u'$var(dimmed)'))
-            # uFramewidth:str         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'framewidth',  bMandatory=False,vDefault=str(int((self.oDef.iDefMaxX/self.fRationX)*0.03)))
-            uFramewidth:str         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'framewidth',  bMandatory=False,vDefault=str(int((self.oDef.iDefMaxX/self.fRationX)*0.05)))
+            self.aFrameColor        = GetColorFromHex(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='framecolor',bMandatory=False,vDefault='$var(dimmed)'))
+            # uFramewidth:str         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='framewidth',  bMandatory=False,vDefault=str(int((self.oDef.iDefMaxX/self.fRationX)*0.03)))
+            uFramewidth:str         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='framewidth',  bMandatory=False,vDefault=str(int((self.oDef.iDefMaxX/self.fRationX)*0.05)))
             self.iFrameWidth,bDummy = self.CalculateWidth(uWidth=uFramewidth,iAnchorWidth=self.iWidth)
             self.iFrameWidth        = self.iFrameWidth / self.fRationX
-            self.aCaptions          = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'captions', bMandatory=False,vDefault=u'unknown').split(u',')
-            self.aActionNames       = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actions',  bMandatory=False,vDefault=u'').split(u',')
+            self.aCaptions          = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='captions', bMandatory=False,vDefault='unknown').split(',')
+            self.aActionNames       = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='actions',  bMandatory=False,vDefault='').split(',')
             self.aOrgActionNames    = copy(self.aActionNames)
-            self.bSorted            = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'sorted',   bMandatory=False,bDefault=False)
-            self.bSetCaption        = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'setcaption', bMandatory=False,bDefault=False)
+            self.bSorted            = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag='sorted',   bMandatory=False,bDefault=False)
+            self.bSetCaption        = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag='setcaption', bMandatory=False,bDefault=False)
             self.oXMLNode           = oXMLNode
 
             # this is a little bit tricky
@@ -160,10 +159,10 @@ class cWidgetDropDown(cWidgetButton):
                     # we cant use the touchbutton object, as Buttonbehaviour not work on buttons on scolllayout
                     #oBtn.ClassName           = Button
                     oBtn.bIsDropButton        = True
-                    self.oXMLNode.set("caption",self.aCaptions[num])
-                    self.oXMLNode.set("type","BUTTON")
-                    # self.oXMLNode.set("action", self.aActionNames[num])
-                    self.oXMLNode.set("action", "NoAction")
+                    self.oXMLNode.set('caption',self.aCaptions[num])
+                    self.oXMLNode.set('type','BUTTON')
+                    # self.oXMLNode.set('action', self.aActionNames[num])
+                    self.oXMLNode.set('action', 'NoAction')
 
                     if self.uAnchorName:
                         oTmpAnchor = self.oParentScreenPage.dWidgets[self.uAnchorName][0]
@@ -176,10 +175,10 @@ class cWidgetDropDown(cWidgetButton):
                     oBtn.iAnchorPosY          = 0
                     oBtn.iPosX                = 0
                     oBtn.iPosY                = 0
-                    oBtn.uActionNameDoubleTap = u''
-                    oBtn.uActionNameDownOnly  = u''
-                    oBtn.uActionNameUpOnly    = u''
-                    oBtn.uActionNameLongTap   = u''
+                    oBtn.uActionNameDoubleTap = ''
+                    oBtn.uActionNameDownOnly  = ''
+                    oBtn.uActionNameUpOnly    = ''
+                    oBtn.uActionNameLongTap   = ''
                     oBtn.iButtonNum           = num
 
                     self.aDropDownButtons.append(oBtn)
@@ -205,7 +204,7 @@ class cWidgetDropDown(cWidgetButton):
                     if (not oWidget.bIcon) and (not self.bIcon):
                         oWidget.oObject.font_size = self.oObject.font_size
 
-                    oWidget.uName               = "*DROPDOWNBUTTON*"+oWidget.uName
+                    oWidget.uName               = '*DROPDOWNBUTTON*'+oWidget.uName
                     oKivyBtn:Button             = oWidget.oObject
                     oWidget.oParent.remove_widget(oKivyBtn)
                     oKivyBtn.size_hint_y            = None
@@ -217,7 +216,7 @@ class cWidgetDropDown(cWidgetButton):
                 return True
             return False
         except Exception as e:
-            LogError(uMsg="Can''t create Dropdown",oException=e)
+            LogError(uMsg='Can\'t create Dropdown',oException=e)
             return False
 
     def GetActions(self) -> bool:
@@ -225,11 +224,11 @@ class cWidgetDropDown(cWidgetButton):
             # noinspection PyUnusedLocal
             self.aActionNames = [self.aActionNames[0] for x in range(len(self.aCaptions))]
 
-        if self.uActionNameLongTap == u"":
-            self.uActionNameLongTap = "noaction"
+        if self.uActionNameLongTap == '':
+            self.uActionNameLongTap = 'noaction'
 
         if len(self.aActionNames) != len(self.aCaptions) and len(self.aCaptions) > 0:
-            LogError(uMsg=u'cWidgetDropDown: [%s] Captions do not match Actions: %s' % (self.uName, self.uActionName))
+            LogError(uMsg=f'cWidgetDropDown: [{self.uName}] Captions do not match Actions: {self.uActionName}')
             return False
         else:
             return True
@@ -239,21 +238,22 @@ class cWidgetDropDown(cWidgetButton):
         uCaptions: str
 
         del self.aDropDownButtons[:]
-        if self.uCaption.endswith("[]"):
-            aCaptions           = self.uCaption.split(u':::')
+        #if self.uCaption.endswith('[]'):
+        if '[]' in self.uCaption:
+            aCaptions           = self.uCaption.split(':::')
             self.uCaption       = aCaptions[0]
             uCaptions           = aCaptions[1]
             self.aCaptions      = Var_GetArray(uCaptions , 1)
-            self.aCaptions      = [u"$var("+item+")" for item in self.aCaptions]
-        elif u':::' in self.uCaption:
-            aCaptions           = self.uCaption.split(u':::')
+            self.aCaptions      = ['$var('+item+')' for item in self.aCaptions]
+        elif ':::' in self.uCaption:
+            aCaptions           = self.uCaption.split(':::')
             self.uCaption       = aCaptions[0]
             self.aCaptions      = aCaptions[1:]
-            self.aActionNames   = ReplaceVars(self.uActionName).split(u':::')
-            self.uActionName    = u''
+            self.aActionNames   = ReplaceVars(self.uActionName).split(':::')
+            self.uActionName    = ''
             super(cWidgetButton, self).SetCaption(self.uCaption)
         else:
-            if self.aCaptions[0].startswith("$DIRLIST["):
+            if self.aCaptions[0].startswith('$DIRLIST['):
                 oPath:cPath = cPath(self.aCaptions[0][9:-1])
                 self.aCaptions = oPath.GetFolderList()
 
@@ -272,12 +272,12 @@ class cWidgetDropDown(cWidgetButton):
 
     def DropDownSelect(self,instance:DropDown) -> None:
         """ selects on item of dropdown """
-        #self.SetCaption(instance.text)
+
         self.oObjectDropDown.dismiss()
-        instance.oOrcaWidget.dActionPars["DROPDOWNVALUE"] = instance.text
-        instance.oOrcaWidget.dActionPars["DROPDOWNINDEX"] = str(instance.oOrcaWidget.iButtonNum)
+        instance.oOrcaWidget.dActionPars['DROPDOWNVALUE'] = instance.text
+        instance.oOrcaWidget.dActionPars['DROPDOWNINDEX'] = str(instance.oOrcaWidget.iButtonNum)
         instance.oOrcaWidget.uActionName = self.aActionNames[instance.oOrcaWidget.iButtonNum]
-        instance.uTapType="down"
+        instance.uTapType='up'
         instance.oOrcaWidget.On_Button_Down(instance)
         if self.bSetCaption:
             self.SetCaption(instance.text)
@@ -293,7 +293,7 @@ class cWidgetDropDown(cWidgetButton):
 
     def UpdateWidgetSecondCaption(self) -> None:
         uCaption:str = ReplaceVars(self.uOrgSecondCaption)
-        if uCaption == u'':
+        if uCaption == '':
             return
         self.uCaption = uCaption
         if self.oObject:

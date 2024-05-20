@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -34,21 +34,18 @@ from kivy.clock             import  Clock
 
 from ORCA.utils.LogError    import  LogError
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from kivy.uix.widget        import Widget
     from ORCA.widgets.base.Base import cWidgetBase
-    from ORCA.Action            import cAction
+    from ORCA.action.Action import cAction
 else:
     from typing import TypeVar
-    Widget  = TypeVar("Widget")
-    cAction = TypeVar("cAction")
-    cWidgetBase = TypeVar("cWidgetBase")
-
-
-
+    Widget  = TypeVar('Widget')
+    cAction = TypeVar('cAction')
+    cWidgetBase = TypeVar('cWidgetBase')
 
 __all__ = ['simplegesture','cOrcaButtonBehaviour']
 
@@ -82,12 +79,12 @@ def GetTouchActions(touch,dGestures:Dict[str,Tuple]) -> Union[List,None]:
         if tGesture:
             # name is added by kivy pickler but not in kivy init
             # noinspection PyUnresolvedReferences
-            Logger.debug (u'Gesturewidget: Identified Gesture:'+ tGesture[1].name)
+            Logger.debug ('Gesturewidget: Identified Gesture:'+ tGesture[1].name)
             for key in Globals.oTheScreen.dGestures.keys():
                 if tGesture[1] == Globals.oTheScreen.dGestures[key].oGesture:
                     if key in dGestures:
                         uAction, uInterFace, uConfigName = dGestures[key]
-                        Logger.debug (u'Gesturewidget: Calling Gesture Actions')
+                        Logger.debug ('Gesturewidget: Calling Gesture Actions')
                         aActions:List[cAction]=Globals.oActions.GetActionList(uActionName = uAction, bNoCopy=False)
                         if aActions:
                             for oAction in aActions:
@@ -97,10 +94,10 @@ def GetTouchActions(touch,dGestures:Dict[str,Tuple]) -> Union[List,None]:
                                     oAction.dActionPars['configname']=uConfigName
                             return aActions
                         else:
-                            LogError (uMsg=u'Gesturewidget: Action Not Found:' + uAction)
+                            LogError (uMsg='Gesturewidget: Action Not Found:' + uAction)
         return None
     except Exception as e:
-        LogError(uMsg=u'Gesturewidget: f_on_touch_up: Runtime Error:',oException=e)
+        LogError(uMsg='Gesturewidget: f_on_touch_up: Runtime Error:',oException=e)
         return None
 
 # We don't use grab()/ungrab() as it didn't show reliable and we had to
@@ -128,9 +125,9 @@ class cOrcaButtonBehaviour:
 
         # Flag, if we have to schedule the first Repeat time, or the repeating time
         self.bFirstRepeat:bool             = True
-        # Flag, to force fire a event on touch up
+        # Flag, to force fire an event on touch up
         self.bForceUp:bool                = False
-        self.uTapType:str                 = u''
+        self.uTapType:str                 = ''
         # Flag, to execute up event by the current down widget
         self.bProcessUp:bool              = False
 
@@ -162,18 +159,20 @@ class cOrcaButtonBehaviour:
 
     def Delete_LongPressClock(self,touch, *args)  -> None:
         """ deletes a clock to detect a long press button press"""
+        global oDownWidget
         Clock.unschedule(self.fktCallBackLong)
+        Clock.unschedule(oDownWidget.fktCallBackLong)
 
     def fLongPress(self, touch, *args)  -> bool:
         """ we detected a long button press """
-        self.uTapType       = u"long_up"
+        self.uTapType       = 'long_up'
         # noinspection PyUnresolvedReferences
         self.dispatch('on_q_release')
         self.bProcessed     = True
         return True
 
     def Create_RepeatClock(self, touch, *args) -> None:
-        """ create a clock to detect repeating press (only, if we havnen't define a long press)"""
+        """ create a clock to detect repeating press (only, if we haven't defined a long press)"""
 
         FktTrigger:Union[Callable,None]
 
@@ -183,7 +182,7 @@ class cOrcaButtonBehaviour:
         # noinspection PyUnresolvedReferences
         oOrcaWidget:cWidgetBase = self.oOrcaWidget
         if hasattr(self,'uActionNameLongTap'):
-            if oOrcaWidget.uActionNameLongTap!=u'':
+            if oOrcaWidget.uActionNameLongTap!='':
                 return
 
         if Globals.fStartRepeatDelay>0:
@@ -192,14 +191,17 @@ class cOrcaButtonBehaviour:
             if self.bFirstRepeat:
                 FktTrigger=Clock.create_trigger(self.fktCallBackRepeat, Globals.fStartRepeatDelay)
             else:
-                if Globals.oTheScreen.uLastTouchType != "end":
+                if Globals.oTheScreen.uLastTouchType != 'end':
                     FktTrigger=Clock.create_trigger(self.fktCallBackRepeat, Globals.fContRepeatDelay)
             if FktTrigger:
                 FktTrigger()
 
     def Delete_RepeatClock(self,touch, *args) -> None:
         """ Deletes the repeating clock """
+        global oDownWidget
         Clock.unschedule(self.fktCallBackRepeat)
+        Clock.unschedule(oDownWidget.fktCallBackRepeat)
+
 
     def fRepeat(self, touch, *args) -> None:
         """ we detected a repeat and call the assigned function """
@@ -217,27 +219,30 @@ class cOrcaButtonBehaviour:
 
     def Delete_DoublePressClock(self,touch, *args) -> None:
         """ Deletes the double press clock """
+        global oDownWidget
         Clock.unschedule(self.fktCallBackDouble )
+        Clock.unschedule(oDownWidget.fktCallBackDouble )
+
         self.bWaitForDouble = False
 
     def fRepeatPress(self, touch, *args) -> bool:
         """ we detected a repeat and call the assigned function """
-        self.uTapType = u'repeat_down'
+        self.uTapType = 'repeat_down'
         self.dispatch('on_q_release')
         self.bProcessed     = True
         return True
 
     def fDoublePress(self, touch, *args) -> bool:
         """ we detected a double press and call the assigned function """
-        # Logger.debug("fDoublePress")
-        # Logger.debug("fDoublePress: IsDown:"+str(self.bIsDown))
-        # Logger.debug("fDoublePress: Double:"+str(touch.is_double_tap))
+        # Logger.debug('fDoublePress')
+        # Logger.debug('fDoublePress: IsDown:'+str(self.bIsDown))
+        # Logger.debug('fDoublePress: Double:'+str(touch.is_double_tap))
 
         if not self.bIsDown:
             if touch.is_double_tap:
-                self.uTapType = u"double_up"
-            self.dispatch('on_q_release')
-            self.bProcessed     = True
+                self.uTapType = 'double_up'
+                self.dispatch('on_q_release')
+                self.bProcessed     = True
         self.bWaitForDouble = False
         return False
 
@@ -260,12 +265,15 @@ class cOrcaButtonBehaviour:
         """ called by the framework, if a widget is touched """
         global oDownWidget
 
-        uButton:str = "left"
-        if hasattr(touch,"button"):
+        uButton:str = 'left'
+        if hasattr(touch,'button'):
             uButton = touch.button
 
-        if self.IsMyTouch(touch) and uButton=="left":
-            # Logger.debug("on_touch_down")
+        if uButton is None:
+            uButton = 'left'
+
+        if self.IsMyTouch(touch) and uButton=='left':
+            # Logger.debug('on_touch_down')
             for child in self.children[:]:
                 if hasattr(child,'oOrcaWidget'):
                     if child.oOrcaWidget.bIsEnabled:
@@ -274,6 +282,7 @@ class cOrcaButtonBehaviour:
                 else:
                     if child.dispatch('on_touch_down', touch):
                         return True
+
             if touch.is_double_tap:
                 self.Delete_LongPressClock(touch)
                 self.Delete_RepeatClock(touch)
@@ -281,7 +290,7 @@ class cOrcaButtonBehaviour:
                 # rest will be managed by the up event
                 return True
 
-            self.uTapType          = u"down"
+            self.uTapType          = 'down'
             self.bProcessed        = False
             self.bFirstRepeat      = True
             oDownWidget            = self
@@ -294,7 +303,7 @@ class cOrcaButtonBehaviour:
             # we start the clocks after the first triggered action, to make sure, that we don't miss
             # timing on lenghly actions
             # but not on right klick to bypass kivy bug
-            if uButton=="left":
+            if uButton=='left':
                 self.Create_DoublePressClock(touch)
                 self.Create_LongPressClock(touch)
                 self.Create_RepeatClock(touch)
@@ -308,17 +317,18 @@ class cOrcaButtonBehaviour:
         if oDownWidget is not None:
             if not oDownWidget.bProcessUp:
                 oDownWidget.bProcessUp = True
-                return oDownWidget.on_touch_up(touch)
+                self.bProcessUp = True
+                if oDownWidget.uTapType == 'down' and not self.bWaitForDouble:
+                    oDownWidget.uTapType='up'
+                oDownWidget.dispatch("on_q_release")
         else:
-            if hasattr(self,"oOrcaWidget"):
+            if hasattr(self,'oOrcaWidget'):
                 if self.oOrcaWidget is not None:
-                    Logger.error ("on_touch_up: Up without Down on Widget:"+self.oOrcaWidget.uName)
+                    Logger.error ('on_touch_up: Up without Down on Widget:'+self.oOrcaWidget.uName)
                 else:
-                    Logger.error ("on_touch_up: Up without Down")
+                    Logger.error ('on_touch_up: Up without Down')
+
         if self.bProcessUp:
-            #Logger.info("on_touch_up")
-            #Logger.debug("on_touch_up: Process:"+str(self.bProcessed))
-            #Logger.debug("on_touch_up: WaitforDouble:"+str(self.bWaitForDouble))
             self.bIsDown = False
             self.Delete_LongPressClock(touch)
             self.Delete_RepeatClock(touch)
@@ -327,8 +337,8 @@ class cOrcaButtonBehaviour:
                 self.bProcessed = False
                 touch.is_double_tap = False
 
-            if self.uTapType == u'' or self.uTapType == u'down' or self.uTapType == u'long_up' or self.uTapType == u'repeat_down':
-                self.uTapType ="up"
+            if self.uTapType == '' or self.uTapType == 'down' or self.uTapType == 'long_up' or self.uTapType == 'repeat_down':
+                self.uTapType ='up'
 
             if not self.bProcessed and not self.bWaitForDouble:
                 if self.fDoublePress(touch):
@@ -365,13 +375,13 @@ class cOrcaButtonBehaviour:
 
     def on_gesture(self) -> None:
         """ placeholder """
-        #print ("default move for ",self.oMainWidget.oOrcaWidget.uName)
+        #print ('default move for ',self.oMainWidget.oOrcaWidget.uName)
         pass
     def on_q_press(self)  -> None:
         """ placeholder """
-        #print ("default down for" ,self.oMainWidget.oOrcaWidget.uName)
+        #print ('default down for' ,self.oMainWidget.oOrcaWidget.uName)
         pass
     def on_q_release(self)  -> None:
         """ placeholder """
-        # print ("default up for " ,self.oMainWidget.oOrcaWidget.uName)
+        # print ('default up for ' ,self.oMainWidget.oOrcaWidget.uName)
         pass

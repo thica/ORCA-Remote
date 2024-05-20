@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ from ORCA.vars.Access                   import SetVar
 from ORCA.vars.Access                   import GetVar
 from ORCA.widgets.core.MultiLineButton  import cMultiLineButton
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['ShowKeyBoard','cInputKeyboard']
 
@@ -44,7 +44,7 @@ class cInputKeyboard(cBasePopup):
         super(cInputKeyboard, self).__init__()
         self.oTextInput:Union[TextInput,None]           = None
         self.oButtonCancel:Union[cMultiLineButton,None] = None
-        self.uDestVar:str                               = u''
+        self.uDestVar:str                               = ''
         self.oFktNotify:Union[Callable,None]             = None
 
     # noinspection PyUnusedLocal
@@ -63,8 +63,8 @@ class cInputKeyboard(cBasePopup):
         self.oPopup         = Popup(title=uTitle,content=oContent, size_hint=(None, None), size=(Globals.iAppWidth*0.9,Globals.iAppHeight*0.35),auto_dismiss=False, pos_hint={'x': .05, 'top': 1})
         uText=GetVar(uVarName = self.uDestVar)
         if uText is None:
-            uText=u''
-        Logger.debug("InputKeyboard: Preassigning Value [%s]" % uText)
+            uText=''
+        Logger.debug('InputKeyboard: Preassigning Value [%s]' % uText)
         self.oTextInput = TextInput(text=uText,multiline=False, size_hint_y=None, height='30dp')
         self.oTextInput.bind(on_text_validate=self.On_Enter)
 
@@ -122,10 +122,10 @@ class cInputKeyboard(cBasePopup):
         self.oFktNotify(self.oTextInput.text)
 
 
-def ShowKeyBoard(*,uDestVar:str,oFktNotify:Union[Callable,None],  uTitle:str = "*") -> cInputKeyboard:
+def ShowKeyBoard(*,uDestVar:str,oFktNotify:Union[Callable,None],  uTitle:str = '*') -> cInputKeyboard:
     """ convenience abstraction to show the keyboard class """
-    if uTitle == "*":
-        uTitle = ReplaceVars("$lvar(1072)")
+    if uTitle == '*':
+        uTitle = ReplaceVars('$lvar(1072)')
     oInputKeyboard:cInputKeyboard  = cInputKeyboard()
     oInputKeyboard.ShowKeyBoard(uDestVar=uDestVar,oFktNotify=oFktNotify, uTitle=uTitle)
     return oInputKeyboard

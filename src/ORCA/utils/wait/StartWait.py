@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ def StartWait(iWaitTime:int=-1) -> None:
 
     if iWaitTime == -1:
         ORCA.utils.wait.Globals.bOnPause = True
-        Logger.debug("System start wait")
+        Logger.debug('System start wait')
         return
 
     ORCA.utils.wait.Globals.oWaitLock.acquire()  # will block if lock is already held

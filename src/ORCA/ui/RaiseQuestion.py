@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ from ORCA.ui.BasePopup              import cBasePopup,SettingSpacer
 from ORCA.vars.Replace              import ReplaceVars
 from ORCA.widgets.core.ScrollableLabelLarge   import cScrollableLabelLarge
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cRaiseQuestion','ShowQuestionPopUp']
 
@@ -43,7 +43,7 @@ class cRaiseQuestion(cBasePopup):
         self.oBtn1:Union[Button,None]                   = None
         self.oBtn2:Union[Button,None]                   = None
         self.oBtnDetails:Union[Button,None]             = None
-        self.uMessage:str                               = u''
+        self.uMessage:str                               = ''
         self.fktYes:Union[Callable,None]                = None
         self.fktNo:Union[Callable,None]                 = None
         self.uStringDetails:str                         = ''
@@ -109,9 +109,9 @@ class cRaiseQuestion(cBasePopup):
             return self.fktNo()
         return None
 
-def ShowQuestionPopUp(*,uTitle:str='',uMessage:str='',fktYes:Union[Callable,None]=None,fktNo:Union[Callable,None]=None,uStringYes:str='',uStringNo:str='', uSound:str=u'question'):
+def ShowQuestionPopUp(*,uTitle:str='',uMessage:str='',fktYes:Union[Callable,None]=None,fktNo:Union[Callable,None]=None,uStringYes:str='',uStringNo:str='', uSound:str='question'):
     """ all in a function """
-    Globals.oSound.PlaySound(uSoundName=uSound)
+    Globals.oSound.PlaySound(SoundName=uSound)
     oRaiseQuestion = cRaiseQuestion()
     oRaiseQuestion.RaiseQuestion(uTitle=uTitle, uMessage=uMessage, fktYes=fktYes, fktNo=fktNo, uStringYes=uStringYes, uStringNo=uStringNo)
     return oRaiseQuestion

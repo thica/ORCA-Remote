@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -26,11 +26,11 @@ try:
     from pyobjus import autoclassios
     # noinspection PyUnresolvedReferences
     from pyobjus.dylib_manager import load_framework
-    Logger.debug("Sucessfully loaded autoclassios, load_framework")
+    Logger.debug('Sucessfully loaded autoclassios, load_framework')
 except Exception as e1:
-    Logger.error("Not able to load autoclassios" + str(e1))
+    Logger.error('Not able to load autoclassios' + str(e1))
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 class cRotation:
     """ Rotation Object for IOS untested    """
@@ -44,7 +44,7 @@ class cRotation:
             NSSelectorFromString = autoclassios('NSSelectorFromString')
             self.NSString = NSSelectorFromString.alloc().init()
         except Exception as e:
-            Logger.error("Orca is not supporting rotation on this IOS Version:"+str(e))
+            Logger.error('Orca is not supporting rotation on this IOS Version:'+str(e))
 
             '''
             if (self.interfaceOrientation != UIInterfaceOrientationPortrait) {
@@ -69,11 +69,11 @@ class cRotation:
         try:
             self.UIDevice.setOrientation(1)
         except Exception as e:
-            Logger.error("Orca is not supporting rotation on this IOS Version:"+str(e))
+            Logger.error('Orca is not supporting rotation on this IOS Version:'+str(e))
     def set_portrait(self) -> None:
         """ untested / unfinished """
         try:
             self.UIDevice.setOrientation(2)
         except Exception as e:
-            Logger.error("Orca is not supporting rotation on this IOS Version:"+str(e))
+            Logger.error('Orca is not supporting rotation on this IOS Version:'+str(e))
 

@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ from ORCA.vars.Access                       import GetVar
 from ORCA.vars.Access                       import SetVar
 from ORCA.definition.Definition             import cDefinition
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 '''
 <root>
@@ -40,8 +40,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to Im/Export Orca files</description>
       <description language='German'>Tool um die Orca Files zu Im/Exportieren</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -79,53 +79,53 @@ class cScript(cToolsTemplate):
 
     def __init__(self):
         super().__init__()
-        self.uSubType           = u'EXPORT'
-        self.uSortOrder         = u'auto'
-        self.uSettingSection    = u'tools'
-        self.uSettingTitle      = u'Import Export'
-        self.uIniFileLocation   = u'none'
+        self.uSubType           = 'EXPORT'
+        self.uSortOrder         = 'auto'
+        self.uSettingSection    = 'tools'
+        self.uSettingTitle      = 'Import Export'
+        self.uIniFileLocation   = 'none'
 
     def RunScript(self, *args, **kwargs) -> None:
         super().RunScript(*args, **kwargs)
-        if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
+        if kwargs.get('caller') == 'settings' or kwargs.get('caller') == 'action':
             self.ShowPageExport(self, *args, **kwargs)
 
     def ShowPageExport(self, *args, **kwargs) -> None:
-        SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="EXPORT")
+        SetVar(uVarName='ORCA_IE_DIRECTION', oVarValue='EXPORT')
         oEvents = Globals.oEvents
         aActions=oEvents.CreateSimpleActionList(aActions=[{'name':'init var','string':'setvar CHECKBOX_EXPORT_CHANGE_LOCATION=0'},
                                                           {'name':'show page','string':'showpage','pagename':'Page_Export'}])
-        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='ShowPageExport')
 
     def ShowPageImport(self, *args, **kwargs) -> None:
-        SetVar(uVarName="ORCA_IE_DIRECTION", oVarValue="IMPORT")
+        SetVar(uVarName='ORCA_IE_DIRECTION', oVarValue='IMPORT')
         oEvents = Globals.oEvents
         aActions=oEvents.CreateSimpleActionList(aActions=[{'name':'init var','string':'setvar CHECKBOX_IMPORT_CHANGE_LOCATION=0'},
                                                           {'name':'show page','string':'showpage','pagename':'Page_Import'}])
-        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='ShowPageImport')
 
     def Register(self, *args, **kwargs) -> Dict:
         super().Register(*args, **kwargs)
-        Globals.oNotifications.RegisterNotification(uNotification="DEFINITIONPAGESLOADED",            fNotifyFunction=self.LoadScriptPages, uDescription="Script Tools Import Export")
-        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTIMPORTEXPORT-IMPORT",   fNotifyFunction=self.ShowPageImport,  uDescription="Script Tools Import / Export")
-        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTIMPORTEXPORT-EXPORT",   fNotifyFunction=self.ShowPageExport,  uDescription="Script Tools Import / Export")
-        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTIMPORTEXPORT-DOIMPORT", fNotifyFunction=self.ImportOrcaFiles, uDescription="Script Tools Import / Export")
-        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTIMPORTEXPORT-DOEXPORT", fNotifyFunction=self.ExportOrcaFiles, uDescription="Script Tools Import / Export")
+        Globals.oNotifications.RegisterNotification(uNotification='DEFINITIONPAGESLOADED',            fNotifyFunction=self.LoadScriptPages, uDescription='Script Tools Import Export')
+        Globals.oNotifications.RegisterNotification(uNotification='STARTSCRIPTIMPORTEXPORT-IMPORT',   fNotifyFunction=self.ShowPageImport,  uDescription='Script Tools Import / Export')
+        Globals.oNotifications.RegisterNotification(uNotification='STARTSCRIPTIMPORTEXPORT-EXPORT',   fNotifyFunction=self.ShowPageExport,  uDescription='Script Tools Import / Export')
+        Globals.oNotifications.RegisterNotification(uNotification='STARTSCRIPTIMPORTEXPORT-DOIMPORT', fNotifyFunction=self.ImportOrcaFiles, uDescription='Script Tools Import / Export')
+        Globals.oNotifications.RegisterNotification(uNotification='STARTSCRIPTIMPORTEXPORT-DOEXPORT', fNotifyFunction=self.ExportOrcaFiles, uDescription='Script Tools Import / Export')
 
         oScriptSettingPlugin = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName
-        oScriptSettingPlugin.uSettingName  = "ORCA"
-        oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
-        oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_4)"
-        oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_1)","desc": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_IMPORTEXPORT_3)","id":"button_notification_STARTSCRIPTIMPORTEXPORT-EXPORT"}]}',
-                                              u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_5)","desc": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_5)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_IMPORTEXPORT_7)","id":"button_notification_STARTSCRIPTIMPORTEXPORT-IMPORT"}]}']
+        oScriptSettingPlugin.uSettingName  = 'ORCA'
+        oScriptSettingPlugin.uSettingPage  = '$lvar(572)'
+        oScriptSettingPlugin.uSettingTitle = '$lvar(SCRIPT_TOOLS_IMPORTEXPORT_4)'
+        oScriptSettingPlugin.aSettingJson  = ['{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_1)","desc": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_IMPORTEXPORT_3)","id":"button_notification_STARTSCRIPTIMPORTEXPORT-EXPORT"}]}',
+                                              '{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_5)","desc": "$lvar(SCRIPT_TOOLS_IMPORTEXPORT_5)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_IMPORTEXPORT_7)","id":"button_notification_STARTSCRIPTIMPORTEXPORT-IMPORT"}]}']
         Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
         self.LoadActions()
         return {}
 
     def LoadScriptPages(self,*args,**kwargs) -> None:
-        oDefinition:cDefinition = kwargs.get("definition")
+        oDefinition:cDefinition = kwargs.get('definition')
 
         if oDefinition.uName == Globals.uDefinitionName:
             if self.oFnXML.Exists():
@@ -135,26 +135,26 @@ class cScript(cToolsTemplate):
         """
         Export all Orca Files a given location
         """
-        oPath:cPath = cPath(GetVar(uVarName="filebrowserfile")) + "/OrcaExport"
+        oPath:cPath = cPath(GetVar(uVarName='filebrowserfile')) + '/OrcaExport'
         oPath.Delete()
-        if not Globals.oPathRoot.string in oPath.string:
+        if not str(Globals.oPathRoot) in str(oPath):
             fIgnore = ignore_patterns('*.ini', 'ORCA', '*.py*')
             Globals.oPathRoot.Copy(oDest=oPath, fIgnoreFiles=fIgnore)
-            if GetVar(uVarName="CHECKBOX_EXPORT_CHANGE_LOCATION")=="1":
-                Globals.oOrcaConfigParser.set("ORCA", u'rootpath', oPath.string)
+            if GetVar(uVarName='CHECKBOX_EXPORT_CHANGE_LOCATION')=='1':
+                Globals.oOrcaConfigParser.set('ORCA', 'rootpath', str(oPath))
                 Globals.oOrcaConfigParser.write()
 
     def ImportOrcaFiles(self,*args,**kwargs) -> None:
             """
             Import all ORCA files from a given location
             """
-            oPath:cPath = cPath(GetVar(uVarName="filebrowserfile"))
+            oPath:cPath = cPath(GetVar(uVarName='filebrowserfile'))
             oFnCheckFile:cFileName = cFileName(oPath + 'actions') + 'actions.xml'
             if oFnCheckFile.Exists():
                 if not Globals.bProtected:
                     oPath.Copy(oDest=Globals.oPathRoot)
-                    if GetVar(uVarName="CHECKBOX_IMPORT_CHANGE_LOCATION")=="1":
-                        Globals.oOrcaConfigParser.set("ORCA", u'rootpath', '')
+                    if GetVar(uVarName='CHECKBOX_IMPORT_CHANGE_LOCATION')=='1':
+                        Globals.oOrcaConfigParser.set('ORCA', 'rootpath', '')
                         Globals.oOrcaConfigParser.write()
 
 

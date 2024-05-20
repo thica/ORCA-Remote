@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -61,7 +61,7 @@ from ORCA.utils.XML         import LoadXMLFile
 from ORCA.utils.XML         import WriteXMLFile
 from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
 from ORCA.ui.BasePopup      import cBasePopup,SettingSpacer
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 import urllib
 
@@ -108,7 +108,7 @@ class cITachIRDB_Editor(cBasePopup):
             oFilename=cFileName(Globals.oPathCodesets) +  oDBSelector.oCodesetName.text
             WriteXMLFile(oFile=oFilename,oElem=oRoot)
         except Exception as e:
-            uMsg=LogError(uMsg=u'IRDB: Error Writing iTach codeset file',oException=e)
+            uMsg=LogError(uMsg='IRDB: Error Writing iTach codeset file',oException=e)
             ShowErrorPopUp(uMessage=uMsg)
         self.oPopup.dismiss()
 
@@ -190,12 +190,12 @@ class ITachIRDB(cBasePopup):
         self.oTextBrands:Union[Label,None]                      = None
         self.oTextModels:Union[Label,None]                      = None
         self.oTextTypes:Union[Label,None]                       = None
-        self.uHost:str                                          = u''
-        self.uOldBrand:str                                      = u''
-        self.uOldModel:str                                      = u''
-        self.uOldType:str                                       = u''
-        self.uPassword:str                                      = u''
-        self.uUser:str                                          = u''
+        self.uHost:str                                          = ''
+        self.uOldBrand:str                                      = ''
+        self.uOldModel:str                                      = ''
+        self.uOldType:str                                       = ''
+        self.uPassword:str                                      = ''
+        self.uUser:str                                          = ''
 
     # noinspection PyMethodMayBeStatic
     def ConvertItach2CCF(self) -> None:
@@ -209,7 +209,7 @@ class ITachIRDB(cBasePopup):
         aFiles:List[str]  = Globals.oPathCodesets.GetFolderList()
         aFiles2:List[str] = []
         for uFile in aFiles:
-            if uFile.startswith("CODESET_iTach_"):
+            if uFile.startswith('CODESET_iTach_'):
                 aFiles2.append(uFile)
 
         for uFile in aFiles2:
@@ -217,15 +217,15 @@ class ITachIRDB(cBasePopup):
             oXMLCodeset:Element = LoadXMLFile(oFile=oFile)
             oXMLCodes:List[Element] = oXMLCodeset.findall('code')
             for oXMLCode in oXMLCodes:
-                uCmd = GetXMLTextAttribute(oXMLNode=oXMLCode,uTag="cmd",bMandatory=False,vDefault="")
-                if uCmd.startswith("sendir,"):
+                uCmd = GetXMLTextAttribute(oXMLNode=oXMLCode,uTag='cmd',bMandatory=False,vDefault='')
+                if uCmd.startswith('sendir,'):
                     uRepeat,uCmd=ITach2CCF(uCmd)
-                    oXMLCode.set("cmd_ccf", uCmd)
-                    oXMLCode.set("repeatcount", uRepeat)
-                    del oXMLCode.attrib["cmd"]
-            uFileName=oFile.string.replace("_iTach_","_infrared_ccf_")
+                    oXMLCode.set('cmd_ccf', uCmd)
+                    oXMLCode.set('repeatcount', uRepeat)
+                    del oXMLCode.attrib['cmd']
+            uFileName=str(oFile).replace('_iTach_','_infrared_ccf_')
             uFinal=ToUnicode(XMLPrettify(oElem=oXMLCodeset))
-            uFinal=uFinal.replace(u'<?xml version="1.0"?>',u'<?xml version="1.0" encoding="UTF-8"?>')
+            uFinal=uFinal.replace('<?xml version="1.0"?>','<?xml version="1.0" encoding="UTF-8"?>')
             with codecs.open(uFileName, 'w', 'utf-8') as oOutfile:
                 oOutfile.write(uFinal)
 
@@ -267,9 +267,9 @@ class ITachIRDB(cBasePopup):
         oContent.add_widget(oContentTypes)
         oContent.add_widget(oContentModels)
 
-        if self.uUser == u'' or self.uPassword == u'':
+        if self.uUser == '' or self.uPassword == '':
             oContent.add_widget(SettingSpacer())
-            oContent.add_widget(Label(text=ReplaceVars("$lvar(SCRIPT_TOOLS_IRDBITACH_5)"),height='20dp', size_hint_y=None))
+            oContent.add_widget(Label(text=ReplaceVars('$lvar(SCRIPT_TOOLS_IRDBITACH_5)'),height='20dp', size_hint_y=None))
 
         oContent.add_widget(SettingSpacer())
         self.oCodesetName = TextInput(height='20dp')
@@ -278,19 +278,19 @@ class ITachIRDB(cBasePopup):
 
         oContentWriteCCF = BoxLayout(orientation='horizontal', spacing='5dp', height='20dp',size_hint_y=None)
         self.oOptionWriteCCF = CheckBox(active=True)
-        oContentWriteCCF.add_widget(Label(text=ReplaceVars("$lvar(SCRIPT_TOOLS_IRDBITACH_9)"),height='20dp', size_hint_y=None, halign='left'))
+        oContentWriteCCF.add_widget(Label(text=ReplaceVars('$lvar(SCRIPT_TOOLS_IRDBITACH_9)'),height='20dp', size_hint_y=None, halign='left'))
         oContentWriteCCF.add_widget(self.oOptionWriteCCF)
         oContent.add_widget(oContentWriteCCF)
 
         oContentWriteITach = BoxLayout(orientation='horizontal', spacing='5dp', height='20dp',size_hint_y=None)
         self.oOptionWriteITach = CheckBox()
-        oContentWriteITach.add_widget(Label(text=ReplaceVars("$lvar(SCRIPT_TOOLS_IRDBITACH_10)"),height='20dp', size_hint_y=None, halign='left'))
+        oContentWriteITach.add_widget(Label(text=ReplaceVars('$lvar(SCRIPT_TOOLS_IRDBITACH_10)'),height='20dp', size_hint_y=None, halign='left'))
         oContentWriteITach.add_widget(self.oOptionWriteITach)
         oContent.add_widget(oContentWriteITach)
 
         oContentOptimizeChannelSelect = BoxLayout(orientation='horizontal', spacing='5dp', height='20dp',size_hint_y=None)
         self.oOptionOptimizeChannelSelect = CheckBox()
-        oContentOptimizeChannelSelect.add_widget(Label(text=ReplaceVars("$lvar(SCRIPT_TOOLS_IRDBITACH_11)"),height='20dp', size_hint_y=None, halign='left'))
+        oContentOptimizeChannelSelect.add_widget(Label(text=ReplaceVars('$lvar(SCRIPT_TOOLS_IRDBITACH_11)'),height='20dp', size_hint_y=None, halign='left'))
         oContentOptimizeChannelSelect.add_widget(self.oOptionOptimizeChannelSelect)
         oContent.add_widget(oContentOptimizeChannelSelect)
         oContent.add_widget(SettingSpacer())
@@ -309,8 +309,8 @@ class ITachIRDB(cBasePopup):
 
     def CreateCodesetFileName(self) -> None:
         """ Creates the filename of a codset file """
-        uInterface="XXXXX"
-        uText="CODESET_%s_%s_%s_%s.xml" %(uInterface,self.oTextBrands.text,self.oTextTypes.text,self.oTextModels.text)
+        uInterface='XXXXX'
+        uText='CODESET_%s_%s_%s_%s.xml' %(uInterface,self.oTextBrands.text,self.oTextTypes.text,self.oTextModels.text)
         uText=self.Remove(uValue=uText, uDeleteChars='\\/:*?"<>|')
         self.oCodesetName.text=uText
 
@@ -325,7 +325,7 @@ class ITachIRDB(cBasePopup):
     def GetProperName(self,uURL:Dict) -> str:
         """ adjust url to valid characters used by irdb """
         uRet:str=uURL['Href']
-        iPos:int=uRet.rfind("/")
+        iPos:int=uRet.rfind('/')
         if not iPos==-1:
             uRet=uRet[iPos+1:]
             uRet=uRet.replace('%20',' ')
@@ -335,7 +335,7 @@ class ITachIRDB(cBasePopup):
     def On_BtnBrands(self,oButton:Button) -> None:
         """ After the brands button has been pressed """
         if self.oBrandsSelector is None:
-            self.oProgressBar.Show(uTitle="$lvar(SCRIPT_TOOLS_IRDBITACH_6)",uMessage="$lvar(SCRIPT_TOOLS_IRDBITACH_12)",iMax=0)
+            self.oProgressBar.Show(uTitle='$lvar(SCRIPT_TOOLS_IRDBITACH_6)',uMessage='$lvar(SCRIPT_TOOLS_IRDBITACH_12)',iMax=0)
         Clock.schedule_once(self.On_BtnBrands_Load,0)
 
     # noinspection PyUnusedLocal
@@ -351,11 +351,11 @@ class ITachIRDB(cBasePopup):
             if self.oBrandsSelector is None:
                 self.oBrandsSelector=cITachIRDB_Selector()
                 self.oProgressBar.ClosePopup()
-                self.oBrandsSelector.Start("$lvar(SCRIPT_TOOLS_IRDBITACH_7)",self.aBrands,self.On_BtnBrandsSelected)
+                self.oBrandsSelector.Start('$lvar(SCRIPT_TOOLS_IRDBITACH_7)',self.aBrands,self.On_BtnBrandsSelected)
             else:
                 self.oBrandsSelector.Show()
         except Exception as e:
-            ShowErrorPopUp(uMessage=LogError(uMsg=u"Can''t load brands",oException=e))
+            ShowErrorPopUp(uMessage=LogError(uMsg='Can\'t load brands',oException=e))
             self.aBrands = []
             self.oProgressBar.ClosePopup()
 
@@ -380,9 +380,9 @@ class ITachIRDB(cBasePopup):
                     self.uOldBrand=self.oTextBrands.text
 
                 self.oSelector=cITachIRDB_Selector()
-                self.oSelector.Start("$lvar(SCRIPT_TOOLS_IRDBITACH_8)",self.aTypes,self.On_BtnTypesSelected)
+                self.oSelector.Start('$lvar(SCRIPT_TOOLS_IRDBITACH_8)',self.aTypes,self.On_BtnTypesSelected)
         except Exception as e:
-            uMsg=LogError(uMsg=u"Can''t load types",oException=e)
+            uMsg=LogError(uMsg='Can\'t load types',oException=e)
             ShowErrorPopUp(uMessage=uMsg)
             self.aTypes = []
 
@@ -406,9 +406,9 @@ class ITachIRDB(cBasePopup):
                     self.IRDBInterface.Logout()
                     self.uOldType = self.oTextTypes.text
                 self.oSelector = cITachIRDB_Selector()
-                self.oSelector.Start("$lvar(SCRIPT_TOOLS_IRDBITACH_8)",self.aModels,self.On_BtnModelsSelected)
+                self.oSelector.Start('$lvar(SCRIPT_TOOLS_IRDBITACH_8)',self.aModels,self.On_BtnModelsSelected)
         except Exception as e:
-            ShowErrorPopUp(uMessage=LogError(uMsg=u"Can''t load models",oException=e))
+            ShowErrorPopUp(uMessage=LogError(uMsg='Can\'t load models',oException=e))
             self.aModels = []
 
 
@@ -435,7 +435,7 @@ class ITachIRDB(cBasePopup):
                     if uTransName is not None:
                         oCodeSet.uFunction=uTransName
                     else:
-                        Logger.debug("Unmatch IR Command:"+oCodeSet.uFunction)
+                        Logger.debug('Unmatch IR Command:'+oCodeSet.uFunction)
                 self.AddStandardCodes(aCodeSets)
                 if self.oOptionWriteITach.active:
                     self.Save_As_iTach(aCodeSets)
@@ -443,7 +443,7 @@ class ITachIRDB(cBasePopup):
                     self.Save_As_CCF(aCodeSets)
                 self.oPopup.dismiss()
             except Exception as e:
-                ShowErrorPopUp(uMessage=LogError(uMsg=u"Can''t load functions",oException=e))
+                ShowErrorPopUp(uMessage=LogError(uMsg='Can\'t load functions',oException=e))
 
     def AddStandardCodes(self,oSet:List[cIRCode]) -> None:
 
@@ -473,7 +473,7 @@ class ITachIRDB(cBasePopup):
             else:
                 # todo: set the optimisation substructure
                 oSingleSet=cIRCode()
-                oSingleSet.uCode1="NEWCHILD"
+                oSingleSet.uCode1='NEWCHILD'
                 oSet.append(oSingleSet)
                 oSingleSet=cIRCode()
                 oSingleSet.uCode1='{"REPEAT":{"REPEATCMD":"key_","REPEATVAR":"$cvar(CHANNELNUM)"}}'
@@ -482,12 +482,12 @@ class ITachIRDB(cBasePopup):
                 oSingleSet=cIRCode()
                 oSingleSet.uCode1='key_ok'
                 oSingleSet.uType='alias'
-                oSingleSet.uString=""
-                oSingleSet.uPreAction="channel_select_pre"
+                oSingleSet.uString=''
+                oSingleSet.uPreAction='channel_select_pre'
                 oSingleSet.uFunction = 'channel_select'
                 oSet.append(oSingleSet)
                 oSingleSet=cIRCode()
-                oSingleSet.uCode1="LEAVECHILD"
+                oSingleSet.uCode1='LEAVECHILD'
 
         if not bHasPowerOn and bHasPowerToggle:
             oSingleSet=cIRCode()
@@ -516,46 +516,46 @@ class ITachIRDB(cBasePopup):
         oSet:Element
         oCommand:Element
         if len(self.dTranslations)==0:
-            oFnTranslation:cFileName = cFileName(Globals.oPathResources + u"irdbtranslation") + u"itach2orca.xml"
+            oFnTranslation:cFileName = cFileName(Globals.oPathResources + 'irdbtranslation') + 'itach2orca.xml'
             try:
-                Logger.debug (u'IRDB: Loading Translation Table:'+oFnTranslation.string)
+                Logger.debug (f'IRDB: Loading Translation Table: {oFnTranslation}')
                 oET_Root:Element = LoadXMLFile(oFile=oFnTranslation)
                 #oSets=oET_Root.findall('set')
                 for oSet in oET_Root:
                     for oCommand in oSet.findall('action'):
-                        uFrom:str = GetXMLTextAttribute(oXMLNode=oCommand,uTag=u'from',bMandatory=True,vDefault='')
-                        uTo:str    = GetXMLTextAttribute(oXMLNode=oCommand,uTag=u'to',bMandatory=True,vDefault='')
+                        uFrom:str = GetXMLTextAttribute(oXMLNode=oCommand,uTag='from',bMandatory=True,vDefault='')
+                        uTo:str    = GetXMLTextAttribute(oXMLNode=oCommand,uTag='to',bMandatory=True,vDefault='')
                         self.dTranslations[uFrom]=uTo
             except ParseError as e:
-                ShowErrorPopUp(uMessage=LogError(uMsg=u'IRDB: Error:Loading Translations file',oException=e))
+                ShowErrorPopUp(uMessage=LogError(uMsg='IRDB: Error:Loading Translations file',oException=e))
 
     ''' Todo : check / remove '''
     def Save_As_iTach(self,oSet:List[cIRCode]) -> None:
         oRoot:Element
         oCodesetCode:Element
         oFunction:cIRCode
-        uFilename:str       = Globals.oPathCodesets.string + "/iTach/" + self.oCodesetName.text
-        oFilename:cFileName = cFileName().ImportFullPath(uFnFullName=uFilename.replace("_XXXXX_","_iTach_"))
+        uFilename:str       = f'{Globals.oPathCodesets}/iTach/{self.oCodesetName.text}'
+        oFilename:cFileName = cFileName().ImportFullPath(uFnFullName=uFilename.replace('_XXXXX_','_iTach_'))
         try:
-            oRoot = Element("codeset")
+            oRoot = Element('codeset')
             for oFunction in oSet:
-                oCodesetCode = SubElement(oRoot, "action")
-                oCodesetCode.set("string", "codeset")
-                oCodesetCode.set("name", oFunction.uFunction)
-                oCodesetCode.set("type", oFunction.uType)
-                uString:str=oFunction.uCode1.replace("sendir,1:1,","sendir,$cvar(CONFIG_MODULE):$cvar(CONFIG_CONNECTOR),")
-                uString=uString.replace("\n","")
-                uString=uString.replace("\r","")
-                oCodesetCode.set("cmd", uString)
+                oCodesetCode = SubElement(oRoot, 'action')
+                oCodesetCode.set('string', 'codeset')
+                oCodesetCode.set('name', oFunction.uFunction)
+                oCodesetCode.set('type', oFunction.uType)
+                uString:str=oFunction.uCode1.replace('sendir,1:1,','sendir,$cvar(CONFIG_MODULE):$cvar(CONFIG_CONNECTOR),')
+                uString=uString.replace('\n','')
+                uString=uString.replace('\r','')
+                oCodesetCode.set('cmd', uString)
             uFinal:str=XMLPrettify(oElem=oRoot)
             uFinal=uFinal.replace('<?xml version="1.0"?>','<?xml version="1.0" encoding="UTF-8"?>')
-            oFile = open(oFilename.string, 'w')
+            oFile = open(str(oFilename), 'w')
             oFile.write(uFinal)
             oFile.close()
             #oTree = ElementTree(oRoot)
             #oTree.write(uFilename, encoding="UTF-8",xml_declaration='<?xml version="1.0" encoding="UTF-8"?>')
         except Exception as e:
-            ShowErrorPopUp(uMessage=LogError(uMsg=u'IRDB: Error Writing iTach codeset file',oException=e))
+            ShowErrorPopUp(uMessage=LogError(uMsg='IRDB: Error Writing iTach codeset file',oException=e))
 
     def Save_As_CCF(self,oSet):
         oRoot:Element
@@ -565,45 +565,45 @@ class ITachIRDB(cBasePopup):
         uRepeat:str
         uString:str
 
-        uFilename:str = Globals.oPathCodesets.string + "/infrared_ccf/" + self.oCodesetName.text
-        oFn:cFileName = cFileName().ImportFullPath(uFnFullName=uFilename.replace("_XXXXX_","_infrared_ccf_"))
+        uFilename:str = f'{Globals.oPathCodesets}/infrared_ccf/{self.oCodesetName.text}'
+        oFn:cFileName = cFileName().ImportFullPath(uFnFullName=uFilename.replace('_XXXXX_','_infrared_ccf_'))
         try:
-            oRoot = Element("codeset")
+            oRoot = Element('codeset')
             oRootToUse=oRoot
             for oFunction in oSet:
                 if oFunction.uCode1=='NEWCHILD':
-                    oCodesetCode = SubElement(oRootToUse, "action")
-                    oCodesetCode.set("name", oFunction.uFunction)
+                    oCodesetCode = SubElement(oRootToUse, 'action')
+                    oCodesetCode.set('name', oFunction.uFunction)
                     oRootToUse=oCodesetCode
                 elif oFunction.uCode1=='LEAVECHILD':
                     oRootToUse=oRoot
                 else:
-                    oCodesetCode = SubElement(oRootToUse, "action")
-                    oCodesetCode.set("name", oFunction.uFunction)
-                    if oFunction.uType!="alias":
-                        if oFunction.uString!=u'':
-                            oCodesetCode.set("string", oFunction.uString)
-                    if oFunction.uType!=u'':
-                        oCodesetCode.set("type", oFunction.uType)
-                    if oFunction.uType=="cmd" and not "REPEAT" in oFunction.uCode1:
+                    oCodesetCode = SubElement(oRootToUse, 'action')
+                    oCodesetCode.set('name', oFunction.uFunction)
+                    if oFunction.uType!='alias':
+                        if oFunction.uString!='':
+                            oCodesetCode.set('string', oFunction.uString)
+                    if oFunction.uType!='':
+                        oCodesetCode.set('type', oFunction.uType)
+                    if oFunction.uType=='cmd' and not 'REPEAT' in oFunction.uCode1:
                         uRepeat,uString=ITach2CCF(oFunction.uCode1)
-                        uString=uString.replace("\n","")
-                        uString=uString.replace("\r","")
-                        oCodesetCode.set("cmd_ccf", uString)
-                        oCodesetCode.set("repeatcount",uRepeat)
+                        uString=uString.replace('\n','')
+                        uString=uString.replace('\r','')
+                        oCodesetCode.set('cmd_ccf', uString)
+                        oCodesetCode.set('repeatcount',uRepeat)
                     else:
                         if oFunction.uCode1!='':
-                            oCodesetCode.set("cmd", oFunction.uCode1)
+                            oCodesetCode.set('cmd', oFunction.uCode1)
             uFinal:str = XMLPrettify(oElem=oRoot)
             uFinal=uFinal.replace('<?xml version="1.0"? >','<?xml version="1.0" encoding="UTF-8"?>')
             uFinal=uFinal.replace('{&amp;REPEAT&amp;:{&amp;REPEATCMD&amp;:&amp;key_&amp;,&amp;REPEATVAR&amp;:&amp;$cvar(CHANNELNUM)&amp;}}','{"REPEAT":{"REPEATCMD":"key_","REPEATVAR":"$cvar(CHANNELNUM)"}}')
-            oFile = open(oFn.string, 'w')
+            oFile = open(str(oFn), 'w')
             oFile.write(uFinal)
             oFile.close()
             #oTree = ElementTree(oRoot)
             #oTree.write(uFilename, encoding="UTF-8",xml_declaration='<?xml version="1.0" encoding="UTF-8"?>')
         except Exception as e:
-            ShowErrorPopUp(uMessage=LogError(uMsg=u'IRDB: Error Writing CCF codeset file',oException=e))
+            ShowErrorPopUp(uMessage=LogError(uMsg='IRDB: Error Writing CCF codeset file',oException=e))
 
 oDBSelector      = ITachIRDB()
 
@@ -612,17 +612,17 @@ def ShowITachIRDB(uHost:str,uUser:str,uPassword:str) -> ITachIRDB:
     oDBSelector.Start(uHost,uUser,uPassword)
     return oDBSelector
 
-CONTENT_TYPE = "application/json;charset=utf-8"
+CONTENT_TYPE = 'application/json;charset=utf-8'
 
 # API Paths
-BRANDS_PATH    = "api/brands"
-TYPES_PATH     = "api/brands/{0}/types"
-MODELS_PATH    = "api/brands/{0}/types/{1}/models"
-LOGIN_PATH     = "api/account/login"
-LOGOUT_PATH    = "api/account/logout"
-CODESET_PATH   = "api/codesets/{0}"
-FUNCTIONS_PATH = "api/codesets/{0}/functions"
-CODE_PATH      = "api/codesets/{0}/functions/{1}/codes"
+BRANDS_PATH    = 'api/brands'
+TYPES_PATH     = 'api/brands/{0}/types'
+MODELS_PATH    = 'api/brands/{0}/types/{1}/models'
+LOGIN_PATH     = 'api/account/login'
+LOGOUT_PATH    = 'api/account/logout'
+CODESET_PATH   = 'api/codesets/{0}'
+FUNCTIONS_PATH = 'api/codesets/{0}/functions'
+CODE_PATH      = 'api/codesets/{0}/functions/{1}/codes'
 HEADERS        = {'Content-type': 'application/x-www-form-urlencoded',  'Accept': 'text/plain'}
 
 class IRDBInterface:
@@ -640,7 +640,7 @@ class IRDBInterface:
                 for key, value in dParams.items():
                     uUrl += '&{}={}'.format(key, value)
             return uUrl
-        return u''
+        return ''
     # Login, and save the account information provided (the api key particularly)
     # This must be called first.
     def Login(self) -> None:
@@ -690,8 +690,8 @@ class IRDBInterface:
     # Get a list of all models for the given brand and type
 
     def GetModels(self, uBrandName:str, uTypeName:str) -> List[cModel]:
-        uBrandName = urllib.parse.quote(uBrandName,safe="")
-        uTypeName =  urllib.parse.quote(uTypeName,safe="")
+        uBrandName = urllib.parse.quote(uBrandName,safe='')
+        uTypeName =  urllib.parse.quote(uTypeName,safe='')
         uUrl:str = self.PrepareUrl(MODELS_PATH.format(uBrandName, uTypeName))
         return self.GetClassListFromUrl(uUrl,cModel)
 
@@ -739,14 +739,14 @@ class cBrand(cIRDB_Object):
     uLinks:List[str] = [] # This is a List, even if it HAS to start with 'u'
 
     def __str__(self):
-        return "Name:{0:10}".format(self.uName)
+        return 'Name:{0:10}'.format(self.uName)
 
 class cType(cIRDB_Object):
     uBrand:str = '' # Brand Name
     uType:str = '' # Device Type
 
     def __str__(self):
-        return "Brand:{0:10} Type:{1:10}".format(self.uBrand, self.uType)
+        return 'Brand:{0:10} Type:{1:10}'.format(self.uBrand, self.uType)
 
 class cModel(cIRDB_Object):
     uID:str    = '' # Set ID (this is the setid value to be passed to GetCodeSet, GetFunctions and get_code)
@@ -756,14 +756,14 @@ class cModel(cIRDB_Object):
     uNotes:str = ''
 
     def __str__(self):
-        return "Brand:{0:10} Type:{1:10} Name:{2:10} SetID:{3:10} Notes:{4}".format(self.uBrand, self.uType, self.uName, self.uID, self.uNotes)
+        return 'Brand:{0:10} Type:{1:10} Name:{2:10} SetID:{3:10} Notes:{4}'.format(self.uBrand, self.uType, self.uName, self.uID, self.uNotes)
 
 class cFunction(cIRDB_Object):
     uSetID:str    = ''
     uFunction:str = '' # Function Name
 
     def __str__(self):
-        return "SetID:{0:10} Function:{1:10}".format(self.uSetID, self.uFunction)
+        return 'SetID:{0:10} Function:{1:10}'.format(self.uSetID, self.uFunction)
 
 class cIRCode(cIRDB_Object):
     uSetID:str    = ''
@@ -773,10 +773,10 @@ class cIRCode(cIRDB_Object):
     uCode2:str    = '' # Second code, in GC format, often null
     uHexCode2:str = '' # Second code, in Hexadecimal format, often null
     uType:str     = 'cmd'
-    uString:str   = u''
+    uString:str   = ''
 
     def __str__(self):
-        return "SetID:{0:10} Function:{1:10}\nCode1:{2}\nCode1(Hex):{3}\nCode2:{4}\nCode2(Hex):{5}".format(self.uSetID, self.uFunction, self.uCode1, self.uHexCode1, self.uCode2, self.uHexCode2)
+        return 'SetID:{0:10} Function:{1:10}\nCode1:{2}\nCode1(Hex):{3}\nCode2:{4}\nCode2(Hex):{5}'.format(self.uSetID, self.uFunction, self.uCode1, self.uHexCode1, self.uCode2, self.uHexCode2)
 
 class Account(cIRDB_Object):
     uEmail:str = '' # Account email address, must be provided to login
@@ -784,54 +784,54 @@ class Account(cIRDB_Object):
     uApiKey:str = '' # Api key, used to identify the account on subsequent calls, after having already logged in.
 
     def __str__(self):
-        return "Email:{0:20} Password:{1:20} ApiKey:{2:20}".format(self.uEmail, self.uPassword, self.uApiKey)
+        return 'Email:{0:20} Password:{1:20} ApiKey:{2:20}'.format(self.uEmail, self.uPassword, self.uApiKey)
     def ToData(self)->str:
-        return urllib.parse.urlencode({"Email":self.uEmail, "Password":self.uPassword})
+        return urllib.parse.urlencode({'Email':self.uEmail, 'Password':self.uPassword})
 
 def ITach2CCF(uITACHString:str) -> Tuple[str,str]:
     aArray:List[str]
-    uDelimiter:str        = u','
-    uFinalString:str      = u"0000 " #0000 denotes CCF type
+    uDelimiter:str        = ','
+    uFinalString:str      = '0000 ' #0000 denotes CCF type
     iFreqNum:int
     iFreq:int
     iPairData:int
     uTmpString:str
     iTransCount:int
     uTransCount:str
-    uRepeatCount      = u"0000"
+    uRepeatCount      = '0000'
     uITachRepeatCount:str
 
     aArray = uITACHString.split(uDelimiter)
 
     if len(aArray) < 6:
-        Logger.error (u'ITach2CCF: Invalid String (#1)')
-        return u'',u''
+        Logger.error ('ITach2CCF: Invalid String (#1)')
+        return '',''
 
-    if aArray[3]=="":
-        Logger.error (u'ITach2CCF: Invalid String (#2)')
-        return u'',u''
+    if aArray[3]=='':
+        Logger.error ('ITach2CCF: Invalid String (#2)')
+        return '',''
 
     iFreqNum = ToInt(aArray[3])
     if iFreqNum==0:
-        Logger.error (u'ITach2CCF: Invalid String (#3)')
-        return u'',u''
+        Logger.error ('ITach2CCF: Invalid String (#3)')
+        return '',''
 
     #todo Check if iFreq and Itranscount needs to converted to int
     iFreq = int(41450 / (iFreqNum / 100))
-    uTmpString='{0:0>4X}'.format(iFreq)             # tmpString = iFreq.ToString("X04")
+    uTmpString='{0:0>4X}'.format(iFreq)             # tmpString = iFreq.ToString('X04')
     iTransCount = int((len(aArray) - 6) / 2)
-    uTransCount = '{0:0>4X}'.format(iTransCount)    #iTransCount.ToString("X04");
+    uTransCount = '{0:0>4X}'.format(iTransCount)    #iTransCount.ToString('X04');
     uITachRepeatCount = aArray[4]
 
-    uFinalString = uFinalString + uTmpString + " " + uRepeatCount + " " + uTransCount
+    uFinalString = uFinalString + uTmpString + ' ' + uRepeatCount + ' ' + uTransCount
 
     for uElement in aArray[6:]:
-        if uElement=="":
-            Logger.error (u'ITach2CCF: Invalid String (#4)')
-            return u'',u''
+        if uElement=='':
+            Logger.error ('ITach2CCF: Invalid String (#4)')
+            return '',''
         iPairData = ToInt(uElement)
-        uTmpString='{0:0>4X}'.format(iPairData)             #iPairData.ToString("X04");
-        uFinalString = uFinalString + " "+ uTmpString
+        uTmpString='{0:0>4X}'.format(iPairData)             #iPairData.ToString('X04');
+        uFinalString = uFinalString + ' '+ uTmpString
 
     return uITachRepeatCount,uFinalString
 

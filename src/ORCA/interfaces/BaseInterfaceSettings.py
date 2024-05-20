@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,6 @@ from typing                                     import List
 from typing                                     import Union
 from typing                                     import Any
 from typing                                     import Tuple
-from typing                                     import Optional
 
 from copy                                       import copy
 from xml.etree.ElementTree                      import Element
@@ -31,11 +30,13 @@ from xml.etree.ElementTree                      import Element
 from kivy.logger                                import Logger
 from kivy.clock                                 import Clock
 
-from ORCA                                       import Globals as Globals
-from ORCA.Action                                import GetActionID
-from ORCA.Action                                import cAction
+from ORCA.Globals                               import Globals
+from ORCA.action.Action import GetActionID
+from ORCA.action.Action import cAction
 from ORCA.interfaces.BaseTrigger                import cBaseTrigger
-from ORCA.BaseSettings                          import cBaseSettings
+from ORCA.interfaces.BaseTrigger                import dTriggers
+
+from ORCA.settings.BaseSettings import cBaseSettings
 from ORCA.ui.ShowErrorPopUp                     import ShowErrorPopUp
 from ORCA.utils.CachedFile                      import CachedFile
 from ORCA.utils.TypeConvert                     import ToBool
@@ -49,8 +50,10 @@ if TYPE_CHECKING:
     from ORCA.interfaces.InterfaceResultParser import cInterFaceResultParser
 else:
     from typing import TypeVar
-    cBaseInterFace = TypeVar("cBaseInterFace")
-    cInterFaceResultParser = TypeVar("cInterFaceResultParser")
+    cBaseInterFace = TypeVar('cBaseInterFace')
+    cInterFaceResultParser = TypeVar('cInterFaceResultParser')
+
+dRefTriggers:Dict = {} # just a reference, to avoid duplicate triggers
 
 
 __all__ = ['cBaseInterFaceSettings']
@@ -64,33 +67,31 @@ class cBaseInterFaceSettings(cBaseSettings):
         super().__init__(oInterFace)
 
         self.oInterFace:cBaseInterFace                          = oInterFace
-        self.uConfigName:str                                    = "DEVICE_DEFAULT"
-        self.uType:str                                          = "interface"
+        self.uConfigName:str                                    = 'DEVICE_DEFAULT'
+        self.uType:str                                          = 'interface'
 
         self.aIniSettings.bDisableInterFaceOnError              = False
         self.aIniSettings.bDisconnectInterFaceOnSleep           = True
         self.aIniSettings.fTimeOut                              = 1.0
         self.aIniSettings.iTimeToClose                          = -1
-        self.aIniSettings.uFNCodeset                            = u''
-        self.aIniSettings.uHost                                 = u'192.168.1.2'
-        self.aIniSettings.uParseResultOption                    = u''
-        self.aIniSettings.uParseResultTokenizeString            = u''
-        self.aIniSettings.uParseResultFlags                     = u''
-        self.aIniSettings.uPort                                 = u'80'
-        self.aIniSettings.uResultEndString                      = u'\\n'
-        self.aIniSettings.uDiscoverScriptName                   = u''
+        self.aIniSettings.uFNCodeset                            = ''
+        self.aIniSettings.uHost                                 = '192.168.1.2'
+        self.aIniSettings.uParseResultOption                    = ''
+        self.aIniSettings.uParseResultTokenizeString            = ''
+        self.aIniSettings.uParseResultFlags                     = ''
+        self.aIniSettings.uPort                                 = '80'
+        self.aIniSettings.uResultEndString                      = '\\n'
+        self.aIniSettings.uDiscoverScriptName                   = ''
         self.bInConnect:bool                                    = False
         self.bIsConnected:bool                                  = False
         self.bResumeConnection:bool                             = False
-        self.dTriggers:Dict[str,cBaseTrigger]                   = {}
         self.iDiscoverCount:int                                 = 0
         self.iMaxDiscoverCount:int                              = 1
         self.oAction:Union[cAction,None]                        = None
         self.oLastAction:Union[cAction,None]                    = None
-        self.dStandardActions:Dict[str,Union[cAction,None]]     = {"ping":None,"defaultresponse":None}
+        self.dStandardActions:Dict[str,Union[cAction,None]]     = {'ping':None,'defaultresponse':None}
         self.bStandardActionsLoaded:bool                        = False
         self.oResultParser:Union[cInterFaceResultParser,None]   = None
-        self.dNewTriggers:Dict[str,List[cBaseTrigger]]          = {}
 
     def ReadStandardActions(self) -> None:
         """ Reads the standard codeset codes eg ping """
@@ -105,17 +106,17 @@ class cBaseInterFaceSettings(cBaseSettings):
         """
         Sub Routine to read the standard actions
 
-        :param cAction|None oTargetAction: The Action for a standradextion, should be None as input
+        :param cAction|None oTargetAction: The Action for a standard action, should be None as input
         :param str uActionName: The Actionname
         """
 
-        if oTargetAction is None or oTargetAction==u'':
+        if oTargetAction is None or oTargetAction=='':
             aActions:List[cAction] = Globals.oActions.GetActionList(uActionName = self.MakeLocalActionName(uActionName), bNoCopy=False)
             if aActions is not None:
                 if len(aActions)==1:
                     return aActions[0]
                 else:
-                    Logger.error("StandardCodesetCodes can''t be multiline:"+uActionName)
+                    Logger.error('StandardCodesetCodes can\'t be multiline:'+uActionName)
         return None
 
     def ExecuteStandardAction(self,uActionName:str) -> int:
@@ -128,7 +129,7 @@ class cBaseInterFaceSettings(cBaseSettings):
 
         aActions:List[cAction]=Globals.oActions.GetActionList(uActionName = self.MakeLocalActionName(uActionName), bNoCopy = False)
         if aActions is not None:
-            return Globals.oEvents.ExecuteActionsNewQueue(aActions, None, True)
+            return Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions, oParentWidget=None, bForce=True,uQueueName="readstandardactions")
         else:
             return 0
 
@@ -136,14 +137,14 @@ class cBaseInterFaceSettings(cBaseSettings):
     def Discover(self,**kwargs) -> bool:
         """ helper for the discover scripts"""
 
-        if self.aIniSettings.uHost!="discover":
+        if self.aIniSettings.uHost!='discover':
             return True
 
         self.iDiscoverCount += 1
         if self.iDiscoverCount > self.iMaxDiscoverCount:
             return False
 
-        self.ShowDebug(uMsg=u'Try to discover device')
+        self.ShowDebug(uMsg='Try to discover device')
         uDiscoverScriptName:str = self.aIniSettings.uDiscoverScriptName
         dParams:Dict[str,Any] = {}
 
@@ -158,19 +159,19 @@ class cBaseInterFaceSettings(cBaseSettings):
             for uKey in dResult:
                 if uKey != Exception:
                     self.aIniSettings[uKey]=dResult[uKey]
-                if uKey == 'Host' and dResult.get("Hostname","")=="":
+                if uKey == 'Host' and dResult.get('Hostname','')=='':
                     if self.aIniSettings.bSaveDiscoveredIP:
-                        self.oInterFace.oObjectConfig.oConfigParser.set(self.uSection, u'olddiscoveredip', self.aIniSettings.uHost)
+                        self.oInterFace.oObjectConfig.oConfigParser.set(self.uSection, 'olddiscoveredip', self.aIniSettings.uHost)
                         self.oInterFace.oObjectConfig.oConfigParser.write()
-                if uKey == 'Hostname' and dResult.get("Hostname","")!="":
-                    self.aIniSettings["Host"]=dResult[uKey]
+                if uKey == 'Hostname' and dResult.get('Hostname','')!='':
+                    self.aIniSettings['Host']=dResult[uKey]
                     if self.aIniSettings.bSaveDiscoveredIP:
-                        self.oInterFace.oObjectConfig.oConfigParser.set(self.uSection, u'olddiscoveredip', self.aIniSettings.uHostname)
+                        self.oInterFace.oObjectConfig.oConfigParser.set(self.uSection, 'olddiscoveredip', self.aIniSettings.uHostname)
                         self.oInterFace.oObjectConfig.oConfigParser.write()
 
             return True
         else:
-            self.ShowError(uMsg=u'Can''t discover device:' + self.oInterFace.oObjectConfig.oFnConfig.string + u' Section:' + self.uSection, oException=oException)
+            self.ShowError(uMsg=f'Can\'t discover device: {self.oInterFace.oObjectConfig.oFnConfig} Section: {self.uSection}', oException=oException)
             return False
 
     def ReadCodeset(self) -> None:
@@ -182,21 +183,21 @@ class cBaseInterFaceSettings(cBaseSettings):
         oCodesetFileName:cFileName = self.oInterFace.FindCodesetFile(self.aIniSettings.uFNCodeset)
 
         if oCodesetFileName is None:
-            self.ShowDebug(uMsg=u'Cannot Read Codeset (Not Found):' + self.aIniSettings.uFNCodeset)
+            self.ShowDebug(uMsg='Cannot Read Codeset (Not Found):' + self.aIniSettings.uFNCodeset)
             return
 
-        self.ShowDebug(uMsg=u'Read Codeset:'+oCodesetFileName)
+        self.ShowDebug(uMsg=f'Read Codeset: {oCodesetFileName.string}')
 
         if oCodesetFileName.Exists():
             uET_Data:str     = CachedFile(oFileName=oCodesetFileName)
-            oET_Root:Element = Orca_FromString(uET_Data=uET_Data,oDef=None,uFileName=oCodesetFileName.string)
+            oET_Root:Element = Orca_FromString(uET_Data=uET_Data,oDef=None,uFileName=str(oCodesetFileName))
             Orca_include(oET_Root,orca_et_loader)
             dTmpCodeSetActions:Dict[str,List[cAction]] = {}
-            Globals.oActions.LoadActionsSub(oET_Root=oET_Root ,uSegmentTag=u'',uListTag=u'action', dTargetDic=dTmpCodeSetActions,uFileName=oCodesetFileName.string)
+            Globals.oActions.LoadActionsSub(oET_Root=oET_Root ,uSegmentTag='',uListTag='action', dTargetDic=dTmpCodeSetActions,uFileName=str(oCodesetFileName))
             # replacing alias
             bDoItAgain:bool = True
-            uKey:str        = u''
-            uAlias:str      = u''
+            uKey:str        = ''
+            uAlias:str      = ''
 
             try:
                 # replace all alias
@@ -207,32 +208,32 @@ class cBaseInterFaceSettings(cBaseSettings):
                             iPos:int = -1
                             for oTmpCodeSetAction in dTmpCodeSetActions[uKey]:
                                 iPos += 1
-                                if oTmpCodeSetAction.dActionPars.get('type','')=="alias":
+                                if oTmpCodeSetAction.dActionPars.get('type','')=='alias':
                                     uAlias:str = oTmpCodeSetAction.dActionPars['cmd']
                                     aAliasCodeSet:List[cAction] = dTmpCodeSetActions[uAlias]
                                     if len(aAliasCodeSet)==1:
                                         oTmpCodeSetAction = copy(aAliasCodeSet[0])
                                         oTmpCodeSetAction.uActionName= uAlias
                                     else:
-                                        oTmpCodeSetAction.uActionString="call"
-                                        oTmpCodeSetAction.dActionPars["actionname"]=uAlias
+                                        oTmpCodeSetAction.uActionString='call'
+                                        oTmpCodeSetAction.dActionPars['actionname']=uAlias
                                         oTmpCodeSetAction.iActionId=GetActionID(oTmpCodeSetAction.uActionString)
-                                        oTmpCodeSetAction.dActionPars["type"]=""
+                                        oTmpCodeSetAction.dActionPars['type']=''
 
                                     dTmpCodeSetActions[uKey][iPos]=oTmpCodeSetAction
                                     bDoItAgain=True
 
                     except Exception as e:
-                        uMsg:str = self.ShowError(uMsg=u'Cannot read Codeset (wrong alias [%s=%s] CodesetFileName: %s):'% (uKey,uAlias,oCodesetFileName.string),oException=e)
-                        ShowErrorPopUp(uTitle='Error Reading Codeset',uMessage=uMsg)
+                        uMsg:str = self.ShowError(uMsg=f'Can\'t read codeset (wrong alias [{uKey}={uAlias}] CodesetFileName: {oCodesetFileName}):', oException=e)
+                        ShowErrorPopUp(uTitle='Error reading codeset',uMessage=uMsg)
 
                 # Make calls local & Read the common attributes
                 for  uKey in dTmpCodeSetActions:
                     for oTmpCodeSetAction in dTmpCodeSetActions[uKey]:
                         if oTmpCodeSetAction.iActionId==Globals.oActions.oActionType.Call:
-                            uActionName:str = oTmpCodeSetAction.dActionPars.get("actionname","")
+                            uActionName:str = oTmpCodeSetAction.dActionPars.get('actionname','')
                             if uActionName in dTmpCodeSetActions:
-                                oTmpCodeSetAction.dActionPars["actionname"] = self.MakeLocalActionName(uActionName)
+                                oTmpCodeSetAction.dActionPars['actionname'] = self.MakeLocalActionName(uActionName)
                         self.ReadAction(oTmpCodeSetAction)
 
                 # add them to the global action list
@@ -240,10 +241,10 @@ class cBaseInterFaceSettings(cBaseSettings):
                     Globals.oActions.SetActionList(self.MakeLocalActionName(uKey),dTmpCodeSetActions[uKey])
 
             except Exception as e:
-                uMsg:str = self.ShowError(uMsg=u'Cannot read Codeset :',oException=e)
-                ShowErrorPopUp(uTitle='Error Reading Codeset',uMessage=uMsg)
+                uMsg:str = self.ShowError(uMsg='Can\'t read codeset :',oException=e)
+                ShowErrorPopUp(uTitle='Error reading codeset',uMessage=uMsg)
 
-            self.SetContextVar(uVarName="firstcall",uVarValue="1")
+            self.SetContextVar(uVarName='firstcall',uVarValue='1')
 
     def ReadAction(self,oAction:cAction) -> None:
         """
@@ -252,22 +253,22 @@ class cBaseInterFaceSettings(cBaseSettings):
         :param cAction oAction: Reads an action from the action pars
         """
 
-        oAction.uType                       = oAction.dActionPars.get(u'type',              u'send')
-        oAction.uCmd                        = oAction.dActionPars.get(u'cmd',               u'No cmd action defined')
-        oAction.uLocalDestVar               = oAction.dActionPars.get(u'ldestvar',          u'RESULT_' + oAction.uActionName)
-        oAction.uGlobalDestVar              = oAction.dActionPars.get(u'gdestvar',          u'RESULT_' + oAction.uActionName)
-        oAction.uGetVar                     = oAction.dActionPars.get(u'getvar',            u'')
-        oAction.bWaitForResponse            = ToBool(oAction.dActionPars.get(u'waitforresponse',   u'0'))
-        oAction.uParseResultOption          = oAction.dActionPars.get(u'parseoption',       self.aIniSettings.uParseResultOption)
-        oAction.uParseResultTokenizeString  = oAction.dActionPars.get(u'parsetoken',        self.aIniSettings.uParseResultTokenizeString)
-        oAction.uParseResultFlags           = oAction.dActionPars.get(u'parseflags',        self.aIniSettings.uParseResultFlags)
-        oAction.uResultEndString            = oAction.dActionPars.get(u'parseendstring',    self.aIniSettings.uResultEndString)
+        oAction.uType                       = oAction.dActionPars.get('type',              'send')
+        oAction.uCmd                        = oAction.dActionPars.get('cmd',               'No cmd action defined')
+        oAction.uLocalDestVar               = oAction.dActionPars.get('ldestvar',          'RESULT_' + oAction.uActionName)
+        oAction.uGlobalDestVar              = oAction.dActionPars.get('gdestvar',          'RESULT_' + oAction.uActionName)
+        oAction.uGetVar                     = oAction.dActionPars.get('getvar',            '')
+        oAction.bWaitForResponse            = ToBool(oAction.dActionPars.get('waitforresponse',   '0'))
+        oAction.uParseResultOption          = oAction.dActionPars.get('parseoption',       self.aIniSettings.uParseResultOption)
+        oAction.uParseResultTokenizeString  = oAction.dActionPars.get('parsetoken',        self.aIniSettings.uParseResultTokenizeString)
+        oAction.uParseResultFlags           = oAction.dActionPars.get('parseflags',        self.aIniSettings.uParseResultFlags)
+        oAction.uResultEndString            = oAction.dActionPars.get('parseendstring',    self.aIniSettings.uResultEndString)
 
         oAction.dActionPars['interface']  = self.oInterFace.uObjectName
         oAction.dActionPars['configname'] = self.uConfigName
 
-        if oAction.dActionPars.get('varcontext','')=="codeset":
-            oAction.dActionPars["varcontext"]=self.uContext
+        if oAction.dActionPars.get('varcontext','')=='codeset':
+            oAction.dActionPars['varcontext']=self.uContext
 
     def MakeLocalActionName(self,uActionName:str) -> str:
         """
@@ -276,79 +277,47 @@ class cBaseInterFaceSettings(cBaseSettings):
         :param uActionName:
         :return:
         """
-        return uActionName+" :"+self.uContext
+        return uActionName+' :'+self.uContext
 
     def Connect(self) -> bool:
         """ basic helper for managing connect """
         if self.bOnError:
-            self.ShowDebug(uMsg=u'Interface Connect: Interface is on Error, setting interface to disconnected')
+            self.ShowDebug(uMsg='Interface Connect: Interface is on Error, setting interface to disconnected')
             self.bIsConnected=False
         if not self.aIniSettings.bDisableInterFaceOnError:
             self.bOnError=False
         if self.bIsConnected:
-            self.ShowDebug(uMsg=u'Interface Connect: Interface is connected, no connect required.')
+            self.ShowDebug(uMsg='Interface Connect: Interface is connected, no connect required.')
             return False
         self.ReadStandardActions()
         if self.bOnError:
             return False
 
         uOldHost:str = self.aIniSettings.uHost
-        if self.aIniSettings.get("bSaveDiscoveredIP") is not None and self.aIniSettings.get("uOldDiscoveredIP") is not None:
-            if self.aIniSettings.bSaveDiscoveredIP and self.aIniSettings.uOldDiscoveredIP != '' and self.aIniSettings.uHost== u'discover':
+        if self.aIniSettings.get('bSaveDiscoveredIP') is not None and self.aIniSettings.get('uOldDiscoveredIP') is not None:
+            if self.aIniSettings.bSaveDiscoveredIP and self.aIniSettings.uOldDiscoveredIP != '' and self.aIniSettings.uHost== 'discover':
                 self.aIniSettings.uHost=self.aIniSettings.uOldDiscoveredIP
-                self.ShowDebug(uMsg="Reusing previous discovered IP:"+self.aIniSettings.uOldDiscoveredIP)
-            elif self.aIniSettings.uHost==u'discover':
+                self.ShowDebug(uMsg='Reusing previous discovered IP:'+self.aIniSettings.uOldDiscoveredIP)
+            elif self.aIniSettings.uHost=='discover':
                 bRet:bool = self.Discover()
                 if not bRet:
-                    if self.aIniSettings.uOldDiscoveredIP!="":
+                    if self.aIniSettings.uOldDiscoveredIP!='':
                         self.aIniSettings.uHost=self.aIniSettings.uOldDiscoveredIP
         if self.aIniSettings.uHost.startswith('linked:'):
             self.aIniSettings.uHost=self.oInterFace.oObjectConfig.GetSettingParFromVar(self.aIniSettings.uHost)
-            self.ShowDebug(uMsg=u'Pulled crosslinked var: %s=%s' %(uOldHost,self.aIniSettings.uHost))
+            self.ShowDebug(uMsg=f'Pulled crosslinked var: {uOldHost}={self.aIniSettings.uHost}')
 
-        if self.aIniSettings.uHost=="discover":
+        if self.aIniSettings.uHost=='discover':
             return False
 
         return True
 
+    @classmethod
+    def CreateTriggerReference(cls,*,uTrigger:str,uActionName:str) -> str:
+        return f"TriggerName:{uTrigger}_ActionName:{uActionName}"
+
+
     def AddTrigger(self,uTrigger:str,uActionName:str,uRetVar:str,uGetVar:str) -> cBaseTrigger:
-        """
-        Adds a trigger
-
-        :rtype: cBaseTrigger
-        :param string uTrigger: The name of the trigger
-        :param string uActionName: The Action the get triggered
-        :param string uRetVar: The return var
-        :param string uGetVar: The var to parse
-        :return: The trigger
-        """
-
-        oTrigger:cBaseTrigger               = cBaseTrigger()
-        oTrigger.uTriggerAction             = uActionName
-        oTrigger.uRetVar                    = uRetVar
-        oTrigger.uGetVar                    = uGetVar
-        oTrigger.uTriggerName               = uTrigger
-        oTrigger.uGlobalDestVar             = uRetVar
-        oTrigger.uLocalDestVar              = uRetVar
-
-        # If we link to a codesetcode setting
-        '''
-        if uGetVar.startswith(u'codesetcode:'):
-            uActionName = self.MakeLocalActionName(uGetVar[12:])
-            aActions = Globals.oActions.dActionsCommands.get(uActionName)
-            if aActions is not None:
-                oAction=aActions[0]
-                if oAction.uGetVar != u'':
-                    oTrigger.uGetVar=oAction.uGetVar
-                if oAction.uGlobalDestVar != u'':
-                    oTrigger.uRetVar = oAction.uGlobalDestVar
-                oTrigger.uTriggerName = oAction.uCmd
-        '''
-        self.dTriggers[uTrigger] = oTrigger
-        return self.AddTriggerNew(uTrigger,uActionName,uRetVar,uGetVar)
-        return oTrigger
-
-    def AddTriggerNew(self,uTrigger:str,uActionName:str,uRetVar:str,uGetVar:str) -> cBaseTrigger:
         """
         Adds a trigger
 
@@ -367,10 +336,23 @@ class cBaseInterFaceSettings(cBaseSettings):
         oTrigger.uTriggerName               = uTrigger
         oTrigger.uGlobalDestVar             = uRetVar
         oTrigger.uLocalDestVar              = uRetVar
+        oTrigger.uInterfaceName             = self.oInterFace.uObjectName
+        oTrigger.uConfigName                = self.uConfigName
+        uRefTrigger:str                     = self.CreateTriggerReference(uTrigger=uTrigger,uActionName=uActionName)
 
-        aCurrentTriggers:List[cBaseTrigger]=self.dNewTriggers.get(uTrigger,[])
+        if uRefTrigger in dRefTriggers:
+            self.DelTrigger(uTrigger=uTrigger,uActionName=uActionName)
+
+        aCurrentTriggers:List[cBaseTrigger] = dTriggers.get(uTrigger,[])
         aCurrentTriggers.append(oTrigger)
-        self.dNewTriggers[uTrigger]=aCurrentTriggers
+
+        #todo: this is debug only, need to be removed in release
+        if len(aCurrentTriggers)>1:
+            self.ShowError(uMsg=f"Multiple Trigger detected {uTrigger}",oException=None)
+        #     del aCurrentTriggers[1:]
+
+        dTriggers[uTrigger]=aCurrentTriggers
+        dRefTriggers[uRefTrigger]=oTrigger
         return oTrigger
 
     def DelTrigger(self,uTrigger:str,uActionName:str) -> None:
@@ -381,11 +363,17 @@ class cBaseInterFaceSettings(cBaseSettings):
         :param string uActionName: The Action which has been registered
         """
 
-        oTrigger:cBaseTrigger               = cBaseTrigger()
+        oTrigger:cBaseTrigger
+        uRefTrigger:str
 
-        if uTrigger in self.dNewTriggers:
-            aCurrentTriggers:List[cBaseTrigger]=self.dNewTriggers.get(uTrigger,[])
-            aCurrentTriggers[:] = [oTrigger for oTrigger in aCurrentTriggers if oTrigger.uTriggerAction!=uActionName]
+        if uTrigger in dTriggers:
+            aCurrentTriggers:List[cBaseTrigger] = dTriggers.get(uTrigger,[])
+            for oTrigger in aCurrentTriggers:
+                if oTrigger.uTriggerAction == uActionName:
+                    aCurrentTriggers.remove(oTrigger)
+                    uRefTrigger = self.CreateTriggerReference(uTrigger=oTrigger.uTriggerName,uActionName=oTrigger.uTriggerAction)
+                    dRefTriggers.pop(uRefTrigger)
+            dTriggers[uTrigger] = aCurrentTriggers
 
     def GetTrigger(self,uTrigger:str) -> List[cBaseTrigger]:
         """
@@ -400,11 +388,12 @@ class cBaseInterFaceSettings(cBaseSettings):
         aResult:List[cBaseTrigger] = []
         oTrigger:cBaseTrigger
 
-        for uTriggerIdx in self.dNewTriggers:
-            aTriggers = self.dNewTriggers[uTriggerIdx]
+        for uTriggerIdx in dTriggers:
+            aTriggers = dTriggers[uTriggerIdx]
             for oTrigger in aTriggers:
                 if oTrigger.uTriggerName == uTrigger[:len(oTrigger.uTriggerName)]:
-                    aResult.append(oTrigger)
+                    if oTrigger.uInterfaceName == self.oInterFace.uObjectName:
+                        aResult.append(oTrigger)
         return aResult
 
     def CallTrigger(self,oTrigger:cBaseTrigger,uResponse:str) -> None:
@@ -416,24 +405,24 @@ class cBaseInterFaceSettings(cBaseSettings):
         :return: None
         """
         # if oTrigger.uTriggerAction=='':
-        #    self.ShowWarning(u'No Trigger Action defined for Trigger:' + oTrigger.uTriggerName)
+        #    self.ShowWarning('No Trigger Action defined for Trigger:' + oTrigger.uTriggerName)
         #    # return
 
-        self.ShowDebug(uMsg=oTrigger.uTriggerName+":"u'Trigger Action:'+oTrigger.uTriggerAction)
+        self.ShowDebug(uMsg=oTrigger.uTriggerName+':Trigger Action:'+oTrigger.uTriggerAction)
 
         uCmd:str
         vRetVal:Union[str,Tuple]
         uRetVal:str
         oAction:Union[None,cAction] = None
 
-        if oTrigger.uGetVar.startswith(u'codesetcode:'):
+        if oTrigger.uGetVar.startswith('codesetcode:'):
             uActionName:str = self.MakeLocalActionName(oTrigger.uGetVar[12:])
             aActions:List[cAction] = Globals.oActions.GetActionList(uActionName = uActionName, bNoCopy=False)
             if aActions is not None:
                 oAction=aActions[0]
-                if oAction.uGetVar != u'':
+                if oAction.uGetVar != '':
                     oTrigger.uGetVar=oAction.uGetVar
-                if oAction.uGlobalDestVar != u'':
+                if oAction.uGlobalDestVar != '':
                     oTrigger.uRetVar = oAction.uGlobalDestVar
                 oTrigger.uTriggerName = oAction.uCmd
 
@@ -454,12 +443,11 @@ class cBaseInterFaceSettings(cBaseSettings):
         else:
             uRetVal = vRetVal
 
-        if oTrigger.uRetVar != u'' and uRetVal != u'':
+        if oTrigger.uRetVar != '' and uRetVal != '':
             SetVar(uVarName = oTrigger.uRetVar, oVarValue = uRetVal)
-        if oAction.uActionName != u'':
+        if oAction.uActionName != '':
             aActions=Globals.oEvents.CreateSimpleActionList(aActions=[{'string':'call','actionname':oTrigger.uTriggerAction,'name':oAction.uActionName}])
-            Globals.oEvents.ExecuteActionsNewQueue(aActions,Globals.oTheScreen.oCurrentPage.oWidgetBackGround)
-
+            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=Globals.oTheScreen.oCurrentPage.oWidgetBackGround,uQueueName="calltrigger")
 
     def DeInit(self) -> None:
         """ Deinits the interfaces """
@@ -472,39 +460,14 @@ class cBaseInterFaceSettings(cBaseSettings):
         self.Disconnect()
     def Disconnect(self) -> bool:
         """ Basic disconnect function """
-        self.ShowDebug(uMsg=u'Base Disconnect #1:Closing Connection')
+        self.ShowDebug(uMsg='Base Disconnect #1:Closing Connection')
         if not self.bIsConnected:
             return False
-        self.ShowDebug(uMsg=u'Base Disconnect #2:Closing Connection')
+        self.ShowDebug(uMsg='Base Disconnect #2:Closing Connection')
         self.bIsConnected = False
         if self.bOnError:
             return False
-        self.ShowDebug(uMsg=u'Closing Connection')
+        self.ShowDebug(uMsg='Closing Connection')
         Clock.unschedule(self.FktDisconnect)
         return True
 
-
-    def GetTriggerOld(self,uTrigger:str) -> Union[cBaseTrigger,None]:
-        """
-        We do not use the index, as the uTrigger might not reflect the Trigger Name,
-        it could be an Trigger parsed by the result eg defined by an codesetcode
-
-        :param string uTrigger:
-        :return:
-        """
-
-        for uTriggerIdx in self.dTriggers:
-            oTrigger = self.dTriggers[uTriggerIdx]
-            if oTrigger.uTriggerName == uTrigger[:len(oTrigger.uTriggerName)]:
-                return oTrigger
-        return None
-
-    def DelTriggerOld(self,uTrigger:str) -> None:
-        """
-        deletes a trigger
-
-        :param string uTrigger: The Name of the trigger to delete
-        """
-
-        if uTrigger in self.dTriggers:
-            del self.dTriggers[uTrigger]

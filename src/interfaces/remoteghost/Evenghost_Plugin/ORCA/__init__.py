@@ -1,6 +1,6 @@
-"""
+'''
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""
+'''
 
 # Parts of the code are based on eventghost plugins code
 
@@ -23,22 +23,22 @@
 import eg
 
 eg.RegisterPlugin(
-    name = "ORCA",
-    description = "Receives events from the Orca over Network.",
-    version = "1.0.1",
-    author = "miljbee, adjustments from thica",
+    name = 'ORCA',
+    description = 'Receives events from the Orca over Network.',
+    version = '1.0.1',
+    author = 'miljbee, adjustments from thica',
     canMultiLoad = True,
     createMacrosOnAdd = True,
     icon = (
-        "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/"
-        "AAAACXBIWXMAAAsSAAALEgHS3X78AAAAB3RJTUUH1gIQFgQb1MiCRwAAAVVJREFUOMud"
-        "kjFLw2AQhp8vif0fUlPoIgVx6+AgopNI3fwBViiIoOAgFaugIDhUtP4BxWDs4CI4d3MR"
-        "cSyIQ1tDbcHWtjFI4tAWG5pE8ca7997vnrtP4BOZvW0dSBAcZ0pAMTEzPUs4GvMsVkvP"
-        "6HktGWRAOBpjIXVNKOSWWdYXN7lFAAINhBCEQgqxyTHAAQQAD/dFbLurUYJYT7P7TI2C"
-        "VavwIiZodyyaH6ZLo/RZVTXiOYVhGOh5jcpbq5eRAXAc5wdBVSPMLR16GtxdbgJgN95d"
-        "OxicACG6bPH4uIu1UHjE7sFqR/NDVxhaoixLvFYbtDufNFtu1tzxgdeAaZfBU7ECTvd1"
-        "WRlxsa4sp1ydkiRxkstmlEFRrWT4nrRer3vmlf6mb883fK8AoF1d+Bqc6Xkt+cufT6e3"
-        "dnb9DJJrq+uYpunZ2WcFfA0ol8v8N5Qgvr/EN8Lzfbs+L0goAAAAAElFTkSuQmCC"
+        'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/'
+        'AAAACXBIWXMAAAsSAAALEgHS3X78AAAAB3RJTUUH1gIQFgQb1MiCRwAAAVVJREFUOMud'
+        'kjFLw2AQhp8vif0fUlPoIgVx6+AgopNI3fwBViiIoOAgFaugIDhUtP4BxWDs4CI4d3MR'
+        'cSyIQ1tDbcHWtjFI4tAWG5pE8ca7997vnrtP4BOZvW0dSBAcZ0pAMTEzPUs4GvMsVkvP'
+        '6HktGWRAOBpjIXVNKOSWWdYXN7lFAAINhBCEQgqxyTHAAQQAD/dFbLurUYJYT7P7TI2C'
+        'VavwIiZodyyaH6ZLo/RZVTXiOYVhGOh5jcpbq5eRAXAc5wdBVSPMLR16GtxdbgJgN95d'
+        'OxicACG6bPH4uIu1UHjE7sFqR/NDVxhaoixLvFYbtDufNFtu1tzxgdeAaZfBU7ECTvd1'
+        'WRlxsa4sp1ydkiRxkstmlEFRrWT4nrRer3vmlf6mb883fK8AoF1d+Bqc6Xkt+cufT6e3'
+        'dnb9DJJrq+uYpunZ2WcFfA0ol8v8N5Qgvr/EN8Lzfbs+L0goAAAAAElFTkSuQmCC'
     ),
 )
 
@@ -51,16 +51,16 @@ import win32api
 import win32con
 
 class Text:
-    """
+    '''
     Helper class for receivin remote ghost commands
-    """
+    '''
     def __init__(self):
         pass
 
-    port = "TCP/IP Port:"
-    eventPrefix = "Event Prefix:"
-    tcpBox = "TCP/IP Settings"
-    eventGenerationBox = "Event generation"
+    port = 'TCP/IP Port:'
+    eventPrefix = 'Event Prefix:'
+    tcpBox = 'TCP/IP Settings'
+    eventGenerationBox = 'Event generation'
 
 
 DEBUG = False
@@ -73,11 +73,11 @@ else:
 
 
 class ServerHandler(asynchat.async_chat):
-    """Telnet engine class. Implements command line user interface."""
+    '''Telnet engine class. Implements command line user interface.'''
 
     # noinspection PyUnusedLocal
     def __init__(self, sock, addr, plugin, server):
-        log("Server Handler inited")
+        log('Server Handler inited')
         self.plugin = plugin
 
         # Call constructor of the parent class
@@ -95,32 +95,32 @@ class ServerHandler(asynchat.async_chat):
 
 
     def handle_close(self):
-        """
+        '''
         Closes the connection
-        """
+        '''
         self.plugin.EndLastEvent()
         asynchat.async_chat.handle_close(self)
 
 
     def collect_incoming_data(self, data):
-        """Put data read from socket to a buffer
-        """
+        '''Put data read from socket to a buffer
+        '''
         # Collect data in input buffer
-        log("<<" + repr(data))
+        log('<<' + repr(data))
         self.data = self.data + data
 
 
     if DEBUG:
         def push(self, data):
-            log(">>" + repr(data))
+            log('>>' + repr(data))
             asynchat.async_chat.push(self, data)
 
 
     def found_terminator(self):
-        """
+        '''
         This method is called by asynchronous engine when it finds
         command terminator in the input stream
-        """
+        '''
         # Take the complete line
         line = self.data
 
@@ -132,43 +132,43 @@ class ServerHandler(asynchat.async_chat):
 
 
     def initiate_close(self):
-        """
+        '''
         Closes the connection
-        """
+        '''
         self.state = self.state1
         self.close()
 
     def respond_ok(self):
-        """
+        '''
         Give a OK response
-        """
-        self.respond(u'RemoteGhost.OK')
+        '''
+        self.respond('RemoteGhost.OK')
     def respond_error(self):
-        """
+        '''
         Give an ERROR Response
-        """
-        self.respond(u'RemoteGhost.ERROR')
+        '''
+        self.respond('RemoteGhost.ERROR')
     def respond(self, sMsg):
-        """
+        '''
         Give a the sMsg as a response
         :param sMsg:
-        """
+        '''
         try:
-            sMsg += "[EOL]"
-            #print u"ORCA:",type(sMsg),u':',sMsg
-            #print "ORCA:",eg.systemEncoding
+            sMsg += '[EOL]'
+            #print u'ORCA:',type(sMsg),':',sMsg
+            #print 'ORCA:',eg.systemEncoding
             #asynchat.async_chat.push(self,sMsg.encode(eg.systemEncoding))
-            asynchat.async_chat.push(self,sMsg.encode("utf-8","replace"))
-            #synchat.async_chat.push(self,sMsg.decode("utf-8","replace"))
-#            asynchat.async_chat.push(self,u"\xc3\x84\xc3\xa4")
+            asynchat.async_chat.push(self,sMsg.encode('utf-8','replace'))
+            #synchat.async_chat.push(self,sMsg.decode('utf-8','replace'))
+#            asynchat.async_chat.push(self,u'\xc3\x84\xc3\xa4')
             #asynchat.async_chat.push(self,sMsg)
         except Exception as inst:
-            print (u"ORCA:error send to Orca:"+str(inst))
+            print ('ORCA:error send to Orca:'+str(inst))
             pass
 
     def state1(self, line):
         if line.startswith('c'):
-            self.respond(u"RemoteGhost.Pong")
+            self.respond('RemoteGhost.Pong')
             return
         if line.startswith('e'):
             self.plugin.TriggerEvent(line[1:].strip())
@@ -177,7 +177,7 @@ class ServerHandler(asynchat.async_chat):
             return
         if line.startswith('a'):
             sRet=self.ExecuteMacro(line[1:].strip())
-            self.respond(u"RemoteGhost."+sRet)
+            self.respond('RemoteGhost.'+sRet)
             return
         if line.startswith('k'):
             hwnds = eg.lastFoundWindows
@@ -186,7 +186,7 @@ class ServerHandler(asynchat.async_chat):
             else:
                 hwnd = hwnds[0]
             sCmd=line[1:]
-            print (u'ORCA: Sending Keystroke:'+sCmd)
+            print ('ORCA: Sending Keystroke:'+sCmd)
             eg.SendKeys(hwnd, sCmd, False)
             self.respond_ok()
             return
@@ -204,14 +204,14 @@ class ServerHandler(asynchat.async_chat):
                 return
 
         self.respond_error()
-        print (u'ORCA:Received invalid statement:'+line)
+        print ('ORCA:Received invalid statement:'+line)
 
     # noinspection PyUnusedLocal
     def ProcessMsg(self, sMsg, icon):
         self.respond(sMsg)
 
     def ExecuteMacro(self,sMacro):
-        sRet="Command not found...:"+sMacro
+        sRet='Command not found...:'+sMacro
         if len(self.aTreeMacros)==0:
             self.BrowseTree()
         oMacro=self.aTreeMacros.get(sMacro)
@@ -231,11 +231,11 @@ class ServerHandler(asynchat.async_chat):
         if sRet is None:
             sRet=''
         if not isinstance(sRet, str):
-            print ("ORCA: ErrorExecute:",type(sRet))
+            print ('ORCA: ErrorExecute:',type(sRet))
             sRet=str(sRet)
             return sRet
 
-        return "Error"
+        return 'Error'
 
     def BrowseTree(self,oRoot=None, sContext=''):
 
@@ -255,20 +255,20 @@ class ServerHandler(asynchat.async_chat):
 
         for child in oRoot.childs:
             sText=child.GetLabel()
-            #print "ORCA:5:",type(child)
-            #print "ORCA:6:",child.GetLabel()
+            #print 'ORCA:5:',type(child)
+            #print 'ORCA:6:',child.GetLabel()
 
             if filterFuncTargets(child):
                 sLabel=child.GetLabel()
                 if sContext=='':
                     sQlName=sLabel
                 else:
-                    sQlName=sContext+"."+sLabel
-                #print "ORCA:6:",sQlName
+                    sQlName=sContext+'.'+sLabel
+                #print 'ORCA:6:',sQlName
                 self.aTreeMacros[sQlName]=child
                 self.aRawMacros[sLabel]=child
             if filterFuncNodes(child):
-                self.BrowseTree(child,sContext+"."+sText)
+                self.BrowseTree(child,sContext+'.'+sText)
 
 
 class Server(asyncore.dispatcher):
@@ -299,10 +299,10 @@ class Server(asyncore.dispatcher):
 
 
     def handle_accept (self):
-        """Called by asyncore engine when new connection arrives"""
+        '''Called by asyncore engine when new connection arrives'''
         # Accept new connection
-        log("handle_accept")
-        #self.handler.TriggerEvent(u'ORCA Connecting...')
+        log('handle_accept')
+        #self.handler.TriggerEvent('ORCA Connecting...')
         (sock, addr) = self.accept()
         self.oServerHandler=ServerHandler(sock, addr, self.handler, self)
         self.handler.logWrapper.AddLogListener(self.oServerHandler)
@@ -330,7 +330,7 @@ class NetworkReceiver(eg.PluginBase):
         self.logWrapper.StopAllLogListeners()
 
 
-    def Configure(self, port=1024, prefix="ORCA"):
+    def Configure(self, port=1024, prefix='ORCA'):
         text = self.text
         panel = eg.ConfigPanel()
 
@@ -365,7 +365,7 @@ class LogWrapper:
     # noinspection PyUnusedLocal
     def WriteLine(self, sLine, oIcon, wRef, when, indent):
         for oListener in self.aLogListener:
-            if not sLine.startswith("ORCA:"):
+            if not sLine.startswith('ORCA:'):
                 oListener.ProcessMsg(sLine, oIcon)
 
     @eg.LogIt

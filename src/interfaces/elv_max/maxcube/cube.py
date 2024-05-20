@@ -360,16 +360,16 @@ class MaxCube(MaxDevice):
 
     def set_programme(self, thermostat, day, metadata):
         if thermostat.programme[day] == metadata:
-            logger.debug("Skipping setting unchanged programme for " + day)
+            logger.debug('Skipping setting unchanged programme for ' + day)
             return
         with self.connection_manager():
             # compare with current programme
             heat_time_tuples = [
-                (x["temp"], x["until"]) for x in metadata]
+                (x['temp'], x['until']) for x in metadata]
             # pad heat_time_tuples so that there are always seven
             for _ in range(7 - len(heat_time_tuples)):
-                heat_time_tuples.append((0, "00:00"))
-            command = ""
+                heat_time_tuples.append((0, '00:00'))
+            command = ''
             if thermostat.is_room():
                 rf_flag = RF_FLAG_IS_ROOM
                 devices = self.cube.devices_by_room(thermostat)
@@ -402,8 +402,8 @@ class MaxCube(MaxDevice):
             day_programme = programme.get(TODAY,None)
             if day_programme:
                 for segment in day_programme:
-                    if minutes < segment["untilminutes"]:
-                        return segment["temp"]
+                    if minutes < segment['untilminutes']:
+                        return segment['temp']
         except Exception:
             return device.target_temperature
 
@@ -427,11 +427,11 @@ class MaxCube(MaxDevice):
                     result = self.set_programme(
                         device, day, metadata)
                     if result:
-                        duty_cycle, command_result, memory_slots = result[2:].split(",")
+                        duty_cycle, command_result, memory_slots = result[2:].split(',')
                         if int(command_result) > 0:
                             raise Exception('Error')
                         if duty_cycle == 100 and memory_slots == 0:
-                            raise Exception("Run out of duty cycle and memory slots")
+                            raise Exception('Run out of duty cycle and memory slots')
 
 
     @classmethod
@@ -456,14 +456,14 @@ def get_programme(bits):
         settings = [day[i:i + n] for i in range(0, len(day), n)]
         day_programme = []
         for setting in settings:
-            word = format(setting[0], "08b") + format(setting[1], "08b")
+            word = format(setting[0], '08b') + format(setting[1], '08b')
             temp = int(int(word[:7], 2) / 2)
             time_mins = int(word[7:], 2) * 5
             mins = time_mins % 60
             hours = int((time_mins - mins) / 60)
-            time = "{:02d}:{:02d}".format(hours, mins)
-            day_programme.append({"temp": temp, "until": time, "untilminutes":time_mins })
-            if time == "24:00":
+            time = '{:02d}:{:02d}'.format(hours, mins)
+            day_programme.append({'temp': temp, 'until': time, 'untilminutes':time_mins })
+            if time == '24:00':
                 # This appears to flag the end of useable set points
                 break
         programme[day_of_week_from_n(j)] = day_programme
@@ -480,16 +480,16 @@ def day_of_week_from_n(day):
 
 def temp_and_time(temp, time):
     temp = float(temp)
-    assert temp <= 32, "Temp must be 32 or lower"
-    assert temp % 0.5 == 0, "Temp must be increments of 0.5"
+    assert temp <= 32, 'Temp must be 32 or lower'
+    assert temp % 0.5 == 0, 'Temp must be increments of 0.5'
     temp = int(temp * 2)
-    hours, mins = [int(x) for x in time.split(":")]
-    assert mins % 5 == 0, "Time must be a multiple of 5 mins"
+    hours, mins = [int(x) for x in time.split(':')]
+    assert mins % 5 == 0, 'Time must be a multiple of 5 mins'
     mins = hours * 60 + mins
-    bits = format(temp, "07b") + format(int(mins/5), "09b")
+    bits = format(temp, '07b') + format(int(mins/5), '09b')
     return to_hex(int(bits, 2))
 
 
 def to_hex(value):
     """Return value as hex word"""
-    return format(value, "02x")
+    return format(value, '02x')

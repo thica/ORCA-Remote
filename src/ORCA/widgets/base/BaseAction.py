@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -37,16 +37,16 @@ from ORCA.vars.Replace                 import ReplaceVars
 from ORCA.widgets.helper.WidgetType    import eWidgetType
 from ORCA.widgets.base.BaseBase        import cWidgetBaseBase
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
-    from ORCA.Action                import cAction
+    from ORCA.screen.ScreenPage import cScreenPage
+    from ORCA.action.Action import cAction
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
-    cAction       = TypeVar("cAction")
+    cScreenPage   = TypeVar('cScreenPage')
+    cAction       = TypeVar('cAction')
 
 __all__ = ['cWidgetBaseAction']
 
@@ -61,40 +61,40 @@ class cWidgetBaseAction(cWidgetBaseBase):
 
         self.aWidgetActions:List[Dict]                  = []
         self.dActionPars:Dict[str,str]                  = {} # Actionpars will be passed to Actions within command set, existing pars will be replaced!
-        self.uActionName:str                            = u''
-        self.uActionNameDoubleTap:str                   = u''
-        self.uActionNameDownOnly:str                    = u''
-        self.uActionNameLongTap:str                     = u''
-        self.uActionNameUpOnly:str                      = u''
-        self.uTapType:str                               = u''
+        self.uActionName:str                            = ''
+        self.uActionNameDoubleTap:str                   = ''
+        self.uActionNameDownOnly:str                    = ''
+        self.uActionNameLongTap:str                     = ''
+        self.uActionNameUpOnly:str                      = ''
+        self.uTapType:str                               = ''
 
     # noinspection PyUnresolvedReferences
     def ParseXMLBaseNode (self,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
 
         try:
-            self.uActionName          = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'action',           bMandatory=False,vDefault=u'')
-            self.uActionNameDoubleTap = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actiondoubletap',  bMandatory=False,vDefault=u'')
-            self.uActionNameLongTap   = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actionlongtap',    bMandatory=False,vDefault=u'')
-            self.uActionNameDownOnly  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actiondownonly',   bMandatory=False,vDefault=u'')
-            self.uActionNameUpOnly    = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actionuponly',     bMandatory=False,vDefault=u'')
-            uActionPars:str           = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'actionpars',       bMandatory=False,vDefault=u'{}')
-            if uActionPars.startswith("$var("):
+            self.uActionName          = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='action',           bMandatory=False,vDefault='')
+            self.uActionNameDoubleTap = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='actiondoubletap',  bMandatory=False,vDefault='')
+            self.uActionNameLongTap   = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='actionlongtap',    bMandatory=False,vDefault='')
+            self.uActionNameDownOnly  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='actiondownonly',   bMandatory=False,vDefault='')
+            self.uActionNameUpOnly    = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='actionuponly',     bMandatory=False,vDefault='')
+            uActionPars:str           = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='actionpars',       bMandatory=False,vDefault='{}')
+            if uActionPars.startswith('$var('):
                 uActionPars=ReplaceVars(uActionPars)
 
             self.dActionPars=ToDic(uActionPars)
 
-            if self.uActionName.startswith("SendCommand "):
+            if self.uActionName.startswith('SendCommand '):
                 if len(self.dActionPars)==0:
-                    self.dActionPars={"commandname":self.uActionName[12:]}
-                    self.uActionName="Send"
+                    self.dActionPars={'commandname':self.uActionName[12:]}
+                    self.uActionName='Send'
 
-            if not self.uInterFace==u'':
+            if not self.uInterFace=='':
                 Globals.oInterFaces.dUsedInterfaces[self.uInterFace]=True
 
             return super().ParseXMLBaseNode (oXMLNode,oParentScreenPage, uAnchor)
 
         except Exception as e:
-            LogError(uMsg=u'Error parsing widget from element (Action):['+self.uName+"",oException=e)
+            LogError(uMsg='Error parsing widget from element (Action):['+self.uName+']',oException=e)
             return False
 
     def On_Button_Up(self,instance:Widget) -> None:
@@ -103,9 +103,7 @@ class cWidgetBaseAction(cWidgetBaseBase):
             if hasattr(instance,'uTapType'):
                 self.uTapType = instance.uTapType
             else:
-                self.uTapType = u"up"
-
-            Logger.debug (u'WidgetBaseAction:On_Button_Up: Tap detected: %s:%s' %( self.uName, self.uTapType))
+                self.uTapType = 'up'
 
             self.OnButtonClicked()
             return
@@ -113,14 +111,13 @@ class cWidgetBaseAction(cWidgetBaseBase):
     def On_Button_Down(self,instance:Widget) -> None:
 
         if self.bIsEnabled:
-            Globals.oSound.PlaySound(uSoundName=u'click')
+            Globals.oSound.PlaySound(SoundName=Globals.oSound.eSounds.click)
             OS_Vibrate()
 
             if hasattr(instance,'uTapType'):
                 self.uTapType = instance.uTapType
             else:
-                self.uTapType = u"down"
-            Logger.debug (u'WidgetBaseAction:On_Button_Down: Tap detected: %s:%s' %( self.uName, self.uTapType))
+                self.uTapType = 'down'
 
             self.OnButtonClicked()
             return
@@ -137,41 +134,41 @@ class cWidgetBaseAction(cWidgetBaseBase):
         uActionNameLongTap:str   = ReplaceVars(self.uActionNameLongTap)
         aUseActionName:List[str] = []
 
-        if uActionNameDoubleTap != u'' and self.uTapType == u'double_up':
+        if uActionNameDoubleTap != '' and self.uTapType == 'double_up':
             aUseActionName.append(uActionNameDoubleTap)
-        elif uActionNameLongTap != u'' and self.uTapType == u'long_up':
+        elif uActionNameLongTap != '' and self.uTapType == 'long_up':
             aUseActionName.append(uActionNameLongTap)
-        elif uActionNameDown    != u'' and self.uTapType == u"down":
+        elif uActionNameDown    != '' and self.uTapType == 'down':
             aUseActionName.append(uActionNameDown)
-        elif uActionNameUp      != u'' and self.uTapType == u"up":
+        elif uActionNameUp      != '' and self.uTapType == 'up':
             aUseActionName.append(uActionNameUp)
-        elif uActionName!=u'' and  self.uTapType== u'repeat_down' and uActionNameLongTap == u'':
+        elif uActionName!='' and  self.uTapType== 'repeat_down' and uActionNameLongTap == '':
             aUseActionName.append(uActionName)
-        elif uActionName!=u'' and self.uTapType== u"up":
+        elif uActionName!='' and self.uTapType== 'up':
             aUseActionName.append(uActionName)
 
         # this a response optimisation, If we do have just one standard action
-        # the we convert it to a down only action
+        # then we convert it to a down only action
 
-        if self.eWidgetType == eWidgetType.Button or self.eWidgetType == eWidgetType.Picture:
-            if self.uTapType == u"down":
-                if self.uActionName != u"":
-                    if self.uActionNameDoubleTap == u"":
-                        if self.uActionNameLongTap == u"":
-                            if self.uActionNameDownOnly == u"":
-                                if self.uActionNameUpOnly == u"":
+        if (self.eWidgetType == eWidgetType.Button or self.eWidgetType == eWidgetType.Picture) and False:
+            if self.uTapType == 'down':
+                if self.uActionName != '':
+                    if self.uActionNameDoubleTap == '':
+                        if self.uActionNameLongTap == '':
+                            if self.uActionNameDownOnly == '':
+                                if self.uActionNameUpOnly == '':
                                     aUseActionName.append(uActionName)
 
-            if self.uTapType == u"up":
-                if self.uActionName != u"":
-                    if self.uActionNameDoubleTap == u"":
-                        if self.uActionNameLongTap == u"":
-                            if self.uActionNameDownOnly == u"":
-                                if self.uActionNameUpOnly == u"":
+            if self.uTapType == 'up' and False:
+                if self.uActionName != '':
+                    if self.uActionNameDoubleTap == '':
+                        if self.uActionNameLongTap == '':
+                            if self.uActionNameDownOnly == '':
+                                if self.uActionNameUpOnly == '':
                                     return
 
         # if we have a doubletap but no doubletap action, then execute two single taps
-        if len(aUseActionName) == 0 and self.uTapType == u'double_up':
+        if len(aUseActionName) == 0 and self.uTapType == 'double_up' and False:
             aUseActionName.append(uActionName)
             aUseActionName.append(uActionName)
 
@@ -182,12 +179,12 @@ class cWidgetBaseAction(cWidgetBaseBase):
                 Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':'call'}])
                 aActions[-1].dActionPars=self.dActionPars
                 aActions[-1].dActionPars['actionname']=uUseActionName
-                Logger.debug (u'WidgetBaseAction: [%s] Action queued for Object [%s] [%s]' % (self.uTapType,self.uName,uUseActionName))
+                Logger.debug (f'WidgetBaseAction: [{self.uTapType}] Action queued for Object [{self.uName}] [{uUseActionName}]')
             else:
                 Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=[{'string':uUseActionName}])
                 aActions[-1].dActionPars=self.dActionPars
         if len(aActions)>0:
-            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=self)
+            Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=self,uQueueName="Button_clicked")
         return
 
     def On_Gesture(self,instance:Widget) -> None:

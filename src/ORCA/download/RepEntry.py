@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -50,14 +50,14 @@ class cRepEntry:
         self.iMinOrcaVersion:int                    = 0
         self.iVersion:int                           = 0
         self.oDescriptions:cRepDescription          = cRepDescription()
-        self.uAuthor:str                            = u''
-        self.uDescription:str                       = u''
-        self.uMinOrcaVersion:str                    = u''
-        self.uName:str                              = u'Error'
+        self.uAuthor:str                            = ''
+        self.uDescription:str                       = ''
+        self.uMinOrcaVersion:str                    = ''
+        self.uName:str                              = 'Error'
         self.oPath:Optional[cPath]                  = None
-        self.uRepType:str                           = u''
-        self.uUrl:str                               = u''
-        self.uVersion:str                           = u''
+        self.uRepType:str                           = ''
+        self.uUrl:str                               = ''
+        self.uVersion:str                           = ''
 
     def __repr__(self) -> str:
         return repr(self.uName)
@@ -69,33 +69,33 @@ class cRepEntry:
         oXMLDependencies:Element
         oXMLSkipFiles:Element
 
-        self.uName          = GetXMLTextValue(oXMLNode=oXMLEntry,uTag=u'name',          bMandatory=True, vDefault=u'Error')
-        self.uAuthor        = GetXMLTextValue(oXMLNode=oXMLEntry,uTag=u'author',        bMandatory=False,vDefault=u'unknown')
-        self.uVersion       = GetXMLTextValue(oXMLNode=oXMLEntry,uTag=u'version',       bMandatory=False,vDefault=u'0')
-        self.uMinOrcaVersion= GetXMLTextValue(oXMLNode=oXMLEntry,uTag=u'minorcaversion',bMandatory=False,vDefault=u'1.1.0')
-        self.bSkip          = GetXMLBoolValue(oXMLNode=oXMLEntry,uTag=u'skip',          bMandatory=False,bDefault=False)
+        self.uName          = GetXMLTextValue(oXMLNode=oXMLEntry,uTag='name',          bMandatory=True, vDefault='Error')
+        self.uAuthor        = GetXMLTextValue(oXMLNode=oXMLEntry,uTag='author',        bMandatory=False,vDefault='unknown')
+        self.uVersion       = GetXMLTextValue(oXMLNode=oXMLEntry,uTag='version',       bMandatory=False,vDefault='0')
+        self.uMinOrcaVersion= GetXMLTextValue(oXMLNode=oXMLEntry,uTag='minorcaversion',bMandatory=False,vDefault='1.1.0')
+        self.bSkip          = GetXMLBoolValue(oXMLNode=oXMLEntry,uTag='skip',          bMandatory=False,bDefault=False)
         self.iVersion       = ToIntVersion(self.uVersion)
         self.iMinOrcaVersion= ToIntVersion(self.uMinOrcaVersion)
         self.oDescriptions.ParseFromXMLNode(oXMLEntry=oXMLEntry)
 
-        oXMLSources = oXMLEntry.find(u'sources')
+        oXMLSources = oXMLEntry.find('sources')
         if not oXMLSources is None:
-            for oXMLSource in oXMLSources.findall(u'source'):
+            for oXMLSource in oXMLSources.findall('source'):
                 oSource:cRepSource = cRepSource()
                 oSource.ParseFromXMLNode(oXMLNode=oXMLSource)
                 self.aSources.append(oSource)
 
-        oXMLDependencies = oXMLEntry.find(u'dependencies')
+        oXMLDependencies = oXMLEntry.find('dependencies')
         if not oXMLDependencies is None:
-            for oXMLDependency in oXMLDependencies.findall(u'dependency'):
+            for oXMLDependency in oXMLDependencies.findall('dependency'):
                 oRepDependency:cRepDependency=cRepDependency()
                 oRepDependency.ParseFromXMLNode(oXMLNode=oXMLDependency)
                 self.aDependencies.append(oRepDependency)
 
-        oXMLSkipFiles = oXMLEntry.find(u'skipfiles')
+        oXMLSkipFiles = oXMLEntry.find('skipfiles')
         if not oXMLSkipFiles is None:
             oRepSkipFile:cRepSkipFile = cRepSkipFile()
-            for oXMLSkipFile in oXMLSkipFiles.findall(u'file'):
+            for oXMLSkipFile in oXMLSkipFiles.findall('file'):
                 oRepSkipFile.ParseFromXMLNode(oXMLNode=oXMLSkipFile)
                 oRepSkipFile.uFile=ReplaceVars(oRepSkipFile.uFile)
                 self.aSkipFiles.append(oRepSkipFile)

@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -25,9 +25,9 @@ from typing                                 import List
 
 from ORCA.scripts.Scripts                   import cScriptSettingPlugin
 from ORCA.scripttemplates.Template_Tools    import cToolsTemplate
-from ORCA.Action                            import cAction
+from ORCA.action.Action import cAction
 from ORCA.definition.Definition             import cDefinition
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 '''
@@ -38,8 +38,8 @@ import ORCA.Globals as Globals
       <description language='English'>Tool to convert IR Files from iTach format to Kira Keene formats</description>
       <description language='German'>Tool um IR Dateien vom iTach Format zum Kira Keene Format zu konvertieren</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -83,40 +83,40 @@ class cScript(cToolsTemplate):
 
     def __init__(self):
         super().__init__()
-        self.uSubType        = u'IR-CONVERTER'
-        self.uSortOrder      = u'auto'
-        self.uSettingSection = u'tools'
-        self.uSettingTitle   = u'iTach2Keene'
+        self.uSubType        = 'IR-CONVERTER'
+        self.uSortOrder      = 'auto'
+        self.uSettingSection = 'tools'
+        self.uSettingTitle   = 'iTach2Keene'
 
     def RunScript(self, *args, **kwargs) -> None:
         super().RunScript(*args, **kwargs)
-        if kwargs.get("caller") == "settings" or kwargs.get("caller") == "action":
+        if kwargs.get('caller') == 'settings' or kwargs.get('caller') == 'action':
             self.ShowPageItach2Keene(self, *args, **kwargs)
 
     # noinspection PyMethodMayBeStatic
     def ShowPageItach2Keene(self, *args, **kwargs) -> None:
-        Globals.oTheScreen.AddActionShowPageToQueue(uPageName=u'Page_ITach2Keene')
+        Globals.oTheScreen.AddActionShowPageToQueue(uPageName='Page_ITach2Keene')
 
     def Register(self, *args, **kwargs) -> Dict:
         super().Register(*args, **kwargs)
-        Globals.oNotifications.RegisterNotification(uNotification="DEFINITIONPAGESLOADED",  fNotifyFunction=self.LoadScriptPages,     uDescription="Script Tools iTach2Keene")
-        Globals.oNotifications.RegisterNotification(uNotification="STARTSCRIPTITACH2KEENE", fNotifyFunction=self.ShowPageItach2Keene, uDescription="Script Tools iTach2Keene")
+        Globals.oNotifications.RegisterNotification(uNotification='DEFINITIONPAGESLOADED',  fNotifyFunction=self.LoadScriptPages,     uDescription='Script Tools iTach2Keene')
+        Globals.oNotifications.RegisterNotification(uNotification='STARTSCRIPTITACH2KEENE', fNotifyFunction=self.ShowPageItach2Keene, uDescription='Script Tools iTach2Keene')
         oScriptSettingPlugin               = cScriptSettingPlugin()
         oScriptSettingPlugin.uScriptName   = self.uObjectName
-        oScriptSettingPlugin.uSettingName  = "ORCA"
-        oScriptSettingPlugin.uSettingPage  = "$lvar(572)"
-        oScriptSettingPlugin.uSettingTitle = "$lvar(SCRIPT_TOOLS_ITACH2KEENE_4)"
-        oScriptSettingPlugin.aSettingJson  = [u'{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_ITACH2KEENE_1)","desc": "$lvar(SCRIPT_TOOLS_ITACH2KEENE_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_ITACH2KEENE_3)","id":"button_notification_STARTSCRIPTITACH2KEENE"}]}']
+        oScriptSettingPlugin.uSettingName  = 'ORCA'
+        oScriptSettingPlugin.uSettingPage  = '$lvar(572)'
+        oScriptSettingPlugin.uSettingTitle = '$lvar(SCRIPT_TOOLS_ITACH2KEENE_4)'
+        oScriptSettingPlugin.aSettingJson  = ['{"type": "buttons","title": "$lvar(SCRIPT_TOOLS_ITACH2KEENE_1)","desc": "$lvar(SCRIPT_TOOLS_ITACH2KEENE_2)","section": "ORCA","key": "button_notification","buttons":[{"title":"$lvar(SCRIPT_TOOLS_ITACH2KEENE_3)","id":"button_notification_STARTSCRIPTITACH2KEENE"}]}']
         Globals.oScripts.RegisterScriptInSetting(uScriptName=self.uObjectName,oScriptSettingPlugin=oScriptSettingPlugin)
 
         ''' If we press ESC on the iTach2Keene page, goto to the settings page '''
 
         aActions:List[cAction]= Globals.oEvents.CreateSimpleActionList(aActions=[{'name':'ESC Key Handler iTach2Keene','string':'registernotification','filterpagename':'Page_iTach2Keene','notification':'on_key_ESC','notifyaction':'gotosettingspage'}])
-        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+        Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='registerscript')
         return {}
 
     def LoadScriptPages(self,*args,**kwargs) -> None:
-        oDefinition:cDefinition = kwargs.get("definition")
+        oDefinition:cDefinition = kwargs.get('definition')
 
         if oDefinition.uName == Globals.uDefinitionName:
             if self.oFnXML.Exists():

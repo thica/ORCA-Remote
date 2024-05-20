@@ -1,0 +1,76 @@
+'''
+WikiDoc:Doc
+WikiDoc:Context:Interfaces
+WikiDoc:Page:Interfaces-telnet2
+WikiDoc:TOCTitle:Telnet
+= Telnet2 =
+The telnet interface is a simple interface. It opens a telnet connection to a given device and sends a set of commands to the interface. The Telnet2 interfaces just sends single commands, you can't set triggers
+= Settings =
+
+The following settings are supported by the interface
+<div style="overflow:auto; ">
+{| class="wikitable"
+! align="left" | Setting
+! align="left" | Description
+|-
+|Host
+|Host-Name or IP-Address of your telnet device/server. Could be "discover" as well. (upnp discover)
+|-
+|Port
+|Port Address of your telnet device. Default is 23
+|-
+|User
+|Username , if logon is requiered
+|-
+|Password
+|Password , if logon is requiered
+|-
+|Terminaltype
+|defaults to "linux"
+|-
+|FNCodeset
+|Filename of your codeset. Without path
+|-
+|parseresult
+|The way, responses should be parsed
+|-
+|tokenizestring
+|If the responses should be tokenized, this token should be used. Defaults to ":"
+|-
+|resultendstring
+|How to detect the end of a respond. Defaults to [LF]
+|-
+|DiscoverTimeOut
+|For Autodiscover: Timeout to discover a device in seconds. Defaults to 5
+|-
+|SaveDiscoveredIP
+|For Autodiscover: Flag if the discovered IP should be saved. Prevents to discover every app start.
+|-
+|OldDiscoveredIP
+|For Autodiscover: The last discoverd IP-Address. Delete, if you want the force a new discover
+|-
+|TimeToClose
+|Timeout in seconds, until the connection from the interface to the device will be close.
+* -1 The connection will not be closed
+* 0 The connection will be closed immediately
+* all other, Timeout in seconds
+|-
+|DisableInterFaceOnError
+|Disables the interface, if an error occurs. Prevents the interface to continue to send commands to a broken connection.
+|-
+|DisconnectInterFaceOnSleep
+|Disconnects the interface, when your remote control device goes to sleep
+|}</div>
+
+Some word to discover:
+The interface reduces matches / results from the discover results using the ...
+* discoverprettyname
+* discovermodels
+* discovermanufacturer
+... settings. Blank option will not be used. You could eg use the pretty name just to match a specific device, or just the manufacturer name to match all devices in the network of this manufacturer.
+Discover uses the upnp discover protocol
+
+You need to define the codeset filename, which contains the command set for your device
+
+WikiDoc:End
+'''

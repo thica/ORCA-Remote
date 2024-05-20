@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ from ORCA.utils.TypeConvert         import EscapeUnicode
 from ORCA.utils.FileName import cFileName
 
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['SettingPicture']
 
@@ -47,14 +47,14 @@ class SettingPicture(SettingFile):
         try:
             oFnPic              = cFileName().ImportFullPath(uFnFullName=self.value)
             self.oPic:Image     = Image(source=UnEscapeUnicode(ToAtlas(oFileName=oFnPic)),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
-            oFnBack:cFileName   = cFileName(Globals.oPathResources + "pics") + "imagepicker_background.png"
+            oFnBack:cFileName   = cFileName(Globals.oPathResources + 'pics') + 'imagepicker_background.png'
             self.oBack:Image    = Image(source=ToAtlas(oFileName=oFnBack),size_hint=(1, 1), pos_hint={'x':0.0, 'y':0.0})
             self.oLayout.add_widget(self.oBack)
             self.oLayout.add_widget(self.oPic)
             self.add_widget(self.oLayout)
             self.content.children[1].text=''
         except Exception as e:
-            uMsg=u'Settings: Picture: can\'t load image file: '+ToUnicode(e)+ " "+oFnPic.string
+            uMsg=f'Settings: Picture: can\'t load image file: {ToUnicode(e)} File: {oFnPic}'
             Logger.error (uMsg)
 
     def set_value(self, section, key, value):
@@ -66,6 +66,6 @@ class SettingPicture(SettingFile):
         """ displays the folder """
 
         SettingFile._validate(self,instance)
-        self.oPic.source=ToAtlas(oFileName=cFileName('').ImportFullPath(uFnFullName=self.value))
+        self.oPic.source=ToAtlas(oFileName=cFileName(self.value))
         self.content.children[1].text=''
 

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -27,17 +27,17 @@ from jnius                  import autoclass
 def GetLocale() -> str:
     """ gets the locale / language from the system """
     uCurrent:str = 'English'
-    uOurlocale:str = "en"
+    uOurlocale:str = 'en'
 
     try:
-        Logger.debug("Attempting to get default locale from Java...")
+        Logger.debug('Attempting to get default locale from Java...')
         JavaUtilLocale = autoclass('java.util.Locale')
         jlocale = JavaUtilLocale
         uOurlocale = jlocale.getDefault().getLanguage()
     except Exception:
-        Logger.debug("Unable to get locale from Java...")
-    Logger.debug("Javalocale:"+uOurlocale)
+        Logger.debug('Unable to get locale from Java...')
+    Logger.debug('Javalocale:'+uOurlocale)
 
-    if uOurlocale == "de":
-        uCurrent="German"
+    if uOurlocale == 'de':
+        uCurrent='German'
     return uCurrent

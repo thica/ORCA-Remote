@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ import select
 import socket
 from threading                              import Thread
 from kivy.logger                            import Logger
-from ORCA.Action                            import cAction
+from ORCA.action.Action import cAction
 from ORCA.interfaces.BaseInterface          import cBaseInterFace
 from ORCA.interfaces.BaseInterfaceSettings  import cBaseInterFaceSettings
 from ORCA.utils.FileName                    import cFileName
@@ -40,6 +40,14 @@ from ORCA.utils.wait.StartWait              import StartWait
 from ORCA.vars.Replace                      import ReplaceVars
 from ORCA.actions.ReturnCode                import eReturnCode
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.interfaces.BaseTrigger import cBaseTrigger
+else:
+    from typing import TypeVar
+    cBaseTrigger = TypeVar('cBaseTrigger')
+
+
 '''
 <root>
   <repositorymanager>
@@ -48,8 +56,8 @@ from ORCA.actions.ReturnCode                import eReturnCode
       <description language='English'>Interface to send commands to EventGhost</description>
       <description language='German'>Interface um Kommandos an EventGhost zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/remoteghost</local>
@@ -128,16 +136,16 @@ class cInterface(cBaseInterFace):
         def __init__(self,oInterFace:cInterface):
             super().__init__(oInterFace)
             self.aIniSettings.iTimeToClose          = -1
-            self.aIniSettings.uParseResultOption    = u'store'
+            self.aIniSettings.uParseResultOption    = 'store'
             self.bStopThreadEvent:bool              = False
             self.iBufferSize:int                    = 1024
             self.oSocket:Optional[socket.socket]    = None
             self.oThread:Optional[Thread]           = None
-            self.uMsg:str                           = u''
+            self.uMsg:str                           = ''
 
         def ReadConfigFromIniFile(self,uConfigName:str) -> None:
             super().ReadConfigFromIniFile(uConfigName=uConfigName)
-            self.aIniSettings.uParseResultOption = u'store'
+            self.aIniSettings.uParseResultOption = 'store'
             return
 
         def Connect(self) -> bool:
@@ -172,16 +180,16 @@ class cInterface(cBaseInterFace):
                     self.oThread.start()
 
                 if self.oSocket is None:
-                    self.ShowError(uMsg=u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
+                    self.ShowError(uMsg='Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                     self.bOnError=True
                     return False
                 self.bIsConnected =True
             except Exception as e:
-                self.ShowError(uMsg=u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                self.ShowError(uMsg='Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.bOnError=True
                 return False
 
-            self.ShowDebug(uMsg=u'Interface connected!')
+            self.ShowDebug(uMsg='Interface connected!')
             return True
 
         def Disconnect(self) -> bool:
@@ -213,19 +221,19 @@ class cInterface(cBaseInterFace):
                             byResponses = self.oSocket.recv(self.iBufferSize)
                             # there could be more than one response, so we need to split them
                             uResponses  = ToUnicode(byResponses)
-                            aResponses  = uResponses.split("[EOL]")
+                            aResponses  = uResponses.split('[EOL]')
                             for uResponse in aResponses:
                                 # Todo: find proper encoding
-                                if not uResponse==u'' and not uResponse==u'ORCA.ORCA Connecting...':
+                                if not uResponse=='' and not uResponse=='ORCA.ORCA Connecting...':
                                     if True:
                                          # If the returned Command is a response to the send message
-                                        if uResponse.startswith(u'RemoteGhost.'):
-                                            self.ShowDebug(uMsg=u'Returned Message:'+uResponse)
+                                        if uResponse.startswith('RemoteGhost.'):
+                                            self.ShowDebug(uMsg='Returned Message:'+uResponse)
                                             #todo: parse the command from return
                                             # We do not need to wait for an response anymore
                                             StartWait(0)
                                             # we got our response, all other responses are for somebody else
-                                            self.uMsg=u''
+                                            self.uMsg=''
                                         else:
                                             # we have a notification issued by the device, so lets have a look, if we have a trigger assigned to it
                                             aActionTrigger=self.GetTrigger(uResponse)
@@ -233,17 +241,17 @@ class cInterface(cBaseInterFace):
                                                 for oActionTrigger in aActionTrigger:
                                                     self.CallTrigger(oActionTrigger,uResponse)
                                             else:
-                                                self.ShowDebug(uMsg=u'Discard message:'+uResponse)
+                                                self.ShowDebug(uMsg='Discard message:'+uResponse)
 
             except Exception as e:
-                self.ShowError(uMsg=u'Error Receiving Response:',oException=e)
+                self.ShowError(uMsg='Error Receiving Response:',oException=e)
                 self.bIsConnected=False
             try:
                 if not self.oSocket is None:
-                    self.ShowDebug(uMsg=u'Closing socket in Thread')
+                    self.ShowDebug(uMsg='Closing socket in Thread')
                     self.oSocket.close()
             except Exception as e:
-                self.ShowError(uMsg=u'Error closing socket in Thread',oException=e)
+                self.ShowError(uMsg='Error closing socket in Thread',oException=e)
 
 
     def __init__(self):
@@ -255,16 +263,16 @@ class cInterface(cBaseInterFace):
 
     def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
         super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
-        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oObjectConfig.dDefaultSettings['ParseResult']['active']                 = "enabled"
-        self.oObjectConfig.dDefaultSettings['TokenizeString']['active']              = "enabled"
-        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = 'enabled'
+        self.oObjectConfig.dDefaultSettings['ParseResult']['active']                 = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TokenizeString']['active']              = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = 'enabled'
 
     def DeInit(self, **kwargs) -> None:
         super().DeInit(**kwargs)
@@ -272,37 +280,37 @@ class cInterface(cBaseInterFace):
             self.dSettings[uSettingName].DeInit()
 
     def GetConfigJSON(self) -> Dict:
-        return {"Prefix": {"active": "enabled", "order": 3, "type": "string",         "title": "$lvar(IFACE_RGHOST_1)", "desc": "$lvar(IFACE_RGHOST_2)", "section": "$var(ObjectConfigSection)","key": "Prefix",                  "default":"ORCA_"}}
+        return {'Prefix': {'active': 'enabled', 'order': 3, 'type': 'string',         'title': '$lvar(IFACE_RGHOST_1)', 'desc': '$lvar(IFACE_RGHOST_2)', 'section': '$var(ObjectConfigSection)','key': 'Prefix',                  'default':'ORCA_'}}
 
     # noinspection PyUnresolvedReferences
     def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
         super().SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=uRetVar,bNoLogOut=bNoLogOut)
 
         uCmd:str
-        uPrefix:str      = u''
+        uPrefix:str      = ''
         iTryCount:int    = 0
         eRet:eReturnCode = eReturnCode.Error
 
         # call the function to pass string to eventghost
-        if oAction.uType==u'command':
-            uPrefix= u'c'
-        elif oAction.uType==u'event':
-            uPrefix=u'e'+oSetting.aIniSettings.uPreFix
-        elif oAction.uType==u'key':
-            uPrefix= u'k'
-        elif oAction.uType==u'macro':
-            uPrefix= u'a'
-        elif oAction.uType==u'mouse':
-            uPrefix= u'm'
+        if oAction.uType=='command':
+            uPrefix= 'c'
+        elif oAction.uType=='event':
+            uPrefix='e'+oSetting.aIniSettings.uPreFix
+        elif oAction.uType=='key':
+            uPrefix= 'k'
+        elif oAction.uType=='macro':
+            uPrefix= 'a'
+        elif oAction.uType=='mouse':
+            uPrefix= 'm'
         else:
-            Logger.warning (u'Invalid type: '+oAction.uType)
+            Logger.warning ('Invalid type: '+oAction.uType)
 
         uCmd = ReplaceVars(oAction.uCmd)
         uCmd = ReplaceVars(uCmd,self.uObjectName+'/'+oSetting.uConfigName)
-        if uCmd==u'*':
+        if uCmd=='*':
             uCmd=oAction.dActionPars['commandname']
 
-        self.ShowInfo(uMsg=u'Sending Command: '+uPrefix+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,uParConfigName=oSetting.uConfigName)
+        self.ShowInfo(uMsg='Sending Command: '+uPrefix+uCmd + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,uParConfigName=oSetting.uConfigName)
 
         while iTryCount<self.iMaxTryCount:
             iTryCount+=1
@@ -312,14 +320,14 @@ class cInterface(cBaseInterFace):
             #bIsConnected=oSetting.IsConnected()
 
             if oSetting.bIsConnected:
-                uMsg=uPrefix+uCmd+u'\n'
+                uMsg=uPrefix+uCmd+'\n'
                 try:
                     StartWait(self.iWaitMs)
                     oSetting.oSocket.sendall(ToBytes(uMsg))
                     eRet = eReturnCode.Success
                     break
                 except Exception as e:
-                    self.ShowError(uMsg=u'can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
+                    self.ShowError(uMsg='can\'t Send Message',uParConfigName=oSetting.uConfigName,oException=e)
                     oSetting.Disconnect()
                     eRet = eReturnCode.Error
 

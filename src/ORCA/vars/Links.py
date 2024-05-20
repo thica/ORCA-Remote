@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,12 +21,12 @@
 from typing import List
 from kivy.logger import Logger
 import ORCA.vars.Globals
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 from ORCA.utils.TypeConvert import ToDic
 from ORCA.utils.TypeConvert import ToUnicode
 from ORCA.vars.Globals import cLinkPar
 
-oLinkPar:cLinkPar=""
+oLinkPar:cLinkPar=''
 
 __all__ = ['VarHasLinks',
            'SetVarLink',
@@ -67,7 +67,7 @@ def DelVarLink(uVarName:str, oActions:cLinkPar) -> None:
     :param oActions: The actions which has been used to set var link. If you provide a * , all var links will be removed (see DelVarLinks)
     """
 
-    if oActions == "*":
+    if oActions == '*':
         DelVarLinks(uVarName=uVarName)
         return
 
@@ -98,28 +98,32 @@ def DelAllVarLinks() -> None:
     """
     ORCA.vars.Globals.dUserVarLinks.clear()
 
-
 def TriggerLinkActions(uVarName:str) -> None:
     """
-    Executes all Actions given as a variable link to a variable. The actions will get excecuted immmediatly
+    Executes all Actions given as a variable link to a variable. The actions will get executed immediately
     :param str uVarName: The variable name, for which the actions should get executed
     """
     aVarLinks:cLinkPar = ORCA.vars.Globals.dUserVarLinks.get(uVarName, [])
+
     if len(aVarLinks)==0:
         return
     if isinstance(aVarLinks, list):
+        aCmds:List = []
         for uCmd in aVarLinks:
-            Logger.debug(u'Call Triggered Var Link Actions for: %s -> %s' %(uVarName,ToUnicode(uCmd)))
+            Logger.debug(f'Call Triggered Var Link Actions for: {uVarName} -> {ToUnicode(uCmd)}')
             if isinstance(uCmd, list):
-                Globals.oTheScreen.AddActionToQueue(aActions=uCmd, bNewQueue=True)
+                # Globals.oTheScreen.AddActionToQueue(aActions=uCmd, bNewQueue=True)
+                aCmds = aCmds+uCmd
             else:
-                Globals.oTheScreen.AddActionToQueue(aActions=[ToDic(uCmd)], bNewQueue=True)
+                # Globals.oTheScreen.AddActionToQueue(aActions=[ToDic(uCmd)], bNewQueue=True)
+                aCmds.append(ToDic(uCmd))
+        Globals.oTheScreen.AddActionToQueue(aActions=aCmds, bNewQueue=True)
     else:
         Globals.oTheScreen.AddActionToQueue(aActions=[ToDic(aVarLinks)], bNewQueue=True)
 
     """
     for uCmd in aVarLinks:
-        Logger.debug(u'Call Triggered Var Link Actions for:' + uVarName)
+        Logger.debug('Call Triggered Var Link Actions for:' + uVarName)
         if isinstance(uCmd, list):
             Globals.oTheScreen.AddActionToQueue(aActions=uCmd,bNewQueue=True)
         else:

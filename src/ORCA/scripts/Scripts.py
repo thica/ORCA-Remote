@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -32,24 +32,24 @@ from ORCA.utils.Path            import cPath
 from ORCA.utils.LogError        import LogError
 from ORCA.vars.Access           import SetVar
 from ORCA.scripts.BaseScript    import cBaseScript
-from ORCA.BaseObject            import cBaseObjects
+from ORCA.settings.BaseObject import cBaseObjects
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cScriptSettingPlugin', 'cScripts']
 
 @dataclass
 class cScriptSettingPlugin:
-     uScriptName:str    = u""
-     uSettingName:str   = u""
-     uSettingPage:str   = u""
-     uSettingTitle:str  = u""
+     uScriptName:str    = ''
+     uSettingName:str   = ''
+     uSettingPage:str   = ''
+     uSettingTitle:str  = ''
      aSettingJson:List  = field(default_factory=list)
 
 class cScripts(cBaseObjects):
     """ container for all scripts """
     def __init__(self):
-        cBaseObjects.__init__(self,uType="SCRIPTS",uPrefix="SCRIPTS")
+        cBaseObjects.__init__(self,uType='SCRIPTS',uPrefix='SCRIPTS')
         self.aObjectNameListWithConfig:List[str]                    = [] # list of all names of all scripts, which have configs
         self.dScriptPathList:Dict[str,cPath]                        = {} # dict of all script paths of all scripts
         self.dScriptSettingPlugins:Dict[str,cScriptSettingPlugin]   = {} # dict of all settings to pulled into the various setting pages (optional)
@@ -74,12 +74,12 @@ class cScripts(cBaseObjects):
             oRealPath = cast(cPath,oPath)
 
         if oRealPath == Globals.oPathScripts:
-            Logger.debug (u'Scripts: Loading Script List')
+            Logger.debug ('Scripts: Loading Script List')
 
         aObjectNameList = oRealPath.GetFolderList()
         for uScriptNameFolder in aObjectNameList:
             oFolderPath=cPath(oRealPath)+uScriptNameFolder
-            if (cFileName(oFolderPath)+"script.py").Exists():
+            if (cFileName(oFolderPath)+'script.py').Exists():
                 self.aObjectNameList.append(uScriptNameFolder)
                 self.dScriptPathList[uScriptNameFolder]=oFolderPath
             else:
@@ -88,14 +88,14 @@ class cScripts(cBaseObjects):
         if oRealPath == Globals.oPathScripts:
             self.aObjectNameList.sort(key = lambda x: x)
             for uScriptName in self.aObjectNameList:
-                SetVar(uVarName="SCRIPTPATH[%s]" % uScriptName,oVarValue=self.dScriptPathList[uScriptName].string)
-                oPathScriptSkinElements = self.dScriptPathList[uScriptName]+"elements"
-                oPathCheck              = oPathScriptSkinElements + ("skin_" + Globals.uSkinName)
+                SetVar(uVarName=f'SCRIPTPATH[{uScriptName}]',oVarValue=str(self.dScriptPathList[uScriptName]))
+                oPathScriptSkinElements = self.dScriptPathList[uScriptName]+'elements'
+                oPathCheck              = oPathScriptSkinElements + ('skin_' + Globals.uSkinName)
                 if oPathCheck.Exists():
                     oPathScriptSkinElements = oPathCheck
                 else:
-                    oPathScriptSkinElements = oPathScriptSkinElements + "skin_default"
-                SetVar(uVarName="SCRIPTPATHSKINELEMENTS[%s]" % uScriptName, oVarValue=oPathScriptSkinElements.string)
+                    oPathScriptSkinElements = oPathScriptSkinElements + 'skin_default'
+                SetVar(uVarName=f'SCRIPTPATHSKINELEMENTS[{uScriptName}]' , oVarValue=str(oPathScriptSkinElements))
 
     def LoadScripts(self) -> None:
         """ Loads all scripts """
@@ -117,28 +117,28 @@ class cScripts(cBaseObjects):
         if uScriptName in self.dObjects:
             return self.dModules.get(uScriptName)
 
-        if uScriptName=="":
+        if uScriptName=='':
             return None
 
-        Logger.info (u'Scripts: Loading Script: '+uScriptName)
+        Logger.info ('Scripts: Loading Script: '+uScriptName)
 
-        oFnScriptPy:cFileName     = cFileName(self.dScriptPathList[uScriptName]) + u'script.py'
+        oFnScriptPy:cFileName     = cFileName(self.dScriptPathList[uScriptName]) + 'script.py'
         oFnScript:cFileName       = cFileName(oFnScriptPy)
 
         if not oFnScript.Exists():
             return None
 
         try:
-            oModule                     = Globals.oModuleLoader.LoadModule(oFnModule=oFnScript,uModuleName='cScript'+"_"+uScriptName)
+            oModule                     = Globals.oModuleLoader.LoadModule(oFnModule=oFnScript, uModuleName=f'cScript_{uScriptName}')
             self.dModules[uScriptName]  = oModule
             oScript:cBaseScript         = oModule.GetClass('cScript')()
             oScript.Init(uScriptName, oFnScript)
             self.dObjects[uScriptName]  = oScript
-            if oScript.uIniFileLocation != "none":
+            if oScript.uIniFileLocation != 'none':
                 self.aObjectNameListWithConfig.append(uScriptName)
             return oModule
         except Exception as e:
-            ShowErrorPopUp(uMessage=LogError(uMsg=u'Scripts: Fatal Error Loading Script: '+uScriptName+ u' :',oException=e))
+            ShowErrorPopUp(uMessage=LogError(uMsg=f'Scripts: Fatal Error Loading Script: {uScriptName} :',oException=e))
             return None
 
     def GetScript(self,uScriptName:str) -> cBaseScript:
@@ -148,7 +148,7 @@ class cScripts(cBaseObjects):
         :param str uScriptName: The name of the Script
         :return: The script class (cBaseScript)
         """
-        return self.dObjects.get(uScriptName)
+        return cast(cBaseScript,self.dObjects.get(uScriptName))
 
     def GetScriptListForScriptType(self, uType:str) -> List[str]:
         """ gets a list a scripts for a specific script type """
@@ -160,7 +160,7 @@ class cScripts(cBaseObjects):
 
         for uScriptName in self.aObjectNameList:
             if uScriptName in self.dObjects:
-                if self.dObjects[uScriptName].uType==uType:
+                if cast(cBaseScript,self.dObjects[uScriptName]).uType==uType:
                     aResult.append(uScriptName)
         self._SortScripts(aResult)
         return aResult
@@ -179,15 +179,15 @@ class cScripts(cBaseObjects):
         if len(aScriptList)>1:
             for u in range(3): #do it three times
                 for iIndex in range(len(aScriptList)):
-                    uSortOrder = self.dObjects[aScriptList[iIndex]].uSortOrder
-                    if uSortOrder == "first":
+                    uSortOrder = cast(cBaseScript,self.dObjects[aScriptList[iIndex]]).uSortOrder
+                    if uSortOrder == 'first':
                         aScriptList[0],aScriptList[iIndex] = aScriptList[iIndex],aScriptList[0]
-                    elif uSortOrder == "last":
+                    elif uSortOrder == 'last':
                         aScriptList[-1], aScriptList[iIndex] = aScriptList[iIndex], aScriptList[-1]
-                    elif uSortOrder == "auto":
+                    elif uSortOrder == 'auto':
                         pass
                     else:
-                        aElements = uSortOrder.split(":")
+                        aElements = uSortOrder.split(':')
                         if len(aElements)==2:
                             uSortOrder  = aElements[0]
                             uScriptName = aElements[1]
@@ -198,13 +198,13 @@ class cScripts(cBaseObjects):
                                     bFound = True
                                     break
                             if bFound:
-                                if uSortOrder == "before":
+                                if uSortOrder == 'before':
                                     if iIndex2 > 0:
                                         aScriptList[iIndex2-1], aScriptList[iIndex] = aScriptList[iIndex], aScriptList[iIndex2-1]
                                     else:
                                         aScriptList[0], aScriptList[1] = aScriptList[1], aScriptList[0]
                                         aScriptList[0], aScriptList[iIndex] = aScriptList[iIndex], aScriptList[0]
-                                if uSortOrder == "after":
+                                if uSortOrder == 'after':
                                     if iIndex2 < len(aScriptList):
                                         aScriptList[iIndex2+1], aScriptList[iIndex] = aScriptList[iIndex], aScriptList[iIndex2+1]
                                     else:
@@ -216,12 +216,12 @@ class cScripts(cBaseObjects):
         oScript:cBaseScript = self.LoadScript(uScriptName)
         if oScript:
             return self.GetScript(uScriptName).RunScript(*args,**kwargs)
-        LogError (uMsg=u'Script '+uScriptName+u': not found')
+        LogError (uMsg='Script '+uScriptName+': not found')
         return {}
 
     def RegisterScriptGroup(self,*,uName:str)-> None:
         uScriptName:str
         aScripts:List[str] = self.GetScriptListForScriptType(uName)
         for uScriptName in aScripts:
-            self.RunScript(uScriptName,**{"caller":"appstart"})
+            self.RunScript(uScriptName,**{'caller':'appstart'})
         return None

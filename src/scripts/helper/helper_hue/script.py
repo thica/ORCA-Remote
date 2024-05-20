@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -34,9 +34,9 @@ from ORCA.utils.TypeConvert                 import ToDic
 from ORCA.vars.Replace                      import ReplaceVars
 
 from ORCA.ui.ShowErrorPopUp                 import ShowErrorPopUp
-from ORCA.Action                            import cAction
+from ORCA.action.Action import cAction
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 '''
@@ -47,8 +47,8 @@ import ORCA.Globals as Globals
       <description language='English'>HUE Helper Script</description>
       <description language='German'>HUE Hilfs - Skript</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/helper/helper_hue</local>
@@ -118,8 +118,8 @@ class cScript(cBaseScript):
 
     def __init__(self):
         super().__init__()
-        self.uType:str                  = u'HELPERS'
-        self.uIniFileLocation:str       = u"none"
+        self.uType:str                  = 'HELPERS'
+        self.uIniFileLocation:str       = 'none'
         self.dStatus:Dict               = {}
         self.oHueConverter              = None
 
@@ -134,25 +134,25 @@ class cScript(cBaseScript):
         try:
             if 'cmd_type' in kwargs:
                 uCmdType = kwargs['cmd_type']
-                if uCmdType == u'evaluate_status':
+                if uCmdType == 'evaluate_status':
                     self.DumpStatus(**kwargs)
                     return None
-                if uCmdType == u'evaluate_light':
+                if uCmdType == 'evaluate_light':
                     self.DumpLight(**kwargs)
                     return None
-                if uCmdType == u'evaluate_group':
+                if uCmdType == 'evaluate_group':
                     self.DumpGroup(**kwargs)
                     return None
-                if uCmdType == u'RGB2XY':
+                if uCmdType == 'RGB2XY':
                     self.RGB2XY(**kwargs)
                     return None
-                if uCmdType == u'XY2RGB':
+                if uCmdType == 'XY2RGB':
                     self.XY2RGB(**kwargs)
                     return None
 
             return None
         except Exception as e:
-            LogErrorSmall(uMsg="Can't run Hue Helper script, invalid parameter",oException=e)
+            LogErrorSmall(uMsg='Can\'t run Hue Helper script, invalid parameter',oException=e)
             return None
 
 
@@ -172,10 +172,10 @@ class cScript(cBaseScript):
                 if oAction is not None:
                     uPrefix=oAction.uRetVar
 
-            self.DumpSingleLight(iID=-1,uLightKey= uLightKey,dLight=dResult,uPrefix= uPrefix,uType=u'Light')
+            self.DumpSingleLight(iID=-1,uLightKey= uLightKey,dLight=dResult,uPrefix= uPrefix,uType='Light')
             return None
         except Exception as e:
-            LogErrorSmall(uMsg="DumpLight: Error parsing HUE Bridge response",oException=e)
+            LogErrorSmall(uMsg='DumpLight: Error parsing HUE Bridge response',oException=e)
             return None
 
     def DumpGroup(self,**kwargs) -> None:
@@ -193,10 +193,10 @@ class cScript(cBaseScript):
                 if oAction is not None:
                     uPrefix=oAction.uRetVar
 
-            self.DumpSingleLight(iID=-1, uLightKey=uLightKey,dLight=dResult, uPrefix=uPrefix, uType=u'Group')
+            self.DumpSingleLight(iID=-1, uLightKey=uLightKey,dLight=dResult, uPrefix=uPrefix, uType='Group')
             return None
         except Exception as e:
-            LogErrorSmall(uMsg="DumpGroup: Error parsing HUE Bridge response",oException=e)
+            LogErrorSmall(uMsg='DumpGroup: Error parsing HUE Bridge response',oException=e)
             return None
 
     def DumpStatus(self,**kwargs) -> None:
@@ -226,7 +226,7 @@ class cScript(cBaseScript):
                 iIndex+=1
             return None
         except Exception as e:
-            LogErrorSmall(uMsg="DumpStatus: Error parsing HUE Bridge response",oException=e)
+            LogErrorSmall(uMsg='DumpStatus: Error parsing HUE Bridge response',oException=e)
             return None
 
     def RGB2XY(self,**kwargs) -> None:
@@ -238,12 +238,12 @@ class cScript(cBaseScript):
             uPrefix:str      = ReplaceVars(kwargs.get('retvar',''))
             uLightKey:str    = ReplaceVars(kwargs.get('index', ''))
             uType:str        = ReplaceVars(kwargs.get('type', 'Light'))
-            if uType == "Group":
-                uType="groups"
+            if uType == 'Group':
+                uType='groups'
             else:
-                uType="lights"
+                uType='lights'
 
-            tGammut:Tuple    = self._GetGamut(self.dStatus[uType][uLightKey].get('modelid', ""))
+            tGammut:Tuple    = self._GetGamut(self.dStatus[uType][uLightKey].get('modelid', ''))
             oConverter = self.oHueConverter.Converter(tGammut)
             x,y        = oConverter.rgb_to_xy(fR, fG, fB)
             if uPrefix=='':
@@ -251,11 +251,11 @@ class cScript(cBaseScript):
                 if oAction is not None:
                     uPrefix=oAction.uRetVar
 
-            self.oResultParser.SetVar2(str(x), "", uPrefix, u'Storing X-Value', uAddName=u"_x")
-            self.oResultParser.SetVar2(str(y), "", uPrefix, u'Storing Y-Value', uAddName=u"_y")
+            self.oResultParser.SetVar2(str(x), '', uPrefix, 'Storing X-Value', uAddName='_x')
+            self.oResultParser.SetVar2(str(y), '', uPrefix, 'Storing Y-Value', uAddName='_y')
             return None
         except Exception as e:
-            LogErrorSmall(uMsg="RGB2XY: Error parsing parameter",oException=e)
+            LogErrorSmall(uMsg='RGB2XY: Error parsing parameter',oException=e)
             return None
 
     def XY2RGB(self,**kwargs) -> None:
@@ -272,24 +272,24 @@ class cScript(cBaseScript):
             uPrefix    = kwargs.get('retvar','')
             uLightKey  = kwargs.get('index', '')
             uType      = kwargs.get('type', 'Light')
-            if uType == "Group":
-                uType = "groups"
+            if uType == 'Group':
+                uType = 'groups'
             else:
-                uType = "lights"
-            tGammut:Tuple = self._GetGamut(self.dStatus[uType][uLightKey].get('modelid', ""))
+                uType = 'lights'
+            tGammut:Tuple = self._GetGamut(self.dStatus[uType][uLightKey].get('modelid', ''))
             oConverter    = self.oHueConverter.Converter(tGammut)
             r,g,b         = oConverter.xy_to_rgb(fX, fY)
 
             dStatusLight:Dict = self.dStatus.get(uLightKey,{})
             if len(dStatusLight)>0:
-                uType=dStatusLight["lightstype"]
+                uType=dStatusLight['lightstype']
 
-            self.oResultParser.SetVar2(str(r), "", uPrefix, u'Storing R-Value', uAddName=u"_r")
-            self.oResultParser.SetVar2(str(g), "", uPrefix, u'Storing G-Value', uAddName=u"_g")
-            self.oResultParser.SetVar2(str(b), "", uPrefix, u'Storing B-Value', uAddName=u"_b")
+            self.oResultParser.SetVar2(str(r), '', uPrefix, 'Storing R-Value', uAddName='_r')
+            self.oResultParser.SetVar2(str(g), '', uPrefix, 'Storing G-Value', uAddName='_g')
+            self.oResultParser.SetVar2(str(b), '', uPrefix, 'Storing B-Value', uAddName='_b')
             return None
         except Exception as e:
-            LogErrorSmall(uMsg="XY2RGB: Error parsing parameter",oException=e)
+            LogErrorSmall(uMsg='XY2RGB: Error parsing parameter',oException=e)
             return None
 
     def DumpSingleLight(self, iID:int,uLightKey:str, dLight:Dict, uPrefix:str,uType:str) -> None:
@@ -297,9 +297,9 @@ class cScript(cBaseScript):
 
         try:
 
-            uIndex:str      = u""
-            uOnTag:str      = u"on"
-            uDetailsTag:str = u"state"
+            uIndex:str      = ''
+            uOnTag:str      = 'on'
+            uDetailsTag:str = 'state'
 
             r:float      = 1.0
             g:float      = 1.0
@@ -309,11 +309,11 @@ class cScript(cBaseScript):
             bri:float    = 1.0
 
             if iID >= 0:
-                uIndex = u"[" + str(iID) + u"]"
+                uIndex = '[' + str(iID) + ']'
 
-            if uType == u"Group":
-                uOnTag = u"all_on"
-                uDetailsTag = "action"
+            if uType == 'Group':
+                uOnTag = 'all_on'
+                uDetailsTag = 'action'
 
             # Some devices return just single values (Philips is really bad!)
             x = dLight[uDetailsTag].get('xy', (1.0, 1.0))[0]
@@ -323,46 +323,46 @@ class cScript(cBaseScript):
 
             bri = dLight[uDetailsTag].get('bri', -1.0)
             if bri == -1.0:
-                if uOn == "true":
+                if uOn == 'true':
                     bri = 254
                 else:
                     bri = 0
 
-            dLight["lightstype"] = uType
-            self.oResultParser.SetVar2(uLightKey, "", uPrefix, u'Storing Light Configuration', uAddName=u"_index" + uIndex)
-            self.oResultParser.SetVar2(uType, "", uPrefix, u'Storing Light Configuration', uAddName=u"_category" + uIndex)
-            self.oResultParser.SetVar2(dLight['name'], "", uPrefix, u'Storing Light Configuration', uAddName=u"_name" + uIndex)
-            self.oResultParser.SetVar2(str(dLight['state'][uOnTag]), "", uPrefix, u'Storing Light Configuration', uAddName=u"_on" + uIndex)
-            self.oResultParser.SetVar2(dLight[uDetailsTag].get('colormode', "none"), "", uPrefix, u'Storing Light Configuration', uAddName=u"_colormode" + uIndex)
-            self.oResultParser.SetVar2(str(bri), "", uPrefix, u'Storing Light Configuration', uAddName=u"_bri" + uIndex)
-            self.oResultParser.SetVar2(str(dLight[uDetailsTag].get('ct', 0)), "", uPrefix, u'Storing Light Configuration', uAddName=u"_ct" + uIndex)
-            self.oResultParser.SetVar2(str(dLight[uDetailsTag].get('hue', 0)), "", uPrefix, u'Storing Light Configuration', uAddName=u"_hue" + uIndex)
-            self.oResultParser.SetVar2(str(dLight[uDetailsTag].get('hs', 0)), "", uPrefix, u'Storing Light Configuration', uAddName=u"_hs" + uIndex)
-            self.oResultParser.SetVar2(dLight[uDetailsTag].get('effect', "none"), "", uPrefix, u'Storing Light Configuration', uAddName=u"_effect" + uIndex)
-            self.oResultParser.SetVar2(str(x), "", uPrefix, u'Storing Light Configuration', uAddName=u"_x" + uIndex)
-            self.oResultParser.SetVar2(str(y), "", uPrefix, u'Storing Light Configuration', uAddName=u"_y" + uIndex)
-            self.oResultParser.SetVar2(str(dLight[uDetailsTag].get('sat', 0)), "", uPrefix, u'Storing Light Configuration', uAddName=u"_sat" + uIndex)
-            self.oResultParser.SetVar2(dLight.get('manufacturername', ""), "", uPrefix, u'Storing Light Configuration', uAddName=u"_manufacturername" + uIndex)
-            self.oResultParser.SetVar2(dLight['type'], "", uPrefix, u'Storing Light Configuration', uAddName=u"_type" + uIndex)
-            self.oResultParser.SetVar2(dLight.get('modelid', ""), "", uPrefix, u'Storing Light Configuration', uAddName=u"_modelid" + uIndex)
-            self.oResultParser.SetVar2(str(dLight['state'].get('any_on', "true")), "", uPrefix, u'Storing Group Configuration', uAddName=u"_all_on" + uIndex)
-            self.oResultParser.SetVar2(dLight['state'].get('class', 'unknown'), "", uPrefix, u'Storing Group Configuration', uAddName=u"_class" + uIndex)
+            dLight['lightstype'] = uType
+            self.oResultParser.SetVar2(uLightKey, '', uPrefix, 'Storing Light Configuration', uAddName='_index' + uIndex)
+            self.oResultParser.SetVar2(uType, '', uPrefix, 'Storing Light Configuration', uAddName='_category' + uIndex)
+            self.oResultParser.SetVar2(dLight['name'], '', uPrefix, 'Storing Light Configuration', uAddName='_name' + uIndex)
+            self.oResultParser.SetVar2(str(dLight['state'][uOnTag]), '', uPrefix, 'Storing Light Configuration', uAddName='_on' + uIndex)
+            self.oResultParser.SetVar2(dLight[uDetailsTag].get('colormode', 'none'), '', uPrefix, 'Storing Light Configuration', uAddName='_colormode' + uIndex)
+            self.oResultParser.SetVar2(str(bri), "", uPrefix, 'Storing Light Configuration', uAddName='_bri' + uIndex)
+            self.oResultParser.SetVar2(str(dLight[uDetailsTag].get('ct', 0)), '', uPrefix, 'Storing Light Configuration', uAddName='_ct' + uIndex)
+            self.oResultParser.SetVar2(str(dLight[uDetailsTag].get('hue', 0)), '', uPrefix, 'Storing Light Configuration', uAddName='_hue' + uIndex)
+            self.oResultParser.SetVar2(str(dLight[uDetailsTag].get('hs', 0)), '', uPrefix, 'Storing Light Configuration', uAddName='_hs' + uIndex)
+            self.oResultParser.SetVar2(dLight[uDetailsTag].get('effect', "none"), '', uPrefix, 'Storing Light Configuration', uAddName='_effect' + uIndex)
+            self.oResultParser.SetVar2(str(x), '', uPrefix, 'Storing Light Configuration', uAddName='_x' + uIndex)
+            self.oResultParser.SetVar2(str(y), '', uPrefix, 'Storing Light Configuration', uAddName='_y' + uIndex)
+            self.oResultParser.SetVar2(str(dLight[uDetailsTag].get('sat', 0)), '', uPrefix, 'Storing Light Configuration', uAddName='_sat' + uIndex)
+            self.oResultParser.SetVar2(dLight.get('manufacturername', ''), '', uPrefix, 'Storing Light Configuration', uAddName='_manufacturername' + uIndex)
+            self.oResultParser.SetVar2(dLight['type'], '', uPrefix, 'Storing Light Configuration', uAddName='_type' + uIndex)
+            self.oResultParser.SetVar2(dLight.get('modelid', ''), '', uPrefix, 'Storing Light Configuration', uAddName='_modelid' + uIndex)
+            self.oResultParser.SetVar2(str(dLight['state'].get('any_on', 'true')), '', uPrefix, 'Storing Group Configuration', uAddName='_all_on' + uIndex)
+            self.oResultParser.SetVar2(dLight['state'].get('class', 'unknown'), '', uPrefix, 'Storing Group Configuration', uAddName='_class' + uIndex)
 
             if x!=0.0 or y!=0.0:
-                tGammut = self._GetGamut(dLight.get('modelid', ""))
+                tGammut = self._GetGamut(dLight.get('modelid', ''))
                 oConverter = self.oHueConverter.Converter(tGammut)
                 r, g, b = oConverter.xy_to_rgb(x, y, bri)
-            self.oResultParser.SetVar2(str(r), "", uPrefix, u'Storing Light Configuration', uAddName=u"_r" + uIndex)
-            self.oResultParser.SetVar2(str(g), "", uPrefix, u'Storing Light Configuration', uAddName=u"_g" + uIndex)
-            self.oResultParser.SetVar2(str(b), "", uPrefix, u'Storing Light Configuration', uAddName=u"_b" + uIndex)
+            self.oResultParser.SetVar2(str(r), '', uPrefix, 'Storing Light Configuration', uAddName='_r' + uIndex)
+            self.oResultParser.SetVar2(str(g), '', uPrefix, 'Storing Light Configuration', uAddName='_g' + uIndex)
+            self.oResultParser.SetVar2(str(b), '', uPrefix, 'Storing Light Configuration', uAddName='_b' + uIndex)
             return None
         except Exception as e:
-            LogErrorSmall(uMsg="Error parsing HUE Bridge response for single light/group of status", oException=e)
+            LogErrorSmall(uMsg='Error parsing HUE Bridge response for single light/group of status', oException=e)
             return None
 
     def _LoadHueConverter(self):
         """ Loads the hue converter script """
-        oFnScript     = cFileName(self.oPathMyCode+"hue-python-rgb-converter-master/rgbxy") +"__init__.py"
+        oFnScript     = cFileName(self.oPathMyCode+'hue-python-rgb-converter-master/rgbxy') +'__init__.py'
 
         if not oFnScript.Exists():
             return None
@@ -372,7 +372,7 @@ class cScript(cBaseScript):
             oClasses=oModule.GetModule()
             return oClasses
         except Exception as e:
-            uMsg=LogError(uMsg=u'Script Hue Helper: Fatal Error Loading HUE RGB Converter: '+oFnScript.string+ u' :',oException=e)
+            uMsg=LogError(uMsg=f'Script Hue Helper: Fatal Error Loading HUE RGB Converter: {oFnScript} : ',oException=e)
             ShowErrorPopUp(uMessage=uMsg)
             return None
 

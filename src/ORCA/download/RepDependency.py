@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -33,12 +33,12 @@ class cRepDependency:
     loads and writes the xml node
     """
     def __init__(self):
-        self.uType:str           = u''
-        self.uName:str           = u''
+        self.uType:str           = ''
+        self.uName:str           = ''
     def ParseFromXMLNode(self,*,oXMLNode:Element) -> None:
         """ Parses an xms string into object vars """
-        self.uType = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'type',bMandatory=True,vDefault=u'')
-        self.uName = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'')
+        self.uType = GetXMLTextValue(oXMLNode=oXMLNode,uTag='type',bMandatory=True,vDefault='')
+        self.uName = GetXMLTextValue(oXMLNode=oXMLNode,uTag='name',bMandatory=True,vDefault='')
 
     def WriteToXMLNode(self,*,oXMLNode:Element) -> None:
         """ writes object vars to a xml node """

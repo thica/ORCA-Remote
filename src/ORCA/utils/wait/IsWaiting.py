@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ def IsWaiting() -> bool:
         ORCA.utils.wait.Globals.oWaitLock.release()
         return False
     if datetime.now() > ORCA.utils.wait.Globals.oWaitEndTime:
-        Logger.warning("Interface waiting timed out!!")
+        Logger.warning('Interface waiting timed out!!')
         ORCA.utils.wait.Globals.oWaitEndTime = ORCA.utils.wait.Globals.oWaitZeroTime
         ORCA.utils.wait.Globals.oWaitLock.release()
         return False

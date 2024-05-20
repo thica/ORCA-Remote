@@ -8,8 +8,8 @@
       <description language='English'>English language strings</description>
       <description language='German'>Englische Zeichenketten</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/languages/English</local>
@@ -237,10 +237,16 @@
   <string id="619">MAC Address</string>
   <string id="620">Mute</string>
   <string id="621">Mute all sounds</string>
+  <string id="622">Gateway V6</string>
+  <string id="623">Subnet V6</string>
   <string id="624">Page effect type</string>
   <string id="625">Default page effect type</string>
   <string id="626">Page effect direction</string>
   <string id="627">Default page effect direction</string>
+  <string id="628">Network adapter (OS)</string>
+  <string id="629">Network adapter (Phys)</string>
+  <string id="630">Network adapter (Nice)</string>
+
   <string id="633">Others</string>
   <string id="634">Sounds</string>
   <string id="635">Choose Sounds</string>
@@ -336,10 +342,16 @@
   <string id="801">min</string>
   <string id="802">hour</string>
 
+  <string id="804">Persistence (mobile devices only)</string>
+  <string id="805">On sleep</string>
+  <string id="806">Save persistence on sleep</string>
+  <string id="807">On page start</string>
+  <string id="808">Save persistence on page start</string>
+
     <!--Button Strings -->
   <string id="1000">Power</string>
-  <string id="1001">Power On</string>
-  <string id="1002">Power Off</string>
+  <string id="1001">On</string>
+  <string id="1002">Off</string>
   <string id="1003">Power Toggle</string>
   <string id="1004">Play</string>
   <string id="1005">Play/Pause</string>
@@ -572,6 +584,7 @@
   <string id="5042">ORCA requires write access, please grant</string>
   <string id="5043">Grant Access</string>
   <string id="5044">Do you really want to delete this setting?</string>
+  <string id="5045"> Discover Processes running</string>
 
 
   <!--Generic Interfaces Config Strings for multi interface use-->
@@ -616,6 +629,7 @@
   <string id="6038">Use IPv6</string>
   <string id="6039">running</string>
   <string id="6040">finished</string>
-
-
+  <string id="6041">Retry count</string>
+  <string id="6042">Numbers of retries in case of failure</string>
+  <string id="6043">MAC-Address of the device</string>
 </strings>

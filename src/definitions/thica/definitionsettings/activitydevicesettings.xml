@@ -35,7 +35,10 @@
     <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[12]" default="Page_Device_$dvar(definition_alias_mediaplayer_kodi2)" />
     <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[13]"   default="device heater" />
     <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[13]"      default="$lvar(thica_10015)" />
-    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[13]" default="Page_Device_$dvar(definition_alias_elv_max)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[13]" default="Page_Device_$dvar(definition_alias_fritz_sm_heating)" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_PICTURE[14]"   default="$var(DEFINITIONPATH[velux])/pics/logo.png"  />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_NAME[14]"      default="Velux" />
+    <default var="$dvar(definition_activity_template)_ACTIVITYDEVICES_STARTPAGE[14]" default="Page_Device_$dvar(definition_alias_velux)" />
 
 </settings>
 

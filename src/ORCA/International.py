@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -45,7 +45,7 @@ from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
 from ORCA.utils.LogError    import LogError
 from ORCA.utils.CachedFile  import CachedFile
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from ORCA.utils.FileName import cFileName
 
@@ -67,27 +67,27 @@ def find_first_not_of(uString:str,iStartPos:int,cChar:str) -> int:
 class cLocalesEntry:
     """ Object which represents a locales entry """
     def __init__(self):
-        self.uName:str              = u''
-        self.uLocale:str            = u''
-        self.uDateShort:str         = u''
-        self.uDateLong:str          = u''
-        self.uTimeSymbolAM:str      = u''
-        self.uTimeSymbolPM:str      = u''
-        self.uTimeFormat:str        = u''
-        self.uTempUnit:str          = u''
-        self.uSpeedUnit:str         = u''
+        self.uName:str              = ''
+        self.uLocale:str            = ''
+        self.uDateShort:str         = ''
+        self.uDateLong:str          = ''
+        self.uTimeSymbolAM:str      = ''
+        self.uTimeSymbolPM:str      = ''
+        self.uTimeFormat:str        = ''
+        self.uTempUnit:str          = ''
+        self.uSpeedUnit:str         = ''
 
     def ParseXMLLocales(self,oXMLLocales:Element) -> None:
         """ reads the locales information from the xml (kodi file) """
-        self.uName       = GetXMLTextAttribute(oXMLNode=oXMLLocales,uTag=u'name',  bMandatory=True, vDefault=u'')
-        self.uLocale     = GetXMLTextAttribute(oXMLNode=oXMLLocales,uTag=u'locale',bMandatory=False,vDefault=u'EN')
-        self.uDateShort  = GetXMLTextValue(oXMLNode=oXMLLocales,uTag=u'dateshort', bMandatory=False,vDefault=u'DD.MM.YYYY')
-        self.uDateLong   = GetXMLTextValue(oXMLNode=oXMLLocales,uTag=u'datelong',  bMandatory=False,vDefault=u'DDDD, D MMMM YYYY')
-        self.uTimeFormat = GetXMLTextValue(oXMLNode=oXMLLocales,uTag=u'time',      bMandatory=False,vDefault=u'H:mm:ss')
+        self.uName       = GetXMLTextAttribute(oXMLNode=oXMLLocales,uTag='name',  bMandatory=True, vDefault='')
+        self.uLocale     = GetXMLTextAttribute(oXMLNode=oXMLLocales,uTag='locale',bMandatory=False,vDefault='EN')
+        self.uDateShort  = GetXMLTextValue(oXMLNode=oXMLLocales,uTag='dateshort', bMandatory=False,vDefault='DD.MM.YYYY')
+        self.uDateLong   = GetXMLTextValue(oXMLNode=oXMLLocales,uTag='datelong',  bMandatory=False,vDefault='DDDD, D MMMM YYYY')
+        self.uTimeFormat = GetXMLTextValue(oXMLNode=oXMLLocales,uTag='time',      bMandatory=False,vDefault='H:mm:ss')
         oXMLTime:Element = oXMLLocales.find('time')
         if oXMLTime is not None:
-            self.uTimeSymbolAM=GetXMLTextAttribute(oXMLNode=oXMLTime,uTag=u'symbolAM',bMandatory=False,vDefault=u'')
-            self.uTimeSymbolPM=GetXMLTextAttribute(oXMLNode=oXMLTime,uTag=u'symbolPM',bMandatory=False,vDefault=u'')
+            self.uTimeSymbolAM=GetXMLTextAttribute(oXMLNode=oXMLTime,uTag='symbolAM',bMandatory=False,vDefault='')
+            self.uTimeSymbolPM=GetXMLTextAttribute(oXMLNode=oXMLTime,uTag='symbolPM',bMandatory=False,vDefault='')
 
 class cLocales:
     """ a representation of all loaded locales entries for a language"""
@@ -98,12 +98,12 @@ class cLocales:
         self.oLocalesEntries.clear()
         try:
             oET_Root:Element    = LoadXMLFile(oFile=Globals.oFnLangInfo)
-            oXMLRegions:Element = oET_Root.find(u'regions')
+            oXMLRegions:Element = oET_Root.find('regions')
             if oXMLRegions is not None:
-                for oXMLRegion in oXMLRegions.findall(u'region'):
+                for oXMLRegion in oXMLRegions.findall('region'):
                     self.__ParseXMLLocales(oXMLRegion)
         except ParseError as e:
-            uMsg:str=LogError(uMsg=u'Language: Fatal Error:Load Locales XmlFile:',oException=e)
+            uMsg:str=LogError(uMsg='Language: Fatal Error:Load Locales XmlFile:',oException=e)
             ShowErrorPopUp(uTitle='Fatal Error',uMessage=uMsg, bAbort=True)
 
     def __ParseXMLLocales(self,oXMLLocale:Element) -> None:
@@ -124,17 +124,17 @@ class cLanguage:
         self.oFnLanguageFallBackEnglish:Optional[cFileName]     = None
 
         # add some basic strings, even before we load the language files (for messages)
-        self.SetString("5000", "Continue")
-        self.SetString("5001", "Yes")
-        self.SetString("5002", "No")
-        self.SetString("5003", "Question")
-        self.SetString("5004", "Quit ORCA?")
-        self.SetString("5005", "Quit ORCA!")
-        self.SetString("5006", "Info")
-        self.SetString("5008", "OK")
-        self.SetString("5009", "Cancel")
-        self.SetString("5010", "Message")
-        self.SetString("452",  "OK")
+        self.SetString('5000', 'Continue')
+        self.SetString('5001', 'Yes')
+        self.SetString('5002', 'No')
+        self.SetString('5003', 'Question')
+        self.SetString('5004', 'Quit ORCA?')
+        self.SetString('5005', 'Quit ORCA!')
+        self.SetString('5006', 'Info')
+        self.SetString('5008', 'OK')
+        self.SetString('5009', 'Cancel')
+        self.SetString('5010', 'Message')
+        self.SetString('452',  'OK')
 
 
     def Init(self) -> None:
@@ -142,10 +142,10 @@ class cLanguage:
         Implicitly initializes the language object
         :return:
         """
-        self.oFnLanguagePrimary              = cFileName(Globals.oPathLanguageRoot + Globals.uLanguage) + u'strings.xml'
-        self.oFnLanguageEnglish              = cFileName(Globals.oPathLanguageRoot + u'English') + u'strings.xml'
-        self.oFnLanguageFallBackPrimary      = cFileName(Globals.oPathAppReal + u'languages/'+ Globals.uLanguage) + u'strings.xml'
-        self.oFnLanguageFallBackEnglish      = cFileName(Globals.oPathAppReal + u'languages/English') + u'strings.xml'
+        self.oFnLanguagePrimary              = cFileName(Globals.oPathLanguageRoot + Globals.uLanguage) + 'strings.xml'
+        self.oFnLanguageEnglish              = cFileName(Globals.oPathLanguageRoot + 'English') + 'strings.xml'
+        self.oFnLanguageFallBackPrimary      = cFileName(Globals.oPathAppReal + 'languages/'+ Globals.uLanguage) + 'strings.xml'
+        self.oFnLanguageFallBackEnglish      = cFileName(Globals.oPathAppReal + 'languages/English') + 'strings.xml'
 
     def SetString(self,uID:str,uText:str) -> None:
         """ sets a string """
@@ -157,36 +157,36 @@ class cLanguage:
         if uRet is not None:
             return uRet
         else:
-            Logger.warning (u'Language: No Language String found:'+uID)
+            Logger.warning ('Language: No Language String found:'+uID)
         return uID
 
     def __LoadXMLNode(self,oET_Root:Element,dTarget:Dict[str,str]) -> None:
 
         uText: str
-        sIndex: str
+        uIndex: str
 
         if oET_Root.find(ElementInclude.XINCLUDE_INCLUDE) is not None:
             Orca_include(oET_Root ,orca_et_loader)
 
-        oET_Strings:Element=oET_Root.find("strings")
+        oET_Strings:Element=oET_Root.find('strings')
         if oET_Strings is not None:
             self.__LoadXMLNode(oET_Strings,dTarget)
 
         for oXMLString in oET_Root.findall('string'):
             uText = oXMLString.text
             if uText is None:
-                uText=u''
+                uText=''
             uText  = ToUnicode(uText)
-            sIndex = GetXMLTextAttribute(oXMLNode=oXMLString,uTag=u'id',bMandatory=True,vDefault=u"0")
-            dTarget[sIndex]  = uText
+            uIndex = GetXMLTextAttribute(oXMLNode=oXMLString,uTag='id',bMandatory=True,vDefault='0')
+            dTarget[uIndex]  = uText
 
     def _LoadXmlFile(self,oFnFile:cFileName) -> None:
         """ Loads all strings for the language from a specific files"""
         if not oFnFile.Exists():
-            Logger.debug (u'Language: String File does not exist:'+oFnFile.string)
+            Logger.debug (f'Language: String File does not exist: {oFnFile}')
             return
-        if oFnFile.string in self.aLoadedFiles:
-            Logger.debug (u'Language: Skip duplicate language file loading:'+oFnFile.string)
+        if str(oFnFile) in self.aLoadedFiles:
+            Logger.debug (f'Language: Skip duplicate language file loading: {oFnFile}')
             return
 
         oDef:Optional[cDefinition]=None
@@ -195,13 +195,13 @@ class cLanguage:
             uET_Data:str = CachedFile(oFileName=oFnFile)
             if Globals.uDefinitionContext:
                 oDef = Globals.oDefinitions.get(Globals.uDefinitionContext)
-            oET_Root = Orca_FromString(uET_Data=uET_Data,oDef=oDef,uFileName=oFnFile.string)
+            oET_Root = Orca_FromString(uET_Data=uET_Data,oDef=oDef,uFileName=str(oFnFile))
             self.__LoadXMLNode(oET_Root,self.dIDToString)
         except ParseError as e:
-            uMsg:str=LogError(uMsg=u'Language: Fatal Error:Load Language XmlFile (xml parse error):'+oFnFile.string,oException=e)
+            uMsg:str=LogError(uMsg=f'Language: Fatal Error:Load Language XmlFile (xml parse error): {oFnFile}',oException=e)
             ShowErrorPopUp(uTitle='Fatal Error',uMessage=uMsg, bAbort=True)
         except Exception as e:
-            uMsg:str=LogError(uMsg=u'Language: Fatal Error:Load Language XmlFile (2):'+oFnFile.string,oException=e)
+            uMsg:str=LogError(uMsg=f'Language: Fatal Error:Load Language XmlFile (2): {oFnFile}',oException=e)
             ShowErrorPopUp(uTitle='Fatal Error',uMessage=uMsg, bAbort=True)
 
     def Reset(self) -> None:
@@ -219,11 +219,11 @@ class cLanguage:
         iCountFonts:int = 0
         try:
             uET_Data            = CachedFile(oFileName=oFnFile)
-            oET_Root:Element    = Orca_FromString(uET_Data=uET_Data,oDef=None,uFileName=oFnFile.string)
+            oET_Root:Element    = Orca_FromString(uET_Data=uET_Data,oDef=None,uFileName=str(oFnFile))
             iCountFonts         = Globals.oTheScreen.oFonts.ParseFontFromXMLNode(oXMLNode=oET_Root)
             Globals.oTheScreen.oFonts.ParseIconsFromXMLNode(oXMLNode=oET_Root)
         except Exception as e:
-            uMsg:str=LogError(uMsg=u'Language: Fatal Error:Load Fonts from XmlFile:'+oFnFile.string,oException=e)
+            uMsg:str=LogError(uMsg=f'Language: Fatal Error:Load Fonts from XmlFile: {oFnFile}',oException=e)
             ShowErrorPopUp(uTitle='Fatal Error',uMessage=uMsg, bAbort=False)
         return iCountFonts
 
@@ -232,43 +232,43 @@ class cLanguage:
         iCountFonts:int
         oFnFile:cFileName
 
-        if uType=="APP":
+        if uType=='APP':
             if not self.oFnLanguageEnglish.Exists():
                 iCountFonts = self.LoadXMLLanguageFont(self.oFnLanguageFallBackPrimary)
                 self._LoadXmlFile(self.oFnLanguageFallBackEnglish)
-                if Globals.uLanguage != u'English' and iCountFonts == 0:
+                if Globals.uLanguage != 'English' and iCountFonts == 0:
                     self._LoadXmlFile(self.oFnLanguageFallBackPrimary)
             else:
                 self._LoadXmlFile(self.oFnLanguageEnglish)
-                if Globals.uLanguage!=u'English':
+                if Globals.uLanguage!='English':
                     self._LoadXmlFile(self.oFnLanguagePrimary)
                 self.oLocales.LoadXmlFile()
                 self.LoadXMLLanguageFont(self.oFnLanguagePrimary)
-        elif uType == "DEFINITION":
+        elif uType == 'DEFINITION':
             self._LoadXmlFile(Globals.oDefinitionPathes.oFnDefinitionLanguageFallBack)
-            if not Globals.uLanguage==u'English':
+            if not Globals.uLanguage=='English':
                 self._LoadXmlFile(Globals.oDefinitionPathes.oFnDefinitionLanguage)
-        elif uType == "SCRIPT":
-            oFnFile = cFileName().ImportFullPath(uFnFullName=Globals.oScripts.dScriptPathList[uContext].string+"/" + Globals.uScriptLanguageFallBackTail)
+        elif uType == 'SCRIPT':
+            oFnFile = cFileName().ImportFullPath(uFnFullName=f'{Globals.oScripts.dScriptPathList[uContext]}/{Globals.uScriptLanguageFallBackTail}')
             self._LoadXmlFile(oFnFile)
-            if not Globals.uLanguage==u'English':
-                oFnFile = cFileName().ImportFullPath(uFnFullName=Globals.oScripts.dScriptPathList[uContext].string + "/" + Globals.uScriptLanguageFileTail)
+            if not Globals.uLanguage=='English':
+                oFnFile = cFileName().ImportFullPath(uFnFullName=f'{Globals.oScripts.dScriptPathList[uContext]}/{Globals.uScriptLanguageFileTail}')
                 self._LoadXmlFile(oFnFile)
-        elif uType == "INTERFACE":
-            oFnFile = cFileName().ImportFullPath(uFnFullName=Globals.oFnInterfaceLanguageFallBack.string % uContext)
+        elif uType == 'INTERFACE':
+            oFnFile = cFileName().ImportFullPath(uFnFullName=str(Globals.oFnInterfaceLanguageFallBack) % uContext)
             self._LoadXmlFile(oFnFile)
-            if not Globals.uLanguage==u'English':
-                oFnFile = cFileName().ImportFullPath(uFnFullName=Globals.oFnInterfaceLanguage.string % uContext)
+            if not Globals.uLanguage=='English':
+                oFnFile = cFileName().ImportFullPath(uFnFullName=str(Globals.oFnInterfaceLanguage) % uContext)
                 self._LoadXmlFile(oFnFile)
         else:
-            oFnFile=cFileName('').ImportFullPath(uFnFullName=uType)
+            oFnFile=cFileName(uType)
             if oFnFile.Exists():
                 self._LoadXmlFile(oFnFile)
 
     # next two functions are ported from KODI
 
     def GetLocalizedTime(self, bWithSeconds:bool, oTime:struct_time=None) -> str:
-        """ return a formated time to a locale """
+        """ return a formatted time to a locale """
         oLocales:cLocalesEntry = self.oLocales.oLocalesEntries.get(Globals.uLocalesName)
         uOut:str
         uTimeFormat:str
@@ -278,8 +278,8 @@ class cLanguage:
         uStr:str
 
         if oLocales is None:
-            return u''
-        uOut=u''
+            return ''
+        uOut=''
         uTimeFormat=oLocales.uTimeFormat
         if oTime is None:
             oTime=localtime()
@@ -291,7 +291,7 @@ class cLanguage:
         iLength=len(uTimeFormat)
         while i<iLength:
             cC=uTimeFormat[i]
-            if cC==u'\'':
+            if cC=='\'':
                 #To be able to display a "'" in the string,
                 #find the last "'" that doesn't follow a "'"
 
@@ -328,9 +328,9 @@ class cLanguage:
                         hour = hour + (12 * (hour < 1))
                 #Format hour string with the length of the mask
                 if iPartLength==1:
-                    uStr=u'%d' % hour
+                    uStr='%d' % hour
                 else:
-                    uStr=u'%02d' % hour
+                    uStr='%02d' % hour
                 uOut+=uStr
 
             elif cC=='m': #parse minutes
@@ -347,9 +347,9 @@ class cLanguage:
                 #Format minute string with the length of the mask
                 minute=oTime.tm_min
                 if iPartLength==1:
-                    uStr=u'%d' % minute
+                    uStr= f'{minute:d}'
                 else:
-                    uStr=u'%02d' % minute
+                    uStr= f'{minute:02d}'
                 uOut+=uStr
             elif cC=='s': #parse seconds
                 pos=find_first_not_of(uTimeFormat,i+1,cC)
@@ -365,13 +365,13 @@ class cLanguage:
                 if bWithSeconds:
                     second=oTime.tm_sec
                     if iPartLength==1:
-                        uStr=u'%d' % second
+                        uStr= f'{second:d}'
                     else:
-                        uStr=u'%02d' % second
+                        uStr= f'{second:02d}'
                     uOut+=uStr
                 else:
                     uOut = uOut[0:-1]
-            elif cC=='x': # add meridiem symbol
+            elif cC=='x': # add meridian symbol
 
                 pos=find_first_not_of(uTimeFormat,i+1,cC)
                 if pos>-1:
@@ -398,8 +398,8 @@ class cLanguage:
 
         oLocales:cLocalesEntry=self.oLocales.oLocalesEntries.get(Globals.uLocalesName)
         if oLocales is None:
-            return u''
-        uOut=u''
+            return ''
+        uOut=''
         if bLongDate:
             uDateFormat=oLocales.uDateLong
         else:
@@ -411,7 +411,7 @@ class cLanguage:
         iLength=len(uDateFormat)
         while i<iLength:
             cC=uDateFormat[i]
-            if cC==u'\'':
+            if cC=='\'':
                 #To be able to display a "'" in the string,
                 #find the last "'" that doesn't follow a "'"
                 pos=uDateFormat.find(cC,i+1)
@@ -441,14 +441,14 @@ class cLanguage:
                 #Format day string with the length of the mask
                 day=oTime.tm_mday
                 if iPartLength==1:   # single-digit number
-                    uStr=u'%d' % day
+                    uStr= f'{day:d}'
                 elif iPartLength==2:  # two-digit number
-                    uStr=u'%02d' % day
+                    uStr= f'{day:02d}'
                 else:                 # day of week string
                     if bLongDay:
-                        uStr='$lvar(%d)'%(oTime.tm_wday+11)
+                        uStr= f'$lvar({oTime.tm_wday + 11:d})'
                     else:
-                        uStr='$lvar(%d)'%(oTime.tm_wday+41)
+                        uStr= f'$lvar({oTime.tm_wday + 41:d})'
                 uOut+=uStr
 
             elif cC=='m' or cC=='M':  # parse months
@@ -464,14 +464,14 @@ class cLanguage:
                 #Format month string with the length of the mask
                 month=oTime.tm_mon
                 if iPartLength==1:   # single-digit number
-                    uStr=u'%d' % month
+                    uStr= f'{month:d}'
                 elif iPartLength==2:  # two-digit number
-                    uStr=u'%02d' % month
+                    uStr= f'{month:02d}'
                 else:                 # day of week string
                     if bLongMonth:
-                        uStr='$lvar(%d)'%(month+20)
+                        uStr= f'$lvar({month + 20:d})'
                     else:
-                        uStr='$lvar(%d)'%(month+50)
+                        uStr= f'$lvar({month + 50:d})'
                 uOut+=uStr
             elif cC=='y' or cC=='Y':  # parse months
                 pos=find_first_not_of(uDateFormat,i+1,cC)
@@ -486,11 +486,11 @@ class cLanguage:
                 #Format month string with the length of the mask
                 year=oTime.tm_year
                 if iPartLength==1:   # single-digit number
-                    uStr=u'%d' % year
+                    uStr= f'{year:d}'
                 elif iPartLength==2:  # two-digit number
-                    uStr=u'%02d' % year
+                    uStr= f'{year:02d}'
                 else:                 # four digit
-                    uStr=u'%04d' % year
+                    uStr= f'{year:04d}'
                 uOut+=uStr
             else:
                 uOut += cC

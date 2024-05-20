@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -46,7 +46,7 @@ from ORCA.utils.XML         import XMLPrettify
 from ORCA.utils.Path        import cPath
 from ORCA.download.RepManagerEntry import cRepManagerEntry
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 oRepositoryManager:Union[cRepositoryManager,None] = None
 
@@ -73,7 +73,7 @@ class cRepositoryManager:
     def CollectAndUpload(self) -> None:
         """ Collects all Reps and uploads them """
         try:
-            oPath:cPath = Globals.oPathTmp + "RepManager"
+            oPath:cPath = Globals.oPathTmp + 'RepManager'
             oPath.Delete()
 
             self.GetOthers()
@@ -111,7 +111,7 @@ class cRepositoryManager:
         del self.aRepManagerEntries[:]
         aFontsFolders:List[str] = Globals.oPathFonts.GetFolderList(bFullPath=True)
         for uFontFolder in aFontsFolders:
-            oFnFontDefinition:cFileName = cFileName(cPath(uFontFolder)) + "fonts.xml"
+            oFnFontDefinition:cFileName = cFileName(cPath(uFontFolder)) + 'fonts.xml'
             oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFileName=oFnFontDefinition)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
@@ -140,7 +140,7 @@ class cRepositoryManager:
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
         for uSound in Globals.oSound.aSoundsList:
-            oFnSound:cFileName = cFileName(Globals.oPathSoundsRoot + uSound) +"sounds.xml"
+            oFnSound:cFileName = cFileName(Globals.oPathSoundsRoot + uSound) +'sounds.xml'
             oRepManagerEntry:cRepManagerEntry = cRepManagerEntry(oFileName=oFnSound)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
@@ -154,7 +154,7 @@ class cRepositoryManager:
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
         for uDefinitionName in Globals.aDefinitionList:
-            oFnFile:cFileName=cFileName().ImportFullPath(uFnFullName='%s/definitions/%s/definition.xml' % (Globals.oPathRoot.string, uDefinitionName))
+            oFnFile:cFileName=cFileName().ImportFullPath(uFnFullName=f'{Globals.oPathRoot}/definitions/{uDefinitionName}/definition.xml')
             oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFnFile)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
@@ -168,7 +168,7 @@ class cRepositoryManager:
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
         for uLanguage in Globals.aLanguageList:
-            oFn:cFileName=cFileName().ImportFullPath(uFnFullName='%s/languages/%s/strings.xml' % (Globals.oPathRoot.string, uLanguage))
+            oFn:cFileName=cFileName().ImportFullPath(uFnFullName=f'{Globals.oPathRoot}/languages/{uLanguage}/strings.xml')
             oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
@@ -182,7 +182,7 @@ class cRepositoryManager:
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
         for uInterFaceName in Globals.oInterFaces.aObjectNameList:
-            oFn:cFileName=cFileName().ImportFullPath(uFnFullName='%s/interfaces/%s/interface.py' % (Globals.oPathRoot.string, uInterFaceName))
+            oFn:cFileName=cFileName().ImportFullPath(uFnFullName=f'{Globals.oPathRoot}/interfaces/{uInterFaceName}/interface.py')
             oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
             if oRepManagerEntry.ParseFromSourceFile():
                 if not oRepManagerEntry.oRepEntry.bSkip:
@@ -210,7 +210,7 @@ class cRepositoryManager:
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
         for uSkinName in Globals.aSkinList:
-            oFn:cFileName=cFileName().ImportFullPath(uFnFullName='%s/skins/%s/skin.xml' % (Globals.oPathRoot.string, uSkinName))
+            oFn:cFileName=cFileName().ImportFullPath(uFnFullName=f'{Globals.oPathRoot}/skins/{uSkinName}/skin.xml')
             oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
             if oRepManagerEntry.ParseFromXML():
                 if not oRepManagerEntry.oRepEntry.bSkip:
@@ -223,11 +223,11 @@ class cRepositoryManager:
         """ Gets all wizard reps """
         del self.aFiles[:]
         del self.aRepManagerEntries[:]
-        aDirs:List[str]=(Globals.oPathRoot + u'wizard templates').GetFolderList()
+        aDirs:List[str]=(Globals.oPathRoot + 'wizard templates').GetFolderList()
         for uDirName in aDirs:
-            aDirsSub:List[str]=(Globals.oPathRoot + (u'wizard templates/' + uDirName)).GetFolderList()
+            aDirsSub:List[str]=(Globals.oPathRoot + ('wizard templates/' + uDirName)).GetFolderList()
             for uDirsSub in aDirsSub:
-                oFn:cFileName=cFileName(Globals.oPathRoot + (u'wizard templates/' + uDirName + "/" + uDirsSub)) +  (uDirsSub + ".xml")
+                oFn:cFileName=cFileName(Globals.oPathRoot + ('wizard templates/' + uDirName + '/' + uDirsSub)) +  (uDirsSub + '.xml')
                 oRepManagerEntry:cRepManagerEntry=cRepManagerEntry(oFileName=oFn)
                 if oRepManagerEntry.ParseFromXML():
                     if not oRepManagerEntry.oRepEntry.bSkip:
@@ -262,7 +262,7 @@ class cRepositoryManager:
         oXMLEntries:Element = SubElement(oXMLRoot,'entries')
 
         for oEntry in self.aRepManagerEntries:
-            Logger.debug ('Saving Repository-Entry [%s]' % oEntry.oFnEntry.string)
+            Logger.debug (f'Saving Repository-Entry [{oEntry.oFnEntry}]')
 
             oEntry.oRepEntry.WriteToXMLNode(oXMLNode=oXMLEntries)
             for oSource in oEntry.oRepEntry.aSources:
@@ -271,16 +271,16 @@ class cRepositoryManager:
                 if bZipParentDir:
                     uUpper:str          = os.path.basename(oSource.uSourceFile)
                     uFinalPath:str      = uType
-                    oDest:cFileName     = cFileName().ImportFullPath(uFnFullName='%s/RepManager/repositories/%s/%s' % (Globals.oPathTmp.string, uFinalPath, uUpper))
+                    oDest:cFileName     = cFileName().ImportFullPath(uFnFullName=f'{Globals.oPathTmp}/RepManager/repositories/{uFinalPath}/{uUpper}')
                     uUpper1:str         = os.path.split(os.path.abspath(oSource.uLocal))[0]
                     uRoot           = AdjustPathToOs(uPath=ReplaceVars(uUpper1)+'/')
-                    self.aZipFiles.append({'filename':oSource.uLocal,'dstfilename':oDest.string, 'removepath':uRoot, 'skipfiles':ToUnicode(oEntry.oRepEntry.aSkipFileNames)})
+                    self.aZipFiles.append({'filename':oSource.uLocal,'dstfilename':str(oDest), 'removepath':uRoot, 'skipfiles':ToUnicode(oEntry.oRepEntry.aSkipFileNames)})
                 else:
-                    uDest:str = AdjustPathToOs(uPath='%s/RepManager/repositories/%s/%s.zip' % (Globals.oPathTmp.string, uType, os.path.splitext(os.path.basename(oSource.uLocal))[0]))
-                    uRoot = AdjustPathToOs(uPath=Globals.oPathRoot.string + "/" + oSource.uTargetPath)
+                    uDest:str = AdjustPathToOs(uPath=f'{Globals.oPathTmp}/RepManager/repositories/{uType}/{os.path.splitext(os.path.basename(oSource.uLocal))[0]}.zip')
+                    uRoot = AdjustPathToOs(uPath=str(Globals.oPathRoot) + "/" + oSource.uTargetPath)
                     self.aZipFiles.append({'filename':oSource.uLocal,'dstfilename':uDest, 'removepath':uRoot})
 
-        oFSFile     = open(oFnXml.string, 'w')
+        oFSFile     = open(str(oFnXml), 'w')
         uContent    = XMLPrettify(oElem=oXMLRoot)
         uContent    = ReplaceVars(uContent)
         oFSFile.write(EscapeUnicode(uContent))
@@ -288,42 +288,42 @@ class cRepositoryManager:
 
     def CreateRepository(self) -> None:
         self.CreateZipVarArray()
-        SetVar(uVarName="REPMAN_BASELOCALDIR", oVarValue=(Globals.oPathTmp + "RepManager").string)
+        SetVar(uVarName="REPMAN_BASELOCALDIR", oVarValue=str(Globals.oPathTmp + "RepManager"))
         Globals.oTheScreen.AddActionToQueue(aActions=[{'string': 'call Create Repository'}])
         return
 
     def CreateZipVarArray(self) -> None:
-        SetVar(uVarName="REPMAN_ZIPCNTFILES",  oVarValue= str(len(self.aZipFiles)))
-        Var_DelArray("REPMAN_ZIPSOUREFILENAMES[]")
-        Var_DelArray("REPMAN_ZIPDESTFILENAMES[]")
-        Var_DelArray("REPMAN_ZIPREMOVEPATH[]")
-        Var_DelArray("REPMAN_ZIPSKIPFILES[]")
-        Var_DelArray("REPMAN_ZIPTYPE[]")
+        SetVar(uVarName='REPMAN_ZIPCNTFILES',  oVarValue= str(len(self.aZipFiles)))
+        Var_DelArray('REPMAN_ZIPSOUREFILENAMES[]')
+        Var_DelArray('REPMAN_ZIPDESTFILENAMES[]')
+        Var_DelArray('REPMAN_ZIPREMOVEPATH[]')
+        Var_DelArray('REPMAN_ZIPSKIPFILES[]')
+        Var_DelArray('REPMAN_ZIPTYPE[]')
 
         i:int=0
         for dZipFile in self.aZipFiles:
-            uIndex:str = str(i) + "]"
-            SetVar(uVarName="REPMAN_ZIPSOURCEFILENAMES[" + uIndex ,oVarValue=dZipFile['filename'])
-            SetVar(uVarName="REPMAN_ZIPDESTFILENAMES[" + uIndex ,oVarValue=dZipFile['dstfilename'])
-            SetVar(uVarName="REPMAN_ZIPREMOVEPATH[" + uIndex ,oVarValue=dZipFile['removepath'])
+            uIndex:str = str(i) + ']'
+            SetVar(uVarName='REPMAN_ZIPSOURCEFILENAMES[' + uIndex ,oVarValue=dZipFile['filename'])
+            SetVar(uVarName='REPMAN_ZIPDESTFILENAMES[' + uIndex ,oVarValue=dZipFile['dstfilename'])
+            SetVar(uVarName='REPMAN_ZIPREMOVEPATH[' + uIndex ,oVarValue=dZipFile['removepath'])
             uSkipFiles:str = dZipFile.get('skipfiles',None)
             if uSkipFiles is not None:
-                SetVar(uVarName="REPMAN_ZIPSKIPFILES[" + uIndex, oVarValue=dZipFile['skipfiles'])
-                SetVar(uVarName="REPMAN_ZIPTYPE[" + uIndex,oVarValue= "folder")
+                SetVar(uVarName='REPMAN_ZIPSKIPFILES[' + uIndex, oVarValue=dZipFile['skipfiles'])
+                SetVar(uVarName='REPMAN_ZIPTYPE[' + uIndex,oVarValue= 'folder')
             else:
-                SetVar(uVarName="REPMAN_ZIPTYPE[" + uIndex,oVarValue= "file")
+                SetVar(uVarName='REPMAN_ZIPTYPE[' + uIndex,oVarValue= 'file')
 
             i += 1
 
     # noinspection PyMethodMayBeStatic
     def CreateRepVarArray(self,uBaseLocalDir:str) -> None:
         aLocalFiles:List[str] = cPath(uBaseLocalDir).GetFileList(bSubDirs=True, bFullPath=True)
-        SetVar(uVarName="REPMAN_LOCALBASENAME", oVarValue=uBaseLocalDir)
-        SetVar(uVarName="REPMAN_CNTFILES",      oVarValue= str(len(aLocalFiles)))
-        Var_DelArray("REPMAN_LOCALFILENAMES[]")
+        SetVar(uVarName='REPMAN_LOCALBASENAME', oVarValue=uBaseLocalDir)
+        SetVar(uVarName='REPMAN_CNTFILES',      oVarValue= str(len(aLocalFiles)))
+        Var_DelArray('REPMAN_LOCALFILENAMES[]')
 
         i:int=0
         for uLocalFile in aLocalFiles:
-            uIndex:str = str(i) + "]"
-            SetVar(uVarName="REPMAN_LOCALFILENAMES[" + uIndex ,oVarValue=uLocalFile)
+            uIndex:str = str(i) + ']'
+            SetVar(uVarName='REPMAN_LOCALFILENAMES[' + uIndex ,oVarValue=uLocalFile)
             i += 1

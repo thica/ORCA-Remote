@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@ from ORCA.settings.setttingtypes.SettingActions                 import SettingAc
 from ORCA.settings.setttingtypes.SettingButtons                 import SettingButtons
 from ORCA.settings.setttingtypes.SettingColorpicker             import SettingColorPicker
 from ORCA.settings.setttingtypes.SettingFile                    import SettingFile
+from ORCA.settings.setttingtypes.SettingNewPath                 import SettingNewPath
 from ORCA.settings.setttingtypes.SettingInfo                    import SettingInfo
 from ORCA.settings.setttingtypes.SettingNumericFloat            import SettingNumericFloat
 from ORCA.settings.setttingtypes.SettingNumericSlider           import SettingNumericSlider
@@ -48,6 +49,8 @@ def RegisterSettingTypes(oSetting:Settings):
     oSetting.register_type('info', SettingInfo)
     # File Picker
     oSetting.register_type('file', SettingFile)
+    # New Path Picker
+    oSetting.register_type('newpath', SettingNewPath)
     #Pictures
     oSetting.register_type('picture', SettingPicture)
     # Action List

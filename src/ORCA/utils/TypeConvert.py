@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,8 @@
 
 import ast
 import json
-import demjson
+# import ORCA.modules.demjson
+from ORCA.modules.demjson import decode as demjson_decode
 
 from typing import Dict
 from typing import List
@@ -34,6 +35,7 @@ from xml.etree.ElementTree  import Element
 from xml.etree.ElementTree  import fromstring
 from collections            import OrderedDict
 from ORCA.utils.LogError    import LogError, LogErrorSmall
+
 
 import html
 
@@ -66,7 +68,7 @@ def ToHex(iInt:int,iLen:int=2)->str:
     :return: The Hex String
     """
 
-    uTmp:str = "0"*iLen+hex(iInt)
+    uTmp:str = '0'*iLen+hex(iInt)
     uTmp     = uTmp.replace('x', '0')
     uTmp     = uTmp[iLen*-1:]
     return uTmp
@@ -86,7 +88,7 @@ def ToBytes(uStr:Union[str,bytes]) -> bytes:
     try:
         byRet = bytes(uStr, 'utf-8')
     except Exception as e:
-        LogError(uMsg=u'ToBytes: Convert error, using fallback', oException=e)
+        LogError(uMsg='ToBytes: Convert error, using fallback', oException=e)
 
     return byRet
 
@@ -96,7 +98,7 @@ def ToHexFromString(uString:str) -> str:
     :param uString: the string to convert to a hex string
     :return: A hex string representation of a string
     """
-    return ":".join("{:02x}".format(ord(c)) for c in uString)
+    return ':'.join('{:02x}'.format(ord(c)) for c in uString)
 
 def DictToUnicode(vObj:Union[Dict[Any,Any],List[Any],bool,str,None]) -> str:
     """
@@ -107,18 +109,18 @@ def DictToUnicode(vObj:Union[Dict[Any,Any],List[Any],bool,str,None]) -> str:
 
         if isinstance(vObj, dict):
             if len(vObj)==0:
-                return "{}"
-
-            uRet=u'{'
+                return '{}'
+            uRet='{'
             for key, value in vObj.items():
-                uRet=uRet+DictToUnicode(key)+": "+DictToUnicode(value)+","
-            return uRet[:-1]+u'}'
+                uRet=f'{uRet}{DictToUnicode(key)}:{DictToUnicode(value)},'
+                # uRet=uRet+DictToUnicode(key)+': '+DictToUnicode(value)+','
+            return uRet[:-1]+'}'
         elif isinstance(vObj, list):
             if len(vObj)>0:
-                uRet = "["
+                uRet = '['
                 for value in vObj:
-                    uRet+=DictToUnicode(value)+","
-                uRet =  uRet[:-1] +"]"
+                    uRet+=DictToUnicode(value)+','
+                uRet =  uRet[:-1] +']'
                 return uRet
             return "[]"
         elif isinstance(vObj, bool):
@@ -130,7 +132,7 @@ def DictToUnicode(vObj:Union[Dict[Any,Any],List[Any],bool,str,None]) -> str:
         else:
             return ToUnicode(vObj)
     except Exception as e:
-        LogError(uMsg=u'DictToUnicode: Dictionary convert error, using fallback',oException=e)
+        LogError(uMsg='DictToUnicode: Dictionary convert error, using fallback',oException=e)
         return ToUnicode(str(vObj))
 
 def ToString(uObj:str) -> bytes:
@@ -161,16 +163,16 @@ def ToUnicode(Obj:Any) ->str:
     try:
         if isinstance(Obj, bytes):
             try:
-                return Obj.decode("utf-8")
+                return Obj.decode('utf-8')
             except Exception as Ex:
-                LogError(uMsg=u'Unicode Transfer Error',oException=Ex)
-                uRet:str = Obj.decode(encoding="ascii", errors="ignore")
+                LogError(uMsg='Unicode Transfer Error',oException=Ex)
+                uRet:str = Obj.decode(encoding='ascii', errors='ignore')
                 print (uRet)
                 return uRet
         else:
             return str(Obj)
     except Exception as e:
-        LogError(uMsg=u'Unicode Transfer Error',oException=e)
+        LogError(uMsg='Unicode Transfer Error',oException=e)
         print ('[',Obj,']')
         print (type(Obj))
         if isinstance(Obj, str):
@@ -198,21 +200,21 @@ def ToOrderedDic(uString:str) -> OrderedDict:
 
     try:
         uFinalstring = uString.strip(' \n{}')
-        aList = uFinalstring.split(",")
+        aList = uFinalstring.split(',')
         for uPair in aList:
             if ":" in uPair:
-                aKeyValue = uPair.split(":")
+                aKeyValue = uPair.split(':')
                 uName=aKeyValue[0].strip(' \n\"')
                 uValue=aKeyValue[1].strip(' \n\"')
                 dDict[uName] = uValue
     except Exception as e:
-        LogError(uMsg=u'ToOrderedDic: Dictionary Convert error',oException=e)
+        LogError(uMsg='ToOrderedDic: Dictionary Convert error',oException=e)
         LogError(uMsg=uString)
 
     return dDict
 
 
-def ToDic(uString:Union[str,Dict]) -> Dict:
+def ToDic(uString:Union[str,Dict,List]) -> Dict:
     """
     converts a (unicode) string into a dict
 
@@ -230,66 +232,96 @@ def ToDic(uString:Union[str,Dict]) -> Dict:
     """
 
     dRet:Dict[Any,Any]
-    uString2:str
+    uString2: str
     bDoubleBack:bool = False
 
+    if isinstance(uString, list):
+        if len(uString):
+            uString = uString[0]
+        else:
+            return {}
 
     if isinstance(uString, dict):
         return uString
 
-    if uString==u'' or uString=="{}":
+    if uString=='' or uString=='{}':
         return {}
 
-    if "\\" in uString:
-        uString2 = uString.replace("\\","***BaCkSlAsH***")
-        bDoubleBack = True
-    else:
-        uString2= cast(str,uString)
 
     try:
-        for i in range(2):
-            if i==1:
-                uString2 = uString2.replace("\'", "\"")
+        for i in range(3):
+            bDoubleBack = False
+            uString2 = cast(str, uString)
 
-            try:
-                dRet     = cast(Dict[Any,Any],json.loads(uString2))
+            if i == 0:
+                if '\\' in uString2:
+                    uString2 = uString2.replace('\\', '***BaCkSlAsH***')
+                    bDoubleBack = True
+
+            if i==2:
+                #unsafe fallback
+                uString2 = uString2.replace('\'', '"')
+
+            dRet=ToDic_jsonloads(uString2)
+            if dRet is None: dRet=ToDic_jsonloads_philippshack(uString2)
+            if dRet is None: dRet=ToDic_demjson(uString2)
+            if dRet is None: dRet=ToDic_astliteraleval(uString2)
+            if dRet is not None:
                 if bDoubleBack:
                     DictUnescaceBackslash(dRet)
                 return dRet
-            except Exception:
-                pass
 
-            try:
-                dRet     = cast(Dict[Any,Any],demjson.decode(uString2))
-                if bDoubleBack:
-                    DictUnescaceBackslash(dRet)
-                return dRet
-            except Exception:
-                pass
-
-            try:
-                dRet     = ast.literal_eval(uString2)
-                if bDoubleBack:
-                    DictUnescaceBackslash(dRet)
-                return dRet
-            except Exception:
-                pass
-
-
-        LogError(uMsg=u'ToDic: can\'t convert string to dic:'+uString)
+        LogError(uMsg='ToDic: can\'t convert string to dic:'+uString)
         return {}
 
     except Exception as e:
-        LogErrorSmall(uMsg=u'ToDic: Dictionary Convert error',oException=e)
+        LogErrorSmall(uMsg='ToDic: Dictionary convert error',oException=e)
         LogErrorSmall(uMsg=uString)
     return {}
+
+def ToDic_jsonloads(uString:str) ->  Union[Dict,None]:
+
+    try:
+        dRet = cast(Dict[Any, Any], json.loads(uString))
+        return dRet
+    except Exception as e:
+        # LogErrorSmall(uMsg='ToDic: Dictionary convert error json.loads', oException=e)
+        return None
+
+
+def ToDic_jsonloads_philippshack(uString:str) ->  Union[Dict,None]:
+
+    try:
+        # Hacky, Philipps Hue return invalid formatted json string
+        dRet = cast(Dict[Any, Any], json.loads(uString.replace('}"}', '}}').replace('"{"', '{"').replace('"}",', '"},').replace('"}}",', '"}},')))
+        return dRet
+    except Exception as e:
+        # LogErrorSmall(uMsg='ToDic: Dictionary convert error json.loads (Philipps Hack)' , oException=e)
+        pass
+
+def ToDic_demjson(uString:str) ->  Union[Dict,None]:
+
+    try:
+        dRet = cast(Dict[Any, Any], demjson_decode(uString))
+        return dRet
+    except Exception as e:
+        #LogErrorSmall(uMsg='ToDic: Dictionary convert error demjson', oException=e)
+        pass
+
+def ToDic_astliteraleval(uString:str) ->  Union[Dict,None]:
+    try:
+        dRet = ast.literal_eval(uString)
+        return dRet
+    except Exception as e:
+        # LogErrorSmall(uMsg='ToDic: Dictionary convert error ast.literal_eval', oException=e)
+        pass
+
 
 def DictUnescaceBackslash(oDict:Dict[str,Any]) -> None:
     """
     Unescapes previous escapes backslashes in dict strings
     :param dict oDict:
     """
-
     uKey:str
     vValue:Any
     vElem:Any
@@ -299,12 +331,12 @@ def DictUnescaceBackslash(oDict:Dict[str,Any]) -> None:
             if isinstance(vValue, dict):
                 DictUnescaceBackslash(vValue)
             elif isinstance(vValue, str):
-                oDict[uKey]=oDict[uKey].replace("***BaCkSlAsH***","\\")
+                oDict[uKey]=oDict[uKey].replace('***BaCkSlAsH***','\\')
             elif isinstance(vValue, list):
                 for vElem in vValue:
                     DictUnescaceBackslash(vElem)
     except Exception as e:
-        LogError(uMsg=u'DictUnescaceBackslash',oException=e)
+        LogError(uMsg='DictUnescaceBackslash',oException=e)
 
 
 def ToList(uString:Union[str,List]) -> List:
@@ -322,7 +354,7 @@ def ToList(uString:Union[str,List]) -> List:
     if isinstance(uString, list):
         return uString
 
-    if uString=="" or uString=="[]" or uString=="u[]":
+    if uString=='' or uString=='[]' or uString=='u[]':
         return []
 
     try:
@@ -331,25 +363,25 @@ def ToList(uString:Union[str,List]) -> List:
         pass
 
     try:
-        if uString.startswith("["):
+        if uString.startswith('['):
             return ast.literal_eval(uString[1:-1])
     except:
         pass
 
     if not "," in uString:
-        if uString.startswith("["):
+        if uString.startswith('['):
             return [uString[1:-1]]
         else:
             return [uString]
 
     try:
         aRet = []
-        for uItem in uString.split(","):
+        for uItem in uString.split(','):
             aRet.append(uItem)
         return aRet
 
     except Exception as e:
-        LogError(uMsg=u'ToList: List Convert error',oException=e)
+        LogError(uMsg='ToList: List Convert error',oException=e)
         LogError(uMsg=uString)
         uRet= [uString]
     return uRet
@@ -369,7 +401,7 @@ def ToInt(vValue:Union[str,float]) -> int:
     except Exception:
         return 0
 
-def ToBool(vValue:Union[str,bool]) -> bool:
+def ToBool(vValue:Union[str,int]) -> bool:
     """
     converts a (unicode) string into a bool
 
@@ -385,7 +417,7 @@ def ToBool(vValue:Union[str,bool]) -> bool:
     return uString.lower() in ['true', '1']
 
 
-def ToFloat(uString:str) -> float:
+def ToFloat(uString: str) -> float:
     """
     converts a (unicode) string into a float number
     (0.0) in case of an error
@@ -501,7 +533,7 @@ def XMLToDic(vElement:Union[Element,str]) -> Dict:
 
         return cXMLToDic(oElement).getDict()
     except Exception as e:
-        LogError(uMsg=u'XMLToDic: XML Convert error',oException=e)
+        LogError(uMsg='XMLToDic: XML Convert error',oException=e)
         LogError(uMsg=str(vElement))
         return {}
 
@@ -539,17 +571,17 @@ class cXMLToDic(dict):
         :param dDict: The target dict to store the attributes
         """
         for uAttribute in oNode.attrib:
-            uValue = oNode.get(uAttribute, default="")
+            uValue = oNode.get(uAttribute, default='')
             if uValue:
-                if not "attributes" in dDict:
-                    dDict["attributes"] = {}
-                dDict["attributes"][uAttribute]=uValue
+                if not 'attributes' in dDict:
+                    dDict['attributes'] = {}
+                dDict['attributes'][uAttribute]=uValue
                 for iIndex in range(1000):
-                    sTag = uAttribute+"[%s]" % iIndex
-                    if not sTag in dDict["attributes"]:
-                        dDict["attributes"][sTag] = uValue
+                    sTag = uAttribute+'[%s]' % iIndex
+                    if not sTag in dDict['attributes']:
+                        dDict['attributes'][sTag] = uValue
                         if iIndex>0:
-                            del dDict["attributes"][uAttribute]
+                            del dDict['attributes'][uAttribute]
                         break
 
     class _addToDict(dict):

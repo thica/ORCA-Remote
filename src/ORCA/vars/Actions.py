@@ -1,6 +1,6 @@
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,15 +21,16 @@ from typing import List
 from typing import Tuple
 from datetime import datetime
 from datetime import timedelta
+import re
 
 from kivy.logger            import Logger
 
 from ORCA.vars.Access       import SetVar
 from ORCA.vars.Access       import SetVarWithOutVarTranslation
+from ORCA.vars.Access       import  ExistVar
 from ORCA.vars.Access       import GetVar
 from ORCA.vars.Replace      import ReplaceVars
 from ORCA.vars.Helpers      import Round, Find_nth_Character
-from ORCA.utils.LoadFile    import LoadFile
 from ORCA.utils.LogError    import LogError
 from ORCA.utils.TypeConvert import ToFloat
 from ORCA.utils.TypeConvert import ToUnicode
@@ -37,7 +38,7 @@ from ORCA.utils.TypeConvert import ToInt
 from ORCA.utils.FileName    import cFileName
 
 import ORCA.vars.Globals
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['Var_Concatenate',
            'Var_Decrease',
@@ -64,6 +65,8 @@ __all__ = ['Var_Concatenate',
            'Var_StringToTime',
            'Var_ToVar',
            'Var_Trim',
+           'Var_ToArray',
+           'Var_Regex_sub',
            'Var_UpperCase',
           ]
 
@@ -83,40 +86,26 @@ def Var_Invert(uVarName:str) -> str:
     uValue:str = GetVar(uVarName=uVarName)
     uValueOrg:str = uValue
 
-    if uValue is not None:
-        if uValue == u'0':
-            uValue = u'1'
-        elif uValue == u'1':
-            uValue = u'0'
-        elif uValue == u'false':
-            uValue = u'true'
-        elif uValue == u'true':
-            uValue = u'false'
-        elif uValue == u'False':
-            uValue = u'True'
-        elif uValue == u'True':
-            uValue = u'False'
-        elif uValue == u'FALSE':
-            uValue = u'TRUE'
-        elif uValue == u'TRUE':
-            uValue = u'FALSE'
-        elif uValue == u'OFF':
-            uValue = u'ON'
-        elif uValue == u'ON':
-            uValue = u'OFF'
-        elif uValue == u'off':
-            uValue = u'on'
-        elif uValue == u'on':
-            uValue = u'off'
-        elif uValue == u'Off':
-            uValue = u'On'
-        elif uValue == u'On':
-            uValue = u'Off'
-        elif uValue == u'':
-            uValue = u'1'
-    SetVar(uVarName=uVarName, oVarValue=uValue)
+    match uValue:
+        case None:          pass
+        case '0'|'':        uValue = '1'
+        case '1':           uValue = '0'
+        case 'false':       uValue = 'true'
+        case 'true':        uValue = 'false'
+        case 'False':       uValue = 'True'
+        case 'True':        uValue = 'False'
+        case 'FALSE':       uValue = 'TRUE'
+        case 'TRUE':        uValue = 'FALSE'
+        case 'OFF':         uValue = 'ON'
+        case 'ON':          uValue = 'OFF'
+        case 'off':         uValue = 'on'
+        case 'on':          uValue = 'off'
+        case 'Off':         uValue = 'On'
+        case 'On' :         uValue = 'Off'
+        case _:             pass
 
-    Logger.debug(u'Var_Invert: [%s] returned [%s] (stored in %s)' % (uValueOrg, uValue,uVarName))
+    Logger.debug(f'Var_Invert: [{uValueOrg}] returned [{uValue}] (stored in {uVarName})')
+    SetVar(uVarName=uVarName, oVarValue=uValue)
 
     return uValue
 
@@ -129,7 +118,7 @@ def Var_NormalizeInt(uVar:str) -> str:
     :return: The changed variable value
     """
 
-    if uVar[-2:] == u'.0':
+    if uVar[-2:] == '.0':
         return uVar[:-2]
     else:
         return uVar
@@ -150,30 +139,30 @@ def Var_Increase(uVarName:str, uStep:str='1', uMax:str='') -> str:
         uValue:str    = GetVar(uVarName=uVarName)
         uValueOrg:str = uValue
 
-        if uValue == u'':
+        if uValue == '':
             uValue = '0'
         uStepToUse:str = GetVar(uVarName=uStep)
-        if uStepToUse == u'':
+        if uStepToUse == '':
             uStepToUse = uStep
         uStepToUse = ReplaceVars(uStepToUse)
         uMaxToUse:str = GetVar(uVarName=uMax)
-        if uMaxToUse == u'':
+        if uMaxToUse == '':
             uMaxToUse = uMax
 
         fValue:float = ToFloat(uValue)
         fValue += ToFloat(uStepToUse)
-        if not uMaxToUse == u'':
+        if not uMaxToUse == '':
             fMaxToUse = ToFloat(uMaxToUse)
             if fValue > fMaxToUse:
                 fValue = fMaxToUse
         uValue = ToUnicode(fValue)
         uValue = Var_NormalizeInt(uValue)
+        Logger.debug(f'Var_Increase: [{uValueOrg}] plus [{uStepToUse}] returned [{uValue}]  (stored in [{uVarName}])')
         SetVar(uVarName=uVarName, oVarValue=uValue)
-        Logger.debug(u'Var_Increase: [%s] plus [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uStepToUse, uValue, uVarName))
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_Increase: Invalid Argument', oException=e)
-        return u'Error'
+        LogError(uMsg='Var_Increase: Invalid Argument', oException=e)
+        return 'Error'
 
 def Var_Decrease(uVarName:str, uStep:str, uMin:str) -> str:
     """
@@ -189,31 +178,31 @@ def Var_Decrease(uVarName:str, uStep:str, uMin:str) -> str:
     try:
         uValue:str      = GetVar(uVarName=uVarName)
         uValueOrg:str   = uValue
-        if uValue == u'':
+        if uValue == '':
             uValue = '0'
 
         uStepToUse:str = GetVar(uVarName=uStep)
-        if uStepToUse == u'':
+        if uStepToUse == '':
             uStepToUse = uStep
         uMinToUse:str = GetVar(uVarName=uMin)
         uMinToUse = ReplaceVars(uMinToUse)
-        if uMinToUse == u'':
+        if uMinToUse == '':
             uMinToUse = uMin
 
         fValue:float = ToFloat(uValue)
         fValue -= ToFloat(uStepToUse)
-        if not uMinToUse == u'':
+        if not uMinToUse == '':
             fMinToUse = ToFloat(uMinToUse)
             if fValue < fMinToUse:
                 fValue = fMinToUse
         uValue = ToUnicode(fValue)
         uValue = Var_NormalizeInt(uValue)
+        Logger.debug(f'Var_Decrease: [{uValueOrg}] minus [{uStepToUse}] returned [{uValue}]  (stored in [{uVarName}])')
         SetVar(uVarName=uVarName, oVarValue=uValue)
-        Logger.debug(u'Var_Decrease: [%s] minus [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uStepToUse, uValue, uVarName))
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_Decrease: Invalid Argument', oException=e)
-        return u'Error'
+        LogError(uMsg='Var_Decrease: Invalid Argument', oException=e)
+        return 'Error'
 
 
 def Var_Multiply(uVarName:str, uFactor:str) ->str:
@@ -230,11 +219,11 @@ def Var_Multiply(uVarName:str, uFactor:str) ->str:
         uValue:str    = GetVar(uVarName=uVarName)
         uValueOrg:str = uValue
 
-        if uValue == u'':
-            return u''
+        if uValue == '':
+            return ''
 
         uFactorToUse:str = GetVar(uVarName=uFactor)
-        if uFactorToUse == u'':
+        if uFactorToUse == '':
             uFactorToUse = uFactor
         uFactorToUse = ReplaceVars(uFactorToUse)
         fFactor:float = ToFloat(uFactorToUse)
@@ -242,12 +231,12 @@ def Var_Multiply(uVarName:str, uFactor:str) ->str:
         fValue = fValue * fFactor
         uValue = ToUnicode(fValue)
         uValue = Var_NormalizeInt(uValue)
+        Logger.debug(f'Var_Multiply: [{uValueOrg}] * [{uFactorToUse}] returned [{uValue}]  (stored in [{uVarName}])')
         SetVar(uVarName=uVarName, oVarValue=uValue)
-        Logger.debug(u'Var_Multiply: [%s] * [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uFactorToUse, uValue, uVarName))
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_Multiply: Invalid Argument', oException=e)
-        return u'Error'
+        LogError(uMsg='Var_Multiply: Invalid Argument', oException=e)
+        return 'Error'
 
 
 def Var_Divide(uVarName:str, uDivisor:str) -> str:
@@ -263,8 +252,8 @@ def Var_Divide(uVarName:str, uDivisor:str) -> str:
     try:
         uValue:str      = GetVar(uVarName=uVarName)
         uValueOrg:str   = uValue
-        if uValue == u'':
-            return u''
+        if uValue == '':
+            return ''
 
         uDivisorToUse:str = GetVar(uVarName=uDivisor)
         if uDivisorToUse == '':
@@ -279,12 +268,12 @@ def Var_Divide(uVarName:str, uDivisor:str) -> str:
         fValue = fValue / fDivisor
         uValue = ToUnicode(fValue)
         uValue = Var_NormalizeInt(uValue)
+        Logger.debug(f'Var_Divide: [{uValueOrg}] / [{uDivisorToUse}] returned [{uValue}]  (stored in [{uVarName}])')
         SetVar(uVarName=uVarName, oVarValue=uValue)
-        Logger.debug(u'Var_Divide: [%s] / [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uDivisorToUse, uValue, uVarName))
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_Divide: Invalid Argument', oException=e)
-        return u'Error'
+        LogError(uMsg='Var_Divide: Invalid Argument', oException=e)
+        return 'Error'
 
 def Var_Power(uVarName:str, uPower:str) -> str:
     """
@@ -299,11 +288,11 @@ def Var_Power(uVarName:str, uPower:str) -> str:
     try:
         uValue:str = GetVar(uVarName=uVarName)
         uValueOrg:str = uValue
-        if uValue == u'':
-            return u''
+        if uValue == '':
+            return ''
 
         uPowerToUse:str = GetVar(uVarName=uPower)
-        if uPowerToUse == u'':
+        if uPowerToUse == '':
             uPowerToUse = uPower
         uPowerToUse = ReplaceVars(uPowerToUse)
         fPower:float = ToFloat(uPowerToUse)
@@ -311,12 +300,12 @@ def Var_Power(uVarName:str, uPower:str) -> str:
         fValue = fValue ** fPower
         uValue = ToUnicode(fValue)
         uValue = Var_NormalizeInt(uValue)
+        Logger.debug(f'Var_Power: [{uValueOrg}] ^ [{uPowerToUse}] returned [{uValue}]  (stored in [{uVarName}])')
         SetVar(uVarName=uVarName, oVarValue=uValue)
-        Logger.debug(u'Var_Power: [%s] ^ [%s] returned [%s]  (stored in [%s])' % (uValueOrg, uPowerToUse, uValue, uVarName))
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_Power: Invalid Argument', oException=e)
-        return u'Error'
+        LogError(uMsg='Var_Power: Invalid Argument', oException=e)
+        return 'Error'
 
 def Var_UpperCase(uVarName:str) -> str:
     """
@@ -360,7 +349,7 @@ def Var_Trim(uVarName:str) -> str:
     return uValue
 
 
-def Var_FromVar(uVarName:str, uContext:str=u'') -> str:
+def Var_FromVar(uVarName:str, uContext:str='') -> str:
     """
     Pulls the variable value from a variable value which represents a variable name
     eg varname1 = "test"
@@ -376,10 +365,12 @@ def Var_FromVar(uVarName:str, uContext:str=u'') -> str:
 
     uValue:str  = ReplaceVars(GetVar(uVarName=uVarName, uContext=uContext))
     uValue2:str = ReplaceVars(GetVar(uVarName=uValue,uContext=uContext))
-    if uValue2 != u'':
+    if uValue2 != '':
         uValue = uValue2
     else:
-        uValue=""
+        if not ExistVar(uVarName=uValue):
+            Logger.warning(f"Warning: Fromvar for wrong value Varname={uVarName}, Value from Varname={uValue}, Value from Value={uValue2}" )
+        uValue=''
     SetVar(uVarName=uVarName, oVarValue=uValue,uContext=uContext)
     return uValue
 
@@ -389,7 +380,7 @@ def Var_ToVar(uVarName:str, uNewVarName:str) -> str:
     Sets a variable value to a var name without variable translation
     eg varname1 = "test"
     varname2 = "varname1"
-    ToVar("varname2","varname1") returns "varname1"
+    ToVar('varname2','varname1') returns 'varname1'
 
     uNewVarName will be return and stored in the user vars (Triggers raised if set)
 
@@ -416,11 +407,11 @@ def Var_Round(uVarName:str, uPos:str) -> str:
     uValue: str = GetVar(uVarName=uVarName)
 
     try:
-        if uValue == u'':
-            return u''
+        if uValue == '':
+            return ''
 
         uPosToUse:str = GetVar(uVarName=uPos)
-        if uPosToUse == u'':
+        if uPosToUse == '':
             uPosToUse = uPos
         iPos:int = int(uPosToUse)
         uValue = ToUnicode(Round(ToFloat(uValue), iPos))
@@ -428,8 +419,8 @@ def Var_Round(uVarName:str, uPos:str) -> str:
         return uValue
 
     except Exception as e:
-        LogError(uMsg=u'Var_Round: Invalid Argument [' + uVarName + u'=' + uValue + u']:', oException=e)
-        return u'Error'
+        LogError(uMsg='Var_Round: Invalid Argument [' + uVarName + '=' + uValue + ']:', oException=e)
+        return 'Error'
 
 
 def Var_Concatenate(uVarName:str, uAddVar:str) -> str:
@@ -444,7 +435,7 @@ def Var_Concatenate(uVarName:str, uAddVar:str) -> str:
 
     uValue:str = GetVar(uVarName=uVarName)
     uValueAdd:str = GetVar(uVarName=uAddVar)
-    if uValueAdd == u'':
+    if uValueAdd == '':
         uValueAdd = uAddVar
     uValue += uValueAdd
     SetVar(uVarName=uVarName, oVarValue=uValue)
@@ -464,8 +455,8 @@ def Var_Part(uVarName:str, uStart:str, uEnd:str) -> str:
 
     try:
         uValue:str = GetVar(uVarName=uVarName)
-        if uValue == u'':
-            return u''
+        if uValue == '':
+            return ''
         if not uStart == '':
             if not uEnd == '':
                 uValue = uValue[int(uStart):int(uEnd)]
@@ -477,7 +468,7 @@ def Var_Part(uVarName:str, uStart:str, uEnd:str) -> str:
         return uValue
     except Exception as e:
         LogError(uMsg='Var_Part: Invalid Argument', oException=e)
-        return u'Error'
+        return 'Error'
 
 def Var_Len(uVarName: str, uDestVar:str) -> str:
     """
@@ -506,12 +497,12 @@ def Var_StringToHexString(uVarName:str) -> str:
     """
     uValue = GetVar(uVarName=uVarName)
     try:
-        uValue = ToUnicode(uValue.encode("utf-8").hex())
+        uValue = ToUnicode(uValue.encode('utf-8').hex())
         SetVar(uVarName=uVarName, oVarValue=uValue)
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_StringToHexString: Invalid Argument [' + uVarName + u'=' + uValue + u']:', oException=e)
-        return u'Error'
+        LogError(uMsg='Var_StringToHexString: Invalid Argument [' + uVarName + '=' + uValue + ']:', oException=e)
+        return 'Error'
 
 
 def Var_HexStringToString(uVarName:str) -> str:
@@ -529,8 +520,8 @@ def Var_HexStringToString(uVarName:str) -> str:
         SetVar(uVarName=uVarName, oVarValue=uValue)
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_HexStringToString: Invalid Argument [' + uVarName + u'=' + uValue + u']:', oException=e)
-        return u'Error'
+        LogError(uMsg='Var_HexStringToString: Invalid Argument [' + uVarName + '=' + uValue + ']:', oException=e)
+        return 'Error'
 
 
 def Var_Find(uVarName:str, uFindVar:str, uDestVar:str) -> str:
@@ -545,7 +536,7 @@ def Var_Find(uVarName:str, uFindVar:str, uDestVar:str) -> str:
     """
 
     uValue:str = GetVar(uVarName=uVarName)
-    if uValue == u'':
+    if uValue == '':
         uValue = uVarName
     uValue = ReplaceVars(uValue)
 
@@ -553,7 +544,7 @@ def Var_Find(uVarName:str, uFindVar:str, uDestVar:str) -> str:
     iPos:int = uValue.find(uFindVar)
     uResult:str = ToUnicode(iPos)
     SetVar(uVarName=uDestVar, oVarValue=uResult)
-    Logger.debug(u'Var_Find: [%s] in [%s] returned [%s]  (stored in [%s])' % (uFindVar, uValue, uResult, uDestVar))
+    Logger.debug(f'Var_Find: [{uFindVar}] in [{uValue}] returned [{uResult}]  (stored in [{uDestVar}])')
     return uResult
 
 
@@ -571,13 +562,13 @@ def Var_GetArray(uVarName:str, iLevel:int, bSort:bool = True) -> List[str]:
     iPosStart:int = Find_nth_Character(uVarName, "[", iLevel)
     if iPosStart > 0:
         uRootVarName:str = uVarName[:iPosStart + 1]
-        uTail = uVarName[uVarName.rfind("]")+1:]
+        uTail = uVarName[uVarName.rfind(']')+1:]
         for uName in ORCA.vars.Globals.dUserVars:
-            if uName.startswith(uRootVarName) and len(uName)>len(uRootVarName) and uName[len(uRootVarName)]!="]":
-                if uTail == "":
+            if uName.startswith(uRootVarName) and len(uName)>len(uRootVarName) and uName[len(uRootVarName)]!=']':
+                if uTail == '':
                     aRet.append(uName)
                 else:
-                    uRemains = uName[uName.find("]",iPosStart+1)+1:]
+                    uRemains = uName[uName.find(']',iPosStart+1)+1:]
                     if uRemains.startswith(uTail):
                         aRet.append(uName)
 
@@ -596,12 +587,12 @@ def Var_GetArrayEx(uVarName:str, iLevel:int, bSort:bool = True) -> List[Tuple[st
     """
 
     aRet:List[Tuple[str,str]] = []
-    iPosStart:int = Find_nth_Character(uVarName, "[", iLevel)
+    iPosStart:int = Find_nth_Character(uVarName, '[', iLevel)
     if iPosStart > 0:
         uRootVarName:str = uVarName[:iPosStart + 1]
         for uName in ORCA.vars.Globals.dUserVars:
-            if uName.startswith(uRootVarName) and len(uName)>len(uRootVarName) and uName[len(uRootVarName)]!="]":
-                uIndex=uName[iPosStart+1:uName.find("]",iPosStart+1)]
+            if uName.startswith(uRootVarName) and len(uName)>len(uRootVarName) and uName[len(uRootVarName)]!=']':
+                uIndex=uName[iPosStart+1:uName.find(']',iPosStart+1)]
                 aRet.append((uName,uIndex))
         if bSort:
             aRet = sorted(aRet)
@@ -610,7 +601,7 @@ def Var_GetArrayEx(uVarName:str, iLevel:int, bSort:bool = True) -> List[Tuple[st
 
 def Var_DelArray(uVarName:str) -> None:
     """
-    Deletes an var Array, the var name needs to end with []. No Triggers will be raised
+    Deletes a var array, the var name needs to end with []. No Triggers will be raised
 
     :param str uVarName: The array name
     """
@@ -622,6 +613,40 @@ def Var_DelArray(uVarName:str) -> None:
             aDelKeys.append(uKey)
     for uKey in aDelKeys:
         del ORCA.vars.Globals.dUserVars[uKey]
+
+def Var_ToArray(uVarName:str, uSeparator:str) -> List[str]:
+    """
+    Returns an array of vars from a variable holding a list of values
+
+    eg:
+    myvar="5,7,1"
+    This converts to myvar[0]=5, myvar[1]=7, myvar[2] = 1
+
+    :param str uVarName: The variable name which for a list of value, from where the value is pulled
+    :param int uSeparator: The separating character, default is ','
+    """
+
+    aRet:List[str] = []
+    uValue:str
+    i:int
+    if uSeparator=='':
+        uSeparator=','
+    try:
+        uValue=GetVar(uVarName=uVarName)
+        if uValue.startswith('[') and  uValue.count('[')==1  and  uValue.count(uSeparator)>0:
+            uValue=uValue[1:]
+        if uValue.endswith(']')  and  uValue.count(']')==1  and  uValue.count(uSeparator)>0:
+            uValue=uValue[:-1]
+
+        aRet=uValue.split(uSeparator)
+        Var_DelArray(uVarName=f'{uVarName}[]')
+        for i in range(len(aRet)):
+            Logger.debug(f'Var_ToArray: Result [{uVarName}[{i}]]=[{aRet[i]}]')
+            SetVar(uVarName=f'{uVarName}[{i}]',oVarValue=aRet[i])
+        return aRet
+    except Exception as e:
+        LogError(uMsg=f'Var_ToArray: Invalid Argument [{uVarName}]', oException=e)
+        return []
 
 def Var_Hex2Int(uVarName:str) -> str:
     """
@@ -635,9 +660,9 @@ def Var_Hex2Int(uVarName:str) -> str:
     uValue: str = GetVar(uVarName=uVarName)
     try:
         if uValue == '':
-            return u'0'
+            return '0'
         if uValue == 'Error':
-            return u'0'
+            return '0'
 
         if uValue.lower().startswith('0x'):
             iValue = int(uValue, 0)
@@ -649,8 +674,8 @@ def Var_Hex2Int(uVarName:str) -> str:
         SetVar(uVarName=uVarName, oVarValue=uValue)
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_Hex2Int: Invalid Argument (%s):' % uValue, oException=e)
-        return u'0'
+        LogError(uMsg=f'Var_Hex2Int: Invalid Argument ({uValue}):', oException=e)
+        return '0'
 
 
 def Var_Int2Hex(uVarName:str, uFormat:str='{0:0>2X}') -> str:
@@ -667,18 +692,46 @@ def Var_Int2Hex(uVarName:str, uFormat:str='{0:0>2X}') -> str:
     try:
 
         if uValue == '':
-            return u'0'
+            return '0'
         if uValue == 'Error':
-            return u'0'
+            return '0'
 
         uValue = uFormat.format(int(uValue))
         uValue = ToUnicode(uValue)
         SetVar(uVarName=uVarName, oVarValue=uValue)
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_Int2Hex: Invalid Argument (%s):' % uValue, oException=e)
-        return u'0'
+        LogError(uMsg=f'Var_Int2Hex: Invalid Argument ({uValue}):', oException=e)
+        return '0'
 
+
+def Var_Regex_sub(uVarName:str, uFormat:str='', uReplace='') -> str:
+    """
+    Applies an regex substitute command to a var
+    The changed variable value will be return and stored in the user vars (Triggers raised if set)
+
+    :param str uVarName: The variable name for the action, from where the value is pulled
+    :param str uFormat: The regex string to apply
+    :param str uReplace: The replacement string
+    :return: The changed variable value
+    """
+
+    uValue_Tmp:str
+    uValue: str = GetVar(uVarName=uVarName)
+    try:
+
+        if uValue == '':
+            return '0'
+        if uValue == 'Error':
+            return '0'
+
+        uValue_Tmp = re.sub(uFormat, uReplace, uValue)
+        uValue = ToUnicode(uValue_Tmp)
+        SetVar(uVarName=uVarName, oVarValue=uValue)
+        return uValue
+    except Exception as e:
+        LogError(uMsg=f'Var_Regex_sub: Invalid Argument ({uValue}):', oException=e)
+        return '0'
 
 def Var_LoadFile(uVarName:str, uFileName:str) -> str:
     """
@@ -691,13 +744,13 @@ def Var_LoadFile(uVarName:str, uFileName:str) -> str:
     """
 
     try:
-        oFileName:cFileName = cFileName('').ImportFullPath(uFnFullName=uFileName)
-        uValue:str = LoadFile(oFileName=oFileName)
+        oFileName:cFileName = cFileName(uFileName)
+        uValue:str = oFileName.Load()
         SetVar(uVarName=uVarName, oVarValue=uValue)
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_LoadFile: Error Loading File Content (%s:%s)' % (uVarName, uFileName), oException=e)
-        return u''
+        LogError(uMsg=f'Var_LoadFile: Error Loading File Content ({uVarName}:{uFileName})', oException=e)
+        return ''
 
 
 def Var_Format(uVarName:str, uFormat:str):
@@ -713,7 +766,7 @@ def Var_Format(uVarName:str, uFormat:str):
     try:
         uValue:str = GetVar(uVarName=uVarName)
         if uValue is None:
-            return u''
+            return ''
         uFormatToUse:str = ORCA.vars.Globals.dUserVars.get(uFormat)
         if uFormatToUse is None:
             uFormatToUse = uFormat
@@ -727,8 +780,8 @@ def Var_Format(uVarName:str, uFormat:str):
         SetVar(uVarName=uVarName, oVarValue=uValue)
         return uValue
     except Exception as e:
-        LogError(uMsg=u'Var_Format: Invalid Argument', oException=e)
-        return u''
+        LogError(uMsg='Var_Format: Invalid Argument', oException=e)
+        return ''
 
 def Var_StringToTime(uVarName:str, uFormat:str, uGap:str):
     """
@@ -746,14 +799,14 @@ def Var_StringToTime(uVarName:str, uFormat:str, uGap:str):
     bUseTime:bool = False
     uValue:str
     uFormatToUse:str
-    uResult:str = u''
+    uResult:str = ''
     oDateTime:datetime
     iGap:int
 
     try:
         uValue = GetVar(uVarName=uVarName)
         if uValue is None:
-            return u''
+            return ''
         uFormatToUse:str = ORCA.vars.Globals.dUserVars.get(uFormat)
         if uFormatToUse is None:
             uFormatToUse = uFormat
@@ -780,11 +833,11 @@ def Var_StringToTime(uVarName:str, uFormat:str, uGap:str):
         if bUseDate:
             uResult=Globals.oLanguage.GetLocalizedDate(Globals.bLongDate, Globals.bLongMonth, Globals.bLongDay,oDateTime.timetuple())
             if bUseTime:
-                uResult = uResult+" "
+                uResult = uResult+' '
         if bUseTime:
-            uResult = uResult+Globals.oLanguage.GetLocalizedTime(Globals.bClockWithSeconds,oDateTime.timetuple())+" "
+            uResult = uResult+Globals.oLanguage.GetLocalizedTime(Globals.bClockWithSeconds,oDateTime.timetuple())+' '
         SetVar(uVarName=uVarName, oVarValue=uResult)
         return uResult
     except Exception as e:
-        LogError(uMsg=u'Var_StringToTime: Invalid Argument', oException=e)
-        return u''
+        LogError(uMsg='Var_StringToTime: Invalid Argument', oException=e)
+        return ''

@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -26,30 +26,30 @@ if TYPE_CHECKING:
     from ORCA.utils.Platform.generic.generic_cRotation import cRotation
 else:
     from typing import TypeVar
-    cRotation   = TypeVar("cRotation")
+    cRotation   = TypeVar('cRotation')
 
-__all__ = ['cRotation']
+__all__ = ['cRotationLayer']
 
-class cRotation:
+class cRotationLayer:
     """ Rotation abstraction layer """
     def __init__(self):
-        Logger.debug (u'Loading Orientation Support' )
+        Logger.debug ('Loading Orientation Support' )
         self.bLocked:bool = False
         self.oRotation:cRotation = OS_GetRotationObject()
     def Lock(self):
         """ Locks the rotation on a device """
-        Logger.debug (u'Orientation Lock' )
+        Logger.debug ('Orientation Lock' )
         if self.oRotation:
             self.oRotation.lock()
         self.bLocked = True
     def SetOrientation_Landscape(self):
         """rotate a device to landscape """
-        Logger.debug (u'SetOrientation_Landscape' )
+        Logger.debug ('SetOrientation_Landscape' )
         if self.oRotation:
             self.oRotation.set_landscape()
     def SetOrientation_Portrait(self):
         """rotate a device to portrait """
-        Logger.debug (u'SetOrientation_Portrait' )
+        Logger.debug ('SetOrientation_Portrait' )
         if self.oRotation:
             self.oRotation.set_portrait()
 

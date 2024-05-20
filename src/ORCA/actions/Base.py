@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -22,10 +22,10 @@ __all__ = ['cEventActionBase']
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.Events import cEvents
+    from ORCA.action.Events import cEvents
 else:
     from typing import TypeVar
-    cEvents = TypeVar("cEvents")
+    cEvents = TypeVar('cEvents')
 
 
 class cEventActionBase:

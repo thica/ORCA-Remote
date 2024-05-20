@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -43,9 +43,9 @@ class SettingNumericSlider(SettingNumeric):
     def __init__(self, **kwargs):
         self.register_event_type('on_release')
         super().__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=SettingNumeric))
-        self.fMin:float                         = ToFloat(kwargs["min"])
-        self.fMax:float                         = ToFloat(kwargs["max"])
-        self.iRoundPos:int                      = int(kwargs["roundpos"])
+        self.fMin:float                         = ToFloat(kwargs['min'])
+        self.fMax:float                         = ToFloat(kwargs['max'])
+        self.iRoundPos:int                      = int(kwargs['roundpos'])
         self.slider:Union[Slider,None]          = None
         self.textvalue:Union[TextInput,None]    = None
 

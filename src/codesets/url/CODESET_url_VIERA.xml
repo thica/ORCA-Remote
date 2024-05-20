@@ -9,8 +9,8 @@
       <description language='English'>LAN Control for Panasonic Viera TVs</description>
       <description language='German'>LAN Steuerung für Panasonic Viera TVs</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_VIERA.xml</local>
@@ -151,6 +151,28 @@
   <action name='stop_timer'     string="codeset"    params='$var(vieraparamskeypre)NRC_OFFTIMER-ONOFF$var(vieraparamskeypost)'    type="soap" waitforresponse='1' requesttype='POST' cmd='/nrc/control_0' headers="$var(vieraheaderkey)"  />
 
   <action name="ping"            type="alias"       cmd="getvolume" />
+
+  <!--
+  class Apps(Enum):
+    """Contains several app product IDs."""
+    netflix = '0010000200000001'
+    youtube = '0070000200180001'
+    shoutcast = '0070000400000001'
+    calendar = '0387878700150020'
+    browser = '0077777700160002'
+    amazonprime = '0010000100180001'
+    iplayer = '0020000A00000010'
+    bbciplayer = '0020000A00000010'
+    itv = '0387878700000124'
+    all4 = '0387878700000125'
+    demand5 = '0020009300000001'
+    recordedtv = '0387878700000013'
+    multiwindow = '0387878700000050'
+    bbcnews = '0020000A00000006'
+    bbcsport = '0020000A00000007'
+    weather = '0070000C00000001'
+    developer = '0077777777777778'
+    -->
 
 </includes>
 

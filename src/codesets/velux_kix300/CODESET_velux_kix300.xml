@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>VELUX KIX300</name>
+      <description language='English'>Default commandset for the Velux KIX300</description>
+      <description language='German'>Standard Kommandos für das Velux KIX300</description>
+      <author>Carsten Thielepape</author>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/velux_kix300/CODESET_velux_kix300.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_velux_kix300.zip</sourcefile>
+          <targetpath>codesets/velux_kix300</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Velux KIX300</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+
+<!--
+
+WikiDoc:Doc
+WikiDoc:Context:Codesets
+WikiDoc:Page:Userdescription codeset Android_adb_Default
+WikiDoc:TOCTitle:android_adb_DEFAULT
+
+= Android Default =
+
+This codeset defines the available commands for the android_adb interfaces. These are generic commands. For a full list of commands you have to have a look into the codeset files
+Remarks: Amazon firetv has some variations, so there is a separate codeset for it
+
+Key Features: Provides: "power_on", "power_off", "power_toogle", "reboot"
+
+Special commands:
+*startapp: This starts an app on the android device. The appname must be given as regex strings to identify the App on the device. This sounds more complicated than it is.
+The application name has to be provided as a regex string (see below) in the "startapp" parameter
+some examples:
+^(?=.*netflix).*$           :  This will start an app on the android device which has the text "Netflix" in its name
+^(?=.*youtube)(?=.*tv).*$   :  This will start an app on the android device which has the text "Youtube" and the text "tv" in its name
+*closeapp: This stops an app on the android device. Same logic as "startapp", but the application name has to be passed n the "stopapp" argument
+
+For startapp and closeapp, your android device need to have android version 7.1 or higher
+
+*startapp_oldapi: ORCA will try to identify the right code to start an app. If this fails, you can still use the fallback and provide the full intent manually
+*closeapp_oldapi: same as startapp_oldapi
+
+WikiDoc:End
+-->
+
+  <!-- KEYCODE_DPAD_CENTER /  enter=66-->
+  <action string="codeset" name='logon'            waitforresponse='1' cmd='{"method": "logon"}'      parseoption='store'/>
+  <action string="codeset" name='gethome'          waitforresponse='1' cmd='{"method": "gethome"}'    parseoption='json' parseflags="E" ldestvar='velux_home' gdestvar='velux_home' />
+  <action string="codeset" name='getroomdevices'   waitforresponse='1' cmd='{"method": "getroomdevices",  "params": {"home":"$cvar(home)","room": "$cvar(room)"}}' parseoption='list' ldestvar='velux_device_names' gdestvar='velux_device_names' />
+  <action string="codeset" name='getdevicestate'   waitforresponse='1' cmd='{"method": "getdevicestate",  "params": {"home":"$cvar(home)","room": "$cvar(room)","device": "$cvar(device)"}}' parseoption='store' ldestvar='velux_device_state' gdestvar='velux_device_state' />
+  <action string="codeset" name='setdevicestate'   waitforresponse='1' cmd='{"method": "setdevicestate",  "params": {"home":"$cvar(home)","room": "$cvar(room)","device": "$cvar(device)","position": "$cvar(position)"}}'  />
+  <action1 name="ping" type="alias" cmd="getpowerstatus" />
+</includes>
+

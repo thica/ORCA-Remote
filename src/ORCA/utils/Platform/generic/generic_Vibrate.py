@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,14 +21,14 @@
 
 from kivy.logger             import Logger
 from ORCA.utils.TypeConvert  import ToUnicode
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 try:
     # noinspection PyUnresolvedReferences
     from   plyer                 import vibrator
-    Logger.info("plyer/vibrator available")
+    Logger.info('plyer/vibrator available')
 except Exception as e:
-    Logger.info("plyer/vibrator not available")
+    Logger.info('plyer/vibrator not available')
 
 
 def Vibrate(fDuration:float=0.05) -> bool:
@@ -39,7 +39,7 @@ def Vibrate(fDuration:float=0.05) -> bool:
         except NotImplementedError:
             pass
         except Exception as ex:
-            uMsg=u'Globals: can\'t Vibrate:'+ToUnicode(ex)
+            uMsg='Globals: can\'t Vibrate:'+ToUnicode(ex)
             Logger.info (uMsg)
             return False
     return True

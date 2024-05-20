@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -38,19 +38,19 @@ __all__ = ['GetIPAddressV4']
 
 def GetIPAddressV4() -> str:
 
-    uIP:str = "127.0.0.0"
+    uIP:str = '127.0.0.0'
     iIP:int
     try:
-        cContext        = GetAndroidModule("Context","android.content")
-        cPythonActivity = GetAndroidModule("PythonActivity")
+        cContext        = GetAndroidModule('Context','android.content')
+        cPythonActivity = GetAndroidModule('PythonActivity')
         oPythonActivity = cPythonActivity.mActivity
         oWifiManager    = oPythonActivity.getSystemService(cContext.WIFI_SERVICE)
 
         oIP             = oWifiManager.getConnectionInfo()
         iIP             = oIP.getIpAddress()
-        uIP             = "%d.%d.%d.%d" % ( (iIP & 0xff), (iIP >> 8 & 0xff), (iIP >> 16 & 0xff), (iIP >> 24 & 0xff))
+        uIP             = f'{(iIP & 0xff):d}.{(iIP >> 8 & 0xff):d}.{(iIP >> 16 & 0xff):d}.{(iIP >> 24 & 0xff):d}'
         # detach()
-        Logger.debug("Found IPv4 Address:"+uIP)
+        Logger.debug('Found IPv4 Address:'+uIP)
 
     except Exception as e:
         LogError(uMsg='GetIPAddressV4:',oException=e)

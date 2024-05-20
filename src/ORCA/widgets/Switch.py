@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -31,14 +31,14 @@ from ORCA.vars.Access               import SetVar
 from ORCA.vars.Access               import GetVar
 from ORCA.vars.Actions              import Var_Invert
 from ORCA.utils.FileName            import cFileName
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 
 __all__ = ['cWidgetSwitch']
@@ -78,16 +78,16 @@ class cWidgetSwitch(cWidgetButton):
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.oFnButtonPictureNormalOrg:cFileName  = cFileName(u'')
-        self.oFnButtonPicturePressedOrg:cFileName = cFileName(u'')
-        self.uDestVar:str                         = u''
-        self.uGroup:str                           = u''
+        self.oFnButtonPictureNormalOrg:cFileName  = cFileName('')
+        self.oFnButtonPicturePressedOrg:cFileName = cFileName('')
+        self.uDestVar:str                         = ''
+        self.uGroup:str                           = ''
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
         bRet:bool = super().InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=uAnchor)
-        self.uDestVar                         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'destvar', bMandatory=False, vDefault=self.uName+'_switchstate')
-        self.uGroup                           = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'group',   bMandatory=False, vDefault='')
+        self.uDestVar                         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='destvar', bMandatory=False, vDefault=self.uName+'_switchstate')
+        self.uGroup                           = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='group',   bMandatory=False, vDefault='')
         self.oFnButtonPictureNormalOrg        = cFileName(self.oFnButtonPictureNormal)
         self.oFnButtonPicturePressedOrg       = cFileName(self.oFnButtonPicturePressed)
         if GetVar(uVarName = self.uDestVar)=='1':
@@ -95,6 +95,7 @@ class cWidgetSwitch(cWidgetButton):
         return bRet
 
     def On_Button_Up(self,instance:cTouchButton) -> None:
+
         if Globals.oTheScreen.GuiIsBlocked():
             return
 
@@ -119,12 +120,12 @@ class cWidgetSwitch(cWidgetButton):
         """ Inverts and button and the var """
         if GetVar(uVarName = self.uDestVar)=='1':
             SetVar(uVarName = self.uDestVar, oVarValue = '0')
-            self.SetPictureNormal( self.oFnButtonPictureNormalOrg.string,True)
-            self.SetPicturePressed(self.oFnButtonPicturePressedOrg.string)
+            self.SetPictureNormal( str(self.oFnButtonPictureNormalOrg),True)
+            self.SetPicturePressed( str(self.oFnButtonPicturePressedOrg))
         else:
             SetVar(uVarName = self.uDestVar, oVarValue = '1')
-            self.SetPictureNormal( self.oFnButtonPicturePressedOrg.string,True)
-            self.SetPicturePressed( self.oFnButtonPictureNormalOrg.string)
+            self.SetPictureNormal( str(self.oFnButtonPicturePressedOrg),True)
+            self.SetPicturePressed( str(self.oFnButtonPictureNormalOrg))
 
     def GroupSwitch(self) -> None:
         """ Switches the button as part of a button group """

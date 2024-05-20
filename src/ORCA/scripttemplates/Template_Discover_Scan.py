@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,6 @@ from typing                                 import List
 from typing                                 import Union
 from typing                                 import Callable
 from typing                                 import Tuple
-from typing                                 import Optional
 
 import threading
 from kivy.logger                            import Logger
@@ -36,14 +35,13 @@ from kivy.clock                             import Clock
 from ORCA.scripttemplates.Template_Discover import cDiscoverScriptTemplate
 from ORCA.scripts.BaseScriptSettings        import cBaseScriptSettings
 from ORCA.ui.ShowErrorPopUp                 import ShowMessagePopUp
-from ORCA.utils.LogError                    import LogErrorSmall
 from ORCA.utils.TypeConvert                 import ToFloat
 from ORCA.utils.TypeConvert                 import ToBool
 from ORCA.vars.QueryDict                    import TypedQueryDict
 from ORCA.utils.FileName                    import cFileName
 from ORCA.utils.Network                     import Ping
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
@@ -55,11 +53,11 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
 
     def __init__(self):
         cDiscoverScriptTemplate.__init__(self)
-        self.uSubType:str                       = u''
+        self.uSubType:str                       = ''
         self.iPort:int                          = 80
         self.aResults:List[TypedQueryDict]      = []
-        self.uNothingFoundMessage               = u'Discover - Networkscan: Could not find a device on the network'
-        self.uTitle                             = u''
+        self.uNothingFoundMessage               = 'Discover - Networkscan: Could not find a device on the network'
+        self.uTitle                             = ''
         self.bDoNotWait:bool                    = False
 
     def Init(self,uObjectName:str,oFnScript:Union[cFileName,None]=None) -> None:
@@ -70,7 +68,7 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
         :param cFileName oFnScript: The file of the script (to be passed to all scripts)
         """
         cDiscoverScriptTemplate.Init(self, uObjectName, oFnScript)
-        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = 'enabled'
 
     def ListDiscover(self) -> None:
         self.SendStartNotification()
@@ -91,9 +89,9 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
         uConfigName:str                = kwargs.get('configname',self.uConfigName)
         oSetting:cBaseScriptSettings   = self.GetSettingObjectForConfigName(uConfigName=uConfigName)
         fTimeOut:float                 = ToFloat(kwargs.get('timeout',oSetting.aIniSettings.fTimeOut))
-        bOnlyOnce:bool                 = ToBool(kwargs.get('onlyonce', "1"))
+        bOnlyOnce:bool                 = ToBool(kwargs.get('onlyonce', '1'))
         uIPSubNet:str                  = Globals.uIPGateWayV4
-        uIPSubNet:str                  = uIPSubNet[:uIPSubNet.rfind(".")]+"."
+        uIPSubNet:str                  = uIPSubNet[:uIPSubNet.rfind('.')]+'.'
         self.bDoNotWait                = ToBool(kwargs.get('donotwait',0))
 
         del self.aResults[:]
@@ -121,40 +119,40 @@ class cDiscoverScriptTemplate_Scan(cDiscoverScriptTemplate):
 
     def GetHeaderLabels(self) -> List[str]:
         # Empty function
-        Logger.error("You must implement GetHeaderLabels")
+        Logger.error('You must implement GetHeaderLabels')
         return ['']
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
-        Logger.error("You must implement CreateDiscoverList_ShowDetails")
+        Logger.error('You must implement CreateDiscoverList_ShowDetails')
         dDevice:TypedQueryDict = oButton.dDevice
-        uText:str = u"$lvar(5029): %s \n" % dDevice.uFoundIP
+        uText:str = '$lvar(5029): %s \n' % dDevice.uFoundIP
         ShowMessagePopUp(uMessage=uText)
 
     # noinspection PyMethodMayBeStatic
     def CreateReturnDict(self,dResult:Union[TypedQueryDict,None]) -> Dict:
-        Logger.error("You must implement CreateReturnDict")
-        uHost: str = u""
+        Logger.error('You must implement CreateReturnDict')
+        uHost: str = ''
         if dResult is not None:
-            uHost= dResult["uIP"]
+            uHost= dResult['uIP']
         return {'Host': uHost,'Exception': None}
 
     # noinspection PyMethodMayBeStatic
     def ParseResult(self,dResult:TypedQueryDict) -> Tuple[str,TypedQueryDict,List]:
-        Logger.error("You must implement ParseResult")
+        Logger.error('You must implement ParseResult')
         dDevice:TypedQueryDict = TypedQueryDict()
         dDevice.uFoundIP        = dResult["uIP"]
         uTageLine:str           = dDevice.uFoundIP
         aLine:List              = [dDevice.uFoundIP]
-        Logger.info(u'Bingo: Discovered device %s:%s' % (dDevice.uFoundModel, dDevice.uFoundIP))
+        Logger.info('Bingo: Discovered device %s:%s' % (dDevice.uFoundModel, dDevice.uFoundIP))
         return uTageLine,dDevice,aLine
 
     @classmethod
     def GetConfigJSONforParameters(cls,dDefaults:Dict) -> Dict[str,Dict]:
-        return {"TimeOut":{"type": "numericfloat", "order":0, "title": "$lvar(6019)", "desc": "$lvar(6020)","key": "timeout", "default":"1.0"}}
+        return {'TimeOut':{'type': 'numericfloat', 'order':0, 'title': '$lvar(6019)', 'desc': '$lvar(6020)','key': 'timeout', 'default':'1.0'}}
 
     # noinspection PyMethodMayBeStatic
     def GetThreadClass(self) -> Callable:
-        Logger.error("You must implement GetThreadClass")
+        Logger.error('You must implement GetThreadClass')
         return cThread_CheckIP
 
 # this is dummy code, which just pings the IP. must be replaced which real code to find a device by scan
@@ -184,6 +182,6 @@ class cThread_CheckIP(threading.Thread):
                 dResult.uIP          = self.uIP
                 self.oCaller.aResults.append(dResult)
         except Exception as e:
-            self.oCaller.ShowError(uMsg="Error on send:", oException=e)
+            self.oCaller.ShowError(uMsg='Error on send:', oException=e)
         return
 

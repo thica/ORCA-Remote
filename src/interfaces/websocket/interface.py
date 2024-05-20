@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -33,9 +33,17 @@ from ORCA.vars.Access                           import SetVar
 from ORCA.utils.TypeConvert                     import ToUnicode
 from ORCA.utils.wait.StartWait                  import StartWait
 from ORCA.utils.Sleep                           import fSleep
-from ORCA.Action                                import cAction
+from ORCA.action.Action import cAction
 from ORCA.utils.FileName                        import cFileName
 from ORCA.actions.ReturnCode                    import eReturnCode
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ORCA.interfaces.BaseTrigger import cBaseTrigger
+else:
+    from typing import TypeVar
+    cBaseTrigger = TypeVar('cBaseTrigger')
+
 
 '''
 <root>
@@ -45,8 +53,8 @@ from ORCA.actions.ReturnCode                    import eReturnCode
       <description language='English'>Sends commands via the Websocket protocol</description>
       <description language='German'>Sendet Befehle via dem Websocket protokoll</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -80,30 +88,30 @@ class cInterface(cBaseInterFace):
             def SetSettingObject(self, oSetting:cInterface.cInterFaceSettings) -> None:
                 self.oSetting = oSetting
             def opened(self) -> None:
-                self.oSetting.ShowDebug(uMsg="Websocket opened")
+                self.oSetting.ShowDebug(uMsg='Websocket opened')
             def closed(self, code, reason=None) -> None:
-                self.oSetting.ShowDebug(uMsg="Websocket closed! Code:%d Reason: %s" % (code, reason))
+                self.oSetting.ShowDebug(uMsg='Websocket closed! Code:%d Reason: %s' % (code, reason))
             def received_message(self, m) -> None:
                 self.oSetting.Receive(m.data)
 
         def __init__(self,oInterFace:cInterface):
             super().__init__(oInterFace)
             self.oWebSocket:Optional[WebSocketClient]     = None
-            self.uRetVar                                  = u''
+            self.uRetVar                                  = ''
 
             # default config fits for KODI
-            self.aIniSettings.uHost                       = u"discover"
-            self.aIniSettings.uPort                       = u"9090"
-            self.aIniSettings.uService                    = u"ws://$cvar(HOST):$cvar(PORT)/jsonrpc"
+            self.aIniSettings.uHost                       = 'discover'
+            self.aIniSettings.uPort                       = '9090'
+            self.aIniSettings.uService                    = 'ws://$cvar(HOST):$cvar(PORT)/jsonrpc'
 
-            self.aIniSettings.uFNCodeset                  = u"CODESET_websocket_KODI-Leia.xml"
-            self.aIniSettings.uParseResultOption          = u'json'
-            self.aIniSettings.uDiscoverScriptName         = u"discover_upnp"
+            self.aIniSettings.uFNCodeset                  = 'CODESET_websocket_KODI-Leia.xml'
+            self.aIniSettings.uParseResultOption          = 'json'
+            self.aIniSettings.uDiscoverScriptName         = 'discover_upnp'
             self.aIniSettings.fDISCOVER_UPNP_timeout      = 5.0
-            self.aIniSettings.uDISCOVER_UPNP_models       = u'["Kodi"]'
-            self.aIniSettings.uDISCOVER_UPNP_servicetypes = "upnp:rootdevice"
-            self.aIniSettings.uDISCOVER_UPNP_manufacturer = "XBMC Foundation"
-            self.aIniSettings.uDISCOVER_UPNP_prettyname   = ""
+            self.aIniSettings.uDISCOVER_UPNP_models       = '["Kodi"]'
+            self.aIniSettings.uDISCOVER_UPNP_servicetypes = 'upnp:rootdevice'
+            self.aIniSettings.uDISCOVER_UPNP_manufacturer = 'XBMC Foundation'
+            self.aIniSettings.uDISCOVER_UPNP_prettyname   = ''
             self.aIniSettings.bDISCOVER_UPNP_returnport   = False
 
         def Connect(self) -> bool:
@@ -111,12 +119,12 @@ class cInterface(cBaseInterFace):
             if not super().Connect():
                 return False
 
-            self.ShowDebug(uMsg=u'Interface trying to connect...')
+            self.ShowDebug(uMsg='Interface trying to connect...')
 
             try:
                 if self.oWebSocket is None or self.oWebSocket.sock is None:
                     uURL = ReplaceVars(self.aIniSettings.uService)
-                    uURL = ReplaceVars(uURL,self.oInterFace.uObjectName+'/'+self.uConfigName+"CONFIG_")
+                    uURL = ReplaceVars(uURL,self.oInterFace.uObjectName+'/'+self.uConfigName+'CONFIG_')
                     self.oWebSocket=self.cWebSocketClient(uURL, heartbeat_freq=2.0)
                     self.oWebSocket.SetSettingObject(self)
                 self.oWebSocket.connect()
@@ -126,19 +134,19 @@ class cInterface(cBaseInterFace):
                 self.bInConnect = False
                 self.bIsConnected =True
             except Exception as e:
-                self.ShowError(uMsg=u'Interface not connected: Cannot open socket #2:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                self.ShowError(uMsg='Interface not connected: Cannot open socket #2:'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.bOnError=True
                 return False
 
-            self.ShowDebug(uMsg=u'Interface connected!')
+            self.ShowDebug(uMsg='Interface connected!')
             return True
 
         def Disconnect(self) -> bool:
 
             if not super().Disconnect():
-                self.ShowDebug(uMsg=u'Interface Disconnect #1: Connection is already closed, no further actions')
+                self.ShowDebug(uMsg='Interface Disconnect #1: Connection is already closed, no further actions')
                 return False
-            self.ShowDebug(uMsg=u'Interface Disconnect #2:Closing Connection')
+            self.ShowDebug(uMsg='Interface Disconnect #2:Closing Connection')
 
             try:
                 self.ExecuteStandardAction('logoff')
@@ -153,14 +161,14 @@ class cInterface(cBaseInterFace):
             uResponse = ToUnicode(uResponse)
             if self.oAction is not None:
                 uCmd,uRetVal=self.oInterFace.ParseResult(self.oAction,uResponse,self)
-                self.ShowDebug(uMsg=u'Parsed Responses:'+uRetVal)
-                if not self.uRetVar==u'' and not uRetVal==u'':
+                self.ShowDebug(uMsg='Parsed Responses:'+uRetVal)
+                if not self.uRetVar=='' and not uRetVal=='':
                     SetVar(uVarName = self.uRetVar, oVarValue = uRetVal)
                 # We do not need to wait for an response anymore
                 StartWait(0)
                 self.oAction=None
             else:
-                oAction:cAction = self.dStandardActions["defaultresponse"]
+                oAction:cAction = self.dStandardActions['defaultresponse']
                 if oAction:
                     uCommand = self.oInterFace.ParseResult(oAction, uResponse, self)
                     if not isinstance(uCommand, str):
@@ -170,33 +178,33 @@ class cInterface(cBaseInterFace):
                     # we have a notification issued by the device, so lets have a look, if we have a trigger assigned to it
                     aActionTrigger=self.GetTrigger(uCommand)
                     if aActionTrigger is not None:
-                        for oActionTrigger in oActionTrigger:
+                        for oActionTrigger in aActionTrigger:
                             self.CallTrigger(oActionTrigger,uResponse)
                     else:
-                        self.ShowDebug(uMsg=u'Discard message:'+uCommand +':'+uResponse)
+                        self.ShowDebug(uMsg='Discard message:'+uCommand +':'+uResponse)
 
     def __init__(self):
         super().__init__()
         self.dSettings:Dict      = {}
         self.oSetting       = None
-        self.uResponse      = u''
+        self.uResponse      = ''
         self.iWaitMs        = 100
 
     def Init(self, uObjectName: str, oFnObject: Optional[cFileName] = None) -> None:
         super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
-        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['User']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['Password']['active']                    = "enabled"
-        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['User']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['Password']['active']                    = 'enabled'
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = 'enabled'
 
     def GetConfigJSON(self) -> Dict:
-        return {"Service": {"active": "enabled", "order": 3, "type": "string",         "title": "$lvar(IFACE_WEBSOCKET_1)", "desc": "$lvar(IFACE_WEBSOCKET_2)", "section": "$var(ObjectConfigSection)","key": "Service",                  "default":"ws://$cvar(HOST):$cvar(PORT)/jsonrpc"}}
+        return {'Service': {'active': 'enabled', 'order': 3, 'type': 'string',         'title': '$lvar(IFACE_WEBSOCKET_1)', 'desc': '$lvar(IFACE_WEBSOCKET_2)', 'section': '$var(ObjectConfigSection)','key': 'Service',                  'default':'ws://$cvar(HOST):$cvar(PORT)/jsonrpc'}}
 
     def DeInit(self, **kwargs) -> None:
         super().DeInit(**kwargs)
@@ -206,7 +214,7 @@ class cInterface(cBaseInterFace):
     def SendCommand(self,oAction:cAction,oSetting:cInterFaceSettings,uRetVar:str,bNoLogOut:bool=False) -> eReturnCode:
         super().SendCommand(oAction=oAction,oSetting=oSetting,uRetVar=uRetVar,bNoLogOut=bNoLogOut)
 
-        if uRetVar!="":
+        if uRetVar!='':
             oAction.uGlobalDestVar=uRetVar
 
         iTryCount        = 0
@@ -231,7 +239,7 @@ class cInterface(cBaseInterFace):
                     oSetting.uMsg=uMsg
                     oSetting.uRetVar=uRetVar
                     oSetting.uRetVar=uRetVar
-                    self.ShowInfo (uMsg=u'Sending Command: '+uMsg + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,uParConfigName=oSetting.uConfigName)
+                    self.ShowInfo (uMsg='Sending Command: '+uMsg + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort,uParConfigName=oSetting.uConfigName)
                     #All response comes to receiver thread, so we should hold the queue until vars are set
                     if oSetting.oAction.bWaitForResponse:
                         StartWait(self.iWaitMs)
@@ -240,15 +248,15 @@ class cInterface(cBaseInterFace):
                     eRet = eReturnCode.Success
                     break
                 except Exception as e:
-                    self.ShowError(uMsg=u'Can\'t send message',uParConfigName=oSetting.uConfigName,oException=e)
+                    self.ShowError(uMsg='Can\'t send message',uParConfigName=oSetting.uConfigName,oException=e)
                     eRet = eReturnCode.Error
                     oSetting.Disconnect()
                     oSetting.bOnError=True
-                    if not uRetVar==u'':
-                        SetVar(uVarName = uRetVar, oVarValue = u"Error")
+                    if not uRetVar=='':
+                        SetVar(uVarName = uRetVar, oVarValue = 'Error')
             else:
-                if not uRetVar==u'':
-                    SetVar(uVarName = uRetVar, oVarValue = u"Error")
+                if not uRetVar=='':
+                    SetVar(uVarName = uRetVar, oVarValue = 'Error')
 
         self.CloseSettingConnection(oSetting=oSetting, bNoLogOut=bNoLogOut)
         return eRet

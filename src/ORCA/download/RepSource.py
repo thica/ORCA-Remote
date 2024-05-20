@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -38,15 +38,15 @@ class cRepSource:
     """
 
     def __init__(self):
-        self.uSourceFile:str          = u''
-        self.uTargetPath:str          = u''
-        self.uLocal:str               = u''
+        self.uSourceFile:str          = ''
+        self.uTargetPath:str          = ''
+        self.uLocal:str               = ''
 
     def ParseFromXMLNode(self,*,oXMLNode:Element) -> None:
         """ Parses an xms string into object vars """
-        self.uSourceFile = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'sourcefile',bMandatory=True,vDefault=u'')
-        self.uTargetPath = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'targetpath',bMandatory=True,vDefault=u'')
-        self.uLocal      = AdjustPathToOs(uPath=ReplaceVars(GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'local',bMandatory=False,vDefault=u'')))
+        self.uSourceFile = GetXMLTextValue(oXMLNode=oXMLNode,uTag='sourcefile',bMandatory=True,vDefault='')
+        self.uTargetPath = GetXMLTextValue(oXMLNode=oXMLNode,uTag='targetpath',bMandatory=True,vDefault='')
+        self.uLocal      = AdjustPathToOs(uPath=ReplaceVars(GetXMLTextValue(oXMLNode=oXMLNode,uTag='local',bMandatory=False,vDefault='')))
 
     def WriteToXMLNode(self,*,oXMLNode:Element) -> None:
 
@@ -55,7 +55,7 @@ class cRepSource:
         oXMLSource:Element = SubElement(oXMLNode,'source')
         oVal               = SubElement(oXMLSource,'sourcefile')
 
-        oFnUrl:cFileName   = cFileName('').ImportFullPath(uFnFullName=self.uSourceFile)
+        oFnUrl:cFileName   = cFileName(self.uSourceFile)
         oVal.text          = oFnUrl.urlstring
         oVal               = SubElement(oXMLSource,'targetpath')
         oVal.text          = self.uTargetPath

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -28,7 +28,7 @@ from kivy.uix.label         import Label
 from kivy.graphics          import BorderImage
 from kivy.graphics          import Color
 from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cSliderEx']
 
@@ -37,7 +37,7 @@ class cSliderEx(Slider):
     def __init__(self, **kwargs):
         self.uBackgroundPic:str             = kwargs['background_pic']
         self.uButtonPic:str                 = kwargs['button_pic']
-        self.uMoveType:str                  = u''
+        self.uMoveType:str                  = ''
         self.oText:Union[Label,None]        = None
         fGap:float
         self.x:float
@@ -52,7 +52,7 @@ class cSliderEx(Slider):
         super().__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=Slider))
         self.register_event_type('on_slider_moved')
         self.canvas.clear()
-        if self.orientation==u'horizontal':
+        if self.orientation=='horizontal':
             fGap                     = (self.height - sp(32))/2
             self.x                   = self.x + fGap
             self.width               = self.width - fGap * 2
@@ -96,7 +96,7 @@ class cSliderEx(Slider):
 
     def on_touch_down(self, touch) -> bool:
         if self.collide_point(*touch.pos) and not Globals.oTheScreen.GuiIsBlocked():
-            self.uMoveType=u'down'
+            self.uMoveType='down'
             Slider.on_touch_down(self,touch)
             touch.grab(self)
             self.UpdateButtonPos()
@@ -106,7 +106,7 @@ class cSliderEx(Slider):
 
     def on_touch_move(self, touch) -> bool:
         if touch.grab_current is self and not Globals.oTheScreen.GuiIsBlocked():
-            self.uMoveType=u'move'
+            self.uMoveType='move'
             Slider.on_touch_move(self,touch)
             self.UpdateButtonPos()
             return True
@@ -114,7 +114,7 @@ class cSliderEx(Slider):
             return super(cSliderEx, self).on_touch_move(touch)
     def on_touch_up(self, touch) -> bool:
         if touch.grab_current is self and not Globals.oTheScreen.GuiIsBlocked():
-            self.uMoveType=u'up'
+            self.uMoveType='up'
             Slider.on_touch_up(self,touch)
             self.UpdateButtonPos()
             touch.ungrab(self)
@@ -124,7 +124,7 @@ class cSliderEx(Slider):
 
     def UpdateButtonPos(self,bNoDispatch=False):
         tNewPos:Tuple
-        if self.orientation==u'horizontal':
+        if self.orientation=='horizontal':
             tNewPos = self.value_pos[0]- (self.height/2) ,self.value_pos[1]
         else:
             tNewPos = self.value_pos[0] ,self.value_pos[1]- (self.width/2)

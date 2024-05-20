@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+     <string id="SCRIPT_TOOLS_CREATETVLOGOS_1">Create TV Logos</string>
+     <string id="SCRIPT_TOOLS_CREATETVLOGOS_2">Loads TV from the Internet and coverts them for ORCA</string>
+     <string id="SCRIPT_TOOLS_CREATETVLOGOS_3">Create</string>
+     <string id="SCRIPT_TOOLS_CREATETVLOGOS_4">TV-Logos</string>
+  </strings>
+

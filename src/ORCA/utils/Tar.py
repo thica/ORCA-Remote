@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -36,17 +36,17 @@ from ORCA.utils.TypeConvert import ToUnicode
 
 __all__ = ['cTarFile','cTarPath']
 
-def GetWriteMode(*,oFnTarDest:cFileName, uDefaultMode:str="") -> str:
+def GetWriteMode(*,oFnTarDest:cFileName, uDefaultMode:str='') -> str:
     uMode:str
     if oFnTarDest.Exists():
-        uMode = "w"
+        uMode = 'w'
     else:
-        uMode = "x"
+        uMode = 'x'
 
     if uDefaultMode:
-        uMode+=":"+uDefaultMode
+        uMode+=':'+uDefaultMode
     else:
-        uMode+=":"+oFnTarDest.Extension()[1:]
+        uMode+=':'+oFnTarDest.Extension()[1:]
 
     return uMode
 
@@ -58,12 +58,12 @@ class cTarFile(cFileName):
         """
 
         try:
-            return tarfile.is_tarfile(self.string)
+            return tarfile.is_tarfile(str(self))
         except Exception as e:
-            LogError(uMsg=u'IstarFile: Error for:'+self.string, oException=e)
+            LogError(uMsg=f'IstarFile: Error for: {self}', oException=e)
             return False
 
-    def TarFile(self,*, oTarDest:cFileName, uRemovePath:str='', uCompressionMode:str = "") -> bool:
+    def TarFile(self,*, oTarDest:cFileName, uRemovePath:str='', uCompressionMode:str = '') -> bool:
         """
         tars a single file to a tar file
 
@@ -76,16 +76,16 @@ class cTarFile(cFileName):
         uMode:str
         try:
             uMode = GetWriteMode(oFnTarDest=oTarDest,uDefaultMode=uCompressionMode)
-            oTarFile:tarfile.TarFile = tarfile.open(name=oTarDest.string, mode=uMode)
+            oTarFile:tarfile.TarFile = tarfile.open(name=str(oTarDest), mode=uMode)
             if uRemovePath == '':
-                oTarFile.add(name=self.string)
+                oTarFile.add(name=str(self))
             else:
-                uArc:str = self.string[len(uRemovePath):]
-                oTarFile.add(name=self.string, arcname=uArc)
+                uArc:str = str(self)[len(uRemovePath):]
+                oTarFile.add(name=str(self), arcname=uArc)
             oTarFile.close()
             return True
         except Exception as e:
-            Logger.critical(u'Tar: Fatal Error Taring File:' + ToUnicode(e))
+            Logger.critical('Tar: Fatal Error Taring File:' + ToUnicode(e))
             return False
 
     def UnTar(self, oPath:cPath) -> bool:
@@ -101,13 +101,13 @@ class cTarFile(cFileName):
 
         try:
 
-            Logger.debug(u'Extracting file [%s] to path [%s]' % (self.string, oPath.string))
-            oTarFile = tarfile.open(self.string, 'r')
-            oTarFile.extractall(path=oPath.string)
+            Logger.debug(f'Extracting file [{self}] to path [{oPath}]')
+            oTarFile = tarfile.open(str(self), 'r')
+            oTarFile.extractall(path=str(oPath))
             oTarFile.close()
             return True
         except Exception as e:
-            LogError(uMsg=u'Untar: Fatal Error untaring file',oException=e)
+            LogError(uMsg='Untar: Fatal Error untaring file',oException=e)
             try:
                 # noinspection PyUnboundLocalVariable
                 oTarFile.close()
@@ -117,7 +117,7 @@ class cTarFile(cFileName):
 
 
 class cTarPath(cPath):
-    def TarFolder(self, oFnTarDest:cFileName, uRemovePath:str=u'', aSkipFiles:Optional[List[str]]=None, uCompressionMode:str = "")-> bool:
+    def TarFolder(self, oFnTarDest:cFileName, uRemovePath:str='', aSkipFiles:Optional[List[str]]=None, uCompressionMode:str = '')-> bool:
         """
         Tars a folder to a tar file
 
@@ -137,10 +137,10 @@ class cTarPath(cPath):
             aSkipFiles = []
 
         try:
-            Logger.debug(u'Taring path [%s] to file [%s] , removing path [%s]' % (self.string, oFnTarDest.string, uRemovePath))
+            Logger.debug(f'Taring path [{self}] to file [{oFnTarDest}] , removing path [{uRemovePath}]')
             uMode = GetWriteMode(oFnTarDest=oFnTarDest,uDefaultMode=uCompressionMode)
-            oTarFile:tarfile.TarFile = tarfile.open(name=oFnTarDest.string, mode=uMode)
-            for uRoot, uDirs, uFiles in walk(self.string):
+            oTarFile:tarfile.TarFile = tarfile.open(name=str(oFnTarDest), mode=uMode)
+            for uRoot, uDirs, uFiles in walk(str(self)):
                 for uFile in uFiles:
                     uFile      = join(uRoot, uFile)
                     uFile2:str = ''
@@ -151,12 +151,12 @@ class cTarPath(cPath):
                     if (uFile in aSkipFiles) or (uFile2 in aSkipFiles):
                         bSkip = True
                     for uSkipFile in aSkipFiles:
-                        if uSkipFile.endswith("*"):
+                        if uSkipFile.endswith('*'):
                             uSkipFile = uSkipFile[:-1]
                             if uFile.startswith(uSkipFile):
                                 bSkip = True
                                 break
-                        if uSkipFile.startswith("*"):
+                        if uSkipFile.startswith('*'):
                             if uFile.endswith(uSkipFile[1:]):
                                 bSkip = True
                                 break
@@ -173,12 +173,12 @@ class cTarPath(cPath):
                             uArc:str = uFile[len(uRemovePath):]
                             oTarFile.add(name=uFile, arcname=uArc)
                     else:
-                        Logger.debug(u'Skip Taring File [%s]' % uFile)
+                        Logger.debug(f'Skip Taring File [{uFile}]')
 
             oTarFile.close()
             return True
         except Exception as e:
-            uMsg = u'Tar: Fatal Error taring Directory:' + ToUnicode(e)
+            uMsg = 'Tar: Fatal Error taring Directory:' + ToUnicode(e)
             Logger.critical(uMsg)
             return False
 
@@ -189,12 +189,12 @@ def Extract_LZMA2Tar(*,oFnSource:cFileName,oPathDst:cPath) -> cFileName:
     byData:bytes
     oFnDestTar:cFileName
     # open lzma file
-    with open(oFnSource.string,"rb") as oArSource:
+    with open(str(oFnSource),"rb") as oArSource:
         byData = lzma.decompress(oArSource.read())
     # write tar file
-    oFnDestTar = cFileName().ImportFullPath(uFnFullName=oPathDst.string+"/"+oFnSource.basename[:-3])
+    oFnDestTar = cFileName().ImportFullPath(uFnFullName=str(oPathDst)+"/"+oFnSource.basename[:-3])
 
-    with open(oFnDestTar.string, "wb") as oArDest:
+    with open(str(oFnDestTar), "wb") as oArDest:
         oArDest.write(byData)
     return oFnDestTar
 

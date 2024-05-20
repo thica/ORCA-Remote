@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -28,14 +28,14 @@ from ORCA.utils.XML                 import GetXMLTextAttributeVar
 
 from ORCA.widgets.base.Base         import cWidgetBase
 from ORCA.widgets.core.Border       import cBorder
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 
 __all__ = ['cWidgetBorder']
@@ -64,7 +64,6 @@ class cWidgetBorder(cWidgetBase):
     |-
     |linewidth
     |The width of the line, should be a percentage with the same systax os for the width attribute
-
     |}</div>
 
     Below you see an example for a rectangle
@@ -76,7 +75,7 @@ class cWidgetBorder(cWidgetBase):
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.uLineWidth: str    = u''
+        self.uLineWidth: str    = ''
         self.iLineWidth: int = 1
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
@@ -84,17 +83,17 @@ class cWidgetBorder(cWidgetBase):
 
         bRet:bool=self.ParseXMLBaseNode(oXMLNode, oParentScreenPage, uAnchor)
         if bRet:
-            self.uLineWidth  = GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'linewidth', bMandatory=False, uDefault="1.0")
-            if self.uBackGroundColor=="#00000000":
+            self.uLineWidth  = GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag='linewidth', bMandatory=False, uDefault='1.0')
+            if self.uBackGroundColor=='#00000000':
                 self.aBackGroundColor = Globals.oTheScreen.oSkin.dSkinAttributes.get('color border')
 
             fPercentage:float=-1.0
-            if not self.uLineWidth==u'':
+            if not self.uLineWidth=='':
                 if self.uLineWidth.startswith('of:'):
                     self.iLineWidth=self._ParseDimPosValue(self.uLineWidth)
-                elif self.uLineWidth[0]==u'%':
+                elif self.uLineWidth[0]=='%':
                     fPercentage=ToFloat(self.uLineWidth[1:])
-                elif self.uLineWidth[0]==u'd':
+                elif self.uLineWidth[0]=='d':
                    self.iLineWidth=dp(ToInt(self.uLineWidth[1:]))+self.iAnchorPosX
                 else:
                     self.iLineWidth=ToInt(self.uLineWidth)

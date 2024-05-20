@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -43,7 +43,7 @@ from ORCA.settings.setttingtypes.Base   import GetSendActionList
 from ORCA.settings.setttingtypes.Base   import SettingSpacer
 from ORCA.utils.RemoveNoClassArgs       import RemoveNoClassArgs
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['SettingScrollOptions',
            'ScrollOptionsPopUp']
@@ -66,7 +66,7 @@ class ScrollOptionsPopUp:
         self.options:List[str]                          = kwargs.get('options','')
 
         if len(self.options)>0:
-            if self.options[0]=="$LANGUAGELIST":
+            if self.options[0]=='$LANGUAGELIST':
                 self.bIsLanguageInput=True
 
         uRet=kwargs.get('novaluechange')
@@ -74,29 +74,29 @@ class ScrollOptionsPopUp:
             self.bNoValueChange=(uRet=='1')
             self.uOrgValue=self.value
 
-        self.bAllWaysOnChange=(kwargs.get('alwaysonchange',0)=="1")
-        self.bAddInputField=(kwargs.get('allowtextinput',0)=="1")
+        self.bAllWaysOnChange=(kwargs.get('alwaysonchange',0)=='1')
+        self.bAddInputField=(kwargs.get('allowtextinput',0)=='1')
         self.oButtonHeigth=dp(55)
 
         self.bStopVarTrigger = True
         self.value=self.UnhideLanguageVars(self.value)
 
         ''' Show text of language vars '''
-        if self.value.startswith(u'$lvar(') and self.value.endswith(u')') and ":::" not in self.value:
-            self.value="%s [[%s]]" % (ReplaceVars(self.value),self.value[self.value.find("(")+1:-1])
+        if self.value.startswith('$lvar(') and self.value.endswith(')') and ':::' not in self.value:
+            self.value='%s [[%s]]' % (ReplaceVars(self.value),self.value[self.value.find('(')+1:-1])
 
-        if ":::" in self.value:
-            aValues=self.value.split(":::")
-            self.value=""
+        if ':::' in self.value:
+            aValues=self.value.split(':::')
+            self.value=''
             for uValue in aValues:
-                if uValue.startswith(u'$lvar(') and uValue.endswith(u')'):
-                    self.value+="%s [[%s]]" % (ReplaceVars(uValue),uValue[uValue.find("(")+1:-1])+":::"
+                if uValue.startswith('$lvar(') and uValue.endswith(')'):
+                    self.value+='%s [[%s]]' % (ReplaceVars(uValue),uValue[uValue.find('(')+1:-1])+':::'
                 else:
-                    self.value+=uValue+":::"
+                    self.value+=uValue+':::'
             self.value=self.value[:-3]
 
         self.bStopVarTrigger = False
-        Globals.oNotifications.RegisterNotification(uNotification="on_key",fNotifyFunction=self.ClosePopUpbyESC,uDescription= "Close Settings Popup",aValueLinks=[{"in":"key","out":"key"}])
+        Globals.oNotifications.RegisterNotification(uNotification='on_key',fNotifyFunction=self.ClosePopUpbyESC,uDescription= 'Close Settings Popup',aValueLinks=[{'in':'key','out':'key'}])
 
     def CreatePopup(self, uValue, fktButttonSelect, fktTextInputSelect):
 
@@ -106,7 +106,7 @@ class ScrollOptionsPopUp:
         oScrollview:ScrollView             = ScrollView( do_scroll_x=False, bar_width='10dp',scroll_type=['bars','content'] )
         oScrollcontent:GridLayout          = GridLayout(cols=1,  spacing='5dp', size_hint=(None, None))
         oScrollcontent.bind(minimum_height = oScrollcontent.setter('height'))
-        if Globals.uDeviceOrientation == u'landscape':
+        if Globals.uDeviceOrientation == 'landscape':
             self.popup = Popup(content=self.oContent, title=self.title, size_hint=(0.5, 0.9),  auto_dismiss=False)
         else:
             self.popup = Popup(content=self.oContent, title=self.title, size_hint=(0.9, 0.9),  auto_dismiss=False)
@@ -128,20 +128,20 @@ class ScrollOptionsPopUp:
 
         # we test if we want to show some special list
         if len(self.options)>0:
-            if self.options[0]=="$LANGUAGELIST":
+            if self.options[0]=='$LANGUAGELIST':
                 self.options=GetLanguageList()
                 self.oButtonHeigth=dp(30)
-            elif self.options[0]=="$GESTURESLIST":
+            elif self.options[0]=='$GESTURESLIST':
                 self.options=GetGestureList()
-            elif self.options[0]=="$PAGELIST":
+            elif self.options[0]=='$PAGELIST':
                 self.options=GetPageList()
-            elif self.options[0]=="$ACTIONLIST":
+            elif self.options[0]=='$ACTIONLIST':
                 self.options=GetActionList()
                 self.oButtonHeigth=dp(30)
-            elif self.options[0]=="$ACTIONLISTSEND":
+            elif self.options[0]=='$ACTIONLISTSEND':
                 self.options=GetSendActionList()
                 self.oButtonHeigth=dp(30)
-            elif self.options[0].startswith("$DIRLIST["):
+            elif self.options[0].startswith('$DIRLIST['):
                 uPath=self.options[0][9:-1]
                 aFiles= cPath(uPath).GetFolderList()
                 aRet=[]
@@ -149,7 +149,7 @@ class ScrollOptionsPopUp:
                     aRet.append(uFile)
                 aRet.sort()
                 self.options=aRet
-            elif self.options[0].startswith("$FILELIST["):
+            elif self.options[0].startswith('$FILELIST['):
                 uPath=self.options[0][10:-1]
                 aFiles= cPath(uPath).GetFileList()
                 aRet=[]
@@ -157,17 +157,17 @@ class ScrollOptionsPopUp:
                     aRet.append(uFile)
                 aRet.sort()
                 self.options=aRet
-            elif self.options[0].endswith("[]"):
+            elif self.options[0].endswith('[]'):
                 aRetTmp = Var_GetArray(uVarName = self.options[0] , iLevel = 1)
-                aRet = [ReplaceVars(u"$var("+item+")") for item in aRetTmp]
+                aRet = [ReplaceVars('$var('+item+')') for item in aRetTmp]
                 aRet.sort()
                 self.options=aRet
 
-        uid = "test"
+        uid = 'test'
 
         for option in self.options:
             state = 'down' if option == uValue else 'normal'
-            btn = ToggleButton(text=option, state=state, group=uid, size=(self.popup.width, self.oButtonHeigth), size_hint=(None, None),text_size=(self.popup.width, self.oButtonHeigth), valign="middle",halign="center")
+            btn = ToggleButton(text=option, state=state, group=uid, size=(self.popup.width, self.oButtonHeigth), size_hint=(None, None),text_size=(self.popup.width, self.oButtonHeigth), valign='middle',halign='center')
             btn.bind(on_release=fktButttonSelect)
             btn.iIndex = i
             oScrollcontent.add_widget(btn)
@@ -193,7 +193,7 @@ class ScrollOptionsPopUp:
 
 
     def ClosePopUpbyESC(self,**kwargs):
-        if kwargs["key"]=="ESC":
+        if kwargs['key']=='ESC':
             if self.popup:
                     if self.bIsOpen:
                         self.popup.dismiss()
@@ -204,16 +204,16 @@ class ScrollOptionsPopUp:
         """ Hides the added Language string (only the $var will left) """
 
         if self.bIsLanguageInput:
-            if "[[" in uValue and uValue.endswith("]]") and not ":::" in uValue:
-                uValue="$lvar(%s)" % (uValue[uValue.find("[[")+2:-2])
-            if ":::" in uValue:
-                aValues=uValue.split(":::")
-                uValue=""
+            if '[[' in uValue and uValue.endswith(']]') and not ':::' in uValue:
+                uValue='$lvar(%s)' % (uValue[uValue.find('[[')+2:-2])
+            if ':::' in uValue:
+                aValues=uValue.split(':::')
+                uValue=''
                 for uSValue in aValues:
-                    if "[[" in uSValue and uSValue.endswith("]]"):
-                        uValue+="$lvar(%s)" % (uSValue[uSValue.find("[[")+2:-2])+":::"
+                    if '[[' in uSValue and uSValue.endswith(']]'):
+                        uValue+='$lvar(%s)' % (uSValue[uSValue.find('[[')+2:-2])+':::'
                     else:
-                        uValue+=uSValue+":::"
+                        uValue+=uSValue+':::'
                 uValue=uValue[:-3]
 
         return uValue
@@ -221,8 +221,8 @@ class ScrollOptionsPopUp:
     # noinspection PyMethodMayBeStatic
     def UnhideLanguageVars(self, uValue:str) -> str:
         """ Show text of language vars """
-        if uValue.startswith(u'$lvar(') and uValue.endswith(u')') and not ":::" in uValue:
-            return "%s [[%s]]" % (ReplaceVars(uValue),uValue[uValue.find("(")+1:-1])
+        if uValue.startswith('$lvar(') and uValue.endswith(')') and not ':::' in uValue:
+            return '%s [[%s]]' % (ReplaceVars(uValue),uValue[uValue.find('(')+1:-1])
         return uValue
 
 class SettingScrollOptions(SettingOptions):

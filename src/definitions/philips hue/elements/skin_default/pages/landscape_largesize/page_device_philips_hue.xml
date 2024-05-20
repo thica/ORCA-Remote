@@ -13,7 +13,7 @@
 
     <element name='Anchor Dimmer' type='ANCHOR' posx='%2' posy='of:totop:Anchor BottomGap' width='%5' height='%85'>
         <element name='Button Power On' type='BUTTON' pposy='top'    height='of:width:self'  picturenormal='button square*' action='$dvar(definition_alias_philips_hue) Fkt Philips Hue Power On'  fontsize='%h60' textcolor='$var(green)' caption='icon:power_on' />
-        <element name="Slider Dimmer HUE" type="SLIDER" posx="center"  posy="middle" height='of:width:self:*6.8' picturenormal="background boxes" picturebutton="button square normal"  action="$dvar(definition_alias_philips_hue) Dim Lights Philips Hue by Widget"  mindatavalue="0" maxdatavalue="255" destvar="hue_v"  roundpos="0" orientation="vertical"/>
+        <element name="Slider Dimmer HUE" type="SLIDER" posx="center"  posy="middle" height='of:width:self:*6.8' picturenormal="background boxes" picturebutton="button square normal"  action="$dvar(definition_alias_philips_hue) Dim Lights Philips Hue by Widget"  mindatavalue="0" maxdatavalue="255" destvar="DIMVALUE"  roundpos="0" orientation="vertical"/>
         <element name='Button Power Off' type='BUTTON' posy='bottom' height='of:width:self'  picturenormal='button square*' action='$dvar(definition_alias_philips_hue) Fkt Philips Hue Power Off' fontsize='%h60' textcolor='$var(red)' caption='icon:power_off' />
     </element>
 

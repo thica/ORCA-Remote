@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ __all__ = ['Config_GetDefault_Bool',
            'Config_GetDefault_Path']
 
 def Config_GetDefault_Bool(*,oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) ->bool:
-    return Config_GetDefault_Str(oConfig=oConfig,uSection=uSection,uOption=uOption, vDefaultValue=uDefaultValue) == u'1'
+    return Config_GetDefault_Str(oConfig=oConfig,uSection=uSection,uOption=uOption, vDefaultValue=uDefaultValue) == '1'
 
 def Config_GetDefault_Float(*,oConfig: ConfigParser, uSection: str, uOption: str, uDefaultValue: str) ->float:
     return ToFloat(Config_GetDefault_Str(oConfig=oConfig,uSection=uSection,uOption=uOption, vDefaultValue=uDefaultValue))
@@ -55,7 +55,7 @@ def Config_GetDefault_Str(*,oConfig: ConfigParser , uSection: str, uOption: str,
     :param vDefaultValue: The default value
     :return: The value of an ini setting or the default value
     """
-    uDefaultValue:str = u""
+    uDefaultValue:str = ''
 
     if not oConfig.has_section(uSection):
         oConfig.add_section(uSection)
@@ -63,9 +63,9 @@ def Config_GetDefault_Str(*,oConfig: ConfigParser , uSection: str, uOption: str,
         if vDefaultValue is not None:
             if type(vDefaultValue)==bool:
                 if vDefaultValue:
-                    uDefaultValue: str=u'1'
+                    uDefaultValue: str='1'
                 else:
-                    uDefaultValue: str = u'0'
+                    uDefaultValue: str = '0'
             else:
                 uDefaultValue = vDefaultValue
             oConfig.set(uSection, uOption, uDefaultValue)

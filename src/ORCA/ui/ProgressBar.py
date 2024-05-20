@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ from ORCA.ui.BasePopup              import cBasePopup
 from ORCA.ui.BasePopup              import SettingSpacer
 from ORCA.vars.Replace              import ReplaceVars
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cProgressBar']
 
@@ -52,7 +52,7 @@ class cProgressBar(cBasePopup):
         self.bCancel        = False
         oContent:BoxLayout  = BoxLayout(orientation='vertical', spacing='5dp')
         iHeight:int         = int(Globals.iAppHeight*0.5)
-        if Globals.uDeviceOrientation=="landscape":
+        if Globals.uDeviceOrientation=='landscape':
             iHeight=int(Globals.iAppHeight*0.9)
         self.oPopup         = Popup(title=ReplaceVars(uTitle),content=oContent, size=(Globals.iAppWidth*0.9,iHeight),size_hint=(None, None),auto_dismiss=False)
         self.oLabel         = Label(text=ReplaceVars(uMessage), text_size=(Globals.iAppWidth*0.86, None), shorten=True, valign='top',halign='left')
@@ -60,7 +60,7 @@ class cProgressBar(cBasePopup):
         oContent.add_widget(Widget())
         oContent.add_widget(self.oLabel)
         oContent.add_widget(Widget())
-        self.oProgressText.text=""
+        self.oProgressText.text=''
 
         self.oProgressBar = ProgressBar(size_hint_y=None, height='50dp', max=iMax)
         oContent.add_widget(self.oProgressBar)

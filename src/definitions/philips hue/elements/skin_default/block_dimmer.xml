@@ -11,7 +11,7 @@
         <element name='Anchor Dimmer $dvar(philips_hue_dimmer_num) Gap2' type='ANCHOR' height='%3' posy='of:bottom:Button Power On $dvar(philips_hue_dimmer_num)' />
 
         <element name='Anchor Dimmer $dvar(philips_hue_dimmer_num) Inner' type='ANCHOR' height='%46' posy='of:bottom:Anchor Dimmer $dvar(philips_hue_dimmer_num) Gap2' posx='center'>
-            <element name="Slider Dimmer $dvar(philips_hue_dimmer_num)" type="SLIDER" posy="middle"  picturenormal="background boxes" picturebutton="button square normal" action="$dvar(definition_alias_philips_hue) Send Dim Lamp"  actionpars='{"LAMPNUM":"$dvar(philips_hue_dimmer_num)"}' mindatavalue="0" maxdatavalue="255" destvar="Dimmer$dvar(philips_hue_dimmer_num)"  roundpos="0" orientation="vertical" discardmoves="1"/>
+        <element name="Slider Dimmer $dvar(philips_hue_dimmer_num)" type="SLIDER" posy="middle"  picturenormal="background boxes" picturebutton="button square normal" action="$dvar(definition_alias_philips_hue) Send Dim Lamp"  actionpars='{"LAMPNUM":"$dvar(philips_hue_dimmer_num)"}' mindatavalue="0" maxdatavalue="255" destvar="Dimmer$dvar(philips_hue_dimmer_num)"  roundpos="0" orientation="vertical" discardmoves="1"/>
         </element>
     </element>
 </elements>

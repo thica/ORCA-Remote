@@ -1,5 +1,6 @@
 source:
 Website: https://www.picons.eu/
+New: https://github.com/picons/picons/releases
 
 Use the hardlinks 220x132
 use: 

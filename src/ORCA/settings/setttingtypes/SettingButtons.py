@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ class SettingButtons(SettingItem):
         # Level 1 = Buttons, Level 2 = Options per Button, Level 3 = Suboptions per options
         self.aSubOptions:Optional[List[List[List[str]]]]            = kwargs.get('buttonsuboptions',None)
         self.iButton:int                                            = 0
-        self.uOption                                                = u''
+        self.uOption                                                = ''
         self.oScrollOptionsPopup:Optional[ScrollOptionsPopUp]       = None
         self.oScrollSubOptionsPopup:Optional[ScrollOptionsPopUp]    = None
         aButton:Dict[str,str]

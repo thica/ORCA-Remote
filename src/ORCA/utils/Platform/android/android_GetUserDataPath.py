@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ from ORCA.utils.Platform     import OS_GetInstallationDataPath
 from ORCA.utils.Path         import cPath
 from ORCA.utils.FileName     import cFileName
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 # noinspection PyUnreachableCode
@@ -40,7 +40,7 @@ def Android_GetDataDir() -> cPath:
     """
 
     oPathInst:cPath = OS_GetInstallationDataPath()
-    uSubDir:str = u'OrcaRemote'
+    uSubDir:str = 'OrcaRemote'
 
     # on android 6 and higher kivy runs on and error we fetch the kivy user_data_dir (kivy 1.10.1)
     # replace with a working value
@@ -57,16 +57,16 @@ def Android_GetDataDir() -> cPath:
     # First try to Find existing Orca Data Dir
     aTestDirs:List[cPath]=[oPreferredUserDataPath,cPath(OS_GetUserDownloadsDataPath())+uSubDir,oPathInst]
     for oTestDir in aTestDirs:
-        Logger.debug(u"Try to find Orca installations file at: " + oTestDir.string)
+        Logger.debug(f'Try to find Orca installations file at: {oTestDir}')
         if (cFileName(cPath(oTestDir)+'actions') + 'actions.xml').Exists():
-            Logger.debug(u"Found Orca installations file at " + oTestDir.string)
+            Logger.debug(f'Found Orca installations file at {oTestDir}')
             return oTestDir
 
     # First try to Find existing Orca Data Dir (fresh install)
     for oTestDir in aTestDirs:
-        Logger.debug(u"Try to find Orca installations file (Fallback) at: " + oTestDir.string)
+        Logger.debug(f'Try to find Orca installations file (Fallback) at: {oTestDir}')
         if (cFileName(cPath(oTestDir)+'actions') + 'actionsfallback.xml').Exists():
-            Logger.debug(u"Found Orca installations file (Fallback) at " + oTestDir.string)
+            Logger.debug(f'Found Orca installations file (Fallback) at {oTestDir}')
             if oTestDir != oPreferredUserDataPath and oPreferredUserDataPath.IsWriteable():
                 # lets copy the files outside of the Android App folder to make them accessible to users
                 '''
@@ -74,31 +74,29 @@ def Android_GetDataDir() -> cPath:
                 as in Android 11 we will have further restrictions on placing Application data, this needs to be reworked
                 Also needs to be reworked, that the appstartearly is always taken from the installation folder
                 '''
-                Logger.debug(u"Copy Orca installations file (Fallback) from %s to %s" %(oTestDir.string,oPreferredUserDataPath.string))
-                oTmpSrcDir:cPath = oTestDir +"actions"
-                oTmpDstDir:cPath = oPreferredUserDataPath+"actions"
+                Logger.debug(f'Copy Orca installations file (Fallback) from {oTestDir} to {oPreferredUserDataPath}')
+                oTmpSrcDir:cPath = oTestDir + 'actions'
+                oTmpDstDir:cPath = oPreferredUserDataPath + 'actions'
                 oTmpSrcDir.Copy(oDest=oTmpDstDir)
-                oTmpSrcDir = oTestDir +"languages"
-                oTmpDstDir = oPreferredUserDataPath+"languages"
+                oTmpSrcDir = oTestDir +'languages'
+                oTmpDstDir = oPreferredUserDataPath+'languages'
                 oTmpSrcDir.Copy(oDest=oTmpDstDir)
                 return oPreferredUserDataPath
             return oTestDir
 
-    Logger.error(u"Haven't found Orca installations file")
+    Logger.error('Haven\'t found Orca installations file')
 
-    Logger.error("Folder content so far")
+    Logger.error('Folder content so far')
     aContent:List[str]
     uName:str
     for oTestDir in aTestDirs:
-        Logger.error("Folder:"+oTestDir.string)
+        Logger.error(f'Folder: {oTestDir}')
         aContent=oTestDir.GetFolderList()
         for uName in aContent:
-            Logger.error("Folder:"+uName)
+            Logger.error(f'Folder: {uName}')
         aContent=oTestDir.GetFileList()
         for uName in aContent:
-            Logger.error("File:"+uName)
-
-
+            Logger.error(f'File: {uName}')
     return cPath()
 
 

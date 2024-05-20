@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -39,11 +39,10 @@ from ORCA.vars.Helpers              import CopyDict
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
-
+    cScreenPage   = TypeVar('cScreenPage')
 
 __all__ = ['cWidgetScrollList']
 
@@ -112,7 +111,7 @@ class cWidgetScrollList(cWidgetPicture):
         super().__init__()
         self.oObjectContent:Union[FloatLayout,None] = None
         self.oObjectScroll:Union[ScrollView,None]   = None
-        self.uRowHeightInit:str                     = u''
+        self.uRowHeightInit:str                     = ''
         self.iRowHeightScreen:int                   = 0
         self.iRowHeight:int                         = 0
         self.iNumRows:int                           = 0
@@ -122,7 +121,7 @@ class cWidgetScrollList(cWidgetPicture):
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Reads further Widget attributes from a xml node """
-        self.uRowHeightInit = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag="rowheight",bMandatory=True,vDefault="%20")
+        self.uRowHeightInit = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='rowheight',bMandatory=True,vDefault='%20')
         return super().InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage ,uAnchor=uAnchor)
 
     def Create(self,oParent:Widget) -> bool:
@@ -162,10 +161,10 @@ class cWidgetScrollList(cWidgetPicture):
         for oChild in aChilds:
             aChildCaptions = []
             if hasattr(oChild,'uOrgCaption'):
-                if oChild.uOrgCaption.endswith("[])"):
+                if oChild.uOrgCaption.endswith('[])'):
                     aTmp = Var_GetArrayEx(uVarName=oChild.uOrgCaption[5:-1], iLevel=1, bSort=False)
                     for tItem in aTmp:
-                        aChildCaptions.append((u"$var(" + tItem[0] + ")",tItem[1]))
+                        aChildCaptions.append(('$var(' + tItem[0] + ')',tItem[1]))
                     self.iNumRows = max(self.iNumRows, len(aChildCaptions))
             aCaptions.append(aChildCaptions)
         return aCaptions
@@ -193,38 +192,39 @@ class cWidgetScrollList(cWidgetPicture):
         iAdd:int
         uVarIndex:str
         dTmpdActionPars:Dict = {}
+        u:int
 
         for u in range(self.iNumRows):
             iIndex = 0
-            uVarIndex = u'' # by purpose, we don't set it by child, we use the last known index, in case we have widgets without vars eg Buttons
+            uVarIndex = '' # by purpose, we don't set it by child, we use the last known index, in case we have widgets without vars eg Buttons
             for oChild in aChilds:
 
                 if hasattr(oChild,"dActionPars"):
                     dTmpdActionPars         = CopyDict(oChild.dActionPars)
                 oTmpChild               = copy(oChild)
-                oTmpChild.uName          = "%s[%s]" % (oTmpChild.uName, str(u))
+                oTmpChild.uName         = f'{oTmpChild.uName}[{u:d}]'
                 oTmpChild.iHeightInit   = self.iRowHeight * (oChild.iHeightInit/oChild.iAnchorHeight)
                 oTmpChild.iPosXInit     = oTmpChild.iPosXInit - self.iPosXInit
                 oTmpChild.iGapY         = (self.iPosY *-1) + (self.iRowHeightScreen * (u + 0))
                 if isinstance(oChild,cWidgetSwitch):
                     if oTmpChild.uDestVar:
-                        oTmpChild.uDestVar=oTmpChild.uDestVar+"_"+str(u)
+                        oTmpChild.uDestVar=oTmpChild.uDestVar+'_'+str(u)
 
                 if len(aCaptions[iIndex]) > u:
-                    if hasattr(oTmpChild,"uCaption"):
+                    if hasattr(oTmpChild,'uCaption'):
                         oTmpChild.uOrgCaption   = aCaptions[iIndex][u][0]
                         oTmpChild.uCaption      = ReplaceVars(aCaptions[iIndex][u][0])
                         uVarIndex               = ReplaceVars(aCaptions[iIndex][u][1])
 
                 oTmpChild.Create(self.oObjectContent)
 
-                if hasattr(oTmpChild,"dActionPars"):
+                if hasattr(oTmpChild,'dActionPars'):
                     try:
-                        oTmpChild.dActionPars["SCROLLLISTVALUE"] = oTmpChild.oObject.text
+                        oTmpChild.dActionPars['SCROLLLISTVALUE'] = oTmpChild.oObject.text
                     except:
-                        oTmpChild.dActionPars["SCROLLLISTVALUE"] = ""
-                    oTmpChild.dActionPars["SCROLLLISTINDEX"]     = str(u)
-                    oTmpChild.dActionPars["SCROLLLISTVARINDEX"]  = uVarIndex
+                        oTmpChild.dActionPars['SCROLLLISTVALUE'] = ''
+                    oTmpChild.dActionPars['SCROLLLISTINDEX']     = str(u)
+                    oTmpChild.dActionPars['SCROLLLISTVARINDEX']  = uVarIndex
 
                 self.aListChilds.append(oTmpChild)
                 self.oParentScreenPage.aAddWidgets.append(oTmpChild)

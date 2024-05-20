@@ -30,7 +30,8 @@
                       "definition_alias_appfavorites_android":                      "Android Apps",
                       "definition_alias_philips_hue":                               "Philips HUE",
                       "definition_alias_unraid":                                    "UNRAID",
-                      "definition_alias_elv_max":                                   "ELV_MAX",
+                      "definition_alias_fritz_sm_heating":                          "FRITZ_SMARTHOME_HEATING",
+                      "definition_alias_velux":                                     "VELUX",
                       "definition_activity_template":                               "Activities",
                       "definition_alias_tvfavorites_shared":                        "Shared TV Channels",
                       "definition_alias_cmdfavorites_unused":                       "Unused Shared Commands",
@@ -296,12 +297,20 @@
           importpages     ="1"
           importsettings  ="1"
           importactions   ="1"
-          alias           ="$dvar(definition_alias_elv_max)"
+          alias           ="$dvar(definition_alias_fritz_sm_heating)"
           definitionvars  ='{"definition_activity_template":                          "$dvar(definition_activity_template)",
-                             "definition_alias_elv_max":                              "$dvar(definition_alias_elv_max)"}'>elv max</definition>
+                             "definition_alias_fritz_sm_heating":                     "$dvar(definition_alias_fritz_sm_heating)"}'>fritz sm heating</definition>
 
+      <definition
+          importlanguages ="1"
+          importpages     ="1"
+          importsettings  ="1"
+          importactions   ="1"
+          alias           ="$dvar(definition_alias_velux)"
+          definitionvars  ='{"definition_activity_template":                          "$dvar(definition_activity_template)",
+                             "definition_alias_velux":                     "$dvar(definition_alias_velux)"}'>velux</definition>
 
-        <definition
+      <definition
           importlanguages ="1"
           importpages     ="1"
           importsettings  ="1"
@@ -375,17 +384,16 @@
             </configuration>
         </interface>
         <interface name="url">
-          <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_enigma2)">
-              <settingold name="Host" parameter="192.168.1.154"/>
-          </configuration>
-          <!-- We allreday paired the bridge -->
+          <!-- We already paired the bridge -->
           <!-- We skip the discover for the Panasonic TV, as discover will not work on turned off devices-->
           <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_panasonic_4k)">
+              <setting1 name="DISCOVER_UPNP_prettyname" parameter="65DX900_Series"/>
               <setting name="Host" parameter="192.168.1.199"/>
           </configuration>
           <!-- We skip the discover for the Panasonic, as discover will not work on turned off devices-->
           <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_panasonictvnet)">
-              <setting name="Host" parameter="192.168.1.184"/>
+              <setting1 name="DISCOVER_UPNP_prettyname" parameter="42AS500_Series"/>
+              <setting name="Host" parameter="192.168.1.116"/>
           </configuration>
           <configuration name ="DEVICE_$dvar(definition_activityalias_mediaplayer_tv1)">
               <setting name="Host" parameter="192.168.1.154"/>
@@ -393,19 +401,33 @@
       </interface>
       <interface name="wake_on_lan">
           <configuration name ="DEVICE_$dvar(definition_alias_unraid)">
-              <setting name="MAC" parameter="00:25:22:e0:34:21"/>
+              <setting name="MAC" parameter="B8:AE:ED:A2:C5:EF"/>
+              <setting name="Host" parameter="192.168.1.150"/>
           </configuration>
           <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_enigma2)">
               <setting name="MAC" parameter="44:70:0B:04:7E:34"/>
+              <setting name="Host" parameter="linked:url:DEVICE_$dvar(definition_alias_mediaplayer_enigma2):Host"/>
           </configuration>
           <configuration name ="DEVICE_$dvar(definition_activityalias_mediaplayer_tv1)">
               <setting name="MAC" parameter="44:70:0B:04:7E:34"/>
+              <setting name="Host" parameter="linked:android_adb:DEVICE_$dvar(definition_alias_mediaplayer_shield):Host"/>
           </configuration>
           <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_panasonic_4k)">
               <setting name="MAC" parameter="A8:13:74:A6:36:7B"/>
+              <setting name="Host" parameter="linked:url:DEVICE_$dvar(definition_alias_mediaplayer_panasonic_4k):Host"/>
+          </configuration>
+      </interface>
+      <interface name="telnet2">
+          <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_enigma2)">
+            <setting name="password" parameter="root"/>
+          </configuration>
+          <configuration name ="DEVICE_$dvar(definition_activityalias_mediaplayer_tv1)">
+            <setting name="password" parameter="root"/>
           </configuration>
 
       </interface>
+
+
       <interface name="android_adb">
           <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_firetv2)">
             <setting name="DISCOVER_UPNP_prettyname" parameter="Petra's 2nd Fire TV"/>
@@ -433,7 +455,7 @@
     <default var="$dvar(definition_alias_mediaplayer_panasonic_4k)_INTERFACE_POWERON"                      default="wake_on_lan" />
     <default var="$dvar(definition_alias_mediaplayer_panasonictvnet)_INTERFACE_POWERON"                    default="android_adb" />
     <default var="$dvar(definition_alias_mediaplayer_enigma2)_INTERFACE_POWERON"                           default="url" />
-    <default var="$dvar(definition_alias_unraid)_INTERFACE_MAIN"                                           default="telnet" />
+    <default var="$dvar(definition_alias_unraid)_INTERFACE_MAIN"                                           default="telnet2" />
     <default var="$dvar(definition_alias_unraid)_INTERFACE_POWERON"                                        default="wake_on_lan" />
     <default var="$dvar(definition_alias_unraid)_INTERFACE_VOLUME"                                         default="wake_on_lan" />
     <default var="$dvar(definition_alias_mediaplayer_firetv2)_INTERFACE_VOLUME"                            default="url" />
@@ -559,8 +581,8 @@
       <description language='English'>Personal definition from the developer, good to see, how ORCA is fully utilized</description>
       <description language='German'>Persönliche Definition des Entwicklers, hilfreich um zu sehen, wie ORCA genutzt wird</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/thica</local>
@@ -607,11 +629,15 @@
         </dependency>
         <dependency>
           <type>definitions</type>
+          <name>VELUX</name>
+        </dependency>
+        <dependency>
+          <type>definitions</type>
           <name>Activity Template</name>
         </dependency>
         <dependency>
           <type>definitions</type>
-          <name>ELV MAX</name>
+          <name>Fritz Smarthome Heating</name>
         </dependency>
         <dependency>
           <type>interfaces</type>
@@ -623,7 +649,7 @@
         </dependency>
         <dependency>
           <type>codesets</type>
-          <name>Unraid Power off / Telnet</name>
+          <name>Unraid Power off / Telnet2</name>
         </dependency>
         <dependency>
           <type>interfaces</type>

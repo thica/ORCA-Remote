@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -28,7 +28,6 @@ from kivy.logger            import Logger
 
 from ORCA.ui.ShowErrorPopUp import ShowErrorPopUp
 from ORCA.utils.FileName    import cFileName
-from ORCA.utils.LoadFile    import LoadFile
 from ORCA.utils.LogError    import LogError
 from ORCA.utils.XML         import LoadXMLFile
 from ORCA.utils.XML         import LoadXMLString
@@ -37,11 +36,8 @@ from ORCA.download.RepEntry import cRepEntry
 class cRepManagerEntry:
     """ Single entry of Repository entry """
     def __init__(self, *,oFileName:Union[str,cFileName]):
-        if isinstance(oFileName,str):
-            self.oFnEntry = cFileName(u'').ImportFullPath(uFnFullName=oFileName)
-        else:
-            self.oFnEntry = cFileName(oFileName)
-        self.oRepEntry:cRepEntry=cRepEntry()
+        self.oFnEntry:cFileName  = cFileName(oFileName)
+        self.oRepEntry:cRepEntry = cRepEntry()
 
     def ParseFromXML(self,*,vContent:Union[str,Element,None]=None) -> bool:
         """ Parses an xms string into object vars """
@@ -50,7 +46,7 @@ class cRepManagerEntry:
         try:
             if vContent is None:
                 oET_Root = LoadXMLFile(oFile=self.oFnEntry)
-                Logger.debug('RepManager: Parsing File: [%s]' % self.oFnEntry.string)
+                Logger.debug(f'RepManager: Parsing File: [{self.oFnEntry}]')
             elif isinstance(vContent,Element):
                 oET_Root = cast(Element,vContent)
             else:
@@ -64,12 +60,12 @@ class cRepManagerEntry:
                         self.oRepEntry.ParseFromXMLNode(oXMLEntry=oNode)
             return self.oRepEntry.uName!='Error'
         except Exception as e:
-            ShowErrorPopUp(uMessage=LogError(uMsg='Invalid XML Syntax on file '+self.oFnEntry ,oException=e))
+            ShowErrorPopUp(uMessage=LogError(uMsg=f'Invalid XML Syntax on file {self.oFnEntry}' ,oException=e))
             return False
 
     def ParseFromSourceFile(self) -> bool:
         """ Parses an xml file into object vars """
-        uContent:str=LoadFile(oFileName=self.oFnEntry)
+        uContent:str=self.oFnEntry.Load()
         #iPos=uContent.find('<root>')
         #iPos2=uContent.find('</root>')
         iPos=uContent.find('<repositorymanager>')
@@ -77,7 +73,7 @@ class cRepManagerEntry:
         if iPos==-1 or iPos2==-1:
             return False
         #uContent=uContent[iPos:iPos2+7]
-        uContent="<root>"+uContent[iPos:iPos2+21]+"</root>"
+        uContent='<root>'+uContent[iPos:iPos2+21]+'</root>'
 
         return self.ParseFromXML(vContent=uContent)
 

@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -50,9 +50,9 @@ from ORCA.utils.XML                         import WriteXMLFile
 from ORCA.utils.FileName                    import cFileName
 from ORCA.scripttemplates.Template_System   import cSystemTemplate
 from ORCA.widgets.base.Base                 import cWidgetBase
-from ORCA.ScreenPage                        import cScreenPage
+from ORCA.screen.ScreenPage import cScreenPage
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 '''
 <root>
@@ -62,8 +62,8 @@ import ORCA.Globals as Globals
       <description language='English'>Additional Widget to convert IR Files from iTach format to Kira Keene format</description>
       <description language='German'>Zusätzliches Widgets um IR Dateien vom iTach Format zum Kira Keene Format zu konvertieren</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -80,7 +80,7 @@ import ORCA.Globals as Globals
 '''
 
 def ToHex(iNumber) -> str:
-    sTmp:str="0000"+hex(iNumber)
+    sTmp:str='0000'+hex(iNumber)
     sTmp=sTmp.replace('x', '0')
     sTmp=sTmp[-4:]
     return sTmp
@@ -89,14 +89,14 @@ def GlobalCacheToCCF(uGCString:str) -> Tuple[str,int]:
 
     aArray:List
     uDelimiter:str      = ','
-    uFinalString        = u'0000 '    #0000 denotes CCF type
+    uFinalString        = '0000 '    #0000 denotes CCF type
     iFreqNum:int
     iFreq:int
     iPairData:int
     uTmpString:str
     iTransCount:int
     uTransCount:str
-    uRepeatCount:str   = u'0000'
+    uRepeatCount:str   = '0000'
 
     if uGCString=='':
         return uGCString,1
@@ -113,7 +113,7 @@ def GlobalCacheToCCF(uGCString:str) -> Tuple[str,int]:
         return '',0
         #return ("Error: Please enter a valid " + GC2CCF.Properties.Resources.Company + " sendir command.");
 
-    if aArray[3]=="":
+    if aArray[3]=='':
         return '',0
         #return ("Error: Error parsing data. Please try again.");
 
@@ -190,8 +190,8 @@ def CCfToKeene(uCCFString:str,iRepeatCount:int):
         if iPair_Count == 0:
             iPair_Count = aBurst_Time[3]
 
-        #print "Frequency = " , iFreq
-        #print "Pair_count = " , iPair_Count
+        #print 'Frequency = ' , iFreq
+        #print 'Pair_count = ' , iPair_Count
 
         iX=0
         while iX<iy:
@@ -213,23 +213,23 @@ def CCfToKeene(uCCFString:str,iRepeatCount:int):
             iX += 1
 
         aMyInt[iX + 2] = 8192   # over write the lead out space with 2000 X is one over when exits from for loop
-        uData = ""
+        uData = ''
 
         iX              = 0
         iEnd            = (iPair_Count * 2) + 3
         while iX<iEnd:
-            uData = uData + ToHex(aMyInt[iX]) + " "
+            uData = uData + ToHex(aMyInt[iX]) + ' '
             iX += 1
         bError = False
     except Exception as e:
-        uMsg:str='CCfToKeene:Can''t Convert:'+str(e)
+        uMsg:str='CCfToKeene:Can\'t Convert:'+str(e)
         Logger.error (uMsg)
         Logger.error (uCCFString)
 
     if bError:
-        return u""
+        return ''
     else:
-        uRet="K "+ uData.strip().upper()
+        uRet='K '+ uData.strip().upper()
         if iRepeatCount>1:
             uRet=uRet+' 4000 '+str(iRepeatCount)
         return uRet
@@ -240,7 +240,7 @@ def GlobalCacheToKeene(uGCString:str) -> str:
     iRepeatCount:int
     uTmp,iRepeatCount=GlobalCacheToCCF(uGCString)
     if uTmp=='' or iRepeatCount==0:
-        Logger.error ("wrong string:"+uGCString)
+        Logger.error ('wrong string:'+uGCString)
     return CCfToKeene(uTmp,iRepeatCount)
 
 class cITachToKeene(BoxLayout):
@@ -270,8 +270,8 @@ class cITachToKeene(BoxLayout):
         self.oLayoutButtons.add_widget(self.oButtonLoad)
         self.oLayoutButtons.add_widget(self.oButtonSave)
 
-        self.oLabelITach:Label              = Label(text = "ITach", halign='center')
-        self.oLabelKeene:Label              = Label(text = "Keene Kira", halign='center')
+        self.oLabelITach:Label              = Label(text = 'ITach', halign='center')
+        self.oLabelKeene:Label              = Label(text = 'Keene Kira', halign='center')
         self.oLayoutHeaders.add_widget(self.oLabelITach)
         self.oLayoutHeaders.add_widget(self.oLabelKeene)
 
@@ -292,11 +292,11 @@ class cITachToKeene(BoxLayout):
                  'iconview_string': ReplaceVars('$lvar(5023)'),
                  'transition': FadeTransition(),
                  'size_hint': (1, 1),
-                 'favorites': [(Globals.oPathRoot.string, 'ORCA')],
+                 'favorites': [(str(Globals.oPathRoot), 'ORCA')],
                  'show_fileinput': False,
                  'show_filterinput': False,
                  'dirselect': False,
-                 'path': Globals.oPathCodesets.string,
+                 'path': str(Globals.oPathCodesets),
                  'filters': ['*.xml', ]
                  }
         #alargs['filters']=          ['CODESET_iTach_*.xml',]
@@ -304,7 +304,7 @@ class cITachToKeene(BoxLayout):
 
         self.oContent=FileBrowser(**alargs)
         self.oContent.bind(on_success=self.load,on_canceled=self.dismiss_popup)
-        self._popup = Popup(title=ReplaceVars("$lvar(5027)"), content=self.oContent, size_hint=(1, 1))
+        self._popup = Popup(title=ReplaceVars('$lvar(5027)'), content=self.oContent, size_hint=(1, 1))
         self._popup.open()
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
@@ -329,7 +329,6 @@ class cITachToKeene(BoxLayout):
         try:
             oParser          = XMLParser(target=CommentedTreeBuilder())
             oXMLRoot         = LoadXMLFile(oFile=cFileName().ImportFullPath(uFnFullName=self.uCodesetFileName),oParser=oParser)
-            # oXMLRoot         = LoadXMLFile(oFile=cFileName().ImportFullPath(uFnFullName=self.uCodesetFileName))
 
             if oXMLRoot is not None:
                 self.oTextInput.text=tostring(oXMLRoot)
@@ -361,69 +360,69 @@ class cITachToKeene(BoxLayout):
         oXMLRepMgSources:List[Element]
         oXMLRepMgSource:Element
 
-        oXMLRepMgr=oXMLRoot.find("repositorymanager")
+        oXMLRepMgr=oXMLRoot.find('repositorymanager')
         if oXMLRepMgr is not None:
-            oXMLRepMgrEntry=oXMLRepMgr.find("entry")
+            oXMLRepMgrEntry=oXMLRepMgr.find('entry')
             if oXMLRepMgrEntry is not None:
-                aXMLRepMgrDescriptions=oXMLRepMgrEntry.findall("description")
+                aXMLRepMgrDescriptions=oXMLRepMgrEntry.findall('description')
                 if aXMLRepMgrDescriptions is not None:
                     for oDes in aXMLRepMgrDescriptions:
-                        oDes.text=oDes.text.replace("iTach IR","Keene Kira IR")
-                oXMLRepMgrName=oXMLRepMgrEntry.find("name")
+                        oDes.text=oDes.text.replace('iTach IR','Keene Kira IR')
+                oXMLRepMgrName=oXMLRepMgrEntry.find('name')
                 if oXMLRepMgrName is not None:
-                    oXMLRepMgrName.text=oXMLRepMgrName.text.replace("iTach","Keene Kira")
-                aXMLRepMgrDependencies=oXMLRepMgrEntry.findall("dependencies")
+                    oXMLRepMgrName.text=oXMLRepMgrName.text.replace('iTach','Keene Kira')
+                aXMLRepMgrDependencies=oXMLRepMgrEntry.findall('dependencies')
                 if aXMLRepMgrDependencies is not None:
                     for oDep in aXMLRepMgrDependencies:
-                        oDEDep=oDep.find("dependency")
+                        oDEDep=oDep.find('dependency')
                         if oDEDep is not None:
-                            oName=oDEDep.find("name")
+                            oName=oDEDep.find('name')
                             if oName is not None:
-                                oName.text=oName.text.replace("iTach IR Control","Keene Kira IR Control")
-                aXMLRepMgSources=oXMLRepMgrEntry.findall("sources")
+                                oName.text=oName.text.replace('iTach IR Control','Keene Kira IR Control')
+                aXMLRepMgSources=oXMLRepMgrEntry.findall('sources')
                 if aXMLRepMgSources is not None:
                     for oXMLRepMgSource in aXMLRepMgSources:
                         for oSource in oXMLRepMgSource:
-                            oSource.text=oSource.text.replace("_iTach_","_Keene_Kira_")
+                            oSource.text=oSource.text.replace('_iTach_','_Keene_Kira_')
 
     # noinspection PyMethodMayBeStatic
     def AdjustRepManagerITachToCCF(self,oXMLRoot:Element) -> None:
         oXMLRepMgr:Element
-        oXMLRepMgr=oXMLRoot.find("repositorymanager")
+        oXMLRepMgr=oXMLRoot.find('repositorymanager')
         if oXMLRepMgr is not None:
-            oXMLRepMgrEntry=oXMLRepMgr.find("entry")
+            oXMLRepMgrEntry=oXMLRepMgr.find('entry')
             if oXMLRepMgrEntry is not None:
-                oXMLRepMgrDescriptions=oXMLRepMgrEntry.findall("description")
+                oXMLRepMgrDescriptions=oXMLRepMgrEntry.findall('description')
                 if oXMLRepMgrDescriptions is not None:
                     for oDes in oXMLRepMgrDescriptions:
-                        oDes.text=oDes.text.replace("iTach IR","CCF IR Codes")
-                oXMLRepMgrName=oXMLRepMgrEntry.find("name")
+                        oDes.text=oDes.text.replace('iTach IR','CCF IR Codes')
+                oXMLRepMgrName=oXMLRepMgrEntry.find('name')
                 if oXMLRepMgrName is not None:
-                    oXMLRepMgrName.text=oXMLRepMgrName.text.replace("iTach","CCF IR Codes")
-                oXMLRepMgrDependencies=oXMLRepMgrEntry.findall("dependencies")
+                    oXMLRepMgrName.text=oXMLRepMgrName.text.replace('iTach','CCF IR Codes')
+                oXMLRepMgrDependencies=oXMLRepMgrEntry.findall('dependencies')
                 if oXMLRepMgrDependencies is not None:
                     for oDep in oXMLRepMgrDependencies:
-                        oDEDep=oDep.find("dependency")
+                        oDEDep=oDep.find('dependency')
                         if oDEDep is not None:
-                            oName=oDEDep.find("name")
+                            oName=oDEDep.find('name')
                             if oName is not None:
-                                oName.text=oName.text.replace("iTach IR Control","CCF IR Codes")
-                oXMLRepMgSources=oXMLRepMgrEntry.find("sources")
+                                oName.text=oName.text.replace('iTach IR Control','CCF IR Codes')
+                oXMLRepMgSources=oXMLRepMgrEntry.find('sources')
                 if oXMLRepMgSources is not None:
-                    oXMLRepMgSourceBlock=oXMLRepMgSources.findall("source")
+                    oXMLRepMgSourceBlock=oXMLRepMgSources.findall('source')
                     if oXMLRepMgSourceBlock is not None:
                         for oXMLRepMgSource in oXMLRepMgSourceBlock:
                             for oSource in oXMLRepMgSource:
-                                oSource.text=oSource.text.replace("_iTach_","_infrared_ccf_")
+                                oSource.text=oSource.text.replace('_iTach_','_infrared_ccf_')
 
     # noinspection PyUnusedLocal
     def show_save(self,*largs) -> None:
-        if self.oTextInput2.text!="":
-            uOutput:str=self.uCodesetFileName+"3"
-            uOutput=uOutput.replace("_iTach_","_Keene_Kira_")
+        if self.oTextInput2.text!='':
+            uOutput:str=self.uCodesetFileName+'3'
+            uOutput=uOutput.replace('_iTach_','_Keene_Kira_')
             WriteXMLFile(oFile=cFileName().ImportFullPath(uFnFullName=uOutput),oElem=self.oXMLCodeset)
-        self.oTextInput.text=""
-        self.oTextInput2.text=""
+        self.oTextInput.text=''
+        self.oTextInput2.text=''
 
 
 class cWidgetITach2Keene(cWidgetBase):
@@ -494,28 +493,28 @@ class cScript(cSystemTemplate):
 
     def __init__(self):
         super().__init__()
-        self.uSubType           = u'WIDGET'
-        self.uSortOrder         = u'auto'
-        self.uIniFileLocation   = u'none'
+        self.uSubType           = 'WIDGET'
+        self.uSortOrder         = 'auto'
+        self.uIniFileLocation   = 'none'
 
 
     def RunScript(self, *args, **kwargs) -> None:
-        Globals.oNotifications.RegisterNotification(uNotification="UNKNOWNWIDGET",fNotifyFunction=self.AddWidgetFromXmlNode,uDescription="Script Widget iTach2Keene")
+        Globals.oNotifications.RegisterNotification(uNotification='UNKNOWNWIDGET',fNotifyFunction=self.AddWidgetFromXmlNode,uDescription='Script Widget iTach2Keene')
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def AddWidgetFromXmlNode(self,*args,**kwargs) -> Union[Dict,None]:
-        oScreenPage:cScreenPage = kwargs.get("SCREENPAGE")
-        oXMLNode:Element        = kwargs.get("XMLNODE")
-        uAnchor:str             = kwargs.get("ANCHOR")
-        oWidget:cWidgetBase     = kwargs.get("WIDGET")
+        oScreenPage:cScreenPage = kwargs.get('SCREENPAGE')
+        oXMLNode:Element        = kwargs.get('XMLNODE')
+        uAnchor:str             = kwargs.get('ANCHOR')
+        oWidget:cWidgetBase     = kwargs.get('WIDGET')
 
 
         if uAnchor is None or oScreenPage is None or oXMLNode is None or oWidget is None:
             return None
 
-        if oWidget.uTypeString != "ITACH2KEENE":
+        if oWidget.uTypeString != 'ITACH2KEENE':
             return None
 
         Ret = oScreenPage.AddWidgetFromXmlNode_Class(oXMLNode=oXMLNode,  uAnchor=uAnchor,oClass=cWidgetITach2Keene)
-        return {"ret":Ret}
+        return {'ret':Ret}
 

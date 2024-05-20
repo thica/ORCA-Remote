@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -32,14 +32,14 @@ from ORCA.utils.FileName            import cFileName
 from ORCA.utils.LogError            import LogError
 from ORCA.ui.ShowErrorPopUp         import ShowErrorPopUp
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.Action import cAction
+    from ORCA.action.Action import cAction
 else:
     from typing import TypeVar
-    cAction = TypeVar("cAction")
+    cAction = TypeVar('cAction')
 
 
 __all__ = ['cFonts', 'cFontDef']
@@ -51,11 +51,11 @@ class cFontDef:
     """
 
     def __init__(self)->None:
-        self.uName:str                        = u''
-        self.oFnNormal:cFileName              = cFileName(u'')
-        self.oFnBold:cFileName                = cFileName(u'')
-        self.oFnItalic:cFileName              = cFileName(u'')
-        self.oFnBoldItalic:cFileName          = cFileName(u'')
+        self.uName:str                        = ''
+        self.oFnNormal:cFileName              = cFileName('')
+        self.oFnBold:cFileName                = cFileName('')
+        self.oFnItalic:cFileName              = cFileName('')
+        self.oFnBoldItalic:cFileName          = cFileName('')
 
     def ParseFontFromXMLNode(self,*,oXMLNode:Element) -> int:
         """
@@ -66,21 +66,21 @@ class cFontDef:
         """
 
         uFontStyle:str
-        self.uName = GetXMLTextValue(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'NoName')
+        self.uName = GetXMLTextValue(oXMLNode=oXMLNode,uTag='name',bMandatory=True,vDefault='NoName')
         iCount:int = 0
-        for oXMLSingleFont in oXMLNode.findall(u'file'):
+        for oXMLSingleFont in oXMLNode.findall('file'):
             iCount += 1
-            uFontStyle = GetXMLTextAttribute(oXMLNode=oXMLSingleFont,uTag=u'face',bMandatory=True,vDefault=u'')
-            if uFontStyle==u'normal':
+            uFontStyle = GetXMLTextAttribute(oXMLNode=oXMLSingleFont,uTag='face',bMandatory=True,vDefault='')
+            if uFontStyle=='normal':
                 self.oFnNormal.ImportFullPath(uFnFullName=oXMLSingleFont.text)
-            elif uFontStyle==u'bold':
+            elif uFontStyle=='bold':
                 self.oFnBold.ImportFullPath(uFnFullName=oXMLSingleFont.text)
-            elif uFontStyle==u'italic':
+            elif uFontStyle=='italic':
                 self.oFnItalic.ImportFullPath(uFnFullName=oXMLSingleFont.text)
-            elif uFontStyle==u'bolditalic':
+            elif uFontStyle=='bolditalic':
                 self.oFnBoldItalic.ImportFullPath(uFnFullName=oXMLSingleFont.text)
             else:
-                ShowErrorPopUp(uMessage=LogError(uMsg=u'FontParser: Invalid Tag:'+uFontStyle))
+                ShowErrorPopUp(uMessage=LogError(uMsg='FontParser: Invalid Tag:'+uFontStyle))
         return iCount
 
     def Register(self) -> None:
@@ -88,12 +88,12 @@ class cFontDef:
         Registers Font in the app system
         :return: None
         """
-        Logger.debug(u'Register Font: ' + self.oFnNormal)
+        Logger.debug('Register Font: ' + self.oFnNormal)
 
-        uFnNormal:Optional[str]        = self.oFnNormal.string
-        uFnItalic:[str,None]           = self.oFnItalic.string
-        uFnBold:[str,None]             = self.oFnBold.string
-        uFnBoldItalic:[str,None]       = self.oFnBoldItalic.string
+        uFnNormal:Optional[str]        = str(self.oFnNormal)
+        uFnItalic:[str,None]           = str(self.oFnItalic)
+        uFnBold:[str,None]             = str(self.oFnBold)
+        uFnBoldItalic:[str,None]       = str(self.oFnBoldItalic)
 
         if uFnNormal == '':     uFnNormal = None
         if uFnItalic =='':      uFnItalic = None
@@ -120,7 +120,7 @@ class cFonts:
         """
         oTmpFont:cFontDef   = cFontDef()
         oTmpFont.uName      = uFontName
-        oTmpFont.oFnNormal  = cFileName("").ImportFullPath(uFnFullName=uFontFileNormal)
+        oTmpFont.oFnNormal  = cFileName(uFontFileNormal)
         self.dFonts[oTmpFont.uName] = oTmpFont
 
     # noinspection PyMethodMayBeStatic
@@ -130,15 +130,15 @@ class cFonts:
         """
         oXMLIcons:Element = oXMLNode.find('icons')
         if oXMLIcons is not None:
-            Logger.info(u'Loading Icons')
+            Logger.info('Loading Icons')
             for oXMLIcon in oXMLIcons.findall('icon'):
-                uIconName:str           = GetXMLTextAttribute(oXMLNode=oXMLIcon,uTag=u'name',bMandatory=True, vDefault=u'')
-                oFnIconFont:cFileName   = cFileName("").ImportFullPath(uFnFullName=GetXMLTextAttribute(oXMLNode=oXMLIcon, uTag=u'font', bMandatory=True, vDefault=u''))
-                uIconChar:str           = GetXMLTextAttribute(oXMLNode=oXMLIcon, uTag=u'char', bMandatory=True, vDefault=u'')
+                uIconName:str           = GetXMLTextAttribute(oXMLNode=oXMLIcon,uTag='name',bMandatory=True, vDefault='')
+                oFnIconFont:cFileName   = cFileName(GetXMLTextAttribute(oXMLNode=oXMLIcon, uTag='font', bMandatory=True, vDefault=''))
+                uIconChar:str           = GetXMLTextAttribute(oXMLNode=oXMLIcon, uTag='char', bMandatory=True, vDefault='')
                 uFontName:str           = oFnIconFont.basename
-                fIconScale:float        = GetXMLFloatAttribute(oXMLNode=oXMLIcon, uTag=u'scale', bMandatory=False, fDefault=1.0)
-                Globals.dIcons[uIconName] = {"fontfile": oFnIconFont.string, "char": uIconChar, "fontname":uFontName, "scale":fIconScale}
-                Globals.oTheScreen.oFonts.ParseDirect(uFontName=uFontName, uFontFileNormal=oFnIconFont.string)
+                fIconScale:float        = GetXMLFloatAttribute(oXMLNode=oXMLIcon, uTag='scale', bMandatory=False, fDefault=1.0)
+                Globals.dIcons[uIconName] = {'fontfile': str(oFnIconFont), 'char': uIconChar, 'fontname':uFontName, 'scale':fIconScale}
+                Globals.oTheScreen.oFonts.ParseDirect(uFontName=uFontName, uFontFileNormal=str(oFnIconFont))
 
     def ParseFontFromXMLNode(self,*,oXMLNode:Element) -> int:
         """
@@ -163,7 +163,7 @@ class cFonts:
         oFont:cFontDef
 
         if not uFontName:
-            Logger.debug (u'TheScreen: Register Fonts')
+            Logger.debug ('TheScreen: Register Fonts')
             fPercentage=fSplashScreenPercentageStartValue
             fPercentageStep=fSplashScreenPercentageRange/len(self.dFonts)
 
@@ -179,7 +179,7 @@ class cFonts:
                     aCommands = [{'name':'Update Percentage and Font Name','string':'showsplashtext','subtext':oFont.uName,'percentage':str(fPercentage)}]
                 aCommands.append({'name':'Register the Font','string':'registerfonts','fontname':oFont.uName})
                 Globals.oEvents.AddToSimpleActionList(aActionList=aActions,aActions=aCommands)
-                Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None)
+                Globals.oEvents.ExecuteActionsNewQueue(aActions=aActions,oParentWidget=None,uQueueName='RegisterFonts')
         else:
             oFont=self.dFonts[uFontName]
             # todo: either we always load all fonts, or we need to check in widget if font is required in case we load elements as runtime

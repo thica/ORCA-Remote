@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 from ORCA.interfaces.BaseInterface          import cBaseInterFace
 from ORCA.utils.Network                     import Ping
 from ORCA.utils.FileName                    import cFileName
-from ORCA.Action                            import cAction
+from ORCA.action.Action import cAction
 from ORCA.interfaces.BaseInterfaceSettings  import cBaseInterFaceSettings
 from ORCA.actions.ReturnCode                import eReturnCode
 
@@ -36,8 +36,8 @@ from ORCA.actions.ReturnCode                import eReturnCode
       <description language='English'>Interface to verify, if devices respond to ping</description>
       <description language='German'>Interface um zu prüfen, ob Geräte auf einen Ping antworten</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/ping</local>
@@ -56,11 +56,11 @@ from ORCA.actions.ReturnCode                import eReturnCode
 class cInterface(cBaseInterFace):
     def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
         super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
-        self.oObjectConfig.dDefaultSettings['Host']['active']  = "enabled"
-        self.oObjectConfig.dDefaultSettings['Host']['desc']    = "$lvar(IFACE_PING_1)"
+        self.oObjectConfig.dDefaultSettings['Host']['active']  = 'enabled'
+        self.oObjectConfig.dDefaultSettings['Host']['desc']    = '$lvar(IFACE_PING_1)'
 
     def DoAction(self,oAction:cAction) -> eReturnCode:
-        oSetting:cBaseInterFaceSettings=self.GetSettingObjectForConfigName(uConfigName=oAction.dActionPars.get(u'configname',u''))
+        oSetting:cBaseInterFaceSettings=self.GetSettingObjectForConfigName(uConfigName=oAction.dActionPars.get('configname',''))
         if Ping(uHostname=oSetting.aIniSettings.uHost):
             return eReturnCode.Success
         else:

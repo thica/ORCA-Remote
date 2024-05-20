@@ -7,7 +7,8 @@
     <action name="Initialize Var"  string="setvar HUELIGHTCATEGORY=Light" />
 
     <!-- Number of group light to dim-->
-    <action name="Initialize Value" string="setvar hue_t=20" />
+    <action name="Initialize Value Transition Time" string="setvar hue_t=1" />
+    <action name="Initialize Value Dimmervalue"     string="setvar DIMVALUE=255" />
 
   </pagestartaction>
 

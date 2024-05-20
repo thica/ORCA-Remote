@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -29,13 +29,13 @@ __all__ = ['cDownLoadObject']
 class cDownLoadObject:
     """ Representation of a single object to download"""
     def __init__(self):
-        self.dPars:Dict[str,Any] =    { "Url"     : "",
-                                        "Dest"    : "",
-                                        "Target"  : "",
-                                        "Type"    : "",
-                                        "Name"    : "",
-                                        "Version" : 0,
-                                        "Finalize": ""}
+        self.dPars:Dict[str,Any] =    { 'Url'     : '',
+                                        'Dest'    : '',
+                                        'Target'  : '',
+                                        'Type'    : '',
+                                        'Name'    : '',
+                                        'Version' : 0,
+                                        'Finalize': ''}
     def ToString(self) -> str:
         """ Dumps the pars of the object """
         return json.dumps(self.dPars)

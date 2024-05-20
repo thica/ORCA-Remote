@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -29,16 +29,16 @@ def BuildSettingOptionList(aArray:Iterable[str]) -> str:
     Little helper function to create a json option list
     """
     uToken:str
-    uValueString:str=u''
+    uValueString:str=''
     for uToken in aArray:
-        uValueString+=u'\"'+uToken+u'\",'
+        uValueString+=f'"{uToken}",'
     return uValueString[:-1]
 
 def BuildSettingOptionListVar(aArray:Iterable[str],uDestVar:str) -> str:
     """
     Little helper function to create a json option list
     """
-    uValueString = "["+BuildSettingOptionList(aArray)+"]"
+    uValueString = f'[{BuildSettingOptionList(aArray)}]'
     SetVar(uDestVar,uValueString)
     return uValueString
 
@@ -48,15 +48,15 @@ def BuildSettingOptionListDict(dArray:Dict[str,str]) -> str:
     Little helper function to create a json option list
     """
     uToken:str
-    uValueString:str=u''
+    uValueString:str=''
     for uToken in dArray:
-        uValueString+=u'\"'+dArray[uToken]+u" ["+uToken+u"]" +u'\",'
+        uValueString+='\"'+dArray[uToken]+" ["+uToken+"]" +'\",'
     return uValueString[:-1]
 
 def BuildSettingOptionListDictVar(dArray:Dict[str,str],uDestVar:str) -> str:
     """
     Little helper function to create a json option list
     """
-    uValueString = "[" + BuildSettingOptionListDict(dArray) + "]"
+    uValueString = f'[{BuildSettingOptionListDict(dArray)}]'
     SetVar(uDestVar, uValueString)
     return uValueString

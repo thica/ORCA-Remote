@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -45,13 +45,13 @@ from ORCA.interfaces.BaseInterface  import cBaseInterFace
 from ORCA.scripts.BaseScript        import cBaseScript
 
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 __all__ = ['cWidgetSettings']
 
@@ -92,13 +92,13 @@ class cWidgetSettings(cWidgetFileViewer):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.uSettingsType:str                  = u''
+        self.uSettingsType:str                  = ''
         self.oXMLNode:Union[Element,None]       = None
         self.aSettingObjects:Dict[str,Settings] = {}
         self.oReAssignObject                    = None
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
-        self.uSettingsType  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'settingstype', bMandatory=False,vDefault=u'interface')
+        self.uSettingsType  = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='settingstype', bMandatory=False,vDefault='interface')
         self.oXMLNode       = oXMLNode
         bRet=super(cWidgetSettings, self).InitWidgetFromXml(oXMLNode=oXMLNode,oParentScreenPage=oParentScreenPage, uAnchor=uAnchor)
         if bRet:
@@ -108,7 +108,7 @@ class cWidgetSettings(cWidgetFileViewer):
     def Create(self, oParent: Widget) -> bool:
 
         self.oParent = oParent
-        if self.uSettingsType == u'orca':
+        if self.uSettingsType == 'orca':
             return self.CreateReal(oParent)
         else:
             Clock.schedule_once(partial(self.CreateReal,oParent),0)
@@ -116,16 +116,18 @@ class cWidgetSettings(cWidgetFileViewer):
 
     # noinspection PyUnusedLocal
     def CreateReal(self,oParent:Widget,*largs) -> bool:
-        uSettingsJSON:str = ""
+        uSettingsJSON:str = ''
         uConfigName:str
         oInterFace:cBaseInterFace
         oScript:cBaseScript
-        uNewMenuName:str = ReplaceVars("$lvar(579)")
-        uOldMenuName:str = "Kivy"
+        uNewMenuName:str = ReplaceVars('$lvar(579)')
+        uOldMenuName:str = 'Kivy'
 
         try:
-            if self.uSettingsType==u'powerstati':
+            if self.uSettingsType=='powerstati':
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
+                    self.oObject.interface.content.bar_width='10dp'
+                    self.oObject.interface.content.scroll_type=['bars', 'content']
                     self.oParent.add_widget(self.oObject)
                     uSettingsJSON = BuildSettingsStringPowerStatus()
                     self.oObject.add_json_panel(ReplaceVars('$lvar(547)'),Globals.oDefinitionConfigParser, data=uSettingsJSON)
@@ -133,8 +135,10 @@ class cWidgetSettings(cWidgetFileViewer):
                     return True
                 return False
 
-            if self.uSettingsType==u'interface':
+            if self.uSettingsType=='interface':
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
+                    self.oObject.interface.content.bar_width='10dp'
+                    self.oObject.interface.content.scroll_type=['bars', 'content']
                     self.oParent.add_widget(self.oObject)
                     oInterFace=Globals.oInterFaces.GetInterface(Globals.oTheScreen.uInterFaceToConfig)
                     if oInterFace:
@@ -143,8 +147,10 @@ class cWidgetSettings(cWidgetFileViewer):
                     return True
                 return False
 
-            if self.uSettingsType==u'script':
+            if self.uSettingsType=='script':
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSpinner):
+                    self.oObject.interface.content.bar_width='10dp'
+                    self.oObject.interface.content.scroll_type=['bars', 'content']
                     self.oParent.add_widget(self.oObject)
                     Globals.oScripts.LoadScript(Globals.oTheScreen.uScriptToConfig)
                     oScript=Globals.oScripts.GetScript(Globals.oTheScreen.uScriptToConfig)
@@ -154,8 +160,10 @@ class cWidgetSettings(cWidgetFileViewer):
                     return True
                 return False
 
-            if self.uSettingsType==u'interface_discover':
+            if self.uSettingsType=='interface_discover':
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
+                    self.oObject.interface.content.bar_width='10dp'
+                    self.oObject.interface.content.scroll_type=['bars', 'content']
                     self.oParent.add_widget(self.oObject)
                     oInterFace=Globals.oInterFaces.GetInterface(Globals.oTheScreen.uInterFaceToConfig)
                     uConfigName=Globals.oTheScreen.uConfigToConfig
@@ -165,17 +173,20 @@ class cWidgetSettings(cWidgetFileViewer):
                     return True
                 return False
 
-            if self.uSettingsType==u'download':
+            if self.uSettingsType=='download':
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
+                    self.oObject.interface.content.bar_width='10dp'
+                    self.oObject.interface.content.scroll_type=['bars', 'content']
                     self.oParent.add_widget(self.oObject)
                     Globals.oDownLoadSettings.ConfigDownLoadSettings(oSetting=self.oObject)
                     return True
                 return False
 
-            if self.uSettingsType==u'orca':
+            if self.uSettingsType=='orca':
                 if self.CreateBase(Parent=oParent, Class=''):
                     self.oObject = Globals.oApp.create_settings()
-
+                    self.oObject.interface.content.bar_width='10dp'
+                    self.oObject.interface.content.scroll_type=['bars', 'content']
                     # Replace the old "Kivy" Menu text by "System"
                     oMenu = self.oObject.interface.menu
                     for oChildren in oMenu.children:
@@ -200,12 +211,14 @@ class cWidgetSettings(cWidgetFileViewer):
                     return False
 
                 if self.CreateBase(Parent=oParent, Class=SettingsWithSidebar):
+                    self.oObject.interface.content.bar_width='10dp'
+                    self.oObject.interface.content.scroll_type=['bars', 'content']
                     settings=self.oObject
                     RegisterSettingTypes(settings)
                     self.oParent.add_widget(self.oObject)
                     uDefinitionName=Globals.uDefinitionToConfigure
                     oDef=Globals.oDefinitions[uDefinitionName]
-                    uSettingsJSON =u'[{ "type": "title","title": "%s" },{"type": "info","title": "$lvar(587)","section": "ORCA","info":"$var(VERSION)"}]' % oDef.uDefPublicTitle
+                    uSettingsJSON = f'[{{ "type": "title","title": "{oDef.uDefPublicTitle}" }},{{"type": "info","title": "$lvar(587)","section": "ORCA","info":"$var(VERSION)"}}]'
                     for uVisSection in oDef.dDefinitionSettingsJSON:
                         uSettingsJSON=oDef.dDefinitionSettingsJSON[uVisSection]
                         uSettingsJSON=ReplaceVars(uSettingsJSON)
@@ -215,7 +228,7 @@ class cWidgetSettings(cWidgetFileViewer):
                     return True
                 return False
         except Exception as e:
-            LogError(uMsg="Fatal Error creating settings Panel [%s]" % self.uSettingsType,oException=e)
+            LogError(uMsg=f'Fatal Error creating settings Panel [{self.uSettingsType}]', oException=e)
             Logger.error(uSettingsJSON)
         return False
 
@@ -234,11 +247,16 @@ class cWidgetSettings(cWidgetFileViewer):
                     Clock.schedule_once(self.Scheduled_AssignExistingObject,0)
                     return
 
-            if (self.uSettingsType=='interface') or (self.uSettingsType=='script') or (self.uSettingsType=='download') or (self.uSettingsType=='definition') or (self.uSettingsType=='powerstati'):
-                self.oParent.remove_widget(self.oObject)
-                self.bIsCreated = False
-                Clock.schedule_once(self.Schedule_AssignNewObject,0)
-                return
+            if (self.uSettingsType=='interface') or \
+                (self.uSettingsType=='script') or \
+                (self.uSettingsType=='download') or \
+                (self.uSettingsType=='definition') or \
+                (self.uSettingsType=='powerstati') or \
+                (self.uSettingsType=='interface_discover'):
+                    self.oParent.remove_widget(self.oObject)
+                    self.bIsCreated = False
+                    Clock.schedule_once(self.Schedule_AssignNewObject,0)
+                    return
 
             if self.uSettingsType=='orca':
                 self.oParent.remove_widget(self.oObject)
@@ -264,7 +282,7 @@ class cWidgetSettings(cWidgetFileViewer):
     def On_Definition_ConfigChange(self, settings:Settings,config:ConfigParser, section:str, key:str, value:str) -> None:
         """ Called, when a setting has been changed, will set the associated var as well """
         if key in Globals.oDefinitions.aDefinitionSettingVars:
-            if value.startswith("button_"):
+            if value.startswith('button_'):
                 SetVar(uVarName = key, oVarValue = str(random()))
             else:
                 SetVar(uVarName=key, oVarValue=value)
@@ -272,7 +290,7 @@ class cWidgetSettings(cWidgetFileViewer):
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def On_Orca_ConfigChange(self, settings:Settings,config:ConfigParser, section:str, key:str, value:str) -> None:
         """ Called, when a setting has been changed, will set the associated var as well """
-        if value.startswith("button_"):
+        if value.startswith('button_'):
             SetVar(uVarName = key, oVarValue = str(random()))
         else:
             SetVar(uVarName=key, oVarValue=value)

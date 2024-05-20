@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -22,43 +22,56 @@
 from typing import List
 from typing import Dict
 from kivy import Logger
+import socket
+
+
+from ORCA.Globals import Globals
+
 
 try:
     import netifaces
 except Exception as ex:
-    Logger.error("Can't load netifaces:"+str(ex))
+    Logger.error('Can\'t load netifaces:'+str(ex))
 
 __all__ = ['GetIPAddressV6']
 
+# we need to detect the IPV6 first and than find the V6IP address on the same adapter
+
 def GetIPAddressV6() -> str:
 
-    uPreferredAdapter:str = u'eth0'
-    uInet_Type:str        = u'AF_INET6'
-    uRet:str              = u'127.0.0.0'
-    aFound:List[str]      = []
+    uInet_Type:str        = 'AF_INET6'
+    uRet:str              = '127.0.0.0'
     iInet_num:int
+    dNetInfo: Dict
+    aNetDetails: List
 
     try:
         iInet_num = getattr(netifaces, uInet_Type)
-        aInterfaces:List = netifaces.interfaces()
-
-        for uNetiface in aInterfaces:
-            dNetInfo:Dict    = netifaces.ifaddresses(uNetiface)
-            aNetDetails:List = dNetInfo.get(iInet_num)
+        if Globals.uIPInterfaceName_OS != '':
+            dNetInfo = netifaces.ifaddresses(Globals.uIPInterfaceName_OS)
+            aNetDetails = dNetInfo.get(iInet_num)
             if aNetDetails is not None and len(aNetDetails)>0:
                 dNetDetails:Dict = aNetDetails[0]
-                uIP = dNetDetails["addr"]
-                if uIP != "::1":
-                    aFound.append(uIP)
-                    if uNetiface == uPreferredAdapter:
-                        aFound = [uIP]
-                        break
+                uRet = dNetDetails['addr']
+                # We select the local link address
+                if True:
+                    for dNetDetails in aNetDetails:
+                        if  dNetDetails['addr'].startswith('fe80'):
+                            uRet = dNetDetails['addr']
+                            break
+
     except Exception as e:
-        Logger.error("Error on GetIPAddressV6:"+str(e))
+        Logger.error('Using Fallback on GetIPAddressV6:'+str(e))
+        uRet = GetIPAddressV6_Fallback()
 
-    if len(aFound)>0:
-        uRet = aFound[-1]
-
-    # remove stuff like %eth0 that gets thrown on end of some addrs
-    uRet=uRet.split('%')[0]
     return uRet
+
+
+def GetIPAddressV6_Fallback() -> str:
+    oSocket = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+    try:
+        oSocket.connect(('2001:db8::', 1027))
+    except:
+        return ''
+    return oSocket.getsockname()[0]
+

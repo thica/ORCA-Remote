@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <repositorymanager>
+    <entry>
+      <name>TV Logo Pack Dark Silver Background</name>
+      <description language='English'>TV Logos Dark on Silver Background (50 MB!)</description>
+      <description language='German'>TV Logos Dunkel auf silbernen Hintergrund  (50 MB!)</description>
+      <author>Carsten Thielepape</author>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(RESOURCEPATH)/tvlogos/dark.on.reflection</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/others/tvlogos_dark.on.reflection.zip</sourcefile>
+          <targetpath>resources/tvlogos</targetpath>
+        </source>
+      </sources>
+    </entry>
+  </repositorymanager>
+</root>

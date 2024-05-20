@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -29,16 +29,16 @@ from kivy.logger                import Logger
 from ORCA.vars.Replace          import ReplaceVars
 from ORCA.utils.TypeConvert     import ToInt
 from ORCA.utils.FileName        import cFileName
-from ORCA.Action                import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.ReturnCode    import eReturnCode
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 
 try:
     # noinspection PyUnresolvedReferences
     from   plyer                 import irblaster
 except Exception as e:
-    Logger.info("plyer not available")
+    Logger.info('plyer not available')
     pass
 
 '''
@@ -49,8 +49,8 @@ except Exception as e:
       <description language='English'>Send IR Commands on Android devices with IR tranmitter WIP</description>
       <description language='German'>Sendet IR Befehle auf Android Geräten mit eingebautem IR Sender WIP</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -76,7 +76,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from interfaces.generic_infrared.interface import cInterface as oBaseInterFaceInfrared
 else:
-    oBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass("cInterface")
+    oBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass('cInterface')
 
 class cInterface(oBaseInterFaceInfrared):
 
@@ -90,19 +90,19 @@ class cInterface(oBaseInterFaceInfrared):
 
             self.bIsConnected = False
             if not super().Connect():
-                Logger.debug("ir_on_android: Connect cancelled by root class")
+                Logger.debug('ir_on_android: Connect cancelled by root class')
                 return False
             try:
                 if irblaster.exists():
-                    self.ShowDebug(uMsg="Connected")
+                    self.ShowDebug(uMsg='Connected')
                     self.bIsConnected = True
                     return True
                 else:
-                    self.ShowDebug(uMsg="No Ir-Blaster at device")
+                    self.ShowDebug(uMsg='No Ir-Blaster at device')
                     self.bIsConnected = False
 
             except Exception as ex:
-                self.ShowError(uMsg=u'Cannot open IR Device',oException=ex)
+                self.ShowError(uMsg='Cannot open IR Device',oException=ex)
                 self.bOnError=True
             return False
 
@@ -119,7 +119,7 @@ class cInterface(oBaseInterFaceInfrared):
 
     def Init(self, uObjectName:str, oFnObject:Optional[cFileName]=None) -> None:
         super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
-        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = 'enabled'
 
     def DeInit(self, **kwargs) -> None:
         super().DeInit(**kwargs)
@@ -131,25 +131,25 @@ class cInterface(oBaseInterFaceInfrared):
 
         eRet:eReturnCode = eReturnCode.Error
 
-        if oAction.uCCF_Code != u"":
+        if oAction.uCCF_Code != '':
             # noinspection PyUnresolvedReferences
             oAction.oIRCode=CCfToAndroidIR(oAction.uCCF_Code,ToInt(oAction.uRepeatCount))
-            oAction.uCCF_Code = u""
+            oAction.uCCF_Code = ''
 
         uCmd:str=ReplaceVars(oAction.uCmd)
 
-        self.ShowInfo(uMsg=u'Sending Command: '+uCmd + u' to '+oSetting.uConfigName)
+        self.ShowInfo(uMsg='Sending Command: '+uCmd + ' to '+oSetting.uConfigName)
 
         oSetting.Connect()
         if oSetting.bIsConnected:
             try:
-                Logger.debug("Sending IR Commend to IRBLASTER")
+                Logger.debug('Sending IR Commend to IRBLASTER')
                 irblaster.transmit(oAction.oIRCode.iFrequency,oAction.oIRCode.aPattern)
                 eRet = eReturnCode.Success
             except Exception as ex:
-                self.ShowWarning(uMsg=u'Can\'t send message: '+str(ex))
+                self.ShowWarning(uMsg='Can\'t send message: '+str(ex))
         else:
-            Logger.debug("Not Connected")
+            Logger.debug('Not Connected')
         return eRet
 
 class cIRCommand:
@@ -162,7 +162,7 @@ class cIRCommand:
 # noinspection PyUnusedLocal
 def CCfToAndroidIR(sCCFString:str,iRepeatCount:int) -> cIRCommand:
     iCount:int
-    aList:List = sCCFString.split(" ")
+    aList:List = sCCFString.split(' ')
     iFrequency:int = int(aList[1], 16)
     aList=aList[3:]
     iFrequency = ToInt(iFrequency * 0.241246)
@@ -177,7 +177,7 @@ def CCfToAndroidIR(sCCFString:str,iRepeatCount:int) -> cIRCommand:
 
     // based on code from http://stackoverflow.com/users/1679571/randy (http://stackoverflow.com/a/25518468)
     private IRCommand hex2ir(final String irData) {
-        List<String> list = new ArrayList<String>(Arrays.asList(irData.split(" ")));
+        List<String> list = new ArrayList<String>(Arrays.asList(irData.split(' ')));
         list.remove(0); // dummy
         int frequency = Integer.parseInt(list.remove(0), 16); // frequency
         list.remove(0); // seq1

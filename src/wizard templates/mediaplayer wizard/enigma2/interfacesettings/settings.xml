@@ -18,12 +18,12 @@
             <setting name="MAC" parameter="aa:bb:cc:dd:ee:ff"/>
         </configuration>
     </interface>
-    <interface name="telnet">
+    <interface name="telnet2">
         <configuration name ="DEVICE_$dvar(definition_alias_mediaplayer_template)">
             <setting name="Port" parameter="23"/>
             <setting name="Host" parameter="linked:url:DEVICE_$dvar(definition_alias_mediaplayer_template):Host"/>
             <setting name="TimeToClose" parameter="30"/>
-            <setting name="FNCodeset" parameter="CODESET_telnet_ENIGMA2.xml"/>
+            <setting name="FNCodeset" parameter="CODESET_telnet2_ENIGMA2.xml"/>
             <setting name="User" parameter="root" />
             <setting name="Password" parameter="" />
             <setting name="ParseResult" parameter="no" />

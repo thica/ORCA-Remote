@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--$Revision$ -->
+<strings>
+  <!--Custom Strings -->
+    <string id="fritz_sm_heating_10100">Fehler</string>
+    <string id="fritz_sm_heating_10101">Räume</string>
+    <string id="fritz_sm_heating_10102">Geräte</string>
+    <string id="fritz_sm_heating_10103">Temperaturen</string>
+
+    <string id="fritz_sm_heating_10104">Komfort</string>
+    <string id="fritz_sm_heating_10105">Eco</string>
+    <string id="fritz_sm_heating_10106">Soll</string>
+    <string id="fritz_sm_heating_10107">Aktuell</string>
+
+
+    <string id="fritz_sm_heating_10110">Set</string>
+    <string id="fritz_sm_heating_10111">Automatik</string>
+    <string id="fritz_sm_heating_10112">Manuell</string>
+    <string id="fritz_sm_heating_10113">Aktueller Modus</string>
+
+    <string id="fritz_sm_heating_10115">Automatisch</string>
+    <string id="fritz_sm_heating_10116">Manuell</string>
+    <string id="fritz_sm_heating_10117">Boost</string>
+    <string id="fritz_sm_heating_10118">Urlaub</string>
+    <string id="fritz_sm_heating_10120">Raum</string>
+    <string id="fritz_sm_heating_10121">Gerät</string>
+
+    <string id="fritz_sm_heating_10200">Sonstiges</string>
+    <string id="fritz_sm_heating_10202">Max Temperatur</string>
+    <string id="fritz_sm_heating_10203">Maximale Temperature die einstellbar ist</string>
+    <string id="fritz_sm_heating_10204">Min Temperatur</string>
+    <string id="fritz_sm_heating_10205">Minimale Temperature die einstellbar ist</string>
+    <string id="fritz_sm_heating_10240">Navigations Leiste</string>
+    <string id="fritz_sm_heating_10241">Wähle den Typ der Navigations Leiste</string>
+    <string id="fritz_sm_heating_10242">Gerätebild</string>
+    <string id="fritz_sm_heating_10243">Anzuzeigendes Gerätebild</string>
+
+
+</strings>

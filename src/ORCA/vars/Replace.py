@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ import re
 from kivy.logger                import Logger
 from ORCA.utils.LogError        import LogError
 from ORCA.utils.TypeConvert     import ToUnicode
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 import ORCA.vars.Globals
 
 __all__ = ['ReplaceDefVars',
@@ -43,15 +43,14 @@ def _VarDefReplace(oMatch) -> str:
     Internal Helper function used by the regex function to parse the definition variable name and returns its value
 
     :param re.Match Object oMatch: The regex match pattern
-    :return: The definiton var with the given var name
+    :return: The definition var with the given var name
     """
 
     uNumber:str = oMatch.string[oMatch.regs[1][0]:oMatch.regs[1][1]]
     uReturn:str = ORCA.vars.Globals.dDefVars.get(uNumber)
     if uReturn is None:
         uReturn = oMatch.string[oMatch.regs[0][0]:oMatch.regs[0][1]]
-        Logger.error(u'Vars: ReplaceDefVars: Var not found: [%s] in \n [%s]' % (uNumber, ToUnicode(oMatch.string)))  # DumpDefinitionVars(this.dDefVars)
-
+        Logger.error(f'Vars: ReplaceDefVars: Var not found: [{uNumber}] in [{ToUnicode(oMatch.string)}]')  # DumpDefinitionVars(this.dDefVars)
     uReturn = str(uReturn)
     return uReturn
 
@@ -68,7 +67,7 @@ def _VarReplace(oMatch) -> str:
     uReturn:str = ORCA.vars.Globals.dUserVars.get(uNumber)
     if uReturn is None:
         uReturn = oMatch.string[oMatch.regs[0][0]:oMatch.regs[0][1]]
-        Logger.warning(u'Vars: ReplaceVars: Var not found:' + uNumber)
+        Logger.warning('Vars: ReplaceVars: Var not found:' + uNumber)
     return uReturn
 
 
@@ -110,7 +109,7 @@ def ReplaceDefVars(uOrgIn:str, dArray:Dict[str,str]) -> str:
     return re.sub(rPatternDefVar, _VarDefReplace, uOrgIn)
 
 
-def ReplaceVars(uOrgIn:str, uContext:str=u'') -> str:
+def ReplaceVars(uOrgIn:str, uContext:str='') -> str:
     """
     Replaces all occurences of $var(xxx) and $lvar(lll) with the uservars or language vars, with name xxx/lll.
     Multiple var placeholder can be given in on string in any combination.
@@ -121,22 +120,22 @@ def ReplaceVars(uOrgIn:str, uContext:str=u'') -> str:
     :param str uContext: The context for the var, default empty. This should be the same context as given in SetVar
     :return: The string with replaced variables or the orginal string, if not variables are defined
     """
-    uTmp:str = ""
+    uTmp:str = ''
 
     if uOrgIn is None:
-        return ""
+        return ''
 
     try:
         uTmp = re.sub(rPatternVar, _VarReplace, uOrgIn)
         uTmp = re.sub(rPatternLVar, _LanguageVarReplace, uTmp)
-        if uContext != "":
+        if uContext != '':
             ORCA.vars.Globals.uRepContext = uContext
             uTmp = re.sub(rPatternCVar, _ContextVarReplace, uOrgIn)
 
     except Exception as e:
-        if "$var(" in uOrgIn or "$lvar(" in uOrgIn:
-            LogError(uMsg=u'Vars: ReplaceVars: Runtime Error:' + ToUnicode(uOrgIn) + u':', oException=e)
+        if '$var(' in uOrgIn or '$lvar(' in uOrgIn:
+            LogError(uMsg=f'Vars: ReplaceVars: Runtime Error: {ToUnicode(uOrgIn)} ', oException=e)
         else:
             uTmp = uOrgIn
 
-    return ToUnicode(uTmp)
+    return uTmp

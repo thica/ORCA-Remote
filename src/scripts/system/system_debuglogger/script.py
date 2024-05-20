@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 import logging
 import time
 
+import kivy
 from kivy.logger  import Logger
 from ORCA.scripttemplates.Template_System import cSystemTemplate
 
@@ -34,8 +35,8 @@ from ORCA.scripttemplates.Template_System import cSystemTemplate
       <description language='English'>Script to add timestamps to the logfile</description>
       <description language='German'>Script um einen Zeitstempel zum Logfile hinzuzufügen</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <skip>0</skip>
       <sources>
         <source>
@@ -53,18 +54,28 @@ from ORCA.scripttemplates.Template_System import cSystemTemplate
 
 class LoggerPatch:
     """ Patches the logger to add timestamp """
+
     def __init__(self):
+
+        oHandler=None
 
         self.emit_org = None
         # we create a formatter object once to avoid
-        # inialisation on every log line
+        # initialisation on every log line
         self.oFormatter=logging.Formatter(None)
 
-        # we just need to patch the first Handler
+        # we just need to patch the first Handler (if present)
         # as we change the message itself
-        oHandler = Logger.handlers[0]
-        self.emit_org=oHandler.emit
-        oHandler.emit=self.emit
+        if Logger.hasHandlers():
+            if len(Logger.handlers):
+                oHandler = Logger.handlers[0]
+            else:
+                if len(Logger.parent.handlers):
+                    oHandler = Logger.parent.handlers[0]
+
+            if oHandler is not None:
+                self.emit_org=oHandler.emit
+                oHandler.emit=self.emit
 
 
     def emit(self,record) -> None:
@@ -73,12 +84,12 @@ class LoggerPatch:
 
         try:
             ct = self.oFormatter.converter(record.created)
-            t:str       = time.strftime("%Y-%m-%d %H|%M|%S", ct)
-            s:str       = u"%s.%03d: " % (t, record.msecs)
+            t:str       = time.strftime('%Y-%m-%d %H.%M.%S', ct)
+            s:str       = u'%s.%03d: ' % (t, record.msecs)
             msg:str     = record.msg
-            if len(msg)>500:
-                if not "Traceback (most recent call last)" in msg:
-                    record.msg=msg[:500]+u"..."
+            if len(msg)>50000:
+                if not 'Traceback (most recent call last)' in msg:
+                    record.msg=msg[:50000]+u'...'
 
             # record.msg = s+str(record.msg.encode('ascii', 'ignore'))
             record.msg = s + record.msg
@@ -110,8 +121,8 @@ class cScript(cSystemTemplate):
 
     def __init__(self):
         super().__init__()
-        self.uSubType           = u'DEBUG'
-        self.uSortOrder         = u'last'
+        self.uSubType           = 'DEBUG'
+        self.uSortOrder         = 'last'
         self.oLoggerPatch       = None
         self.uIniFileLocation   = 'none'
 

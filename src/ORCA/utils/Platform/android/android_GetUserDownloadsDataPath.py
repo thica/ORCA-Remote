@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -23,40 +23,27 @@ from kivy.logger             import Logger
 # noinspection PyUnresolvedReferences
 from jnius                   import autoclass
 from ORCA.utils.Path         import cPath
-
+from ORCA.utils.Platform     import OS_GetSystemTmpPath
 
 def GetUserDownloadsDataPath() -> cPath:
     """ returns the path to the download folder """
-    uRetPath:str = u"/"
+    uRetPath:str = '/'
+    oRetPath: cPath =  cPath(uRetPath)
     try:
         Environment = autoclass('android.os.Environment')
         uRetPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
-        Logger.debug("Android Download Folder = " +uRetPath)
+        Logger.debug('Android Download Folder = ' +uRetPath)
+        oRetPath = cPath(uRetPath)
+        # we check if we have permissions to write here, and as a fallback we use the tmp path
+        if not oRetPath.IsWriteable():
+            Logger.error(f'GetUserDownloadsDataPath for Android No Write Permission for Download Folder: {str(oRetPath)}')
+            oRetPath=OS_GetSystemTmpPath()
+            if not oRetPath.IsWriteable():
+                Logger.error(f'GetUserDownloadsDataPath for Android cant find writable folder: {str(oRetPath)}')
     except Exception as e:
-        Logger.error("GetUserDownloadsDataPath for Android failed:"+str(e))
-    oRetPath:cPath = cPath(uRetPath)
+        Logger.error('GetUserDownloadsDataPath for Android failed:'+str(e))
 
-    if not oRetPath.IsDir():
-        Logger.error("Downloadpath not valid:" + oRetPath.string)
+    if not oRetPath.IsDir() and not oRetPath.IsWriteable():
+        Logger.error(f'Downloadpath not valid: {oRetPath}')
 
     return oRetPath
-
-
-
-'''
-from plyer                   import storagepath
-def GetUserDownloadsDataPath():
-    """ returns the path to the download folder """
-    uRetPath=u"/"
-    try:
-        uRetPath = storagepath.get_downloads_dir
-        Logger.debug("Android Download Folder = "+uRetPath)
-    except Exception as e:
-        Logger.error("GetUserDownloadsDataPath for Android failed:"+str(e))
-    oRetPath = cPath(uRetPath)
-
-    if not oRetPath.IsDir():
-        Logger.error("Android Download path not valid:" + oRetPath.string)
-
-    return oRetPath
-'''

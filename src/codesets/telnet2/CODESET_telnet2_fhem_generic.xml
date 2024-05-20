@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translates Orca Actions to Interface Commands action = Orca Action String
+     cmd = command to send, -->
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <repositorymanager>
+    <entry>
+      <name>Telnet2 FHEM / Generic Command Set</name>
+      <description language='English'>Command set to send generic Commands to FHEM using telnet2</description>
+      <description language='German'>Befehlssatz für allgemeine Befehle an FHEM über Telnet2</description>
+      <author>Carsten Thielepape</author>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(APPLICATIONPATH)/codesets/telnet2/CODESET_telnet2_fhem_generic.xml</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_telnet2_fhem_generic.zip</sourcefile>
+          <targetpath>codesets/telnet2</targetpath>
+        </source>
+      </sources>
+      <dependencies>
+        <dependency>
+          <type>interfaces</type>
+          <name>Telnet2</name>
+        </dependency>
+      </dependencies>
+    </entry>
+  </repositorymanager>
+
+
+  <action string="codeset" name='raw' waitforresponse='1' cmd='$cvar(device)' />
+  <action string="codeset" name='raw_wait' waitforresponse='1' cmd='$cvar(device)' />
+  <action string="codeset" name='raw_nowait' waitforresponse='0' cmd='$cvar(device)' />
+  <action string="codeset" name='power_on' waitforresponse='1' cmd='set $cvar(device) on' />
+  <action string="codeset" name='power_off' waitforresponse='1' cmd='set $cvar(device) off' />
+  <action string="codeset" name='get' waitforresponse='1' cmd='get $cvar(device)' />
+  <action string="codeset" name='getstate' waitforresponse='1' cmd='getstate $cvar(device)' />
+</includes>

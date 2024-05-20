@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -44,10 +44,10 @@ from ORCA.utils.FileName             import cFileName
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 
 __all__ = ['cWidgetSlider']
@@ -113,13 +113,13 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
         super().__init__()
         self.oFnPictureNormal:Union[cFileName,None] = None
         self.oFnPictureButton:Union[cFileName,None] = None
-        self.uDestVar:str                           = u'slider'
-        self.uDeviceOrientation:str                 = u'horizontal'
+        self.uDestVar:str                           = 'slider'
+        self.uDeviceOrientation:str                 = 'horizontal'
         self.bDiscardMoves:bool                     = True
         self.fMin:float                             = 0.0
         self.fMax:float                             = 100.0
-        self.uMin:str                               = u''
-        self.uMax:str                               = u''
+        self.uMin:str                               = ''
+        self.uMax:str                               = ''
         self.fValue:float                           = 0.0
         self.fOldValue:float                        = 10000.23445
         self.fDataRange:float                       = 100.0
@@ -129,14 +129,14 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
         """ Reads further Widget attributes from a xml node """
         bRet=self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
-            self.oFnPictureNormal           = cFileName(u'').ImportFullPath(uFnFullName=GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'picturenormal',bMandatory= False,uDefault=u''))
-            self.oFnPictureButton           = cFileName(u'').ImportFullPath(uFnFullName=GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag=u'picturebutton',bMandatory= False,uDefault=u''))
-            self.uMin                       = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag=u'mindatavalue', bMandatory=False, vDefault=u'0.0')
-            self.uMax                       = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag=u'maxdatavalue', bMandatory=False, vDefault=u'100.0')
-            self.uDestVar                   = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag=u'destvar',      bMandatory=False, vDefault=self.uDestVar)
-            self.iRoundPos                  = GetXMLIntAttribute(oXMLNode=oXMLNode,     uTag=u'roundpos',     bMandatory=False, iDefault=0)             #roundpos: the position, the  number should be rounded
-            self.uDeviceOrientation         = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag=u'orientation',  bMandatory=False, vDefault=self.uDeviceOrientation)
-            self.bDiscardMoves              = GetXMLBoolAttributeVar(oXMLNode=oXMLNode, uTag=u'discardmoves', bMandatory=False, bDefault=False)
+            self.oFnPictureNormal           = cFileName(GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag='picturenormal',bMandatory= False,uDefault=''))
+            self.oFnPictureButton           = cFileName(GetXMLTextAttributeVar(oXMLNode=oXMLNode,uTag='picturebutton',bMandatory= False,uDefault=''))
+            self.uMin                       = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag='mindatavalue', bMandatory=False, vDefault='0.0')
+            self.uMax                       = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag='maxdatavalue', bMandatory=False, vDefault='100.0')
+            self.uDestVar                   = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag='destvar',      bMandatory=False, vDefault=self.uDestVar)
+            self.iRoundPos                  = GetXMLIntAttribute(oXMLNode=oXMLNode,     uTag='roundpos',     bMandatory=False, iDefault=0)             #roundpos: the position, the  number should be rounded
+            self.uDeviceOrientation         = GetXMLTextAttribute(oXMLNode=oXMLNode,    uTag='orientation',  bMandatory=False, vDefault=self.uDeviceOrientation)
+            self.bDiscardMoves              = GetXMLBoolAttributeVar(oXMLNode=oXMLNode, uTag='discardmoves', bMandatory=False, bDefault=False)
             self.fValue                     = self.fMin
         return bRet
 
@@ -155,7 +155,7 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
                 self.fDataRange=abs(self.fMax-self.fMin)
                 self.oObject.bind(on_slider_moved=self.OnNotifyChange)
                 # Capability to click on Knobs as well (needs to be implemented)
-                if not self.uActionName==u'':
+                if not self.uActionName=='':
                     self.oObject.bind(on_release=self.On_Button_Up)
                     self.oObject.bind(on_press  =self.On_Button_Down)
 
@@ -164,19 +164,19 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
                 return True
             return False
         except Exception as e:
-            LogError ( uMsg=u'cWidgetSlider:Unexpected error Creating Object:',oException=e)
+            LogError ( uMsg='cWidgetSlider:Unexpected error Creating Object:',oException=e)
             return False
 
     def OnNotifyChange(self,instance):
         """ will be called, when the slider will be moved """
 
-        if self.bDiscardMoves and (instance.uMoveType == u'move'):
+        if self.bDiscardMoves and (instance.uMoveType == 'move'):
             return
 
         if not self.bIsEnabled:
             return
 
-        if not self.uDestVar==u'':
+        if not self.uDestVar=='':
             if self.fMin<self.fMax:
                 self.fValue=Round(self.oObject.value,self.iRoundPos)
             else:
@@ -184,7 +184,7 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
             if self.iRoundPos==0:
                 self.fValue=int(self.fValue)
             self.UpdateVars()
-            if not self.uActionName==u'':
+            if not self.uActionName=='':
                 if self.fOldValue!=self.fValue:
                     self.fOldValue=self.fValue
                     self.On_Button_Up(instance)
@@ -198,16 +198,16 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
 
         super().UpdateWidget()
 
-        if not self.uDestVar==u'':
+        if not self.uDestVar=='':
             uValue=GetVar(uVarName = self.uDestVar)
             fNewValue=ToFloat(uValue)
 
-            if GetVar(uVarName=self.uMax) != u'':
+            if GetVar(uVarName=self.uMax) != '':
                 fMax = ToFloat(GetVar(uVarName=self.uMax))
             else:
                 fMax = self.fMax
 
-            if GetVar(uVarName=self.uMin) != u'':
+            if GetVar(uVarName=self.uMin) != '':
                 fMin = ToFloat(GetVar(uVarName=self.uMin))
             else:
                 fMin = self.fMin
@@ -223,7 +223,7 @@ class cWidgetSlider(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
 
     def UpdateVars(self):
         """ Updates the vars, if the slider has been moved """
-        if not self.uDestVar==u'':
+        if not self.uDestVar=='':
             SetVar(uVarName = self.uDestVar, oVarValue = ToUnicode(self.fValue))
 
     def SetMax(self,fMax):

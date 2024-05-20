@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page name='Page_Device_$dvar(definition_alias_fritz_sm_heating)'>
+  <page_parameter>
+    <interface>$var($dvar(definition_alias_fritz_sm_heating)_INTERFACE_MAIN)</interface>
+    <configname>$var($dvar(definition_alias_fritz_sm_heating)_CONFIGNAME_MAIN)</configname>
+  </page_parameter>
+  <elements xmlns:xi="http://www.w3.org/2001/XInclude">
+    <element name='Background' type='BACKGROUND' picturenormal='background' />
+    <element name='Picture Device' type='PICTURE' posx='%90' posy='%20' width='%25' height='of:width:self:*0.5' picturenormal='$var($dvar(definition_alias_fritz_sm_heating)_DEVICEPICTURE)' />
+    <element name='Anchor BottomGap' type='ANCHOR' posx='left' posy='bottom' width='%100'  height='%1' />
+
+    <element name='Anchor DropDowns' type='ANCHOR' posx='%5' posy='%20' width='%30'  height='%20' >
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_dropdowns.xml" parse="xml" />
+    </element>
+    <element name='Anchor Info' type='ANCHOR' posx='%5' posy='of:totop:Anchor BottomGap' width='%30' height='of:width:self:*1'>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_buttons_info.xml" parse="xml" />
+    </element>
+    <element name='Anchor Temp Knob' type='ANCHOR' posx='%95' posy='of:totop:Anchor BottomGap' width='%30' height='of:width:self:*1'>
+      <xi:include href="$var(DEFINITIONPATHSKINELEMENTS)/block_knob_tempselect.xml" parse="xml" />
+    </element>
+
+  </elements>
+</page>

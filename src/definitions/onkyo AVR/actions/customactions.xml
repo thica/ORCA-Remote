@@ -116,26 +116,37 @@
 
   <action name="PageStart Page_Device_$dvar(definition_alias_mediaplayer_template) Onkyo">
     <!-- Just for the main page, the standard pagestart option will be called by the media template -->
-
+    <action name="Init all Triggers" string="call FKT Set Trigger $dvar(definition_alias_mediaplayer_template)" />
     <action name="Init Receiver Commands"            string="sendcommand init"     retvar="$dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)" condition="$var(DEVICEISONLINE)!=FALSE" />
     <action name="Show Warning if nothing found"     string="showquestion"         title="$lvar(5040): $dvar(definition_alias_onkyoavr)" message="$lvar(onkyoAVR_10009)" actionyes="dummy" condition="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model)=Onkyo"/>
     <action name="Show Warning if nothing found"     string="showquestion"         title="$lvar(5040): $dvar(definition_alias_onkyoavr)" message="$lvar(onkyoAVR_10009)" actionyes="dummy" condition="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model)=Unknown"/>
     <action name="Set OnkyoAVR Power On Action"      string="setwidgetattribute"   widgetname="Button Power On" attributename="action" attributevalue="FKT SwitchOn $dvar(definition_alias_mediaplayer_template) Force" />
     <action name="Set OnkyoAVR Power Off Action"     string="setwidgetattribute"   widgetname="Button Power Off" attributename="action" attributevalue="FKT SwitchOff $dvar(definition_alias_mediaplayer_template) Force" />
     <action name="Send Default Picture Type to Link" string="sendcommand main.net-usb-jacket-art.setlink" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var(DEVICEISONLINE)!=FALSE"/>
-    <action name="Send Get Audio"                    string="sendcommand main.audio-infomation.query" retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var(DEVICEISONLINE)!=FALSE"/>
-    <action name="Send Get Video"                    string="sendcommand main.video-infomation.query" retvar="$dvar(definition_alias_mediaplayer_template)_videoinfo" interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  condition="$var(DEVICEISONLINE)!=FALSE"/>
+    <action name="Update all triggers" string="call $dvar(definition_alias_mediaplayer_template) Update All Triggers" />
+
   </action>
 
-
   <action name="$dvar(definition_alias_mediaplayer_template)_updateimage" >
+
     <action name="Only on main Page" string="if $var(CURRENTPAGE)=Page_Device_$dvar(definition_alias_mediaplayer_template)" />
       <action name="Set ONKYO Device Name Text" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model=Onkyo" condition="$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model)=Unknown"/>
       <action name="And Show It" string="updatewidget Device Pretty Name" />
       <action name="Replace Standard Picture" string="if $var($dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE)=device TV receiver" />
-        <action name="check if we have a device picture"  string="modifyfile" operator="existfile"  filename="$var(DEFINITIONPATH[onkyo AVR])/pics/devices/$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model).png" dstvarname="tmpfileexist"/>
-        <action name="And set it device picture, if exist #1" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Picture=$var(DEFINITIONPATH[onkyo AVR])/pics/devices/$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model).png" condition="$var(tmpfileexist)=TRUE"/>
-        <action name="And set it device picture, if exist #2" string="setwidgetattribute" attributename="picturenormal" widgetname="Picture Device" attributevalue="$var(DEFINITIONPATH[onkyo AVR])/pics/devices/$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model).png" condition="$var(tmpfileexist)=TRUE" />
+        <action name="Create FilePath #1"  string="setvar TMPFILENAME=$var($dvar(definition_alias_onkyoavr)_DEVICEPICTUREPATH)/$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model).png" />
+        <action name="check if we have a device picture (Standard Path)"  string="modifyfile" operator="existfile"  filename="$var(TMPFILENAME)" dstvarname="tmpfileexist"/>
+        <action name="if exist" string="if $var(tmpfileexist)==TRUE" />
+          <action name="Set the device picture, if exist" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Picture=$var(TMPFILENAME)" />
+          <action name="leave" string="goto endsetpicture" />
+        <action name="" string="endif" />
+        <action name="Create FilePath #2"  string="setvar TMPFILENAME=$var(DOWNLOADSPATH)/ORCA/resources/devices/onkyo/$var($dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Model).png" />
+          <action name="check if we have a device picture (Downloads Path)"  string="modifyfile" operator="existfile"  filename="$var(TMPFILENAME)" dstvarname="tmpfileexist"/>
+          <action name="if exist" string="if $var(tmpfileexist)==TRUE" />
+          <action name="And set it device picture, if exist #1" string="setvar $dvar(definition_alias_mediaplayer_template)_DEVICESETTINGS_Picture=$var(TMPFILENAME)" />
+          <action name="leave" string="goto endsetpicture" />
+        <action name="" string="endif" />
+        <action name="endsetpicture"  />
+        <action name="And Show It" string="updatewidget Picture Device" />
       <action name="endif" string="endif" />
     <action name="endif" string="endif" />
   </action>

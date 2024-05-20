@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -71,25 +71,25 @@ from ORCA.widgets.helper.HexColor      import GetColorFromHex
 from ORCA.widgets.helper.HexColor      import aColorUndefined
 from ORCA.widgets.base.BaseBase        import cWidgetBaseBase
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ORCA.definition.Definition import cDefinition
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
     from ORCA.widgets.Anchor        import cWidgetAnchor
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
-    cDefinition   = TypeVar("cDefinition")
-    cWidgetAnchor = TypeVar("cWidgetAnchor")
+    cScreenPage   = TypeVar('cScreenPage')
+    cDefinition   = TypeVar('cDefinition')
+    cWidgetAnchor = TypeVar('cWidgetAnchor')
 
 
 __all__ = ['cWidgetBase']
 
 oLastWidget:Union[cWidgetBase,None]     = None
 oLastWidgetSave:Union[cWidgetBase,None] = None
-uContainerContext:str                   = u''
+uContainerContext:str                   = ''
 
 class cWidgetBase(cWidgetBaseBase):
     # Base Class for all ORCA widgets
@@ -199,12 +199,12 @@ class cWidgetBase(cWidgetBaseBase):
         self.dKwArgs:Dict                               = {}
         self.dObject_kwargs:Dict                        = {} # The kwargs used to create the kivy object
         self.oTmpAnchor:Union[cWidgetAnchor,None]       = None
-        self.uBackGroundColor:str                       = u''
-        self.uContainer:str                             = u''
-        self.uDefinitionContext:str                     = u''
-        self.uPageName:str                              = u''
-        self.uTapType:str                               = u''
-        self.uTypeString:str                            = u''
+        self.uBackGroundColor:str                       = ''
+        self.uContainer:str                             = ''
+        self.uDefinitionContext:str                     = ''
+        self.uPageName:str                              = ''
+        self.uTapType:str                               = ''
+        self.uTypeString:str                            = ''
         self.oParentScreenPage:Union[cScreenPage,None]  = None
 
     # noinspection PyUnresolvedReferences
@@ -226,10 +226,10 @@ class cWidgetBase(cWidgetBaseBase):
             global oLastWidget
 
             self.GetWidgetTypeFromXmlNode(oXMLNode)
-            self.uFileName          = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag=u'linefilename', bMandatory=False, vDefault="unknown file")
-            self.uFileNames         = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag=u'linefilenames', bMandatory=False, vDefault="Unknown File")
+            self.uFileName          = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag='linefilename', bMandatory=False, vDefault='Unknown file')
+            self.uFileNames         = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag='linefilenames', bMandatory=False, vDefault='Unknown File')
 
-            uDefinitionContext      = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag=u'definitioncontext', bMandatory=False, vDefault=Globals.uDefinitionContext)
+            uDefinitionContext      = GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag='definitioncontext', bMandatory=False, vDefault=Globals.uDefinitionContext)
             uAlias                  = oXMLNode.get('definitionalias')
             oDef                    = None
             if uAlias is not None:
@@ -237,7 +237,7 @@ class cWidgetBase(cWidgetBaseBase):
 
             self.oDef               = oDef
             self.uDefinitionContext = uDefinitionContext
-            self.uName              = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'name',bMandatory=True,vDefault=u'NoName')
+            self.uName              = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='name',bMandatory=True,vDefault='NoName')
             self.oParentScreenPage  = oParentScreenPage
             self.uPageName          = self.oParentScreenPage.uPageName
 
@@ -250,9 +250,9 @@ class cWidgetBase(cWidgetBaseBase):
             self.iGapY              = oDef.iGapY
             self.fRationX           = oDef.fRationX
             self.fRationY           = oDef.fRationY
-            self.uAnchorName        = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'anchor',bMandatory=False,vDefault=u'')
+            self.uAnchorName        = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='anchor',bMandatory=False,vDefault='')
 
-            if self.uAnchorName == u'':
+            if self.uAnchorName == '':
                 self.uAnchorName=uAnchor
 
             if self.uAnchorName:
@@ -271,8 +271,8 @@ class cWidgetBase(cWidgetBaseBase):
                     self.oTmpAnchor=None
 
             # We parse for Text and change later to integer
-            uWidth                  = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag= u'width', bMandatory=False,  vDefault=u''))
-            uHeight                 = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag= u'height',bMandatory= False, vDefault=u''))
+            uWidth                  = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag= 'width', bMandatory=False,  vDefault=''))
+            uHeight                 = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode,uTag= 'height',bMandatory= False, vDefault=''))
 
             iAnchorWidth            = self.iAnchorWidth
             iAnchorHeight           = self.iAnchorHeight
@@ -282,26 +282,26 @@ class cWidgetBase(cWidgetBaseBase):
             if bApplyWidth:
                 self.iWidth = self._ParseDimPosValue(uWidth)
 
-            self.bIsEnabled         = GetXMLBoolAttribute(oXMLNode=oXMLNode, uTag=u'enabled',        bMandatory=False,  bDefault=bAnchorEnabled)
-            self.uContainer         = GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'container',      bMandatory=False,  vDefault=u'')
+            self.bIsEnabled         = GetXMLBoolAttribute(oXMLNode=oXMLNode, uTag='enabled',        bMandatory=False,  bDefault=bAnchorEnabled)
+            self.uContainer         = GetXMLTextAttribute(oXMLNode=oXMLNode, uTag='container',      bMandatory=False,  vDefault='')
 
-            if (self.eWidgetType == eWidgetType.ScrollContainer or self.eWidgetType == eWidgetType.ScrollList) and self.uContainer == u'':
+            if (self.eWidgetType == eWidgetType.ScrollContainer or self.eWidgetType == eWidgetType.ScrollList) and self.uContainer == '':
                 self.uContainer = ''.join(random.choice(string.ascii_lowercase)+str(i) for i in range(20))
 
-            if self.uContainer==u'':
+            if self.uContainer=='':
                 self.uContainer=uContainerContext
 
-            self.uBackGroundColor   = GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'backgroundcolor',bMandatory=False,  vDefault=u'#00000000')
+            self.uBackGroundColor   = GetXMLTextAttribute(oXMLNode=oXMLNode, uTag='backgroundcolor',bMandatory=False,  vDefault='#00000000')
             self.aBackGroundColor   = GetColorFromHex(ReplaceVars(self.uBackGroundColor))
 
-            uPosY:str               = ReplaceVars(GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag=u'posy',bMandatory=False,vDefault=u'top'))
+            uPosY:str               = ReplaceVars(GetXMLTextAttribute  (oXMLNode=oXMLNode,uTag='posy',bMandatory=False,vDefault='top'))
             self.iPosY              = self.CalculatePosY(uPosY)
 
-            uPosX:str               = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode, uTag=u'posx', bMandatory=False,vDefault=u'left'))
+            uPosX:str               = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLNode, uTag='posx', bMandatory=False,vDefault='left'))
             self.iPosX              = self.CalculatePosX(uPosX)
 
-            self.uInterFace         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'interface', bMandatory=False,        vDefault=u'')
-            self.uConfigName        = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'configname',bMandatory=False,        vDefault=u'')
+            self.uInterFace         = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='interface', bMandatory=False,        vDefault='')
+            self.uConfigName        = GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='configname',bMandatory=False,        vDefault='')
 
             if oLastWidget:
                 self.uLastWidgetID  = oLastWidget.uID
@@ -316,66 +316,66 @@ class cWidgetBase(cWidgetBaseBase):
             return super().ParseXMLBaseNode (oXMLNode,oParentScreenPage, uAnchor)
 
         except Exception as e:
-            LogError(uMsg=u'Error parsing widget from element:[%s] [%s]' % (self.uName,self.uFileNames),oException=e, bTrackStack=True)
+            LogError(uMsg=f'Error parsing widget from element:[{self.uName}] [{self.uFileNames}]', oException=e, bTrackStack=True)
             return False
 
     def CalculatePosX(self,uPosX:str) -> int:
         fPercentage: float = -1.0
         iPosX: int = 0
 
-        if not uPosX == u'':
-            if uPosX == u'right':
+        if not uPosX == '':
+            if uPosX == 'right':
                 fPercentage = 100.0
             elif uPosX.startswith('of:'):
                 iPosX = self._ParseDimPosValue(uPosX)
-            elif uPosX == u'left':
+            elif uPosX == 'left':
                 fPercentage = 0.0
-            elif uPosX == u'center':
+            elif uPosX == 'center':
                 fPercentage = 50.0
             elif uPosX.isdigit():
-                Logger.warning("Depreciated absolute PosX used:" + self.uName + " from:" + self.uPageName)
+                Logger.warning('Depreciated absolute PosX used:' + self.uName + ' from:' + self.uPageName)
                 iPosX = (int(uPosX)) + self.iAnchorPosX
-            elif uPosX[0] == u'%':
+            elif uPosX[0] == '%':
                 fPercentage = float(uPosX[1:])
-            elif uPosX[0] == u'd':
+            elif uPosX[0] == 'd':
                 iPosX = dp(float(uPosX[1:])) + self.iAnchorPosX
-            elif uPosX[0] == u's':
+            elif uPosX[0] == 's':
                 iPosX = sp(float(uPosX[1:])) + self.iAnchorPosX
             else:
-                LogError(uMsg=u'WidgetBase: Fatal Error:Wrong xpos:' + self.uName + " " + uPosX)
+                LogError(uMsg='WidgetBase: Fatal Error:Wrong xpos:' + self.uName + " " + uPosX)
                 iPosX = 0
 
             if not fPercentage == -1.0:
-                iPosX = self.iAnchorPosX + ((fPercentage / 100) * self.iAnchorWidth) - (self.iWidth * (fPercentage / 100))
+                iPosX = int(self.iAnchorPosX + ((fPercentage / 100) * self.iAnchorWidth) - (self.iWidth * (fPercentage / 100)))
         return int(iPosX)
 
     def CalculatePosY(self,uPosY:str) -> int:
         fPercentage:float = -1.0
         iPosY:int         = 0
 
-        if not uPosY == u'':
-            if uPosY == u'bottom':
+        if not uPosY == '':
+            if uPosY == 'bottom':
                 fPercentage = 100.0
             elif uPosY.startswith('of:'):
                 iPosY = self._ParseDimPosValue(uPosY)
-            elif uPosY == u'top':
+            elif uPosY == 'top':
                 fPercentage = 0.0
-            elif uPosY == u'middle' or uPosY == u'center':
-                uPosY = "middle"
+            elif uPosY == 'middle' or uPosY == 'center':
+                uPosY = 'middle'
                 fPercentage = 50.0
             elif uPosY.isdigit():
-                Logger.warning("Depreciated absolute PosY used:" + self.uName + " from:" + self.uPageName)
+                Logger.warning('Depreciated absolute PosY used:' + self.uName + ' from:' + self.uPageName)
                 iPosY = (int(uPosY) + self.iAnchorPosY)
-            elif uPosY[0] == u'%':
+            elif uPosY[0] == '%':
                 fPercentage = float(uPosY[1:])
-            elif uPosY[0] == u'd':
+            elif uPosY[0] == 'd':
                 # iPosY = dp(float(self.iPosY[1:])) + self.iAnchorPosY
                 iPosY = Globals.iAppHeight - self.iHeight - int(uPosY)
-            elif uPosY[0] == u's':
+            elif uPosY[0] == 's':
                 # iPosY = sp(float(self.iPosY[1:])) + self.iAnchorPosY
                 iPosY = Globals.iAppHeight - self.iHeight - int(uPosY)
             else:
-                LogError(uMsg=u'WidgetBase: Fatal Error:Wrong ypos:' + self.uName)
+                LogError(uMsg='WidgetBase: Fatal Error:Wrong ypos:' + self.uName)
                 iPosY = 0
             if not fPercentage == -1.0:
                 iPosY = int(self.iAnchorPosY + ((fPercentage / 100) * self.iAnchorHeight) - (self.iHeight * (fPercentage / 100)))
@@ -386,7 +386,7 @@ class cWidgetBase(cWidgetBaseBase):
         bApplyWidth = False
         iWidth:int = 0
 
-        if uWidth == u'':
+        if uWidth == '':
             return iAnchorWidth,bApplyWidth
         elif uWidth.startswith('of:height:self'):
             bApplyWidth = True
@@ -394,10 +394,10 @@ class cWidgetBase(cWidgetBaseBase):
             bApplyWidth = True
         elif uWidth.startswith('of:'):
             iWidth = self._ParseDimPosValue(uWidth)
-        elif uWidth[0] == u'%':
+        elif uWidth[0] == '%':
             fPercentage: float = float(uWidth[1:])
             iWidth = int((fPercentage / 100) * iAnchorWidth)
-        elif uWidth[0] == u'd':
+        elif uWidth[0] == 'd':
             # we define: First Value is dp value,
             # second value is absolute value (unscaled)
             # eg d20:50 would result either d20 or 50, whatever is larger
@@ -408,20 +408,20 @@ class cWidgetBase(cWidgetBaseBase):
                 fVar = max(dp(tTmp[0]), tTmp[1])
             iWidth = int(fVar)
         else:
-            # Logger.warning("Depreciated absolute width used:"+self.uName+ " from:"+self.uPageName+":["+uWidth+"]")
+            # Logger.warning('Depreciated absolute width used:'+self.uName+ ' from:'+self.uPageName+':['+uWidth+']')
             iWidth = int(uWidth)
         return iWidth, bApplyWidth
 
     def CalculateHeight(self,uHeight:str,iAnchorHeight:int) -> int:
         fPercentage:float
-        if uHeight == u'':
+        if uHeight == '':
             return iAnchorHeight
-        elif uHeight[0] == u'%':
+        elif uHeight[0] == '%':
             fPercentage = float(uHeight[1:])
             return int((fPercentage / 100) * iAnchorHeight)
         elif uHeight.startswith('of:'):
             return int(self._ParseDimPosValue(uHeight))
-        elif uHeight[0] == u'd':
+        elif uHeight[0] == 'd':
             # we define: First Value is dp value,
             # second value is absolute value (unscaled)
             tTmp: Tuple[float, float] = SplitMax(uHeight[1:])
@@ -432,11 +432,11 @@ class cWidgetBase(cWidgetBaseBase):
 
             return int(fVar)
         else:
-            Logger.warning("Depreciated absolute height used:"+self.uName+ " from:"+self.uPageName)
+            Logger.warning('Depreciated absolute height used:'+self.uName+ ' from:'+self.uPageName)
             return int(uHeight)
 
     def _ParseDimPosValue(self,uValue:str) -> int:
-        tSplit:List[str]=uValue.split(":")
+        tSplit:List[str]=uValue.split(':')
         fRetVal:float=0
 
         '''
@@ -490,9 +490,9 @@ class cWidgetBase(cWidgetBaseBase):
                     fRetVal = tFrom.iPosX+tFrom.iWidth -self.iWidth
 
                 else:
-                    LogError(uMsg=u'Unknown Reference:'+uDim)
+                    LogError(uMsg='Unknown Reference:'+uDim)
             else:
-                LogError(uMsg=u'Unknown Widget: [%s][%s][%s]' % (self.oParentScreenPage.uPageName,tSplit[2],self.uFileNames))
+                LogError(uMsg=f'Unknown Widget: [{self.oParentScreenPage.uPageName}][{tSplit[2]}][{self.uFileNames}]')
 
         if len(tSplit) > 3:
             uOperator = tSplit[3]
@@ -503,7 +503,7 @@ class cWidgetBase(cWidgetBaseBase):
                     fRetVal = fRetVal/float(uOperator[1:])
 
                 else:
-                    LogError(uMsg=u'Unknown Operator:'+uOperator)
+                    LogError(uMsg='Unknown Operator:'+uOperator)
         return ToInt(fRetVal)
 
 
@@ -533,7 +533,7 @@ class cWidgetBase(cWidgetBaseBase):
             super().CreateBase(Parent, Class)
 
             if not Class=='':
-                if Class.__name__.startswith("c"):
+                if Class.__name__.startswith('c'):
                     # Just add to ORCA classes, passing custom parameter to Kivy classes crashes on Python 3
                     self.dKwArgs['ORCAWIDGET']=self
                     self.oObject = Class(**self.dKwArgs)
@@ -548,7 +548,7 @@ class cWidgetBase(cWidgetBaseBase):
             self.bIsCreated = True
             return True
         except Exception as e:
-            LogError(uMsg=u'Can''t create widget:'+self.uName,oException=e)
+            LogError(uMsg='Can\'t create widget:'+self.uName,oException=e)
             return False
 
     def FlipBorder(self) -> None:
@@ -564,7 +564,7 @@ class cWidgetBase(cWidgetBaseBase):
                     self.oBorder = None
 
     def GetWidgetTypeFromXmlNode(self,oXMLNode:Element) -> None:
-        self.uTypeString = GetXMLTextAttribute (oXMLNode=oXMLNode,uTag=u'type',bMandatory=True,vDefault=u'')
+        self.uTypeString = GetXMLTextAttribute (oXMLNode=oXMLNode,uTag='type',bMandatory=True,vDefault='')
         self.eWidgetType = dWidgetTypeToId.get(self.uTypeString,eWidgetType.ERROR)
         if not CheckCondition(oPar=oXMLNode):
             self.eWidgetType = eWidgetType.SkipWidget
@@ -636,16 +636,16 @@ class cWidgetBase(cWidgetBaseBase):
 
     def Create(self,oParent:Widget) -> bool:
         """ Dummy, needs to be overridden and not called """
-        Logger.error(u'WidgetBase: Create called on base, not allowed [%s]' % self.uName)
+        Logger.error(f'WidgetBase: Create called on base, not allowed [{self.uName}]')
         return False
 
     def InitWidgetFromXml(self,*,oXMLNode:Element,oParentScreenPage:cScreenPage, uAnchor:str) -> bool:
         """ Dummy, needs to be overridden and not called """
-        Logger.error(u'WidgetBase: Create called on base, not allowed [%s]' % self.uName)
+        Logger.error(f'WidgetBase: Create called on base, not allowed [{self.uName}]')
         return False
 
     def __str__(self):
-        return "Name:%s Anchor:%s : Type:%s" % (self.uName,self.uAnchorName,str(self.eWidgetType))
+        return f"Name:{self.uName} Anchor:{self.uAnchorName} : Type:{str(self.eWidgetType)}"
 
     def __repr__(self):
         return self.__str__()

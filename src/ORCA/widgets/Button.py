@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -35,10 +35,10 @@ from ORCA.utils.FileName            import cFileName
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ORCA.ScreenPage            import cScreenPage
+    from ORCA.screen.ScreenPage import cScreenPage
 else:
     from typing import TypeVar
-    cScreenPage   = TypeVar("cScreenPage")
+    cScreenPage   = TypeVar('cScreenPage')
 
 __all__ = ['cWidgetButton']
 
@@ -122,18 +122,18 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
         """ Reads further Widget attributes from a xml node """
         bRet:bool =self.ParseXMLBaseNode(oXMLNode,oParentScreenPage , uAnchor)
         if bRet:
-            self.SetPictureNormal   (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'picturenormal',  bMandatory=False, vDefault=u''))
-            self.SetPicturePressed  (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag=u'picturepressed', bMandatory=False, vDefault=u''))
-            #self.SetPictureDisabled (GetXMLTextAttribute(oXMLNode,u'picturedisabled',    False,u''))
-            self.bAutoHide  = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag=u'autohide',bMandatory=False,bDefault=False)
+            self.SetPictureNormal   (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='picturenormal',  bMandatory=False, vDefault=''))
+            self.SetPicturePressed  (GetXMLTextAttribute(oXMLNode=oXMLNode,uTag='picturepressed', bMandatory=False, vDefault=''))
+            #self.SetPictureDisabled (GetXMLTextAttribute(oXMLNode,'picturedisabled',    False,''))
+            self.bAutoHide  = GetXMLBoolAttribute(oXMLNode=oXMLNode,uTag='autohide',bMandatory=False,bDefault=False)
 
             if self.bAutoHide:
-                if self.uCaption == u'':
+                if self.uCaption == '':
                     self.EnableWidget(bEnable=False)
-            if not self.oFnButtonPictureNormal.string.rfind('*')==-1:
+            if not str(self.oFnButtonPictureNormal).rfind('*')==-1:
                 if self.oFnButtonPicturePressed.IsEmpty():
-                    self.oFnButtonPicturePressed.ImportFullPath(uFnFullName=self.oFnButtonPictureNormal.string.replace(u'*',u' pressed'))
-                self.oFnButtonPictureNormal.ImportFullPath(uFnFullName=self.oFnButtonPictureNormal.string.replace(u'*',u' normal'))
+                    self.oFnButtonPicturePressed.ImportFullPath(uFnFullName=str(self.oFnButtonPictureNormal).replace('*',' pressed'))
+                self.oFnButtonPictureNormal.ImportFullPath(uFnFullName=str(self.oFnButtonPictureNormal).replace('*',' normal'))
         return bRet
 
     # noinspection PyUnusedLocal
@@ -169,6 +169,8 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
                 self.AddArg('forceup', '1')
 
             if self.CreateBase(Parent=oParent, Class=self.ClassName):
+                # from kivy.logger import Logger
+                # Logger.debug(f'WidgetButton Create: [{self.uName}]')
                 self.oObject.bind(on_q_release  = self.On_Button_Up)
                 self.oObject.bind(on_q_press    = self.On_Button_Down)
                 self.oObject.bind(on_gesture    = self.On_Gesture)
@@ -176,11 +178,11 @@ class cWidgetButton(cWidgetBase,cWidgetBaseText,cWidgetBaseAction,cWidgetBaseBas
                 return True
             return False
         except Exception as e:
-            LogError(uMsg=u'cWidgetButton:Unexpected error Creating Object:',oException=e)
+            LogError(uMsg='cWidgetButton:Unexpected error Creating Object:',oException=e)
             return False
 
     def UpdateWidget(self) -> None:
         super().UpdateWidget()
-        self.SetPictureNormal("")
+        self.SetPictureNormal('')
         return
 

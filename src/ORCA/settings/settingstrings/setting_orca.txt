@@ -39,4 +39,7 @@
 {"type": "numericslider",        "title": "$lvar(601)","desc": "$lvar(602)","section": "ORCA","key": "soundvolume_notification",   "min":"0", "max":"100" ,"roundpos":"0"},
 {"type": "numericslider",        "title": "$lvar(603)","desc": "$lvar(604)","section": "ORCA","key": "soundvolume_ring",           "min":"0", "max":"100" ,"roundpos":"0"},
 {"type": "numericslider",        "title": "$lvar(605)","desc": "$lvar(606)","section": "ORCA","key": "soundvolume_success",        "min":"0", "max":"100" ,"roundpos":"0"},
-{"type": "numericslider",        "title": "$lvar(607)","desc": "$lvar(608)","section": "ORCA","key": "soundvolume_click",          "min":"0", "max":"100" ,"roundpos":"0"}]
+{"type": "numericslider",        "title": "$lvar(607)","desc": "$lvar(608)","section": "ORCA","key": "soundvolume_click",          "min":"0", "max":"100" ,"roundpos":"0"},
+{"type": "title",                "title": "$lvar(804)" },
+{"type": "bool",                 "title": "$lvar(805)","desc": "$lvar(806)","section": "ORCA","key": "persistence_sleep"},
+{"type": "bool",                 "title": "$lvar(807)","desc": "$lvar(808)","section": "ORCA","key": "persistence_pagestart"}]

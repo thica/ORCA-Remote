@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
   <pagestartaction name="appstart">
+
     <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_centervolume=0" />
     <action name="Initialize Value" string="setvar $dvar(definition_alias_mediaplayer_template)_subwoofervolume=0" />
 
@@ -59,7 +60,7 @@
     <action name="Remove the Favourites settings from the imported setting"     string="removedefinitionsetting" definitionname="$dvar(definition_alias_mediaplayer_template)" settingname="$dvar(definition_alias_mediaplayer_template)_FAVORITES_TYPE"/>
     <action name="Remove the Layout settings from the imported setting"         string="removedefinitionsetting" definitionname="$dvar(definition_alias_mediaplayer_template)" settingname="$lvar(mediaplayertemplate_10064)"/>
     <action name="Remove the tv channels settings from the imported setting"    string="removedefinitionsetting" definitionname="$dvar(definition_alias_tvfavorites_template)"/>
-    <action name="Init all Triggers" string="call FKT Set Trigger $dvar(definition_alias_mediaplayer_template)" />
+    <action name="Add Varlinks for the triggers" string="call FKT Add Trigger Links $dvar(definition_alias_mediaplayer_template)"/>
     <action name="OnkyoAVR Definitions ends here" />
   </pagestartaction>
 
@@ -67,8 +68,9 @@
     <action name="Calling Onkyo Pagestart actions as a separate function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template) Onkyo" />
   </pagestartaction>
 
-  <pagestopaction name="[Disabled] Page_Device_$dvar(definition_alias_mediaplayer_template)">
-    <action name="Call Pagestop Actions" string="call PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+  <pagestopaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)">
+    <action name="Call Pagestop Actions Template" string="call PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+    <action name="Remove Onkyo Trigger" string="call FKT Delete Trigger $dvar(definition_alias_mediaplayer_template)" />
   </pagestopaction>
 
   <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Net">
@@ -77,18 +79,19 @@
     <action name="Send Get Picture"  string="sendcommand main.net-usb-jacket-art.query"  retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
   </pagestartaction>
 
-  <pagestopaction name="[Disabled] Page_Device_$dvar(definition_alias_mediaplayer_template)_Net">
-    <action name="Remove the Trigger" string="call Delete Trigger $dvar(definition_alias_mediaplayer_template)" />
+  <pagestopaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Net">
+    <action name="Call Pagestop Actions Template" string="call PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+    <action name="Remove Onkyo Trigger" string="call FKT Delete Trigger $dvar(definition_alias_mediaplayer_template)" />
   </pagestopaction>
 
   <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Radio">
     <action name="Calling Onkyo Pagestart actions as a seperate function" string="call PageStart Page_Device_$dvar(definition_alias_mediaplayer_template)" />
     <action name="Send Get Picture"  string="sendcommand main.net-usb-jacket-art.query"  retvar="$dvar(definition_alias_mediaplayer_template)_audioinfo"       interface="$var($dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN)" configname="$var($dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN)"  />
-
   </pagestartaction>
 
-  <pagestopaction name="[Disabled] Page_Device_$dvar(definition_alias_mediaplayer_template)_Radio">
-    <action name="Delete Trigger" string="call Delete Trigger $dvar(definition_alias_mediaplayer_template)" />
+  <pagestopaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Radio">
+    <action name="Call Pagestop Actions Template" string="call PageStop Page_Device_$dvar(definition_alias_mediaplayer_template)" />
+    <action name="Remove Onkyo Trigger" string="call FKT Delete Trigger $dvar(definition_alias_mediaplayer_template)" />
   </pagestopaction>
 
    <pagestartaction name="Page_Device_$dvar(definition_alias_mediaplayer_template)_Popup">

@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,6 @@ import socket
 from time                                   import sleep
 from xml.etree.ElementTree                  import Element
 
-from kivy.clock                             import Clock
 from kivy.network.urlrequest                import UrlRequest
 from kivy.uix.button                        import Button
 
@@ -45,7 +44,7 @@ from ORCA.vars.QueryDict                    import TypedQueryDict
 from ORCA.utils.XML                         import GetXMLTextValue
 from ORCA.utils.XML                         import LoadXMLString
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 '''
 <root>
@@ -55,8 +54,8 @@ import ORCA.Globals as Globals
       <description language='English'>Discover Enigma Receiver via the webinterface</description>
       <description language='German'>Erkennt Enigma Reveiver mittels des Web Interfaces</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/scripts/discover/discover_enigma</local>
@@ -98,22 +97,18 @@ class cScript(cDiscoverScriptTemplate_Scan):
 
     def __init__(self):
         super().__init__()
-        self.uSubType:str                       = u'Enigma'
+        self.uSubType:str                       = 'Enigma'
         self.iPort:int                          = 80
         self.bStopWait:bool                     = False
-        self.uNothingFoundMessage               = u"Enigma-Discover: Could not find a Enigma Receiver on the network"
-        self.uScriptTitle                       = u"Enigma Discovery local subnet"
+        self.uNothingFoundMessage               = 'Enigma-Discover: Could not find a Enigma Receiver on the network'
+        self.uScriptTitle                       = 'Enigma Discovery local subnet'
 
     def GetHeaderLabels(self) -> List[str]:
         return ['$lvar(5029)','$lvar(5035)','$lvar(6002)','$lvar(5031)']
 
     def CreateDiscoverList_ShowDetails(self,oButton:Button) -> None:
         dDevice:TypedQueryDict = oButton.dDevice
-        uText:str = u"$lvar(5029): %s \n" \
-                    u"$lvar(5035): %s \n" \
-                    u"$lvar(6002): %s \n"\
-                    u"$lvar(5031): %s \n" % (dDevice.uIP,dDevice.uHostName,str(dDevice.iPort),dDevice.uModel)
-
+        uText:str = f'$lvar(5029): {dDevice.uIP} \n$lvar(5035): {dDevice.uHostName} \n$lvar(6002): {dDevice.iPort} \n$lvar(5031): {dDevice.uModel} \n'
         ShowMessagePopUp(uMessage=uText)
 
     # noinspection PyMethodMayBeStatic
@@ -143,7 +138,6 @@ class cScript(cDiscoverScriptTemplate_Scan):
     def GetThreadClass(self) -> Callable:
         return cThread_CheckIP
 
-
 # noinspection PyUnusedLocal
 class cThread_CheckIP(threading.Thread):
     def __init__(self, uIP:str, bOnlyOnce:bool,fTimeOut:float,oCaller:cScript):
@@ -164,17 +158,17 @@ class cThread_CheckIP(threading.Thread):
     def SendCommand(self) -> None:
 
         self.bStopWait      = False
-        uUrlFull:str = "http://"+self.uIP+"/web/about"
+        uUrlFull:str = 'http://'+self.uIP+'/web/about'
         try:
-            self.oReq = UrlRequest(uUrlFull,method="GET",timeout=self.fTimeOut,on_error=self.OnResponse,on_success=self.OnResponse)
+            self.oReq = UrlRequest(uUrlFull,method='GET',timeout=self.fTimeOut,on_error=self.OnResponse,on_success=self.OnResponse)
             self.NewWait(0.05)
             if self.oReq.resp_status is not None:
                 uResult:str = self.oReq.result
                 if "<e2abouts>" in uResult:
                     oXmlRoot:Element    = LoadXMLString(uXML=uResult)
-                    oXmlAbout:Element   = oXmlRoot.find("e2about")
-                    uModel:str          = GetXMLTextValue(oXMLNode=oXmlAbout, uTag="e2model", bMandatory=False, vDefault="Enigma")
-                    uFoundHostName:str  = ""
+                    oXmlAbout:Element   = oXmlRoot.find('e2about')
+                    uModel:str          = GetXMLTextValue(oXMLNode=oXmlAbout, uTag='e2model', bMandatory=False, vDefault='Enigma')
+                    uFoundHostName:str  = ''
                     try:
                         uFoundHostName = socket.gethostbyaddr(self.uIP)[0]
                     except Exception:
@@ -185,33 +179,36 @@ class cThread_CheckIP(threading.Thread):
                     dResult.uIP          = self.uIP
                     dResult.iPort        = 80
                     dResult.uModel       = uModel
-                    dResult.uIPVersion   = "IPv4"
+                    dResult.uIPVersion   = 'IPv4'
                     dResult.uHostName    = uFoundHostName
                     self.oCaller.aResults.append(dResult)
-                    Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTFOUND",**{"script":self,"scriptname":self.oCaller.uObjectName,"line":[dResult.uIP,dResult.uHostName, str(dResult.iPort), dResult.uModel],"device":dResult})
-                    self.oCaller.ShowInfo(uMsg=u'Discovered Enigma device (V4) %s' % dResult.uIP)
+                    Globals.oNotifications.SendNotification(uNotification='DISCOVER_SCRIPTFOUND',**{'script':self,'scriptname':self.oCaller.uObjectName,'line':[dResult.uIP,dResult.uHostName, str(dResult.iPort), dResult.uModel],'device':dResult})
+                    self.oCaller.ShowInfo(uMsg='Discovered Enigma device (V4) %s' % dResult.uIP)
                     try:
-                        uIP = ""
+                        uIP = ''
                         aIPs = socket.getaddrinfo(uFoundHostName,None)
                         for tIP in aIPs:
-                            uIP =  "["+tIP[-1][0]+"]"
-                            if ":" in uIP:
+                            uIP =  '['+tIP[-1][0]+']'
+                            if ':' in uIP:
                                 break
-                        if ":" in uIP:
+                        if ':' in uIP:
                             dResult:TypedQueryDict = TypedQueryDict()
                             dResult.uIP          = uIP
                             dResult.iPort        = 80
                             dResult.uModel       = uModel
-                            dResult.uIPVersion   = "IPv6"
+                            dResult.uIPVersion   = 'IPv6'
                             dResult.uHostName    = uFoundHostName
                             self.oCaller.aResults.append(dResult)
-                            Globals.oNotifications.SendNotification(uNotification="DISCOVER_SCRIPTFOUND",**{"script":self,"scriptname":self.oCaller.uObjectName,"line":[dResult.uIP,dResult.uHostName, str(dResult.iPort), dResult.uModel],"device":dResult})
-                            self.oCaller.ShowInfo(uMsg=u'Discovered Enigma device (V6) %s' % dResult.uIP)
+                            Globals.oNotifications.SendNotification(uNotification='DISCOVER_SCRIPTFOUND',
+                                                                        **{'script':self,
+                                                                        'scriptname':self.oCaller.uObjectName,
+                                                                        'line':[dResult.uIP,dResult.uHostName, str(dResult.iPort), dResult.uModel],'device':dResult})
+                            self.oCaller.ShowInfo(uMsg='Discovered Enigma device (V6) %s' % dResult.uIP)
                     except Exception:
                         pass
 
         except Exception as e:
-            self.oCaller.ShowError(uMsg="Error on send:", oException=e)
+            self.oCaller.ShowError(uMsg='Error on send:', oException=e)
         return
 
     def NewWait(self,delay) -> None:

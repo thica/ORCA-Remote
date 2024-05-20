@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ def GetDrives() -> List[Tuple[str,str]]:
         if iBitmask & 1:
             oName = create_unicode_buffer(64)
             # get name of the drive
-            uDrive = uLetter + u':'
+            uDrive = uLetter + ':'
             GetVolumeInformationW(uDrive + sep, oName, 64, None,None, None, None, 0)
             if isdir(uDrive):
                 aDrives.append((uDrive, oName.value))

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ from ORCA.utils.Path        import cPath
 from ORCA.utils.LogError    import LogError
 from ORCA.utils.TypeConvert import ToUnicode
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['ToAtlas','CreateAtlas','ClearAtlas']
 
@@ -44,31 +44,31 @@ def ToAtlas(*,oFileName: cFileName) -> str:
     :param cFileName oFileName:
     :return: Found FileName
     """
-    uRetFileName: str               = oFileName.string
+    uRetFileName: str               = str(oFileName)
     oFnSkinPic: Optional[cFileName] = Globals.oTheScreen.oSkin.dSkinPics.get(uRetFileName)
     oFn:cFileName
     oAtlas:Atlas
 
     if not oFnSkinPic is None:
-        uRetFileName = oFnSkinPic.string
+        uRetFileName = str(oFnSkinPic)
 
     if Globals.bIgnoreAtlas:
         return uRetFileName
 
     uKey: str = os.path.splitext(os.path.basename(uRetFileName))[0]
 
-    if uRetFileName.startswith(Globals.oPathSkin.string):
+    if uRetFileName.startswith(str(Globals.oPathSkin)):
         oFn = Globals.oFnAtlasSkin
-    elif uRetFileName.startswith(Globals.oDefinitionPathes.oPathDefinition.string):
+    elif uRetFileName.startswith(str(Globals.oDefinitionPathes.oPathDefinition)):
         oFn = Globals.oDefinitionPathes.oFnDefinitionAtlas
     else:
         return uRetFileName
 
-    oAtlas = Cache.get('kv.atlas', oFn.string)
+    oAtlas = Cache.get('kv.atlas', str(oFn))
 
     if oAtlas:
         if not oAtlas.textures.get(uKey) is None:
-            return ToUnicode(u'atlas://'+oFn.string+u'/'+uKey)
+            return ToUnicode('atlas://'+str(oFn)+'/'+uKey)
 
     return uRetFileName
 
@@ -92,29 +92,29 @@ def CreateAtlas(*,oPicPath: cPath,oAtlasFile: cFileName,uDebugMsg: str) -> None:
         return
 
     #can\'t get JPEG lib included in package, so just ignore atlas
-    if Globals.uPlatform=='macosx'  or Globals.uPlatform=="ios":
+    if Globals.uPlatform=='macosx'  or Globals.uPlatform=='ios':
         return
 
     try:
         if not oAtlasFile.Exists():
             Logger.debug(uDebugMsg)
-            #aExtensions=[u'.png',u'.jpg',u'.bmp',u'.gif']
+            #aExtensions=['.png','.jpg','.bmp','.gif']
             # we exclude gifs as they might be animated
-            aExtensions = [u'.png',u'.jpg',u'.bmp']
+            aExtensions = ['.png','.jpg','.bmp']
             aPicFiles   = []
 
             aFileList = oPicPath.GetFileList(bSubDirs=False , bFullPath=True)
             for uFileName in aFileList:
                 uExtension = os.path.splitext(uFileName)[1].lower()
                 if uExtension in aExtensions:
-                    if uFileName.find(Globals.oPathSkin.string + u'/atlas/')==-1:
+                    if uFileName.find(str(Globals.oPathSkin) + '/atlas/')==-1:
                         aPicFiles.append(uFileName)
             try:
-                Atlas.create(oAtlasFile.string[:-6],aPicFiles,1024)
+                Atlas.create(str(oAtlasFile)[:-6],aPicFiles,1024)
             except Exception as e:
-                LogError(uMsg=u'Error creating Atlas File (1):', oException=e)
+                LogError(uMsg='Error creating Atlas File (1):', oException=e)
     except Exception as e:
-        LogError(uMsg=u'Error creating Atlas File (2):',oException=e)
+        LogError(uMsg='Error creating Atlas File (2):',oException=e)
 
 def ClearAtlas() -> None:
     """ deletes all atlas files """
@@ -126,8 +126,8 @@ def ClearAtlas() -> None:
     oPathDefinitionAtlas: cPath
 
     for uSkinName in Globals.aSkinList:
-        oPathAtlasSkin = Globals.oPathRoot + ('skins/' + uSkinName + u'/atlas')
+        oPathAtlasSkin = Globals.oPathRoot + f'skins/{uSkinName}/atlas'
         oPathAtlasSkin.Clear()
     for uDefinitionName in Globals.aDefinitionList:
-        oPathDefinitionAtlas = Globals.oPathRoot + ('definitions/' + uDefinitionName + u'/atlas')
+        oPathDefinitionAtlas = Globals.oPathRoot + f'definitions/{uDefinitionName}/atlas'
         oPathDefinitionAtlas.Clear()

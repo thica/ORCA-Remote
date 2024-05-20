@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<includes  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <repositorymanager>
+        <entry>
+            <name>FRITZ Smarthome</name>
+            <description language='English'>Smarthome Control for FRITZ!Boxes</description>
+            <description language='German'>Smarthome Steuerung für FRITZ!Boxen</description>
+            <author>Carsten Thielepape</author>
+            <version>6.0.0</version>
+            <minorcaversion>6.0.0</minorcaversion>
+            <sources>
+                <source>
+                    <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_FRITZ_SMARTHOME.xml</local>
+                    <sourcefile>$var(REPOSITORYWWWPATH)/codesets/CODESET_url_FRITZ_SMARTHOME.zip</sourcefile>
+                    <targetpath>codesets/url</targetpath>
+                </source>
+            </sources>
+            <dependencies>
+                <dependency>
+                    <type>interfaces</type>
+                    <name>URL-Web</name>
+                </dependency>
+            </dependencies>
+        </entry>
+    </repositorymanager>
+
+    <action name='logon' >
+        <action string="if $cvar(firstcall)==1" varcontext="codeset"/>
+            <action string="setvar firstcall=0" varcontext="codeset"/>
+            <action name='gettokens'    string="codeset"    type="string" waitforresponse='1' requesttype='GET' protocol="http://" cmd="/login_sid.lua" headers=' {"User-Agent": "python-requests/2.23.0", "Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Connection": "keep-alive"}' parseoption='xml'  ldestvar='FRITZSMARTHOME'    parseflags="E"/>
+            <action name='create hash'  string="runscript"  scriptname="helper_fritz_smarthome" commandparameter='{"cmd_type":"calculate_password_hash","interface":"$var(codeset_interfacename)","configname":"$var(codeset_configname)","challenge":"$cvar(FRITZSMARTHOME_SessionInfo_Challenge)","password": "$cvar(Password)","retvar":"FRITZSMARTHOME_HASH"}' />
+            <action name='dologin'      string="codeset"    type="string" waitforresponse='1' requesttype='GET' protocol="http://" cmd="/login_sid.lua?username=$cvar(User)&amp;response=$cvar(FRITZSMARTHOME_HASH)" headers=' {"User-Agent": "python-requests/2.23.0", "Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Connection": "keep-alive"}' parseoption='xml'  ldestvar='FRITZSMARTHOME_SID'    parseflags="E"/>
+        <action string="endif"/>
+
+    </action>
+
+    <!-- Heating Control : Tested -->
+
+    <action name='getalldevices' string="codeset"  type="string" waitforresponse='1' requesttype='GET' protocol="http://" cmd="/webservices/homeautoswitch.lua?switchcmd=getdevicelistinfos&amp;sid=$cvar(FRITZSMARTHOME_SID_SessionInfo_SID)" headers='{"User-Agent": "python-requests/2.23.0", "Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Connection": "keep-alive"}'   parseoption='xml' ldestvar1='FRITZSMARTHOME_DEVICES' parseflags="E" />
+    <action name='device_set_temperature_manual' string="codeset"  type="string" waitforresponse='1' requesttype='GET' protocol="http://" cmd="/webservices/homeautoswitch.lua?switchcmd=sethkrtsoll&amp;sid=$cvar(FRITZSMARTHOME_SID_SessionInfo_SID)&amp;ain=$cvar(ain)&amp;param=$cvar(temperature)" headers='{"User-Agent": "python-requests/2.23.0", "Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Connection": "keep-alive"}'   parseoption='store' ldestvar1='FRITZSMARTHOME_TEMPERATURE_TARGET'/>
+    <action name='device_set_temperature_manual_on' string="codeset"  type="string" waitforresponse='1' requesttype='GET' protocol="http://" cmd="/webservices/homeautoswitch.lua?switchcmd=sethkrtsoll&amp;sid=$cvar(FRITZSMARTHOME_SID_SessionInfo_SID)&amp;ain=$cvar(ain)&amp;param=254" headers='{"User-Agent": "python-requests/2.23.0", "Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Connection": "keep-alive"}'   />
+    <action name='device_set_temperature_manual_off' string="codeset"  type="string" waitforresponse='1' requesttype='GET' protocol="http://" cmd="/webservices/homeautoswitch.lua?switchcmd=sethkrtsoll&amp;sid=$cvar(FRITZSMARTHOME_SID_SessionInfo_SID)&amp;ain=$cvar(ain)&amp;param=253" headers='{"User-Agent": "python-requests/2.23.0", "Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Connection": "keep-alive"}'   />
+    <action name='device_set_temperature_boost_on' >
+        <action name='GetTargetTime'  string="runscript"  scriptname="helper_fritz_smarthome" commandparameter='{"cmd_type":"addtime","interface":"$var(codeset_interfacename)","configname":"$var(codeset_configname)","seconds":"$cvar(seconds)","retvar":"FRITZSMARTHOME_BOOSTEND"}' />
+        <action name='setboost' string="codeset"  type="string" waitforresponse='1' requesttype='GET' protocol="http://" cmd="/webservices/homeautoswitch.lua?switchcmd=sethkrboost&amp;sid=$cvar(FRITZSMARTHOME_SID_SessionInfo_SID)&amp;ain=$cvar(ain)&amp;endtimestamp=$cvar(FRITZSMARTHOME_BOOSTEND)" headers='{"User-Agent": "python-requests/2.23.0", "Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Connection": "keep-alive"}'   />
+    </action>
+    <action name='device_set_temperature_boost_off' string="codeset"  type="string" waitforresponse='1' requesttype='GET' protocol="http://" cmd="/webservices/homeautoswitch.lua?switchcmd=sethkrboost&amp;sid=$cvar(FRITZSMARTHOME_SID_SessionInfo_SID)&amp;ain=$cvar(ain)&amp;endtimestamp=0" headers='{"User-Agent": "python-requests/2.23.0", "Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Connection": "keep-alive"}'   />
+
+
+
+</includes>
+
+
+
+
+
+

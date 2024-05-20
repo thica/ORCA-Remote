@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,6 @@
 from kivy.cache          import Cache
 
 from ORCA.utils.FileName import cFileName
-from ORCA.utils.LoadFile import LoadFile
 
 __all__ = ['CachedFile','ClearCache']
 
@@ -34,10 +33,10 @@ def CachedFile(*,oFileName: cFileName) -> str:
     Returns the content of a file as string, using a cache if already loaded
     """
 
-    uFileContent: str = Cache.get(category = uCacheName, key = oFileName.string)
+    uFileContent: str = Cache.get(category = uCacheName, key = str(oFileName))
     if uFileContent is None:
-        uFileContent = LoadFile(oFileName=oFileName)
-        Cache.append(category = uCacheName, key = oFileName.string, obj = uFileContent, timeout = 120)
+        uFileContent = oFileName.Load()
+        Cache.append(category = uCacheName, key = str(oFileName), obj = uFileContent, timeout = 120)
 
     return uFileContent
 

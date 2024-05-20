@@ -9,8 +9,8 @@
     <description language='English'>KODI command set using JSON (Helix)</description>
     <description language='German'>KODI Befehlssatz über JSON (Helix) </description>
     <author>Carsten Thielepape</author>
-    <version>5.0.4</version>
-    <minorcaversion>5.0.4</minorcaversion>
+    <version>6.0.0</version>
+    <minorcaversion>6.0.0</minorcaversion>
     <sources>
       <source>
         <local>$var(APPLICATIONPATH)/codesets/json-tcp/CODESET_json-tcp_KODI-Helix.xml</local>

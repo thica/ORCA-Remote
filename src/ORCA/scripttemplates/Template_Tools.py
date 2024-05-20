@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -24,26 +24,26 @@ from typing import Union
 from ORCA.scripts.BaseScript import cBaseScript
 from ORCA.utils.FileName import cFileName
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 class cToolsTemplate(cBaseScript):
     """ template class for discover scripts """
     def __init__(self):
         cBaseScript.__init__(self)
-        self.uType:str                      = u'TOOLS'
+        self.uType:str                      = 'TOOLS'
         self.iHash:int                      = 0
         self.oFnXML:Union[cFileName,None]   = None
         # self.aScriptSettingPlugins        = []
 
     def Init(self,uObjectName:str,oFnObject:Union[cFileName,str]=None) -> None:
         cBaseScript.Init(self,uObjectName,oFnObject)
-        self.oFnXML     = cFileName(Globals.oScripts.dScriptPathList[self.uObjectName])+"script.xml"
+        self.oFnXML     = cFileName(Globals.oScripts.dScriptPathList[self.uObjectName])+'script.xml'
 
     def RunScript(self, *args, **kwargs) -> Union[Dict,None]:
         """ main entry point to run the script """
-        if 'register' in args or kwargs.get("caller")=="appstart":
+        if 'register' in args or kwargs.get('caller')=='appstart':
             return self.Register(*args,**kwargs)
-        elif "unregister" in args:
+        elif 'unregister' in args:
             return self.UnRegister(*args,**kwargs)
         return None
 

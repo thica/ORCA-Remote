@@ -3,7 +3,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ from ORCA.utils.TypeConvert     import ToBytes
 from ORCA.utils.TypeConvert     import ToUnicode
 from ORCA.vars.Replace          import ReplaceVars
 from ORCA.utils.FileName        import cFileName
-from ORCA.Action                import cAction
+from ORCA.action.Action import cAction
 from ORCA.actions.ReturnCode    import eReturnCode
 
 '''
@@ -46,8 +46,8 @@ from ORCA.actions.ReturnCode    import eReturnCode
       <description language='English'>Sends commands to Keene Kira devices to submit IR comands</description>
       <description language='German'>Sendet Befehle zu Keene Kira Geräten um IR Befehle zu senden</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/interfaces/Keene_Kira</local>
@@ -72,13 +72,13 @@ from ORCA.actions.ReturnCode    import eReturnCode
 </root>
 '''
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from interfaces.generic_infrared.interface import cInterface as cBaseInterFaceInfrared
 else:
-    cBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass("cInterface")
+    cBaseInterFaceInfrared = Globals.oInterFaces.LoadInterface('generic_infrared').GetClass('cInterface')
 
 class cInterface(cBaseInterFaceInfrared):
 
@@ -86,10 +86,10 @@ class cInterface(cBaseInterFaceInfrared):
         def __init__(self,oInterFace:cInterface):
             super().__init__(oInterFace)
             self.oSocket:Optional[socket.socket]    = None
-            self.aIniSettings.uHost                 = u"discover"
-            self.aIniSettings.uPort                 = u"65432"
-            self.aIniSettings.uFNCodeset            = u"Select"
-            self.aIniSettings.uDiscoverScriptName   = u"discover_kira"
+            self.aIniSettings.uHost                 = 'discover'
+            self.aIniSettings.uPort                 = '65432'
+            self.aIniSettings.uFNCodeset            = 'Select'
+            self.aIniSettings.uDiscoverScriptName   = 'discover_kira'
             self.aIniSettings.iTimeToClose          = 0
             self.aIniSettings.fTimeOut              = 2.0
             self.bIsConnected                       = False
@@ -111,14 +111,14 @@ class cInterface(cBaseInterFaceInfrared):
                         continue
                     break
                 if self.oSocket is None:
-                    self.ShowError(uMsg=u'Cannot open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
+                    self.ShowError(uMsg='Can\'t open socket'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort)
                     self.bOnError=True
                     return False
                 self.bIsConnected =True
                 return True
 
             except Exception as e:
-                self.ShowError(uMsg=u'Cannot open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                self.ShowError(uMsg='Can\'t open socket #2'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 self.bOnError=True
                 return False
 
@@ -131,7 +131,7 @@ class cInterface(cBaseInterFaceInfrared):
                 self.bOnError = False
                 return True
             except Exception as e:
-                self.ShowError(uMsg=u'can\'t Disconnect'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
+                self.ShowError(uMsg='Can\'t disconnect'+self.aIniSettings.uHost+':'+self.aIniSettings.uPort,oException=e)
                 return False
 
     def __init__(self):
@@ -143,14 +143,14 @@ class cInterface(cBaseInterFaceInfrared):
 
     def Init(self, uObjectName: str, oFnObject: cFileName = None) -> None:
         super().Init(uObjectName=uObjectName, oFnObject=oFnObject)
-        self.oObjectConfig.dDefaultSettings['Host']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['Port']['active']                        = "enabled"
-        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = "enabled"
-        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = "enabled"
-        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = "enabled"
-        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = "enabled"
-        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = "enabled"
+        self.oObjectConfig.dDefaultSettings['Host']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['Port']['active']                        = 'enabled'
+        self.oObjectConfig.dDefaultSettings['FNCodeset']['active']                   = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TimeOut']['active']                     = 'enabled'
+        self.oObjectConfig.dDefaultSettings['TimeToClose']['active']                 = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisableInterFaceOnError']['active']     = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DisconnectInterFaceOnSleep']['active']  = 'enabled'
+        self.oObjectConfig.dDefaultSettings['DiscoverSettingButton']['active']       = 'enabled'
 
     def DeInit(self, **kwargs) -> None:
         super().DeInit(**kwargs)
@@ -162,33 +162,33 @@ class cInterface(cBaseInterFaceInfrared):
 
         eRet:eReturnCode = eReturnCode.Error
 
-        if oAction.uCCF_Code != u"":
+        if oAction.uCCF_Code != '':
             # noinspection PyUnresolvedReferences
             oAction.uCmd=CCfToKeene(oAction.uCCF_Code,ToInt(oAction.uRepeatCount))
-            oAction.uCCF_Code = u""
+            oAction.uCCF_Code = ''
 
         uCmd:str=ReplaceVars(oAction.uCmd)
 
-        self.ShowInfo(uMsg=u'Sending Command: '+uCmd + u' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort)
+        self.ShowInfo(uMsg='Sending Command: '+uCmd + ' to '+oSetting.aIniSettings.uHost+':'+oSetting.aIniSettings.uPort)
 
         oSetting.Connect()
         if oSetting.bIsConnected:
-            uMsg=uCmd+u'\r\n'
+            uMsg=uCmd+'\r\n'
             try:
                 uMsg=ReplaceVars(uMsg,self.uObjectName+'/'+oSetting.uConfigName)
                 oSetting.oSocket.sendto(ToBytes(uMsg), (oSetting.aIniSettings.uHost, int(oSetting.aIniSettings.uPort)))
                 byResponse, addr =  oSetting.oSocket.recvfrom(self.iBufferSize)
                 uResponse = ToUnicode(byResponse)
-                self.ShowDebug(uMsg=u'Response'+uResponse,uParConfigName=oSetting.uConfigName)
+                self.ShowDebug(uMsg='Response'+uResponse,uParConfigName=oSetting.uConfigName)
                 if 'ACK' in uResponse:
                     eRet = eReturnCode.Success
                 else:
                     eRet = eReturnCode.Error
             except Exception as e:
-                if str(e)!="timed out":
-                    self.ShowError(uMsg=u'Can\'t send message',uParConfigName=oSetting.uConfigName,oException=e)
+                if str(e)!='timed out':
+                    self.ShowError(uMsg='Can\'t send message',uParConfigName=oSetting.uConfigName,oException=e)
                 else:
-                    self.ShowWarning(uMsg=u'Can\'t send message: time out',uParConfigName=oSetting.uConfigName)
+                    self.ShowWarning(uMsg='Can\'t send message: time out',uParConfigName=oSetting.uConfigName)
 
                 eRet = eReturnCode.Error
 
@@ -248,7 +248,7 @@ def CCfToKeene(uCCFString:str,iRepeatCount:int):
             iX += 1
 
         iMyInt[iX + 2] = 8192   # over write the lead out space with 2000 X is one over when exits from for loop
-        uData = ""
+        uData = ''
 
         iX              = 0
         iEnd            = (iPair_Count * 2) + 3
@@ -257,13 +257,13 @@ def CCfToKeene(uCCFString:str,iRepeatCount:int):
             iX += 1
         bError = False
     except Exception as e:
-        LogError(uMsg = 'CCfToKeene:Can''t Convert',oException=e)
+        LogError(uMsg = 'CCfToKeene:Can\'t convert',oException=e)
         LogError(uMsg = uCCFString)
 
     if bError:
         return ""
     else:
-        uRet="K "+ uData.strip().upper()
+        uRet='K '+ uData.strip().upper()
         if iRepeatCount>1:
             uRet=uRet+' 4000 '+str(iRepeatCount)
         return uRet

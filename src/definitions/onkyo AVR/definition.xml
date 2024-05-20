@@ -65,6 +65,9 @@
   </interface_setup>
 
   <settings>
+
+      <setting title="$lvar(onkyoAVR_10014)"  desc="$lvar(onkyoAVR_10015)" var="$dvar(definition_alias_onkyoavr)_DEVICEPICTUREPATH"    type="newpath" default="$var(RESOURCEPATH)/devices/onkyo/onkyo-devices-black" />
+
       <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_MAIN"             default="eiscp" />
       <default var="$dvar(definition_alias_mediaplayer_template)_CONFIGNAME_MAIN"            default="DEVICE_$dvar(definition_alias_mediaplayer_template)" />
       <default var="$dvar(definition_alias_mediaplayer_template)_INTERFACE_POWERON"          default="eiscp" />
@@ -83,7 +86,6 @@
       <default var="$dvar(definition_alias_mediaplayer_template)_POWERONCOMMAND"             default="Send Power On" />
       <default var="$dvar(definition_alias_mediaplayer_template)_DEVICEPICTURE"              default="device TV receiver" />
       <default var="$dvar(definition_alias_mediaplayer_template)_PRETTYNAME"                 default="Onkyo AVR"  />
-
       <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[4]"           default="0" />
       <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[1]"           default="0" />
       <default var="$dvar(definition_alias_mediaplayer_template)_SHOWBUTTONBAR[2]"           default="0" />
@@ -96,8 +98,8 @@
       <description language='English'>LAN Remote Control for ONKYO Receiver</description>
       <description language='German'>LAN Fernbedienung für ONKYO Receiver</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/definitions/onkyo AVR</local>
@@ -118,8 +120,10 @@
           <type>definitions</type>
           <name>Generic Mediaplayer / TV template</name>
         </dependency>
-
-
+        <dependency>
+          <type>others</type>
+          <name>Onkyo devices black</name>
+        </dependency>
       </dependencies>
       <skipfiles>
         <file>$var(APPLICATIONPATH)/definitions/onkyo AVR/interfacesettings*</file>

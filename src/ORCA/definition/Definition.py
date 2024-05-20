@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -54,14 +54,14 @@ from ORCA.definition.DefinitionContext  import SetDefinitionContext
 from ORCA.definition.DefinitionContext  import RestoreDefinitionContext
 from ORCA.ui.ShowErrorPopUp             import ShowErrorPopUp
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ORCA.definition.Definitions import cDefinitions
 else:
     from typing import TypeVar
-    cDefinitions = TypeVar("cDefinitions")
+    cDefinitions = TypeVar('cDefinitions')
 
 
 __all__ = ['cDefinition', 'LoadFontFromXML', 'aLoadedFontFiles', 'aLoadedGestures', 'LoadGesturesFromXML']
@@ -102,7 +102,7 @@ def LoadGesturesFromXML(*,oET_Root:Element,uSegmentTag:str, uListTag:str) -> Non
                     oET_Segments:List[Element] = oET_Include.findall(uListTag)
                     if oET_Segments:
                         for oET_Segment in oET_Segments:
-                            uName:str  =GetXMLTextAttribute(oXMLNode=oET_Segment,uTag=u'name',bMandatory=True,vDefault=u'')
+                            uName:str  =GetXMLTextAttribute(oXMLNode=oET_Segment,uTag='name',bMandatory=True,vDefault='')
                             oGesture:cGesture=cGesture()
                             oGesture.ParseGestureFromXMLNode(oXMLNode=oET_Segment)
                             oGesture.oGesture = Globals.oTheScreen.oGdb.str_to_gesture(oGesture.uGestureString)
@@ -110,7 +110,7 @@ def LoadGesturesFromXML(*,oET_Root:Element,uSegmentTag:str, uListTag:str) -> Non
                             Globals.oTheScreen.oGdb.add_gesture(oGesture.oGesture)
                             Globals.oTheScreen.dGestures[uName]=oGesture
     except ParseError as e:
-        ShowErrorPopUp(uTitle="LoadGesturesFromXML:Fatal Error",uMessage=LogError(uMsg=u'Fatal Error:Load Gesture XmlFile:',oException=e),bAbort=True)
+        ShowErrorPopUp(uTitle='LoadGesturesFromXML:Fatal Error',uMessage=LogError(uMsg='Fatal Error:Load Gesture XmlFile:',oException=e),bAbort=True)
 
 class cDefinition:
 
@@ -130,9 +130,9 @@ class cDefinition:
         self.fRationY:float                             = 1.0
         self.iDefMaxX:int                               = 1
         self.iDefMaxY:int                               = 1
-        self.uFontSize_Button:str                       = u'200'
-        self.uFontSize_File:str                         = u'200'
-        self.uFontSize_Text:str                         = u'200'
+        self.uFontSize_Button:str                       = '200'
+        self.uFontSize_File:str                         = '200'
+        self.uFontSize_Text:str                         = '200'
         self.iGapX:int                                  = 0
         self.iGapY:int                                  = 0
         self.oDefinitionPathes:cDefinitionPathes        = Globals.dDefinitionPathes.get(uDefinitionName, cDefinitionPathes(uDefinitionName=uDefinitionName))
@@ -140,12 +140,12 @@ class cDefinition:
         self.oET_Root:Optional[Element]                 = None
         self.oRepManEntry:Optional[cRepManagerEntry]    = None
         self.sET_Data:str                               = ''
-        self.uAlias:str                                 = u''
-        self.uDefaultFont:str                           = u''
-        self.uDefDescription:str                        = u''
-        self.uDefPublicTitle:str                        = u''
+        self.uAlias:str                                 = ''
+        self.uDefaultFont:str                           = ''
+        self.uDefDescription:str                        = ''
+        self.uDefPublicTitle:str                        = ''
         self.uName:str                                  = uDefinitionName
-        self.uParentDefinitionName:str                  = u''
+        self.uParentDefinitionName:str                  = ''
 
     # next two functions required to have a definition object included as an element tree attribute
     def __contains__(self,key:Any) -> bool:
@@ -154,34 +154,34 @@ class cDefinition:
     # noinspection PyUnusedLocal
     def encode(self,encoding:str, decode:str) -> str:
         """ Dummy to return the name """
-        return str(self.uAlias)
+        return self.uAlias
 
     def LoadActions(self) -> None:
         """ parses the definition specific actions """
-        Logger.info (u'Loading Actions for definition:'+self.uDefPublicTitle)
+        Logger.info (f'Loading Actions for definition: {self.uDefPublicTitle}')
         uET_Data: str
         SetDefinitionContext(uDefinitionName=self.uName)
         if Globals.oFnAction.Exists():
             uET_Data = CachedFile(oFileName=Globals.oFnAction)
             uET_Data = ReplaceDefVars(uET_Data,self.oDefinitionVars)
-            oET_Root:Element = Orca_FromString(uET_Data=uET_Data, oDef=self, uFileName=Globals.oFnAction.string)
+            oET_Root:Element = Orca_FromString(uET_Data=uET_Data, oDef=self, uFileName=str(Globals.oFnAction))
             Orca_include(oET_Root,orca_et_loader)
             SetDefinitionContext(uDefinitionName=self.uName)
-            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag=u'pagestartactions',uListTag=u'pagestartaction', dTargetDic=Globals.oActions.dActionsPageStart, uFileName=Globals.oFnAction)
-            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag=u'pagestartactions',uListTag=u'pagestopaction',  dTargetDic=Globals.oActions.dActionsPageStop,  uFileName=Globals.oFnAction)
-            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag=u'actions',         uListTag=u'action',          dTargetDic=Globals.oActions.dActionsCommands,  uFileName=Globals.oFnAction)
+            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag='pagestartactions',uListTag='pagestartaction', dTargetDic=Globals.oActions.dActionsPageStart, uFileName=Globals.oFnAction)
+            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag='pagestartactions',uListTag='pagestopaction',  dTargetDic=Globals.oActions.dActionsPageStop,  uFileName=Globals.oFnAction)
+            Globals.oActions.LoadActionsSub(oET_Root=oET_Root,uSegmentTag='actions',         uListTag='action',          dTargetDic=Globals.oActions.dActionsCommands,  uFileName=Globals.oFnAction)
 
-            SetVar(uVarName = u'ORCASTANDARDPAGESTARTACTIONSINCLUDED',oVarValue = u"1")
-            SetVar(uVarName = u'ORCASTANDARDACTIONSINCLUDED', oVarValue = u"1")
+            SetVar(uVarName = 'ORCASTANDARDPAGESTARTACTIONSINCLUDED',oVarValue = '1')
+            SetVar(uVarName = 'ORCASTANDARDACTIONSINCLUDED', oVarValue = '1')
         RestoreDefinitionContext()
         return None
 
     def LoadFonts(self) -> None:
         """ Loads all fonts descriptions for a definition """
-        Logger.info (u'Loading Local Font list for definition:'+self.uDefPublicTitle)
+        Logger.info ('Loading Local Font list for definition:'+self.uDefPublicTitle)
         if self.oDefinitionPathes.oFnDefinitionLocalFont.Exists():
-            if not self.oDefinitionPathes.oFnDefinitionLocalFont.string in aLoadedFontFiles:
-                aLoadedFontFiles.append(self.oDefinitionPathes.oFnDefinitionLocalFont.string)
+            if not str(self.oDefinitionPathes.oFnDefinitionLocalFont) in aLoadedFontFiles:
+                aLoadedFontFiles.append(str(self.oDefinitionPathes.oFnDefinitionLocalFont))
                 LoadFontFromXML(oET_Root=LoadXMLFile(oFile=self.oDefinitionPathes.oFnDefinitionLocalFont))
 
     def LoadGestures(self) -> None:
@@ -193,36 +193,36 @@ class cDefinition:
                 SetDefinitionContext(uDefinitionName=self.uName)
                 oET_Root:Element = LoadXMLFile(oFile=Globals.oFnGestures)
                 Orca_include(oET_Root,orca_et_loader)
-                LoadGesturesFromXML(oET_Root=oET_Root ,uSegmentTag=u'gestures',uListTag=u'gesture')
+                LoadGesturesFromXML(oET_Root=oET_Root ,uSegmentTag='gestures',uListTag='gesture')
             RestoreDefinitionContext()
-        SetVar(uVarName = "ORCASTANDARDGESTURESINCLUDED", oVarValue = "1")
+        SetVar(uVarName = 'ORCASTANDARDGESTURESINCLUDED', oVarValue = '1')
 
     def LoadXMLFile(self) -> bool:
         """ The main function to load the xml """
 
         SetDefinitionContext(uDefinitionName=self.uName)
         Globals.oTheScreen.LogToSplashScreen2(uText=self.uDefDescription)
-        Logger.info (u'Loading definition XmlFile:'+Globals.oDefinitionPathes.oFnDefinition)
+        Logger.info ('Loading definition XmlFile:'+Globals.oDefinitionPathes.oFnDefinition)
 
         oET_Root:Element = self.oET_Root
         try:
-            Logger.debug (u'Definition %s (%s): Loading xml includes' % (self.uName,self.uAlias))
-            Orca_include(oElem=oET_Root,pLoader=orca_et_loader,uFileName=Globals.oDefinitionPathes.oFnDefinition.string)
+            Logger.debug (f'Definition {self.uName} ({self.uAlias}): Loading xml includes')
+            Orca_include(oElem=oET_Root,pLoader=orca_et_loader,uFileName=str(Globals.oDefinitionPathes.oFnDefinition))
             SetDefinitionContext(uDefinitionName=self.uName)
         except Exception as e:
             StartWait()
-            ShowErrorPopUp(uTitle="LoadXMLFile:Fatal Error",uMessage=LogError(uMsg=u'Fatal Error: definition xml file faulty:'+self.uName,oException=e),bAbort=True)
+            ShowErrorPopUp(uTitle='LoadXMLFile:Fatal Error',uMessage=LogError(uMsg=f'Fatal Error: definition xml file faulty: {self.uName}',oException=e),bAbort=True)
 
-        SetVar(uVarName = 'ORCASTANDARDPAGESINCLUDED', oVarValue = "1")
+        SetVar(uVarName = 'ORCASTANDARDPAGESINCLUDED', oVarValue = '1')
 
         Globals.oTheScreen.uDefName            = self.oRepManEntry.oRepEntry.uName
         self.oDefinitions.uDefinitionAuthor    = self.oRepManEntry.oRepEntry.uAuthor
         self.oDefinitions.uDefinitionVersion   = self.oRepManEntry.oRepEntry.uVersion
-        SetVar(uVarName = u'DEFINITIONAUTHOR',  oVarValue = self.oDefinitions.uDefinitionAuthor)
-        SetVar(uVarName = u'DEFINITIONVERSION', oVarValue = self.oDefinitions.uDefinitionVersion)
-        SetVar(uVarName = u'DEFINITIONSUPPORT', oVarValue = self.oDefinitions.uDefinitionSupport)
+        SetVar(uVarName = 'DEFINITIONAUTHOR',  oVarValue = self.oDefinitions.uDefinitionAuthor)
+        SetVar(uVarName = 'DEFINITIONVERSION', oVarValue = self.oDefinitions.uDefinitionVersion)
+        SetVar(uVarName = 'DEFINITIONSUPPORT', oVarValue = self.oDefinitions.uDefinitionSupport)
 
-        Logger.debug (u'Definition [%s] : Ratios %fx%f:' % (self.uName,self.fRationX,self.fRationY))
+        Logger.debug (f'Definition [{self.uName}] : Ratios {self.fRationX:f}x{self.fRationY:f}:')
         if self.bImportPages:
             # get a list of all pages and add Them
             oXMLPages:Element       = oET_Root.find('pages')
@@ -233,8 +233,7 @@ class cDefinition:
                 for oXMLPage in oXMLPageImport.findall('page'):
                     Globals.oTheScreen.oScreenPages.AddPageFromXmlNode(oXMLPage=oXMLPage)
 
-
-            Globals.oNotifications.SendNotification(uNotification="DEFINITIONPAGESLOADED",**{"definition":self})
+            Globals.oNotifications.SendNotification(uNotification='DEFINITIONPAGESLOADED',**{'definition':self})
         RestoreDefinitionContext()
 
         return True
@@ -248,7 +247,7 @@ class cDefinition:
 
         uET_Data = CachedFile(oFileName=oFnXml)
         uET_Data = ReplaceDefVars(uET_Data, self.oDefinitionVars)
-        oET_Root:Element = Orca_FromString(uET_Data=uET_Data, oDef=self, uFileName=oFnXml.string)
+        oET_Root:Element = Orca_FromString(uET_Data=uET_Data, oDef=self, uFileName=str(oFnXml))
         Orca_include(oET_Root, orca_et_loader)
 
         if self.bImportPages:
@@ -266,71 +265,71 @@ class cDefinition:
         if oXMLInterfaceSetupTag is not None:
             aXMLInterfaceSetups:List[Element]=oXMLInterfaceSetupTag.findall('interface')
             for oXMLInterfaceSetup in aXMLInterfaceSetups:
-                uInterFaceName:str=GetXMLTextAttribute(oXMLNode=oXMLInterfaceSetup,uTag='name',bMandatory=True,vDefault=u'')
+                uInterFaceName:str=GetXMLTextAttribute(oXMLNode=oXMLInterfaceSetup,uTag='name',bMandatory=True,vDefault='')
                 if self.oDefinitions.dInitInterfaceSettings.get(uInterFaceName) is None:
                     self.oDefinitions.dInitInterfaceSettings[uInterFaceName]={}
                 aConfigurations:List[Element] = oXMLInterfaceSetup.findall('configuration')
                 for oConfiguration in aConfigurations:
-                    uConfigurationName:str = GetXMLTextAttribute(oXMLNode=oConfiguration,uTag='name',bMandatory=True,vDefault=u'')
+                    uConfigurationName:str = GetXMLTextAttribute(oXMLNode=oConfiguration,uTag='name',bMandatory=True,vDefault='')
                     if self.oDefinitions.dInitInterfaceSettings[uInterFaceName].get(uConfigurationName) is None:
                         self.oDefinitions.dInitInterfaceSettings[uInterFaceName][uConfigurationName]={}
                     oSettings:List[Element] = oConfiguration.findall('setting')
                     for oSetting in oSettings:
-                        uSettingName:str=GetXMLTextAttribute(oXMLNode=oSetting,uTag='name',bMandatory=True,vDefault=u'')
-                        uSettingParameter:str=GetXMLTextAttribute(oXMLNode=oSetting,uTag='parameter',bMandatory=True,vDefault=u'')
+                        uSettingName:str=GetXMLTextAttribute(oXMLNode=oSetting,uTag='name',bMandatory=True,vDefault='')
+                        uSettingParameter:str=GetXMLTextAttribute(oXMLNode=oSetting,uTag='parameter',bMandatory=True,vDefault='')
                         self.oDefinitions.dInitInterfaceSettings[uInterFaceName][uConfigurationName][uSettingName.upper()]=uSettingParameter
             self.InitInterFaceSettings(oXMLRoot=oXMLInterfaceSetupTag)
 
     def LoadParameter(self) -> bool:
         """ Loads the Parameter from the definition XML File """
-        Logger.info (u'Load Definition Parameter [%s] %s:' %(self.uAlias, self.oDefinitionPathes.oPathDefinition.string))
+        Logger.info (f'Load Definition Parameter [{self.uAlias}] {self.oDefinitionPathes.oPathDefinition}:')
 
         oET_Root:Element = self.oET_Root
         #Get Definition Wide Setting
         oRef:Element                    = oET_Root.find('def_parameter')
 
-        self.uFontSize_Button   = GetXMLTextValue(oXMLNode=oRef,uTag=u'fontsize_button',bMandatory=False,vDefault='%h100')
-        self.uFontSize_Text     = GetXMLTextValue(oXMLNode=oRef,uTag=u'fontsize_text',  bMandatory=False,vDefault='%h100')
-        self.uFontSize_File     = GetXMLTextValue(oXMLNode=oRef,uTag=u'fontsize_file',  bMandatory=False,vDefault='d11')
+        self.uFontSize_Button   = GetXMLTextValue(oXMLNode=oRef,uTag='fontsize_button',bMandatory=False,vDefault='%h100')
+        self.uFontSize_Text     = GetXMLTextValue(oXMLNode=oRef,uTag='fontsize_text',  bMandatory=False,vDefault='%h100')
+        self.uFontSize_File     = GetXMLTextValue(oXMLNode=oRef,uTag='fontsize_file',  bMandatory=False,vDefault='d11')
 
         # we replace the custom definition vars and reparse the xml again
         self.sET_Data=ReplaceDefVars(self.sET_Data,self.oDefinitionVars)
-        self.oET_Root=Orca_FromString(uET_Data=self.sET_Data,oDef=self,uFileName="root2")
+        self.oET_Root=Orca_FromString(uET_Data=self.sET_Data,oDef=self,uFileName='root2')
 
-        self.uDefaultFont       = GetXMLTextValue(oXMLNode=oRef,uTag=u'defaultfont',bMandatory=True,vDefault=Globals.oTheScreen.oSkin.dSkinAttributes['defaultfont'])
+        self.uDefaultFont       = GetXMLTextValue(oXMLNode=oRef,uTag='defaultfont',bMandatory=True,vDefault=Globals.oTheScreen.oSkin.dSkinAttributes['defaultfont'])
 
         if not self.uDefaultFont:
             self.uDefaultFont=Globals.oTheScreen.oSkin.dSkinAttributes['defaultfont']
 
         if self.uName==Globals.uDefinitionName:
-            self.oDefinitions.uDefinitionSupport = GetXMLTextValue(oXMLNode=oRef,uTag=u'support',bMandatory=False,vDefault=u'')
-        uInstallationHint:str = GetXMLTextValue(oXMLNode=oRef,uTag=u'installationhint',bMandatory=False,vDefault=u'')
+            self.oDefinitions.uDefinitionSupport = GetXMLTextValue(oXMLNode=oRef,uTag='support',bMandatory=False,vDefault='')
+        uInstallationHint:str = GetXMLTextValue(oXMLNode=oRef,uTag='installationhint',bMandatory=False,vDefault='')
         if uInstallationHint!='':
-            self.oDefinitions.dInstallationsHints[self.uName]=("[b][color=#FFFF00]"+self.uDefPublicTitle +u"[/color][/b]\n\n"+uInstallationHint+u"\n\n")
+            self.oDefinitions.dInstallationsHints[self.uName]=('[b][color=#FFFF00]'+self.uDefPublicTitle +'[/color][/b]\n\n'+uInstallationHint+'\n\n')
 
-        if Globals.uStretchMode=="CENTER" or Globals.uStretchMode=="TOPLEFT":
+        if Globals.uStretchMode=='CENTER' or Globals.uStretchMode=='TOPLEFT':
             fRatio:float=float(float(Globals.iAppWidth)/float(Globals.iAppHeight))/float(float(self.iDefMaxX)/float(self.iDefMaxY))
             if fRatio<1.0:
                 fShouldHeight=float(Globals.iAppWidth)/ (float(self.iDefMaxX)/float(self.iDefMaxY))
                 self.fRationY=float(self.iDefMaxY)/fShouldHeight
-                if Globals.uStretchMode=="CENTER" :
+                if Globals.uStretchMode=='CENTER' :
                     self.iGapY=int((((Globals.iAppHeight*self.fRationX)-self.iDefMaxY)/self.fRationX)/2)
             else:
                 fShouldWidth:float=float(Globals.iAppHeight)/ (float(self.iDefMaxY)/float(self.iDefMaxX))
                 self.fRationX=float(self.iDefMaxX)/fShouldWidth
-                if Globals.uStretchMode=="CENTER" :
+                if Globals.uStretchMode=='CENTER' :
                     self.iGapX=int((((Globals.iAppWidth*self.fRationY)-self.iDefMaxX)/self.fRationY)/2)
         return True
 
     def ParseSettings(self) -> None:
 
         """ Parses the settings for a definition """
-        self.oRepManEntry = cRepManagerEntry(oFileName="")
+        self.oRepManEntry = cRepManagerEntry(oFileName='')
         self.oRepManEntry.ParseFromXML(vContent=self.oET_Root)
         self.uDefDescription = self.oRepManEntry.oRepEntry.uName
         self.uDefPublicTitle = self.uDefDescription
-        if self.uAlias!="" and self.uAlias!=self.uName:
-            self.uDefPublicTitle="%s [%s]" % (self.uAlias,self.uDefPublicTitle)
+        if self.uAlias!='' and self.uAlias!=self.uName:
+            self.uDefPublicTitle='%s [%s]' % (self.uAlias,self.uDefPublicTitle)
 
         if self.bImportSettings:
             self.ParseXMLSettings()
@@ -364,32 +363,32 @@ class cDefinition:
     def AddDefinitionSetting(self,*,oXMLSetting:Element) -> None:
         """ Adds a single definition to the list of settings """
 
-        dSetting:Dict= {'title':             GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'title',           bMandatory=True,  vDefault=u'NoName'),
-                        'type':              GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'type',            bMandatory=True,  vDefault=u'string'),
-                        'var':               GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'var',             bMandatory=False, vDefault=u'NoVar'),
-                        'description':       GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'desc',            bMandatory=False, vDefault=u''),
-                        'default':           GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'default',         bMandatory=False, vDefault=u''),
-                        'options':           GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'options',         bMandatory=False, vDefault=u''),
-                        'buttons':           GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'buttons',         bMandatory=False, vDefault=u''),
-                        'min':               GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'min',             bMandatory=False, vDefault=u'0'),
-                        'max':               GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'max',             bMandatory=False, vDefault=u'100'),
-                        'roundpos':          GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'roundpos',        bMandatory=False, vDefault=u'0'),
-                        'allowtextinput':    GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'allowtextinput',  bMandatory=False, vDefault=u'0'),
-                        'cookie':            GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag=u'cookie',          bMandatory=False, vDefault=u'')}
+        dSetting:Dict= {'title':             GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='title',           bMandatory=True,  vDefault='NoName'),
+                        'type':              GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='type',            bMandatory=True,  vDefault='string'),
+                        'var':               GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='var',             bMandatory=False, vDefault='NoVar'),
+                        'description':       GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='desc',            bMandatory=False, vDefault=''),
+                        'default':           GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='default',         bMandatory=False, vDefault=''),
+                        'options':           GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='options',         bMandatory=False, vDefault=''),
+                        'buttons':           GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='buttons',         bMandatory=False, vDefault=''),
+                        'min':               GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='min',             bMandatory=False, vDefault='0'),
+                        'max':               GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='max',             bMandatory=False, vDefault='100'),
+                        'roundpos':          GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='roundpos',        bMandatory=False, vDefault='0'),
+                        'allowtextinput':    GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='allowtextinput',  bMandatory=False, vDefault='0'),
+                        'cookie':            GetXMLTextAttribute(oXMLNode=oXMLSetting, uTag='cookie',          bMandatory=False, vDefault='')}
 
         self.oDefinitions.dSettingsDefaults[dSetting['var']]  = dSetting['default']
 
         uKey:str = ReplaceVars(dSetting['title']+dSetting['var'])
-        if uKey not in self.oDefinitions.aSettingsVars or dSetting['type']=="title" or dSetting['type']=="section":
+        if uKey not in self.oDefinitions.aSettingsVars or dSetting['type']=='title' or dSetting['type']=='section':
             self.aDefinitionsSettings.append(dSetting)
             self.oDefinitions.aSettingsVars.append(uKey)
         else:
             pass
-            #Logger.warning("Skipping duplicate setting:"+uKey+":"+dSetting['title'])
+            #Logger.warning('Skipping duplicate setting:'+uKey+':'+dSetting['title'])
 
     def __AddSettingDefaults(self,*,oXMLSetting:Element) -> None:
-        uVar:str                 = GetXMLTextAttribute(oXMLNode=oXMLSetting,uTag=u'var',              bMandatory=True,  vDefault=u'NoVar')
-        uDefault:str             = GetXMLTextAttribute(oXMLNode=oXMLSetting,uTag=u'default',          bMandatory=True,  vDefault=u'')
+        uVar:str                 = GetXMLTextAttribute(oXMLNode=oXMLSetting,uTag='var',              bMandatory=True,  vDefault='NoVar')
+        uDefault:str             = GetXMLTextAttribute(oXMLNode=oXMLSetting,uTag='default',          bMandatory=True,  vDefault='')
         #Logger.debug( "setdefault: Definition:%s Var:%s  Default:%s" % (self.uAlias,uVar,uDefault))
         self.oDefinitions.dSettingsDefaults[uVar]  = uDefault
 

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -37,17 +37,17 @@ def GetMACAddress() -> List[str]:
     :return: A List of MAC Addresses (strings): First with colon as separator, second with colon as separator
     """
 
-    uRetColon:str = u'00:00:00:00:00:00'
-    uRetDash:str  = u'00-00-00-00-00-00'
+    uRetColon:str = '00:00:00:00:00:00'
+    uRetDash:str  = '00-00-00-00-00-00'
 
     try:
-        cContext             = GetAndroidModule("Context","android.content")
-        cPythonActivity      = GetAndroidModule("PythonActivity")
+        cContext             = GetAndroidModule('Context','android.content')
+        cPythonActivity      = GetAndroidModule('PythonActivity')
         oPythonActivity      = cPythonActivity.mActivity
         oWifiManager         = oPythonActivity.getSystemService(cContext.WIFI_SERVICE)
         uRetColon            = oWifiManager.getConnectionInfo().getMacAddress()
-        uRetDash             = uRetColon.replace(":","-")
+        uRetDash             = uRetColon.replace(':','-')
     except Exception as e:
-        Logger.error("Error on GetMACAddress:"+str(e))
+        Logger.error('Error on GetMACAddress:'+str(e))
 
     return [uRetColon,uRetDash]

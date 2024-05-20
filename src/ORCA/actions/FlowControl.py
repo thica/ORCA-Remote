@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -29,15 +29,16 @@ from ORCA.vars.Access           import SetVar
 from ORCA.ui.ShowErrorPopUp     import ShowErrorPopUp
 from ORCA.utils.LogError        import LogError
 from ORCA.actions.Base          import cEventActionBase
-from ORCA.Queue                 import GetActiveQueue
-from ORCA.Queue                 import cQueue
-from ORCA.Queue                 import DumpQueue
-from ORCA.Action                import cAction
-from ORCA.ScreenPage            import cScreenPage
+from ORCA.action.Queue import GetActiveQueue
+from ORCA.action.Queue import cQueue
+from ORCA.action.Queue import DumpQueue
+from ORCA.action.Action import cAction
+from ORCA.screen.ScreenPage import cScreenPage
 from ORCA.actions.ReturnCode    import eReturnCode
+from ORCA.action.ActionType import eReplaceOption
 
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cEventActionsFlowControl']
 
@@ -72,10 +73,10 @@ class cEventActionsFlowControl(cEventActionBase):
         WikiDoc:End
         """
 
-        uLabel:str = ReplaceVars(oAction.dActionPars.get("label",""))
+        uLabel:str = ReplaceVars(oAction.dActionPars.get('label',''))
         oTmpAction: cAction
         i:int = 0
-        self.oEventDispatcher.LogAction(uTxt=u'Goto',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='Goto',oAction=oAction)
 
         oQueue:cQueue = GetActiveQueue()
         for oTmpAction in oQueue.aActionQueue:
@@ -83,7 +84,7 @@ class cEventActionsFlowControl(cEventActionBase):
                 oQueue.iActionQueuePos=i-1
                 return eReturnCode.Nothing
             i+=1
-        uMsg:str = self.oEventDispatcher.CreateDebugLine(oAction=oAction,uTxt='Wrong Goto')+u"\nFileName:"+oAction.uFileName
+        uMsg:str = f'{self.oEventDispatcher.CreateDebugLine(oAction=oAction, uTxt="Wrong Goto")}\nFileName:{oAction.uFileName}'
         Logger.error (uMsg)
         ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
         return eReturnCode.Nothing
@@ -118,7 +119,7 @@ class cEventActionsFlowControl(cEventActionBase):
         """
 
         #This action will be called, if "IF" fails to goto the next end if
-        self.oEventDispatcher.LogAction(uTxt=u'If',oAction=oAction,uAddText="skip actions")
+        self.oEventDispatcher.LogAction(uTxt='If',oAction=oAction,uAddText='skip actions')
         iLevel:int = -1
         oTmpAction:cAction
         oQueue:cQueue = GetActiveQueue()
@@ -132,16 +133,16 @@ class cEventActionsFlowControl(cEventActionBase):
             if oTmpAction.iActionId==Globals.oActions.oActionType.EndIf:
                 if iLevel==0:
                     oQueue.iActionQueuePos = i
-                    self.oEventDispatcher.LogAction(uTxt=u'EndIf', oAction=oTmpAction)
+                    self.oEventDispatcher.LogAction(uTxt='EndIf', oAction=oTmpAction)
                     return eReturnCode.Nothing
                 iLevel-=1
             i+=1
-        uMsg:str = self.oEventDispatcher.CreateDebugLine(oAction=oAction,uTxt='Wrong If')+u"\nFileName:"+oAction.uFileName
+        uMsg:str = f'{self.oEventDispatcher.CreateDebugLine(oAction=oAction, uTxt="Wrong If")}\nFileName:{oAction.uFileName}'
         DumpQueue()
 
         for oTmpAction in oQueue.aActionQueue[iActionQueuePos:]:
-            uMsg+=u"\n"
-            uMsg+=oTmpAction.uActionName + u' '+oTmpAction.uActionString
+            uMsg+='\n'
+            uMsg+=oTmpAction.uActionName + ' '+oTmpAction.uActionString
 
         Logger.error (uMsg)
         ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
@@ -168,7 +169,7 @@ class cEventActionsFlowControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'EndIf',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='EndIf',oAction=oAction)
         return eReturnCode.Nothing
 
     def ExecuteActionExitAction(self,oAction:cAction) -> eReturnCode:
@@ -192,7 +193,7 @@ class cEventActionsFlowControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'ExitAction',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='ExitAction',oAction=oAction)
         oQueue:cQueue = GetActiveQueue()
         oQueue.iActionQueuePos=len(oQueue.aActionQueue)+1
         return eReturnCode.Nothing
@@ -250,12 +251,12 @@ class cEventActionsFlowControl(cEventActionBase):
         #self.oEventDispatcher.bDoNext = False
         #self.oEventDispatcher.bDoNext = True
 
-        self.oEventDispatcher.LogAction(uTxt=u'Call',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='Call',oAction=oAction)
 
-        uActionName:str      = ReplaceVars(oAction.dActionPars.get("actionname",""))
-        uEnforce:str         = ReplaceVars(oAction.dActionPars.get("enforce",""))
-        uPageName:str        = ReplaceVars(oAction.dActionPars.get("pagename",""))
-        uCurrentPageName:str = ReplaceVars(oAction.dActionPars.get("currentpagename",""))
+        uActionName:str      = ReplaceVars(oAction.dActionPars.get('actionname',''))
+        uEnforce:str         = ReplaceVars(oAction.dActionPars.get('enforce',''))
+        uPageName:str        = ReplaceVars(oAction.dActionPars.get('pagename',''))
+        uCurrentPageName:str = ReplaceVars(oAction.dActionPars.get('currentpagename',''))
         bForceState:bool     = GetActiveQueue().bForceState
         uLastPageName:str
         oLastPage:cScreenPage
@@ -263,45 +264,45 @@ class cEventActionsFlowControl(cEventActionBase):
         aActions:List[cAction] = Globals.oActions.GetActionList(uActionName = ReplaceVars(uActionName), bNoCopy = False)
 
         if aActions is None:
-            if uActionName=="APPSTARTACTIONS":
-                aActions=Globals.oActions.GetPageStartActionList(uActionName = u'appstart', bNoCopy=True)
+            if uActionName=='APPSTARTACTIONS':
+                aActions=Globals.oActions.GetPageStartActionList(uActionName = 'appstart', bNoCopy=True)
                 if aActions is None:
                     return eReturnCode.Nothing
-            elif uActionName=="DEFINITIONSTARTACTIONS":
-                aActions=Globals.oActions.GetPageStartActionList(uActionName=u'definitionstart', bNoCopy=True)
+            elif uActionName=='DEFINITIONSTARTACTIONS':
+                aActions=Globals.oActions.GetPageStartActionList(uActionName='definitionstart', bNoCopy=True)
                 if aActions is None:
                     return eReturnCode.Nothing
-            elif uActionName=="PAGESTARTACTIONS":
+            elif uActionName=='PAGESTARTACTIONS':
                 # we want to prevent pagestart actions, if the old page was just a popup, or we enforce it
-                uLastPageName=""
+                uLastPageName=''
                 oLastPage=Globals.oTheScreen.oScreenPages.GetLastPageReal()
                 if oLastPage:
                     uLastPageName=oLastPage.uPageName
                 if (not Globals.oTheScreen.IsPopup(uPageName=uLastPageName)) or ('ENFORCESTARTACTIONS' in uEnforce):
                     aActions=Globals.oTheScreen.ShowPageGetPageStartActions(uPageName=uPageName)
                     if aActions is not None:
-                        uActionName=u"PageStartAction"
-                        Logger.debug("Action: () Calling PageStartAction for page: {0}".format(uPageName))
+                        uActionName='PageStartAction'
+                        Logger.debug(f'Action: () Calling PageStartAction for page: {uPageName}')
                         oAction.oParentWidget=Globals.oTheScreen.oCurrentPage.oWidgetBackGround
                     else:
                         return eReturnCode.Nothing
                 else:
-                    self.oEventDispatcher.LogAction(uTxt=u'Skipping PageStartAction',oAction=oAction,uAddText=u' for: {0}'.format(uPageName))
+                    self.oEventDispatcher.LogAction(uTxt='Skipping PageStartAction', oAction=oAction, uAddText=f' for: {uPageName}')
                     return eReturnCode.Nothing
-            elif uActionName=="PAGESTOPACTIONS":
+            elif uActionName=='PAGESTOPACTIONS':
                 # we want to prevent pagestop actions, if the new page is just a popup  or we enforce it
                 # Or we want to force it
                 # noinspection PyRedundantParentheses
-                if (not Globals.oTheScreen.IsPopup(uPageName=uCurrentPageName) or  ("ENFORCESTOPACTIONS" in uEnforce) ):
-                    aActions=Globals.oTheScreen.ShowPageGetPageStopActions(uPageName="$var(CURRENTPAGE)")
+                if (not Globals.oTheScreen.IsPopup(uPageName=uCurrentPageName) or  ('ENFORCESTOPACTIONS' in uEnforce) ):
+                    aActions=Globals.oTheScreen.ShowPageGetPageStopActions(uPageName='$var(CURRENTPAGE)')
                     if aActions is not None:
-                        uActionName=u"PageStopAction"
-                        self.oEventDispatcher.LogAction(uTxt=u'Calling PageStopAction',oAction=oAction,uAddText=u' for: {0}'.format(ReplaceVars("$var(CURRENTPAGE)")))
+                        uActionName='PageStopAction'
+                        self.oEventDispatcher.LogAction(uTxt='Calling PageStopAction', oAction=oAction, uAddText=f' for: {ReplaceVars("$var(CURRENTPAGE)")}')
                         oAction.oParentWidget=Globals.oTheScreen.oCurrentPage.oWidgetBackGround
                     else:
                         return eReturnCode.Nothing
                 else:
-                    self.oEventDispatcher.LogAction(uTxt=u'Skipping PageStopAction',oAction=oAction,uAddText=u' for: {0}'.format(ReplaceVars("$var(CURRENTPAGE)")))
+                    self.oEventDispatcher.LogAction(uTxt='Skipping PageStopAction', oAction=oAction, uAddText=f' for: {ReplaceVars("$var(CURRENTPAGE)")}')
                     return eReturnCode.Nothing
 
         if aActions is not None:
@@ -311,24 +312,24 @@ class cEventActionsFlowControl(cEventActionBase):
                 oTmpFunction.append(copy(oTmp))
 
             if oAction.oParentWidget is not None:
-                self.oEventDispatcher.CopyActionPars(dTarget=oTmpFunction[0].dActionPars,dSource=oAction.oParentWidget.dActionPars,uReplaceOption="donotreplacetarget")
-                self.oEventDispatcher.CopyActionPars(dTarget=oAction.dActionPars,dSource=oAction.oParentWidget.dActionPars,uReplaceOption="donotreplacetarget")
+                self.oEventDispatcher.CopyActionPars(dTarget=oTmpFunction[0].dActionPars,dSource=oAction.oParentWidget.dActionPars,enReplaceOption=eReplaceOption.eDoNotReplaceTarget)
+                self.oEventDispatcher.CopyActionPars(dTarget=oAction.dActionPars,dSource=oAction.oParentWidget.dActionPars,enReplaceOption=eReplaceOption.eDoNotReplaceTarget)
             else:
-                self.oEventDispatcher.CopyActionPars(dTarget=oTmpFunction[0].dActionPars,dSource=oAction.dActionPars,uReplaceOption="donotreplacetarget")
+                self.oEventDispatcher.CopyActionPars(dTarget=oTmpFunction[0].dActionPars,dSource=oAction.dActionPars,enReplaceOption=eReplaceOption.eDoNotReplaceTarget)
 
             #for aActionParKey in oTmpFunction[0].dActionPars:
                 #SetVar(uActionName+"_parameter_"+aActionParKey,oTmpFunction[0].dActionPars[aActionParKey])
             for aActionParKey in oAction.dActionPars:
-                if aActionParKey != "linefilename" and aActionParKey != "linefilenames" :
-                    # SetVar(uVarName = uActionName+"_parameter_"+aActionParKey, oVarValue = oAction.dActionPars[aActionParKey])
-                    SetVar(uVarName = uActionName+"_parameter_"+aActionParKey, oVarValue = ReplaceVars(oAction.dActionPars[aActionParKey]))
+                if aActionParKey != 'linefilename' and aActionParKey != 'linefilenames' :
+                    # SetVar(uVarName = uActionName+'_parameter_'+aActionParKey, oVarValue = oAction.dActionPars[aActionParKey])
+                    SetVar(uVarName = f'{uActionName}_parameter_{aActionParKey}', oVarValue = ReplaceVars(oAction.dActionPars[aActionParKey]))
 
-            self.oEventDispatcher.ExecuteActionsNewQueue(aActions=oTmpFunction,oParentWidget=oAction.oParentWidget,bForce=bForceState)
+            self.oEventDispatcher.ExecuteActionsNewQueue(aActions=oTmpFunction,oParentWidget=oAction.oParentWidget,bForce=bForceState, uQueueName=uActionName)
             return eReturnCode.Nothing
-        uMsg:str=self.oEventDispatcher.CreateDebugLine(oAction=oAction,uTxt='Wrong Call')+u"\nFileName:"+oAction.uFileName
+        uMsg:str= f'{self.oEventDispatcher.CreateDebugLine(oAction=oAction, uTxt="Wrong Call")}\nFileName:{oAction.uFileName}'
         Logger.error (uMsg)
         for uKey in sorted(Globals.oActions.dActionsCommands):
-            LogError(uMsg=u'Action: Call: Available Name: [%s]' % uKey)
+            LogError(uMsg=f'Action: Call: Available Name: [{uKey}]')
         DumpQueue()
 
         ShowErrorPopUp(uTitle='Warning',uMessage=uMsg)
@@ -360,7 +361,7 @@ class cEventActionsFlowControl(cEventActionBase):
 
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'StopApp',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='StopApp',oAction=oAction)
         self.oEventDispatcher.oAllTimer.DeleteAllTimer()
         self.oEventDispatcher.StopQueue()
         Clock.schedule_once(self._ExecuteActionStopApp2)
@@ -400,5 +401,5 @@ class cEventActionsFlowControl(cEventActionBase):
         WikiDoc:End
         """
 
-        self.oEventDispatcher.LogAction(uTxt=u'Wait',oAction=oAction)
+        self.oEventDispatcher.LogAction(uTxt='Wait',oAction=oAction)
         return eReturnCode.Nothing

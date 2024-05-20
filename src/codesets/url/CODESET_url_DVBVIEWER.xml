@@ -7,8 +7,8 @@
       <description language='English'>DVBViewer control using the DVBViewer Webserver</description>
       <description language='German'>DVBViewer Konrolle über den DVBViewer Webserver</description>
       <author>Carsten Thielepape</author>
-      <version>5.0.4</version>
-      <minorcaversion>5.0.4</minorcaversion>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
       <sources>
         <source>
           <local>$var(APPLICATIONPATH)/codesets/url/CODESET_url_DVBVIEWER.xml</local>

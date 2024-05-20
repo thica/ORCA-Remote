@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 from kivy.logger                        import Logger
 import ORCA.utils.wait.Globals
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['StopWait']
 
@@ -32,6 +32,6 @@ def StopWait() -> None:
     """
 
     if ORCA.utils.wait.Globals.bOnPause:
-        Logger.debug("System stop wait")
+        Logger.debug('System stop wait')
         ORCA.utils.wait.Globals.bOnPause = False
         Globals.oEvents.UnPauseQueue()

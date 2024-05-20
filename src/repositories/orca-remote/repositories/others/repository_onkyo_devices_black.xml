@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <repositorymanager>
+    <entry>
+      <name>Onkyo devices black</name>
+      <description language='English'>Onkyo receiver device pictures black on transparent backgroud</description>
+      <description language='German'>Onkyo Receiver Geräte Bilder schwarz auf transparentem Hintergrund</description>
+      <author>Carsten Thielepape</author>
+      <version>6.0.0</version>
+      <minorcaversion>6.0.0</minorcaversion>
+      <sources>
+        <source>
+          <local>$var(RESOURCEPATH)/devices/onkyo/onkyo-devices-black</local>
+          <sourcefile>$var(REPOSITORYWWWPATH)/others/onkyo-devices-black.zip</sourcefile>
+          <targetpath>resources/devices/onkyo</targetpath>
+        </source>
+      </sources>
+    </entry>
+  </repositorymanager>
+</root>

@@ -2,7 +2,7 @@
 
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -25,14 +25,14 @@ from kivy import Logger
 try:
     import netifaces
 except Exception as ex:
-    Logger.error("Can't load netifaces:"+str(ex))
+    Logger.error('Can\'t load netifaces:'+str(ex))
 
 __all__ = ['GetGatewayV6']
 
 def GetGatewayV6() -> str:
 
-    uIP:str        = u'FE80::1'
-    uFamily:str    = u'AF_INET6'
+    uIP:str        = 'FE80::1'
+    uFamily:str    = 'AF_INET6'
     iInet_num:int
 
     try:
@@ -41,7 +41,7 @@ def GetGatewayV6() -> str:
         # noinspection PyTypeChecker
         uIP  = dGateways['default'][iInet_num][0]
     except Exception:
-        # Logger.error("Error on GetGatewayV6:"+str(e))
+        # Logger.error('Error on GetGatewayV6:'+str(e))
         pass
 
     return uIP

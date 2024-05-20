@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -65,7 +65,7 @@ class cFTP:
             bExists = True
         return bExists
 
-    def CreateDir(self,*, oPath:cPath, uSep:str=u'/') ->bool:
+    def CreateDir(self,*, oPath:cPath, uSep:str='/') ->bool:
         """
         creates a remote ftp path
         :param cPath oPath: The Remote Path to create
@@ -75,17 +75,17 @@ class cFTP:
 
         uPath:str             = oPath.unixstring
         aSplitPath:List[str]  = uPath.split(uSep)
-        uNewDir:str           = u''
+        uNewDir:str           = ''
 
         for uServerDir in aSplitPath:
             if uServerDir:
                 uNewDir += uSep + uServerDir
                 if not self.DirExists(oPath=cPath(uNewDir)):
                     try:
-                        Logger.debug('Attempting to create directory (%s) ...' % uNewDir)
+                        Logger.debug(f'Attempting to create directory ({uNewDir}) ...')
                         self.oFTP.mkd(uNewDir)
                     except Exception as e:
-                        LogError(uMsg='can\'t create directory (%s) ...' % uNewDir,oException=e)
+                        LogError(uMsg=f'can\'t create directory ({uNewDir}) ...', oException=e)
                         return False
         return True
 
@@ -100,22 +100,21 @@ class cFTP:
             self.oFTP.cwd(oPath.unixstring)
             return True
         except Exception as e:
-            LogError(uMsg='can\'t change directory (%s) ...' % oPath.unixstring,oException=e)
+            LogError(uMsg=f'can\'t change directory ({oPath.unixstring}) ...', oException=e)
         return False
 
-    def Connect(self, *,uServer:str) ->bool:
+    def Connect(self, *,uServer:str,uUserName:str='',uPassword:str='') ->bool:
         """ connects to an ftp server """
         if not self.bEncrypt: # Use standard FTP
-            self.oFTP = ftplib.FTP()
+            self.oFTP = ftplib.FTP(host=uServer)
         else: # Use sftp
-            self.oFTP = ftplib.FTP_TLS()
+            self.oFTP = ftplib.FTP_TLS(host=uServer)
         try:
-            self.oFTP.connect(uServer)
-            if self.bEncrypt:
+            if self.Login(uUserName=uUserName,uPassword=uPassword) and self.bEncrypt:
                 self.oFTP.prot_p()
             return True
         except Exception as e:
-             ShowErrorPopUp(uMessage=LogError(uMsg='FTP: Could not connect to (%s)' % uServer, oException=e))
+             ShowErrorPopUp(uMessage=LogError(uMsg=f'FTP: Could not connect to ({uServer})', oException=e))
         return False
     def DisConnect(self) ->bool:
         try:
@@ -124,11 +123,11 @@ class cFTP:
             LogError(uMsg='FTP: Could not disconnect', oException=e)
             return False
         return True
-    def Login(self,*,uUsername:str, uPassword:str) ->bool:
+    def Login(self,*,uUserName:str, uPassword:str) ->bool:
         """ logs to an ftp server """
         try:
-            self.oFTP.login(uUsername,uPassword)
-            Logger.debug('Logged in as (%s)' % uUsername)
+            self.oFTP.login(user=uUserName,passwd=uPassword)
+            Logger.debug('Logged in as (%s)' % uUserName)
             return True
         except ftplib.error_perm as e:
             uMsg=LogError(uMsg='FTP: can\'t login, check Username/Password',oException=e)
@@ -145,20 +144,20 @@ class cFTP:
         :param cPath oRemoteSubPath:
         :return:
         """
-        oFileHandle:BinaryIO = open(oFile.string,'rb')
+        oFileHandle:BinaryIO = open(str(oFile),'rb')
         uFileName:str        = oFile.basename
 
         uDisplayFilename:str = uFileName
 
-        Logger.debug('Sending (%s) via FTP to %s' % (uDisplayFilename,oRemoteSubPath.unixstring))
-        uSendCmd:str = 'STOR %s' % uFileName
+        Logger.debug(f'Sending {uDisplayFilename} via FTP to {oRemoteSubPath.unixstring}')
+        uSendCmd:str = f'STOR {uFileName}'
         try:
             self.oFTP.storbinary(uSendCmd, oFileHandle)
             Logger.debug('FTP: Upload done!')
             oFileHandle.close()
             return True
         except Exception as e:
-            LogError(uMsg='FTP: can\'t upload file (%s), general failure' % uFileName,oException=e)
+            LogError(uMsg=f'FTP: can\'t upload file ({uFileName}), general failure', oException=e)
             oFileHandle.close()
         return False
 
@@ -174,9 +173,9 @@ class cFTP:
         """
         try:
             bRet:bool             = False
-            uPath:str             = oFile.oPath.string
-            oRemoteSubPath:cPath  = cPath(uPath.replace(oBaseLocalDir.string, ''))
-            oRemotePath:cPath     = cPath(uPath.replace(oBaseLocalDir.string, oBaseRemoteDir.string))
+            uPath:str             = str(oFile.oPath)
+            oRemoteSubPath:cPath  = cPath(uPath.replace(str(oBaseLocalDir), ''))
+            oRemotePath:cPath     = cPath(uPath.replace(str(oBaseLocalDir), str(oBaseRemoteDir)))
 
             if not self.DirExists(oPath=oRemotePath):
                 self.CreateDir(oPath=oRemotePath)
@@ -185,7 +184,7 @@ class cFTP:
                 if oFile.Exists():
                     bRet = self._UploadFile(oFile=oFile,oRemoteSubPath=oRemoteSubPath)
                 else:
-                    Logger.warning ("File no longer exists, (%s)!" % oFile.string)
+                    Logger.warning (f'File no longer exists, ({oFile})!')
 
             return bRet
 
@@ -204,7 +203,7 @@ class cFTP:
         uFileName:str        = oFnLocalFile.basename
         uDisplayFilename:str = uFileName
 
-        Logger.debug('Download (%s) via FTP from %s' % (uDisplayFilename,oPathRemote.unixstring))
+        Logger.debug(f'Download ({uDisplayFilename}) via FTP from {oPathRemote.unixstring}')
         uGetCmd:str = 'RETR %s' % uFileName
         try:
             if self.ChangeDir(oPath=oPathRemote):
@@ -214,7 +213,7 @@ class cFTP:
                 Logger.debug('FTP: Download done!')
             return True
         except Exception as e:
-            LogError(uMsg='FTP: can\'t Download file (%s), general failure' % uFileName,oException=e)
+            LogError(uMsg=f'FTP: can\'t Download file ({uFileName}), general failure', oException=e)
         return False
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ from ORCA.vars.Replace              import ReplaceVars
 from ORCA.vars.Access               import SetVar
 from ORCA.widgets.helper.HexColor   import GetColorFromHex
 
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 
 __all__ = ['cSkin']
 
@@ -67,61 +67,61 @@ class cSkin:
         try:
             oET_Root = LoadXMLFile(oFile=Globals.oFnSkinXml)
             if oET_Root is not None:
-                Logger.debug (u'TheScreen: Loading Skin Description (pics)')
+                Logger.debug ('TheScreen: Loading Skin Description (pics)')
                 oXMLPics = oET_Root.find('pics')
                 if oXMLPics is not None:
                     for oXMLPic in oXMLPics.findall('pic'):
-                        uPicName = GetXMLTextAttribute(oXMLNode=oXMLPic,uTag=u'name',bMandatory=False, vDefault=u'')
-                        self.dSkinPics[uPicName]= cFileName('').ImportFullPath(uFnFullName=GetXMLTextAttribute(oXMLNode=oXMLPic,uTag=u'file',bMandatory=False,vDefault=u''))
+                        uPicName = GetXMLTextAttribute(oXMLNode=oXMLPic,uTag='name',bMandatory=False, vDefault='')
+                        self.dSkinPics[uPicName]= cFileName(GetXMLTextAttribute(oXMLNode=oXMLPic,uTag='file',bMandatory=False,vDefault=''))
 
-                Logger.debug (u'TheScreen: Loading Skin Description (colors)')
+                Logger.debug ('TheScreen: Loading Skin Description (colors)')
                 oXMLColors = oET_Root.find('colors')
                 if oXMLColors is not None:
                     for oXMLColor in oXMLColors.findall('color'):
-                        uColorName  = GetXMLTextAttribute(oXMLNode=oXMLColor,uTag=u'name',bMandatory=True,vDefault=u'black')
-                        uColor      = GetXMLTextValue(oXMLNode=oXMLColor,    uTag='',     bMandatory=True,vDefault=u'#000000ff')
+                        uColorName  = GetXMLTextAttribute(oXMLNode=oXMLColor,uTag='name',bMandatory=True,vDefault='black')
+                        uColor      = GetXMLTextValue(oXMLNode=oXMLColor,    uTag='',     bMandatory=True,vDefault='#000000ff')
                         SetVar(uVarName = uColorName, oVarValue = uColor)
 
-                Logger.debug (u'TheScreen: Loading Skin Description (redirects)')
+                Logger.debug ('TheScreen: Loading Skin Description (redirects)')
                 oXMLRedirects = oET_Root.find('redirects')
                 if oXMLRedirects is not None:
                     for oXMLRedirect in oXMLRedirects.findall('redirect'):
-                        oFrom:cFileName   = cFileName('').ImportFullPath(uFnFullName=GetXMLTextAttribute(oXMLNode=oXMLRedirect,uTag=u'from',bMandatory=True,vDefault=u''))
-                        oTo:cFileName     = cFileName('').ImportFullPath(uFnFullName=GetXMLTextAttribute(oXMLNode=oXMLRedirect,uTag=u'to',  bMandatory=True,vDefault=u''))
-                        self.dSkinRedirects[oFrom.string]=oTo
+                        oFrom:cFileName   = cFileName(GetXMLTextAttribute(oXMLNode=oXMLRedirect,uTag='from',bMandatory=True,vDefault=''))
+                        oTo:cFileName     = cFileName(GetXMLTextAttribute(oXMLNode=oXMLRedirect,uTag='to',  bMandatory=True,vDefault=''))
+                        self.dSkinRedirects[str(oFrom)]=oTo
 
-                Logger.debug (u'TheScreen: Loading Skin Description (attributes)')
+                Logger.debug ('TheScreen: Loading Skin Description (attributes)')
                 oXMLAtts = oET_Root.find('attributes')
                 if oXMLAtts is not None:
                     for oXMLAtt in oXMLAtts.findall('attribute'):
-                        uAttName = GetXMLTextAttribute(oXMLNode=oXMLAtt,uTag=u'name',bMandatory=False,vDefault=u'')
-                        uAtt     = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLAtt,uTag=u'att',bMandatory=False,vDefault=u''))
+                        uAttName = GetXMLTextAttribute(oXMLNode=oXMLAtt,uTag='name',bMandatory=False,vDefault='')
+                        uAtt     = ReplaceVars(GetXMLTextAttribute(oXMLNode=oXMLAtt,uTag='att',bMandatory=False,vDefault=''))
                         self.dSkinAttributes[uAttName]=uAtt
                         SetVar(uVarName = uAttName, oVarValue = uAtt)
 
                 if self.dSkinAttributes.get('color font button'):
-                    SetVar(uVarName = u'SKIN_FONTCOLOR_BUTTON', oVarValue = self.dSkinAttributes['color font button'])
+                    SetVar(uVarName = 'SKIN_FONTCOLOR_BUTTON', oVarValue = self.dSkinAttributes['color font button'])
                     self.dSkinAttributes['color font button']        =  GetColorFromHex(self.dSkinAttributes['color font button'])
                 if self.dSkinAttributes.get('color font text'):
-                    SetVar(uVarName = u'SKIN_FONTCOLOR_TEXT', oVarValue = self.dSkinAttributes['color font text'])
+                    SetVar(uVarName = 'SKIN_FONTCOLOR_TEXT', oVarValue = self.dSkinAttributes['color font text'])
                     self.dSkinAttributes['color font text']  =  GetColorFromHex(self.dSkinAttributes['color font text'])
                 if self.dSkinAttributes.get('color font file'):
-                    SetVar(uVarName = u'SKIN_FONTCOLOR_FILE', oVarValue = self.dSkinAttributes['color font file'])
+                    SetVar(uVarName = 'SKIN_FONTCOLOR_FILE', oVarValue = self.dSkinAttributes['color font file'])
                     self.dSkinAttributes['color font file']          =  GetColorFromHex(self.dSkinAttributes['color font file'])
                 if self.dSkinAttributes.get('color border'):
-                    SetVar(uVarName = u'SKIN_COLOR_BORDER', oVarValue = self.dSkinAttributes['color border'])
+                    SetVar(uVarName = 'SKIN_COLOR_BORDER', oVarValue = self.dSkinAttributes['color border'])
                     self.dSkinAttributes['color border']             =  GetColorFromHex(self.dSkinAttributes['color border'])
 
 
             oPathSkinAtlas:cPath = Globals.oPathSkin + 'atlas'
             oPathSkinAtlas.Create()
             Globals.oFnAtlasSkin = cFileName(oPathSkinAtlas) + "skin.atlas"
-            CreateAtlas(oPicPath=Globals.oPathSkin+"pics", oAtlasFile=Globals.oFnAtlasSkin, uDebugMsg=u'Create Skin Atlas Files')
+            CreateAtlas(oPicPath=Globals.oPathSkin+"pics", oAtlasFile=Globals.oFnAtlasSkin, uDebugMsg='Create Skin Atlas Files')
 
             Globals.oTheScreen.LoadAtlas()
             Globals.oTheScreen.oFonts.ParseFontFromXMLNode(oXMLNode=oET_Root)
             Globals.oTheScreen.oFonts.ParseIconsFromXMLNode(oXMLNode=oET_Root)
 
         except Exception as e:
-            ShowErrorPopUp(uMessage=LogError(uMsg=u'TheScreen:  __LoadSkinDescription: can\'t load SkinDescription',oException=e))
+            ShowErrorPopUp(uMessage=LogError(uMsg='TheScreen:  __LoadSkinDescription: can\'t load SkinDescription',oException=e))
 

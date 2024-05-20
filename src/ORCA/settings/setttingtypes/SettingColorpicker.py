@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ class SettingColorPicker(SettingNumeric):
     """ A colorpicker settings """
     def __init__(self, **kwargs):
         super(SettingColorPicker, self).__init__(**RemoveNoClassArgs(dInArgs=kwargs,oObject=SettingNumeric))
-        self.newvalue = u''
+        self.newvalue = ''
         self.oColorpicker:Union[ColorPicker,None] = None
 
     def _create_popup(self, instance) -> None:

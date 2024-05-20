@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     ORCA Open Remote Control Application
-    Copyright (C) 2013-2020  Carsten Thielepape
+    Copyright (C) 2013-2024  Carsten Thielepape
     Please contact me by : http://www.orca-remote.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ from xml.etree.ElementTree import Element
 
 from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
-import ORCA.Globals as Globals
+from ORCA.Globals import Globals
 from ORCA.settings.setttingtypes.SettingScrollOptionsWithOptions import SettingScrollOptionsWithOptions
 from ORCA.settings.setttingtypes.SettingScrollOptions   import ScrollOptionsPopUp
 from ORCA.utils.XML                                     import LoadXMLFile
@@ -46,8 +46,8 @@ class SettingActions(SettingScrollOptionsWithOptions):
         self.aCodesetCmds:List[str]                             = []
         self.oActionPopup:Union[Popup,None]                     = None
         self.oCodeSetActionsScrollOptionsPopup:Union[Popup,None]=None
-        kwargs["options"] = [ReplaceVars("$lvar(742)"),ReplaceVars("$lvar(743)"),ReplaceVars("$lvar(744)")]
-        kwargs["suboptions"] = [["$ACTIONLISTSEND"], ["$ACTIONLIST"], ["$FILELIST[%s]" % Globals.oPathCodesets.string]]
+        kwargs['options'] = [ReplaceVars('$lvar(742)'),ReplaceVars('$lvar(743)'),ReplaceVars('$lvar(744)')]
+        kwargs['suboptions'] = [['$ACTIONLISTSEND'], ['$ACTIONLIST'], ['$FILELIST[%s]' % str(Globals.oPathCodesets)]]
         super().__init__(**kwargs)
 
     def _set_suboption(self, instance:Widget) -> None:
@@ -64,7 +64,7 @@ class SettingActions(SettingScrollOptionsWithOptions):
 
     def _set_suboptioncodesetaction(self, instance:Widget) -> None:
         """ called, when a codesetcode is selected """
-        self.value = "SendCommand "+instance.text
+        self.value = 'SendCommand '+instance.text
         self.oActionPopup.dismiss()
 
     def _ReadCodeset(self,uFN:str) -> None:
